@@ -1,31 +1,25 @@
-
 // This file defines the server interface.
 
 #ifndef __SERVER_INTERFACE_H__
 #define __SERVER_INTERFACE_H__
 
-
 	#include "ltbasedefs.h"
 
-
 	#define SI_VERSION	2
-
 
 	// Update flags for the server.
 		
 		// Non-active (ie: the server should just eat up time but not update anything).
-		#define UPDATEFLAG_NONACTIVE		1
+		#define UPDATEFLAG_NONACTIVE	1
 
 	
 	// Create status.	
 	#define SI_CREATESTATUS	int
-	#define SI_OK				0			// Create a server successfully.
-	#define SI_ALREADYINSTANCED	1			// A server has already been instanced.
-	#define SI_INVALIDVERSION	2			// Different server version.
-	#define SI_ERRORINITTING	3			// Error initializing.
+	#define SI_OK				0	// Create a server successfully.
+	#define SI_ALREADYINSTANCED		1	// A server has already been instanced.
+	#define SI_INVALIDVERSION		2	// Different server version.
+	#define SI_ERRORINITTING		3	// Error initializing.
 	#define SI_CANTLOADRESOURCEMODULE	4	// Couldn't load de_msg.dll.
-
-
 
 	// Client info structure.
 	#define	MAX_CLIENTINFO_NAME	64
@@ -35,8 +29,6 @@
 		uint32	m_ClientID;
 		float	m_Ping;
 	};
-
-
 
 	// You should derive from this class and pass a pointer to it to
 	// ServerInterface::SetHandler so it can talk back to you.
@@ -174,4 +166,3 @@ extern "C"
 #endif
 
 #endif  // __SERVER_INTERFACE_H__
-
