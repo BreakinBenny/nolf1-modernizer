@@ -18,16 +18,16 @@
 	class PreLightInfo
 	{
 	public:
-					PreLightInfo()
-					{
-						m_vPos.Init();
-						m_vInnerColor.Init();
-						m_vOuterColor.Init();
-						m_Radius = 1.0f;
+		PreLightInfo()
+		{
+			m_vPos.Init();
+			m_vInnerColor.Init();
+			m_vOuterColor.Init();
+			m_Radius = 1.0f;
                         m_bDirectional = LTFALSE;
-						m_vDirection.Init();
-						m_FOV = 0.0f;
-					}
+			m_vDirection.Init();
+			m_FOV = 0.0f;
+		}
 
 
 	public:
@@ -40,7 +40,7 @@
 
 		LTBOOL		m_bDirectional;
 		LTVector	m_vDirection;	// (Used if it's directional).
-		float		m_FOV;			// In radians.
+		float		m_FOV;		// In radians.
 	};
 
 
@@ -49,13 +49,13 @@
 	{
 	public:
 
-					PreWorldModelInfo()
-					{
-						m_WorldModelName[0] = 0;
-						m_Pos.Init();
-						m_Rot.Init();
-						m_bInvisible = LTFALSE;
-					}
+			PreWorldModelInfo()
+			{
+				m_WorldModelName[0] = 0;
+				m_Pos.Init();
+				m_Rot.Init();
+				m_bInvisible = LTFALSE;
+			}
 
 		char		m_WorldModelName[MAX_PREWORLDMODELINFONAME_LEN];
 		LTVector	m_Pos;
@@ -69,19 +69,19 @@
 	{
 	public:
 
-					PreLightAnimFrameInfo()
-					{
-						m_vSunLightDir.Init();
-						m_vSunLightInnerColor.Init();
-						m_vSunLightOuterColor.Init();
-						m_bSunLight = LTFALSE;
+		PreLightAnimFrameInfo()
+		{
+			m_vSunLightDir.Init();
+			m_vSunLightInnerColor.Init();
+			m_vSunLightOuterColor.Init();
+			m_bSunLight = LTFALSE;
 
-						m_Lights = LTNULL;
-						m_nLights = 0;
+			m_Lights = LTNULL;
+			m_nLights = 0;
 
-						m_WorldModels = LTNULL;
-						m_nWorldModels = 0;
-					}
+			m_WorldModels = LTNULL;
+			m_nWorldModels = 0;
+		}
 
 	public:
 
