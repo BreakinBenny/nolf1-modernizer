@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : SecurityCamera.h
+// MODULE: SecurityCamera.h
 //
 // PURPOSE : An object which scans for the player and then sends a message
 //
 // CREATED : 3/29/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __SECURITYCAMERA_H__
@@ -41,23 +39,23 @@ class SecurityCamera : public CScanner
 			eStateDestroyed
 		};
 
-        virtual uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
-        virtual uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		virtual uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		virtual uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 	protected :
 
-        LTBOOL  ReadProp(ObjectCreateStruct *pData);
+		LTBOOL	ReadProp(ObjectCreateStruct *pData);
 		void	PostPropRead(ObjectCreateStruct* pData);
-        LTBOOL  InitialUpdate();
+		LTBOOL	InitialUpdate();
 
-        LTBOOL  Update();
+		LTBOOL	Update();
 		void	UpdateRotation();
 		void	UpdateSounds(State eStatePrevious);
 
 		virtual DetectState UpdateDetect();
-        virtual LTRotation GetScanRotation();
+		virtual LTRotation GetScanRotation();
 
-        virtual LTFLOAT  GetFocusTime();
+		virtual LTFLOAT	GetFocusTime();
 
 		void	StartLoopSound();
 		void	StopLoopSound();
@@ -72,34 +70,34 @@ class SecurityCamera : public CScanner
 
 	protected :
 
-		State		m_eState;
-		State		m_ePreviousState;
+		State	m_eState;
+		State	m_ePreviousState;
 
-        LTFLOAT		m_fYaw;
-        LTFLOAT		m_fYaw1;
-        LTFLOAT		m_fYaw2;
-        LTFLOAT		m_fYawSpeed;
-        LTFLOAT		m_fYaw1PauseTime;
-        LTFLOAT		m_fYaw2PauseTime;
-        LTFLOAT		m_fYawPauseTimer;
+		LTFLOAT	m_fYaw;
+		LTFLOAT	m_fYaw1;
+		LTFLOAT	m_fYaw2;
+		LTFLOAT	m_fYawSpeed;
+		LTFLOAT	m_fYaw1PauseTime;
+		LTFLOAT	m_fYaw2PauseTime;
+		LTFLOAT	m_fYawPauseTimer;
 
-		LTVector	m_vPos;
-		HSTRING		m_hstrFocusingSound;
-		HSTRING		m_hstrLoopSound;
-		HSTRING		m_hstrDetectSound;
+		LTVector m_vPos;
+		HSTRING	m_hstrFocusingSound;
+		HSTRING	m_hstrLoopSound;
+		HSTRING	m_hstrDetectSound;
 
-        LTFLOAT		m_fSoundRadius;
+		LTFLOAT	m_fSoundRadius;
 
-        HLTSOUND	m_hFocusingSound;
-        HLTSOUND	m_hLoopSound;
+		HLTSOUND	m_hFocusingSound;
+		HLTSOUND	m_hLoopSound;
 
-		HOBJECT		m_hDisablerModel;
-		HOBJECT		m_hLight;
+		HOBJECT	m_hDisablerModel;
+		HOBJECT	m_hLight;
 
-        LTBOOL		m_bDisabled;
-		LTBOOL		m_bTripped;
+		LTBOOL	m_bDisabled;
+		LTBOOL	m_bTripped;
 
-		CTimer		m_LightTimer;
+		CTimer	m_LightTimer;
 
 	private :
 
