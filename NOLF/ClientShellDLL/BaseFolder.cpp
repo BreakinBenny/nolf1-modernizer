@@ -15,27 +15,27 @@
 extern CGameClientShell* g_pGameClientShell;
 extern VarTrack g_vtUseGOTYMenu;
 
-LTBOOL      CBaseFolder::m_bReadLayout = LTFALSE;
-LTRect      CBaseFolder::m_HelpRect;
-LTIntPt     CBaseFolder::m_BackPos;
-LTIntPt     CBaseFolder::m_ContinuePos;
-LTIntPt     CBaseFolder::m_MainPos;
-HLTCOLOR    CBaseFolder::m_hShadeColor;
-HLTCOLOR    CBaseFolder::m_hBarColor;
-int			CBaseFolder::m_nBarHt;
-int			CBaseFolder::m_nTopShadeHt;
-int			CBaseFolder::m_nBottomShadeHt;
+LTBOOL		CBaseFolder::m_bReadLayout = LTFALSE;
+LTRect		CBaseFolder::m_HelpRect;
+LTIntPt		CBaseFolder::m_BackPos;
+LTIntPt		CBaseFolder::m_ContinuePos;
+LTIntPt		CBaseFolder::m_MainPos;
+HLTCOLOR	CBaseFolder::m_hShadeColor;
+HLTCOLOR	CBaseFolder::m_hBarColor;
+int		CBaseFolder::m_nBarHt;
+int		CBaseFolder::m_nTopShadeHt;
+int		CBaseFolder::m_nBottomShadeHt;
 char		CBaseFolder::m_sArrowBack[128];
 char		CBaseFolder::m_sArrowNext[128];
 LTIntPt		CBaseFolder::m_ArrowBackPos;
-LTIntPt     CBaseFolder::m_ArrowNextPos;
+LTIntPt		CBaseFolder::m_ArrowNextPos;
 HSURFACE	CBaseFolder::m_hHelpSurf = LTNULL;
 
 namespace
 {
 	LTIntPt offscreen(-64,-64);
-    LTVector g_vPos, g_vU, g_vR, g_vF;
-    LTRotation g_rRot;
+	LTVector g_vPos, g_vU, g_vR, g_vF;
+	LTRotation g_rRot;
 
 	HSTRING hDemoBuildVersion;
 	LTIntPt DemoBuildPos;
@@ -47,16 +47,16 @@ namespace
 
 CBaseFolder::CBaseFolder()
 {
-    m_bInit = LTFALSE;
-    m_bBuilt = LTFALSE;
+	m_bInit = LTFALSE;
+	m_bBuilt = LTFALSE;
 	m_bHaveFocus = LTFALSE;
 
-    m_pFolderMgr = LTNULL;
+	m_pFolderMgr = LTNULL;
 
-    m_hTitleString = LTNULL;
+	m_hTitleString = LTNULL;
 
 	m_hTransparentColor = SETRGB_T(255,0,255);
-    m_hTitleColor = LTNULL;
+	m_hTitleColor = LTNULL;
 
 	m_titlePos.x = 0;
 	m_titlePos.y = 0;
@@ -73,29 +73,29 @@ CBaseFolder::CBaseFolder()
 	m_controlArray.SetSize(0);
 
 	m_nSelection = kNoSelection;
-    m_pCaptureCtrl = LTNULL;
+	m_pCaptureCtrl = LTNULL;
 	m_nFirstDrawn = 0;
 	m_nLastDrawn = -1;
-	m_nRMouseDownItemSel =  kNoSelection;
-	m_nRMouseDownItemSel =  kNoSelection;
+	m_nRMouseDownItemSel = kNoSelection;
+	m_nRMouseDownItemSel = kNoSelection;
 
 	m_nItemSpacing = 0;
-    m_bScrollWrap = LTTRUE;
+	m_bScrollWrap = LTTRUE;
 
-    m_sBackground[0] = LTNULL;
+	m_sBackground[0] = LTNULL;
 
-	m_hSelectedColor		= kWhite;
-	m_hNonSelectedColor		= kBlack;
-	m_hDisabledColor		= kGray;
-	m_nAlignment			= LTF_JUSTIFY_LEFT;
+	m_hSelectedColor	= kWhite;
+	m_hNonSelectedColor	= kBlack;
+	m_hDisabledColor	= kGray;
+	m_nAlignment		= LTF_JUSTIFY_LEFT;
 
-    m_pUpArrow = LTNULL;
-    m_pDownArrow = LTNULL;
+	m_pUpArrow = LTNULL;
+	m_pDownArrow = LTNULL;
 	m_pBackArrow = LTNULL;
 	m_pContinueArrow = LTNULL;
-    m_pBack = LTNULL;
-    m_pContinue = LTNULL;
-    m_pMain = LTNULL;
+	m_pBack = LTNULL;
+	m_pContinue = LTNULL;
+	m_pMain = LTNULL;
 
 	m_nNumAttachments = 0;
 }
@@ -109,27 +109,24 @@ CBaseFolder::~CBaseFolder()
 
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CBaseFolder::Init
 //
 //	PURPOSE:	initialize the folder
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseFolder::Init(int nFolderID)
 {
 	if (!m_bReadLayout)
 	{
-        m_bReadLayout   = LTTRUE;
-		m_HelpRect		= g_pLayoutMgr->GetHelpRect();
-		m_BackPos		= g_pLayoutMgr->GetBackPos();
+		m_bReadLayout = LTTRUE;
+		m_HelpRect	= g_pLayoutMgr->GetHelpRect();
+		m_BackPos	= g_pLayoutMgr->GetBackPos();
 		m_ContinuePos	= g_pLayoutMgr->GetContinuePos();
-		m_MainPos		= g_pLayoutMgr->GetMainPos();
+		m_MainPos	= g_pLayoutMgr->GetMainPos();
 		m_hShadeColor	= g_pLayoutMgr->GetShadeColor();
-		m_hBarColor		= g_pLayoutMgr->GetBarColor();
-		m_nBarHt		= g_pLayoutMgr->GetBarHeight();
+		m_hBarColor	= g_pLayoutMgr->GetBarColor();
+		m_nBarHt	= g_pLayoutMgr->GetBarHeight();
 		m_nTopShadeHt	= g_pLayoutMgr->GetTopShadeHeight();
 		m_nBottomShadeHt= g_pLayoutMgr->GetBottomShadeHeight();
 		g_pLayoutMgr->GetArrowBackBmp(m_sArrowBack,128);
@@ -138,7 +135,7 @@ LTBOOL CBaseFolder::Init(int nFolderID)
 		m_ArrowNextPos	= g_pLayoutMgr->GetArrowNextPos();
 
 #ifdef _DEMO
-	    hDemoBuildVersion = g_pLTClient->FormatString(IDS_DEMOVERSION);
+	hDemoBuildVersion = g_pLTClient->FormatString(IDS_DEMOVERSION);
 		DemoBuildPos = g_pLayoutMgr->GetFolderCustomPoint(FOLDER_ID_MAIN,"VersionPos");
 #endif
 
@@ -152,7 +149,7 @@ LTBOOL CBaseFolder::Init(int nFolderID)
 	SetTitleColor(kWhite);
 
 	//set up layout variables
-    LTIntPt tpos = g_pLayoutMgr->GetFolderTitlePos((eFolderID)nFolderID);
+	LTIntPt tpos = g_pLayoutMgr->GetFolderTitlePos((eFolderID)nFolderID);
 	SetTitlePos(tpos.x,tpos.y);
 
 	SetTitleAlignment(g_pLayoutMgr->GetFolderTitleAlign((eFolderID)nFolderID));
@@ -161,7 +158,7 @@ LTBOOL CBaseFolder::Init(int nFolderID)
 	g_pLayoutMgr->GetFolderBackground((eFolderID)nFolderID,back,sizeof(back));
 	SetBackground(back);
 
-	m_PageRect  = g_pLayoutMgr->GetFolderPageRect((eFolderID)nFolderID);
+	m_PageRect	= g_pLayoutMgr->GetFolderPageRect((eFolderID)nFolderID);
 
 	SetItemSpacing(g_pLayoutMgr->GetFolderItemSpacing((eFolderID)nFolderID));
 
@@ -173,17 +170,14 @@ LTBOOL CBaseFolder::Init(int nFolderID)
 		m_hHelpSurf = g_pLTClient->CreateSurface((uint32)nWidth,(uint32)nHeight);
 
 	m_bInit=TRUE;
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CBaseFolder::Term
 //
 //	PURPOSE:	Terminate the folder
-//
 // ----------------------------------------------------------------------- //
 
 void CBaseFolder::Term()
@@ -195,17 +189,17 @@ void CBaseFolder::Term()
 		if (m_pUpArrow)
 		{
 			debug_delete(m_pUpArrow);
-            m_pUpArrow = LTNULL;
+			m_pUpArrow = LTNULL;
 		}
 		if (m_pDownArrow)
 		{
 			debug_delete(m_pDownArrow);
-            m_pDownArrow = LTNULL;
+			m_pDownArrow = LTNULL;
 		}
 		if (m_pBack)
 		{
 			debug_delete(m_pBack);
-            m_pBack = LTNULL;
+			m_pBack = LTNULL;
 		}
 		if (m_pBackArrow)
 		{
@@ -222,32 +216,30 @@ void CBaseFolder::Term()
 	// Free the title string
 	if (m_hTitleString)
 	{
-        g_pLTClient->FreeString(m_hTitleString);
-        m_hTitleString=LTNULL;
+		g_pLTClient->FreeString(m_hTitleString);
+		m_hTitleString=LTNULL;
 	}
 
 	if (m_hHelpSurf)
 	{
-        g_pLTClient->DeleteSurface (m_hHelpSurf);
-        m_hHelpSurf = LTNULL;
+		g_pLTClient->DeleteSurface (m_hHelpSurf);
+		m_hHelpSurf = LTNULL;
 	}
 
 	m_bInit=FALSE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CBaseFolder::Escape
 //
 //	PURPOSE:	back out of the folder
-//
 // ----------------------------------------------------------------------- //
 
 void CBaseFolder::Escape()
 {
 	if (!m_pFolderMgr->PreviousFolder())
 	{
-        HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+ 		HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 		if (g_pGameClientShell->IsInWorld() && hPlayerObj && 
 			(!g_pGameClientShell->IsPlayerDead() || g_pGameClientShell->GetGameType() != SINGLE))
 		{
@@ -261,18 +253,16 @@ void CBaseFolder::Escape()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CBaseFolder::Render
 //
 //	PURPOSE:	Renders the folder to a surface
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseFolder::Render(HSURFACE hDestSurf)
 {
 	if (!hDestSurf)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	int xo = g_pInterfaceResMgr->GetXOffset();
@@ -292,12 +282,12 @@ LTBOOL CBaseFolder::Render(HSURFACE hDestSurf)
 		{
 		case LTF_JUSTIFY_CENTER:
 			{
-                LTIntPt size=pTitleFont->GetTextExtents(m_hTitleString);
+				LTIntPt size=pTitleFont->GetTextExtents(m_hTitleString);
 				xPos-=size.x/2;
 			} break;
 		case LTF_JUSTIFY_RIGHT:
 			{
-                LTIntPt size=pTitleFont->GetTextExtents(m_hTitleString);
+				LTIntPt size=pTitleFont->GetTextExtents(m_hTitleString);
 				xPos-=size.x;
 			} break;
 		}
@@ -326,7 +316,7 @@ LTBOOL CBaseFolder::Render(HSURFACE hDestSurf)
 
 	int x= GetPageLeft();
 	int y= GetPageTop();
-    LTIntPt  size;
+	LTIntPt size;
 	for ( i = m_nFirstDrawn; i < m_controlArray.GetSize(); i++ )
 	{
 		if (m_controlArray[i]->GetID() == FOLDER_CMD_BREAK)
@@ -357,7 +347,7 @@ LTBOOL CBaseFolder::Render(HSURFACE hDestSurf)
 	if (m_hHelpSurf && m_dwCurrHelpID)
 	{
 		g_pLTClient->SetOptimized2DBlend(LTSURFACEBLEND_MASK);
-        g_pLTClient->DrawSurfaceToSurface(hDestSurf, m_hHelpSurf, LTNULL, (m_HelpRect.left*yr)+xo,(m_HelpRect.top*yr));
+		g_pLTClient->DrawSurfaceToSurface(hDestSurf, m_hHelpSurf, LTNULL, (m_HelpRect.left*yr)+xo,(m_HelpRect.top*yr));
 		g_pLTClient->SetOptimized2DBlend(LTSURFACEBLEND_ALPHA);
 	}
 
@@ -370,76 +360,72 @@ LTBOOL CBaseFolder::Render(HSURFACE hDestSurf)
 	}
 #endif
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CBaseFolder::CreateTitle
 //
 //	PURPOSE:	Creates the string to display as the folders title
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseFolder::CreateTitle(HSTRING hString)
 {
 	if (!hString)
-        return LTFALSE;
+		return LTFALSE;
 
 	// Free the title string if there is one
 	if (m_hTitleString)
 	{
-        g_pLTClient->FreeString(m_hTitleString);
-        m_hTitleString=LTNULL;
+		g_pLTClient->FreeString(m_hTitleString);
+		m_hTitleString=LTNULL;
 	}
 
 
-    m_hTitleString=g_pLTClient->CopyString(hString);
+	m_hTitleString=g_pLTClient->CopyString(hString);
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 LTBOOL CBaseFolder::CreateTitle(char *lpszTitle)
 {
-    HSTRING hString=g_pLTClient->CreateString(lpszTitle);
+	HSTRING hString=g_pLTClient->CreateString(lpszTitle);
 
-    LTBOOL created = CreateTitle(hString);
+	LTBOOL created = CreateTitle(hString);
 
-    g_pLTClient->FreeString(hString);
+	g_pLTClient->FreeString(hString);
 	return created;
 }
 
 LTBOOL CBaseFolder::CreateTitle(int nStringID)
 {
-    HSTRING hString=g_pLTClient->FormatString(nStringID);
+	HSTRING hString=g_pLTClient->FormatString(nStringID);
 
-    LTBOOL created = CreateTitle(hString);
+	LTBOOL created = CreateTitle(hString);
 
-    g_pLTClient->FreeString(hString);
+	g_pLTClient->FreeString(hString);
 	return created;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CBaseFolder::Build
 //
 //	PURPOSE:	Construct the basic folder elements
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseFolder::Build()
 {
-	m_UpArrowPos		= g_pLayoutMgr->GetUpArrowPos((eFolderID)m_nFolderID);
-	m_DownArrowPos		= g_pLayoutMgr->GetDownArrowPos((eFolderID)m_nFolderID);
+	m_UpArrowPos	= g_pLayoutMgr->GetUpArrowPos((eFolderID)m_nFolderID);
+	m_DownArrowPos	= g_pLayoutMgr->GetDownArrowPos((eFolderID)m_nFolderID);
 
-    m_bBuilt=LTTRUE;
+	m_bBuilt=LTTRUE;
 
-    UseArrows(LTTRUE);
-    UseBack(LTTRUE);
-    UseMain(LTFALSE);
+	UseArrows(LTTRUE);
+	UseBack(LTTRUE);
+	UseMain(LTFALSE);
 
 	return TRUE;
 }
@@ -447,12 +433,12 @@ LTBOOL CBaseFolder::Build()
 // Handles a user entered character
 LTBOOL CBaseFolder::HandleChar(char c)
 {
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 
 	if (m_pCaptureCtrl)
 	{
 		if (m_pCaptureCtrl->HandleChar(c))
-            handled = LTTRUE;
+		handled = LTTRUE;
 	}
 	return handled;
 }
@@ -461,14 +447,14 @@ LTBOOL CBaseFolder::HandleChar(char c)
 // Left, Up, Down, Right, and Enter are automatically passed through OnUp(), OnDown(), etc.
 LTBOOL CBaseFolder::HandleKeyDown(int key, int rep)
 {
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 
 	if (m_pCaptureCtrl)
 	{
 		if (key == VK_RETURN)
 			handled = m_pCaptureCtrl->OnEnter();
 		else if (m_pCaptureCtrl->HandleKeyDown(key,rep))
-            handled = LTTRUE;
+		handled = LTTRUE;
 		return handled;
 	}
 
@@ -512,7 +498,7 @@ LTBOOL CBaseFolder::HandleKeyDown(int key, int rep)
 		}
 	default:
 		{
-            handled = LTFALSE;
+		handled = LTFALSE;
 			break;
 		}
 	}
@@ -552,7 +538,7 @@ LTBOOL CBaseFolder::OnDown()
 
 LTBOOL CBaseFolder::OnLeft()
 {
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 	CLTGUICtrl* pCtrl = GetSelectedControl();
 	if (pCtrl)
 		handled = pCtrl->OnLeft();
@@ -566,7 +552,7 @@ LTBOOL CBaseFolder::OnLeft()
 
 LTBOOL CBaseFolder::OnRight()
 {
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 	CLTGUICtrl* pCtrl = GetSelectedControl();
 	if (pCtrl)
 		handled = pCtrl->OnRight();
@@ -579,7 +565,7 @@ LTBOOL CBaseFolder::OnRight()
 
 LTBOOL CBaseFolder::OnTab()
 {
-    return LTFALSE;
+	return LTFALSE;
 }
 /******************************************************************/
 
@@ -590,10 +576,10 @@ LTBOOL CBaseFolder::OnPageUp()
 		PreviousPage();
 		if (m_nSelection >= 0)
 			SetSelection(m_nFirstDrawn,LTTRUE);
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else
-        return LTFALSE;
+		return LTFALSE;
 }
 
 /******************************************************************/
@@ -605,10 +591,10 @@ LTBOOL CBaseFolder::OnPageDown()
 		NextPage();
 		if (m_nSelection >= 0)
 			SetSelection(m_nFirstDrawn,LTTRUE);
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else
-        return LTFALSE;
+		return LTFALSE;
 }
 
 
@@ -616,7 +602,7 @@ LTBOOL CBaseFolder::OnPageDown()
 
 LTBOOL CBaseFolder::OnEnter()
 {
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 	CLTGUICtrl* pCtrl = GetSelectedControl();
 	if (pCtrl)
 	{
@@ -635,32 +621,32 @@ LTBOOL CBaseFolder::OnEnter()
 
 CLTGUIFont* CBaseFolder::GetTitleFont()
 {
-    if (!g_pInterfaceResMgr) return LTNULL;
+	if (!g_pInterfaceResMgr) return LTNULL;
 	return g_pInterfaceResMgr->GetTitleFont();
 }
 
 CLTGUIFont* CBaseFolder::GetSmallFont()
 {
-    if (!g_pInterfaceResMgr) return LTNULL;
+	if (!g_pInterfaceResMgr) return LTNULL;
 	return g_pInterfaceResMgr->GetSmallFont();
 }
 
 CLTGUIFont* CBaseFolder::GetMediumFont()
 {
-    if (!g_pInterfaceResMgr) return LTNULL;
+	if (!g_pInterfaceResMgr) return LTNULL;
 	return g_pInterfaceResMgr->GetMediumFont();
 }
 
 
 CLTGUIFont* CBaseFolder::GetHelpFont()
 {
-    if (!g_pInterfaceResMgr) return LTNULL;
+	if (!g_pInterfaceResMgr) return LTNULL;
 	return g_pInterfaceResMgr->GetHelpFont();
 }
 
 CLTGUIFont* CBaseFolder::GetLargeFont()
 {
-    if (!g_pInterfaceResMgr) return LTNULL;
+	if (!g_pInterfaceResMgr) return LTNULL;
 	return g_pInterfaceResMgr->GetLargeFont();
 }
 
@@ -796,7 +782,7 @@ LTBOOL CBaseFolder::OnLButtonDown(int x, int y)
 	{
 		CLTGUICtrl* pCtrl = GetControl(nControlIndex);
 		if (m_pCaptureCtrl && pCtrl != m_pCaptureCtrl)
-            return LTFALSE;
+		return LTFALSE;
 
 		// Select the control
 		SetSelection(nControlIndex);
@@ -810,7 +796,7 @@ LTBOOL CBaseFolder::OnLButtonDown(int x, int y)
 	else
 		m_nLMouseDownItemSel=kNoSelection;
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 /******************************************************************/
@@ -822,7 +808,7 @@ LTBOOL CBaseFolder::OnLButtonUp(int x, int y)
 	{
 		CLTGUICtrl* pCtrl = GetControl(nControlIndex);
 		if (m_pCaptureCtrl && pCtrl != m_pCaptureCtrl)
-            return LTFALSE;
+		return LTFALSE;
 		// If the mouse is over the same control now as it was when the down message was called
 		// then send the "enter" message to the control.
 		if (nControlIndex == m_nLMouseDownItemSel)
@@ -847,7 +833,7 @@ LTBOOL CBaseFolder::OnLButtonUp(int x, int y)
 	{
 		m_nLMouseDownItemSel= kNoSelection;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 /******************************************************************/
@@ -859,7 +845,7 @@ LTBOOL CBaseFolder::OnRButtonDown(int x, int y)
 	{
 		CLTGUICtrl* pCtrl = GetControl(nControlIndex);
 		if (m_pCaptureCtrl && pCtrl != m_pCaptureCtrl)
-            return LTFALSE;
+		return LTFALSE;
 
 		// Select the control
 		SetSelection(nControlIndex);
@@ -873,7 +859,7 @@ LTBOOL CBaseFolder::OnRButtonDown(int x, int y)
 	else
 		m_nRMouseDownItemSel=kNoSelection;
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 /******************************************************************/
@@ -885,7 +871,7 @@ LTBOOL CBaseFolder::OnRButtonUp(int x, int y)
 	{
 		CLTGUICtrl* pCtrl = GetControl(nControlIndex);
 		if (m_pCaptureCtrl && pCtrl != m_pCaptureCtrl)
-            return LTFALSE;
+		return LTFALSE;
 
 		// If the mouse is over the same control now as it was when the down message was called
 		// then send the "left" message to the control.
@@ -907,7 +893,7 @@ LTBOOL CBaseFolder::OnRButtonUp(int x, int y)
 	{
 		m_nRMouseDownItemSel= kNoSelection;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 /******************************************************************/
@@ -915,12 +901,12 @@ LTBOOL CBaseFolder::OnLButtonDblClick(int x, int y)
 {
 	CLTGUICtrl* pCtrl = GetSelectedControl();
 	if (m_pCaptureCtrl && pCtrl != m_pCaptureCtrl)
-        return LTFALSE;
+		return LTFALSE;
 
 	if (pCtrl)
 		return pCtrl->OnLButtonDblClick(x, y);
 	else
-        return LTFALSE;
+		return LTFALSE;
 }
 
 /******************************************************************/
@@ -928,17 +914,17 @@ LTBOOL CBaseFolder::OnRButtonDblClick(int x, int y)
 {
 	CLTGUICtrl* pCtrl = GetSelectedControl();
 	if (m_pCaptureCtrl && pCtrl != m_pCaptureCtrl)
-        return LTFALSE;
+		return LTFALSE;
 
 	if (pCtrl)
 		return pCtrl->OnRButtonDblClick(x, y);
 	else
-        return LTFALSE;
+		return LTFALSE;
 }
 
 HSTRING CBaseFolder::GetHelpString(uint32 dwHelpId, int nControlIndex)
 {
-    return g_pLTClient->FormatString(dwHelpId);
+	return g_pLTClient->FormatString(dwHelpId);
 }
 
 /******************************************************************/
@@ -946,17 +932,17 @@ LTBOOL CBaseFolder::OnMouseMove(int x, int y)
 {
 	int nControlUnderPoint=kNoSelection;
 	//SDL_Log("Mouse at %d/%d", x, y);
-    LTBOOL onCtrl = GetControlUnderPoint(x,y,&nControlUnderPoint);
+	LTBOOL onCtrl = GetControlUnderPoint(x,y,&nControlUnderPoint);
 	if (onCtrl)
 	{
 		CLTGUICtrl* pCtrl = GetControl(nControlUnderPoint);
 		if (m_pCaptureCtrl && m_pCaptureCtrl != pCtrl)
-            return LTFALSE;
+		return LTFALSE;
 
 		pCtrl->OnMouseMove(x,y);
 	}
 	else if (m_pCaptureCtrl)
-        return LTFALSE;
+		return LTFALSE;
 
 	if (onCtrl)
 	{
@@ -972,10 +958,10 @@ LTBOOL CBaseFolder::OnMouseMove(int x, int y)
 //				SetSelection(kNoSelection);
 			}
 		}
-        return LTTRUE;
+		return LTTRUE;
 	}
 //	SetSelection(kNoSelection);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 int CBaseFolder::SetSelection(int select, LTBOOL bFindSelectable)
@@ -1068,14 +1054,14 @@ int CBaseFolder::SetSelection(int select, LTBOOL bFindSelectable)
 		// Figure out if we should change the page
 		while ( m_nSelection < m_nFirstDrawn )
 		{
-            PreviousPage(LTFALSE);
+		PreviousPage(LTFALSE);
 		}
 		if (m_nLastDrawn < m_nFirstDrawn)
 			CalculateLastDrawn();
 
 		while (m_nLastDrawn < m_nSelection )
 		{
-            NextPage(LTFALSE);
+		NextPage(LTFALSE);
 			if (m_nLastDrawn < 0)
 			{
 				//no items are drawn
@@ -1093,7 +1079,7 @@ int CBaseFolder::SetSelection(int select, LTBOOL bFindSelectable)
 
 void CBaseFolder::CalculateLastDrawn()
 {
-    LTIntPt  size;
+	LTIntPt size;
 	int x= GetPageLeft();
 	int y= GetPageTop();
 	unsigned int i;
@@ -1148,7 +1134,7 @@ LTBOOL CBaseFolder::GetControlUnderPoint(int xPos, int yPos, int *pnIndex)
 		{
 			*pnIndex=i;
 
-            return LTTRUE;
+		return LTTRUE;
 		}
 	}
 	for (i=0; i < (int)m_fixedControlArray.GetSize(); i++)
@@ -1163,11 +1149,11 @@ LTBOOL CBaseFolder::GetControlUnderPoint(int xPos, int yPos, int *pnIndex)
 		{
 			*pnIndex=-1-i;
 
-            return LTTRUE;
+		return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // Return a control at a specific index
@@ -1181,7 +1167,7 @@ CLTGUICtrl *CBaseFolder::GetControl ( int nIndex )
 		if (nFix < (int)m_fixedControlArray.GetSize() )
 			return m_fixedControlArray[nFix];
 	}
-    return LTNULL;
+	return LTNULL;
 }
 
 
@@ -1243,7 +1229,7 @@ LTBOOL CBaseFolder::NextPage(LTBOOL bChangeSelection)
 
 		if (bChangeSelection)
 		{
-            LTIntPt cPos = g_pInterfaceMgr->GetCursorPos();
+		LTIntPt cPos = g_pInterfaceMgr->GetCursorPos();
 			OnMouseMove(cPos.x,cPos.y);
 		}
 	}
@@ -1292,7 +1278,7 @@ LTBOOL CBaseFolder::PreviousPage(LTBOOL bChangeSelection)
 
 		if (bChangeSelection)
 		{
-            LTIntPt cPos = g_pInterfaceMgr->GetCursorPos();
+		LTIntPt cPos = g_pInterfaceMgr->GetCursorPos();
 			OnMouseMove(cPos.x,cPos.y);
 
 		}
@@ -1338,7 +1324,7 @@ int	CBaseFolder::AddFreeControl(CLTGUICtrl* pCtrl)
 	m_controlArray.Add(pCtrl);
 	int num = m_controlArray.GetSize();
 	if (num == m_nSelection+1)
-        pCtrl->Select(LTTRUE);
+		pCtrl->Select(LTTRUE);
 	return num-1;
 
 }
@@ -1363,14 +1349,14 @@ CLTGUITextItemCtrl* CBaseFolder::CreateTextItem(HSTRING hString, uint32 commandI
 {
 	CLTGUITextItemCtrl* pCtrl=debug_new(CLTGUITextItemCtrl);
 
-    if (pFont == LTNULL)
+	if (pFont == LTNULL)
 		pFont = GetDefaultFont();
 
 
-    if (!pCtrl->Create(g_pLTClient, commandID, hString, pFont, this, pnValue))
+	if (!pCtrl->Create(g_pLTClient, commandID, hString, pFont, this, pnValue))
 	{
 		debug_delete(pCtrl);
-        return LTNULL;
+		return LTNULL;
 	}
 	if (bFixed)
 		pCtrl->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
@@ -1384,9 +1370,9 @@ CLTGUITextItemCtrl* CBaseFolder::CreateTextItem(HSTRING hString, uint32 commandI
 
 CLTGUITextItemCtrl* CBaseFolder::CreateTextItem(int stringID, uint32 commandID, int helpID, LTBOOL bFixed, CLTGUIFont *pFont, int *pnValue)
 {
-    HSTRING hStr=g_pLTClient->FormatString(stringID);
+	HSTRING hStr=g_pLTClient->FormatString(stringID);
 	CLTGUITextItemCtrl* pCtrl=CreateTextItem(hStr, commandID, helpID, bFixed, pFont, pnValue);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 
@@ -1394,9 +1380,9 @@ CLTGUITextItemCtrl* CBaseFolder::CreateTextItem(int stringID, uint32 commandID, 
 
 CLTGUITextItemCtrl* CBaseFolder::CreateTextItem(char *pString, uint32 commandID, int helpID, LTBOOL bFixed, CLTGUIFont *pFont, int *pnValue)
 {
-    HSTRING hStr=g_pLTClient->CreateString(pString);
+	HSTRING hStr=g_pLTClient->CreateString(pString);
 	CLTGUITextItemCtrl* pCtrl=CreateTextItem(hStr, commandID, helpID, bFixed, pFont, pnValue);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 
@@ -1406,13 +1392,13 @@ CStaticTextCtrl* CBaseFolder::CreateStaticTextItem(HSTRING hString, uint32 comma
 {
 	CStaticTextCtrl* pCtrl=debug_new(CStaticTextCtrl);
 
-    if (pFont == LTNULL)
+	if (pFont == LTNULL)
 		pFont = GetDefaultFont();
 
-    if (!pCtrl->Create(g_pLTClient,commandID,hString,pFont,this,width,height))
+	if (!pCtrl->Create(g_pLTClient,commandID,hString,pFont,this,width,height))
 	{
 		debug_delete(pCtrl);
-        return LTNULL;
+		return LTNULL;
 	}
 
 
@@ -1428,9 +1414,9 @@ CStaticTextCtrl* CBaseFolder::CreateStaticTextItem(HSTRING hString, uint32 comma
 
 CStaticTextCtrl* CBaseFolder::CreateStaticTextItem(int stringID, uint32 commandID, int helpID, int width, int height, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    HSTRING hStr=g_pLTClient->FormatString(stringID);
+	HSTRING hStr=g_pLTClient->FormatString(stringID);
 	CStaticTextCtrl* pCtrl=CreateStaticTextItem(hStr, commandID, helpID, width, height, bFixed, pFont);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 
@@ -1438,9 +1424,9 @@ CStaticTextCtrl* CBaseFolder::CreateStaticTextItem(int stringID, uint32 commandI
 
 CStaticTextCtrl* CBaseFolder::CreateStaticTextItem(char *pString, uint32 commandID, int helpID, int width, int height, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    HSTRING hStr=g_pLTClient->CreateString(pString);
+	HSTRING hStr=g_pLTClient->CreateString(pString);
 	CStaticTextCtrl* pCtrl=CreateStaticTextItem(hStr, commandID, helpID, width, height, bFixed, pFont);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 
@@ -1454,13 +1440,13 @@ CLTGUIEditCtrl* CBaseFolder::CreateEditCtrl(HSTRING hDescription, uint32 command
 
 	CLTGUIEditCtrl* pCtrl=debug_new(CLTGUIEditCtrl);
 
-    if (pFont == LTNULL)
+	if (pFont == LTNULL)
 		pFont = GetDefaultFont();
 
-    if (!pCtrl->Create(g_pLTClient, commandID, hDescription, pFont, nTextOffset, nBufferSize, this, pBuffer))
+	if (!pCtrl->Create(g_pLTClient, commandID, hDescription, pFont, nTextOffset, nBufferSize, this, pBuffer))
 	{
 		debug_delete(pCtrl);
-        return LTNULL;
+		return LTNULL;
 	}
 	if (bFixed)
 		pCtrl->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
@@ -1475,9 +1461,9 @@ CLTGUIEditCtrl* CBaseFolder::CreateEditCtrl(HSTRING hDescription, uint32 command
 CLTGUIEditCtrl* CBaseFolder::CreateEditCtrl(int nDescriptionID, uint32 commandID, int helpID, char *pBuffer, int nBufferSize,
 									int	nTextOffset, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    HSTRING hStr=g_pLTClient->FormatString(nDescriptionID);
+	HSTRING hStr=g_pLTClient->FormatString(nDescriptionID);
 	CLTGUIEditCtrl* pCtrl=CreateEditCtrl(hStr, commandID, helpID, pBuffer, nBufferSize, nTextOffset, bFixed, pFont);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 
@@ -1485,9 +1471,9 @@ CLTGUIEditCtrl* CBaseFolder::CreateEditCtrl(int nDescriptionID, uint32 commandID
 CLTGUIEditCtrl* CBaseFolder::CreateEditCtrl(char *pszDescription, uint32 commandID, int helpID, char *pBuffer, int nBufferSize,
 									int	nTextOffset, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    HSTRING hStr=g_pLTClient->CreateString(pszDescription);
+	HSTRING hStr=g_pLTClient->CreateString(pszDescription);
 	CLTGUIEditCtrl* pCtrl=CreateEditCtrl(hStr, commandID, helpID, pBuffer, nBufferSize, nTextOffset, bFixed, pFont);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 
@@ -1499,13 +1485,13 @@ CCycleCtrl *CBaseFolder::CreateCycleItem(HSTRING hText, int helpID, int nHeaderW
 	// Create the new menu option
 	CCycleCtrl *pCtrl=debug_new(CCycleCtrl);
 
-    if (pFont == LTNULL)
+	if (pFont == LTNULL)
 		pFont = GetDefaultFont();
 
-    if ( !pCtrl->Create(g_pLTClient, hText, pFont, nHeaderWidth, nSpacerWidth ,pnValue, m_nAlignment ) )
+	if ( !pCtrl->Create(g_pLTClient, hText, pFont, nHeaderWidth, nSpacerWidth ,pnValue, m_nAlignment ) )
 	{
 		debug_delete(pCtrl);
-        return LTNULL;
+		return LTNULL;
 	}
 	if (bFixed)
 		pCtrl->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
@@ -1520,18 +1506,18 @@ CCycleCtrl *CBaseFolder::CreateCycleItem(HSTRING hText, int helpID, int nHeaderW
 
 CCycleCtrl *CBaseFolder::CreateCycleItem(int stringID, int helpID, int nHeaderWidth, int nSpacerWidth, int *pnValue, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    HSTRING hStr=g_pLTClient->FormatString(stringID);
+	HSTRING hStr=g_pLTClient->FormatString(stringID);
 	CCycleCtrl* pCtrl=CreateCycleItem(hStr, helpID, nHeaderWidth, nSpacerWidth, pnValue, bFixed, pFont);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 }
 
 CCycleCtrl *CBaseFolder::CreateCycleItem(char *pString, int helpID, int nHeaderWidth, int nSpacerWidth, int *pnValue, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    HSTRING hStr=g_pLTClient->CreateString(pString);
+	HSTRING hStr=g_pLTClient->CreateString(pString);
 	CCycleCtrl* pCtrl=CreateCycleItem(hStr, helpID, nHeaderWidth, nSpacerWidth, pnValue, bFixed, pFont);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 }
@@ -1541,15 +1527,15 @@ CCycleCtrl *CBaseFolder::CreateCycleItem(char *pString, int helpID, int nHeaderW
 // Adds an on/off control
 CToggleCtrl *CBaseFolder::CreateToggle(HSTRING hText, int helpID, int nRightColumnOffset, LTBOOL *pbValue, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    if (pFont == LTNULL)
+	if (pFont == LTNULL)
 		pFont = GetDefaultFont();
 
 	// Create the new menu control
 	CToggleCtrl *pCtrl=debug_new(CToggleCtrl);
-    if ( !pCtrl->Create(g_pLTClient, hText, pFont, nRightColumnOffset, pbValue, m_nAlignment ) )
+	if ( !pCtrl->Create(g_pLTClient, hText, pFont, nRightColumnOffset, pbValue, m_nAlignment ) )
 	{
 		debug_delete(pCtrl);
-        return LTNULL;
+		return LTNULL;
 	}
 
 	if (bFixed)
@@ -1564,18 +1550,18 @@ CToggleCtrl *CBaseFolder::CreateToggle(HSTRING hText, int helpID, int nRightColu
 
 CToggleCtrl *CBaseFolder::CreateToggle(int stringID, int helpID, int nRightColumnOffset, LTBOOL *pbValue, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    HSTRING hStr=g_pLTClient->FormatString(stringID);
+	HSTRING hStr=g_pLTClient->FormatString(stringID);
 	CToggleCtrl* pCtrl=CreateToggle(hStr, helpID, nRightColumnOffset, pbValue, bFixed, pFont);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 }
 
 CToggleCtrl *CBaseFolder::CreateToggle(char *pString, int helpID, int nRightColumnOffset, LTBOOL *pbValue, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    HSTRING hStr=g_pLTClient->CreateString(pString);
+	HSTRING hStr=g_pLTClient->CreateString(pString);
 	CToggleCtrl* pCtrl=CreateToggle(hStr, helpID, nRightColumnOffset, pbValue, bFixed, pFont);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 }
@@ -1583,14 +1569,14 @@ CToggleCtrl *CBaseFolder::CreateToggle(char *pString, int helpID, int nRightColu
 
 CSliderCtrl* CBaseFolder::CreateSlider(HSTRING hText, int helpID, int nSliderOffset, int nSliderWidth, int *pnValue, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    if (pFont == LTNULL)
+	if (pFont == LTNULL)
 		pFont = GetDefaultFont();
 
 	CSliderCtrl *pCtrl=debug_new(CSliderCtrl);
-    if ( !pCtrl->Create(hText, pFont, nSliderOffset, nSliderWidth, LTFALSE, pnValue) )
+	if ( !pCtrl->Create(hText, pFont, nSliderOffset, nSliderWidth, LTFALSE, pnValue) )
 	{
 		debug_delete(pCtrl);
-        return LTNULL;
+		return LTNULL;
 	}
 	if (bFixed)
 		pCtrl->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
@@ -1604,33 +1590,33 @@ CSliderCtrl* CBaseFolder::CreateSlider(HSTRING hText, int helpID, int nSliderOff
 
 CSliderCtrl* CBaseFolder::CreateSlider(int stringID, int helpID, int nSliderOffset, int nSliderWidth, int *pnValue, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    HSTRING hStr=g_pLTClient->FormatString(stringID);
+	HSTRING hStr=g_pLTClient->FormatString(stringID);
 	CSliderCtrl* pCtrl=CreateSlider(hStr, helpID, nSliderOffset, nSliderWidth, pnValue, bFixed, pFont);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 }
 
 CSliderCtrl* CBaseFolder::CreateSlider(char *pString, int helpID, int nSliderOffset, int nSliderWidth, int *pnValue, LTBOOL bFixed, CLTGUIFont *pFont)
 {
-    HSTRING hStr=g_pLTClient->CreateString(pString);
+	HSTRING hStr=g_pLTClient->CreateString(pString);
 	CSliderCtrl* pCtrl=CreateSlider(hStr, helpID, nSliderOffset, nSliderWidth, pnValue, bFixed, pFont);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return pCtrl;
 }
 
 CLTGUIColumnTextCtrl*	CBaseFolder::CreateColumnText(DWORD dwCommandID, int helpID, LTBOOL bFixed, CLTGUIFont *pFont, DWORD dwParam1, DWORD dwParam2)
 {
-    if (pFont == LTNULL)
+	if (pFont == LTNULL)
 		pFont = GetDefaultFont();
 
 	CLTGUIColumnTextCtrl *pCtrl=debug_new(CLTGUIColumnTextCtrl);
-    if ( !pCtrl->Create(g_pLTClient, dwCommandID, pFont, this, dwParam1, dwParam2) )
+	if ( !pCtrl->Create(g_pLTClient, dwCommandID, pFont, this, dwParam1, dwParam2) )
 	{
 		debug_delete(pCtrl);
 
-        return LTNULL;
+		return LTNULL;
 	}
 	if (bFixed)
 		pCtrl->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
@@ -1649,7 +1635,7 @@ CGroupCtrl*	CBaseFolder::CreateGroup(int nWidth, int nHeight, int helpID)
 	if ( !pCtrl->Create(nWidth,nHeight))
 	{
 		debug_delete(pCtrl);
-        return LTNULL;
+		return LTNULL;
 	}
 
 	pCtrl->SetHelpID(helpID);
@@ -1661,14 +1647,14 @@ void CBaseFolder::AddPageBreak()
 {
 	CPageBreakCtrl* pCtrl = debug_new(CPageBreakCtrl);
 	pCtrl->Create(FOLDER_CMD_BREAK);
-    pCtrl->Enable(LTFALSE);
+	pCtrl->Enable(LTFALSE);
 	AddFreeControl(pCtrl);
 }
 
 void CBaseFolder::AddBlankLine()
 {
-    CStaticTextCtrl* pCtrl = AddStaticTextItem(" ",LTNULL,LTNULL, 0,0, LTTRUE, GetSmallFont());
-    pCtrl->Enable(LTFALSE);
+	CStaticTextCtrl* pCtrl = AddStaticTextItem(" ",LTNULL,LTNULL, 0,0, LTTRUE, GetSmallFont());
+	pCtrl->Enable(LTFALSE);
 }
 
 void CBaseFolder::UseArrows(LTBOOL bArrows, LTBOOL bLeft, LTBOOL bRight)
@@ -1683,7 +1669,7 @@ void CBaseFolder::UseArrows(LTBOOL bArrows, LTBOOL bLeft, LTBOOL bRight)
 		{
 			RemoveFixedControl(m_pUpArrow);
 			debug_delete(m_pUpArrow);
-            m_pUpArrow = LTNULL;
+		m_pUpArrow = LTNULL;
 		}
 
 		if (bRight)
@@ -1694,13 +1680,13 @@ void CBaseFolder::UseArrows(LTBOOL bArrows, LTBOOL bLeft, LTBOOL bRight)
 		{
 			RemoveFixedControl(m_pDownArrow);
 			debug_delete(m_pDownArrow);
-            m_pDownArrow = LTNULL;
+		m_pDownArrow = LTNULL;
 		}
 
 		if (IsBuilt())
 		{
-            AddFixedControl(m_pUpArrow,m_UpArrowPos,LTFALSE);
-            AddFixedControl(m_pDownArrow,m_DownArrowPos,LTFALSE);
+		AddFixedControl(m_pUpArrow,m_UpArrowPos,LTFALSE);
+		AddFixedControl(m_pDownArrow,m_DownArrowPos,LTFALSE);
 		}
 	}
 	else
@@ -1709,13 +1695,13 @@ void CBaseFolder::UseArrows(LTBOOL bArrows, LTBOOL bLeft, LTBOOL bRight)
 		{
 			RemoveFixedControl(m_pUpArrow);
 			debug_delete(m_pUpArrow);
-            m_pUpArrow = LTNULL;
+		m_pUpArrow = LTNULL;
 		}
 		if (m_pDownArrow)
 		{
 			RemoveFixedControl(m_pDownArrow);
 			debug_delete(m_pDownArrow);
-            m_pDownArrow = LTNULL;
+		m_pDownArrow = LTNULL;
 		}
 	}
 }
@@ -1736,7 +1722,7 @@ void CBaseFolder::UseBack(LTBOOL bBack,LTBOOL bOK,LTBOOL bReturn)
 		{
 			RemoveFixedControl(m_pBack);
 			debug_delete(m_pBack);
-            m_pBack = LTNULL;
+		m_pBack = LTNULL;
 		}
 	}
 }
@@ -1748,7 +1734,7 @@ void CBaseFolder::UseMain(LTBOOL bMain)
 
 		if (IsBuilt())
 		{
-            AddFixedControl(m_pMain,m_MainPos,LTTRUE);
+		AddFixedControl(m_pMain,m_MainPos,LTTRUE);
 		}
 	}
 	else
@@ -1757,7 +1743,7 @@ void CBaseFolder::UseMain(LTBOOL bMain)
 		{
 			RemoveFixedControl(m_pMain);
 			debug_delete(m_pMain);
-            m_pMain = LTNULL;
+		m_pMain = LTNULL;
 		}
 	}
 }
@@ -1782,7 +1768,7 @@ void CBaseFolder::UseContinue(int nContinueID, int nHelpID, int nStringID)
 		{
 			RemoveFixedControl(m_pContinue);
 			debug_delete(m_pContinue);
-            m_pContinue = LTNULL;
+		m_pContinue = LTNULL;
 		}
 	}
 }
@@ -1793,7 +1779,7 @@ void CBaseFolder::CreateUpArrow()
 	if (!m_pUpArrow)
 	{
 		m_pUpArrow = debug_new(CBitmapCtrl);
-        m_pUpArrow->Create(g_pLTClient,"interface\\ArrowUp.pcx","interface\\ArrowUpH.pcx","interface\\ArrowUpD.pcx", this, FOLDER_CMD_LEFT_ARROW);
+		m_pUpArrow->Create(g_pLTClient,"interface\\ArrowUp.pcx","interface\\ArrowUpH.pcx","interface\\ArrowUpD.pcx", this, FOLDER_CMD_LEFT_ARROW);
 		m_pUpArrow->SetHelpID(IDS_HELP_LEFT);
 	}
 }
@@ -1803,7 +1789,7 @@ void CBaseFolder::CreateDownArrow()
 	if (!m_pDownArrow)
 	{
 		m_pDownArrow = debug_new(CBitmapCtrl);
-        m_pDownArrow->Create(g_pLTClient,"interface\\ArrowDn.pcx","interface\\ArrowDnH.pcx","interface\\ArrowDnD.pcx", this, FOLDER_CMD_RIGHT_ARROW);
+		m_pDownArrow->Create(g_pLTClient,"interface\\ArrowDn.pcx","interface\\ArrowDnH.pcx","interface\\ArrowDnD.pcx", this, FOLDER_CMD_RIGHT_ARROW);
 		m_pDownArrow->SetHelpID(IDS_HELP_RIGHT);
 	}
 }
@@ -1812,7 +1798,7 @@ void CBaseFolder::CreateBack(LTBOOL bOK, LTBOOL bReturn)
 {
 	if (m_pBack)
 	{
-        HSTRING hStr = LTNULL;
+		HSTRING hStr = LTNULL;
 		if (bOK)
 			hStr = g_pLTClient->FormatString(IDS_OK);
 		else
@@ -1825,18 +1811,18 @@ void CBaseFolder::CreateBack(LTBOOL bOK, LTBOOL bReturn)
 			m_pBack->SetHelpID(IDS_HELP_OK);
 		else
 			m_pBack->SetHelpID(IDS_HELP_BACK);
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 	}
 	else
 	{
 		CLTGUIFont *pFont = GetMediumFont();
-        HSTRING hStr = LTNULL;
+		HSTRING hStr = LTNULL;
 		if (bOK)
 			hStr = g_pLTClient->FormatString(IDS_OK);
 		else
 			hStr = g_pLTClient->FormatString(IDS_BACK);
 		m_pBack = debug_new(CLTGUITextItemCtrl);
-        m_pBack->Create(g_pLTClient, FOLDER_CMD_BACK, hStr, pFont, this);
+		m_pBack->Create(g_pLTClient, FOLDER_CMD_BACK, hStr, pFont, this);
 
 		m_pBack->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
 
@@ -1844,7 +1830,7 @@ void CBaseFolder::CreateBack(LTBOOL bOK, LTBOOL bReturn)
 			m_pBack->SetHelpID(IDS_HELP_OK);
 		else
 			m_pBack->SetHelpID(IDS_HELP_BACK);
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 	}
 }
 
@@ -1852,7 +1838,7 @@ void CBaseFolder::CreateContinue(int nStringID, int nHelpID)
 {
 	if (!nStringID)
 		nStringID = IDS_CONTINUE;
-    HSTRING hStr=g_pLTClient->FormatString(nStringID);
+	HSTRING hStr=g_pLTClient->FormatString(nStringID);
 
 	if (!nHelpID)
 		nHelpID = IDS_HELP_CONTINUE;
@@ -1865,11 +1851,11 @@ void CBaseFolder::CreateContinue(int nStringID, int nHelpID)
 	{
 		CLTGUIFont *pFont = GetMediumFont();
 		m_pContinue = debug_new(CLTGUITextItemCtrl);
-        m_pContinue->Create(g_pLTClient, FOLDER_CMD_CONTINUE, hStr, pFont, this);
+		m_pContinue->Create(g_pLTClient, FOLDER_CMD_CONTINUE, hStr, pFont, this);
 
 		m_pContinue->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
 
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 	}
 	if (!nHelpID)
 		nHelpID = IDS_HELP_CONTINUE;
@@ -1881,14 +1867,14 @@ void CBaseFolder::CreateMain()
 	if (!m_pMain)
 	{
 		CLTGUIFont *pFont = GetMediumFont();
-        HSTRING hStr=g_pLTClient->FormatString(IDS_MAIN);
+		HSTRING hStr=g_pLTClient->FormatString(IDS_MAIN);
 		m_pMain = debug_new(CLTGUITextItemCtrl);
-        m_pMain->Create(g_pLTClient, FOLDER_CMD_MAIN, hStr, pFont, this);
+		m_pMain->Create(g_pLTClient, FOLDER_CMD_MAIN, hStr, pFont, this);
 
 		m_pMain->SetColor(m_hSelectedColor,m_hNonSelectedColor,m_hDisabledColor);
 
 		m_pMain->SetHelpID(IDS_HELP_MAIN);
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 	}
 }
 
@@ -1964,14 +1950,14 @@ void CBaseFolder::ForceMouseUpdate()
 {
 //	SetSelection(kNoSelection);
 	m_dwCurrHelpID = 0;
-    LTIntPt cPos = g_pInterfaceMgr->GetCursorPos();
+	LTIntPt cPos = g_pInterfaceMgr->GetCursorPos();
 	OnMouseMove(cPos.x,cPos.y);
 }
 
 // This is called when the folder gets or loses focus
 void CBaseFolder::OnFocus(LTBOOL bFocus)
 {
-    m_pCaptureCtrl = LTNULL;
+	m_pCaptureCtrl = LTNULL;
 	if (bFocus)
 	{
 		if (m_nSelection == kNoSelection)
@@ -2022,7 +2008,7 @@ void CBaseFolder::CheckArrows()
 		else
 		{
 			m_pUpArrow->SetHelpID(0);
-            m_pUpArrow->SetPos(offscreen);
+		m_pUpArrow->SetPos(offscreen);
 		}
 	}
 
@@ -2037,7 +2023,7 @@ void CBaseFolder::CheckArrows()
 		else
 		{
 			m_pDownArrow->SetHelpID(0);
-            m_pDownArrow->SetPos(offscreen);
+		m_pDownArrow->SetPos(offscreen);
 		}
 	}
 
@@ -2063,9 +2049,9 @@ void CBaseFolder::CreateInterfaceSFX()
 	if (!hCamera) return;
 
 
-    g_pLTClient->GetObjectPos(hCamera, &g_vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &g_rRot);
-    g_pLTClient->GetRotationVectors(&g_rRot, &g_vU, &g_vR, &g_vF);
+	g_pLTClient->GetObjectPos(hCamera, &g_vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &g_rRot);
+	g_pLTClient->GetRotationVectors(&g_rRot, &g_vU, &g_vR, &g_vF);
 
 
 	sprintf(szAttName,"ScaleName%d",n);
@@ -2215,8 +2201,8 @@ void CBaseFolder::UpdateInterfaceSFX()
 		if (g_pModelLT->GetSocketTransform(m_CharSFX.GetObject(), hSocket, transform, LTTRUE) == LT_OK)
 		{
 			g_pTransLT->Get(transform, vPos, rRot);
-            g_pLTClient->SetObjectPos(pSFX->GetObject(), &vPos, LTTRUE);
-            g_pLTClient->SetObjectRotation(pSFX->GetObject(), &rRot);
+		g_pLTClient->SetObjectPos(pSFX->GetObject(), &vPos, LTTRUE);
+		g_pLTClient->SetObjectRotation(pSFX->GetObject(), &rRot);
 
 		}
 	}
@@ -2290,8 +2276,8 @@ void CBaseFolder::CreateCharFX(INT_CHAR *pChar)
 	{
 
 		BSCREATESTRUCT bcs;
-	    LTVector vPos, vTemp, vScale(1.0f,1.0f,1.0f);
-	    LTRotation rRot = g_rRot;
+		LTVector vPos, vTemp, vScale(1.0f,1.0f,1.0f);
+		LTRotation rRot = g_rRot;
 
 		char modName[128];
 		char skinName[128];
@@ -2311,9 +2297,9 @@ void CBaseFolder::CreateCharFX(INT_CHAR *pChar)
 		VEC_MULSCALAR(vScale, vScale, pChar->fScale);
 
 		LTVector vModPos = pChar->vPos;
-	    LTFLOAT fRot = pChar->fRot;
-		fRot  = MATH_PI + DEG2RAD(fRot);
-	    g_pLTClient->RotateAroundAxis(&rRot, &g_vU, fRot);
+		LTFLOAT fRot = pChar->fRot;
+		fRot = MATH_PI + DEG2RAD(fRot);
+		g_pLTClient->RotateAroundAxis(&rRot, &g_vU, fRot);
 
 		VEC_MULSCALAR(vTemp, g_vF, vModPos.z);
 		VEC_MULSCALAR(vTemp, vTemp, 1);//g_pInterfaceResMgr->GetXRatio());
@@ -2353,7 +2339,6 @@ void CBaseFolder::CreateCharFX(INT_CHAR *pChar)
 				g_pInterfaceMgr->AddInterfaceSFX(&m_CharSFX, IFX_WORLD);
 			}
 		}
-
 	}
 }
 
@@ -2363,8 +2348,8 @@ void CBaseFolder::CreateAttachFX(INT_ATTACH *pAttach)
 	{
 
 		BSCREATESTRUCT bcs;
-	    LTVector vPos, vTemp, vScale(1.0f,1.0f,1.0f);
-	    LTRotation rRot = g_rRot;
+		LTVector vPos, vTemp, vScale(1.0f,1.0f,1.0f);
+		LTRotation rRot = g_rRot;
 
 		CString str = "";
 		char szModel[128];
@@ -2420,7 +2405,7 @@ void CBaseFolder::CreateAttachFX(INT_ATTACH *pAttach)
 void CBaseFolder::UpdateHelpText()
 {
 	CLTGUICtrl *pCtrl = GetSelectedControl();
-    uint32 dwID = 0;
+	uint32 dwID = 0;
 	if (pCtrl)
 		dwID = pCtrl->GetHelpID();
 
@@ -2430,17 +2415,16 @@ void CBaseFolder::UpdateHelpText()
 
 		int nWidth = m_HelpRect.right - m_HelpRect.left;
 		int nHeight = m_HelpRect.bottom - m_HelpRect.top;
-        LTRect rect(0,0,nWidth,nHeight);
-        g_pLTClient->FillRect(m_hHelpSurf,&rect,kBlack);
+		LTRect rect(0,0,nWidth,nHeight);
+		g_pLTClient->FillRect(m_hHelpSurf,&rect,kBlack);
 
 		if (m_dwCurrHelpID)
 		{
 			HSTRING hHelpTxt = GetHelpString(m_dwCurrHelpID,m_nSelection);
 
-            GetHelpFont()->DrawFormat(hHelpTxt,m_hHelpSurf,0,0,(uint32)nWidth,kWhite);
+		GetHelpFont()->DrawFormat(hHelpTxt,m_hHelpSurf,0,0,(uint32)nWidth,kWhite);
 			g_pLTClient->OptimizeSurface(m_hHelpSurf,kBlack);
-            g_pLTClient->FreeString(hHelpTxt);
+		g_pLTClient->FreeString(hHelpTxt);
 		}
 	}
 }
-
