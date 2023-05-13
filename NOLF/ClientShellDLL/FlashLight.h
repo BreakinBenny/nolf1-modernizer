@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : FlashLight.h
+// MODULE: FlashLight.h
 //
 // PURPOSE : FlashLight class - Definition
 //
 // CREATED : 07/21/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __FLASH_LIGHT_H__
@@ -41,15 +39,15 @@ class CFlashLight
 
 	private :
 
-        LTBOOL           m_bOn;
-		HOBJECT			 m_hLight;
-		CPolyLineFX		 m_LightBeam;
+	LTBOOL		m_bOn;
+	HOBJECT		m_hLight;
+	CPolyLineFX	m_LightBeam;
 
-        LTFLOAT          m_fMinLightRadius;
-        LTFLOAT          m_fMaxLightRadius;
-        LTFLOAT          m_fMaxLightDist;
+	LTFLOAT		m_fMinLightRadius;
+	LTFLOAT		m_fMaxLightRadius;
+	LTFLOAT		m_fMaxLightDist;
 
-        LTFLOAT          m_fServerUpdateTimer;
+	LTFLOAT		m_fServerUpdateTimer;
 };
 
 class CFlashLightPlayer : public CFlashLight
@@ -78,7 +76,7 @@ class CFlashLightAI : public CFlashLight
 
 	protected :
 
-		HOBJECT			m_hAI;
+		HOBJECT	m_hAI;
 };
 
 #endif // __FLASH_LIGHT_H__
