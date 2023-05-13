@@ -32,16 +32,16 @@ namespace
 
 CFolderAudio::CFolderAudio()
 {
-    m_bSoundOn=LTFALSE;
-    m_bMusicOn=LTFALSE;
+	m_bSoundOn=LTFALSE;
+	m_bMusicOn=LTFALSE;
 	m_nSoundVolume=SOUND_DEFAULT_VOL;
 	m_nMusicVolume=MUSIC_DEFAULT_VOL;
-    m_bSoundQuality=LTFALSE;
-    m_bOldSoundQuality = LTFALSE;
+	m_bSoundQuality=LTFALSE;
+	m_bOldSoundQuality = LTFALSE;
 
-    m_pSoundVolumeCtrl=LTNULL;
-    m_pMusicVolumeCtrl=LTNULL;
-    m_pSoundQualityCtrl=LTNULL;
+	m_pSoundVolumeCtrl=LTNULL;
+	m_pMusicVolumeCtrl=LTNULL;
+	m_pSoundQualityCtrl=LTNULL;
 
 }
 
@@ -116,16 +116,16 @@ void CFolderAudio::EnableDisableControls()
 	{
 		if ( m_pSoundVolumeCtrl )
 		{
-            m_pSoundVolumeCtrl->Enable(LTFALSE);
-            m_pSoundQualityCtrl->Enable(LTFALSE);
+			m_pSoundVolumeCtrl->Enable(LTFALSE);
+			m_pSoundQualityCtrl->Enable(LTFALSE);
 		}
 	}
 	else
 	{
 		if ( m_pSoundVolumeCtrl )
 		{
-            m_pSoundVolumeCtrl->Enable(LTTRUE);
-            m_pSoundQualityCtrl->Enable(LTTRUE);
+			m_pSoundVolumeCtrl->Enable(LTTRUE);
+			m_pSoundQualityCtrl->Enable(LTTRUE);
 		}
 	}
 
@@ -133,14 +133,14 @@ void CFolderAudio::EnableDisableControls()
 	{
 		if ( m_pMusicVolumeCtrl )
 		{
-            m_pMusicVolumeCtrl->Enable(LTFALSE);
+			m_pMusicVolumeCtrl->Enable(LTFALSE);
 		}
 	}
 	else
 	{
 		if ( m_pMusicVolumeCtrl )
 		{
-            m_pMusicVolumeCtrl->Enable(LTTRUE);
+			m_pMusicVolumeCtrl->Enable(LTTRUE);
 		}
 	}
 }
@@ -171,14 +171,14 @@ void CFolderAudio::LoadSoundSettings()
 
 	m_bOldMusicOn = m_bMusicOn = (m_nMusicVolume != MUSIC_MIN_VOL);
 	m_bOldSoundQuality = m_bSoundQuality = pSettings->GetBoolVar("sound16bit");
-    UpdateData(LTFALSE);
+	UpdateData(LTFALSE);
 
 }
 
 // Save the sound settings
 void CFolderAudio::SaveSoundSettings()
 {
-    UpdateData(LTTRUE);
+	UpdateData(LTTRUE);
 	CGameSettings *pSettings = g_pInterfaceMgr->GetSettings();
 
 	// m_bSoundOn = (m_nSoundVolume != SOUND_MIN_VOL);
@@ -226,7 +226,7 @@ void CFolderAudio::SaveSoundSettings()
 // Override the left and right controls so that the volumes can be changed
 LTBOOL CFolderAudio::OnLeft()
 {
-    LTBOOL handled = CBaseFolder::OnLeft();
+	LTBOOL handled = CBaseFolder::OnLeft();
 
 	if (handled)
 		SaveSoundSettings();
@@ -235,7 +235,7 @@ LTBOOL CFolderAudio::OnLeft()
 
 LTBOOL CFolderAudio::OnRight()
 {
-    LTBOOL handled = CBaseFolder::OnRight();
+	LTBOOL handled = CBaseFolder::OnRight();
 
 	if (handled)
 		SaveSoundSettings();
@@ -245,7 +245,7 @@ LTBOOL CFolderAudio::OnRight()
 
 LTBOOL CFolderAudio::OnEnter()
 {
-    LTBOOL handled = CBaseFolder::OnEnter();
+	LTBOOL handled = CBaseFolder::OnEnter();
 
 	if (handled)
 		SaveSoundSettings();
@@ -254,7 +254,7 @@ LTBOOL CFolderAudio::OnEnter()
 
 LTBOOL CFolderAudio::OnLButtonUp(int x, int y)
 {
-    LTBOOL handled = CBaseFolder::OnLButtonUp(x, y);
+	LTBOOL handled = CBaseFolder::OnLButtonUp(x, y);
 
 	if (handled)
 		SaveSoundSettings();
