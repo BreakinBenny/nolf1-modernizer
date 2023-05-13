@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : Weapon.cpp
+// MODULE: Weapon.cpp
 //
 // PURPOSE : Weapon class - implementation
 //
 // CREATED : 9/25/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -32,41 +30,37 @@ uint16 g_wIgnoreFX = 0;
 uint8 g_nRandomWeaponSeed = 255;
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::CWeapon
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 CWeapon::CWeapon()
 {
-	m_eState			= W_IDLE;
-    m_bHave             = LTFALSE;
-	m_nAmmoInClip		= 1;
-	m_fDamageFactor		= 1.0f;
-	m_fRangeAdjust		= 1.0f;
+	m_eState	= W_IDLE;
+	m_bHave		= LTFALSE;
+	m_nAmmoInClip	= 1;
+	m_fDamageFactor	= 1.0f;
+	m_fRangeAdjust	= 1.0f;
 
-	m_fLifeTime			= -1.0f;
+	m_fLifeTime	= -1.0f;
 
-	m_nWeaponId			= 0;
-	m_nAmmoId			= 0;
+	m_nWeaponId	= 0;
+	m_nAmmoId	= 0;
 
-    m_pParent           = LTNULL;
-    m_hModelObject      = LTNULL;
+	m_pParent	= LTNULL;
+	m_hModelObject	= LTNULL;
 
-	m_nCurTracer		= 0;
+	m_nCurTracer	= 0;
 
-	m_nLastTimestamp	= 0;
+	m_nLastTimestamp = 0;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::~CWeapon
 //
 //	PURPOSE:	Deallocate memory
-//
 // ----------------------------------------------------------------------- //
 
 CWeapon::~CWeapon()
@@ -75,38 +69,34 @@ CWeapon::~CWeapon()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::Init
 //
 //	PURPOSE:	Init object
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeapon::Init(CWeapons* pParent, HOBJECT hObj, int nWeaponId, int nAmmoId)
 {
-    if (!pParent || !hObj) return LTFALSE;
+	if (!pParent || !hObj) return LTFALSE;
 
 	m_pParent	= pParent;
-	m_hObject   = hObj;
+	m_hObject	= hObj;
 	m_nWeaponId	= nWeaponId;
 	m_nAmmoId	= nAmmoId;
 
 	m_pWeaponData = g_pWeaponMgr->GetWeapon(m_nWeaponId);
-    if (!m_pWeaponData) return LTFALSE;
+	if (!m_pWeaponData) return LTFALSE;
 
 	m_pAmmoData = g_pWeaponMgr->GetAmmo(m_nAmmoId);
-    if (!m_pAmmoData) return LTFALSE;
+	if (!m_pAmmoData) return LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::ReloadClip
 //
 //	PURPOSE:	Fill the clip
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapon::ReloadClip(LTBOOL bPlayReload, int nNewAmmo)
@@ -129,13 +119,10 @@ void CWeapon::ReloadClip(LTBOOL bPlayReload, int nNewAmmo)
 	}
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::UpdateWeapon
 //
-//  PURPOSE:    Update the weapon (fire if bFire == LTTRUE)
-//
+//	PURPOSE:	Update the weapon (fire if bFire == LTTRUE)
 // ----------------------------------------------------------------------- //
 
 WeaponState CWeapon::UpdateWeapon(WFireInfo & fireInfo, LTBOOL bFire)
@@ -153,13 +140,10 @@ WeaponState CWeapon::UpdateWeapon(WFireInfo & fireInfo, LTBOOL bFire)
 	return eRet;
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::Fire
 //
 //	PURPOSE:	Fire the weapon
-//
 // ----------------------------------------------------------------------- //
 
 WeaponState CWeapon::Fire(WFireInfo & info)
@@ -181,8 +165,7 @@ WeaponState CWeapon::Fire(WFireInfo & info)
 
 
 	// Make sure we always have ammo if we should...
-
-    LTBOOL bInfiniteAmmo = (g_bInfiniteAmmo || m_pWeaponData->bInfiniteAmmo);
+	LTBOOL bInfiniteAmmo = (g_bInfiniteAmmo || m_pWeaponData->bInfiniteAmmo);
 	int nAmmo = bInfiniteAmmo ? INFINITE_AMMO_AMOUNT : m_pParent->GetAmmoCount(m_nAmmoId);
 
 	AmmoType eAmmoType = m_pAmmoData->eType;
@@ -202,8 +185,8 @@ WeaponState CWeapon::Fire(WFireInfo & info)
 		}
 		else if (info.bAltFire)
 		{
-			g_wIgnoreFX &= ~WFX_ALTFIRESND;  // Do alt-fire
-			g_wIgnoreFX |= WFX_FIRESOUND;	 // Don't do fire
+			g_wIgnoreFX &= ~WFX_ALTFIRESND;	// Do alt-fire
+			g_wIgnoreFX |= WFX_FIRESOUND;	// Don't do fire
 		}
 
 		// If the player fired this and it is the appropriate weapon type,
@@ -236,26 +219,26 @@ WeaponState CWeapon::Fire(WFireInfo & info)
 
 		if (m_nAmmoInClip > 0)
 		{
-            LTRotation rRot;
-            LTVector vU, vR, vF;
+			LTRotation rRot;
+			LTVector vU, vR, vF;
 
-            g_pLTServer->GetObjectRotation(info.hFiredFrom, &rRot);
-            g_pLTServer->GetRotationVectors(&rRot, &vU, &vR, &vF);
+			g_pLTServer->GetObjectRotation(info.hFiredFrom, &rRot);
+			g_pLTServer->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 			// Create a projectile for every vector...
 
 			int nVectorsPerShot = m_pWeaponData->nVectorsPerRound;
 
-            //uint8 nNewRandomSeed = GetRandom(2, 255);
+			//uint8 nNewRandomSeed = GetRandom(2, 255);
 
 			WeaponPath wp;
-            LTVector vOriginalPath = info.vPath;
+			LTVector vOriginalPath = info.vPath;
 
-			wp.nWeaponId = m_nWeaponId;
-			wp.vU		 = vU;
-			wp.vR		 = vR;
-			wp.fPerturbR = info.fPerturbR;
-			wp.fPerturbU = info.fPerturbU;
+			wp.nWeaponId	= m_nWeaponId;
+			wp.vU		= vU;
+			wp.vR		= vR;
+			wp.fPerturbR	= info.fPerturbR;
+			wp.fPerturbU	= info.fPerturbU;
 
 			for (int i=0; i < nVectorsPerShot; i++)
 			{
@@ -267,7 +250,6 @@ WeaponState CWeapon::Fire(WFireInfo & info)
 				info.vPath = wp.vPath;
 
 				// Shoot the weapon...
-
 				if (eAmmoType == PROJECTILE)
 				{
 					if (!CreateProjectile(rRot, info))
@@ -279,7 +261,6 @@ WeaponState CWeapon::Fire(WFireInfo & info)
 				{
 					// Don't actually create an object, just use our
 					// parent's projectile object to do vector calculations...
-
 					CProjectile* pProj = m_pParent->GetVecProjectile();
 					if (pProj)
 					{
@@ -289,13 +270,11 @@ WeaponState CWeapon::Fire(WFireInfo & info)
 
 				// If we are shooting multiple vectors ignore some special
 				// fx after the first vector...
-
 				g_wIgnoreFX |= WFX_FIRESOUND | WFX_ALTFIRESND | WFX_SHELL |
 					WFX_SILENCED | WFX_LIGHT | WFX_MUZZLE | WFX_TRACER;
 			}
 
 			//srand(nNewRandomSeed);
-
 			if (nShotsPerClip > 0 && !bInfiniteAmmo)
 			{
 				m_nAmmoInClip--;
@@ -310,16 +289,14 @@ WeaponState CWeapon::Fire(WFireInfo & info)
 		eRet = W_FIRED;
 
 		// Check to see if we need to reload...
-
 		if (nShotsPerClip > 0)
 		{
 			if (m_nAmmoInClip <= 0)
 			{
 				// Only automatically reload if we're the player... and don't play the animation.
-
 				if ( IsPlayer(info.hFiredFrom) )
 				{
-                    ReloadClip(LTFALSE, nAmmo);
+					ReloadClip(LTFALSE, nAmmo);
 				}
 			}
 		}
@@ -330,45 +307,41 @@ WeaponState CWeapon::Fire(WFireInfo & info)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::CreateProjectile
 //
 //	PURPOSE:	Create the approprite projectile to fire.
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeapon::CreateProjectile(LTRotation & rRot, WFireInfo & info)
 {
-    if (!m_pAmmoData->pProjectileFX || !(m_pAmmoData->pProjectileFX->szClass[0])) return LTFALSE;
+	if (!m_pAmmoData->pProjectileFX || !(m_pAmmoData->pProjectileFX->szClass[0])) return LTFALSE;
 
 	ObjectCreateStruct theStruct;
 	INIT_OBJECTCREATESTRUCT(theStruct);
 
-    theStruct.m_Rotation = rRot;
+	theStruct.m_Rotation = rRot;
 	theStruct.m_Pos = info.vFirePos;
 
-    HCLASS hClass = g_pLTServer->GetClass(m_pAmmoData->pProjectileFX->szClass);
+	HCLASS hClass = g_pLTServer->GetClass(m_pAmmoData->pProjectileFX->szClass);
 
 	if (hClass)
 	{
-        CProjectile* pProj = (CProjectile*)g_pLTServer->CreateObject(hClass, &theStruct);
+		CProjectile* pProj = (CProjectile*)g_pLTServer->CreateObject(hClass, &theStruct);
 		if (pProj)
 		{
 			pProj->Setup(this, info);
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::GetModelObject()
 //
 //	PURPOSE:	Get the object associated with the weapon model
-//
 // ----------------------------------------------------------------------- //
 
 HOBJECT CWeapon::GetModelObject()
@@ -377,11 +350,9 @@ HOBJECT CWeapon::GetModelObject()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::SetModelObject()
 //
 //	PURPOSE:	Set the object associated with the weapon model
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapon::SetModelObject(HOBJECT hObj)
@@ -390,117 +361,103 @@ void CWeapon::SetModelObject(HOBJECT hObj)
 
 	if (m_hModelObject)
 	{
-        g_pLTServer->SetModelLooping(m_hModelObject, LTFALSE);
+		g_pLTServer->SetModelLooping(m_hModelObject, LTFALSE);
 	}
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::Select()
 //
 //	PURPOSE:	Select the weapon
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapon::Select()
 {
-    ReloadClip(LTFALSE);
+	ReloadClip(LTFALSE);
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::Deselect()
 //
 //	PURPOSE:	Deselect the weapon
-//
 // ----------------------------------------------------------------------- //
-
 void CWeapon::Deselect()
 {
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::Save
 //
 //	PURPOSE:	Save the object
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapon::Save(HMESSAGEWRITE hWrite, uint8 nType)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hObject);
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hModelObject);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hObject);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hModelObject);
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fLifeTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, float(m_nCurTracer));
-    g_pLTServer->WriteToMessageByte(hWrite, m_bHave);
-    g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)m_nAmmoInClip);
-    g_pLTServer->WriteToMessageByte(hWrite, m_eState);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fDamageFactor);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fRangeAdjust);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nWeaponId);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nAmmoId);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fLifeTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, float(m_nCurTracer));
+	g_pLTServer->WriteToMessageByte(hWrite, m_bHave);
+	g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)m_nAmmoInClip);
+	g_pLTServer->WriteToMessageByte(hWrite, m_eState);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fDamageFactor);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fRangeAdjust);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nWeaponId);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nAmmoId);
 
 	for (int i=0; i < W_MAX_MODS; i++)
 	{
-        m_Mods[i].WriteToMessage(g_pLTServer, hWrite);
+		m_Mods[i].WriteToMessage(g_pLTServer, hWrite);
 	}
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::Load
 //
 //	PURPOSE:	Load the object
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapon::Load(HMESSAGEREAD hRead, uint8 nType)
 {
 	if (!hRead) return;
 
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hObject);
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hModelObject);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hObject);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hModelObject);
 
-    m_fLifeTime         = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_nCurTracer        = (int) g_pLTServer->ReadFromMessageFloat(hRead);
-    m_bHave             = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_nAmmoInClip       = (int) g_pLTServer->ReadFromMessageFloat(hRead);
-    m_eState            = (WeaponState) g_pLTServer->ReadFromMessageByte(hRead);
-    m_fDamageFactor     = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fRangeAdjust      = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_nWeaponId         = g_pLTServer->ReadFromMessageByte(hRead);
-    m_nAmmoId           = g_pLTServer->ReadFromMessageByte(hRead);
+	m_fLifeTime	= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_nCurTracer	= (int) g_pLTServer->ReadFromMessageFloat(hRead);
+	m_bHave		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_nAmmoInClip	= (int) g_pLTServer->ReadFromMessageFloat(hRead);
+	m_eState	= (WeaponState) g_pLTServer->ReadFromMessageByte(hRead);
+	m_fDamageFactor	= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fRangeAdjust	= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_nWeaponId	= g_pLTServer->ReadFromMessageByte(hRead);
+	m_nAmmoId	= g_pLTServer->ReadFromMessageByte(hRead);
 
 	for (int i=0; i < W_MAX_MODS; i++)
 	{
-        m_Mods[i].ReadFromMessage(g_pLTServer, hRead);
+		m_Mods[i].ReadFromMessage(g_pLTServer, hRead);
 	}
 
 	m_pWeaponData	= g_pWeaponMgr->GetWeapon(m_nWeaponId);
-	m_pAmmoData		= g_pWeaponMgr->GetAmmo(m_nAmmoId);
+	m_pAmmoData	= g_pWeaponMgr->GetAmmo(m_nAmmoId);
 }
 
-
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::GetInstDamage()
 //
 //	PURPOSE:	Get the instant damage done by this weapon (value can vary)
-//
 // ----------------------------------------------------------------------- //
 
 LTFLOAT CWeapon::GetInstDamage() const
 {
 	if (!m_pAmmoData) return 0.0f;
 
-    LTFLOAT fDamage = (LTFLOAT) m_pAmmoData->nInstDamage;
+	LTFLOAT fDamage = (LTFLOAT) m_pAmmoData->nInstDamage;
 
 	fDamage *= GetRandom(0.8f, 1.2f) * m_fDamageFactor;
 	fDamage *= AIDifficultyAdjust();
@@ -508,20 +465,17 @@ LTFLOAT CWeapon::GetInstDamage() const
 	return fDamage;
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::GetProgDamage()
 //
 //	PURPOSE:	Get the progressive damage done by this weapon
-//
 // ----------------------------------------------------------------------- //
 
 LTFLOAT CWeapon::GetProgDamage() const
 {
 	if (!m_pAmmoData) return 0.0f;
 
-    LTFLOAT fDamage = m_pAmmoData->fProgDamage;
+	LTFLOAT fDamage = m_pAmmoData->fProgDamage;
 
 	fDamage *= m_fDamageFactor;
 	fDamage *= AIDifficultyAdjust();
@@ -530,21 +484,18 @@ LTFLOAT CWeapon::GetProgDamage() const
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::AIDifficultyAdjust()
 //
 //	PURPOSE:	Adjust AI damage based on difficulty
-//
 // ----------------------------------------------------------------------- //
 
 LTFLOAT CWeapon::AIDifficultyAdjust() const
 {
 	if (!IsAI(m_hObject)) return 1.0f;
 
-    LTFLOAT fDifficultyFactor = 1.0f;
+	LTFLOAT fDifficultyFactor = 1.0f;
 
 	// If we're an AI damage is based on the current difficutly setting...
-
 	switch (g_pGameServerShell->GetDifficulty())
 	{
 		case GD_EASY:
@@ -569,11 +520,9 @@ LTFLOAT CWeapon::AIDifficultyAdjust() const
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::CacheFiles
 //
 //	PURPOSE:	Cache files used by weapon.
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapon::CacheFiles()
@@ -587,21 +536,19 @@ void CWeapon::CacheFiles()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapon::AddMod
 //
 //	PURPOSE:	Add the specified mod to the weapon
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeapon::AddMod(CModData* pMod)
 {
-    if (!pMod) return LTFALSE;
+	if (!pMod) return LTFALSE;
 
 	MOD* pM = g_pWeaponMgr->GetMod(pMod->m_nID);
-    if (!pM) return LTFALSE;
+	if (!pM) return LTFALSE;
 
-    LTBOOL bRet = LTFALSE;
+	LTBOOL bRet = LTFALSE;
 
 	for (int i=0; i < W_MAX_MODS; i++)
 	{
@@ -609,9 +556,9 @@ LTBOOL CWeapon::AddMod(CModData* pMod)
 		{
 			m_Mods[i] = *pMod;
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
