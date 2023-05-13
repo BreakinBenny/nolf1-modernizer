@@ -1,25 +1,23 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : SoundFilterMgr.cpp
+// MODULE: SoundFilterMgr.cpp
 //
 // PURPOSE : SoundFilterMgr - Implementation
 //
 // CREATED : 7/16/2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
 #include "SoundFilterMgr.h"
 #include "CommonUtilities.h"
 
-#define SFM_TAG					"SoundFilter"
+#define SFM_TAG		"SoundFilter"
 
-#define SFM_NAME				"Name"
-#define SFM_FILTERNAME			"FilterName"
-#define SFM_VARIABLE			"Var"
-#define SFM_VALUE				"Value"
+#define SFM_NAME	"Name"
+#define SFM_FILTERNAME	"FilterName"
+#define SFM_VARIABLE	"Var"
+#define SFM_VALUE	"Value"
 
 static char s_aTagName[30];
 static char s_aAttName[100];
@@ -38,24 +36,20 @@ CSoundFilterMgr CSoundFilterMgrPlugin::sm_SoundFilterMgr;
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CSoundFilterMgr::CSoundFilterMgr
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 CSoundFilterMgr::CSoundFilterMgr()
 {
-    m_FilterList.Init(LTTRUE);
+	m_FilterList.Init(LTTRUE);
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CSoundFilterMgr::~CSoundFilterMgr
 //
 //	PURPOSE:	Destructor
-//
 // ----------------------------------------------------------------------- //
 
 CSoundFilterMgr::~CSoundFilterMgr()
@@ -64,17 +58,15 @@ CSoundFilterMgr::~CSoundFilterMgr()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CSoundFilterMgr::Init()
 //
 //	PURPOSE:	Init mgr
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CSoundFilterMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 {
-    if (g_pSoundFilterMgr || !szAttributeFile) return LTFALSE;
-    if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
+	if (g_pSoundFilterMgr || !szAttributeFile) return LTFALSE;
+	if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
 
 	g_pSoundFilterMgr = this;
 
@@ -95,7 +87,7 @@ LTBOOL CSoundFilterMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pFilter);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -103,21 +95,19 @@ LTBOOL CSoundFilterMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 	}
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CSoundFilterMgr::GetFilter
 //
 //	PURPOSE:	Get the specified sound filter record
-//
 // ----------------------------------------------------------------------- //
 
 SOUNDFILTER* CSoundFilterMgr::GetFilter(uint8 nId)
 {
-    SOUNDFILTER** pCur  = LTNULL;
+	SOUNDFILTER** pCur = LTNULL;
 
 	pCur = m_FilterList.GetItem(TLIT_FIRST);
 
@@ -131,22 +121,20 @@ SOUNDFILTER* CSoundFilterMgr::GetFilter(uint8 nId)
 		pCur = m_FilterList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CSoundFilterMgr::GetFilter
 //
 //	PURPOSE:	Get the specified sound filter record
-//
 // ----------------------------------------------------------------------- //
 
 SOUNDFILTER* CSoundFilterMgr::GetFilter(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    SOUNDFILTER** pCur  = LTNULL;
+	SOUNDFILTER** pCur = LTNULL;
 
 	pCur = m_FilterList.GetItem(TLIT_FIRST);
 
@@ -160,20 +148,18 @@ SOUNDFILTER* CSoundFilterMgr::GetFilter(char* pName)
 		pCur = m_FilterList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CSoundFilterMgr::Term()
 //
 //	PURPOSE:	Clean up.
-//
 // ----------------------------------------------------------------------- //
 
 void CSoundFilterMgr::Term()
 {
-    g_pSoundFilterMgr = LTNULL;
+	g_pSoundFilterMgr = LTNULL;
 
 	m_FilterList.Clear();
 }
@@ -183,24 +169,19 @@ void CSoundFilterMgr::Term()
 #ifdef _CLIENTBUILD
 
 
-
-#endif  // _CLIENTBUILD
-
-
+#endif	// _CLIENTBUILD
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SOUNDFILTER::SOUNDFILTER
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 SOUNDFILTER::SOUNDFILTER()
 {
-	nId				= 0;
-	szName[0]		= '\0';
+	nId		= 0;
+	szName[0]	= '\0';
 	szFilterName[0]	= '\0';
 
 	for (int i=0; i < SFM_MAX_VARIABLES; i++)
@@ -209,20 +190,18 @@ SOUNDFILTER::SOUNDFILTER()
 		fValues[i] = 0.0f;
 	}
 
-	nNumVars		= 0;
+	nNumVars	= 0;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SOUNDFILTER::Init
 //
 //	PURPOSE:	Build the surface struct
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL SOUNDFILTER::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, SFM_NAME);
 	if (!str.IsEmpty())
@@ -236,8 +215,8 @@ LTBOOL SOUNDFILTER::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szFilterName, (char*)(LPCSTR)str, ARRAY_LEN(szFilterName));
 	}
 
-    int i;
-    for (i=0; i < SFM_MAX_VARIABLES; i++)
+	int i;
+	for (i=0; i < SFM_MAX_VARIABLES; i++)
 	{
 		sprintf(s_aAttName, "%s%d", SFM_VARIABLE, i);
 
@@ -270,9 +249,8 @@ LTBOOL SOUNDFILTER::Init(CButeMgr & buteMgr, char* aTagName)
 		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
-
 
 
 #ifndef _CLIENTBUILD
@@ -285,20 +263,18 @@ LTBOOL SOUNDFILTER::Init(CButeMgr & buteMgr, char* aTagName)
 ////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CSoundFilterMgrPlugin::PreHook_EditStringList
 //
 //	PURPOSE:	Fill the string list
-//
 // ----------------------------------------------------------------------- //
 
 LTRESULT CSoundFilterMgrPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 	if (!g_pSoundFilterMgr)
 	{
@@ -307,33 +283,31 @@ LTRESULT CSoundFilterMgrPlugin::PreHook_EditStringList(
 
 		char szFile[256];
 		sprintf(szFile, "%s\\%s", szRezPath, SFM_DEFAULT_FILE);
-        sm_SoundFilterMgr.SetInRezFile(LTFALSE);
-        sm_SoundFilterMgr.Init(g_pLTServer, szFile);
+		sm_SoundFilterMgr.SetInRezFile(LTFALSE);
+		sm_SoundFilterMgr.Init(g_pLTServer, szFile);
 	}
 
 	return LT_UNSUPPORTED;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CSoundFilterMgrPlugin::PopulateStringList
 //
 //	PURPOSE:	Populate the list
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CSoundFilterMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,
-    const uint32 cMaxStrings, const uint32 cMaxStringLength)
+	const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {
 	_ASSERT(aszStrings && pcStrings && g_pSoundFilterMgr);
-    if (!aszStrings || !pcStrings || !g_pSoundFilterMgr) return LTFALSE;
+	if (!aszStrings || !pcStrings || !g_pSoundFilterMgr) return LTFALSE;
 
 	// Add an entry for each SOUNDFILTER type
 
 	int nNumFilters = g_pSoundFilterMgr->GetNumFilters();
 	_ASSERT(nNumFilters > 0);
 
-    SOUNDFILTER* pSF = LTNULL;
+	SOUNDFILTER* pSF = LTNULL;
 
 	for (int i=0; i < nNumFilters; i++)
 	{
@@ -342,7 +316,7 @@ LTBOOL CSoundFilterMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcSt
 		pSF = g_pSoundFilterMgr->GetFilter(i);
 		if (pSF && pSF->szName[0])
 		{
-            uint32 dwFilterNameLen = strlen(pSF->szName);
+			uint32 dwFilterNameLen = strlen(pSF->szName);
 
 			if (dwFilterNameLen < cMaxStringLength && ((*pcStrings) + 1) < cMaxStrings)
 			{
@@ -351,7 +325,7 @@ LTBOOL CSoundFilterMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcSt
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
-#endif // #ifndef _CLIENTBUILD
+#endif	// #ifndef _CLIENTBUILD
