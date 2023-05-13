@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : PlayerVehicleFX.h
+// MODULE: PlayerVehicleFX.h
 //
 // PURPOSE : Tracer special fx class - Definition
 //
 // CREATED : 6/8/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __PLAYER_VEHICLE_FX_H__
@@ -24,9 +22,9 @@ class CPlayerVehicleFX : public CSpecialFX
 		{
 		}
 
-        virtual LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hRead);
-        virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
-        virtual LTBOOL Update();
+		virtual LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hRead);
+		virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
+		virtual LTBOOL Update();
 
 		virtual uint32 GetSFXID() { return SFX_PLAYERVEHICLE_ID; }
 
