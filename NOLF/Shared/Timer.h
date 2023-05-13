@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : Timer.h
+// MODULE: Timer.h
 //
 // PURPOSE : Definition/Implementation of the CTimer class
 //
 // CREATED : 8/31/99 (header created)
 //
 // (c) 1996-1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef _TIMER_H_
@@ -19,23 +17,23 @@ class CTimer
 {
 public:
 
-    CTimer() { m_t1 = 0; m_dt = 0; m_tp = 0; m_bOn = FALSE;}
+	CTimer() { m_t1 = 0; m_dt = 0; m_tp = 0; m_bOn = FALSE;}
 
 #ifdef _CLIENTBUILD
-    void Start(float dt) { m_dt = dt; m_t1 = g_pLTClient->GetTime(); m_bOn = TRUE;}
-    void Start() { m_dt = 0; m_tp = 0; m_t1 = g_pLTClient->GetTime(); m_bOn = TRUE;}
+	void Start(float dt) { m_dt = dt; m_t1 = g_pLTClient->GetTime(); m_bOn = TRUE;}
+	void Start() { m_dt = 0; m_tp = 0; m_t1 = g_pLTClient->GetTime(); m_bOn = TRUE;}
 	void Pause() { m_tp = g_pLTClient->GetTime(); }
 #else
-    void Start(float dt) { m_dt = dt; m_t1 = g_pLTServer->GetTime(); m_bOn = TRUE;}
-    void Start() { m_dt = 0; m_tp = 0; m_t1 = g_pLTServer->GetTime(); m_bOn = TRUE;}
+	void Start(float dt) { m_dt = dt; m_t1 = g_pLTServer->GetTime(); m_bOn = TRUE;}
+	void Start() { m_dt = 0; m_tp = 0; m_t1 = g_pLTServer->GetTime(); m_bOn = TRUE;}
 	void Pause() { m_tp = g_pLTServer->GetTime(); }
 #endif
-    void Stop() { m_dt = 0; m_tp = 0; m_bOn = FALSE;}
-    BOOL Stopped();
+	void Stop() { m_dt = 0; m_tp = 0; m_bOn = FALSE;}
+	BOOL Stopped();
 	BOOL Paused() {return (m_tp > 0);}
 	BOOL On() { return m_bOn; }
 	void Resume();
-    float GetElapseTime();
+	float GetElapseTime();
 
 	void Add(float t) { m_dt += t; m_dt = (m_dt < 0.0f ? 0 : m_dt); }
 
@@ -49,10 +47,10 @@ public:
 
 private:
 
-    float m_t1;
-    float m_dt;
-    float m_tp;
-	BOOL  m_bOn;
+	float	m_t1;
+	float	m_dt;
+	float	m_tp;
+	BOOL	m_bOn;
 };
 
 inline BOOL CTimer::Stopped() 
@@ -109,9 +107,9 @@ inline float CTimer::GetCountdownTime()
 	else
 	{
 #ifdef _CLIENTBUILD
-    return m_t1 + m_dt - g_pLTClient->GetTime();
+	return m_t1 + m_dt - g_pLTClient->GetTime();
 #else
-    return m_t1 + m_dt - g_pLTServer->GetTime();
+	return m_t1 + m_dt - g_pLTServer->GetTime();
 #endif
 	}
 }
@@ -119,16 +117,16 @@ inline float CTimer::GetCountdownTime()
 #ifndef _CLIENTBUILD
 inline void CTimer::Save(HMESSAGEWRITE hWrite)
 {
-    g_pLTServer->WriteToMessageFloat(hWrite, m_t1);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_dt);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_tp);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_t1);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_dt);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_tp);
 }
 
 inline void CTimer::Load(HMESSAGEREAD hRead)
 {
-    m_t1 = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_dt = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_tp = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_t1 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_dt = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_tp = g_pLTServer->ReadFromMessageFloat(hRead);
 }
 #endif
 
