@@ -15,16 +15,15 @@ extern CGameClientShell* g_pGameClientShell;
 
 namespace
 {
-	const int kLastWeapon = (NUM_WEAPON_ICONS - 1);
-	const int kLastAmmo = (NUM_AMMO_ICONS - 1);
-	const int kCurrWeapon = 1;
-	const int kCurrAmmo = 0;
+	const int kLastWeapon	= (NUM_WEAPON_ICONS - 1);
+	const int kLastAmmo	= (NUM_AMMO_ICONS - 1);
+	const int kCurrWeapon	= 1;
+	const int kCurrAmmo	= 0;
 	const int kIconWidth	= 48;
-	const int kIconSpacing  = 16;
-    const float kfIconY     = 400.0f;
+	const int kIconSpacing	= 16;
+	const float kfIconY	= 400.0f;
 	const float kfDelayTime	= 3.0f;
 }
-
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -32,11 +31,11 @@ namespace
 
 CWeaponChooser::CWeaponChooser()
 {
-    memset(m_hWeaponSurf, LTNULL, sizeof(m_hWeaponSurf));
+	memset(m_hWeaponSurf, LTNULL, sizeof(m_hWeaponSurf));
 	memset(m_nWeapons, -1, sizeof(m_nWeapons));
-    m_hWeaponStr = LTNULL;
-    m_szWeaponCommand[0] = LTNULL;
-    m_bIsOpen = LTFALSE;
+	m_hWeaponStr = LTNULL;
+	m_szWeaponCommand[0] = LTNULL;
+	m_bIsOpen = LTFALSE;
 	m_fStartTime = 0.0f;
 }
 
@@ -53,7 +52,7 @@ void CWeaponChooser::Term()
 LTBOOL CWeaponChooser::Open()
 {
 	if (m_bIsOpen)
-        return LTTRUE;
+	return LTTRUE;
 
 	m_nWeapons[0] = g_pGameClientShell->GetWeaponModel()->PrevWeapon();
 	m_nWeapons[1] = g_pGameClientShell->GetWeaponModel()->GetWeaponId();
@@ -63,35 +62,35 @@ LTBOOL CWeaponChooser::Open()
 	{
 		for (int i = 0; i < NUM_WEAPON_ICONS; i++)
 			m_nWeapons[i] = -1;
-        m_bIsOpen = LTFALSE;
-        return LTFALSE;
+		m_bIsOpen = LTFALSE;
+		return LTFALSE;
 	}
-    m_bIsOpen = LTTRUE;
+	m_bIsOpen = LTTRUE;
 
-    WEAPON* pWeapon = LTNULL;
+	WEAPON* pWeapon = LTNULL;
 	for (int i = 0; i < NUM_WEAPON_ICONS; i++)
 	{
 		pWeapon = g_pWeaponMgr->GetWeapon(m_nWeapons[i]);
-        if (pWeapon)
+		if (pWeapon)
 		{
-            m_hWeaponSurf[i] = g_pLTClient->CreateSurfaceFromBitmap(pWeapon->szIcon);
-            g_pLTClient->OptimizeSurface(m_hWeaponSurf[i],SETRGB_T(255,0,255));
+			m_hWeaponSurf[i] = g_pLTClient->CreateSurfaceFromBitmap(pWeapon->szIcon);
+			g_pLTClient->OptimizeSurface(m_hWeaponSurf[i],SETRGB_T(255,0,255));
 		}
 	}
 
 	pWeapon = g_pWeaponMgr->GetWeapon(m_nWeapons[1]);
 	if (pWeapon)
 	{
-        m_hWeaponStr = g_pLTClient->FormatString(pWeapon->nNameId);
-        SetCommandStr(m_nWeapons[1]);
-        g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[0],0.5f);
-        g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[1],1.0f);
-        g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[2],0.5f);
+		m_hWeaponStr = g_pLTClient->FormatString(pWeapon->nNameId);
+		SetCommandStr(m_nWeapons[1]);
+		g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[0],0.5f);
+		g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[1],1.0f);
+		g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[2],0.5f);
 	}
 
-    m_fStartTime = g_pLTClient->GetTime();
+	m_fStartTime = g_pLTClient->GetTime();
 
-    return LTTRUE;
+	return LTTRUE;
 
 }
 
@@ -104,18 +103,18 @@ void CWeaponChooser::Close()
 		m_nWeapons[i] = -1;
 		if (m_hWeaponSurf[i])
 		{
-            g_pLTClient->DeleteSurface(m_hWeaponSurf[i]);
-            m_hWeaponSurf[i] = LTNULL;
+			g_pLTClient->DeleteSurface(m_hWeaponSurf[i]);
+			m_hWeaponSurf[i] = LTNULL;
 		}
 	}
 	if (m_hWeaponStr)
 	{
-        g_pLTClient->FreeString(m_hWeaponStr);
-        m_hWeaponStr = LTNULL;
+		g_pLTClient->FreeString(m_hWeaponStr);
+		m_hWeaponStr = LTNULL;
 	}
 	m_szWeaponCommand[0] = LTNULL;
 
-    m_bIsOpen = LTFALSE;
+	m_bIsOpen = LTFALSE;
 	m_fStartTime = 0.0f;
 }
 
@@ -123,11 +122,11 @@ void CWeaponChooser::NextWeapon()
 {
 	if (m_hWeaponSurf[0])
 	{
-        g_pLTClient->DeleteSurface(m_hWeaponSurf[0]);
-        m_hWeaponSurf[0] = LTNULL;
+		g_pLTClient->DeleteSurface(m_hWeaponSurf[0]);
+		m_hWeaponSurf[0] = LTNULL;
 	}
-    int i;
-    for (i = 0; i < kLastWeapon; i++)
+	int i;
+	for (i = 0; i < kLastWeapon; i++)
 	{
 		m_nWeapons[i] = m_nWeapons[i+1];
 		m_hWeaponSurf[i] = m_hWeaponSurf[i+1];
@@ -137,29 +136,29 @@ void CWeaponChooser::NextWeapon()
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(m_nWeapons[kLastWeapon]);
 	if (pWeapon)
 	{
-        m_hWeaponSurf[kLastWeapon] = g_pLTClient->CreateSurfaceFromBitmap(pWeapon->szIcon);
-        g_pLTClient->OptimizeSurface(m_hWeaponSurf[kLastWeapon],SETRGB_T(255,0,255));
+		m_hWeaponSurf[kLastWeapon] = g_pLTClient->CreateSurfaceFromBitmap(pWeapon->szIcon);
+		g_pLTClient->OptimizeSurface(m_hWeaponSurf[kLastWeapon],SETRGB_T(255,0,255));
 	}
 	if (m_hWeaponStr)
 	{
-        g_pLTClient->FreeString(m_hWeaponStr);
-        m_hWeaponStr = LTNULL;
+		g_pLTClient->FreeString(m_hWeaponStr);
+		m_hWeaponStr = LTNULL;
 	}
 	m_szWeaponCommand[0] = LTNULL;
 
 	pWeapon = g_pWeaponMgr->GetWeapon(m_nWeapons[1]);
 	if (pWeapon)
 	{
-        m_hWeaponStr = g_pLTClient->FormatString(pWeapon->nNameId);
+		m_hWeaponStr = g_pLTClient->FormatString(pWeapon->nNameId);
 		SetCommandStr(m_nWeapons[1]);
-        g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[0],0.5f);
-        g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[1],1.0f);
-        g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[2],0.5f);
+		g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[0],0.5f);
+		g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[1],1.0f);
+		g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[2],0.5f);
 	}
 
-    g_pClientSoundMgr->PlayInterfaceSound((char*)g_pInterfaceResMgr->GetSoundSelect());
+	g_pClientSoundMgr->PlayInterfaceSound((char*)g_pInterfaceResMgr->GetSoundSelect());
 
-    m_fStartTime = g_pLTClient->GetTime();
+	m_fStartTime = g_pLTClient->GetTime();
 
 }
 
@@ -167,11 +166,11 @@ void CWeaponChooser::PrevWeapon()
 {
 	if (m_hWeaponSurf[kLastWeapon])
 	{
-        g_pLTClient->DeleteSurface(m_hWeaponSurf[kLastWeapon]);
-        m_hWeaponSurf[kLastWeapon] = LTNULL;
+		g_pLTClient->DeleteSurface(m_hWeaponSurf[kLastWeapon]);
+		m_hWeaponSurf[kLastWeapon] = LTNULL;
 	}
-    int i;
-    for (i = kLastWeapon; i > 0; i--)
+	int i;
+	for (i = kLastWeapon; i > 0; i--)
 	{
 		m_nWeapons[i] = m_nWeapons[i-1];
 		m_hWeaponSurf[i] = m_hWeaponSurf[i-1];
@@ -181,13 +180,13 @@ void CWeaponChooser::PrevWeapon()
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(m_nWeapons[0]);
 	if (pWeapon)
 	{
-        m_hWeaponSurf[0] = g_pLTClient->CreateSurfaceFromBitmap(pWeapon->szIcon);
-        g_pLTClient->OptimizeSurface(m_hWeaponSurf[0],SETRGB_T(255,0,255));
+		m_hWeaponSurf[0] = g_pLTClient->CreateSurfaceFromBitmap(pWeapon->szIcon);
+		g_pLTClient->OptimizeSurface(m_hWeaponSurf[0],SETRGB_T(255,0,255));
 	}
 	if (m_hWeaponStr)
 	{
-        g_pLTClient->FreeString(m_hWeaponStr);
-        m_hWeaponStr = LTNULL;
+		g_pLTClient->FreeString(m_hWeaponStr);
+		m_hWeaponStr = LTNULL;
 	}
 	m_szWeaponCommand[0] = LTNULL;
 
@@ -195,33 +194,32 @@ void CWeaponChooser::PrevWeapon()
 	pWeapon = g_pWeaponMgr->GetWeapon(m_nWeapons[1]);
 	if (pWeapon)
 	{
-        m_hWeaponStr = g_pLTClient->FormatString(pWeapon->nNameId);
+		m_hWeaponStr = g_pLTClient->FormatString(pWeapon->nNameId);
 		SetCommandStr(m_nWeapons[1]);
-        g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[0],0.5f);
-        g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[1],1.0f);
-        g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[2],0.5f);
+		g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[0],0.5f);
+		g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[1],1.0f);
+		g_pLTClient->SetSurfaceAlpha(m_hWeaponSurf[2],0.5f);
 	}
 
-    g_pClientSoundMgr->PlayInterfaceSound((char*)g_pInterfaceResMgr->GetSoundSelect());
+	g_pClientSoundMgr->PlayInterfaceSound((char*)g_pInterfaceResMgr->GetSoundSelect());
 
-    m_fStartTime = g_pLTClient->GetTime();
+	m_fStartTime = g_pLTClient->GetTime();
 
 }
 
 void CWeaponChooser::Draw()
 {
-    float fTime = g_pLTClient->GetTime() - m_fStartTime;
+	float fTime = g_pLTClient->GetTime() - m_fStartTime;
 	if (m_fStartTime > 0.0f && fTime > kfDelayTime)
 	{
-        g_pClientSoundMgr->PlayInterfaceSound((char*)g_pInterfaceResMgr->GetSoundSelect());
+		g_pClientSoundMgr->PlayInterfaceSound((char*)g_pInterfaceResMgr->GetSoundSelect());
 		Close();
 		return;
 	}
 
-
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
-    uint32 nScreenHeight, nScreenWidth;
-    g_pLTClient->GetSurfaceDims (hScreen, &nScreenWidth, &nScreenHeight);
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	uint32 nScreenHeight, nScreenWidth;
+	g_pLTClient->GetSurfaceDims (hScreen, &nScreenWidth, &nScreenHeight);
 	float yRatio = (float)nScreenHeight / 480.0f;
 
 	int x = (int)nScreenWidth / 2;
@@ -236,16 +234,16 @@ void CWeaponChooser::Draw()
 	x -= (NUM_WEAPON_ICONS * (kIconWidth + kIconSpacing)) / 2;
 
 	if (m_hWeaponSurf[0] && m_nWeapons[0] != m_nWeapons[kLastWeapon])
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hWeaponSurf[0], LTNULL, x, y,SETRGB_T(255,0,255));
+	g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hWeaponSurf[0], LTNULL, x, y,SETRGB_T(255,0,255));
 
 	x += (kIconWidth + kIconSpacing);
 	if (m_hWeaponSurf[1])
 	{
-        LTVector vColor = g_pLayoutMgr->GetChooserHighlightColor();
+		LTVector vColor = g_pLayoutMgr->GetChooserHighlightColor();
 
-        LTRect rect(x-3,y-3,x+kIconWidth+3,y+kIconWidth+3);
-        g_pOptimizedRenderer->FillRect(hScreen,&rect,SETRGB_T(vColor.x,vColor.y,vColor.z));
-        g_pLTClient->DrawSurfaceToSurface(hScreen, m_hWeaponSurf[1], LTNULL, x, y);
+		LTRect rect(x-3,y-3,x+kIconWidth+3,y+kIconWidth+3);
+		g_pOptimizedRenderer->FillRect(hScreen,&rect,SETRGB_T(vColor.x,vColor.y,vColor.z));
+		g_pLTClient->DrawSurfaceToSurface(hScreen, m_hWeaponSurf[1], LTNULL, x, y);
 	}
 
 // commented out drawing of weapon command - jrg 9/22
@@ -258,7 +256,7 @@ void CWeaponChooser::Draw()
 
 
 	if (m_hWeaponSurf[2] && m_nWeapons[2] != m_nWeapons[1])
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hWeaponSurf[2], LTNULL, x, y,SETRGB_T(255,0,255));
+	g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hWeaponSurf[2], LTNULL, x, y,SETRGB_T(255,0,255));
 
 }
 
@@ -275,10 +273,10 @@ void CWeaponChooser::SetCommandStr(int nWeaponId)
 
 CAmmoChooser::CAmmoChooser()
 {
-    memset(m_hAmmoSurf, LTNULL, sizeof(m_hAmmoSurf));
+	memset(m_hAmmoSurf, LTNULL, sizeof(m_hAmmoSurf));
 	memset(m_nAmmo, -1, sizeof(m_nAmmo));
-    m_hAmmoStr = LTNULL;
-    m_bIsOpen = LTFALSE;
+	m_hAmmoStr = LTNULL;
+	m_bIsOpen = LTFALSE;
 	m_fStartTime = 0.0f;
 }
 
@@ -302,7 +300,7 @@ LTBOOL CAmmoChooser::Open()
 
 
 	if (m_bIsOpen)
-        return LTTRUE;
+	return LTTRUE;
 
 	m_nAmmo[kCurrAmmo] = g_pGameClientShell->GetWeaponModel()->GetAmmoId();
 	m_nAmmo[kLastAmmo] = g_pGameClientShell->GetWeaponModel()->NextAmmo();
@@ -311,34 +309,34 @@ LTBOOL CAmmoChooser::Open()
 	{
 		for (int i = 0; i < NUM_AMMO_ICONS; i++)
 			m_nAmmo[i] = -1;
-        m_bIsOpen = LTFALSE;
-        return LTFALSE;
+		m_bIsOpen = LTFALSE;
+		return LTFALSE;
 	}
-    m_bIsOpen = LTTRUE;
+	m_bIsOpen = LTTRUE;
 
-    AMMO* pAmmo = LTNULL;
+	AMMO* pAmmo = LTNULL;
 
 	for (int i = 0; i < NUM_AMMO_ICONS; i++)
 	{
 		pAmmo = g_pWeaponMgr->GetAmmo(m_nAmmo[i]);
 		if (pAmmo)
 		{
-            m_hAmmoSurf[i] = g_pLTClient->CreateSurfaceFromBitmap(pAmmo->szIcon);
-            g_pLTClient->OptimizeSurface(m_hAmmoSurf[i],SETRGB_T(255,0,255));
+			m_hAmmoSurf[i] = g_pLTClient->CreateSurfaceFromBitmap(pAmmo->szIcon);
+			g_pLTClient->OptimizeSurface(m_hAmmoSurf[i],SETRGB_T(255,0,255));
 		}
 	}
 
 	pAmmo = g_pWeaponMgr->GetAmmo(m_nAmmo[kLastAmmo]);
 	if (pAmmo)
 	{
-        m_hAmmoStr = g_pLTClient->FormatString(pAmmo->nNameId);
-        g_pLTClient->SetSurfaceAlpha(m_hAmmoSurf[kCurrAmmo],1.0f);
-        g_pLTClient->SetSurfaceAlpha(m_hAmmoSurf[kLastAmmo],0.5f);
+		m_hAmmoStr = g_pLTClient->FormatString(pAmmo->nNameId);
+		g_pLTClient->SetSurfaceAlpha(m_hAmmoSurf[kCurrAmmo],1.0f);
+		g_pLTClient->SetSurfaceAlpha(m_hAmmoSurf[kLastAmmo],0.5f);
 	}
 
-    m_fStartTime = g_pLTClient->GetTime();
+	m_fStartTime = g_pLTClient->GetTime();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 void CAmmoChooser::Close()
@@ -350,16 +348,16 @@ void CAmmoChooser::Close()
 		m_nAmmo[i] = -1;
 		if (m_hAmmoSurf[i])
 		{
-            g_pLTClient->DeleteSurface(m_hAmmoSurf[i]);
-            m_hAmmoSurf[i] = LTNULL;
+			g_pLTClient->DeleteSurface(m_hAmmoSurf[i]);
+			m_hAmmoSurf[i] = LTNULL;
 		}
 	}
 	if (m_hAmmoStr)
 	{
-        g_pLTClient->FreeString(m_hAmmoStr);
-        m_hAmmoStr = LTNULL;
+		g_pLTClient->FreeString(m_hAmmoStr);
+		m_hAmmoStr = LTNULL;
 	}
-    m_bIsOpen = LTFALSE;
+	m_bIsOpen = LTFALSE;
 	m_fStartTime = 0.0f;
 }
 
@@ -367,8 +365,8 @@ void CAmmoChooser::NextAmmo()
 {
 	if (m_hAmmoSurf[kCurrAmmo])
 	{
-        g_pLTClient->DeleteSurface(m_hAmmoSurf[kCurrAmmo]);
-        m_hAmmoSurf[kCurrAmmo] = LTNULL;
+		g_pLTClient->DeleteSurface(m_hAmmoSurf[kCurrAmmo]);
+		m_hAmmoSurf[kCurrAmmo] = LTNULL;
 	}
 	m_nAmmo[kCurrAmmo] = m_nAmmo[kLastAmmo];
 	m_hAmmoSurf[kCurrAmmo] = m_hAmmoSurf[kLastAmmo];
@@ -378,33 +376,33 @@ void CAmmoChooser::NextAmmo()
 	AMMO* pAmmo = g_pWeaponMgr->GetAmmo(m_nAmmo[kLastAmmo]);
 	if (pAmmo)
 	{
-        m_hAmmoSurf[kLastAmmo] = g_pLTClient->CreateSurfaceFromBitmap(pAmmo->szIcon);
-        g_pLTClient->OptimizeSurface(m_hAmmoSurf[kLastAmmo],SETRGB_T(255,0,255));
+		m_hAmmoSurf[kLastAmmo] = g_pLTClient->CreateSurfaceFromBitmap(pAmmo->szIcon);
+		g_pLTClient->OptimizeSurface(m_hAmmoSurf[kLastAmmo],SETRGB_T(255,0,255));
 	}
 	if (m_hAmmoStr)
 	{
-        g_pLTClient->FreeString(m_hAmmoStr);
-        m_hAmmoStr = LTNULL;
+		g_pLTClient->FreeString(m_hAmmoStr);
+		m_hAmmoStr = LTNULL;
 	}
 
 	pAmmo = g_pWeaponMgr->GetAmmo(m_nAmmo[kCurrAmmo]);
 	if (pAmmo)
 	{
-        m_hAmmoStr = g_pLTClient->FormatString(pAmmo->nNameId);
-        g_pLTClient->SetSurfaceAlpha(m_hAmmoSurf[kCurrAmmo],1.0f);
-        g_pLTClient->SetSurfaceAlpha(m_hAmmoSurf[kLastAmmo],0.5f);
+		m_hAmmoStr = g_pLTClient->FormatString(pAmmo->nNameId);
+		g_pLTClient->SetSurfaceAlpha(m_hAmmoSurf[kCurrAmmo],1.0f);
+		g_pLTClient->SetSurfaceAlpha(m_hAmmoSurf[kLastAmmo],0.5f);
 	}
 
 	g_pClientSoundMgr->PlayInterfaceSound((char*)g_pInterfaceResMgr->GetSoundSelect());
 
-    m_fStartTime = g_pLTClient->GetTime();
+	m_fStartTime = g_pLTClient->GetTime();
 
 }
 
 
 void CAmmoChooser::Draw()
 {
-    float fTime = g_pLTClient->GetTime() - m_fStartTime;
+	float fTime = g_pLTClient->GetTime() - m_fStartTime;
 	if (m_fStartTime > 0.0f && fTime > kfDelayTime)
 	{
 		g_pClientSoundMgr->PlayInterfaceSound((char*)g_pInterfaceResMgr->GetSoundSelect());
@@ -414,9 +412,9 @@ void CAmmoChooser::Draw()
 
 	CPlayerStats *pStats = g_pInterfaceMgr->GetPlayerStats();
 
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
-    uint32 nScreenHeight, nScreenWidth;
-    g_pLTClient->GetSurfaceDims (hScreen, &nScreenWidth, &nScreenHeight);
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	uint32 nScreenHeight, nScreenWidth;
+	g_pLTClient->GetSurfaceDims (hScreen, &nScreenWidth, &nScreenHeight);
 	float yRatio = (float)nScreenHeight / 480.0f;
 
 	int x = (int)nScreenWidth / 2;
@@ -430,9 +428,9 @@ void CAmmoChooser::Draw()
 
 	if (m_hAmmoSurf[kCurrAmmo])
 	{
-        LTRect rect(x-3,y-3,x+kIconWidth+3,y+kIconWidth+3);
-        g_pOptimizedRenderer->FillRect(hScreen,&rect,SETRGB_T(220,192,255));
-        g_pLTClient->DrawSurfaceToSurface(hScreen, m_hAmmoSurf[kCurrAmmo], LTNULL, x, y);
+		LTRect rect(x-3,y-3,x+kIconWidth+3,y+kIconWidth+3);
+		g_pOptimizedRenderer->FillRect(hScreen,&rect,SETRGB_T(220,192,255));
+		g_pLTClient->DrawSurfaceToSurface(hScreen, m_hAmmoSurf[kCurrAmmo], LTNULL, x, y);
 		int count = pStats->GetAmmoCount(m_nAmmo[kCurrAmmo]);
 		if (count > 0 && count < 1000)
 		{
@@ -445,7 +443,7 @@ void CAmmoChooser::Draw()
 
 	if (m_hAmmoSurf[kLastAmmo])
 	{
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hAmmoSurf[kLastAmmo], LTNULL, x, y,SETRGB_T(255,0,255));
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hAmmoSurf[kLastAmmo], LTNULL, x, y,SETRGB_T(255,0,255));
 		int count = pStats->GetAmmoCount(m_nAmmo[kLastAmmo]);
 		if (count > 0 && count < 1000)
 		{
@@ -454,5 +452,4 @@ void CAmmoChooser::Draw()
 			pFont->Draw(szStr,hScreen,(x+kIconWidth/2),y + kIconWidth - 16,LTF_JUSTIFY_CENTER);
 		}
 	}
-
 }
