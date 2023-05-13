@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : CameraOffsetMgr.h
+// MODULE: CameraOffsetMgr.h
 //
 // PURPOSE : Camera offset mgr - Definition
 //
 // CREATED : 8/23/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __CAMERA_OFFSET_MGR__
@@ -15,7 +13,7 @@
 
 #include "CommonUtilities.h"
 
-#define	MAX_CAMERA_DELTAS			20
+#define	MAX_CAMERA_DELTAS		20
 #define MAX_STATIC_CAMERA_DELTAS	10
 
 // The CameraAdjustVar struct is used to maintain a single camera orientation
@@ -37,13 +35,13 @@ struct CameraAdjustVar
 	WaveType	eWave1;		// How var changes
 	WaveType	eWave2;		// How reverse var changes
 
-    LTBOOL       bIncrement; // Return value as an increment
+	LTBOOL	bIncrement; // Return value as an increment
 
-  private :
+	private :
 
-	int			m_nDir;				// Forward (1) or reverse (-1)
-	float		m_fValue;			// Current variable value
-	float		m_fCurTime;			// Current time delta
+	int		m_nDir;			// Forward (1) or reverse (-1)
+	float		m_fValue;		// Current variable value
+	float		m_fCurTime;		// Current time delta
 	float		m_fRealValue;		// Real calculated value
 	float		m_fLastRealValue;	// Last real calculated value
 
@@ -56,7 +54,7 @@ struct CameraAdjustVar
 		m_fRealValue = 0.0f;
 		m_fLastRealValue = 0.0f;
 
-        bIncrement = LTFALSE;
+		bIncrement = LTFALSE;
 
 		fVar	= 0.0f;
 		fTime1	= 0.0f;
@@ -73,9 +71,9 @@ struct CameraDelta
 {
 	CameraDelta()
 	{
-        Pitch.bIncrement	= LTFALSE;
-        Roll.bIncrement		= LTFALSE;
-        Yaw.bIncrement		= LTFALSE;
+		Pitch.bIncrement	= LTFALSE;
+		Roll.bIncrement		= LTFALSE;
+		Yaw.bIncrement		= LTFALSE;
 	}
 
 	inline float GetTotalDelta() const
@@ -92,12 +90,12 @@ struct CameraDelta
 		return (float)fTotal;
 	}
 
-	CameraAdjustVar		Pitch;
-	CameraAdjustVar		Yaw;
-	CameraAdjustVar		Roll;
-	CameraAdjustVar		PosX;
-	CameraAdjustVar		PosY;
-	CameraAdjustVar		PosZ;
+	CameraAdjustVar	Pitch;
+	CameraAdjustVar	Yaw;
+	CameraAdjustVar	Roll;
+	CameraAdjustVar	PosX;
+	CameraAdjustVar	PosY;
+	CameraAdjustVar	PosZ;
 };
 
 
@@ -107,29 +105,27 @@ class CCameraOffsetMgr
 
 		CCameraOffsetMgr();
 
-        LTBOOL   Init();
+	LTBOOL	Init();
 		void	Update();
 
 		void	AddDelta(CameraDelta & delta);
 
-		CameraDelta* GetStaticDelta(int nIndex);
-		void	     SetStaticDelta(CameraDelta & delta, int nIndex);
+		CameraDelta*	GetStaticDelta(int nIndex);
+		void		SetStaticDelta(CameraDelta & delta, int nIndex);
 
-        inline LTVector  GetPosDelta()           const { return m_vPosDelta; }
-        inline LTVector  GetPitchYawRollDelta()  const { return m_vPitchYawRollDelta; }
+	inline LTVector GetPosDelta()		const { return m_vPosDelta; }
+	inline LTVector GetPitchYawRollDelta()	const { return m_vPitchYawRollDelta; }
 
 	private :
 
-		void			ValidateDeltas();
+		void		ValidateDeltas();
 
-		CameraDelta		 m_CameraDeltas[MAX_CAMERA_DELTAS];
-		CameraDelta		 m_StaticCameraDeltas[MAX_STATIC_CAMERA_DELTAS];
-        LTVector         m_vPitchYawRollDelta;
-        LTVector         m_vPosDelta;
+		CameraDelta	m_CameraDeltas[MAX_CAMERA_DELTAS];
+		CameraDelta	m_StaticCameraDeltas[MAX_STATIC_CAMERA_DELTAS];
+		LTVector	m_vPitchYawRollDelta;
+		LTVector	m_vPosDelta;
 
-		void			ProcessTestingVars();
+		void	ProcessTestingVars();
 };
 
-
-#endif  // __CAMERA_OFFSET_MGR__
-
+#endif	// __CAMERA_OFFSET_MGR__
