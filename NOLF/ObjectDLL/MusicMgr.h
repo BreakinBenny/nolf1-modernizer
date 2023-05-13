@@ -11,31 +11,30 @@ class CMusicMgr
 
 		enum Event
 		{
-			eEventInvalid		= -1,
-			eEventPlayerDie		= 0, 
-			eEventAIDie			= 1,
-			eEventAIDodge		= 2,
+			eEventInvalid	= -1,
+			eEventPlayerDie	= 0, 
+			eEventAIDie	= 1,
+			eEventAIDodge	= 2,
 
-			kNumEvents			= 3,
+			kNumEvents		= 3,
 			kMaxMotifsPerEvent	= 10,
 		};
 
 		enum Mood
 		{
 			eMoodInvalid		= -1,
-			eMoodNone			= 0,
+			eMoodNone		= 0,
 			eMoodRoutine		= 1,
 			eMoodInvestigate	= 2,
 			eMoodAggressive		= 3,
 
-			kNumMoods			= 4,
+			kNumMoods		= 4,
 			kMaxLevelsPerMood	= 10,
 		};
 
 	public :
 
 		// Ctors/Dtors/etc
-
 		CMusicMgr();
 		virtual ~CMusicMgr();
 
@@ -48,11 +47,9 @@ class CMusicMgr
 		void Invalidate() { /*m_eLastMood = eMoodInvalid;*/ }
 
 		// Update
-
 		void Update();
 
 		// Lock
-
 		void LockMood() { m_bLockedMood = LTTRUE; }
 		void UnlockMood() { m_bLockedMood = LTFALSE; Invalidate(); }
 		LTBOOL IsMoodLocked() { return m_bLockedMood; }
@@ -61,20 +58,16 @@ class CMusicMgr
 		void UnlockEvent() { m_bLockedEvent = LTFALSE; }
 
 		// Moods
-
 		void DoMood(Mood eMood);
 
 		// Events
-
 		void DoEvent(Event eEvent);
 
 		// Intensity
-
 		void SetRestoreMusicIntensity(uint32 iRestoreMusicIntensity) { m_iRestoreMusicIntensity = iRestoreMusicIntensity; }
 		void RestoreMusicIntensity() { m_bRestoreMusicIntensity = LTTRUE; }
 
 		// Enable/Disable
-
 		void Enable() { m_bEnabled = LTTRUE; }
 		void Disable() { m_bEnabled = LTFALSE; }
 		
@@ -82,29 +75,29 @@ class CMusicMgr
 
 		CButeMgr	m_ButeMgr;
 
-		LTBOOL		m_bInitialized;
+		LTBOOL	m_bInitialized;
 
-		char		m_szTheme[128];
+		char	m_szTheme[128];
 
-		LTBOOL		m_bLockedMood;
-		LTBOOL		m_bLockedEvent;
+		LTBOOL	m_bLockedMood;
+		LTBOOL	m_bLockedEvent;
 
-		uint32		m_iRestoreMusicIntensity;
-		LTBOOL		m_bRestoreMusicIntensity;
+		uint32	m_iRestoreMusicIntensity;
+		LTBOOL	m_bRestoreMusicIntensity;
 
-		LTFLOAT		m_afMoods[kNumMoods];
+		LTFLOAT	m_afMoods[kNumMoods];
 
-		Mood		m_eLastMood;
+		Mood	m_eLastMood;
 
-		uint32		m_acMoods[kNumMoods];
-		uint32		m_aanMoods[kNumMoods][kMaxLevelsPerMood];
+		uint32	m_acMoods[kNumMoods];
+		uint32	m_aanMoods[kNumMoods][kMaxLevelsPerMood];
 
-		uint32		m_acEvents[kNumEvents];
-		char		m_aaszEvents[kNumEvents][kMaxMotifsPerEvent][128];
+		uint32	m_acEvents[kNumEvents];
+		char	m_aaszEvents[kNumEvents][kMaxMotifsPerEvent][128];
 
-		LTFLOAT		m_afEventChances[kNumEvents];
+		LTFLOAT	m_afEventChances[kNumEvents];
 
-		LTBOOL		m_bEnabled;
+		LTBOOL	m_bEnabled;
 };
 
 #endif // MUSICMGR_H
