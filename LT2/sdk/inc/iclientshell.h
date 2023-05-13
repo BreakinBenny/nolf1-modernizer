@@ -1,4 +1,3 @@
-
 #ifndef __ICLIENTSHELL_H__
 #define __ICLIENTSHELL_H__
 
@@ -80,9 +79,9 @@
 
 		// Called when a particular engine event happens.
 		// Parameters:
-		//		pShell - Game client shell.
-		//		dwEvent - Event ID.  One of the LTEVENT_ values
-		//		dwParam - Event data.
+		//	pShell - Game client shell.
+		//	dwEvent - Event ID.  One of the LTEVENT_ values
+		//	dwParam - Event data.
 		virtual void OnEvent( uint32 dwEventID, uint32 dwParam ) {}
 
 		// Called when an object moved on the client side collides with another.
@@ -146,4 +145,3 @@
 
 
 #endif  // __ICLIENTSHELL_H__
-
