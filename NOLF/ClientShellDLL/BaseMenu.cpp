@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : BaseMenu.cpp
+// MODULE: BaseMenu.cpp
 //
 // PURPOSE : Base Class for In-game Menus
 //
 // CREATED : 3/20/00
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -14,7 +12,7 @@
 
 CBaseMenu::CBaseMenu()
 {
-    m_pMenuWnd = LTNULL;
+	m_pMenuWnd = LTNULL;
 }
 
 void CBaseMenu::Show(LTBOOL bShow)
