@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : Weapons.cpp
+// MODULE: Weapons.cpp
 //
 // PURPOSE : Weapons container object - Implementation
 //
 // CREATED : 9/25/97
 //
 // (c) 1997-2001 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -28,28 +26,24 @@ CBankedList<CWeapon> s_bankCWeapon;
 CVarTrack g_WeaponsStay;
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::CWeapons()
 //
 //	PURPOSE:	Initialization
-//
 // ----------------------------------------------------------------------- //
 
 CWeapons::CWeapons()
 {
-    m_pWeapons   = LTNULL;
-    m_pAmmo      = LTNULL;
-	m_nCurWeapon = -1;
-    m_hCharacter     = LTNULL;
+	m_pWeapons	= LTNULL;
+	m_pAmmo		= LTNULL;
+	m_nCurWeapon	= -1;
+	m_hCharacter	 = LTNULL;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::~CWeapons()
 //
 //	PURPOSE:	Destructor - deallocate weapons
-//
 // ----------------------------------------------------------------------- //
 
 CWeapons::~CWeapons()
@@ -63,16 +57,14 @@ CWeapons::~CWeapons()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::Init()
 //
 //	PURPOSE:	Initialize weapons
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeapons::Init(HOBJECT hCharacter, HOBJECT hWeaponModel)
 {
-    LTBOOL bRet = LTFALSE;
+	LTBOOL bRet = LTFALSE;
 
 	m_hCharacter = hCharacter;
 	m_hWeaponModel = hWeaponModel;
@@ -89,7 +81,7 @@ LTBOOL CWeapons::Init(HOBJECT hCharacter, HOBJECT hWeaponModel)
 		}
 		else
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 	}
 
@@ -103,7 +95,7 @@ LTBOOL CWeapons::Init(HOBJECT hCharacter, HOBJECT hWeaponModel)
 		}
 		else
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 	}
 
@@ -114,15 +106,13 @@ LTBOOL CWeapons::Init(HOBJECT hCharacter, HOBJECT hWeaponModel)
 		g_WeaponsStay.Init(g_pLTServer, "NetWeaponsStay", NULL, 0.0f);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::CreateWeapon()
 //
 //	PURPOSE:	Create the specified weapon
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapons::CreateWeapon(uint8 nWeaponId, uint8 nAmmoId)
@@ -146,17 +136,14 @@ void CWeapons::CreateWeapon(uint8 nWeaponId, uint8 nAmmoId)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::CreateAllWeapons()
 //
 //	PURPOSE:	Set up the weapon arsenal
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapons::CreateAllWeapons()
 {
 	// Make sure we don't already have this arsenal...
-
 	if (!m_pWeapons || m_pWeapons[0]) return;
 
 	int nNumWeapons = g_pWeaponMgr->GetNumWeapons();
@@ -168,11 +155,9 @@ void CWeapons::CreateAllWeapons()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::EngineMessageFn
 //
 //	PURPOSE:	Handle message from the engine
-//
 // ----------------------------------------------------------------------- //
 
 uint32 CWeapons::EngineMessageFn(LPBASECLASS pObject, uint32 messageID, void *pData, LTFLOAT lData)
@@ -181,13 +166,13 @@ uint32 CWeapons::EngineMessageFn(LPBASECLASS pObject, uint32 messageID, void *pD
 	{
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint8)lData);
+			Save((HMESSAGEWRITE)pData, (uint8)lData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint8)lData);
+			Load((HMESSAGEREAD)pData, (uint8)lData);
 		}
 		break;
 	}
@@ -197,11 +182,9 @@ uint32 CWeapons::EngineMessageFn(LPBASECLASS pObject, uint32 messageID, void *pD
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::ObjectMessageFn
 //
 //	PURPOSE:	Handle object-to-object messages
-//
 // ----------------------------------------------------------------------- //
 
 uint32 CWeapons::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -234,22 +217,19 @@ uint32 CWeapons::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, uint32 me
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::AddWeapon
 //
 //	PURPOSE:	Add a new weapon
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeapons::AddWeapon(LPBASECLASS pObject, HOBJECT hSender, HMESSAGEREAD hRead)
 {
-    uint8   nWeaponId		= g_pLTServer->ReadFromMessageByte(hRead);
-    uint8   nAmmoId			= g_pLTServer->ReadFromMessageByte(hRead);
-    int     nAmmo			= (int) g_pLTServer->ReadFromMessageFloat(hRead);
-	LTBOOL  bIsLevelPowerup = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	uint8	nWeaponId	= g_pLTServer->ReadFromMessageByte(hRead);
+	uint8	nAmmoId		= g_pLTServer->ReadFromMessageByte(hRead);
+	int	nAmmo		= (int) g_pLTServer->ReadFromMessageFloat(hRead);
+	LTBOOL	bIsLevelPowerup	= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
 
 	// Make sure we always have the default ammo for the new weapon...
-
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(nWeaponId);
 
 	if (pWeapon && pWeapon->nDefaultAmmoType != nAmmoId &&
@@ -258,12 +238,10 @@ LTBOOL CWeapons::AddWeapon(LPBASECLASS pObject, HOBJECT hSender, HMESSAGEREAD hR
 		AMMO* pAmmo = g_pWeaponMgr->GetAmmo(pWeapon->nDefaultAmmoType);
 	
 		// Only add the ammo if we don't have any of it...
-
 		if (pAmmo && m_pAmmo[pWeapon->nDefaultAmmoType] == 0)
 		{
 			// Give the default ammo, and make sure the client is updated
 			// if this is a player (and we actually added some)...
-
 			if (AddAmmo(pWeapon->nDefaultAmmoType, pAmmo->nSelectionAmount))
 			{
 				if (IsPlayer(m_hCharacter))
@@ -292,20 +270,18 @@ LTBOOL CWeapons::AddWeapon(LPBASECLASS pObject, HOBJECT hSender, HMESSAGEREAD hR
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::AddWeapon
 //
 //	PURPOSE:	Add a new weapon
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeapons::AddWeapon(LPBASECLASS pObject, HOBJECT hSender, uint8 nWeaponId,
-						   uint8 nAmmoId, int nAmmo, LTBOOL bIsLevelPowerup)
+						uint8 nAmmoId, int nAmmo, LTBOOL bIsLevelPowerup)
 {
  	if (!IsValidIndex(nWeaponId)) return LTFALSE;
 
-	LTBOOL  bHaveIt   = LTTRUE;
-    LTBOOL  bPickedUp = LTFALSE;
+	LTBOOL	bHaveIt = LTTRUE;
+	LTBOOL	bPickedUp = LTFALSE;
 
 	LTBOOL bWasOutOfAmmo = LTFALSE; 
 
@@ -331,8 +307,8 @@ LTBOOL CWeapons::AddWeapon(LPBASECLASS pObject, HOBJECT hSender, uint8 nWeaponId
 	}
 	else
 	{
-        bHaveIt   = LTFALSE;
-        bPickedUp = LTTRUE;
+		bHaveIt	= LTFALSE;
+		bPickedUp = LTTRUE;
 		ObtainWeapon(nWeaponId, nAmmoId, nAmmo);
 	}
 
@@ -340,64 +316,60 @@ LTBOOL CWeapons::AddWeapon(LPBASECLASS pObject, HOBJECT hSender, uint8 nWeaponId
 	if (bPickedUp)
 	{
 		// Tell powerup it was picked up...
-
 		HMESSAGEWRITE hWrite = g_pLTServer->StartMessageToObject(pObject, hSender, MID_PICKEDUP);
-        g_pLTServer->WriteToMessageFloat(hWrite, -1.0f);
-        g_pLTServer->EndMessage(hWrite);
+		g_pLTServer->WriteToMessageFloat(hWrite, -1.0f);
+		g_pLTServer->EndMessage(hWrite);
 
 
 		// Send the appropriate message to the client...
-
 		if (IsPlayer(m_hCharacter))
 		{
-            CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hCharacter);
-            if (!pPlayer) return LTFALSE;
+			CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hCharacter);
+			if (!pPlayer) return LTFALSE;
 
 			HCLIENT hClient = pPlayer->GetClient();
 			if (hClient)
 			{
-                HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
-                g_pLTServer->WriteToMessageByte(hMessage, IC_WEAPON_PICKUP_ID);
-                g_pLTServer->WriteToMessageByte(hMessage, nWeaponId);
-                g_pLTServer->WriteToMessageByte(hMessage, nAmmoId);
-                g_pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)GetAmmoCount(nAmmoId));
-                g_pLTServer->EndMessage(hMessage);
+				HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
+				g_pLTServer->WriteToMessageByte(hMessage, IC_WEAPON_PICKUP_ID);
+				g_pLTServer->WriteToMessageByte(hMessage, nWeaponId);
+				g_pLTServer->WriteToMessageByte(hMessage, nAmmoId);
+				g_pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)GetAmmoCount(nAmmoId));
+				g_pLTServer->EndMessage(hMessage);
 			}
 
 			HandlePotentialWeaponChange(pPlayer, nWeaponId, nAmmoId, bHaveIt, bWasOutOfAmmo);
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::AddAmmoBox
 //
 //	PURPOSE:	Collect ammo from a box
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeapons::AddAmmoBox(LPBASECLASS pObject, HOBJECT hSender, HMESSAGEREAD hRead)
 {
 
-    uint8   nAmmoTypesLeft = 0;
+	uint8	nAmmoTypesLeft	= 0;
 
-    uint8   numAmmoTypes   = g_pLTServer->ReadFromMessageByte(hRead);
-    uint8   nAmmoId[AB_MAX_TYPES];
-	int		nAmmo[AB_MAX_TYPES];
+	uint8	numAmmoTypes	= g_pLTServer->ReadFromMessageByte(hRead);
+	uint8	nAmmoId[AB_MAX_TYPES];
+	int	nAmmo[AB_MAX_TYPES];
 
 	LTBOOL bTookAmmo[AB_MAX_TYPES];
 	LTBOOL bTookAnyAmmo = LTFALSE;
 
-    uint8 i;
-    for (i = 0; i < numAmmoTypes; i++)
+	uint8 i;
+	for (i = 0; i < numAmmoTypes; i++)
 	{
 		bTookAmmo[i] = LTFALSE;
 
-        nAmmoId[i]  = g_pLTServer->ReadFromMessageByte(hRead);
-        nAmmo[i]    = (int) g_pLTServer->ReadFromMessageFloat(hRead);
+		nAmmoId[i]	= g_pLTServer->ReadFromMessageByte(hRead);
+		nAmmo[i]	= (int) g_pLTServer->ReadFromMessageFloat(hRead);
 
 		if (IsValidAmmoId(nAmmoId[i]))
 		{
@@ -433,22 +405,21 @@ LTBOOL CWeapons::AddAmmoBox(LPBASECLASS pObject, HOBJECT hSender, HMESSAGEREAD h
 			}
 			g_pLTServer->EndMessage(hWrite);
 		}
-	}  
+	}
 	else
 	{
-        // Tell powerup it was picked up...
-        HMESSAGEWRITE hWrite = g_pLTServer->StartMessageToObject(pObject, hSender, MID_PICKEDUP);
-        g_pLTServer->WriteToMessageFloat(hWrite, -1.0f);
-        g_pLTServer->EndMessage(hWrite);
+		// Tell powerup it was picked up...
+		HMESSAGEWRITE hWrite = g_pLTServer->StartMessageToObject(pObject, hSender, MID_PICKEDUP);
+		g_pLTServer->WriteToMessageFloat(hWrite, -1.0f);
+		g_pLTServer->EndMessage(hWrite);
 	}
-
 
 
 	// Send the appropriate message to the client...
 	if (IsPlayer(m_hCharacter) && bTookAnyAmmo)
 	{
-        CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hCharacter);
-        if (!pPlayer) return LTFALSE;
+		CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hCharacter);
+		if (!pPlayer) return LTFALSE;
 
 		HCLIENT hClient = pPlayer->GetClient();
 		if (hClient)
@@ -457,33 +428,31 @@ LTBOOL CWeapons::AddAmmoBox(LPBASECLASS pObject, HOBJECT hSender, HMESSAGEREAD h
 			{
 				if (bTookAmmo[i])
 				{
-                    HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
-                    g_pLTServer->WriteToMessageByte(hMessage, IC_WEAPON_PICKUP_ID);
-                    g_pLTServer->WriteToMessageByte(hMessage, WMGR_INVALID_ID);
-                    g_pLTServer->WriteToMessageByte(hMessage, nAmmoId[i]);
-                    g_pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)GetAmmoCount(nAmmoId[i]));
-                    g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLEFAST);
+					HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
+					g_pLTServer->WriteToMessageByte(hMessage, IC_WEAPON_PICKUP_ID);
+					g_pLTServer->WriteToMessageByte(hMessage, WMGR_INVALID_ID);
+					g_pLTServer->WriteToMessageByte(hMessage, nAmmoId[i]);
+					g_pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)GetAmmoCount(nAmmoId[i]));
+					g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLEFAST);
 				}
 			}
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::AddMod
 //
 //	PURPOSE:	Add a weapon mod to the weapon
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeapons::AddMod(LPBASECLASS pObject, HOBJECT hSender, HMESSAGEREAD hRead)
 {
 
-    uint8 nModId = g_pLTServer->ReadFromMessageByte(hRead);
+	uint8 nModId = g_pLTServer->ReadFromMessageByte(hRead);
 
 	MOD* pMod = g_pWeaponMgr->GetMod(nModId);
 	if (pMod)
@@ -491,29 +460,25 @@ LTBOOL CWeapons::AddMod(LPBASECLASS pObject, HOBJECT hSender, HMESSAGEREAD hRead
 		uint8 nWeaponId = pMod->GetWeaponId();
 
 		// Check to see if we already have the mod...
-
 		if (!m_pWeapons[nWeaponId]->HaveMod(nModId))
 		{
 			ObtainMod(nWeaponId, nModId);
 
 			// Tell powerup it was picked up...
-
 			HMESSAGEWRITE hWrite = g_pLTServer->StartMessageToObject(pObject, hSender, MID_PICKEDUP);
 			g_pLTServer->WriteToMessageFloat(hWrite, -1.0f);
 			g_pLTServer->EndMessage(hWrite);
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::AddAmmo
 //
 //	PURPOSE:	Add ammo to a specific ammo type
-//
 // ----------------------------------------------------------------------- //
 
 int CWeapons::AddAmmo(int nAmmoId, int nAmount)
@@ -543,11 +508,9 @@ int CWeapons::AddAmmo(int nAmmoId, int nAmount)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::DecrementAmmo
 //
 //	PURPOSE:	Decrement the specified ammo count
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapons::DecrementAmmo(int nAmmoId)
@@ -564,22 +527,19 @@ void CWeapons::DecrementAmmo(int nAmmoId)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::SetAmmo
 //
 //	PURPOSE:	Set the ammount of ammo for a specific ammo type
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeapons::SetAmmo(int nAmmoId, int nAmount)
 {
 	AMMO* pAmmo = g_pWeaponMgr->GetAmmo(nAmmoId);
-    if (!pAmmo) return LTFALSE;
+	if (!pAmmo) return LTFALSE;
 
 	int nMaxAmmo = pAmmo->GetMaxAmount(m_hCharacter);
 
 	// Set to max if less than 0...
-
 	if (nAmount < 0)
 	{
 		nAmount = nMaxAmmo;
@@ -592,26 +552,23 @@ LTBOOL CWeapons::SetAmmo(int nAmmoId, int nAmount)
 		m_pAmmo[nAmmoId] = nMaxAmmo;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::ObtainWeapon()
 //
 //	PURPOSE:	Mark a specific weapon as aquired
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapons::ObtainWeapon(uint8 nWeaponId, int nAmmoId,
-                            int nDefaultAmmo, LTBOOL bNotifyClient)
+							int nDefaultAmmo, LTBOOL bNotifyClient)
 {
 	if (!m_pWeapons || !IsValidIndex(nWeaponId)) return;
 
 
 	// If necessary set the ammo type based on the weapon's default
 	// ammo...
-
 	if (nAmmoId == AMMO_DEFAULT_ID)
 	{
 		WEAPON* pWeaponData = g_pWeaponMgr->GetWeapon(nWeaponId);
@@ -622,17 +579,14 @@ void CWeapons::ObtainWeapon(uint8 nWeaponId, int nAmmoId,
 
 
 	// Make sure we actually have the thing...
-
 	if (!m_pWeapons[nWeaponId]) return;
 
 
 	// Give us the weapon!
-
 	m_pWeapons[nWeaponId]->Aquire();
 
 
 	// Set the weapon's default ammo if appropriate...
-
 	if (nDefaultAmmo >= 0)
 	{
 		SetAmmo(nAmmoId, nDefaultAmmo + GetAmmoCount(nAmmoId));
@@ -657,33 +611,30 @@ void CWeapons::ObtainWeapon(uint8 nWeaponId, int nAmmoId,
 	}
 
 
-
 	// Notify the client if this is a player's weapon, and the flag
 	// is set...
-
 	if (bNotifyClient)
 	{
 		// Send the appropriate message to the client...
 
 		if (IsPlayer(m_hCharacter))
 		{
-            CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hCharacter);
+			CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hCharacter);
 			if (!pPlayer) return;
 
 			HCLIENT hClient = pPlayer->GetClient();
 			if (hClient)
 			{
-                HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
-                g_pLTServer->WriteToMessageByte(hMessage, IC_WEAPON_OBTAIN_ID);
-                g_pLTServer->WriteToMessageByte(hMessage, nWeaponId);
-                g_pLTServer->WriteToMessageByte(hMessage, nAmmoId);
-                g_pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)GetAmmoCount(nAmmoId));
-                g_pLTServer->EndMessage(hMessage);
+				HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
+				g_pLTServer->WriteToMessageByte(hMessage, IC_WEAPON_OBTAIN_ID);
+				g_pLTServer->WriteToMessageByte(hMessage, nWeaponId);
+				g_pLTServer->WriteToMessageByte(hMessage, nAmmoId);
+				g_pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)GetAmmoCount(nAmmoId));
+				g_pLTServer->EndMessage(hMessage);
 			}
 
 			// If there isn't currently a weapon selected, or we're
 			// on our melee weapon, Select the new weapon..
-
 			if (m_nCurWeapon < 0)
 			{
 				pPlayer->ChangeWeapon(g_pWeaponMgr->GetCommandId(nWeaponId));
@@ -693,11 +644,9 @@ void CWeapons::ObtainWeapon(uint8 nWeaponId, int nAmmoId,
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::ObtainMod()
 //
 //	PURPOSE:	Mark a specific weapon as aquired
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapons::ObtainMod(uint8 nWeaponId, uint8 nModId, LTBOOL bNotifyClient)
@@ -706,7 +655,6 @@ void CWeapons::ObtainMod(uint8 nWeaponId, uint8 nModId, LTBOOL bNotifyClient)
 
 
 	// Make sure we actually have the thing...
-
 	if (!m_pWeapons[nWeaponId]) return;
 
 
@@ -717,63 +665,57 @@ void CWeapons::ObtainMod(uint8 nWeaponId, uint8 nModId, LTBOOL bNotifyClient)
 
 	// Notify the client if this is a player's weapon, and the flag
 	// is set...
-
 	if (bNotifyClient && IsPlayer(m_hCharacter))
 	{
-       CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hCharacter);
+		CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hCharacter);
 		if (!pPlayer) return;
 
 		HCLIENT hClient = pPlayer->GetClient();
 		if (hClient)
 		{
-            HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
-            g_pLTServer->WriteToMessageByte(hMessage, IC_MOD_PICKUP_ID);
-            g_pLTServer->WriteToMessageByte(hMessage, nWeaponId);
-            g_pLTServer->WriteToMessageByte(hMessage, nModId);
-            g_pLTServer->WriteToMessageFloat(hMessage, 0.0f);
-            g_pLTServer->EndMessage(hMessage);
+			HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
+			g_pLTServer->WriteToMessageByte(hMessage, IC_MOD_PICKUP_ID);
+			g_pLTServer->WriteToMessageByte(hMessage, nWeaponId);
+			g_pLTServer->WriteToMessageByte(hMessage, nModId);
+			g_pLTServer->WriteToMessageFloat(hMessage, 0.0f);
+			g_pLTServer->EndMessage(hMessage);
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::ChangeWeapon()
 //
 //	PURPOSE:	Change to a new weapon
 //
 // @parm the weapon to go to
 // @rdef was the switch allowed?
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeapons::ChangeWeapon(uint8 nNewWeapon)
 {
-    if (nNewWeapon == m_nCurWeapon) return LTTRUE;
+	if (nNewWeapon == m_nCurWeapon) return LTTRUE;
 
-    if (!m_pWeapons ||!IsValidWeapon(nNewWeapon)) return LTFALSE;
+	if (!m_pWeapons ||!IsValidWeapon(nNewWeapon)) return LTFALSE;
 
 	// Set this as our current weapon...
-
 	m_nCurWeapon = nNewWeapon;
 
 
 	// Change our weapon model to the newly selected weapon
-
 	if (IsCharacter(m_hCharacter))
 	{
-        CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hCharacter);
+		CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hCharacter);
 		if (pChar)
 		{
 			WEAPON* pWeaponData = g_pWeaponMgr->GetWeapon(m_nCurWeapon);
-            if (!pWeaponData) return LTFALSE;
+			if (!pWeaponData) return LTFALSE;
 
  			// Associated our hand held weapon with our weapon...
-
 			if (m_hWeaponModel)
 			{
-                CHHWeaponModel* pModel = (CHHWeaponModel*)g_pLTServer->HandleToObject(m_hWeaponModel);
+				CHHWeaponModel* pModel = (CHHWeaponModel*)g_pLTServer->HandleToObject(m_hWeaponModel);
 				if (pModel)
 				{
 					pModel->Setup(m_pWeapons[m_nCurWeapon], pWeaponData);
@@ -783,18 +725,15 @@ LTBOOL CWeapons::ChangeWeapon(uint8 nNewWeapon)
 	}
 
 	// Select the weapon...
-
 	m_pWeapons[m_nCurWeapon]->Select();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::DeselectCurWeapon()
 //
 //	PURPOSE:	Deselect the current weapon
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapons::DeselectCurWeapon()
@@ -809,11 +748,9 @@ void CWeapons::DeselectCurWeapon()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::GetWeaponAmmoCount()
 //
 //	PURPOSE:	Return the ammo amount of the specified selected weapon
-//
 // ----------------------------------------------------------------------- //
 
 int CWeapons::GetWeaponAmmoCount(int nWeapon)
@@ -828,13 +765,10 @@ int CWeapons::GetWeaponAmmoCount(int nWeapon)
 	return 0;
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::GetAmmoCount()
 //
 //	PURPOSE:	Return the amount of the specified type of ammo
-//
 // ----------------------------------------------------------------------- //
 
 int CWeapons::GetAmmoCount(int nAmmoId)
@@ -846,11 +780,9 @@ int CWeapons::GetAmmoCount(int nAmmoId)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::Save
 //
 //	PURPOSE:	Save the object
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapons::Save(HMESSAGEWRITE hWrite, uint8 nType)
@@ -868,12 +800,12 @@ void CWeapons::Save(HMESSAGEWRITE hWrite, uint8 nType)
 		{
 			if (m_pWeapons[i])
 			{
-                SAVE_BOOL(LTTRUE);
+				SAVE_BOOL(LTTRUE);
 				m_pWeapons[i]->Save(hWrite, nType);
 			}
 			else
 			{
-                SAVE_BOOL(LTFALSE);
+				SAVE_BOOL(LTFALSE);
 			}
 		}
 	}
@@ -895,11 +827,9 @@ void CWeapons::Save(HMESSAGEWRITE hWrite, uint8 nType)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::Load
 //
 //	PURPOSE:	Load the object
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapons::Load(HMESSAGEREAD hRead, uint8 nType)
@@ -909,17 +839,16 @@ void CWeapons::Load(HMESSAGEREAD hRead, uint8 nType)
 	LOAD_HOBJECT(m_hWeaponModel);
 
 	// Create the m_pWeapons and m_pAmmo data members...
-
 	Init(m_hCharacter, m_hWeaponModel);
 
 	LOAD_INT(m_nCurWeapon);
 
 	int nNumWeapons = g_pWeaponMgr->GetNumWeapons();
 
-    int i;
-    for (i=0; i < nNumWeapons; i++)
+	int i;
+	for (i=0; i < nNumWeapons; i++)
 	{
-        LTBOOL bLoad;
+		LTBOOL bLoad;
 		LOAD_BOOL(bLoad);
 
 		if (bLoad)
@@ -934,7 +863,7 @@ void CWeapons::Load(HMESSAGEREAD hRead, uint8 nType)
 		}
 	}
 
-    uint8 nNumAmmoTypes;
+	uint8 nNumAmmoTypes;
 	LOAD_BYTE(nNumAmmoTypes);
 
 	for (i=0; i < nNumAmmoTypes; i++)
@@ -948,19 +877,17 @@ void CWeapons::Load(HMESSAGEREAD hRead, uint8 nType)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::Reset()
 //
 //	PURPOSE:	Reset all the weapons (i.e., we don't have any of them)
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapons::Reset()
 {
 	int nNumWeapons = g_pWeaponMgr->GetNumWeapons();
 
-    int i;
-    for (i=0; i < nNumWeapons; i++)
+	int i;
+	for (i=0; i < nNumWeapons; i++)
 	{
 		if (m_pWeapons && m_pWeapons[i])
 		{
@@ -981,21 +908,19 @@ void CWeapons::Reset()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::HandlePotentialWeaponChange()
 //
 //	PURPOSE:	Handle potentially changing weapons
-//
 // ----------------------------------------------------------------------- //
 
 void CWeapons::HandlePotentialWeaponChange(CPlayerObj* pPlayer, uint8 nWeaponId, 
-										   uint8 nAmmoId, LTBOOL bHaveIt, LTBOOL
-										   bWasOutOfAmmo)
+										uint8 nAmmoId, LTBOOL bHaveIt, LTBOOL
+										bWasOutOfAmmo)
 {
 	if (!pPlayer) return;
 
-	LTBOOL bChangeWeapon   = LTFALSE;
-	LTBOOL bIsBetterWeapon = IsBetterWeapon(pPlayer, nWeaponId);
+	LTBOOL bChangeWeapon	= LTFALSE;
+	LTBOOL bIsBetterWeapon	= IsBetterWeapon(pPlayer, nWeaponId);
 
 	// If there isn't currently a weapon selected, or this weapon is
 	// better than our currently selected weapon (and we didn't already
@@ -1027,18 +952,16 @@ void CWeapons::HandlePotentialWeaponChange(CPlayerObj* pPlayer, uint8 nWeaponId,
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeapons::IsBetterWeapon()
 //
 //	PURPOSE:	Determine if the passed in weapon type is "better" than the
-//				weapon we are currently using
-//
+//			weapon we are currently using
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeapons::IsBetterWeapon(CPlayerObj* pPlayer, uint8 nWeaponId)
 {
 	int nCurWeaponCoId = g_pWeaponMgr->GetCommandId(m_nCurWeapon);
-	int nWeaponCoId    = g_pWeaponMgr->GetCommandId(nWeaponId);
+	int nWeaponCoId	= g_pWeaponMgr->GetCommandId(nWeaponId);
 
 	// TO DO:  Update this to look at a player-specific weapon priority
 	// list...
