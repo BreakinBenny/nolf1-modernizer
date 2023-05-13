@@ -1,5 +1,4 @@
 // ----------------------------------------------------------------------- //
-//
 // MODULE  : Intelligence.cpp
 //
 // PURPOSE : Implementation of the Intelligence object
@@ -7,7 +6,6 @@
 // CREATED : 9/14/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -18,9 +16,9 @@
 
 // Statics
 
-static char *s_szActivate = "ACTIVATE";
-static char *s_szGadget   = "GADGET";
-static char *s_szRespawn   = "RESPAWN";
+static char *s_szActivate	= "ACTIVATE";
+static char *s_szGadget		= "GADGET";
+static char *s_szRespawn	= "RESPAWN";
 
 extern CVarTrack g_vtNetIntelScore;
 CVarTrack g_IntelRespawnScale;
@@ -29,11 +27,9 @@ CVarTrack g_IntelRespawnScale;
 #define INTEL_PICKUP_SOUND	"Powerups\\Snd\\pu_intel.wav"
 
 // ----------------------------------------------------------------------- //
-//
 //	CLASS:		Intelligence
 //
 //	PURPOSE:	An Intelligence object
-//
 // ----------------------------------------------------------------------- //
 
 BEGIN_CLASS(Intelligence)
@@ -44,11 +40,11 @@ BEGIN_CLASS(Intelligence)
 	ADD_STRINGPROP_FLAG(Skin, "", PF_HIDDEN)
 
 	ADD_STRINGPROP_FLAG(Type, "", PF_STATICLIST | PF_DIMS | PF_LOCALDIMS)
-    ADD_LONGINTPROP(InfoId, 0)
+	ADD_LONGINTPROP(InfoId, 0)
 	ADD_BOOLPROP_FLAG(ShowPopup, LTTRUE, 0)
 	ADD_BOOLPROP_FLAG(PhotoOnly, LTFALSE, 0)
 	ADD_STRINGPROP_FLAG(PickedUpCommand, "", 0)
-    ADD_LONGINTPROP(PlayerTeamFilter, 0)
+	ADD_LONGINTPROP(PlayerTeamFilter, 0)
 
 	ADD_BOOLPROP_FLAG(StartHidden, LTFALSE, 0)
 	ADD_REALPROP(RespawnTime, 30.0f)
@@ -60,9 +56,9 @@ LTRESULT CIntelPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 
 	if ( LT_OK == CPropPlugin::PreHook_EditStringList(szRezPath, szPropName,
@@ -83,10 +79,10 @@ LTRESULT CIntelPlugin::PreHook_EditStringList(
 }
 
 LTRESULT CIntelPlugin::PreHook_Dims(
-			const char* szRezPath,
-			const char* szPropValue,
-			char* szModelFilenameBuf,
-			int	  nModelFilenameBufLen,
+			const	char* szRezPath,
+			const	char* szPropValue,
+			char*	szModelFilenameBuf,
+			int	nModelFilenameBufLen,
 			LTVector & vDims)
 {
 	if (m_IntelMgrPlugin.PreHook_Dims(szRezPath, szPropValue,
@@ -100,21 +96,19 @@ LTRESULT CIntelPlugin::PreHook_Dims(
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::Intelligence()
 //
 //	PURPOSE:	Initialize object
-//
 // ----------------------------------------------------------------------- //
 
 Intelligence::Intelligence() : Prop ()
 {
-    m_bShowPopup		= LTTRUE;
-    m_bPhotoOnly        = LTFALSE;
-    m_hstrPickedUpCmd   = LTNULL;
-    m_nPlayerTeamFilter = 0;
-	m_nInfoId			= 0;
-	m_nIntelId			= INTELMGR_INVALID_ID;
+	m_bShowPopup		= LTTRUE;
+	m_bPhotoOnly		= LTFALSE;
+	m_hstrPickedUpCmd	= LTNULL;
+	m_nPlayerTeamFilter	= 0;
+	m_nInfoId		= 0;
+	m_nIntelId		= INTELMGR_INVALID_ID;
 	m_fRespawnDelay		= 30.0f;
 	m_bStartHidden		= LTFALSE;
 	m_bFirstUpdate		= LTTRUE;
@@ -122,28 +116,24 @@ Intelligence::Intelligence() : Prop ()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::~Intelligence()
 //
 //	PURPOSE:	Deallocate object
-//
 // ----------------------------------------------------------------------- //
 
 Intelligence::~Intelligence()
 {
 	if (m_hstrPickedUpCmd)
 	{
-        g_pLTServer->FreeString(m_hstrPickedUpCmd);
-        m_hstrPickedUpCmd = LTNULL;
+		g_pLTServer->FreeString(m_hstrPickedUpCmd);
+		m_hstrPickedUpCmd = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::EngineMessageFn
 //
 //	PURPOSE:	Handle engine messages
-//
 // ----------------------------------------------------------------------- //
 
 uint32 Intelligence::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -158,7 +148,7 @@ uint32 Intelligence::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDat
 
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = Prop::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = Prop::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE || fData == PRECREATE_STRINGPROP)
 			{
@@ -172,13 +162,13 @@ uint32 Intelligence::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDat
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData);
+			Save((HMESSAGEWRITE)pData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData);
+			Load((HMESSAGEREAD)pData);
 		}
 		break;
 
@@ -201,11 +191,9 @@ uint32 Intelligence::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDat
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::ReadProp
 //
 //	PURPOSE:	Set property value
-//
 // ----------------------------------------------------------------------- //
 
 void Intelligence::ReadProp(ObjectCreateStruct *pInfo)
@@ -214,35 +202,35 @@ void Intelligence::ReadProp(ObjectCreateStruct *pInfo)
 
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("PhotoOnly", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("PhotoOnly", &genProp) == LT_OK)
 	{
 		m_bPhotoOnly = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("StartHidden", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("StartHidden", &genProp) == LT_OK)
 	{
 		m_bStartHidden = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("ShowPopup", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ShowPopup", &genProp) == LT_OK)
 	{
 		m_bShowPopup = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("PickedUpCommand", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("PickedUpCommand", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrPickedUpCmd = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrPickedUpCmd = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("PlayerTeamFilter", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("PlayerTeamFilter", &genProp) == LT_OK)
 	{
 		m_nPlayerTeamFilter = (uint8) genProp.m_Long;
 	}
 
-    if (g_pLTServer->GetPropGeneric("InfoId", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("InfoId", &genProp) == LT_OK)
 	{
 		m_nInfoId = genProp.m_Long;
 	}
@@ -253,9 +241,9 @@ void Intelligence::ReadProp(ObjectCreateStruct *pInfo)
 	}
 
 
-   INTEL* pIntel = LTNULL;
+	INTEL* pIntel = LTNULL;
 
-    if (g_pLTServer->GetPropGeneric("Type", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Type", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
@@ -298,11 +286,9 @@ void Intelligence::ReadProp(ObjectCreateStruct *pInfo)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::PostPropRead()
 //
 //	PURPOSE:	Update Properties
-//
 // ----------------------------------------------------------------------- //
 
 void Intelligence::PostPropRead(ObjectCreateStruct *pStruct)
@@ -330,12 +316,12 @@ void Intelligence::PostPropRead(ObjectCreateStruct *pStruct)
 		m_dwUsrFlgs |= USRFLG_CAN_ACTIVATE;
 	}
 
-    m_damage.SetCanHeal(LTFALSE);
-    m_damage.SetCanRepair(LTFALSE);
-    m_damage.SetApplyDamagePhysics(LTFALSE);
+	m_damage.SetCanHeal(LTFALSE);
+	m_damage.SetCanRepair(LTFALSE);
+	m_damage.SetApplyDamagePhysics(LTFALSE);
 	m_damage.SetMaxHitPoints(1.0f);
 	m_damage.SetHitPoints(1.0f);
-    m_damage.SetCanDamage(LTFALSE);
+	m_damage.SetCanDamage(LTFALSE);
 	
 	// Use the default info id if necessary...
 
@@ -351,16 +337,14 @@ void Intelligence::PostPropRead(ObjectCreateStruct *pStruct)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::ObjectMessageFn
 //
 //	PURPOSE:	Handle object-to-object messages
-//
 // ----------------------------------------------------------------------- //
 
 uint32 Intelligence::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
 {
-    if (!g_pLTServer) return 0;
+	if (!g_pLTServer) return 0;
 
 	switch(messageID)
 	{
@@ -372,7 +356,7 @@ uint32 Intelligence::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGE
 			ConParse parse;
 			parse.Init((char*)szMsg);
 
-            while (g_pLTServer->Common()->Parse(&parse) == LT_OK)
+			while (g_pLTServer->Common()->Parse(&parse) == LT_OK)
 			{
 				if (parse.m_nArgs > 0 && parse.m_Args[0])
 				{
@@ -406,11 +390,9 @@ uint32 Intelligence::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGE
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::HandleGadgetMsg
 //
 //	PURPOSE:	Handle the camera gadget
-//
 // ----------------------------------------------------------------------- //
 
 void Intelligence::HandleGadgetMsg(HOBJECT hSender, ConParse & parse)
@@ -419,11 +401,9 @@ void Intelligence::HandleGadgetMsg(HOBJECT hSender, ConParse & parse)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::DoActivate()
 //
 //	PURPOSE:	Handle Activate...
-//
 // ----------------------------------------------------------------------- //
 
 void Intelligence::DoActivate(HOBJECT hSender)
@@ -447,7 +427,7 @@ void Intelligence::DoActivate(HOBJECT hSender)
 		// Find the player if the sender isn't one...
 
 		ObjArray <HOBJECT, 1> objArray;
-        g_pLTServer->FindNamedObjects(DEFAULT_PLAYERNAME, objArray);
+		g_pLTServer->FindNamedObjects(DEFAULT_PLAYERNAME, objArray);
 
 		if (!objArray.NumObjects()) return;
 
@@ -455,7 +435,7 @@ void Intelligence::DoActivate(HOBJECT hSender)
 	}
 
 	// Increment the player's intelligence count...
-    CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hPlayer);
+	CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hPlayer);
 	if (pPlayer)
 	{
 		if (g_pGameServerShell->GetGameType() == COOPERATIVE_ASSAULT && m_nPlayerTeamFilter)
@@ -466,13 +446,13 @@ void Intelligence::DoActivate(HOBJECT hSender)
 			pPlayer->AddToScore(nScore);
 			
 			HCLIENT hClient = pPlayer->GetClient();
-		    uint32 nPlayerID = g_pLTServer->GetClientID(hClient);
+			uint32 nPlayerID = g_pLTServer->GetClientID(hClient);
 
-            HMESSAGEWRITE hWrite = g_pLTServer->StartMessage (LTNULL, MID_TEAM_SCORED);
-            g_pLTServer->WriteToMessageDWord (hWrite, nPlayerID);
-            g_pLTServer->WriteToMessageByte (hWrite, (uint8)pPlayer->GetTeamID());
-            g_pLTServer->WriteToMessageByte (hWrite, nScore);
-            g_pLTServer->EndMessage (hWrite);
+			HMESSAGEWRITE hWrite = g_pLTServer->StartMessage (LTNULL, MID_TEAM_SCORED);
+			g_pLTServer->WriteToMessageDWord (hWrite, nPlayerID);
+			g_pLTServer->WriteToMessageByte (hWrite, (uint8)pPlayer->GetTeamID());
+			g_pLTServer->WriteToMessageByte (hWrite, nScore);
+			g_pLTServer->EndMessage (hWrite);
 
 		}
 
@@ -486,12 +466,12 @@ void Intelligence::DoActivate(HOBJECT hSender)
 		HCLIENT hClient = pPlayer->GetClient();
 		if (hClient)
 		{
-            HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
-            g_pLTServer->WriteToMessageByte(hMessage, IC_INTEL_PICKUP_ID);
-            g_pLTServer->WriteToMessageByte(hMessage, 0);
-            g_pLTServer->WriteToMessageByte(hMessage, 0);
-            g_pLTServer->WriteToMessageFloat(hMessage, 0.0f);
-            g_pLTServer->EndMessage(hMessage);
+			HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
+			g_pLTServer->WriteToMessageByte(hMessage, IC_INTEL_PICKUP_ID);
+			g_pLTServer->WriteToMessageByte(hMessage, 0);
+			g_pLTServer->WriteToMessageByte(hMessage, 0);
+			g_pLTServer->WriteToMessageFloat(hMessage, 0.0f);
+			g_pLTServer->EndMessage(hMessage);
 		}
 
 		// Show the pop-up associated with the intelligence item, if
@@ -527,7 +507,7 @@ void Intelligence::DoActivate(HOBJECT hSender)
 
 		if (m_hstrPickedUpCmd)
 		{
-            char* pCmd = g_pLTServer->GetStringData(m_hstrPickedUpCmd);
+			char* pCmd = g_pLTServer->GetStringData(m_hstrPickedUpCmd);
 
 			if (pCmd && g_pCmdMgr->IsValidCmd(pCmd))
 			{
@@ -552,62 +532,55 @@ void Intelligence::DoActivate(HOBJECT hSender)
 			g_pServerSoundMgr->PlaySoundFromPos(vPos, INTEL_PICKUP_SOUND,
 				600.0f, SOUNDPRIORITY_MISC_HIGH);
 		}
-
 	}
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::Save
 //
 //	PURPOSE:	Save the object
-//
 // ----------------------------------------------------------------------- //
 
 void Intelligence::Save(HMESSAGEWRITE hWrite)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageByte(hWrite, m_bPhotoOnly);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bShowPopup);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrPickedUpCmd);
-    g_pLTServer->WriteToMessageDWord(hWrite, m_nInfoId);
-    g_pLTServer->WriteToMessageDWord(hWrite, m_nIntelId);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bStartHidden);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bFirstUpdate);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bSkipUpdate);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fRespawnDelay);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bPhotoOnly);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bShowPopup);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrPickedUpCmd);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_nInfoId);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_nIntelId);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bStartHidden);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bFirstUpdate);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bSkipUpdate);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fRespawnDelay);
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::Load
 //
 //	PURPOSE:	Load the object
-//
 // ----------------------------------------------------------------------- //
 
 void Intelligence::Load(HMESSAGEREAD hRead)
 {
 	if (!hRead) return;
 
-    m_bPhotoOnly			= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bShowPopup			= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_hstrPickedUpCmd		= g_pLTServer->ReadFromMessageHString(hRead);
-    m_nInfoId				= g_pLTServer->ReadFromMessageDWord(hRead);
-    m_nIntelId				= g_pLTServer->ReadFromMessageDWord(hRead);
-    m_bStartHidden			= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bFirstUpdate			= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bSkipUpdate			= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_fRespawnDelay			= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_bPhotoOnly		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bShowPopup		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_hstrPickedUpCmd	= g_pLTServer->ReadFromMessageHString(hRead);
+	m_nInfoId		= g_pLTServer->ReadFromMessageDWord(hRead);
+	m_nIntelId		= g_pLTServer->ReadFromMessageDWord(hRead);
+	m_bStartHidden		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bFirstUpdate		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bSkipUpdate		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_fRespawnDelay		= g_pLTServer->ReadFromMessageFloat(hRead);
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::Update()
 //
 //	PURPOSE:	Update
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL Intelligence::Update()
@@ -624,7 +597,7 @@ LTBOOL Intelligence::Update()
 
 	// If we aren't visible it must be time to respawn...
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 	if (!m_bSkipUpdate && !(dwFlags & FLAG_VISIBLE))
 	{
 		uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
@@ -633,23 +606,21 @@ LTBOOL Intelligence::Update()
 
 		// Let the world know what happened...
 
-        LTVector vPos;
-        g_pLTServer->GetObjectPos(m_hObject, &vPos);
-        g_pServerSoundMgr->PlaySoundFromPos(vPos, INTEL_RESPAWN_SOUND,
+		LTVector vPos;
+		g_pLTServer->GetObjectPos(m_hObject, &vPos);
+		g_pServerSoundMgr->PlaySoundFromPos(vPos, INTEL_RESPAWN_SOUND,
 				600.0f, SOUNDPRIORITY_MISC_HIGH);
 	}
 	m_bSkipUpdate = LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::InitialUpdate()
 //
 //	PURPOSE:	First update
-//
 // ----------------------------------------------------------------------- //
 
 void Intelligence::InitialUpdate()
@@ -657,7 +628,7 @@ void Intelligence::InitialUpdate()
 
 	if (!g_IntelRespawnScale.IsInitted())
 	{
-        g_IntelRespawnScale.Init(GetServerDE(), "IntelRespawnScale", LTNULL, 1.0f);
+		g_IntelRespawnScale.Init(GetServerDE(), "IntelRespawnScale", LTNULL, 1.0f);
 	}
 
  	if (m_bStartHidden)
@@ -673,11 +644,9 @@ void Intelligence::InitialUpdate()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	Intelligence::CacheFiles
 //
 //	PURPOSE:	Cache whatever resources this object uses
-//
 // ----------------------------------------------------------------------- //
 
 void Intelligence::CacheFiles()
