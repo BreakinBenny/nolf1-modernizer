@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : WeaponMgr.cpp
+// MODULE: WeaponMgr.cpp
 //
 // PURPOSE : WeaponMgr implementation - Controls attributes of all weapons
 //
 // CREATED : 12/02/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -27,79 +25,79 @@ extern CGameClientShell* g_pGameClientShell;
 #include "PlayerObj.h"
 #endif
 
-#define WMGR_WEAPONORDER_TAG			"WeaponOrder"
-#define WMGR_WEAPONORDER_WEAPON			"Weapon"
+#define WMGR_WEAPONORDER_TAG		"WeaponOrder"
+#define WMGR_WEAPONORDER_WEAPON		"Weapon"
 #define WMGR_WEAPONORDER_FIRSTPLAYER	"FirstPlayerWeapon"
-#define WMGR_WEAPONORDER_LASTPLAYER		"LastPlayerWeapon"
+#define WMGR_WEAPONORDER_LASTPLAYER	"LastPlayerWeapon"
 
-#define WMGR_WEAPON_TAG					"Weapon"
+#define WMGR_WEAPON_TAG			"Weapon"
 
-#define WMGR_WEAPON_NAME				"Name"
-#define WMGR_WEAPON_NAMEID				"NameId"
-#define WMGR_WEAPON_DESCRIPTIONID		"DescriptionId"
-#define WMGR_WEAPON_GADGET				"Gadget"
-#define WMGR_WEAPON_ANITYPE				"AniType"
-#define WMGR_WEAPON_ICON				"Icon"
-#define WMGR_WEAPON_SM_ICON				"SmallIcon"
-#define WMGR_WEAPON_PHOTO				"Photo"
-#define WMGR_WEAPON_POS					"Pos"
-#define WMGR_WEAPON_POS2				"Pos2"
-#define WMGR_WEAPON_MUZZLEPOS			"MuzzlePos"
-#define WMGR_WEAPON_MINPERTURB			"MinPerturb"
-#define WMGR_WEAPON_MAXPERTURB			"MaxPerturb"
-#define WMGR_WEAPON_RANGE				"Range"
-#define WMGR_WEAPON_RECOIL				"Recoil"
-#define WMGR_WEAPON_VECTORSPERROUND		"VectorsPerRound"
-#define WMGR_WEAPON_PVMODEL				"PVModel"
-#define WMGR_WEAPON_PVSKIN				"PVSkin"
-#define WMGR_WEAPON_PVMUZZLEFXNAME		"PVMuzzleFXName"
-#define WMGR_WEAPON_HHMODEL				"HHModel"
-#define WMGR_WEAPON_HHSKIN				"HHSkin"
-#define WMGR_WEAPON_HHSCALE				"HHModelScale"
-#define WMGR_WEAPON_HHBREACH			"HHBreachOffset"
-#define WMGR_WEAPON_HHMUZZLEFXNAME		"HHMuzzleFXName"
-#define WMGR_WEAPON_INTMODEL			"InterfaceModel"
-#define WMGR_WEAPON_INTSKIN				"InterfaceSkin"
-#define WMGR_WEAPON_INTSCALE			"InterfaceModelScale"
-#define WMGR_WEAPON_INTPOS				"InterfaceOffset"
-#define WMGR_WEAPON_SILENCEDFIRESND		"SilencedFireSnd"
-#define WMGR_WEAPON_ALTFIRESND			"AltFireSnd"
-#define WMGR_WEAPON_FIRESND				"FireSnd"
-#define WMGR_WEAPON_DRYFIRESND			"DryFireSnd"
-#define WMGR_WEAPON_RELOADSND			"ReloadSnd"
-#define WMGR_WEAPON_SELECTSND			"SelectSnd"
-#define WMGR_WEAPON_DESELECTSND			"DeselectSnd"
-#define WMGR_WEAPON_FIRESNDRADIUS		"FireSndRadius"
-#define WMGR_WEAPON_AIFIRESNDRADIUS		"AIFireSndRadius"
-#define WMGR_WEAPON_ENVMAP				"EnvironmentMap"
-#define WMGR_WEAPON_INFINITEAMMO		"InfiniteAmmo"
-#define WMGR_WEAPON_LOOKSDANGEROUS		"LooksDangerous"
-#define WMGR_WEAPON_CANBEDEFAULT		"CanBeDefault"
-#define WMGR_WEAPON_CANBEMAPPED			"CanBeMapped"
-#define WMGR_WEAPON_HIDEWHENEMPTY		"HideWhenEmpty"
-#define WMGR_WEAPON_SHOTSPERCLIP		"ShotsPerClip"
-#define WMGR_WEAPON_AMMOMULT			"AmmoMultiplier"
-#define WMGR_WEAPON_AMMONAME			"AmmoName"
-#define WMGR_WEAPON_MODNAME				"ModName"
-#define WMGR_WEAPON_PVFXNAME			"PVFXName"
-#define WMGR_WEAPON_AIMINBURSTSHOTS		"AIMinBurstShots"
-#define WMGR_WEAPON_AIMAXBURSTSHOTS		"AIMaxBurstShots"
+#define WMGR_WEAPON_NAME		"Name"
+#define WMGR_WEAPON_NAMEID		"NameId"
+#define WMGR_WEAPON_DESCRIPTIONID	"DescriptionId"
+#define WMGR_WEAPON_GADGET		"Gadget"
+#define WMGR_WEAPON_ANITYPE		"AniType"
+#define WMGR_WEAPON_ICON		"Icon"
+#define WMGR_WEAPON_SM_ICON		"SmallIcon"
+#define WMGR_WEAPON_PHOTO		"Photo"
+#define WMGR_WEAPON_POS			"Pos"
+#define WMGR_WEAPON_POS2		"Pos2"
+#define WMGR_WEAPON_MUZZLEPOS		"MuzzlePos"
+#define WMGR_WEAPON_MINPERTURB		"MinPerturb"
+#define WMGR_WEAPON_MAXPERTURB		"MaxPerturb"
+#define WMGR_WEAPON_RANGE		"Range"
+#define WMGR_WEAPON_RECOIL		"Recoil"
+#define WMGR_WEAPON_VECTORSPERROUND	"VectorsPerRound"
+#define WMGR_WEAPON_PVMODEL		"PVModel"
+#define WMGR_WEAPON_PVSKIN		"PVSkin"
+#define WMGR_WEAPON_PVMUZZLEFXNAME	"PVMuzzleFXName"
+#define WMGR_WEAPON_HHMODEL		"HHModel"
+#define WMGR_WEAPON_HHSKIN		"HHSkin"
+#define WMGR_WEAPON_HHSCALE		"HHModelScale"
+#define WMGR_WEAPON_HHBREACH		"HHBreachOffset"
+#define WMGR_WEAPON_HHMUZZLEFXNAME	"HHMuzzleFXName"
+#define WMGR_WEAPON_INTMODEL		"InterfaceModel"
+#define WMGR_WEAPON_INTSKIN		"InterfaceSkin"
+#define WMGR_WEAPON_INTSCALE		"InterfaceModelScale"
+#define WMGR_WEAPON_INTPOS		"InterfaceOffset"
+#define WMGR_WEAPON_SILENCEDFIRESND	"SilencedFireSnd"
+#define WMGR_WEAPON_ALTFIRESND		"AltFireSnd"
+#define WMGR_WEAPON_FIRESND		"FireSnd"
+#define WMGR_WEAPON_DRYFIRESND		"DryFireSnd"
+#define WMGR_WEAPON_RELOADSND		"ReloadSnd"
+#define WMGR_WEAPON_SELECTSND		"SelectSnd"
+#define WMGR_WEAPON_DESELECTSND		"DeselectSnd"
+#define WMGR_WEAPON_FIRESNDRADIUS	"FireSndRadius"
+#define WMGR_WEAPON_AIFIRESNDRADIUS	"AIFireSndRadius"
+#define WMGR_WEAPON_ENVMAP		"EnvironmentMap"
+#define WMGR_WEAPON_INFINITEAMMO	"InfiniteAmmo"
+#define WMGR_WEAPON_LOOKSDANGEROUS	"LooksDangerous"
+#define WMGR_WEAPON_CANBEDEFAULT	"CanBeDefault"
+#define WMGR_WEAPON_CANBEMAPPED		"CanBeMapped"
+#define WMGR_WEAPON_HIDEWHENEMPTY	"HideWhenEmpty"
+#define WMGR_WEAPON_SHOTSPERCLIP	"ShotsPerClip"
+#define WMGR_WEAPON_AMMOMULT		"AmmoMultiplier"
+#define WMGR_WEAPON_AMMONAME		"AmmoName"
+#define WMGR_WEAPON_MODNAME		"ModName"
+#define WMGR_WEAPON_PVFXNAME		"PVFXName"
+#define WMGR_WEAPON_AIMINBURSTSHOTS	"AIMinBurstShots"
+#define WMGR_WEAPON_AIMAXBURSTSHOTS	"AIMaxBurstShots"
 #define WMGR_WEAPON_AIMINBURSTINTERVAL	"AIMinBurstInterval"
 #define WMGR_WEAPON_AIMAXBURSTINTERVAL	"AIMaxBurstInterval"
-#define WMGR_WEAPON_FIRERECOILPITCH		"FireRecoilPitch"
-#define WMGR_WEAPON_FIRERECOILDECAY		"FireRecoilDecay"
-#define WMGR_WEAPON_FIREDELAY			"FireDelay"
+#define WMGR_WEAPON_FIRERECOILPITCH	"FireRecoilPitch"
+#define WMGR_WEAPON_FIRERECOILDECAY	"FireRecoilDecay"
+#define WMGR_WEAPON_FIREDELAY		"FireDelay"
 
-#define WMGR_AMMO_TAG				"Ammo"
+#define WMGR_AMMO_TAG			"Ammo"
 
-#define WMGR_AMMO_NAME				"Name"
-#define WMGR_AMMO_NAMEID			"NameId"
-#define WMGR_AMMO_DESCID			"DescId"
-#define WMGR_AMMO_TYPE				"Type"
-#define WMGR_AMMO_PRIORITY			"Priority"
-#define WMGR_AMMO_ICON				"Icon"
-#define WMGR_AMMO_SM_ICON			"SmallIcon"
-#define WMGR_AMMO_MAXAMOUNT			"MaxAmount"
+#define WMGR_AMMO_NAME			"Name"
+#define WMGR_AMMO_NAMEID		"NameId"
+#define WMGR_AMMO_DESCID		"DescId"
+#define WMGR_AMMO_TYPE			"Type"
+#define WMGR_AMMO_PRIORITY		"Priority"
+#define WMGR_AMMO_ICON			"Icon"
+#define WMGR_AMMO_SM_ICON		"SmallIcon"
+#define WMGR_AMMO_MAXAMOUNT		"MaxAmount"
 #define WMGR_AMMO_SPAWNEDAMOUNT		"SpawnedAmount"
 #define WMGR_AMMO_SELECTIONAMOUNT	"SelectionAmount"
 #define WMGR_AMMO_INSTDAMAGE		"InstDamage"
@@ -113,75 +111,75 @@ extern CGameClientShell* g_pGameClientShell;
 #define WMGR_AMMO_PROGDAMAGERADIUS	"ProgDamageRadius"
 #define WMGR_AMMO_PROGDAMAGELIFE	"ProgDamageLifetime"
 #define WMGR_AMMO_FIRERECOILMULT	"FireRecoilMult"
-#define WMGR_AMMO_IMPACTFX			"ImpactFXName"
+#define WMGR_AMMO_IMPACTFX		"ImpactFXName"
 #define WMGR_AMMO_UWIMPACTFX		"UWImpactFXName"
-#define WMGR_AMMO_FIREFX			"FireFXName"
-#define WMGR_AMMO_TRACERFX			"TracerFXName"
+#define WMGR_AMMO_FIREFX		"FireFXName"
+#define WMGR_AMMO_TRACERFX		"TracerFXName"
 #define WMGR_AMMO_PROJECTILEFX		"ProjectileFXName"
 #define WMGR_AMMO_ANIOVERRIDE		"WeaponAniOverride"
 
-#define WMGR_MOD_TAG				"Mod"
+#define WMGR_MOD_TAG			"Mod"
 
 #define WMGR_MOD_DESCRIPTIONID		"DescriptionId"
-#define WMGR_MOD_NAMEID				"NameId"
-#define WMGR_MOD_NAME				"Name"
-#define WMGR_MOD_SOCKET				"Socket"
-#define WMGR_MOD_ICON				"Icon"
-#define WMGR_MOD_SM_ICON			"SmallIcon"
-#define WMGR_MOD_TYPE				"Type"
+#define WMGR_MOD_NAMEID			"NameId"
+#define WMGR_MOD_NAME			"Name"
+#define WMGR_MOD_SOCKET			"Socket"
+#define WMGR_MOD_ICON			"Icon"
+#define WMGR_MOD_SM_ICON		"SmallIcon"
+#define WMGR_MOD_TYPE			"Type"
 #define WMGR_MOD_ATTACHMODEL		"AttachModel"
-#define WMGR_MOD_ATTACHSKIN			"AttachSkin"
+#define WMGR_MOD_ATTACHSKIN		"AttachSkin"
 #define WMGR_MOD_ATTACHSCALE		"AttachScale"
-#define WMGR_MOD_ZOOMLEVEL			"ZoomLevel"
-#define WMGR_MOD_ZOOMINSND			"ZoomInSound"
-#define WMGR_MOD_ZOOMOUTSND			"ZoomOutSound"
-#define WMGR_MOD_INTEGRATED			"Integrated"
-#define WMGR_MOD_PRIORITY			"Priority"
+#define WMGR_MOD_ZOOMLEVEL		"ZoomLevel"
+#define WMGR_MOD_ZOOMINSND		"ZoomInSound"
+#define WMGR_MOD_ZOOMOUTSND		"ZoomOutSound"
+#define WMGR_MOD_INTEGRATED		"Integrated"
+#define WMGR_MOD_PRIORITY		"Priority"
 #define WMGR_MOD_NIGHTVISION		"NightVision"
-#define WMGR_MOD_INTMODEL			"InterfaceModel"
-#define WMGR_MOD_INTSKIN			"InterfaceSkin"
-#define WMGR_MOD_INTSCALE			"InterfaceModelScale"
-#define WMGR_MOD_INTPOS				"InterfaceOffset"
-#define WMGR_MOD_PICKUPSND			"PickUpSound"
-#define WMGR_MOD_RESPAWNSND			"RespawnSound"
+#define WMGR_MOD_INTMODEL		"InterfaceModel"
+#define WMGR_MOD_INTSKIN		"InterfaceSkin"
+#define WMGR_MOD_INTSCALE		"InterfaceModelScale"
+#define WMGR_MOD_INTPOS			"InterfaceOffset"
+#define WMGR_MOD_PICKUPSND		"PickUpSound"
+#define WMGR_MOD_RESPAWNSND		"RespawnSound"
 #define WMGR_MOD_POWERUPMODEL		"PowerupModel"
 #define WMGR_MOD_POWERUPSKIN		"PowerupSkin"
 #define WMGR_MOD_POWERUPSCALE		"PowerupModelScale"
-#define WMGR_MOD_TINT_COLOR			"TintColor"
-#define WMGR_MOD_TINT_TIME			"TintTime"
+#define WMGR_MOD_TINT_COLOR		"TintColor"
+#define WMGR_MOD_TINT_TIME		"TintTime"
 
-#define WMGR_GEAR_TAG				"Gear"
+#define WMGR_GEAR_TAG			"Gear"
 
-#define WMGR_GEAR_NAME				"Name"
-#define WMGR_GEAR_NAMEID			"NameId"
+#define WMGR_GEAR_NAME			"Name"
+#define WMGR_GEAR_NAMEID		"NameId"
 #define WMGR_GEAR_DESCRIPTIONID		"DescriptionId"
-#define WMGR_GEAR_MODEL				"Model"
-#define WMGR_GEAR_SKIN				"Skin"
-#define WMGR_GEAR_ICON				"Icon"
-#define WMGR_GEAR_SM_ICON			"SmallIcon"
+#define WMGR_GEAR_MODEL			"Model"
+#define WMGR_GEAR_SKIN			"Skin"
+#define WMGR_GEAR_ICON			"Icon"
+#define WMGR_GEAR_SM_ICON		"SmallIcon"
 #define WMGR_GEAR_PROTECTTYPE		"ProtectionType"
 #define WMGR_GEAR_PROTECTION		"Protection"
-#define WMGR_GEAR_ARMOR				"Armor"
-#define WMGR_GEAR_STEALTH			"Stealth"
+#define WMGR_GEAR_ARMOR			"Armor"
+#define WMGR_GEAR_STEALTH		"Stealth"
 #define WMGR_GEAR_SELECTABLE		"Selectable"
-#define WMGR_GEAR_EXCLUSIVE			"Exclusive"
+#define WMGR_GEAR_EXCLUSIVE		"Exclusive"
 #define WMGR_GEAR_TINT_COLOR		"TintColor"
-#define WMGR_GEAR_TINT_TIME			"TintTime"
-#define WMGR_GEAR_INTMODEL			"InterfaceModel"
-#define WMGR_GEAR_INTSKIN			"InterfaceSkin"
-#define WMGR_GEAR_PICKUPSND			"PickUpSound"
+#define WMGR_GEAR_TINT_TIME		"TintTime"
+#define WMGR_GEAR_INTMODEL		"InterfaceModel"
+#define WMGR_GEAR_INTSKIN		"InterfaceSkin"
+#define WMGR_GEAR_PICKUPSND		"PickUpSound"
 #define WMGR_GEAR_RESPAWNSND		"RespawnSound"
-#define WMGR_GEAR_INTSCALE			"InterfaceModelScale"
-#define WMGR_GEAR_INTPOS			"InterfaceOffset"
+#define WMGR_GEAR_INTSCALE		"InterfaceModelScale"
+#define WMGR_GEAR_INTPOS		"InterfaceOffset"
 
-#define WMGR_WEAPONANI_TAG			"WeaponAnis"
+#define WMGR_WEAPONANI_TAG		"WeaponAnis"
 
-#define WMGR_WEAPONANI_NAME			"Name"
+#define WMGR_WEAPONANI_NAME		"Name"
 #define WMGR_WEAPONANI_SELECT		"Select"
 #define WMGR_WEAPONANI_DESELECT		"Deselect"
 #define WMGR_WEAPONANI_RELOAD		"Reload"
-#define WMGR_WEAPONANI_IDLE			"Idle"
-#define WMGR_WEAPONANI_FIRE			"Fire"
+#define WMGR_WEAPONANI_IDLE		"Idle"
+#define WMGR_WEAPONANI_FIRE		"Fire"
 
 static char s_aTagName[30];
 static char s_aAttName[100];
@@ -199,34 +197,30 @@ CWeaponMgr CWeaponMgrPlugin::sm_ButeMgr;
 #endif // _CLIENTBUILD
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::CWeaponMgr()
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 CWeaponMgr::CWeaponMgr()
 {
-    m_WeaponList.Init(LTTRUE);
-    m_AmmoList.Init(LTTRUE);
-    m_ModList.Init(LTTRUE);
-    m_GearList.Init(LTTRUE);
+	m_WeaponList.Init(LTTRUE);
+	m_AmmoList.Init(LTTRUE);
+	m_ModList.Init(LTTRUE);
+	m_GearList.Init(LTTRUE);
 
-    m_pWeaponOrder = LTNULL;
-	m_nFirstPlayerWeapon = 0;
-	m_nLastPlayerWeapon = 0;
+	m_pWeaponOrder		= LTNULL;
+	m_nFirstPlayerWeapon	= 0;
+	m_nLastPlayerWeapon	= 0;
 
 	m_nFileCRC = 0;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::~CWeaponMgr()
 //
 //	PURPOSE:	Destructor
-//
 // ----------------------------------------------------------------------- //
 
 CWeaponMgr::~CWeaponMgr()
@@ -236,28 +230,24 @@ CWeaponMgr::~CWeaponMgr()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::Init()
 //
 //	PURPOSE:	Init mgr
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 {
-    if (g_pWeaponMgr || !szAttributeFile) return LTFALSE;
-    if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
+	if (g_pWeaponMgr || !szAttributeFile) return LTFALSE;
+	if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
 	
 	m_nFileCRC = CRC32::CalcRezFileCRC(szAttributeFile);
 
 
 	// Set up global pointer...
-
 	g_pWeaponMgr = this;
 
 
 	// Read in the properties for each mod type...
-
 	int nNum = 0;
 	sprintf(s_aTagName, "%s%d", WMGR_MOD_TAG, nNum);
 
@@ -273,16 +263,14 @@ LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pMod);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
 		sprintf(s_aTagName, "%s%d", WMGR_MOD_TAG, nNum);
 	}
 
-
 	// Read in the properties for each gear type...
-
 	nNum = 0;
 	sprintf(s_aTagName, "%s%d", WMGR_GEAR_TAG, nNum);
 
@@ -298,7 +286,7 @@ LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pGear);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -307,7 +295,6 @@ LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 
 
 	// Read in the properties for each weapon anis type...
-
 	nNum = 0;
 	sprintf(s_aTagName, "%s%d", WMGR_WEAPONANI_TAG, nNum);
 
@@ -323,7 +310,7 @@ LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pWeaponAni);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -332,7 +319,6 @@ LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 
 
 	// Read in the properties for each ammo type...
-
 	nNum = 0;
 	sprintf(s_aTagName, "%s%d", WMGR_AMMO_TAG, nNum);
 
@@ -348,16 +334,14 @@ LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pAmmo);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
 		sprintf(s_aTagName, "%s%d", WMGR_AMMO_TAG, nNum);
 	}
 
-
 	// Read in the properties for each weapon...
-
 	nNum = 0;
 	sprintf(s_aTagName, "%s%d", WMGR_WEAPON_TAG, nNum);
 
@@ -373,29 +357,27 @@ LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pWeapon);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
 		sprintf(s_aTagName, "%s%d", WMGR_WEAPON_TAG, nNum);
 	}
 
-
 	// Read in the order of the weapons...
-
 	if (m_pWeaponOrder)
 	{
 		debug_deletea(m_pWeaponOrder);
 	}
 
 	m_pWeaponOrder = debug_newa(int, m_WeaponList.GetLength());
-    if (!m_pWeaponOrder) return LTFALSE;
+	if (!m_pWeaponOrder) return LTFALSE;
 
 	nNum = 0;
 	sprintf(s_aAttName, "%s%d", WMGR_WEAPONORDER_WEAPON, nNum);
 
 	CString strWeaponName;
-    WEAPON* pWeapon = LTNULL;
+	WEAPON* pWeapon = LTNULL;
 
 	while (m_buteMgr.Exist(WMGR_WEAPONORDER_TAG, s_aAttName) && nNum < m_WeaponList.GetLength())
 	{
@@ -407,7 +389,7 @@ LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		}
 		else
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		if (pWeapon)
@@ -416,36 +398,33 @@ LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		}
 		else
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
 		sprintf(s_aAttName, "%s%d", WMGR_WEAPONORDER_WEAPON, nNum);
 	}
 
-	m_nFirstPlayerWeapon = m_buteMgr.GetInt(WMGR_WEAPONORDER_TAG, WMGR_WEAPONORDER_FIRSTPLAYER);
-	m_nLastPlayerWeapon  = m_buteMgr.GetInt(WMGR_WEAPONORDER_TAG, WMGR_WEAPONORDER_LASTPLAYER);
+	m_nFirstPlayerWeapon	= m_buteMgr.GetInt(WMGR_WEAPONORDER_TAG, WMGR_WEAPONORDER_FIRSTPLAYER);
+	m_nLastPlayerWeapon	= m_buteMgr.GetInt(WMGR_WEAPONORDER_TAG, WMGR_WEAPONORDER_LASTPLAYER);
 
 	// Free up the bute mgr's memory...
-
 	m_buteMgr.Term();
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::Term()
 //
 //	PURPOSE:	Clean up.
-//
 // ----------------------------------------------------------------------- //
 
 void CWeaponMgr::Term()
 {
-    g_pWeaponMgr = LTNULL;
+	g_pWeaponMgr = LTNULL;
 
 	m_WeaponList.Clear();
 	m_AmmoList.Clear();
@@ -456,16 +435,14 @@ void CWeaponMgr::Term()
 	if (m_pWeaponOrder)
 	{
 		debug_deletea(m_pWeaponOrder);
-        m_pWeaponOrder = LTNULL;
+		m_pWeaponOrder = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::WriteFile()
 //
 //	PURPOSE:	Write necessary data back out to bute file
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeaponMgr::WriteFile(ILTCSBase *pInterface)
@@ -473,12 +450,12 @@ LTBOOL CWeaponMgr::WriteFile(ILTCSBase *pInterface)
 	// Re-init our bute mgr...
 
 	m_buteMgr.Init(GBM_DisplayError);
-    Parse(pInterface, WEAPON_DEFAULT_FILE);
+	Parse(pInterface, WEAPON_DEFAULT_FILE);
 
 
 	// Save the necessary weapon data...
 
-    WEAPON** pCur  = LTNULL;
+	WEAPON** pCur = LTNULL;
 
 	pCur = m_WeaponList.GetItem(TLIT_FIRST);
 
@@ -496,7 +473,7 @@ LTBOOL CWeaponMgr::WriteFile(ILTCSBase *pInterface)
 
 	// Save the file...
 
-    LTBOOL bRet = m_buteMgr.Save();
+	LTBOOL bRet = m_buteMgr.Save();
 	m_buteMgr.Term();
 
 
@@ -504,27 +481,23 @@ LTBOOL CWeaponMgr::WriteFile(ILTCSBase *pInterface)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::Reload()
 //
 //	PURPOSE:	Reload data from the bute file
-//
 // ----------------------------------------------------------------------- //
 
 void CWeaponMgr::Reload(ILTCSBase *pInterface)
 {
 	Term();
-    Init(pInterface);
+	Init(pInterface);
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::CalculateWeaponPath()
 //
 //	PURPOSE:	Utility function used to calculate a path based on the
-//				perturb of the weapon
-//
+//			perturb of the weapon
 // ----------------------------------------------------------------------- //
 
 void CWeaponMgr::CalculateWeaponPath(WeaponPath & wp)
@@ -533,7 +506,6 @@ void CWeaponMgr::CalculateWeaponPath(WeaponPath & wp)
 	if (!pWeapon) return;
 
 	// Make sure the path has been normalized...
-
 	wp.vPath.Norm();
 
 	int nMinPerturb = pWeapon->nMinPerturb;
@@ -544,15 +516,15 @@ void CWeaponMgr::CalculateWeaponPath(WeaponPath & wp)
 		float fPerturbRange = float(nMaxPerturb - nMinPerturb);
 
 		int nPerturb = nMinPerturb + (int) (fPerturbRange * wp.fPerturbR);
-        LTFLOAT fRPerturb = ((LTFLOAT)GetRandom(-nPerturb, nPerturb))/1000.0f;
+		LTFLOAT fRPerturb = ((LTFLOAT)GetRandom(-nPerturb, nPerturb))/1000.0f;
 
 		nPerturb = nMinPerturb + (int) (fPerturbRange * wp.fPerturbU);
-        LTFLOAT fUPerturb = ((LTFLOAT)GetRandom(-nPerturb, nPerturb))/1000.0f;
+		LTFLOAT fUPerturb = ((LTFLOAT)GetRandom(-nPerturb, nPerturb))/1000.0f;
 
-        // pInterface->CPrint("Weapon Path RPerturb : %.2f", wp.fPerturbR);
-        // pInterface->CPrint("Calculated RPerturb : %.2f", fRPerturb);
-        // pInterface->CPrint("Weapon Path UPerturb : %.2f", wp.fPerturbU);
-        // pInterface->CPrint("Calculated UPerturb : %.2f", fUPerturb);
+		// pInterface->CPrint("Weapon Path RPerturb : %.2f", wp.fPerturbR);
+		// pInterface->CPrint("Calculated RPerturb : %.2f", fRPerturb);
+		// pInterface->CPrint("Weapon Path UPerturb : %.2f", wp.fPerturbU);
+		// pInterface->CPrint("Calculated UPerturb : %.2f", fUPerturb);
 
 		wp.vPath += (wp.vR * fRPerturb);
 		wp.vPath += (wp.vU * fUPerturb);
@@ -562,16 +534,14 @@ void CWeaponMgr::CalculateWeaponPath(WeaponPath & wp)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::GetWeapon
 //
 //	PURPOSE:	Get the specified weapon struct
-//
 // ----------------------------------------------------------------------- //
 
 WEAPON* CWeaponMgr::GetWeapon(int nWeaponId)
 {
-    WEAPON** pCur  = LTNULL;
+	WEAPON** pCur = LTNULL;
 
 	pCur = m_WeaponList.GetItem(TLIT_FIRST);
 
@@ -585,22 +555,20 @@ WEAPON* CWeaponMgr::GetWeapon(int nWeaponId)
 		pCur = m_WeaponList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::GetWeapon
 //
 //	PURPOSE:	Get the specified weapon struct
-//
 // ----------------------------------------------------------------------- //
 
 WEAPON* CWeaponMgr::GetWeapon(char* pWeaponName)
 {
-    if (!pWeaponName) return LTNULL;
+	if (!pWeaponName) return LTNULL;
 
-    WEAPON** pCur  = LTNULL;
+	WEAPON** pCur = LTNULL;
 
 	pCur = m_WeaponList.GetItem(TLIT_FIRST);
 
@@ -614,20 +582,18 @@ WEAPON* CWeaponMgr::GetWeapon(char* pWeaponName)
 		pCur = m_WeaponList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::GetAmmo
 //
 //	PURPOSE:	Get the specified ammo struct
-//
 // ----------------------------------------------------------------------- //
 
 AMMO* CWeaponMgr::GetAmmo(int nAmmoId)
 {
-    AMMO** pCur  = LTNULL;
+	AMMO** pCur = LTNULL;
 
 	pCur = m_AmmoList.GetItem(TLIT_FIRST);
 
@@ -641,22 +607,20 @@ AMMO* CWeaponMgr::GetAmmo(int nAmmoId)
 		pCur = m_AmmoList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::GetAmmo
 //
 //	PURPOSE:	Get the specified ammo struct
-//
 // ----------------------------------------------------------------------- //
 
 AMMO* CWeaponMgr::GetAmmo(char* pAmmoName)
 {
-    if (!pAmmoName) return LTNULL;
+	if (!pAmmoName) return LTNULL;
 
-    AMMO** pCur  = LTNULL;
+	AMMO** pCur = LTNULL;
 
 	pCur = m_AmmoList.GetItem(TLIT_FIRST);
 
@@ -670,20 +634,18 @@ AMMO* CWeaponMgr::GetAmmo(char* pAmmoName)
 		pCur = m_AmmoList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::GetMod
 //
 //	PURPOSE:	Get the specified mod struct
-//
 // ----------------------------------------------------------------------- //
 
 MOD* CWeaponMgr::GetMod(int nModId)
 {
-    MOD** pCur  = LTNULL;
+	MOD** pCur = LTNULL;
 
 	pCur = m_ModList.GetItem(TLIT_FIRST);
 
@@ -697,22 +659,20 @@ MOD* CWeaponMgr::GetMod(int nModId)
 		pCur = m_ModList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::GetMod
 //
 //	PURPOSE:	Get the specified mod struct
-//
 // ----------------------------------------------------------------------- //
 
 MOD* CWeaponMgr::GetMod(char* pModName)
 {
-    if (!pModName) return LTNULL;
+	if (!pModName) return LTNULL;
 
-    MOD** pCur  = LTNULL;
+	MOD** pCur = LTNULL;
 
 	pCur = m_ModList.GetItem(TLIT_FIRST);
 
@@ -726,20 +686,18 @@ MOD* CWeaponMgr::GetMod(char* pModName)
 		pCur = m_ModList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::GetGear
 //
 //	PURPOSE:	Get the specified gear struct
-//
 // ----------------------------------------------------------------------- //
 
 GEAR* CWeaponMgr::GetGear(int nGearId)
 {
-    GEAR** pCur  = LTNULL;
+	GEAR** pCur  = LTNULL;
 
 	pCur = m_GearList.GetItem(TLIT_FIRST);
 
@@ -753,22 +711,20 @@ GEAR* CWeaponMgr::GetGear(int nGearId)
 		pCur = m_GearList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::GetGear
 //
 //	PURPOSE:	Get the specified gear struct
-//
 // ----------------------------------------------------------------------- //
 
 GEAR* CWeaponMgr::GetGear(char* pGearName)
 {
-    if (!pGearName) return LTNULL;
+	if (!pGearName) return LTNULL;
 
-    GEAR** pCur  = LTNULL;
+	GEAR** pCur = LTNULL;
 
 	pCur = m_GearList.GetItem(TLIT_FIRST);
 
@@ -782,22 +738,20 @@ GEAR* CWeaponMgr::GetGear(char* pGearName)
 		pCur = m_GearList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::GetWeaponAnis
 //
 //	PURPOSE:	Get the specified weapon anis struct
-//
 // ----------------------------------------------------------------------- //
 
 WEAPONANIS* CWeaponMgr::GetWeaponAnis(char* pAnisName)
 {
-    if (!pAnisName) return LTNULL;
+	if (!pAnisName) return LTNULL;
 
-    WEAPONANIS** pCur  = LTNULL;
+	WEAPONANIS** pCur  = LTNULL;
 
 	pCur = m_WeaponAnisList.GetItem(TLIT_FIRST);
 
@@ -811,61 +765,57 @@ WEAPONANIS* CWeaponMgr::GetWeaponAnis(char* pAnisName)
 		pCur = m_WeaponAnisList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-//
 //	W E A P O N  Related functions...
-//
 /////////////////////////////////////////////////////////////////////////////
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	WEAPON::WEAPON
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 WEAPON::WEAPON()
 {
-	nId				= WMGR_INVALID_ID;
+	nId		= WMGR_INVALID_ID;
 
-	nNameId			= 0;
+	nNameId		= 0;
 	nDescriptionId	= 0;
-    bGadget         = LTFALSE;
-	nAniType		= 0;
+	bGadget		= LTFALSE;
+	nAniType	= 0;
 
-	szName[0]		= '\0';
-	szIcon[0]		= '\0';
+	szName[0]	= '\0';
+	szIcon[0]	= '\0';
 	szSmallIcon[0]	= '\0';
-	szPhoto[0]		= '\0';
+	szPhoto[0]	= '\0';
 
 	vPos.Init();
 	vMuzzlePos.Init();
 
 	szPVModel[0]	= '\0';
-	szPVSkin[0]		= '\0';
+	szPVSkin[0]	= '\0';
 	szHHModel[0]	= '\0';
-	szHHSkin[0]		= '\0';
+	szHHSkin[0]	= '\0';
 
-	szInterfaceModel[0]		= '\0';
-	szInterfaceSkin[0]		= '\0';
-    fInterfaceScale			=	1.0f;
-    vInterfaceOffset.Init();
+	szInterfaceModel[0]	= '\0';
+	szInterfaceSkin[0]	= '\0';
+	fInterfaceScale		= 1.0f;
+	vInterfaceOffset.Init();
 
 	vHHScale.Init();
 	fHHBreachOffset	= 0.0f;
 
 	szSilencedFireSound[0]	= '\0';
-	szAltFireSound[0]		= '\0';
+	szAltFireSound[0]	= '\0';
 	szFireSound[0]		= '\0';
 	szDryFireSound[0]	= '\0';
 
-    int i;
-    for (i=0; i < WMGR_MAX_RELOAD_SNDS; i++)
+	int i;
+	for (i=0; i < WMGR_MAX_RELOAD_SNDS; i++)
 	{
 		szReloadSounds[i][0] = '\0';
 	}
@@ -876,16 +826,16 @@ WEAPON::WEAPON()
 	nFireSoundRadius	= 0;
 	nAIFireSoundRadius	= 0;
 
-    bEnvironmentMap     = LTFALSE;
-    bInfiniteAmmo       = LTFALSE;
-    bLooksDangerous     = LTFALSE;
-	bCanBeDefault		= LTFALSE;
-	bCanBeMapped		= LTFALSE;
-	bHideWhenEmpty		= LTFALSE;
+	bEnvironmentMap	= LTFALSE;
+	bInfiniteAmmo	= LTFALSE;
+	bLooksDangerous	= LTFALSE;
+	bCanBeDefault	= LTFALSE;
+	bCanBeMapped	= LTFALSE;
+	bHideWhenEmpty	= LTFALSE;
 
-	nShotsPerClip		= 0;
+	nShotsPerClip	= 0;
 
-	nNumAmmoTypes		= 0;
+	nNumAmmoTypes	= 0;
 	for (i=0; i < WMGR_MAX_AMMO_TYPES; i++)
 	{
 		aAmmoTypes[i] = WMGR_INVALID_ID;
@@ -894,13 +844,13 @@ WEAPON::WEAPON()
 	nDefaultAmmoType	= 0;
 	nAmmoMultiplier		= 1;
 
-	nNumModTypes		= 0;
+	nNumModTypes	= 0;
 	for (i=0; i < WMGR_MAX_MOD_TYPES; i++)
 	{
 		aModTypes[i] = WMGR_INVALID_ID;
 	}
 
-	nNumPVFXTypes		= 0;
+	nNumPVFXTypes	= 0;
 	for (i=0; i < WMGR_MAX_PVFX_TYPES; i++)
 	{
 		aPVFXTypes[i] = WMGR_INVALID_ID;
@@ -908,10 +858,10 @@ WEAPON::WEAPON()
 
 	vRecoil.Init();
 
-	nMinPerturb			= 0;
-	nMaxPerturb			= 0;
+	nMinPerturb		= 0;
+	nMaxPerturb		= 0;
 
-	nRange				= 0;
+	nRange			= 0;
 	nVectorsPerRound	= 0;
 
 	nAIMinBurstShots	= 0;
@@ -922,33 +872,31 @@ WEAPON::WEAPON()
 	fFireRecoilPitch	= 0.0f;
 	fFireRecoilDecay	= 0.0f;
 
-    pPVMuzzleFX         = LTNULL;
-    pHHMuzzleFX         = LTNULL;
+	pPVMuzzleFX	= LTNULL;
+	pHHMuzzleFX	= LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	WEAPON::Init
 //
 //	PURPOSE:	Build the weapon struct
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL WEAPON::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
-	nNameId					= buteMgr.GetInt(aTagName, WMGR_WEAPON_NAMEID);
-	nDescriptionId			= buteMgr.GetInt(aTagName, WMGR_WEAPON_DESCRIPTIONID);
-    bGadget                 = (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_GADGET);
-	nAniType				= buteMgr.GetInt(aTagName, WMGR_WEAPON_ANITYPE);
+	nNameId			= buteMgr.GetInt(aTagName, WMGR_WEAPON_NAMEID);
+	nDescriptionId		= buteMgr.GetInt(aTagName, WMGR_WEAPON_DESCRIPTIONID);
+	bGadget			= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_GADGET);
+	nAniType		= buteMgr.GetInt(aTagName, WMGR_WEAPON_ANITYPE);
 
-	vPos					= buteMgr.GetVector(aTagName, WMGR_WEAPON_POS);
-	vMuzzlePos				= buteMgr.GetVector(aTagName, WMGR_WEAPON_MUZZLEPOS);
-	vHHScale				= buteMgr.GetVector(aTagName, WMGR_WEAPON_HHSCALE);
-	vRecoil					= buteMgr.GetVector(aTagName, WMGR_WEAPON_RECOIL);
-	fInterfaceScale			= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_WEAPON_INTSCALE);
-	vInterfaceOffset		= buteMgr.GetVector(aTagName, WMGR_WEAPON_INTPOS);
+	vPos			= buteMgr.GetVector(aTagName, WMGR_WEAPON_POS);
+	vMuzzlePos		= buteMgr.GetVector(aTagName, WMGR_WEAPON_MUZZLEPOS);
+	vHHScale		= buteMgr.GetVector(aTagName, WMGR_WEAPON_HHSCALE);
+	vRecoil			= buteMgr.GetVector(aTagName, WMGR_WEAPON_RECOIL);
+	fInterfaceScale		= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_WEAPON_INTSCALE);
+	vInterfaceOffset	= buteMgr.GetVector(aTagName, WMGR_WEAPON_INTPOS);
 
 	CString str = buteMgr.GetString(aTagName, WMGR_WEAPON_NAME);
 	if (!str.IsEmpty())
@@ -1057,24 +1005,22 @@ LTBOOL WEAPON::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szDeselectSound, (char*)(LPCSTR)str, ARRAY_LEN(szDeselectSound));
 	}
 
-    fHHBreachOffset     = (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_WEAPON_HHBREACH);
+	fHHBreachOffset	 = (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_WEAPON_HHBREACH);
 
 	nFireSoundRadius	= buteMgr.GetInt(aTagName, WMGR_WEAPON_FIRESNDRADIUS);
-    nAIFireSoundRadius  = buteMgr.GetInt(aTagName, WMGR_WEAPON_AIFIRESNDRADIUS);
-    bEnvironmentMap     = (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_ENVMAP);
-    bInfiniteAmmo       = (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_INFINITEAMMO);
-    bLooksDangerous     = (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_LOOKSDANGEROUS);
-    bCanBeDefault		= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_CANBEDEFAULT);
-    bCanBeMapped		= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_CANBEMAPPED);
-    bHideWhenEmpty      = (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_HIDEWHENEMPTY);
+	nAIFireSoundRadius	= buteMgr.GetInt(aTagName, WMGR_WEAPON_AIFIRESNDRADIUS);
+	bEnvironmentMap	= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_ENVMAP);
+	bInfiniteAmmo	= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_INFINITEAMMO);
+	bLooksDangerous	= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_LOOKSDANGEROUS);
+	bCanBeDefault	= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_CANBEDEFAULT);
+	bCanBeMapped	= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_CANBEMAPPED);
+	bHideWhenEmpty	= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_HIDEWHENEMPTY);
 
-    nShotsPerClip       = buteMgr.GetInt(aTagName, WMGR_WEAPON_SHOTSPERCLIP);
+	nShotsPerClip	= buteMgr.GetInt(aTagName, WMGR_WEAPON_SHOTSPERCLIP);
 
-	nNumAmmoTypes		= 0;
-
+	nNumAmmoTypes	= 0;
 
 	// Build our ammo types id array...
-
 	nNumAmmoTypes = 0;
 	sprintf(s_aAttName, "%s%d", WMGR_WEAPON_AMMONAME, nNumAmmoTypes);
 
@@ -1095,11 +1041,10 @@ LTBOOL WEAPON::Init(CButeMgr & buteMgr, char* aTagName)
 	}
 
 	nDefaultAmmoType = aAmmoTypes[0];
-    nAmmoMultiplier  = (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_AMMOMULT);
+	nAmmoMultiplier	= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_WEAPON_AMMOMULT);
 
 
 	// Build our mod types id array...
-
 	nNumModTypes = 0;
 	sprintf(s_aAttName, "%s%d", WMGR_WEAPON_MODNAME, nNumModTypes);
 
@@ -1121,7 +1066,6 @@ LTBOOL WEAPON::Init(CButeMgr & buteMgr, char* aTagName)
 
 
 	// Build our pv fx id array...
-
 	nNumPVFXTypes = 0;
 	sprintf(s_aAttName, "%s%d", WMGR_WEAPON_PVFXNAME, nNumPVFXTypes);
 
@@ -1142,18 +1086,18 @@ LTBOOL WEAPON::Init(CButeMgr & buteMgr, char* aTagName)
 	}
 
 
-	nMinPerturb			= buteMgr.GetInt(s_aTagName, WMGR_WEAPON_MINPERTURB);
-	nMaxPerturb			= buteMgr.GetInt(s_aTagName, WMGR_WEAPON_MAXPERTURB);
-	nRange				= buteMgr.GetInt(s_aTagName, WMGR_WEAPON_RANGE);
+	nMinPerturb		= buteMgr.GetInt(s_aTagName, WMGR_WEAPON_MINPERTURB);
+	nMaxPerturb		= buteMgr.GetInt(s_aTagName, WMGR_WEAPON_MAXPERTURB);
+	nRange			= buteMgr.GetInt(s_aTagName, WMGR_WEAPON_RANGE);
 	nVectorsPerRound	= buteMgr.GetInt(s_aTagName, WMGR_WEAPON_VECTORSPERROUND);
 
 	nAIMinBurstShots	= buteMgr.GetInt(s_aTagName, WMGR_WEAPON_AIMINBURSTSHOTS);
 	nAIMaxBurstShots	= buteMgr.GetInt(s_aTagName, WMGR_WEAPON_AIMAXBURSTSHOTS);
-    fAIMinBurstInterval = (LTFLOAT)buteMgr.GetDouble(s_aTagName, WMGR_WEAPON_AIMINBURSTINTERVAL);
-    fAIMaxBurstInterval = (LTFLOAT)buteMgr.GetDouble(s_aTagName, WMGR_WEAPON_AIMAXBURSTINTERVAL);
+	fAIMinBurstInterval	= (LTFLOAT)buteMgr.GetDouble(s_aTagName, WMGR_WEAPON_AIMINBURSTINTERVAL);
+	fAIMaxBurstInterval	= (LTFLOAT)buteMgr.GetDouble(s_aTagName, WMGR_WEAPON_AIMAXBURSTINTERVAL);
 
-    fFireRecoilPitch    = (LTFLOAT)buteMgr.GetDouble(s_aTagName, WMGR_WEAPON_FIRERECOILPITCH);
-    fFireRecoilDecay    = (LTFLOAT)buteMgr.GetDouble(s_aTagName, WMGR_WEAPON_FIRERECOILDECAY);
+	fFireRecoilPitch	= (LTFLOAT)buteMgr.GetDouble(s_aTagName, WMGR_WEAPON_FIRERECOILPITCH);
+	fFireRecoilDecay	= (LTFLOAT)buteMgr.GetDouble(s_aTagName, WMGR_WEAPON_FIRERECOILDECAY);
 
 	str = buteMgr.GetString(aTagName, WMGR_WEAPON_HHMUZZLEFXNAME);
 	if (!str.IsEmpty())
@@ -1170,15 +1114,13 @@ LTBOOL WEAPON::Init(CButeMgr & buteMgr, char* aTagName)
 	int nDelay = buteMgr.GetInt(s_aTagName, WMGR_WEAPON_FIREDELAY);
 	m_nFireDelay = (nDelay > 0) ? nDelay : 0;
 	
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	WEAPON::Cache
 //
 //	PURPOSE:	Cache all the resources associated with the weapon
-//
 // ----------------------------------------------------------------------- //
 
 void WEAPON::Cache(CWeaponMgr* pWeaponMgr)
@@ -1189,57 +1131,55 @@ void WEAPON::Cache(CWeaponMgr* pWeaponMgr)
 
 	if (szPVModel[0])
 	{
-        g_pLTServer->CacheFile(FT_MODEL, szPVModel);
+		g_pLTServer->CacheFile(FT_MODEL, szPVModel);
 	}
 
 	if (szPVSkin[0])
 	{
-        g_pLTServer->CacheFile(FT_TEXTURE, szPVSkin);
+		g_pLTServer->CacheFile(FT_TEXTURE, szPVSkin);
 	}
 
 	if (szHHModel[0])
 	{
-        g_pLTServer->CacheFile(FT_MODEL, szHHModel);
+		g_pLTServer->CacheFile(FT_MODEL, szHHModel);
 	}
 
 	if (szHHSkin[0])
 	{
-        g_pLTServer->CacheFile(FT_TEXTURE, szHHSkin);
+		g_pLTServer->CacheFile(FT_TEXTURE, szHHSkin);
 	}
 
 	// Cache sounds...
-
 	if (szFireSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szFireSound);
+		g_pLTServer->CacheFile(FT_SOUND, szFireSound);
 	}
 
 	if (szDryFireSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szDryFireSound);
+		g_pLTServer->CacheFile(FT_SOUND, szDryFireSound);
 	}
 
-    int i;
-    for (i=0; i < WMGR_MAX_RELOAD_SNDS; i++)
+	int i;
+	for (i=0; i < WMGR_MAX_RELOAD_SNDS; i++)
 	{
 		if (szReloadSounds[i][0])
 		{
-            g_pLTServer->CacheFile(FT_SOUND, szReloadSounds[i]);
+			g_pLTServer->CacheFile(FT_SOUND, szReloadSounds[i]);
 		}
 	}
 
 	if (szSelectSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szSelectSound);
+		g_pLTServer->CacheFile(FT_SOUND, szSelectSound);
 	}
 
 	if (szDeselectSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szDeselectSound);
+		g_pLTServer->CacheFile(FT_SOUND, szDeselectSound);
 	}
 
 	// Load all the ammo related resources...
-
 	for (i=0; i < nNumAmmoTypes; i++)
 	{
 		AMMO* pAmmo = pWeaponMgr->GetAmmo(aAmmoTypes[i]);
@@ -1250,7 +1190,6 @@ void WEAPON::Cache(CWeaponMgr* pWeaponMgr)
 	}
 
 	// Load all the mod related resources...
-
 	for (i=0; i < nNumModTypes; i++)
 	{
 		MOD* pMod = pWeaponMgr->GetMod(aModTypes[i]);
@@ -1261,7 +1200,6 @@ void WEAPON::Cache(CWeaponMgr* pWeaponMgr)
 	}
 
 	// Load all the pv fx related resources...
-
 	for (i=0; i < nNumPVFXTypes; i++)
 	{
 		PVFX* pPVFX = g_pFXButeMgr->GetPVFX(aPVFXTypes[i]);
@@ -1272,14 +1210,12 @@ void WEAPON::Cache(CWeaponMgr* pWeaponMgr)
 	}
 
 	// Load the player-view muzzle fx...
-
 	if (pPVMuzzleFX)
 	{
 		pPVMuzzleFX->Cache(g_pFXButeMgr);
 	}
 
 	// Load the hand-held muzzle fx...
-
 	if (pHHMuzzleFX)
 	{
 		pHHMuzzleFX->Cache(g_pFXButeMgr);
@@ -1289,13 +1225,10 @@ void WEAPON::Cache(CWeaponMgr* pWeaponMgr)
 }
 
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	WEAPON::Save()
 //
 //	PURPOSE:	Save any necessary data to the bute file...
-//
 // ----------------------------------------------------------------------- //
 
 void WEAPON::Save(CButeMgr & buteMgr)
@@ -1313,32 +1246,28 @@ void WEAPON::Save(CButeMgr & buteMgr)
 
 
 /////////////////////////////////////////////////////////////////////////////
-//
 //	W E A P O N  A N I S  Related functions...
-//
 /////////////////////////////////////////////////////////////////////////////
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	WEAPONANIS::WEAPONANIS
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 WEAPONANIS::WEAPONANIS()
 {
-	nId			= WMGR_INVALID_ID;
+	nId		= WMGR_INVALID_ID;
 	szName[0]	= '\0';
 
-	szSelectAni[0]		= '\0';
-	szDeselectAni[0]	= '\0';
-	szReloadAni[0]		= '\0';
+	szSelectAni[0]	= '\0';
+	szDeselectAni[0] = '\0';
+	szReloadAni[0]	= '\0';
 
 	nNumIdleAnis	= 0;
-    int i;
-    for (i=0; i < WMGR_MAX_WEAPONANI_IDLE; i++)
+	int i;
+	for (i=0; i < WMGR_MAX_WEAPONANI_IDLE; i++)
 	{
 		szIdleAnis[i][0] = '\0';
 	}
@@ -1351,16 +1280,14 @@ WEAPONANIS::WEAPONANIS()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	WEAPONANIS::Init
 //
 //	PURPOSE:	Build the ammo struct
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL WEAPONANIS::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, WMGR_WEAPONANI_NAME);
 	if (!str.IsEmpty())
@@ -1418,34 +1345,25 @@ LTBOOL WEAPONANIS::Init(CButeMgr & buteMgr, char* aTagName)
 	}
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 
-
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////
-//
 //	A M M O  Related functions...
-//
 /////////////////////////////////////////////////////////////////////////////
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	AMMO::AMMO
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 AMMO::AMMO()
 {
-	nId			= WMGR_INVALID_ID;
+	nId		= WMGR_INVALID_ID;
 
 	nNameId		= 0;
 	nDescId		= 0;
@@ -1456,67 +1374,65 @@ AMMO::AMMO()
 	szSmallIcon[0]	= '\0';
 	szName[0]	= '\0';
 
-	nMaxAmount			= 0;
+	nMaxAmount		= 0;
 	nSpawnedAmount		= 0;
 	nSelectionAmount	= 0;
 
 	nInstDamage		= 0;
 	eInstDamageType	= DT_INVALID;
 
-	nAreaDamage			= 0;
+	nAreaDamage		= 0;
 	nAreaDamageRadius	= 0;
 	eAreaDamageType		= DT_INVALID;
 	fFireRecoilMult		= 1.0f;
 
-	fProgDamage			= 0.0f;
+	fProgDamage		= 0.0f;
 	fProgDamageDuration	= 0.0f;
-	fProgDamageRadius   = 0.0f;
-	fProgDamageLifetime = 0.0f;
+	fProgDamageRadius	= 0.0f;
+	fProgDamageLifetime	= 0.0f;
 	eProgDamageType		= DT_INVALID;
 
 	pProjectileFX	= NULL;
-	pImpactFX		= NULL;
-	pUWImpactFX		= NULL;
-	pFireFX			= NULL;
+	pImpactFX	= NULL;
+	pUWImpactFX	= NULL;
+	pFireFX		= NULL;
 	pAniOverrides	= NULL;
-	pTracerFX		= NULL;
+	pTracerFX	= NULL;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	AMMO::Init
 //
 //	PURPOSE:	Build the ammo struct
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL AMMO::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
-	nNameId				= buteMgr.GetInt(aTagName, WMGR_AMMO_NAMEID);
-	nDescId				= buteMgr.GetInt(aTagName, WMGR_AMMO_DESCID);
-	eType				= (AmmoType) buteMgr.GetInt(aTagName, WMGR_AMMO_TYPE);
+	nNameId		= buteMgr.GetInt(aTagName, WMGR_AMMO_NAMEID);
+	nDescId		= buteMgr.GetInt(aTagName, WMGR_AMMO_DESCID);
+	eType		= (AmmoType) buteMgr.GetInt(aTagName, WMGR_AMMO_TYPE);
 
-    fPriority			= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_PRIORITY);
+	fPriority	= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_PRIORITY);
 
-	nMaxAmount			= buteMgr.GetInt(aTagName, WMGR_AMMO_MAXAMOUNT);
+	nMaxAmount		= buteMgr.GetInt(aTagName, WMGR_AMMO_MAXAMOUNT);
 	nSpawnedAmount		= buteMgr.GetInt(aTagName, WMGR_AMMO_SPAWNEDAMOUNT);
 	nSelectionAmount	= buteMgr.GetInt(aTagName, WMGR_AMMO_SELECTIONAMOUNT);
 
-	nInstDamage			= buteMgr.GetInt(aTagName, WMGR_AMMO_INSTDAMAGE);
+	nInstDamage		= buteMgr.GetInt(aTagName, WMGR_AMMO_INSTDAMAGE);
 	eInstDamageType		= (DamageType) buteMgr.GetInt(aTagName, WMGR_AMMO_INSTDAMAGETYPE);
 
-	nAreaDamage			= buteMgr.GetInt(aTagName, WMGR_AMMO_AREADAMAGE);
+	nAreaDamage		= buteMgr.GetInt(aTagName, WMGR_AMMO_AREADAMAGE);
 	eAreaDamageType		= (DamageType) buteMgr.GetInt(aTagName, WMGR_AMMO_AREADAMAGETYPE);
 	nAreaDamageRadius	= buteMgr.GetInt(aTagName, WMGR_AMMO_AREADAMAGERADIUS);
-    fFireRecoilMult     = (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_FIRERECOILMULT);
+	fFireRecoilMult		= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_FIRERECOILMULT);
 
-    fProgDamage         = (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_PROGDAMAGE);
+	fProgDamage		= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_PROGDAMAGE);
 	eProgDamageType		= (DamageType) buteMgr.GetInt(aTagName, WMGR_AMMO_PROGDAMAGETYPE);
-    fProgDamageDuration = (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_PROGDAMAGEDUR);
-    fProgDamageRadius   = (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_PROGDAMAGERADIUS);
-    fProgDamageLifetime = (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_PROGDAMAGELIFE);
+	fProgDamageDuration	= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_PROGDAMAGEDUR);
+	fProgDamageRadius	= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_PROGDAMAGERADIUS);
+	fProgDamageLifetime	= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_AMMO_PROGDAMAGELIFE);
 
 	CString str = buteMgr.GetString(aTagName, WMGR_AMMO_NAME);
 	if (!str.IsEmpty())
@@ -1591,15 +1507,13 @@ LTBOOL AMMO::Init(CButeMgr & buteMgr, char* aTagName)
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	AMMO::Cache
 //
 //	PURPOSE:	Cache all the resources associated with the ammo
-//
 // ----------------------------------------------------------------------- //
 
 void AMMO::Cache(CWeaponMgr* pWeaponMgr)
@@ -1632,12 +1546,10 @@ void AMMO::Cache(CWeaponMgr* pWeaponMgr)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	AMMO::GetMaxAmount()
 //
 //	PURPOSE:	Calculate max amount of ammo of this type allowed for
-//				the character
-//
+//			the character
 // ----------------------------------------------------------------------- //
 
 int AMMO::GetMaxAmount(HOBJECT hCharacter)
@@ -1647,15 +1559,15 @@ int AMMO::GetMaxAmount(HOBJECT hCharacter)
 	if (!g_pGameClientShell->IsMultiplayerGame())
 	{
 		CPlayerSummaryMgr *pPSummary = g_pGameClientShell->GetPlayerSummary();
-        LTFLOAT fMult = pPSummary->m_PlayerRank.fAmmoMultiplier;
-        nMaxAmmo =  (int) ( fMult * (LTFLOAT)nMaxAmmo );
+		LTFLOAT fMult	= pPSummary->m_PlayerRank.fAmmoMultiplier;
+		nMaxAmmo	= (int) ( fMult * (LTFLOAT)nMaxAmmo );
 	}
 #else
 	if (IsPlayer(hCharacter) && g_pGameServerShell->GetGameType() == SINGLE)
 	{
-        CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(hCharacter);
-        LTFLOAT fMult = pPlayer->GetPlayerSummaryMgr()->m_PlayerRank.fAmmoMultiplier;
-        nMaxAmmo =  (int) ( fMult * (LTFLOAT)nMaxAmmo );
+		CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(hCharacter);
+		LTFLOAT fMult	= pPlayer->GetPlayerSummaryMgr()->m_PlayerRank.fAmmoMultiplier;
+		nMaxAmmo	= (int) ( fMult * (LTFLOAT)nMaxAmmo );
 	};
 #endif
 	return nMaxAmmo;
@@ -1663,77 +1575,71 @@ int AMMO::GetMaxAmount(HOBJECT hCharacter)
 
 
 /////////////////////////////////////////////////////////////////////////////
-//
 //	M O D Related functions...
-//
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	MOD::MOD
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 MOD::MOD()
 {
-	nId		= WMGR_INVALID_ID;
+	nId	= WMGR_INVALID_ID;
 
 	eType	= UNKNOWN_MOD_TYPE;
 
-	szSocket[0]				= '\0';
-	szName[0]				= '\0';
-	szIcon[0]				= '\0';
-	szSmallIcon[0]			= '\0';
-	szZoomInSound[0]		= '\0';
-	szZoomOutSound[0]		= '\0';
-	szAttachModel[0]		= '\0';
-	szAttachSkin[0]			= '\0';
-	szInterfaceModel[0]		= '\0';
-	szInterfaceSkin[0]		= '\0';
-	szPowerupModel[0]		= '\0';
-	szPowerupSkin[0]		= '\0';
-	szPickUpSound[0]		= '\0';
-	szRespawnSound[0]		= '\0';
+	szSocket[0]		= '\0';
+	szName[0]		= '\0';
+	szIcon[0]		= '\0';
+	szSmallIcon[0]		= '\0';
+	szZoomInSound[0]	= '\0';
+	szZoomOutSound[0]	= '\0';
+	szAttachModel[0]	= '\0';
+	szAttachSkin[0]		= '\0';
+	szInterfaceModel[0]	= '\0';
+	szInterfaceSkin[0]	= '\0';
+	szPowerupModel[0]	= '\0';
+	szPowerupSkin[0]	= '\0';
+	szPickUpSound[0]	= '\0';
+	szRespawnSound[0]	= '\0';
 
-    fInterfaceScale			=	1.0f;
-    fPowerupScale			=	1.0f;
-    vInterfaceOffset.Init();
+	fInterfaceScale		=	1.0f;
+	fPowerupScale		=	1.0f;
+	vInterfaceOffset.Init();
 	vAttachScale.Init(1, 1, 1);
 
-	nNameId				= 0;
-	nDescriptionId		= 0;
-	nZoomLevel			= 0;
-	nPriority			= 0;
+	nNameId		= 0;
+	nDescriptionId	= 0;
+	nZoomLevel	= 0;
+	nPriority	= 0;
 
-    bNightVision        = LTFALSE;
+	bNightVision	= LTFALSE;
 
-    bIntegrated         = LTFALSE;
+	bIntegrated	 = LTFALSE;
 
 	fScreenTintTime	= 0.0f;
  	vScreenTintColor.Init();
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	MOD::Init
 //
 //	PURPOSE:	Build the mod struct
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL MOD::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
-	nNameId				= buteMgr.GetInt(aTagName, WMGR_MOD_NAMEID);
+	nNameId			= buteMgr.GetInt(aTagName, WMGR_MOD_NAMEID);
 	nDescriptionId		= buteMgr.GetInt(aTagName, WMGR_MOD_DESCRIPTIONID);
-	eType				= (ModType) buteMgr.GetInt(aTagName, WMGR_MOD_TYPE);
-	nZoomLevel			= buteMgr.GetInt(aTagName, WMGR_MOD_ZOOMLEVEL);
-	nPriority			= buteMgr.GetInt(aTagName, WMGR_MOD_PRIORITY);
-    bNightVision        = (LTBOOL) buteMgr.GetInt(aTagName, WMGR_MOD_NIGHTVISION);
-    bIntegrated         = (LTBOOL) buteMgr.GetInt(aTagName, WMGR_MOD_INTEGRATED);
+	eType			= (ModType) buteMgr.GetInt(aTagName, WMGR_MOD_TYPE);
+	nZoomLevel		= buteMgr.GetInt(aTagName, WMGR_MOD_ZOOMLEVEL);
+	nPriority		= buteMgr.GetInt(aTagName, WMGR_MOD_PRIORITY);
+	bNightVision		= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_MOD_NIGHTVISION);
+	bIntegrated		= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_MOD_INTEGRATED);
 	fInterfaceScale		= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_MOD_INTSCALE);
 	vInterfaceOffset	= buteMgr.GetVector(aTagName, WMGR_MOD_INTPOS);
 	fScreenTintTime		= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_MOD_TINT_TIME);
@@ -1826,15 +1732,13 @@ LTBOOL MOD::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szRespawnSound, (char*)(LPCSTR)str, ARRAY_LEN(szRespawnSound));
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	MOD::Cache
 //
 //	PURPOSE:	Cache all the resources associated with the mod
-//
 // ----------------------------------------------------------------------- //
 
 void MOD::Cache(CWeaponMgr* pWeaponMgr)
@@ -1844,48 +1748,46 @@ void MOD::Cache(CWeaponMgr* pWeaponMgr)
 
 	if (szZoomInSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szZoomInSound);
+		g_pLTServer->CacheFile(FT_SOUND, szZoomInSound);
 	}
 
 	if (szZoomOutSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szZoomOutSound);
+		g_pLTServer->CacheFile(FT_SOUND, szZoomOutSound);
 	}
 
 	if (szAttachModel[0])
 	{
-        g_pLTServer->CacheFile(FT_MODEL, szAttachModel);
+		g_pLTServer->CacheFile(FT_MODEL, szAttachModel);
 	}
 
 	if (szAttachSkin[0])
 	{
-        g_pLTServer->CacheFile(FT_TEXTURE, szAttachSkin);
+		g_pLTServer->CacheFile(FT_TEXTURE, szAttachSkin);
 	}
 
 	if (szPickUpSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szPickUpSound);
+		g_pLTServer->CacheFile(FT_SOUND, szPickUpSound);
 	}
 
 	if (szRespawnSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szRespawnSound);
+		g_pLTServer->CacheFile(FT_SOUND, szRespawnSound);
 	}
 #endif
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	MOD::GetWeaponId()
 //
 //	PURPOSE:	What is the weapon that uses this mod
-//
 // ----------------------------------------------------------------------- //
 
 int MOD::GetWeaponId()
 {
-    WEAPON* pWeapon = LTNULL;
+	WEAPON* pWeapon = LTNULL;
 
 	for (int nWId = 0; nWId < g_pWeaponMgr->GetNumWeapons(); nWId++)
 	{
@@ -1908,78 +1810,72 @@ int MOD::GetWeaponId()
 
 
 /////////////////////////////////////////////////////////////////////////////
-//
 //	G E A R Related functions...
-//
 /////////////////////////////////////////////////////////////////////////////
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	GEAR::GEAR
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 GEAR::GEAR()
 {
 	nId		= WMGR_INVALID_ID;
 
-	nNameId			= 0;
+	nNameId		= 0;
 	nDescriptionId	= 0;
 
-	szName[0]		= '\0';
-	szIcon[0]		= '\0';
+	szName[0]	= '\0';
+	szIcon[0]	= '\0';
 	szSmallIcon[0]	= '\0';
-	szModel[0]		= '\0';
-	szSkin[0]		= '\0';
+	szModel[0]	= '\0';
+	szSkin[0]	= '\0';
 
-	szInterfaceModel[0]		= '\0';
-	szInterfaceSkin[0]		= '\0';
-	szPickUpSound[0]		= '\0';
-	szRespawnSound[0]		= '\0';
+	szInterfaceModel[0]	= '\0';
+	szInterfaceSkin[0]	= '\0';
+	szPickUpSound[0]	= '\0';
+	szRespawnSound[0]	= '\0';
 
-    fInterfaceScale			=	1.0f;
-    vInterfaceOffset.Init();
+	fInterfaceScale		= 1.0f;
+	vInterfaceOffset.Init();
 
 	eProtectionType	= DT_INVALID;
-	fProtection		= 0.0f;
-	fArmor			= 0.0f;
-	fStealth		= 0.0f;
+	fProtection	= 0.0f;
+	fArmor		= 0.0f;
+	fStealth	= 0.0f;
 	fScreenTintTime	= 0.0f;
-    bSelectable     = LTFALSE;
-    bExclusive      = LTFALSE;
+	bSelectable	= LTFALSE;
+	bExclusive	= LTFALSE;
 
 	vScreenTintColor.Init();
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	GEAR::Init
 //
 //	PURPOSE:	Build the gear struct
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL GEAR::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
-	nNameId			= buteMgr.GetInt(aTagName, WMGR_GEAR_NAMEID);
+	nNameId		= buteMgr.GetInt(aTagName, WMGR_GEAR_NAMEID);
 	nDescriptionId	= buteMgr.GetInt(aTagName, WMGR_GEAR_DESCRIPTIONID);
 
 	eProtectionType	= (DamageType) buteMgr.GetInt(aTagName, WMGR_GEAR_PROTECTTYPE);
-    bSelectable     = (LTBOOL) buteMgr.GetInt(aTagName, WMGR_GEAR_SELECTABLE);
-    bExclusive      = (LTBOOL) buteMgr.GetInt(aTagName, WMGR_GEAR_EXCLUSIVE);
+	bSelectable	= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_GEAR_SELECTABLE);
+	bExclusive	= (LTBOOL) buteMgr.GetInt(aTagName, WMGR_GEAR_EXCLUSIVE);
 
-    fProtection     = (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_GEAR_PROTECTION);
-    fArmor          = (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_GEAR_ARMOR);
-    fStealth        = (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_GEAR_STEALTH);
-    fScreenTintTime = (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_GEAR_TINT_TIME);
+	fProtection	= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_GEAR_PROTECTION);
+	fArmor		= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_GEAR_ARMOR);
+	fStealth	= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_GEAR_STEALTH);
+	fScreenTintTime	= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_GEAR_TINT_TIME);
 
-	fProtection		= (fProtection < 0.0f ? 0.0f : (fProtection > 1.0f ? 1.0f : fProtection));
-	fStealth		= (fStealth < 0.0f ? 0.0f : (fStealth > 1.0f ? 1.0f : fStealth));
+	fProtection	= (fProtection < 0.0f ? 0.0f : (fProtection > 1.0f ? 1.0f : fProtection));
+	fStealth	= (fStealth < 0.0f ? 0.0f : (fStealth > 1.0f ? 1.0f : fStealth));
 
 	vScreenTintColor = buteMgr.GetVector(aTagName, WMGR_GEAR_TINT_COLOR);
 
@@ -2038,19 +1934,17 @@ LTBOOL GEAR::Init(CButeMgr & buteMgr, char* aTagName)
 	}
 
 
-	fInterfaceScale		= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_GEAR_INTSCALE);
-	vInterfaceOffset	= buteMgr.GetVector(aTagName, WMGR_GEAR_INTPOS);
+	fInterfaceScale	= (LTFLOAT) buteMgr.GetDouble(aTagName, WMGR_GEAR_INTSCALE);
+	vInterfaceOffset = buteMgr.GetVector(aTagName, WMGR_GEAR_INTPOS);
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	GEAR::Cache
 //
 //	PURPOSE:	Cache all the resources associated with the gear
-//
 // ----------------------------------------------------------------------- //
 
 void GEAR::Cache(CWeaponMgr* pWeaponMgr)
@@ -2060,47 +1954,40 @@ void GEAR::Cache(CWeaponMgr* pWeaponMgr)
 
 	if (szModel[0])
 	{
-        g_pLTServer->CacheFile(FT_MODEL, szModel);
+		g_pLTServer->CacheFile(FT_MODEL, szModel);
 	}
 
 	if (szSkin[0])
 	{
-        g_pLTServer->CacheFile(FT_TEXTURE, szSkin);
+		g_pLTServer->CacheFile(FT_TEXTURE, szSkin);
 	}
 
 	if (szPickUpSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szPickUpSound);
+		g_pLTServer->CacheFile(FT_SOUND, szPickUpSound);
 	}
 
 	if (szRespawnSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szRespawnSound);
+		g_pLTServer->CacheFile(FT_SOUND, szRespawnSound);
 	}
 
 #endif
 }
 
 
-
-
-
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-//
 //	C A C H E  Functions...(SERVER-SIDE ONLY)
 //
 //  These functions are used to cache the resources associated with weapons.
-//
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::CacheAll()
 //
 //	PURPOSE:	Cache all the weapon related resources...
-//
 // ----------------------------------------------------------------------- //
 
 void CWeaponMgr::CacheAll()
@@ -2108,8 +1995,7 @@ void CWeaponMgr::CacheAll()
 #ifndef _CLIENTBUILD // No caching on the client...
 
 	// Cache all the weapons...
-
-    WEAPON** pCurWeapon  = LTNULL;
+	WEAPON** pCurWeapon = LTNULL;
 	pCurWeapon = m_WeaponList.GetItem(TLIT_FIRST);
 
 	while (pCurWeapon)
@@ -2126,26 +2012,23 @@ void CWeaponMgr::CacheAll()
 }
 
 
-#ifndef _CLIENTBUILD  // Server-side only
+#ifndef _CLIENTBUILD	// Server-side only
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::ReadWeaponProp
 //
 //	PURPOSE:	Read in the weapon properties
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeaponMgr::ReadWeaponProp(char* pPropName, uint8 & nWeaponId, uint8 & nAmmoId)
 {
-    if (!pPropName || !pPropName[0]) return LTFALSE;
+	if (!pPropName || !pPropName[0]) return LTFALSE;
 
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric(pPropName, &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric(pPropName, &genProp) == LT_OK)
 	{
 		// Get the weapon name...
-
 		WEAPON* pWeapon = GetWeapon(strtok(genProp.m_String,","));
 		if (pWeapon)
 		{
@@ -2160,25 +2043,22 @@ LTBOOL CWeaponMgr::ReadWeaponProp(char* pPropName, uint8 & nWeaponId, uint8 & nA
 		else
 		{
 			// Use the default ammo type for the weapon...
-
 			if (pWeapon)
 			{
 				nAmmoId = pWeapon->nDefaultAmmoType;
 			}
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgr::ReadWeapon
 //
 //	PURPOSE:	Read in the weapon properties
-//
 // ----------------------------------------------------------------------- //
 
 void CWeaponMgr::ReadWeapon(char* szString, uint8 & nWeaponId, uint8 & nAmmoId)
@@ -2208,27 +2088,23 @@ void CWeaponMgr::ReadWeapon(char* szString, uint8 & nWeaponId, uint8 & nAmmoId)
 }
 
 ////////////////////////////////////////////////////////////////////////////
-//
 // CWeaponMgrPlugin is used to help facilitate populating the DEdit object
 // properties that use WeaponMgr
-//
 ////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgrPlugin::PreHook_EditStringList
 //
 //	PURPOSE:	Fill the string list
-//
 // ----------------------------------------------------------------------- //
 
 LTRESULT CWeaponMgrPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 	if (!sm_bInitted)
 	{
@@ -2243,57 +2119,52 @@ LTRESULT CWeaponMgrPlugin::PreHook_EditStringList(
 		if (!g_pFXButeMgr)
 		{
 			sprintf(szFile, "%s\\%s", szRezPath, FXBMGR_DEFAULT_FILE);
-            sm_FXButeMgr.SetInRezFile(LTFALSE);
+			sm_FXButeMgr.SetInRezFile(LTFALSE);
 			sm_FXButeMgr.Init(szFile);
 		}
 */
 		char szFile[256];
 		sprintf(szFile, "%s\\%s", szRezPath, WEAPON_DEFAULT_FILE);
-        sm_ButeMgr.SetInRezFile(LTFALSE);
-        sm_ButeMgr.Init(g_pLTServer, szFile);
-        sm_bInitted = LTTRUE;
+		sm_ButeMgr.SetInRezFile(LTFALSE);
+		sm_ButeMgr.Init(g_pLTServer, szFile);
+		sm_bInitted = LTTRUE;
 	}
 
 	return LT_UNSUPPORTED;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CWeaponMgrPlugin::PopulateStringList
 //
 //	PURPOSE:	Populate the list
-//
 // ----------------------------------------------------------------------- //
 
 void CWeaponMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,
-    const uint32 cMaxStrings, const uint32 cMaxStringLength)
+	const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {
 	if (!aszStrings || !pcStrings) return;
 
 	// Add an entry for each weapon/ammo combination...
+	uint32 dwNumWeapons = sm_ButeMgr.GetNumWeapons();
 
-    uint32 dwNumWeapons = sm_ButeMgr.GetNumWeapons();
+	WEAPON* pWeapon = LTNULL;
 
-    WEAPON* pWeapon = LTNULL;
-
-    for (uint32 i=0; i < dwNumWeapons; i++)
+	for (uint32 i=0; i < dwNumWeapons; i++)
 	{
 		_ASSERT(cMaxStrings > (*pcStrings) + 1);
 
 		pWeapon = sm_ButeMgr.GetWeapon(i);
-        uint32 dwWeaponNameLen = strlen(pWeapon->szName);
+		uint32 dwWeaponNameLen = strlen(pWeapon->szName);
 
 		if (pWeapon && pWeapon->szName[0] &&
 			dwWeaponNameLen < cMaxStringLength &&
 			(*pcStrings) + 1 < cMaxStrings)
 		{
 			// Account for the ';' character
-
 			dwWeaponNameLen++;
 
 			// Append the ammo types to the string if there is more
 			// than one ammo type...
-
 			if (pWeapon->nNumAmmoTypes > 1)
 			{
 				for (int j=0; j < pWeapon->nNumAmmoTypes; j++)
@@ -2310,7 +2181,6 @@ void CWeaponMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,
 						else
 						{
 							// Just use the weapon name, the default ammo will be used...
-
 							strcpy(aszStrings[(*pcStrings)++], pWeapon->szName);
 						}
 					}
@@ -2319,7 +2189,6 @@ void CWeaponMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,
 			else
 			{
 				// Just use the weapon name, the default ammo will be used...
-
 				strcpy(aszStrings[(*pcStrings)++], pWeapon->szName);
 			}
 		}
