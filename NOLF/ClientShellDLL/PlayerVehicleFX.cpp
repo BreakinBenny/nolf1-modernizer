@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : PlayerVehicleFX.cpp
+// MODULE: PlayerVehicleFX.cpp
 //
 // PURPOSE : Beam special FX - Implementation
 //
 // CREATED : 6/8/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -20,51 +18,44 @@
 extern CGameClientShell* g_pGameClientShell;
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerVehicleFX::Init
 //
 //	PURPOSE:	Init the beam fx
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerVehicleFX::Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage)
 {
-    if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
-    if (!hMessage) return LTFALSE;
+	if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
+	if (!hMessage) return LTFALSE;
 
 	PVCREATESTRUCT cs;
 
 	cs.hServerObj = hServObj;
-    cs.Read(g_pLTClient, hMessage);
+	cs.Read(g_pLTClient, hMessage);
 
 	return Init(&cs);
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerVehicleFX::Init
 //
 //	PURPOSE:	Init the player vehicle fx
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerVehicleFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	PVCREATESTRUCT* pFX = (PVCREATESTRUCT*)psfxCreateStruct;
 	m_cs = *pFX;
 
-     return LTTRUE;
+	return LTTRUE;
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerVehicleFX::Update
 //
 //	PURPOSE:	Update the tracer
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerVehicleFX::Update()
@@ -86,5 +77,5 @@ LTBOOL CPlayerVehicleFX::Update()
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
