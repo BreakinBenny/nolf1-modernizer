@@ -21,9 +21,9 @@
 
 	// Load world flags.
 	#define LOADWORLD_LOADWORLDOBJECTS	(1<<0)	// Load objects from the world file?
-	#define LOADWORLD_RUNWORLD			(1<<1)	// Start running world immediately?
+	#define LOADWORLD_RUNWORLD		(1<<1)	// Start running world immediately?
 	#define LOADWORLD_NORELOADGEOMETRY	(1<<2)	// Don't reload geometry if the world filename
-												// is the same as the currently loaded one.
+							// is the same as the currently loaded one.
 
 	// ---------------------------------------------------------------------- //
 	// Load/Save objects flags.
@@ -41,20 +41,20 @@
 	// CIF_LOCAL and CIF_PLAYBACK are not settable with SetClientInfoFlags.
 	// ---------------------------------------------------------------------- //
 
-	#define CIF_LOCAL				(1<<0)	// Client is local (non-network) connection.
-	#define CIF_PLAYBACK			(1<<1)	// Virtual client from a demo playback.
-	#define CIF_FULLRES				(1<<2)	// Client object is sent with full position resolution.
+	#define CIF_LOCAL		(1<<0)	// Client is local (non-network) connection.
+	#define CIF_PLAYBACK		(1<<1)	// Virtual client from a demo playback.
+	#define CIF_FULLRES		(1<<2)	// Client object is sent with full position resolution.
 	#define CIF_SENDCOBJROTATION	(1<<3)	// Client object rotations are sent to client.
-	#define CIF_FORCENEXTUPDATE		(1<<4)	// Force the server to update the client on the state
-											// of the world as soon as it can.  In multiplayer 
-											// games, it doesn't update the clients every frame
-											// and this can be used if you send a message to the client
-											// that needs to arrive in sync with object changes (like
-											// animation changes).
+	#define CIF_FORCENEXTUPDATE	(1<<4)	// Force the server to update the client on the state
+							// of the world as soon as it can.  In multiplayer 
+							// games, it doesn't update the clients every frame
+							// and this can be used if you send a message to the client
+							// that needs to arrive in sync with object changes (like
+							// animation changes).
 	#define CIF_AUTOACTIVATEOBJECTS	(1<<5)	// Use this instead of PingObjectsFromObject whenever possible.
-											// This activates objects from the client's view position
-											// when determining what to send to the client (so activating
-											// objects is free).
+							// This activates objects from the client's view position
+							// when determining what to send to the client (so activating
+							// objects is free).
 								
 
 	// ---------------------------------------------------------------------- //
@@ -66,10 +66,10 @@
 	// ---------------------------------------------------------------------- //
 							
 
-	#define OBJSTATE_ACTIVE					0	// Normal healthy object.
-	#define OBJSTATE_INACTIVE				1	// Inactive (no updates, physics, or touch notifies).
-	#define OBJSTATE_INACTIVE_TOUCH			2	// Inactive, but gets touch notifies.
-	#define	OBJSTATE_AUTODEACTIVATE_NOW		3	// Autodeactivate now, can reactivate thru PingObjects call.
+	#define OBJSTATE_ACTIVE			0	// Normal healthy object.
+	#define OBJSTATE_INACTIVE		1	// Inactive (no updates, physics, or touch notifies).
+	#define OBJSTATE_INACTIVE_TOUCH		2	// Inactive, but gets touch notifies.
+	#define	OBJSTATE_AUTODEACTIVATE_NOW	3	// Autodeactivate now, can reactivate thru PingObjects call.
 
 
 
@@ -77,10 +77,10 @@
 	// Server state flags.
 	// ---------------------------------------------------------------------- //
 	
-	#define SS_PAUSED		(1<<0)	// Server is paused.
+	#define SS_PAUSED	(1<<0)	// Server is paused.
 	#define SS_DEMOPLAYBACK	(1<<1)	// We're running in 'demo playback' mode (read only).
-	#define SS_CACHING		(1<<2)	// Server can pre-cache files.
-	#define SS_LASTFLAG		SS_DEMOPLAYBACK
+	#define SS_CACHING	(1<<2)	// Server can pre-cache files.
+	#define SS_LASTFLAG	SS_DEMOPLAYBACK
 
 	
 	// ---------------------------------------------------------------------- //
@@ -96,7 +96,7 @@
 	struct ObjectList
 	{
 		ObjectLink	*m_pFirstLink;
-		int			m_nInList;
+		int		m_nInList;
 	};
 
 
@@ -106,8 +106,8 @@
 	class ClassPropInfo
 	{
 	public:
-		char		m_PropName[MAX_CLASSPROPINFONAME_LEN];
-		short		m_PropType;		// PT_ define from serverobj_de.h.
+		char	m_PropName[MAX_CLASSPROPINFONAME_LEN];
+		short	m_PropType;	// PT_ define from serverobj_de.h.
 	};
 
 
@@ -116,7 +116,6 @@
 	class ILTTransform;
 	class ILTLightAnim;
 	class ILTSoundMgr;
-
 
 	// ---------------------------------------------------------------------- //
 	// ILTServer interface. This is your interface to most DirectEngine
@@ -273,8 +272,8 @@
 		// Portal flags are a combination of PORTAL_ flags in de_codes.
 		// Returns LT_OK, LT_NOTFOUND, or LT_NOTINWORLD.  This is
 		// case sensitive.
-		LTRESULT		(*GetPortalFlags)(char *pPortalName, uint32 *pFlags);
-		LTRESULT		(*SetPortalFlags)(char *pPortalName, uint32 flags);
+		LTRESULT	(*GetPortalFlags)(char *pPortalName, uint32 *pFlags);
+		LTRESULT	(*SetPortalFlags)(char *pPortalName, uint32 flags);
 
 		// Intersect a line segment.. (used to be raycast, but line segments are WAY faster).
 		// Returns TRUE and fills in pInfo if it hit something.
@@ -298,8 +297,8 @@
 		
 		// Gets all the objects with the given name.
 		virtual LTRESULT FindNamedObjects(char *pName,	
-										 BaseObjArray<HOBJECT> &objArray,
-										 uint32 *nTotalFound=NULL)=0;
+								 BaseObjArray<HOBJECT> &objArray,
+								 uint32 *nTotalFound=NULL)=0;
 
 		// Find all the objects that interesect the passed in world model
 		// if the world model is moved/rotated to the new position/rotation.
@@ -344,10 +343,10 @@
 		virtual HMESSAGEWRITE	StartSpecialEffectMessage(LPBASECLASS pObject)=0;
 		virtual HMESSAGEWRITE	StartInstantSpecialEffectMessage(LTVector *pPos)=0;
 		virtual HMESSAGEWRITE	StartMessageToObject(LPBASECLASS pSender, HOBJECT hSendTo, uint32 messageID)=0;
-		virtual LTRESULT		StartMessageToServer(LPBASECLASS pSender, uint32 messageID, HMESSAGEWRITE *hWrite)=0;
+		virtual LTRESULT	StartMessageToServer(LPBASECLASS pSender, uint32 messageID, HMESSAGEWRITE *hWrite)=0;
 		virtual HMESSAGEWRITE	StartMessage(HCLIENT hSendTo, uint8 messageID)=0;
-		virtual LTRESULT		EndMessage2(HMESSAGEWRITE hMessage, uint32 flags)=0;
-		virtual LTRESULT		EndMessage(HMESSAGEWRITE hMessage)=0;	// Just calls EndMessage2 with MESSAGE_GUARANTEED.
+		virtual LTRESULT	EndMessage2(HMESSAGEWRITE hMessage, uint32 flags)=0;
+		virtual LTRESULT	EndMessage(HMESSAGEWRITE hMessage)=0;	// Just calls EndMessage2 with MESSAGE_GUARANTEED.
 		
 
 	// NEW message functions.  The main difference between these and the functions above is
