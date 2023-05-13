@@ -68,30 +68,30 @@
 	struct InitSoundInfo
 	{
 		// Name of 3d provider to use
-		char						m_sz3DProvider[_MAX_PATH+1];
+		char					m_sz3DProvider[_MAX_PATH+1];
 
 		// Number of sw voices
-		uint8						m_nNumSWVoices;
+		uint8					m_nNumSWVoices;
 
 		// Number of 3D voices
-		uint8						m_nNum3DVoices;
+		uint8					m_nNum3DVoices;
 
 		// Output sound format.  Sample rate (8000, 11025, 22050 or
 		// 44100 kHz), Bits per sample (8 or 16)...
-		unsigned short				m_nSampleRate;
-		unsigned short				m_nBitsPerSample;
+		unsigned short			m_nSampleRate;
+		unsigned short			m_nBitsPerSample;
 
 		// Use INITSOUNDINFOFLAG_xxx flags
-		unsigned long				m_dwFlags;
+		unsigned long			m_dwFlags;
 
 		// Engine fills in this parameter with INITSOUNDINFORESULTS_xxx after InitSound is called.
-		unsigned long				m_dwResults;
+		unsigned long			m_dwResults;
 
 		// Initial volume (0-100)
-		unsigned short				m_nVolume;
+		unsigned short			m_nVolume;
 
 		// Distance factor in meters/game unit
-		float						m_fDistanceFactor;
+		float				m_fDistanceFactor;
 
 		// Initialize the InitSoundInfo structure to the default values...
 		inline void Init()
@@ -101,8 +101,8 @@
 				m_nNum3DVoices		= 0;									
 				m_nSampleRate		= 22050;								
 				m_nBitsPerSample	= 16;									
-				m_dwFlags			= 0;									
-				m_nVolume			= 100;									
+				m_dwFlags		= 0;									
+				m_nVolume		= 100;									
 				m_fDistanceFactor	= 1.0f;
 			}
 	};
