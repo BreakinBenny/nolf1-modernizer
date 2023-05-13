@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : CameraOffsetMgr.cpp
+// MODULE: CameraOffsetMgr.cpp
 //
 // PURPOSE : Camera offset mgr - Implementation
 //
 // CREATED : 8/23/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -27,11 +25,9 @@ VarTrack	g_vtCamInfo;
 VarTrack	g_vtCamWeaponImpact;
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCameraOffsetMgr::CCameraOffsetMgr
 //
 //	PURPOSE:	Constructor
-//
 // --------------------------------------------------------------------------- //
 
 CCameraOffsetMgr::CCameraOffsetMgr()
@@ -42,11 +38,9 @@ CCameraOffsetMgr::CCameraOffsetMgr()
 
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCameraOffsetMgr::Init
 //
 //	PURPOSE:	Init
-//
 // --------------------------------------------------------------------------- //
 
 LTBOOL CCameraOffsetMgr::Init()
@@ -54,25 +48,23 @@ LTBOOL CCameraOffsetMgr::Init()
 	m_vPitchYawRollDelta.Init();
 	m_vPosDelta.Init();
 
-    g_vtCamMaxPitchOffset.Init(g_pLTClient, "CamMaxPitchOffset", NULL, 15.0);
-    g_vtCamMaxYawOffset.Init(g_pLTClient, "CamMaxYawOffset", NULL, 15.0);
-    g_vtCamMaxRollOffset.Init(g_pLTClient, "CamMaxRollOffset", NULL, 15.0);
-    g_vtCamMaxPosXOffset.Init(g_pLTClient, "CamMaxPosXOffset", NULL, 200.0);
-    g_vtCamMaxPosYOffset.Init(g_pLTClient, "CamMaxPosYOffset", NULL, 200.0);
-    g_vtCamMaxPosZOffset.Init(g_pLTClient, "CamMaxPosZOffset", NULL, 200.0);
+	g_vtCamMaxPitchOffset.Init(g_pLTClient, "CamMaxPitchOffset", NULL, 15.0);
+	g_vtCamMaxYawOffset.Init(g_pLTClient, "CamMaxYawOffset", NULL, 15.0);
+	g_vtCamMaxRollOffset.Init(g_pLTClient, "CamMaxRollOffset", NULL, 15.0);
+	g_vtCamMaxPosXOffset.Init(g_pLTClient, "CamMaxPosXOffset", NULL, 200.0);
+	g_vtCamMaxPosYOffset.Init(g_pLTClient, "CamMaxPosYOffset", NULL, 200.0);
+	g_vtCamMaxPosZOffset.Init(g_pLTClient, "CamMaxPosZOffset", NULL, 200.0);
 	g_vtCamInfo.Init(g_pLTClient, "CamInfo", NULL, 0.0f);
 
-    g_vtCamWeaponImpact.Init(g_pLTClient, "CamWeaponImpact", NULL, 0.0);
+	g_vtCamWeaponImpact.Init(g_pLTClient, "CamWeaponImpact", NULL, 0.0);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCameraOffsetMgr::Update
 //
 //	PURPOSE:	Update all our deltas
-//
 // --------------------------------------------------------------------------- //
 
 void CCameraOffsetMgr::Update()
@@ -87,10 +79,10 @@ void CCameraOffsetMgr::Update()
 	m_vPitchYawRollDelta.Init();
 	m_vPosDelta.Init();
 
-    float fTimeDelta = g_pGameClientShell->GetFrameTime();
+	float fTimeDelta = g_pGameClientShell->GetFrameTime();
 
-    int i;
-    for (i=0; i < MAX_CAMERA_DELTAS; i++)
+	int i;
+	for (i=0; i < MAX_CAMERA_DELTAS; i++)
 	{
 		if (m_CameraDeltas[i].GetTotalDelta() > 0.0f)
 		{
@@ -148,9 +140,9 @@ void CCameraOffsetMgr::Update()
 		if (m_vPitchYawRollDelta.x != 0.0f)
 			g_pLTClient->CPrint("COM Pitch = %.4f (in Deg = %.2f)", m_vPitchYawRollDelta.x, RAD2DEG(m_vPitchYawRollDelta.x));
 		if (m_vPitchYawRollDelta.y != 0.0f)
-			g_pLTClient->CPrint("COM Yaw   = %.4f (in Deg = %.2f)", m_vPitchYawRollDelta.y, RAD2DEG(m_vPitchYawRollDelta.y));
+			g_pLTClient->CPrint("COM Yaw	= %.4f (in Deg = %.2f)", m_vPitchYawRollDelta.y, RAD2DEG(m_vPitchYawRollDelta.y));
 		if (m_vPitchYawRollDelta.z != 0.0f)
-			g_pLTClient->CPrint("COM Roll  = %.4f (in Deg = %.2f)", m_vPitchYawRollDelta.z, RAD2DEG(m_vPitchYawRollDelta.z));
+			g_pLTClient->CPrint("COM Roll	= %.4f (in Deg = %.2f)", m_vPitchYawRollDelta.z, RAD2DEG(m_vPitchYawRollDelta.z));
 
 		if (m_vPosDelta.x != 0.0f)
 			g_pLTClient->CPrint("COM Offset X = %.2f", m_vPosDelta.x);
@@ -162,11 +154,9 @@ void CCameraOffsetMgr::Update()
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCameraOffsetMgr::ValidateDeltas
 //
 //	PURPOSE:	Make sure all the deltas are valid
-//
 // --------------------------------------------------------------------------- //
 
 void CCameraOffsetMgr::ValidateDeltas()
@@ -232,13 +222,10 @@ void CCameraOffsetMgr::ValidateDeltas()
 	}
 }
 
-
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCameraOffsetMgr::AddDelta
 //
 //	PURPOSE:	Add a new delta
-//
 // --------------------------------------------------------------------------- //
 
 void CCameraOffsetMgr::AddDelta(CameraDelta & delta)
@@ -274,13 +261,10 @@ void CCameraOffsetMgr::AddDelta(CameraDelta & delta)
 	}
 }
 
-
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCameraOffsetMgr::SetStaticDelta
 //
 //	PURPOSE:	Set a static delta
-//
 // --------------------------------------------------------------------------- //
 
 void CCameraOffsetMgr::SetStaticDelta(CameraDelta & delta, int nIndex)
@@ -291,11 +275,9 @@ void CCameraOffsetMgr::SetStaticDelta(CameraDelta & delta, int nIndex)
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCameraOffsetMgr::SetStaticDelta
 //
 //	PURPOSE:	Set a static delta
-//
 // --------------------------------------------------------------------------- //
 
 CameraDelta* CCameraOffsetMgr::GetStaticDelta(int nIndex)
@@ -306,13 +288,10 @@ CameraDelta* CCameraOffsetMgr::GetStaticDelta(int nIndex)
 }
 
 
-
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CameraAdjustVar::UpdateVar
 //
 //	PURPOSE:	Update the variable value
-//
 // --------------------------------------------------------------------------- //
 
 void CameraAdjustVar::UpdateVar(float fTimeDelta)
@@ -371,7 +350,7 @@ void CameraAdjustVar::UpdateVar(float fTimeDelta)
 		m_fValue = m_fRealValue;
 	}
 
-    // g_pLTClient->CPrint("m_fValue = %.2f (in Deg = %.2f)", m_fValue, RAD2DEG(m_fValue));
+	// g_pLTClient->CPrint("m_fValue = %.2f (in Deg = %.2f)", m_fValue, RAD2DEG(m_fValue));
 
 	// Calculate new value...
 
@@ -390,15 +369,10 @@ void CameraAdjustVar::UpdateVar(float fTimeDelta)
 	}
 }
 
-
-
-
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCameraOffsetMgr::ProcessTestingVars
 //
 //	PURPOSE:	Process testing console vars...
-//
 // --------------------------------------------------------------------------- //
 
 void CCameraOffsetMgr::ProcessTestingVars()
