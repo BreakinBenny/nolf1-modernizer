@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : LoadingScreen.h
+// MODULE: LoadingScreen.h
 //
 // PURPOSE : Background-thread loading screen encapsulation class
 //
 // CREATED : 2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __LOADINGSCREEN_H__
@@ -77,7 +75,7 @@ private:
 	HANDLE m_hEventThreadRunning; // Ok, the thread is done initializing, continue on
 
 	LTBOOL	m_bOldFogEnable;
-	int		m_nOldFarZ;
+	int	m_nOldFarZ;
 
 	// State of the loading screen
 	enum EScreenState { 
@@ -98,12 +96,12 @@ private:
 
 	// The character and its attachments
 	CBaseScaleFX	m_CharSFX;
-	int				m_nNumAttachments;
+	int		m_nNumAttachments;
 	AttachmentData	m_aAttachment[MAX_INT_ATTACHMENTS];
 
 	// Position variables for internal use
-    LTVector m_vPos, m_vU, m_vR, m_vF;
-    LTRotation m_rRot;
+	LTVector m_vPos, m_vU, m_vR, m_vF;
+	LTRotation m_rRot;
 
 	// Functions for handling the character/attributes/sfx/etc
 	// Note that these are basically copies of what's in BaseFolder
