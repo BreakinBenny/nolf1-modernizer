@@ -22,9 +22,9 @@ public:
 
 	void	Term();
 
-    LTBOOL   Open();
+	LTBOOL	Open();
 	void	Close();
-    LTBOOL   IsOpen()    {return m_bIsOpen;}
+	LTBOOL	IsOpen() {return m_bIsOpen;}
 
 	void	NextWeapon();
 	void	PrevWeapon();
@@ -32,18 +32,18 @@ public:
 	void	Draw();
 
 
-    uint8   GetCurrentSelection() {return m_nWeapons[1];}
+	uint8	GetCurrentSelection() {return m_nWeapons[1];}
 
 private:
-	void		SetCommandStr(int nWeaponId);
+	void	SetCommandStr(int nWeaponId);
 
 	HSURFACE	m_hWeaponSurf[NUM_WEAPON_ICONS];
-    uint8       m_nWeapons[NUM_WEAPON_ICONS];
-    LTBOOL       m_bIsOpen;
-	HSTRING		m_hWeaponStr;
-	float		m_fStartTime;
+	uint8	m_nWeapons[NUM_WEAPON_ICONS];
+	LTBOOL	m_bIsOpen;
+	HSTRING	m_hWeaponStr;
+	float	m_fStartTime;
 
-	char		m_szWeaponCommand[8];
+	char	m_szWeaponCommand[8];
 };
 
 class CAmmoChooser
@@ -54,23 +54,23 @@ public:
 
 	void	Term();
 
-    LTBOOL   Open();
+	LTBOOL	Open();
 	void	Close();
-    LTBOOL   IsOpen()    {return m_bIsOpen;}
+	LTBOOL	IsOpen()	{return m_bIsOpen;}
 
 	void	NextAmmo();
 
 	void	Draw();
 
 
-    uint8   GetCurrentSelection() {return m_nAmmo[0];}
+	uint8	GetCurrentSelection() {return m_nAmmo[0];}
 
 private:
 	HSURFACE	m_hAmmoSurf[NUM_AMMO_ICONS];
-    uint8       m_nAmmo[NUM_AMMO_ICONS];
-    LTBOOL       m_bIsOpen;
-	HSTRING		m_hAmmoStr;
-	float		m_fStartTime;
+	uint8	m_nAmmo[NUM_AMMO_ICONS];
+	LTBOOL	m_bIsOpen;
+	HSTRING	m_hAmmoStr;
+	float	m_fStartTime;
 };
 
 #endif // !defined(AFX_WEAPONCHOOSER_H__1762B140_8553_11D3_B2DB_006097097C7B__INCLUDED_)
