@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : PlayerStats.cpp
+// MODULE: PlayerStats.cpp
 //
 // PURPOSE : Implementation of PlayerStats class
 //
 // CREATED : 10/9/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -28,15 +26,15 @@
 extern CGameClientShell* g_pGameClientShell;
 extern VarTrack g_vtShowFPS;
 
-#define CH_LEFT			(1 << 0)
-#define CH_RIGHT		(1 << 1)
-#define CH_TOP			(1 << 2)
-#define CH_BOTTOM		(1 << 3)
-#define CH_XLEFT		(1 << 4)
-#define CH_XRIGHT		(1 << 5)
-#define CH_XTOP			(1 << 6)
-#define CH_XBOTTOM		(1 << 7)
-#define CH_DOT			(1 << 8)
+#define CH_LEFT		(1 << 0)
+#define CH_RIGHT	(1 << 1)
+#define CH_TOP		(1 << 2)
+#define CH_BOTTOM	(1 << 3)
+#define CH_XLEFT	(1 << 4)
+#define CH_XRIGHT	(1 << 5)
+#define CH_XTOP		(1 << 6)
+#define CH_XBOTTOM	(1 << 7)
+#define CH_DOT		(1 << 8)
 #define CH_FULLRIGHT	(1 << 9)
 #define CH_FULLBOTTOM	(1 << 10)
 
@@ -46,7 +44,7 @@ VarTrack g_vtHUDLayout;
 
 namespace
 {
-    HSURFACE hCrossHighlight = LTNULL;
+	HSURFACE hCrossHighlight = LTNULL;
 
 	VarTrack g_vtCrosshairGapMin;
 	VarTrack g_vtCrosshairGapMax;
@@ -64,20 +62,20 @@ namespace
 	VarTrack g_vtScopeLRRadius;
 	VarTrack g_vtScopeUDRadius;
 
-    LTFLOAT   fLastColorR        = 0.0f;
-    LTFLOAT   fLastColorG        = 0.0f;
-    LTFLOAT   fLastColorB        = 0.0f;
-    LTFLOAT   fLastAlpha         = 0.0f;
-    HLTCOLOR hCursorColor       = LTNULL;
-    LTFLOAT   fRad               = 0.0f;
+	LTFLOAT	fLastColorR	= 0.0f;
+	LTFLOAT	fLastColorG	= 0.0f;
+	LTFLOAT	fLastColorB	= 0.0f;
+	LTFLOAT	fLastAlpha	= 0.0f;
+	HLTCOLOR hCursorColor	= LTNULL;
+	LTFLOAT	fRad		= 0.0f;
 
 	CLTGUIFont *g_pObjForeFont;
 	CLTGUIFont *g_pForeFont;
 
-    LTRect      g_rcObjectives;
-	int 		g_nObjBmpOffset;
-	LTIntPt 	g_ObjTextOffset;
-	uint32		g_dwObjHeight;
+	LTRect	g_rcObjectives;
+	int	g_nObjBmpOffset;
+	LTIntPt	g_ObjTextOffset;
+	uint32	g_dwObjHeight;
 
 	HLTCOLOR	hHealthTint = LTNULL;
 	HLTCOLOR	hArmorTint = LTNULL;
@@ -112,10 +110,10 @@ static LTBOOL DoVectorPolyFilterFn(HPOLY hPoly, void *pUserData)
 
 	if (eSurfType == ST_INVISIBLE)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 static LTBOOL ActivateFilterFn(HOBJECT hTest, void *pUserData)
@@ -127,7 +125,7 @@ static LTBOOL ActivateFilterFn(HOBJECT hTest, void *pUserData)
 
 	// Okay, do normal tests...
 
-    HOBJECT hFilterList[] = {g_pLTClient->GetClientObject(),
+	HOBJECT hFilterList[] = {g_pLTClient->GetClientObject(),
 		g_pGameClientShell->GetMoveMgr()->GetObject(), LTNULL};
 
 	if (ObjListFilterFn(hTest, (void*) hFilterList))
@@ -146,138 +144,136 @@ static LTBOOL ActivateFilterFn(HOBJECT hTest, void *pUserData)
 			}
 		}
 	}
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::CPlayerStats()
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 CPlayerStats::CPlayerStats()
 {
-    LTRect nullrect(0,0,0,0);
-    LTIntPt nullPt(0,0);
+	LTRect nullrect(0,0,0,0);
+	LTIntPt nullPt(0,0);
 
-    m_pnAmmo            = LTNULL;
-    m_pbHaveAmmo        = LTNULL;
-    m_pbHaveWeapon      = LTNULL;
-    m_pbCanUseWeapon    = LTNULL;
-    m_pbCanUseAmmo      = LTNULL;
-    m_pbHaveMod         = LTNULL;
-    m_pbCanUseMod       = LTNULL;
-    m_pbHaveGear        = LTNULL;
-    m_pbCanUseGear      = LTNULL;
-	m_nHealth			= 0;
-	m_nDamage			= 0;
-	m_nArmor			= 0;
+	m_pnAmmo		= LTNULL;
+	m_pbHaveAmmo		= LTNULL;
+	m_pbHaveWeapon		= LTNULL;
+	m_pbCanUseWeapon	= LTNULL;
+	m_pbCanUseAmmo		= LTNULL;
+	m_pbHaveMod		 = LTNULL;
+	m_pbCanUseMod		= LTNULL;
+	m_pbHaveGear		= LTNULL;
+	m_pbCanUseGear		= LTNULL;
+	m_nHealth		= 0;
+	m_nDamage		= 0;
+	m_nArmor		= 0;
 	m_nMaxHealth		= 0;
-	m_nMaxArmor			= 0;
+	m_nMaxArmor		= 0;
 	m_nCurrentWeapon	= WMGR_INVALID_ID;
 	m_nCurrentAmmo		= WMGR_INVALID_ID;
 
-    m_bHealthChanged = LTFALSE;
-    m_bArmorChanged = LTFALSE;
-    m_bAmmoTypeChanged = LTFALSE;
-    m_bAmmoChanged = LTFALSE;
+	m_bHealthChanged = LTFALSE;
+	m_bArmorChanged = LTFALSE;
+	m_bAmmoTypeChanged = LTFALSE;
+	m_bAmmoChanged = LTFALSE;
 
 	m_fAirPercent = 1.0f;
 
 	m_nCrosshairLevel = 2;
-    m_bCrosshairEnabled = LTTRUE;
+	m_bCrosshairEnabled = LTTRUE;
 
-    m_hArmedCrosshair		= LTNULL;
-    m_hUnarmedCrosshair		= LTNULL;
-    m_hActivateCrosshair	= LTNULL;
-	m_hInnocentCrosshair	= LTNULL;
+	m_hArmedCrosshair		= LTNULL;
+	m_hUnarmedCrosshair		= LTNULL;
+	m_hActivateCrosshair		= LTNULL;
+	m_hInnocentCrosshair		= LTNULL;
 	m_hActivateGadgetCrosshair	= LTNULL;
 	m_bDrawingGadgetActivate	= LTFALSE;
 
-    m_hHUDHealth = LTNULL;
-    m_hHealthIcon = LTNULL;
-    m_hArmorIcon = LTNULL;
-    m_hHealthBar = LTNULL;
-    m_hArmorBar = LTNULL;
+	m_hHUDHealth = LTNULL;
+	m_hHealthIcon = LTNULL;
+	m_hArmorIcon = LTNULL;
+	m_hHealthBar = LTNULL;
+	m_hArmorBar = LTNULL;
 	m_rcHealth = nullrect;
 	m_rcHealthBar = nullrect;
 	m_rcArmor = nullrect;
 	m_rcArmorBar = nullrect;
-    m_bHealthInit = LTFALSE;
+	m_bHealthInit = LTFALSE;
 
-    m_hHUDAmmo = LTNULL;
-    m_hAmmoBar = LTNULL;
-    m_hAmmoIcon = LTNULL;
-    m_hAmmoFull = LTNULL;
-    m_hAmmoEmpty = LTNULL;
+	m_hHUDAmmo = LTNULL;
+	m_hAmmoBar = LTNULL;
+	m_hAmmoIcon = LTNULL;
+	m_hAmmoFull = LTNULL;
+	m_hAmmoEmpty = LTNULL;
 	m_AmmoSz = nullPt;
 	m_rcAmmo = nullrect;
 	m_rcAmmoBar = nullrect;
-    m_bAmmoInit = LTFALSE;
+	m_bAmmoInit = LTFALSE;
 
 
-    m_hHUDAir = LTNULL;
-    m_hAirBar = LTNULL;
-    m_hAirStr = LTNULL;
-    m_hAirIcon = LTNULL;
+	m_hHUDAir = LTNULL;
+	m_hAirBar = LTNULL;
+	m_hAirStr = LTNULL;
+	m_hAirIcon = LTNULL;
 	m_rcAir = nullrect;
 	m_rcAirBar = nullrect;
-    m_bAirInit = LTFALSE;
+	m_bAirInit = LTFALSE;
 
 
-    m_bDrawAmmo = LTFALSE;
+	m_bDrawAmmo = LTFALSE;
 
-    m_bHealthFlash = LTFALSE;
+	m_bHealthFlash = LTFALSE;
 	m_fCurrHealthFlash = 0.0f;
 	m_fTotalHealthFlash = 0.0f;
-    m_bArmorFlash = LTFALSE;
+	m_bArmorFlash = LTFALSE;
 	m_fCurrArmorFlash = 0.0f;
 	m_fTotalArmorFlash = 0.0f;
 	m_fFlashSpeed = 0.0f;
 	m_fFlashDuration = 0.0f;
 
 	m_nCurrentLayout = -1;
-    m_bBarsChanged   = LTFALSE;
+	m_bBarsChanged	= LTFALSE;
 
-    m_bUseAmmoBar    = LTFALSE;
+	m_bUseAmmoBar	= LTFALSE;
 	m_AmmoBasePos = nullPt;
 	m_AmmoClipOffset = nullPt;
 	m_AmmoBarOffset = nullPt;
-    m_bUseAmmoText = LTFALSE;
+	m_bUseAmmoText = LTFALSE;
 	m_AmmoTextOffset = nullPt;
 	m_AmmoIconOffset = nullPt;
 
-    m_bUseHealthBar = LTFALSE;
+	m_bUseHealthBar = LTFALSE;
 	m_HealthBasePos = nullPt;
 	m_HealthBarOffset = nullPt;
 	m_ArmorBarOffset = nullPt;
-    m_bUseHealthText = LTFALSE;
+	m_bUseHealthText = LTFALSE;
 	m_HealthTextOffset = nullPt;
 	m_ArmorTextOffset = nullPt;
-    m_bUseHealthIcon = LTFALSE;
+	m_bUseHealthIcon = LTFALSE;
 	m_HealthIconOffset = nullPt;
 	m_ArmorIconOffset = nullPt;
 
-    m_bUseAirIcon = LTFALSE;
+	m_bUseAirIcon = LTFALSE;
 	m_AirBasePos = nullPt;
 	m_AirIconOffset = nullPt;
-    m_bUseAirText = LTFALSE;
+	m_bUseAirText = LTFALSE;
 	m_AirTextOffset = nullPt;
-    m_bUseAirBar = LTFALSE;
+	m_bUseAirBar = LTFALSE;
 	m_AirBarOffset = nullPt;
 	m_nBarHeight = 0;
 	m_fBarScale = 0;
 
 	m_ModeTextPos = nullPt;
-    m_hModeStr = LTNULL;
+	m_hModeStr = LTNULL;
 	m_eLastMode = SUN_NONE;
 
-    m_bObjAdded = LTFALSE;
-    m_bObjRemoved = LTFALSE;
-    m_bObjCompleted = LTFALSE;
-    m_bObjVisible = LTFALSE;
+	m_bObjAdded = LTFALSE;
+	m_bObjRemoved = LTFALSE;
+	m_bObjCompleted = LTFALSE;
+	m_bObjVisible = LTFALSE;
 
 	memset(m_nBoundWeapons,0,sizeof(m_nBoundWeapons));
 	memset(m_hWeaponSurf,0,sizeof(m_hWeaponSurf));
@@ -329,139 +325,139 @@ CPlayerStats::~CPlayerStats()
 
 LTBOOL CPlayerStats::Init()
 {
-    if (!g_pLTClient) return LTFALSE;
+	if (!g_pLTClient) return LTFALSE;
 
 	if (m_pnAmmo)
 	{
 		debug_deletea(m_pnAmmo);
-        m_pnAmmo = LTNULL;
+		m_pnAmmo = LTNULL;
 	}
 
 	if (m_pbHaveAmmo)
 	{
 		debug_deletea(m_pbHaveAmmo);
-        m_pbHaveAmmo = LTNULL;
+		m_pbHaveAmmo = LTNULL;
 	}
 
 	if (m_pbCanUseAmmo)
 	{
 		debug_deletea(m_pbCanUseAmmo);
-        m_pbCanUseAmmo = LTNULL;
+		m_pbCanUseAmmo = LTNULL;
 	}
 
 	int nNumAmmoTypes = g_pWeaponMgr->GetNumAmmoTypes();
 	if (nNumAmmoTypes > 0)
 	{
-        m_pnAmmo = debug_newa(uint32, nNumAmmoTypes);
-        m_pbCanUseAmmo = debug_newa(LTBOOL, nNumAmmoTypes);
-        m_pbHaveAmmo = debug_newa(LTBOOL, nNumAmmoTypes);
-        memset(m_pnAmmo, 0, sizeof(uint32) * nNumAmmoTypes);
-        memset(m_pbHaveAmmo, 0, sizeof(LTBOOL) * nNumAmmoTypes);
-        memset(m_pbCanUseAmmo, 0, sizeof(LTBOOL) * nNumAmmoTypes);
+		m_pnAmmo = debug_newa(uint32, nNumAmmoTypes);
+		m_pbCanUseAmmo = debug_newa(LTBOOL, nNumAmmoTypes);
+		m_pbHaveAmmo = debug_newa(LTBOOL, nNumAmmoTypes);
+		memset(m_pnAmmo, 0, sizeof(uint32) * nNumAmmoTypes);
+		memset(m_pbHaveAmmo, 0, sizeof(LTBOOL) * nNumAmmoTypes);
+		memset(m_pbCanUseAmmo, 0, sizeof(LTBOOL) * nNumAmmoTypes);
 	}
 
 	if (m_pbHaveWeapon)
 	{
 		debug_deletea(m_pbHaveWeapon);
-        m_pbHaveWeapon = LTNULL;
+		m_pbHaveWeapon = LTNULL;
 	}
 
 	if (m_pbCanUseWeapon)
 	{
 		debug_deletea(m_pbCanUseWeapon);
-        m_pbCanUseWeapon = LTNULL;
+		m_pbCanUseWeapon = LTNULL;
 	}
 
 	int nNumWeapons = g_pWeaponMgr->GetNumWeapons();
 	if (nNumWeapons > 0)
 	{
-        m_pbHaveWeapon = debug_newa(LTBOOL, nNumWeapons);
-        memset(m_pbHaveWeapon, 0, sizeof(LTBOOL) * nNumWeapons);
+		m_pbHaveWeapon = debug_newa(LTBOOL, nNumWeapons);
+		memset(m_pbHaveWeapon, 0, sizeof(LTBOOL) * nNumWeapons);
 
-        m_pbCanUseWeapon = debug_newa(LTBOOL, nNumWeapons);
-        memset(m_pbCanUseWeapon, 0, sizeof(LTBOOL) * nNumWeapons);
+		m_pbCanUseWeapon = debug_newa(LTBOOL, nNumWeapons);
+		memset(m_pbCanUseWeapon, 0, sizeof(LTBOOL) * nNumWeapons);
 	}
 
 	if (m_pbHaveMod)
 	{
 		debug_deletea(m_pbHaveMod);
-        m_pbHaveMod = LTNULL;
+		m_pbHaveMod = LTNULL;
 	}
 
 	if (m_pbCanUseMod)
 	{
 		debug_deletea(m_pbCanUseMod);
-        m_pbCanUseMod = LTNULL;
+		m_pbCanUseMod = LTNULL;
 	}
 
 	if (m_pbHaveGear)
 	{
 		debug_deletea(m_pbHaveGear);
-        m_pbHaveGear = LTNULL;
+		m_pbHaveGear = LTNULL;
 	}
 
 	if (m_pbCanUseGear)
 	{
 		debug_deletea(m_pbCanUseGear);
-        m_pbCanUseGear = LTNULL;
+		m_pbCanUseGear = LTNULL;
 	}
 
 	int nNumMods = g_pWeaponMgr->GetNumModTypes();
 	if (nNumMods > 0)
 	{
-        m_pbHaveMod = debug_newa(LTBOOL, nNumMods);
-        memset(m_pbHaveMod, 0, sizeof(LTBOOL) * nNumMods);
+		m_pbHaveMod = debug_newa(LTBOOL, nNumMods);
+		memset(m_pbHaveMod, 0, sizeof(LTBOOL) * nNumMods);
 
-        m_pbCanUseMod = debug_newa(LTBOOL, nNumMods);
-        memset(m_pbCanUseMod, 0, sizeof(LTBOOL) * nNumMods);
+		m_pbCanUseMod = debug_newa(LTBOOL, nNumMods);
+		memset(m_pbCanUseMod, 0, sizeof(LTBOOL) * nNumMods);
 
 	}
 
 	int nNumGear = g_pWeaponMgr->GetNumGearTypes();
 	if (nNumGear > 0)
 	{
-        m_pbHaveGear = debug_newa(LTBOOL, nNumGear);
-        memset(m_pbHaveGear, 0, sizeof(LTBOOL) * nNumGear);
+		m_pbHaveGear = debug_newa(LTBOOL, nNumGear);
+		memset(m_pbHaveGear, 0, sizeof(LTBOOL) * nNumGear);
 
-        m_pbCanUseGear = debug_newa(LTBOOL, nNumGear);
-        memset(m_pbCanUseGear, 0, sizeof(LTBOOL) * nNumGear);
+		m_pbCanUseGear = debug_newa(LTBOOL, nNumGear);
+		memset(m_pbCanUseGear, 0, sizeof(LTBOOL) * nNumGear);
 
 	}
 
-    g_vtHUDLayout.Init(g_pLTClient, "HUDLayout", NULL, 0.0f);
+	g_vtHUDLayout.Init(g_pLTClient, "HUDLayout", NULL, 0.0f);
 
-    LTFLOAT fTemp = g_pLayoutMgr->GetCrosshairGapMin();
+	LTFLOAT fTemp = g_pLayoutMgr->GetCrosshairGapMin();
 	if (fTemp <= 0.0f)
 		fTemp = 5.0f;
-    g_vtCrosshairGapMin.Init(g_pLTClient, "CrosshairGapMin", NULL, fTemp);
+	g_vtCrosshairGapMin.Init(g_pLTClient, "CrosshairGapMin", NULL, fTemp);
 
 	fTemp = g_pLayoutMgr->GetCrosshairGapMax();
 	if (fTemp <= 0.0f)
 		fTemp = 8.0f;
-    g_vtCrosshairGapMax.Init(g_pLTClient, "CrosshairGapMax", NULL, fTemp);
+	g_vtCrosshairGapMax.Init(g_pLTClient, "CrosshairGapMax", NULL, fTemp);
 
 	fTemp = g_pLayoutMgr->GetCrosshairBarMin();
 	if (fTemp <= 0.0f)
 		fTemp = 5.0f;
-    g_vtCrosshairBarMin.Init(g_pLTClient, "CrosshairBarMin", NULL, fTemp);
+	g_vtCrosshairBarMin.Init(g_pLTClient, "CrosshairBarMin", NULL, fTemp);
 
 	fTemp = g_pLayoutMgr->GetCrosshairBarMax();
 	if (fTemp <= 0.0f)
 		fTemp = 8.0f;
-    g_vtCrosshairBarMax.Init(g_pLTClient, "CrosshairBarMax", NULL, fTemp);
+	g_vtCrosshairBarMax.Init(g_pLTClient, "CrosshairBarMax", NULL, fTemp);
 
-    g_vtCrosshairStyle.Init(g_pLTClient, "CrosshairStyle", NULL, 0.0f);
+	g_vtCrosshairStyle.Init(g_pLTClient, "CrosshairStyle", NULL, 0.0f);
 
-    g_vtCrosshairColorR.Init(g_pLTClient, "CrosshairColorR", NULL, 1.0f);
-    g_vtCrosshairColorG.Init(g_pLTClient, "CrosshairColorG", NULL, 1.0f);
-    g_vtCrosshairColorB.Init(g_pLTClient, "CrosshairColorB", NULL, 1.0f);
-    g_vtCrosshairAlpha.Init(g_pLTClient, "CrosshairAlpha", NULL, 1.0f);
-    g_vtCrosshairDynamic.Init(g_pLTClient, "CrosshairDynamic", NULL, 1.0f);
+	g_vtCrosshairColorR.Init(g_pLTClient, "CrosshairColorR", NULL, 1.0f);
+	g_vtCrosshairColorG.Init(g_pLTClient, "CrosshairColorG", NULL, 1.0f);
+	g_vtCrosshairColorB.Init(g_pLTClient, "CrosshairColorB", NULL, 1.0f);
+	g_vtCrosshairAlpha.Init(g_pLTClient, "CrosshairAlpha", NULL, 1.0f);
+	g_vtCrosshairDynamic.Init(g_pLTClient, "CrosshairDynamic", NULL, 1.0f);
 
-    g_vtScopeLRGap.Init(g_pLTClient, "ScopeLRGap", NULL, 24.0f);
-    g_vtScopeUDGap.Init(g_pLTClient, "ScopeUPGap", NULL, 24.0f);
-    g_vtScopeLRRadius.Init(g_pLTClient, "ScopeLRRadius", NULL, 0.4845f);
-    g_vtScopeUDRadius.Init(g_pLTClient, "ScopeUDRadius", NULL, 0.449f);
+	g_vtScopeLRGap.Init(g_pLTClient, "ScopeLRGap", NULL, 24.0f);
+	g_vtScopeUDGap.Init(g_pLTClient, "ScopeUPGap", NULL, 24.0f);
+	g_vtScopeLRRadius.Init(g_pLTClient, "ScopeLRRadius", NULL, 0.4845f);
+	g_vtScopeUDRadius.Init(g_pLTClient, "ScopeUDRadius", NULL, 0.449f);
 
 	InitPlayerStats();
 
@@ -490,7 +486,7 @@ LTBOOL CPlayerStats::Init()
 
 	UpdateConfigSettings();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
@@ -503,7 +499,7 @@ LTBOOL CPlayerStats::Init()
 
 void CPlayerStats::Term()
 {
-    if (!g_pLTClient) return;
+	if (!g_pLTClient) return;
 
 	if ( m_hTargetNameSurface )
 	{
@@ -515,8 +511,8 @@ void CPlayerStats::Term()
 
 	if (m_hModeStr)
 	{
-        g_pLTClient->FreeString(m_hModeStr);
-        m_hModeStr = LTNULL;
+		g_pLTClient->FreeString(m_hModeStr);
+		m_hModeStr = LTNULL;
 	}
 
 
@@ -535,55 +531,55 @@ void CPlayerStats::Term()
 	if (m_pnAmmo)
 	{
 		debug_deletea(m_pnAmmo);
-        m_pnAmmo = LTNULL;
+		m_pnAmmo = LTNULL;
 	}
 
 	if (m_pbCanUseAmmo)
 	{
 		debug_deletea(m_pbCanUseAmmo);
-        m_pbCanUseAmmo = LTNULL;
+		m_pbCanUseAmmo = LTNULL;
 	}
 
 	if (m_pbHaveAmmo)
 	{
 		debug_deletea(m_pbHaveAmmo);
-        m_pbHaveAmmo = LTNULL;
+		m_pbHaveAmmo = LTNULL;
 	}
 
 	if (m_pbHaveWeapon)
 	{
 		debug_deletea(m_pbHaveWeapon);
-        m_pbHaveWeapon = LTNULL;
+		m_pbHaveWeapon = LTNULL;
 	}
 
 	if (m_pbCanUseWeapon)
 	{
 		debug_deletea(m_pbCanUseWeapon);
-        m_pbCanUseWeapon = LTNULL;
+		m_pbCanUseWeapon = LTNULL;
 	}
 
 	if (m_pbHaveMod)
 	{
 		debug_deletea(m_pbHaveMod);
-        m_pbHaveMod = LTNULL;
+		m_pbHaveMod = LTNULL;
 	}
 
 	if (m_pbCanUseMod)
 	{
 		debug_deletea(m_pbCanUseMod);
-        m_pbCanUseMod = LTNULL;
+		m_pbCanUseMod = LTNULL;
 	}
 
 	if (m_pbHaveGear)
 	{
 		debug_deletea(m_pbHaveGear);
-        m_pbHaveGear = LTNULL;
+		m_pbHaveGear = LTNULL;
 	}
 
 	if (m_pbCanUseGear)
 	{
 		debug_deletea(m_pbCanUseGear);
-        m_pbCanUseGear = LTNULL;
+		m_pbCanUseGear = LTNULL;
 	}
 
 	for (int i = 0; i < 10; i++)
@@ -612,7 +608,7 @@ void CPlayerStats::Term()
 
 void CPlayerStats::OnEnterWorld(LTBOOL bRestoringGame)
 {
-    if (!g_pLTClient || !g_pGameClientShell) return;
+	if (!g_pLTClient || !g_pGameClientShell) return;
 
 	// find out what mode we are in and make sure that mode is set
 
@@ -636,7 +632,7 @@ void CPlayerStats::OnEnterWorld(LTBOOL bRestoringGame)
 
 void CPlayerStats::OnExitWorld()
 {
-    if (!g_pLTClient) return;
+	if (!g_pLTClient) return;
 }
 
 // ----------------------------------------------------------------------- //
@@ -649,16 +645,16 @@ void CPlayerStats::OnExitWorld()
 
 void CPlayerStats::Draw(LTBOOL bShowStats)
 {
-    if (!g_pLTClient || !g_pGameClientShell || !g_pGameClientShell->GetCamera()) return;
+	if (!g_pLTClient || !g_pGameClientShell || !g_pGameClientShell->GetCamera()) return;
 
-    float m_nCurrentTime = g_pLTClient->GetTime();
+	float m_nCurrentTime = g_pLTClient->GetTime();
 
 	// get the screen size
 
-    uint32 nWidth = 0;
-    uint32 nHeight = 0;
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
-    g_pLTClient->GetSurfaceDims(hScreen, &nWidth, &nHeight);
+	uint32 nWidth = 0;
+	uint32 nHeight = 0;
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	g_pLTClient->GetSurfaceDims(hScreen, &nWidth, &nHeight);
 
 
 	DrawPlayerStats(hScreen, 0, 0, nWidth, nHeight, bShowStats);
@@ -668,11 +664,9 @@ void CPlayerStats::Draw(LTBOOL bShowStats)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::Clear()
 //
 //	PURPOSE:	Handle clearing the stats
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::Clear()
@@ -682,28 +676,24 @@ void CPlayerStats::Clear()
 	UpdateArmor(0);
 
 	int nNumAmmoTypes = g_pWeaponMgr->GetNumAmmoTypes();
-    for (uint8 i = 0; i < nNumAmmoTypes; i++)
+	for (uint8 i = 0; i < nNumAmmoTypes; i++)
 	{
 		UpdateAmmo(m_nCurrentWeapon, i, 0);
 	}
 
-    m_bHealthFlash  = LTFALSE;
+	m_bHealthFlash		= LTFALSE;
 	m_fCurrHealthFlash	= 0.0f;
 	m_fTotalHealthFlash	= 0.0f;
 
-    m_bArmorFlash   = LTFALSE;
+	m_bArmorFlash		= LTFALSE;
 	m_fCurrArmorFlash	= 0.0f;
 	m_fTotalArmorFlash	= 0.0f;
-
-
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::Update()
 //
 //	PURPOSE:	Handle updates
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::Update()
@@ -711,7 +701,7 @@ void CPlayerStats::Update()
 	if (m_nCurrentLayout != (int)g_vtHUDLayout.GetFloat())
 		UpdateLayout();
 
-	if	(	fLastColorR != g_vtCrosshairColorR.GetFloat() || fLastColorG != g_vtCrosshairColorG.GetFloat() ||
+	if (fLastColorR != g_vtCrosshairColorR.GetFloat() || fLastColorG != g_vtCrosshairColorG.GetFloat() ||
 			fLastColorB != g_vtCrosshairColorB.GetFloat() || fLastAlpha != g_vtCrosshairAlpha.GetFloat() )
 	{
 		UpdateCrosshairColors();
@@ -722,8 +712,8 @@ void CPlayerStats::Update()
 	if (m_bHealthChanged || m_bArmorChanged)
 	{
 		UpdatePlayerHealth();
-        m_bHealthChanged = LTFALSE;
-        m_bArmorChanged = LTFALSE;
+		m_bHealthChanged = LTFALSE;
+		m_bArmorChanged = LTFALSE;
 	}
 
 	// did the player's ammo count change?
@@ -731,7 +721,7 @@ void CPlayerStats::Update()
 	if ((m_bAmmoChanged || m_bAmmoTypeChanged) && m_bDrawAmmo)
 	{
 		UpdatePlayerAmmo();
-        m_bAmmoChanged = LTFALSE;
+		m_bAmmoChanged = LTFALSE;
 	}
 
 	if (m_bObjAdded || m_bObjRemoved || m_bObjCompleted)
@@ -753,9 +743,9 @@ void CPlayerStats::Update()
 		if ( GetConsoleInt("ObjectiveMessages",1) > 0 )
 			g_pInterfaceMgr->GetMessageMgr()->AddLine(IDS_OBJECTIVES_CHANGED);
 
-        m_bObjAdded = LTFALSE;
-        m_bObjRemoved = LTFALSE;
-        m_bObjCompleted = LTFALSE;
+		m_bObjAdded = LTFALSE;
+		m_bObjRemoved = LTFALSE;
+		m_bObjCompleted = LTFALSE;
 	}
 
 	m_bObjVisible = (g_pLTClient->IsCommandOn(COMMAND_ID_MISSION) && g_pInterfaceMgr->GetGameState() == GS_PLAYING);
@@ -763,11 +753,9 @@ void CPlayerStats::Update()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::ResetStats()
 //
 //	PURPOSE:	Reset the stats
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::ResetStats()
@@ -781,11 +769,9 @@ void CPlayerStats::ResetStats()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdatePlayerWeapon()
 //
 //	PURPOSE:	Update the weapon related stats
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdatePlayerWeapon(uint8 nWeaponId, uint8 nAmmoId, LTBOOL bForce)
@@ -805,20 +791,18 @@ void CPlayerStats::UpdatePlayerWeapon(uint8 nWeaponId, uint8 nAmmoId, LTBOOL bFo
 	if (nAmmoId != m_nCurrentAmmo)
 	{
 		m_nCurrentAmmo = nAmmoId;
-        m_bAmmoTypeChanged = LTTRUE;
+		m_bAmmoTypeChanged = LTTRUE;
 	}
 
-    SetDrawAmmo(LTTRUE);
+	SetDrawAmmo(LTTRUE);
 
 	Update();
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateHealth()
 //
 //	PURPOSE:	Update the health stat
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateHealth(uint32 nHealth)
@@ -829,23 +813,19 @@ void CPlayerStats::UpdateHealth(uint32 nHealth)
 
 	if (nHealth < m_nHealth)
 	{
-        m_bHealthFlash  = LTTRUE;
+		m_bHealthFlash		= LTTRUE;
 		m_fCurrHealthFlash	= m_fFlashSpeed;
 		m_fTotalHealthFlash	= m_fFlashDuration;
-		m_nDamage += (m_nHealth  - nHealth);
+		m_nDamage += (m_nHealth - nHealth);
 	}
 	m_nHealth = nHealth;
-    m_bHealthChanged = LTTRUE;
-
-
+	m_bHealthChanged = LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateArmor()
 //
 //	PURPOSE:	Update the armor stat
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateArmor(uint32 nArmor)
@@ -858,20 +838,18 @@ void CPlayerStats::UpdateArmor(uint32 nArmor)
 
 	if (nArmor != m_nArmor)
 	{
-        m_bArmorFlash   = LTTRUE;
+		m_bArmorFlash		= LTTRUE;
 		m_fCurrArmorFlash	= m_fFlashSpeed;
 		m_fTotalArmorFlash	= m_fFlashDuration;
 	}
 	m_nArmor = nArmor;
-    m_bArmorChanged = LTTRUE;
+	m_bArmorChanged = LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateMaxHealth()
 //
 //	PURPOSE:	Update the health stat maximum
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateMaxHealth(uint32 nHealth)
@@ -882,15 +860,13 @@ void CPlayerStats::UpdateMaxHealth(uint32 nHealth)
 	m_nMaxHealth = nHealth;
 
 	UpdateHealthSurfaces();
-    m_bHealthChanged = LTTRUE;
+	m_bHealthChanged = LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateMaxArmor()
 //
 //	PURPOSE:	Update the armor stat maximum
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateMaxArmor(uint32 nArmor)
@@ -901,22 +877,20 @@ void CPlayerStats::UpdateMaxArmor(uint32 nArmor)
 	m_nMaxArmor = nArmor;
 
 	UpdateHealthSurfaces();
-    m_bArmorChanged = LTTRUE;
+	m_bArmorChanged = LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateAmmo()
 //
 //	PURPOSE:	Update the ammo stat
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateAmmo(uint8 nWeaponId, uint8 nAmmoId,
-                              uint32 nAmmo, LTBOOL bPickedup,
-                              LTBOOL bDisplayMsg)
+							  uint32 nAmmo, LTBOOL bPickedup,
+							  LTBOOL bDisplayMsg)
 {
-    if (!g_pLTClient || !g_pWeaponMgr) return;
+	if (!g_pLTClient || !g_pWeaponMgr) return;
 
 	int nMissionNum = g_pInterfaceMgr->GetMissionData()->GetMissionNum();
 	MISSION* pMission = g_pMissionMgr->GetMission(nMissionNum);
@@ -930,9 +904,9 @@ void CPlayerStats::UpdateAmmo(uint8 nWeaponId, uint8 nAmmoId,
 				g_pGameClientShell->HandleWeaponPickup(nWeaponId);
 			}
 
-            m_pbHaveWeapon[nWeaponId] = LTTRUE;
+			m_pbHaveWeapon[nWeaponId] = LTTRUE;
 			if (m_pbCanUseWeapon && pMission && !pMission->IsOneTimeWeapon(nWeaponId) && !pMission->IsOneTimeGadget(nWeaponId))
-                m_pbCanUseWeapon[nWeaponId] = LTTRUE;
+				m_pbCanUseWeapon[nWeaponId] = LTTRUE;
 
 		}
 	}
@@ -950,7 +924,7 @@ void CPlayerStats::UpdateAmmo(uint8 nWeaponId, uint8 nAmmoId,
 			{
 				if (m_pbHaveMod)
 				{
-                    m_pbHaveMod[nModId] = LTTRUE;
+					m_pbHaveMod[nModId] = LTTRUE;
 					if (m_pbCanUseMod && pMission)
 						m_pbCanUseMod[nModId] = LTTRUE;
 				}
@@ -960,7 +934,7 @@ void CPlayerStats::UpdateAmmo(uint8 nWeaponId, uint8 nAmmoId,
 
 	AMMO* pAmmo = g_pWeaponMgr->GetAmmo(nAmmoId);
 
-    LTBOOL bInfiniteAmmo = pWeapon ? pWeapon->bInfiniteAmmo : LTFALSE;
+	LTBOOL bInfiniteAmmo = pWeapon ? pWeapon->bInfiniteAmmo : LTFALSE;
 	int nEquipWeapon = WMGR_INVALID_ID;
 
 	if (pAmmo && !bInfiniteAmmo)
@@ -1036,7 +1010,7 @@ void CPlayerStats::UpdateAmmo(uint8 nWeaponId, uint8 nAmmoId,
 				}
 			}  /*** BL 12/08/2000 End changes ******/
 
-            uint32 maxAmmo = pAmmo->GetMaxAmount(LTNULL);
+			uint32 maxAmmo = pAmmo->GetMaxAmount(LTNULL);
 			if (m_pnAmmo[nAmmoId] > maxAmmo)
 			{
 				m_pnAmmo[nAmmoId] = maxAmmo;
@@ -1088,7 +1062,7 @@ void CPlayerStats::UpdateAmmo(uint8 nWeaponId, uint8 nAmmoId,
 				{
 					if (m_pbHaveAmmo && !pMission->IsOneTimeAmmo(nAmmoId))
 					{
-                        m_pbHaveAmmo[nAmmoId] = LTTRUE;
+						m_pbHaveAmmo[nAmmoId] = LTTRUE;
 						if (m_pbCanUseAmmo && pMission && !pMission->IsOneTimeAmmo(nAmmoId))
 							m_pbCanUseAmmo[nAmmoId] = LTTRUE;
 					}
@@ -1106,31 +1080,29 @@ void CPlayerStats::UpdateAmmo(uint8 nWeaponId, uint8 nAmmoId,
 
 	if (m_nCurrentAmmo == nAmmoId)
 	{
-        m_bAmmoChanged = LTTRUE;
+		m_bAmmoChanged = LTTRUE;
 	}
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateGear()
 //
 //	PURPOSE:	Update the gear stats
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateGear(uint8 nGearId)
 {
-    if (!g_pLTClient || !g_pWeaponMgr) return;
+	if (!g_pLTClient || !g_pWeaponMgr) return;
 
 	int nMissionNum = g_pInterfaceMgr->GetMissionData()->GetMissionNum();
 	MISSION* pMission = g_pMissionMgr->GetMission(nMissionNum);
 
 	if (g_pWeaponMgr->IsValidGearType(nGearId))
 	{
-        LTBOOL bHadAirSupply = HaveAirSupply();
+		LTBOOL bHadAirSupply = HaveAirSupply();
 		if (m_pbHaveGear)
 		{
-            m_pbHaveGear[nGearId] = LTTRUE;
+			m_pbHaveGear[nGearId] = LTTRUE;
 			if (m_pbCanUseGear && pMission && !pMission->IsOneTimeGear(nGearId))
 			{
 				GEAR *pGear = g_pWeaponMgr->GetGear(nGearId);
@@ -1146,11 +1118,9 @@ void CPlayerStats::UpdateGear(uint8 nGearId)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateMod()
 //
 //	PURPOSE:	Update the mod stats
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateMod(uint8 nModId)
@@ -1181,16 +1151,14 @@ void CPlayerStats::UpdateMod(uint8 nModId)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateAir()
 //
 //	PURPOSE:	Update the air stat
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateAir(LTFLOAT fPercent)
 {
-    if (!g_pLTClient) return;
+	if (!g_pLTClient) return;
 
 	if (fPercent > 1.0f)
 		fPercent = 1.0f;
@@ -1204,25 +1172,22 @@ void CPlayerStats::UpdateAir(LTFLOAT fPercent)
 	// clear the meter
 	ClearSurface(m_hHUDAir, SETRGB(25,50,50));
 
-    LTRect rcPower = m_rcAir;
+	LTRect rcPower = m_rcAir;
 	rcPower.right = m_rcAir.left + (int)(100.0f * fPercent);
-    g_pLTClient->ScaleSurfaceToSurfaceTransparent(m_hHUDAir, m_hAirBar, &rcPower, &m_rcAirBar, kTransBlack);
+	g_pLTClient->ScaleSurfaceToSurfaceTransparent(m_hHUDAir, m_hAirBar, &rcPower, &m_rcAirBar, kTransBlack);
 
 	// clear the text
 	char szStr[5] = "";
 	sprintf(szStr,"%d",(int)(100.0f * fPercent));
 	ClearSurface(m_hAirStr, kTransBlack);
 	g_pInterfaceResMgr->GetAirFont()->Draw(szStr, m_hAirStr, 0, 0, LTF_JUSTIFY_LEFT);
-    g_pLTClient->OptimizeSurface(m_hAirStr, kTransBlack);
-
+	g_pLTClient->OptimizeSurface(m_hAirStr, kTransBlack);
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateObjectives()
 //
 //	PURPOSE:	Update the objectives
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateObjectives(uint8 nType, uint8 nTeam, uint32 dwId)
@@ -1240,7 +1205,7 @@ void CPlayerStats::UpdateObjectives(uint8 nType, uint8 nTeam, uint32 dwId)
 		{
 
 			if (m_Objectives.Add(dwId))
-                m_bObjAdded = LTTRUE;
+				m_bObjAdded = LTTRUE;
 		}
 		break;
 
@@ -1263,7 +1228,7 @@ void CPlayerStats::UpdateObjectives(uint8 nType, uint8 nTeam, uint32 dwId)
 		case OBJECTIVE_CLEAR_ID:
 		{
 			if (m_Objectives.nNumObjectives || m_CompletedObjectives.nNumObjectives)
-                m_bObjRemoved = LTTRUE;
+				m_bObjRemoved = LTTRUE;
 			m_Objectives.Clear();
 			m_CompletedObjectives.Clear();
 		}
@@ -1290,38 +1255,36 @@ void CPlayerStats::UpdateFramerate(LTFLOAT framerate)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::SetMultiplayerObjectives()
 //
 //	PURPOSE:	Override current objectives with new list from server
-//
 // ----------------------------------------------------------------------- //
 void CPlayerStats::SetMultiplayerObjectives(HMESSAGEREAD hMessage)
 {
 	if (!hMessage) return;
 
 	if (m_Objectives.nNumObjectives || m_CompletedObjectives.nNumObjectives)
-        m_bObjRemoved = LTTRUE;
+		m_bObjRemoved = LTTRUE;
 	m_Objectives.Clear();
 	m_CompletedObjectives.Clear();
 
 	//read number of objectives
-    uint8 nNumObj = g_pLTClient->ReadFromMessageByte(hMessage);
+	uint8 nNumObj = g_pLTClient->ReadFromMessageByte(hMessage);
 
 	//read list of objectives
-    for (uint8 i = 0; i < nNumObj; i++)
+	for (uint8 i = 0; i < nNumObj; i++)
 	{
-        uint32 dwId = g_pLTClient->ReadFromMessageDWord(hMessage);
+		uint32 dwId = g_pLTClient->ReadFromMessageDWord(hMessage);
 		m_Objectives.Add(dwId);
 	}
 
 	//read number of completed objectives
-    uint8 nNumCompObj = g_pLTClient->ReadFromMessageByte(hMessage);
+	uint8 nNumCompObj = g_pLTClient->ReadFromMessageByte(hMessage);
 
 	//read list of completed objectives
 	for (i = 0; i < nNumCompObj; i++)
 	{
-        uint32 dwId = g_pLTClient->ReadFromMessageDWord(hMessage);
+		uint32 dwId = g_pLTClient->ReadFromMessageDWord(hMessage);
 		m_Objectives.Add(dwId);
 		m_CompletedObjectives.Add(dwId);
 	}
@@ -1330,11 +1293,9 @@ void CPlayerStats::SetMultiplayerObjectives(HMESSAGEREAD hMessage)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::ToggleCrosshair()
 //
 //	PURPOSE:	Toggle the crosshairs on/off
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::ToggleCrosshair()
@@ -1345,11 +1306,9 @@ void CPlayerStats::ToggleCrosshair()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::InitPlayerStats()
 //
 //	PURPOSE:	More initialization
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::InitPlayerStats()
@@ -1370,13 +1329,13 @@ void CPlayerStats::InitPlayerStats()
 	// force updating of the surfaces
 
 	UpdatePlayerHealth();
-    UpdatePlayerWeapon(m_nCurrentWeapon, m_nCurrentAmmo, LTTRUE);
+	UpdatePlayerWeapon(m_nCurrentWeapon, m_nCurrentAmmo, LTTRUE);
 
-    m_bHealthFlash  = LTFALSE;
+	m_bHealthFlash		= LTFALSE;
 	m_fCurrHealthFlash	= 0.0f;
 	m_fTotalHealthFlash	= 0.0f;
 
-    m_bArmorFlash   = LTFALSE;
+	m_bArmorFlash		= LTFALSE;
 	m_fCurrArmorFlash	= 0.0f;
 	m_fTotalArmorFlash	= 0.0f;
 
@@ -1388,19 +1347,17 @@ void CPlayerStats::InitPlayerStats()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DrawPlayerStats()
 //
 //	PURPOSE:	Draw the stats
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::DrawPlayerStats(HSURFACE hScreen, int nLeft, int nTop, int nRight, int nBottom, LTBOOL bShowStats)
 {
-    if (!g_pLTClient) return;
+	if (!g_pLTClient) return;
 
-	int nScreenWidth		= nRight - nLeft;
-	int nScreenHeight		= nBottom - nTop;
+	int nScreenWidth	= nRight - nLeft;
+	int nScreenHeight	= nBottom - nTop;
 
 	float xRatio = g_pInterfaceResMgr->GetXRatio();
 	float yRatio = g_pInterfaceResMgr->GetYRatio();
@@ -1422,7 +1379,7 @@ void CPlayerStats::DrawPlayerStats(HSURFACE hScreen, int nLeft, int nTop, int nR
 
 	// set up the transparent color
 
-    HLTCOLOR hTransColor = LTNULL;
+	HLTCOLOR hTransColor = LTNULL;
 
 	eOverlayMask eCurrMask = g_pInterfaceMgr->GetCurrentOverlay();
 
@@ -1519,9 +1476,7 @@ void CPlayerStats::DrawPlayerStats(HSURFACE hScreen, int nLeft, int nTop, int nR
 
 	}
 
-
 	// draw air meter if we have less than 100% air
-	
 	if (m_fAirPercent < 1.0f)
 	{
 		int nAirX = (int) ((float)m_AirBasePos.x * xRatio);
@@ -1534,11 +1489,11 @@ void CPlayerStats::DrawPlayerStats(HSURFACE hScreen, int nLeft, int nTop, int nR
 			fOrigin = { (float)nBarX, (float)nBarY };
 
 			g_pLTClient->TransformSurfaceToSurfaceTransparent(hScreen, m_hHUDAir, &fOrigin, nBarX, nBarY, 0, fUIScale, fUIScale, hTransColor);
-            //g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hHUDAir, LTNULL, nBarX, nBarY, hTransColor);
+			//g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hHUDAir, LTNULL, nBarX, nBarY, hTransColor);
 			if (m_fAirPercent < 0.25f)
 			{
 				// FIXME: This is slightly off.
-                LTRect rcPower = m_rcAir;
+				LTRect rcPower = m_rcAir;
 				rcPower.left += nBarX;
 				rcPower.top += nBarY;
 
@@ -1548,7 +1503,7 @@ void CPlayerStats::DrawPlayerStats(HSURFACE hScreen, int nLeft, int nTop, int nR
 				rcPower.right = rcPower.left + (int)(100.0f * (m_fAirPercent* fUIScale));
 				rcPower.bottom += nBarY;
 
-                g_pLTClient->ScaleSurfaceToSurfaceTransparent(hScreen, m_hAirBar, &rcPower, &m_rcAirBar, kTransBlack);
+				g_pLTClient->ScaleSurfaceToSurfaceTransparent(hScreen, m_hAirBar, &rcPower, &m_rcAirBar, kTransBlack);
 			}
 		}
 		if (m_bUseAirIcon)
@@ -1558,11 +1513,11 @@ void CPlayerStats::DrawPlayerStats(HSURFACE hScreen, int nLeft, int nTop, int nR
 			fOrigin = { (float)nAirX, (float)nAirY };
 			g_pLTClient->TransformSurfaceToSurfaceTransparent(hScreen, m_hAirIcon, &fOrigin, nAirX + m_AirIconOffset.x, nAirY + m_AirIconOffset.y, 0, yRatio, yRatio, hTransColor);
 			*/
-            g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hAirIcon, LTNULL, nAirX+m_AirIconOffset.x, nAirY+m_AirIconOffset.y, hTransColor);
+			g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hAirIcon, LTNULL, nAirX+m_AirIconOffset.x, nAirY+m_AirIconOffset.y, hTransColor);
 		}
 		if (m_bUseAirText)
 		{
-            g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hAirStr, LTNULL, nAirX+m_AirTextOffset.x, nAirY+m_AirTextOffset.y, hTransColor);
+			g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hAirStr, LTNULL, nAirX+m_AirTextOffset.x, nAirY+m_AirTextOffset.y, hTransColor);
 		}
 	}
 
@@ -1582,9 +1537,9 @@ void CPlayerStats::DrawPlayerStats(HSURFACE hScreen, int nLeft, int nTop, int nR
 			g_pLTClient->TransformSurfaceToSurfaceTransparent(hScreen, m_hHUDHealth, &fOrigin, nBarX, nBarY, 0, fUIScale, fUIScale, hTransColor );
 			//g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hHUDHealth, NULL, nBarX, nBarY, hTransColor);
 			// draw flashing health as required
-			if (m_bHealthFlash ||  (m_nHealth <= (m_nMaxHealth/10)))
+			if (m_bHealthFlash || (m_nHealth <= (m_nMaxHealth/10)))
 			{
-                LTRect rcTemp = m_rcHealth;
+				LTRect rcTemp = m_rcHealth;
 
 				// Not my finest code, but it works. I assume I'm causing a floating point rounding error somewhere.
 				// This keeps everything in sync with the HUDHealth surface.
@@ -1604,13 +1559,13 @@ void CPlayerStats::DrawPlayerStats(HSURFACE hScreen, int nLeft, int nTop, int nR
 				rcTemp.right += 1 * fUIScale;
 				rcTemp.bottom += 1 * fUIScale;
 
-                g_pLTClient->ScaleSurfaceToSurfaceTransparent(hScreen, m_hHealthBar, &rcTemp, &m_rcHealthBar, kTransBlack);
+				g_pLTClient->ScaleSurfaceToSurfaceTransparent(hScreen, m_hHealthBar, &rcTemp, &m_rcHealthBar, kTransBlack);
 			}
 
 			// draw flashing Armor as required
 			if (m_bArmorFlash)
 			{	
-                LTRect rcTemp = m_rcArmor;
+				LTRect rcTemp = m_rcArmor;
 				// Not my finest code, but it works. I assume I'm causing a floating point rounding error somewhere.
 				// This keeps everything in sync with the HUDHealth surface.
 				rcTemp.left += 2 * fUIScale;
@@ -1632,14 +1587,14 @@ void CPlayerStats::DrawPlayerStats(HSURFACE hScreen, int nLeft, int nTop, int nR
 				rcTemp.bottom += 2 * fUIScale;
 
 
-                g_pLTClient->ScaleSurfaceToSurfaceTransparent(hScreen, m_hArmorBar, &rcTemp, &m_rcArmorBar, kTransBlack);
+				g_pLTClient->ScaleSurfaceToSurfaceTransparent(hScreen, m_hArmorBar, &rcTemp, &m_rcArmorBar, kTransBlack);
 			}
 			UpdateFlash();
 		}
 		if (m_bUseHealthIcon)
 		{
-            g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hHealthIcon, LTNULL, nHealthX + m_HealthIconOffset.x, nHealthY + m_HealthIconOffset.y, hTransColor);
-            g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hArmorIcon, LTNULL, nHealthX + m_ArmorIconOffset.x , nHealthY + m_ArmorIconOffset.y, hTransColor);
+			g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hHealthIcon, LTNULL, nHealthX + m_HealthIconOffset.x, nHealthY + m_HealthIconOffset.y, hTransColor);
+			g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hArmorIcon, LTNULL, nHealthX + m_ArmorIconOffset.x , nHealthY + m_ArmorIconOffset.y, hTransColor);
 		}
 		if (m_bUseHealthText)
 		{
@@ -1672,7 +1627,7 @@ void CPlayerStats::DrawPlayerStats(HSURFACE hScreen, int nLeft, int nTop, int nR
 				fOrigin = { (float)nAmmoX, (float)nAmmoY };
 
 				g_pLTClient->TransformSurfaceToSurfaceTransparent(hScreen, m_hHUDAmmo, &fOrigin, (nAmmoX + m_AmmoBarOffset.x) - m_rcAmmoHUD.right, nAmmoY + m_AmmoBarOffset.y, 0, fUIScale, fUIScale, hTransColor);
-                //g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hHUDAmmo, NULL, (nAmmoX + m_AmmoBarOffset.x) - m_rcAmmoHUD.right, nAmmoY + m_AmmoBarOffset.y, hTransColor);
+				//g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hHUDAmmo, NULL, (nAmmoX + m_AmmoBarOffset.x) - m_rcAmmoHUD.right, nAmmoY + m_AmmoBarOffset.y, hTransColor);
 			}
 
 			if (m_hAmmoIcon)
@@ -1699,52 +1654,44 @@ void CPlayerStats::DrawPlayerStats(HSURFACE hScreen, int nLeft, int nTop, int nR
 			}
 		}
 	}
-
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdatePlayerHealth()
 //
 //	PURPOSE:	Update the health
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdatePlayerHealth()
 {
-    if (!g_pLTClient) return;
+	if (!g_pLTClient) return;
 
 	// Clear the surface...
 
-    HLTCOLOR hTransColor = kTransBlack;
+	HLTCOLOR hTransColor = kTransBlack;
 
 
 	ClearSurface(m_hHUDHealth,hTransColor);
 
-    m_rcHealth.right = (int)((LTFLOAT)m_nHealth * m_fBarScale) + m_rcHealth.left;
-    m_rcArmor.right = (int)((LTFLOAT)m_nArmor * m_fBarScale) + m_rcArmor.left;
+	m_rcHealth.right = (int)((LTFLOAT)m_nHealth * m_fBarScale) + m_rcHealth.left;
+	m_rcArmor.right = (int)((LTFLOAT)m_nArmor * m_fBarScale) + m_rcArmor.left;
 
-    g_pOptimizedRenderer->FillRect(m_hHUDHealth, &m_rcArmorShadow, SETRGB(25,25,50));
-    g_pOptimizedRenderer->FillRect(m_hHUDHealth, &m_rcHealthShadow, SETRGB(50,25,25));
-    g_pLTClient->ScaleSurfaceToSurfaceTransparent(m_hHUDHealth, m_hHealthBar, &m_rcHealth, &m_rcHealthBar, kTransBlack);
-    g_pLTClient->ScaleSurfaceToSurfaceTransparent(m_hHUDHealth, m_hArmorBar, &m_rcArmor, &m_rcArmorBar, kTransBlack);
-    g_pLTClient->OptimizeSurface(m_hHUDHealth, hTransColor);
-
-
+	g_pOptimizedRenderer->FillRect(m_hHUDHealth, &m_rcArmorShadow, SETRGB(25,25,50));
+	g_pOptimizedRenderer->FillRect(m_hHUDHealth, &m_rcHealthShadow, SETRGB(50,25,25));
+	g_pLTClient->ScaleSurfaceToSurfaceTransparent(m_hHUDHealth, m_hHealthBar, &m_rcHealth, &m_rcHealthBar, kTransBlack);
+	g_pLTClient->ScaleSurfaceToSurfaceTransparent(m_hHUDHealth, m_hArmorBar, &m_rcArmor, &m_rcArmorBar, kTransBlack);
+	g_pLTClient->OptimizeSurface(m_hHUDHealth, hTransColor);
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdatePlayerAmmo()
 //
 //	PURPOSE:	Update the ammo
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::UpdatePlayerAmmo()
 {
-    if (!g_pLTClient || !g_pWeaponMgr || !m_pnAmmo) return;
+	if (!g_pLTClient || !g_pWeaponMgr || !m_pnAmmo) return;
 
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(m_nCurrentWeapon);
 	if (!pWeapon) return;
@@ -1752,179 +1699,170 @@ void CPlayerStats::UpdatePlayerAmmo()
 	AMMO* pAmmo = g_pWeaponMgr->GetAmmo(m_nCurrentAmmo);
 	if (!pAmmo) return;
 
-    SetDrawAmmo(LTTRUE);
+	SetDrawAmmo(LTTRUE);
 
 	if (m_bAmmoTypeChanged)
 	{
 		UpdateAmmoSurfaces();
-        m_bAmmoTypeChanged = LTFALSE;
+		m_bAmmoTypeChanged = LTFALSE;
 	}
 
 	// Clear the surfaces...
 
-    HLTCOLOR hTransColor = kTransBlack;
+	HLTCOLOR hTransColor = kTransBlack;
 	ClearSurface(m_hHUDAmmo,hTransColor);
 
 	int nAmmoInClip = g_pGameClientShell->GetWeaponModel()->GetAmmoInClip();
 	int nAmmo = m_pnAmmo[m_nCurrentAmmo] - nAmmoInClip;
 
-    LTFLOAT fPercent = 100.0f * (LTFLOAT) (nAmmo + nAmmoInClip) /  (LTFLOAT) pAmmo->GetMaxAmount(LTNULL);
+	LTFLOAT fPercent = 100.0f * (LTFLOAT) (nAmmo + nAmmoInClip) / (LTFLOAT) pAmmo->GetMaxAmount(LTNULL);
 
 	m_rcAmmo.left = m_rcAmmo.right - (int)(fPercent * m_fBarScale);
 
-    g_pOptimizedRenderer->FillRect(m_hHUDAmmo, &m_rcAmmoShadow, SETRGB(50,50,25));
-    g_pLTClient->ScaleSurfaceToSurfaceTransparent(m_hHUDAmmo, m_hAmmoBar, &m_rcAmmo, &m_rcAmmoBar, kTransBlack);
+	g_pOptimizedRenderer->FillRect(m_hHUDAmmo, &m_rcAmmoShadow, SETRGB(50,50,25));
+	g_pLTClient->ScaleSurfaceToSurfaceTransparent(m_hHUDAmmo, m_hAmmoBar, &m_rcAmmo, &m_rcAmmoBar, kTransBlack);
 
 	int nEmpty = pWeapon->nShotsPerClip - nAmmoInClip;
 	int x = (m_rcAmmoHUD.right + m_AmmoClipOffset.x) - m_AmmoSz.x;
 	int y = m_AmmoClipOffset.y;
 
-    int i;
-    for (i = 0; i < nAmmoInClip; i++)
+	int i;
+	for (i = 0; i < nAmmoInClip; i++)
 	{
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(m_hHUDAmmo, m_hAmmoFull, LTNULL, x, y, hTransColor);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(m_hHUDAmmo, m_hAmmoFull, LTNULL, x, y, hTransColor);
 		x -= m_AmmoSz.x;
 	}
 
 	for (i = 0; i < nEmpty; i++)
 	{
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(m_hHUDAmmo, m_hAmmoEmpty, LTNULL, x, y, hTransColor);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(m_hHUDAmmo, m_hAmmoEmpty, LTNULL, x, y, hTransColor);
 		x -= m_AmmoSz.x;
 	}
 
-
-    g_pLTClient->OptimizeSurface(m_hHUDAmmo, hTransColor);
-
+	g_pLTClient->OptimizeSurface(m_hHUDAmmo, hTransColor);
 }
 
-
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::Save
 //
 //	PURPOSE:	Save the player stats info
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::Save(HMESSAGEWRITE hWrite)
 {
-    if (!g_pLTClient || !g_pWeaponMgr) return;
+	if (!g_pLTClient || !g_pWeaponMgr) return;
 
-    m_Objectives.Save(g_pLTClient, hWrite);
-    m_CompletedObjectives.Save(g_pLTClient, hWrite);
+	m_Objectives.Save(g_pLTClient, hWrite);
+	m_CompletedObjectives.Save(g_pLTClient, hWrite);
 
-    g_pLTClient->WriteToMessageDWord(hWrite, m_nHealth);
-    g_pLTClient->WriteToMessageDWord(hWrite, m_nDamage);
-    g_pLTClient->WriteToMessageDWord(hWrite, m_nArmor);
-    g_pLTClient->WriteToMessageDWord(hWrite, m_nMaxHealth);
-    g_pLTClient->WriteToMessageDWord(hWrite, m_nMaxArmor);
-    g_pLTClient->WriteToMessageDWord(hWrite, m_nCrosshairLevel);
+	g_pLTClient->WriteToMessageDWord(hWrite, m_nHealth);
+	g_pLTClient->WriteToMessageDWord(hWrite, m_nDamage);
+	g_pLTClient->WriteToMessageDWord(hWrite, m_nArmor);
+	g_pLTClient->WriteToMessageDWord(hWrite, m_nMaxHealth);
+	g_pLTClient->WriteToMessageDWord(hWrite, m_nMaxArmor);
+	g_pLTClient->WriteToMessageDWord(hWrite, m_nCrosshairLevel);
 
 	int nNumAmmoTypes = g_pWeaponMgr->GetNumAmmoTypes();
-    uint8 i;
-    for (i = 0; i < nNumAmmoTypes; i++)
+	uint8 i;
+	for (i = 0; i < nNumAmmoTypes; i++)
 	{
-        g_pLTClient->WriteToMessageByte(hWrite, m_pbCanUseAmmo[i]);
-        g_pLTClient->WriteToMessageByte(hWrite, m_pbHaveAmmo[i]);
-        g_pLTClient->WriteToMessageDWord(hWrite, m_pnAmmo[i]);
+		g_pLTClient->WriteToMessageByte(hWrite, m_pbCanUseAmmo[i]);
+		g_pLTClient->WriteToMessageByte(hWrite, m_pbHaveAmmo[i]);
+		g_pLTClient->WriteToMessageDWord(hWrite, m_pnAmmo[i]);
 	}
 
 	int nNumWeapons = g_pWeaponMgr->GetNumWeapons();
 	for (i = 0; i < nNumWeapons; i++)
 	{
-        g_pLTClient->WriteToMessageByte(hWrite, m_pbCanUseWeapon[i]);
-        g_pLTClient->WriteToMessageByte(hWrite, m_pbHaveWeapon[i]);
+		g_pLTClient->WriteToMessageByte(hWrite, m_pbCanUseWeapon[i]);
+		g_pLTClient->WriteToMessageByte(hWrite, m_pbHaveWeapon[i]);
 	}
 
 	int nNumMods = g_pWeaponMgr->GetNumModTypes();
 	for (i = 0; i < nNumMods; i++)
 	{
-        g_pLTClient->WriteToMessageByte(hWrite, m_pbCanUseMod[i]);
-        g_pLTClient->WriteToMessageByte(hWrite, m_pbHaveMod[i]);
+		g_pLTClient->WriteToMessageByte(hWrite, m_pbCanUseMod[i]);
+		g_pLTClient->WriteToMessageByte(hWrite, m_pbHaveMod[i]);
 	}
 
 	int nNumGear = g_pWeaponMgr->GetNumGearTypes();
 	for (i = 0; i < nNumGear; i++)
 	{
-        g_pLTClient->WriteToMessageByte(hWrite, m_pbCanUseGear[i]);
-        g_pLTClient->WriteToMessageByte(hWrite, m_pbHaveGear[i]);
+		g_pLTClient->WriteToMessageByte(hWrite, m_pbCanUseGear[i]);
+		g_pLTClient->WriteToMessageByte(hWrite, m_pbHaveGear[i]);
 	}
 
-    g_pLTClient->WriteToMessageByte(hWrite, m_nCurrentWeapon);
-    g_pLTClient->WriteToMessageByte(hWrite, m_nCurrentAmmo);
-    g_pLTClient->WriteToMessageByte(hWrite, m_bCrosshairEnabled);
-    g_pLTClient->WriteToMessageByte(hWrite, m_bDrawAmmo);
-    g_pLTClient->WriteToMessageFloat(hWrite, m_fAirPercent);
+	g_pLTClient->WriteToMessageByte(hWrite, m_nCurrentWeapon);
+	g_pLTClient->WriteToMessageByte(hWrite, m_nCurrentAmmo);
+	g_pLTClient->WriteToMessageByte(hWrite, m_bCrosshairEnabled);
+	g_pLTClient->WriteToMessageByte(hWrite, m_bDrawAmmo);
+	g_pLTClient->WriteToMessageFloat(hWrite, m_fAirPercent);
 }
 
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::Load
 //
 //	PURPOSE:	Load the player stats info
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::Load(HMESSAGEREAD hRead)
 {
-    if (!g_pLTClient || !g_pWeaponMgr) return;
+	if (!g_pLTClient || !g_pWeaponMgr) return;
 
-    m_Objectives.Load(g_pLTClient, hRead);
-    m_CompletedObjectives.Load(g_pLTClient, hRead);
+	m_Objectives.Load(g_pLTClient, hRead);
+	m_CompletedObjectives.Load(g_pLTClient, hRead);
 
-    m_nHealth           = g_pLTClient->ReadFromMessageDWord(hRead);
-    m_nDamage           = g_pLTClient->ReadFromMessageDWord(hRead);
-    m_nArmor            = g_pLTClient->ReadFromMessageDWord(hRead);
-    m_nMaxHealth        = g_pLTClient->ReadFromMessageDWord(hRead);
-    m_nMaxArmor         = g_pLTClient->ReadFromMessageDWord(hRead);
-    m_nCrosshairLevel   = (int) g_pLTClient->ReadFromMessageDWord(hRead);
+	m_nHealth		= g_pLTClient->ReadFromMessageDWord(hRead);
+	m_nDamage		= g_pLTClient->ReadFromMessageDWord(hRead);
+	m_nArmor		= g_pLTClient->ReadFromMessageDWord(hRead);
+	m_nMaxHealth		= g_pLTClient->ReadFromMessageDWord(hRead);
+	m_nMaxArmor		= g_pLTClient->ReadFromMessageDWord(hRead);
+	m_nCrosshairLevel	= (int) g_pLTClient->ReadFromMessageDWord(hRead);
 
-    uint8 i;
+	uint8 i;
 	int nNumAmmoTypes = g_pWeaponMgr->GetNumAmmoTypes();
-    for (i = 0; i < nNumAmmoTypes; i++)
+	for (i = 0; i < nNumAmmoTypes; i++)
 	{
-        m_pbCanUseAmmo[i]   = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
-        m_pbHaveAmmo[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
-        m_pnAmmo[i]         = g_pLTClient->ReadFromMessageDWord(hRead);
+		m_pbCanUseAmmo[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
+		m_pbHaveAmmo[i]	= (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
+		m_pnAmmo[i]	= g_pLTClient->ReadFromMessageDWord(hRead);
 	}
 
 	int nNumWeapons = g_pWeaponMgr->GetNumWeapons();
 	for ( i = 0; i < nNumWeapons; i++)
 	{
-        m_pbCanUseWeapon[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
-        m_pbHaveWeapon[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
+		m_pbCanUseWeapon[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
+		m_pbHaveWeapon[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
 	}
 
 	int nNumMods = g_pWeaponMgr->GetNumModTypes();
 	for ( i = 0; i < nNumMods; i++)
 	{
-        m_pbCanUseMod[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
-        m_pbHaveMod[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
+		m_pbCanUseMod[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
+		m_pbHaveMod[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
 	}
 
 	int nNumGear = g_pWeaponMgr->GetNumGearTypes();
 	for ( i = 0; i < nNumGear; i++)
 	{
-        m_pbCanUseGear[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
-        m_pbHaveGear[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
+		m_pbCanUseGear[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
+		m_pbHaveGear[i] = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
 	}
 
-    m_nCurrentWeapon    = g_pLTClient->ReadFromMessageByte(hRead);
-    m_nCurrentAmmo      = g_pLTClient->ReadFromMessageByte(hRead);
-    m_bCrosshairEnabled = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
-    m_bDrawAmmo         = (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
-    m_fAirPercent       = g_pLTClient->ReadFromMessageFloat(hRead);
+	m_nCurrentWeapon	= g_pLTClient->ReadFromMessageByte(hRead);
+	m_nCurrentAmmo		= g_pLTClient->ReadFromMessageByte(hRead);
+	m_bCrosshairEnabled	= (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
+	m_bDrawAmmo		= (LTBOOL) g_pLTClient->ReadFromMessageByte(hRead);
+	m_fAirPercent		= g_pLTClient->ReadFromMessageFloat(hRead);
 
-    UpdatePlayerWeapon(m_nCurrentWeapon, m_nCurrentAmmo, LTTRUE);
+	UpdatePlayerWeapon(m_nCurrentWeapon, m_nCurrentAmmo, LTTRUE);
 }
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::GetMod
 //
 //	PURPOSE:	Get the id of thefirst mod for the current weapon
-//				of the given type
-//
+//			of the given type
 // --------------------------------------------------------------------------- //
 
 uint8 CPlayerStats::GetMod(ModType eType)
@@ -1955,200 +1893,170 @@ uint8 CPlayerStats::GetMod(ModType eType)
 		}
 	}
 
-
 	return nModId;
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::GetAmmoCount
 //
 //	PURPOSE:	Get the ammo count for the passed in ammo id
-//
 // --------------------------------------------------------------------------- //
 
 uint32 CPlayerStats::GetAmmoCount(uint8 nAmmoId) const
 {
-	 if (!m_pnAmmo || !g_pWeaponMgr->IsValidAmmoType(nAmmoId))  return 0;
+	 if (!m_pnAmmo || !g_pWeaponMgr->IsValidAmmoType(nAmmoId)) return 0;
 
 	 return m_pnAmmo[nAmmoId];
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::HaveWeapon
 //
 //	PURPOSE:	Do we have the weapon associated with the passed in id
-//
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPlayerStats::HaveWeapon(uint8 nWeaponId) const
 {
-     if (!m_pbHaveWeapon || !g_pWeaponMgr->IsValidWeapon(nWeaponId)) return LTFALSE;
+	 if (!m_pbHaveWeapon || !g_pWeaponMgr->IsValidWeapon(nWeaponId)) return LTFALSE;
 
 	 return m_pbHaveWeapon[nWeaponId];
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::CanUseWeapon
 //
 //	PURPOSE:	Can we use the weapon associated with the passed in id
-//
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPlayerStats::CanUseWeapon(uint8 nWeaponId) const
 {
-     if (!m_pbCanUseWeapon || !g_pWeaponMgr->IsValidWeapon(nWeaponId) || !g_pWeaponMgr->IsPlayerWeapon(nWeaponId)) return LTFALSE;
+	 if (!m_pbCanUseWeapon || !g_pWeaponMgr->IsValidWeapon(nWeaponId) || !g_pWeaponMgr->IsPlayerWeapon(nWeaponId)) return LTFALSE;
 
 	 return m_pbCanUseWeapon[nWeaponId];
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::HaveMod
 //
 //	PURPOSE:	Do we have the mod associated with the passed in id
-//
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPlayerStats::HaveMod(uint8 nModId) const
 {
-     if (!m_pbHaveMod || !g_pWeaponMgr->IsValidModType(nModId)) return LTFALSE;
+	 if (!m_pbHaveMod || !g_pWeaponMgr->IsValidModType(nModId)) return LTFALSE;
 
 	 return m_pbHaveMod[nModId];
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::CanUseMod
 //
 //	PURPOSE:	Can we use the mod associated with the passed in id
-//
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPlayerStats::CanUseMod(uint8 nModId) const
 {
-     if (!m_pbCanUseMod || !g_pWeaponMgr->IsValidModType(nModId)) return LTFALSE;
+	 if (!m_pbCanUseMod || !g_pWeaponMgr->IsValidModType(nModId)) return LTFALSE;
 
 	 return m_pbCanUseMod[nModId];
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::HaveGear
 //
 //	PURPOSE:	Do we have the Gear associated with the passed in id
-//
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPlayerStats::HaveGear(uint8 nGearId) const
 {
-     if (!m_pbHaveGear || !g_pWeaponMgr->IsValidGearType(nGearId)) return LTFALSE;
+	 if (!m_pbHaveGear || !g_pWeaponMgr->IsValidGearType(nGearId)) return LTFALSE;
 
 	 return m_pbHaveGear[nGearId];
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::CanUseGear
 //
 //	PURPOSE:	Can we use the Gear associated with the passed in id
-//
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPlayerStats::CanUseGear(uint8 nGearId) const
 {
-     if (!m_pbCanUseGear || !g_pWeaponMgr->IsValidGearType(nGearId)) return LTFALSE;
+	 if (!m_pbCanUseGear || !g_pWeaponMgr->IsValidGearType(nGearId)) return LTFALSE;
 
 	 return m_pbCanUseGear[nGearId];
 }
 
-
-
-
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::CanUseAmmo
 //
 //	PURPOSE:	Can we use the ammo associated with the passed in id
-//
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPlayerStats::CanUseAmmo(uint8 nAmmoId) const
 {
-     if (!m_pbCanUseAmmo || !g_pWeaponMgr->IsValidAmmoType(nAmmoId)) return LTFALSE;
+	 if (!m_pbCanUseAmmo || !g_pWeaponMgr->IsValidAmmoType(nAmmoId)) return LTFALSE;
 
 	 return m_pbCanUseAmmo[nAmmoId];
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::AddCanUseWeapon
 //
 //	PURPOSE:	Add a weapon to our can use list
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::AddCanUseWeapon(uint8 nWeaponId)
 {
 	 if (!m_pbCanUseWeapon || !g_pWeaponMgr->IsValidWeapon(nWeaponId) || !g_pWeaponMgr->IsPlayerWeapon(nWeaponId)) return;
 
-     m_pbCanUseWeapon[nWeaponId] = LTTRUE;
+	 m_pbCanUseWeapon[nWeaponId] = LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::AddCanUseMod
 //
 //	PURPOSE:	Add a mod to our can use list
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::AddCanUseMod(uint8 nModId)
 {
 	 if (!m_pbCanUseMod || !g_pWeaponMgr->IsValidModType(nModId)) return;
 
-     m_pbCanUseMod[nModId] = LTTRUE;
+	 m_pbCanUseMod[nModId] = LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::AddCanUseGear
 //
 //	PURPOSE:	Add a Gear to our can use list
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::AddCanUseGear(uint8 nGearId)
 {
 	 if (!m_pbCanUseGear || !g_pWeaponMgr->IsValidGearType(nGearId)) return;
 
-     m_pbCanUseGear[nGearId] = LTTRUE;
+	 m_pbCanUseGear[nGearId] = LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::AddCanUseAmmo
 //
 //	PURPOSE:	Add the ammo to our can use list
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::AddCanUseAmmo(uint8 nAmmoId)
 {
 	 if (!m_pbCanUseAmmo || !g_pWeaponMgr->IsValidAmmoType(nAmmoId)) return;
 
-     m_pbCanUseAmmo[nAmmoId] = LTTRUE;
+	 m_pbCanUseAmmo[nAmmoId] = LTTRUE;
 }
 
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::PrepareInventory
 //
 //	PURPOSE:	Setup for inventory selection for a new mission
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::PrepareInventory()
@@ -2160,7 +2068,7 @@ void CPlayerStats::PrepareInventory()
 
 	// Make sure the summary file is up-to-date...
 
-    pPSummary->RefreshData(g_pLTClient);
+	pPSummary->RefreshData(g_pLTClient);
 
 	if (nNumAmmoTypes > 0)
 	{
@@ -2184,16 +2092,12 @@ void CPlayerStats::PrepareInventory()
 	{
 		pPSummary->ReadGearData(m_pbCanUseGear,nNumGear);
 	}
-
-
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::SaveInventory
 //
 //	PURPOSE:	Save Inventory after completing a mission
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::SaveInventory()
@@ -2209,15 +2113,15 @@ void CPlayerStats::SaveInventory()
 	CPlayerSummaryMgr *pPSummary = g_pGameClientShell->GetPlayerSummary();
 
 	// Make sure the summary file is up-to-date...
-    pPSummary->RefreshData(g_pLTClient);
+	pPSummary->RefreshData(g_pLTClient);
 
 
 	if (nNumAmmoTypes > 0)
 	{
-        for (uint8 i = 0; i < nNumAmmoTypes; i++)
+		for (uint8 i = 0; i < nNumAmmoTypes; i++)
 		{
 			if (m_pbHaveAmmo[i] && !pMission->IsOneTimeAmmo(i))
-                m_pbCanUseAmmo[i] = LTTRUE;
+				m_pbCanUseAmmo[i] = LTTRUE;
 		}
 		pPSummary->WriteAmmoData(m_pbCanUseAmmo,nNumAmmoTypes);
 	}
@@ -2225,24 +2129,24 @@ void CPlayerStats::SaveInventory()
 	int nNumWeapons = g_pWeaponMgr->GetNumWeapons();
 	if (nNumWeapons > 0)
 	{
-        for (uint8 i = 0; i < nNumWeapons; i++)
+		for (uint8 i = 0; i < nNumWeapons; i++)
 		{
 			WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(i);
 
 			//if we already could use this weapon, or we have it and it's not a one-time,
 			//  check for mods
-			if (m_pbCanUseWeapon[i] ||  (m_pbHaveWeapon[i] && !pMission->IsOneTimeWeapon(i)))
+			if (m_pbCanUseWeapon[i] || (m_pbHaveWeapon[i] && !pMission->IsOneTimeWeapon(i)))
 			{
 				for (int m = 0; m < pWeapon->nNumModTypes; m++)
 				{
 					int nModId = pWeapon->aModTypes[m];
 					if (m_pbHaveMod[nModId])
-                        m_pbCanUseMod[nModId] = LTTRUE;
+						m_pbCanUseMod[nModId] = LTTRUE;
 				}
 			}
 
 			if (m_pbHaveWeapon[i] && !pMission->IsOneTimeWeapon(i) && !pMission->IsOneTimeGadget(i))
-                m_pbCanUseWeapon[i] = LTTRUE;
+				m_pbCanUseWeapon[i] = LTTRUE;
 
 		}
 		pPSummary->WriteWeaponData(m_pbCanUseWeapon,nNumWeapons);
@@ -2257,7 +2161,7 @@ void CPlayerStats::SaveInventory()
 	int nNumGear = g_pWeaponMgr->GetNumGearTypes();
 	if (nNumGear > 0)
 	{
-        for (uint8 i = 0; i < nNumGear; i++)
+		for (uint8 i = 0; i < nNumGear; i++)
 		{
 			if (m_pbHaveGear[i] && !pMission->IsOneTimeGear(i))
 			{
@@ -2267,17 +2171,13 @@ void CPlayerStats::SaveInventory()
 			}
 		}
 		pPSummary->WriteGearData(m_pbCanUseGear,nNumGear);
-
 	}
 }
 
-
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::Setup
 //
 //	PURPOSE:	Setup the stats based on the CMissionData info
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::Setup(CMissionData* pMissionData)
@@ -2301,10 +2201,10 @@ void CPlayerStats::Setup(CMissionData* pMissionData)
 	CWeaponData *weapons[100];
 	int nNum = pMissionData->GetWeapons(weapons, ARRAY_LEN(weapons));
 
-    int i;
-    for (i=0; i < nNum; i++)
+	int i;
+	for (i=0; i < nNum; i++)
 	{
-        UpdateAmmo(weapons[i]->m_nID, -1, 0, LTTRUE);
+		UpdateAmmo(weapons[i]->m_nID, -1, 0, LTTRUE);
 	}
 
 	// Give us all the specified ammo...
@@ -2314,7 +2214,7 @@ void CPlayerStats::Setup(CMissionData* pMissionData)
 
 	for (i=0; i < nNum; i++)
 	{
-        UpdateAmmo(-1, ammo[i]->m_nID, ammo[i]->m_nCount, LTFALSE);
+		UpdateAmmo(-1, ammo[i]->m_nID, ammo[i]->m_nCount, LTFALSE);
 	}
 
 	// Give us all the specified mods...
@@ -2328,7 +2228,7 @@ void CPlayerStats::Setup(CMissionData* pMissionData)
 		{
 			if (m_pbHaveMod)
 			{
-                m_pbHaveMod[mods[i]->m_nID] = LTTRUE;
+				m_pbHaveMod[mods[i]->m_nID] = LTTRUE;
 			}
 
 		}
@@ -2344,15 +2244,12 @@ void CPlayerStats::Setup(CMissionData* pMissionData)
 	{
 		UpdateGear(gear[i]->m_nID);
 	}
-
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::ResetInventory
 //
 //	PURPOSE:	Reset all inventory items
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::ResetInventory()
@@ -2362,16 +2259,16 @@ void CPlayerStats::ResetInventory()
 	int nNumAmmoTypes = g_pWeaponMgr->GetNumAmmoTypes();
 	if (nNumAmmoTypes > 0)
 	{
-        memset(m_pnAmmo, 0, sizeof(uint32) * nNumAmmoTypes);
-        memset(m_pbHaveAmmo, 0, sizeof(LTBOOL) * nNumAmmoTypes);
-        memset(m_pbCanUseAmmo, 0, sizeof(LTBOOL) * nNumAmmoTypes);
+		memset(m_pnAmmo, 0, sizeof(uint32) * nNumAmmoTypes);
+		memset(m_pbHaveAmmo, 0, sizeof(LTBOOL) * nNumAmmoTypes);
+		memset(m_pbCanUseAmmo, 0, sizeof(LTBOOL) * nNumAmmoTypes);
 	}
 
 	int nNumWeapons = g_pWeaponMgr->GetNumWeapons();
 	if (nNumWeapons > 0)
 	{
-        memset(m_pbHaveWeapon, 0, sizeof(LTBOOL) * nNumWeapons);
-        memset(m_pbCanUseWeapon, 0, sizeof(LTBOOL) * nNumWeapons);
+		memset(m_pbHaveWeapon, 0, sizeof(LTBOOL) * nNumWeapons);
+		memset(m_pbCanUseWeapon, 0, sizeof(LTBOOL) * nNumWeapons);
 	}
 
 	int nNumMods = g_pWeaponMgr->GetNumModTypes();
@@ -2387,16 +2284,13 @@ void CPlayerStats::ResetInventory()
 		memset(m_pbHaveGear, 0, sizeof(LTBOOL) * nNumGear);
 		memset(m_pbCanUseGear, 0, sizeof(LTBOOL) * nNumGear);
 	}
-
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DropInventory
 //
 //	PURPOSE:	Removes all currently carried weapons and ammo, optionally
-//				removes gear and mods
-//
+//			removes gear and mods
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::DropInventory(LTBOOL bRemoveGear)
@@ -2406,14 +2300,14 @@ void CPlayerStats::DropInventory(LTBOOL bRemoveGear)
 	int nNumAmmoTypes = g_pWeaponMgr->GetNumAmmoTypes();
 	if (nNumAmmoTypes > 0)
 	{
-        memset(m_pnAmmo, 0, sizeof(uint32) * nNumAmmoTypes);
-        memset(m_pbHaveAmmo, 0, sizeof(LTBOOL) * nNumAmmoTypes);
+		memset(m_pnAmmo, 0, sizeof(uint32) * nNumAmmoTypes);
+		memset(m_pbHaveAmmo, 0, sizeof(LTBOOL) * nNumAmmoTypes);
 	}
 
 	int nNumWeapons = g_pWeaponMgr->GetNumWeapons();
 	if (nNumWeapons > 0)
 	{
-        memset(m_pbHaveWeapon, 0, sizeof(LTBOOL) * nNumWeapons);
+		memset(m_pbHaveWeapon, 0, sizeof(LTBOOL) * nNumWeapons);
 	}
 
 	if (bRemoveGear)
@@ -2433,11 +2327,9 @@ void CPlayerStats::DropInventory(LTBOOL bRemoveGear)
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::CreateHealthSurfaces
 //
 //	PURPOSE:	Create a surfaces for health and armor display
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::CreateHealthSurfaces()
@@ -2445,72 +2337,69 @@ void CPlayerStats::CreateHealthSurfaces()
 	// creates surface to draw bars on
 	UpdateHealthSurfaces();
 
-    HLTCOLOR hTransColor = kTransBlack;
+	HLTCOLOR hTransColor = kTransBlack;
 
 	if (!m_hHealthBar)
 	{
-        uint32 dwWidth, dwHeight;
-        m_hHealthBar = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Bar_Health.pcx");
-        g_pLTClient->OptimizeSurface (m_hHealthBar, hTransColor);
-        g_pLTClient->GetSurfaceDims(m_hHealthBar, &dwWidth, &dwHeight);
+		uint32 dwWidth, dwHeight;
+		m_hHealthBar = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Bar_Health.pcx");
+		g_pLTClient->OptimizeSurface (m_hHealthBar, hTransColor);
+		g_pLTClient->GetSurfaceDims(m_hHealthBar, &dwWidth, &dwHeight);
 		m_rcHealthBar.right = dwWidth;
 		m_rcHealthBar.bottom = dwHeight;
 	}
 
 	if (!m_hArmorBar)
 	{
-        uint32 dwWidth, dwHeight;
-        m_hArmorBar = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Bar_Armor.pcx");
-        g_pLTClient->OptimizeSurface (m_hArmorBar, hTransColor);
-        g_pLTClient->GetSurfaceDims(m_hArmorBar, &dwWidth, &dwHeight);
+		uint32 dwWidth, dwHeight;
+		m_hArmorBar = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Bar_Armor.pcx");
+		g_pLTClient->OptimizeSurface (m_hArmorBar, hTransColor);
+		g_pLTClient->GetSurfaceDims(m_hArmorBar, &dwWidth, &dwHeight);
 		m_rcArmorBar.right = dwWidth;
 		m_rcArmorBar.bottom = dwHeight;
 	}
 
 	if (!m_hHealthIcon)
 	{
-        m_hHealthIcon = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Icon_Health.pcx");
-        g_pLTClient->OptimizeSurface (m_hHealthIcon, hTransColor);
-        g_pLTClient->SetSurfaceAlpha(m_hHealthIcon,0.5f);
+		m_hHealthIcon = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Icon_Health.pcx");
+		g_pLTClient->OptimizeSurface (m_hHealthIcon, hTransColor);
+		g_pLTClient->SetSurfaceAlpha(m_hHealthIcon,0.5f);
 	}
 
 	if (!m_hArmorIcon)
 	{
-        m_hArmorIcon = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Icon_Armor.pcx");
-        g_pLTClient->OptimizeSurface (m_hArmorIcon, hTransColor);
-        g_pLTClient->SetSurfaceAlpha(m_hArmorIcon,0.5f);
+		m_hArmorIcon = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Icon_Armor.pcx");
+		g_pLTClient->OptimizeSurface (m_hArmorIcon, hTransColor);
+		g_pLTClient->SetSurfaceAlpha(m_hArmorIcon,0.5f);
 	}
 
-    m_bHealthInit = LTTRUE;
-
+	m_bHealthInit = LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateHealthSurfaces
 //
 //	PURPOSE:	Create a surface to draw the health and armor bars on
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateHealthSurfaces()
 {
 	if (m_hHUDHealth)
-        g_pLTClient->DeleteSurface (m_hHUDHealth);
-    m_hHUDHealth = LTNULL;
+		g_pLTClient->DeleteSurface (m_hHUDHealth);
+	m_hHUDHealth = LTNULL;
 
-    int nWidth = (int)( Max((LTFLOAT)m_nMaxHealth,(LTFLOAT)m_nMaxArmor) * m_fBarScale ) + abs(m_ArmorBarOffset.x) + 2;
+	int nWidth = (int)( Max((LTFLOAT)m_nMaxHealth,(LTFLOAT)m_nMaxArmor) * m_fBarScale ) + abs(m_ArmorBarOffset.x) + 2;
 	int nHeight = m_nBarHeight + abs(m_ArmorBarOffset.y) + 2;
-    HLTCOLOR hTransColor = kTransBlack;
+	HLTCOLOR hTransColor = kTransBlack;
 
-    m_hHUDHealth = g_pLTClient->CreateSurface(nWidth,nHeight);
+	m_hHUDHealth = g_pLTClient->CreateSurface(nWidth,nHeight);
 
-    g_pLTClient->OptimizeSurface (m_hHUDHealth, hTransColor);
-    g_pLTClient->SetSurfaceAlpha(m_hHUDHealth,0.5f);
+	g_pLTClient->OptimizeSurface (m_hHUDHealth, hTransColor);
+	g_pLTClient->SetSurfaceAlpha(m_hHUDHealth,0.5f);
 
 	m_rcHealth.left = 1;
 	m_rcHealth.top = 1;
-    m_rcHealth.right = (int)( (LTFLOAT)m_nMaxHealth * m_fBarScale ) + 1;
+	m_rcHealth.right = (int)( (LTFLOAT)m_nMaxHealth * m_fBarScale ) + 1;
 	m_rcHealth.bottom = m_nBarHeight + 1;
 
 	m_rcHealthShadow.left = 0;
@@ -2520,7 +2409,7 @@ void CPlayerStats::UpdateHealthSurfaces()
 
 	m_rcArmor.left = m_rcHealth.left + m_ArmorBarOffset.x;
 	m_rcArmor.top = m_rcHealth.top + m_ArmorBarOffset.y;
-    m_rcArmor.right = (int)( (LTFLOAT)m_nMaxArmor * m_fBarScale ) + m_rcArmor.left;
+	m_rcArmor.right = (int)( (LTFLOAT)m_nMaxArmor * m_fBarScale ) + m_rcArmor.left;
 	m_rcArmor.bottom = m_nBarHeight + m_rcArmor.top;
 
 	m_rcArmorShadow.left = m_rcArmor.left - 1;
@@ -2530,105 +2419,96 @@ void CPlayerStats::UpdateHealthSurfaces()
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DestroyHealthSurfaces
 //
 //	PURPOSE:	Destroy surfaces for health and armor display
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::DestroyHealthSurfaces()
 {
 	if (m_hHUDHealth)
-        g_pLTClient->DeleteSurface (m_hHUDHealth);
-    m_hHUDHealth = LTNULL;
+		g_pLTClient->DeleteSurface (m_hHUDHealth);
+	m_hHUDHealth = LTNULL;
 
 	if (m_hHealthBar)
-        g_pLTClient->DeleteSurface (m_hHealthBar);
-    m_hHealthBar = LTNULL;
+		g_pLTClient->DeleteSurface (m_hHealthBar);
+	m_hHealthBar = LTNULL;
 
 	if (m_hHealthIcon)
-        g_pLTClient->DeleteSurface (m_hHealthIcon);
-    m_hHealthIcon = LTNULL;
+		g_pLTClient->DeleteSurface (m_hHealthIcon);
+	m_hHealthIcon = LTNULL;
 
 	if (m_hArmorBar)
-        g_pLTClient->DeleteSurface (m_hArmorBar);
-    m_hArmorBar = LTNULL;
+		g_pLTClient->DeleteSurface (m_hArmorBar);
+	m_hArmorBar = LTNULL;
 
 	if (m_hArmorIcon)
-        g_pLTClient->DeleteSurface (m_hArmorIcon);
-    m_hArmorIcon = LTNULL;
+		g_pLTClient->DeleteSurface (m_hArmorIcon);
+	m_hArmorIcon = LTNULL;
 
-
-    m_bHealthInit = LTFALSE;
-
+	m_bHealthInit = LTFALSE;
 }
 
-
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::CreateAmmoSurfaces
 //
 //	PURPOSE:	Create surfaces for ammo display
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::CreateAmmoSurfaces()
 {
-    uint32 dwWidth, dwHeight;
+	uint32 dwWidth, dwHeight;
 
-    HLTCOLOR hTransColor = kTransBlack;
+	HLTCOLOR hTransColor = kTransBlack;
 
 	if (!m_hAmmoBar)
 	{
-        m_hAmmoBar = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Bar_Ammo.pcx");
-        g_pLTClient->OptimizeSurface (m_hAmmoBar, hTransColor);
-        g_pLTClient->GetSurfaceDims(m_hAmmoBar, &dwWidth, &dwHeight);
+		m_hAmmoBar = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Bar_Ammo.pcx");
+		g_pLTClient->OptimizeSurface (m_hAmmoBar, hTransColor);
+		g_pLTClient->GetSurfaceDims(m_hAmmoBar, &dwWidth, &dwHeight);
 		m_rcAmmoBar.right = dwWidth;
 		m_rcAmmoBar.bottom = dwHeight;
 	}
 
 	if (!m_hAmmoFull)
 	{
-        m_hAmmoFull = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\ammo_full.pcx");
-        g_pLTClient->OptimizeSurface (m_hAmmoFull, hTransColor);
-        g_pLTClient->GetSurfaceDims(m_hAmmoFull, &dwWidth, &dwHeight);
+		m_hAmmoFull = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\ammo_full.pcx");
+		g_pLTClient->OptimizeSurface (m_hAmmoFull, hTransColor);
+		g_pLTClient->GetSurfaceDims(m_hAmmoFull, &dwWidth, &dwHeight);
 		m_AmmoSz.x = (int)dwWidth;
 		m_AmmoSz.y = (int)dwHeight;
 	}
 
 	if (!m_hAmmoEmpty)
 	{
-        m_hAmmoEmpty = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\ammo_Empty.pcx");
-        g_pLTClient->OptimizeSurface (m_hAmmoEmpty, hTransColor);
-        g_pLTClient->GetSurfaceDims(m_hAmmoEmpty, &dwWidth, &dwHeight);
+		m_hAmmoEmpty = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\ammo_Empty.pcx");
+		g_pLTClient->OptimizeSurface (m_hAmmoEmpty, hTransColor);
+		g_pLTClient->GetSurfaceDims(m_hAmmoEmpty, &dwWidth, &dwHeight);
 	}
 
 	// creates surface to draw bars on
 	// create surface for icon
 	UpdateAmmoSurfaces();
 
-    m_bAmmoInit = LTTRUE;
+	m_bAmmoInit = LTTRUE;
 
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateAmmoSurfaces
 //
 //	PURPOSE:	Create a surface to draw the ammo bars on, and an ammo icon
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateAmmoSurfaces()
 {
 	if (m_hAmmoIcon)
 	{
-        g_pLTClient->DeleteSurface (m_hAmmoIcon);
-        m_hAmmoIcon = LTNULL;
+		g_pLTClient->DeleteSurface (m_hAmmoIcon);
+		m_hAmmoIcon = LTNULL;
 	}
 
-    if (!g_pLTClient || !g_pWeaponMgr || !m_pnAmmo) return;
+	if (!g_pLTClient || !g_pWeaponMgr || !m_pnAmmo) return;
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(m_nCurrentWeapon);
 	if (!pWeapon) return;
 
@@ -2639,31 +2519,31 @@ void CPlayerStats::UpdateAmmoSurfaces()
 
 	if (pAmmo->szSmallIcon[0])
 	{
-        m_hAmmoIcon = g_pLTClient->CreateSurfaceFromBitmap(pAmmo->szSmallIcon);
+		m_hAmmoIcon = g_pLTClient->CreateSurfaceFromBitmap(pAmmo->szSmallIcon);
 	}
 	else
 	{
-        m_hAmmoIcon = g_pLTClient->CreateSurfaceFromBitmap("interface\\missingslot.pcx");
+		m_hAmmoIcon = g_pLTClient->CreateSurfaceFromBitmap("interface\\missingslot.pcx");
 	}
-    HLTCOLOR hTransColor = kTransBlack;
-    g_pLTClient->OptimizeSurface (m_hAmmoIcon, hTransColor);
-    g_pLTClient->SetSurfaceAlpha(m_hAmmoIcon,0.5f);
+	HLTCOLOR hTransColor = kTransBlack;
+	g_pLTClient->OptimizeSurface (m_hAmmoIcon, hTransColor);
+	g_pLTClient->SetSurfaceAlpha(m_hAmmoIcon,0.5f);
 
-	int nClipWidth = pWeapon->nShotsPerClip * m_AmmoSz.x;
-	int nBarWidth = (int)( 100.0f * m_fBarScale );
+	int nClipWidth	= pWeapon->nShotsPerClip * m_AmmoSz.x;
+	int nBarWidth	= (int)( 100.0f * m_fBarScale );
 
-	int nWidth  = Max(nClipWidth,nBarWidth) + abs(m_AmmoClipOffset.y) + 2;
-	int nHeight = Max(m_AmmoSz.y,m_nBarHeight) + abs(m_AmmoClipOffset.y) + 2;
+	int nWidth	= Max(nClipWidth,nBarWidth) + abs(m_AmmoClipOffset.y) + 2;
+	int nHeight	= Max(m_AmmoSz.y,m_nBarHeight) + abs(m_AmmoClipOffset.y) + 2;
 
 	// Jake: For some reason Camera disabler has a "ShotsPerClip" of 1000 or so. 
 	// Uhhh, that's no good. Fix our ammo if it ever becomes a problem!
 	if (nWidth > m_rcAmmoHUD.right || nHeight > m_rcAmmoHUD.bottom || m_rcAmmoHUD.right > g_pGameClientShell->GetScreenWidth() || m_rcAmmoHUD.bottom > g_pGameClientShell->GetScreenHeight())
 	{
 		if (m_hHUDAmmo)
-            g_pLTClient->DeleteSurface (m_hHUDAmmo);
-        m_hHUDAmmo = LTNULL;
+			g_pLTClient->DeleteSurface (m_hHUDAmmo);
+		m_hHUDAmmo = LTNULL;
 
-        m_hHUDAmmo = g_pLTClient->CreateSurface(nWidth,nHeight);
+		m_hHUDAmmo = g_pLTClient->CreateSurface(nWidth,nHeight);
 
 		m_rcAmmoHUD.right = nWidth;
 		m_rcAmmoHUD.bottom = nHeight;
@@ -2680,161 +2560,145 @@ void CPlayerStats::UpdateAmmoSurfaces()
 
 	ClearSurface(m_hHUDAmmo,hTransColor);
 
-    g_pLTClient->OptimizeSurface (m_hHUDAmmo, hTransColor);
-    g_pLTClient->SetSurfaceAlpha(m_hHUDAmmo,0.5f);
+	g_pLTClient->OptimizeSurface (m_hHUDAmmo, hTransColor);
+	g_pLTClient->SetSurfaceAlpha(m_hHUDAmmo,0.5f);
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DestroyAmmoSurfaces
 //
 //	PURPOSE:	Destroy surfaces for health and armor display
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::DestroyAmmoSurfaces()
 {
 	if (m_hHUDAmmo)
-        g_pLTClient->DeleteSurface (m_hHUDAmmo);
-    m_hHUDAmmo = LTNULL;
+		g_pLTClient->DeleteSurface (m_hHUDAmmo);
+	m_hHUDAmmo = LTNULL;
 
 	if (m_hAmmoBar)
-        g_pLTClient->DeleteSurface (m_hAmmoBar);
-    m_hAmmoBar = LTNULL;
+		g_pLTClient->DeleteSurface (m_hAmmoBar);
+	m_hAmmoBar = LTNULL;
 
 	if (m_hAmmoIcon)
-        g_pLTClient->DeleteSurface (m_hAmmoIcon);
-    m_hAmmoIcon = LTNULL;
+		g_pLTClient->DeleteSurface (m_hAmmoIcon);
+	m_hAmmoIcon = LTNULL;
 
 	if (m_hAmmoFull)
-        g_pLTClient->DeleteSurface (m_hAmmoFull);
-    m_hAmmoFull = LTNULL;
+		g_pLTClient->DeleteSurface (m_hAmmoFull);
+	m_hAmmoFull = LTNULL;
 
 	if (m_hAmmoEmpty)
-        g_pLTClient->DeleteSurface (m_hAmmoEmpty);
-    m_hAmmoEmpty = LTNULL;
+		g_pLTClient->DeleteSurface (m_hAmmoEmpty);
+	m_hAmmoEmpty = LTNULL;
 
-    m_bAmmoInit = LTFALSE;
+	m_bAmmoInit = LTFALSE;
 
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::CreateAirSurfaces
 //
 //	PURPOSE:	Create surfaces to draw the air meter on
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::CreateAirSurfaces()
 {
-    HLTCOLOR hTransColor = kTransBlack;
+	HLTCOLOR hTransColor = kTransBlack;
 
 	// creates surface to draw bars on
 	UpdateAirSurfaces();
 
 	if (!m_hAirBar)
 	{
-        uint32 dwWidth, dwHeight;
-        m_hAirBar = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Bar_Air.pcx");
-        g_pLTClient->OptimizeSurface (m_hAirBar, hTransColor);
-        g_pLTClient->GetSurfaceDims(m_hAirBar, &dwWidth, &dwHeight);
+		uint32 dwWidth, dwHeight;
+		m_hAirBar = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Bar_Air.pcx");
+		g_pLTClient->OptimizeSurface (m_hAirBar, hTransColor);
+		g_pLTClient->GetSurfaceDims(m_hAirBar, &dwWidth, &dwHeight);
 		m_rcAirBar.right = dwWidth;
 		m_rcAirBar.bottom = dwHeight;
 	}
 
 	if (!m_hAirIcon)
 	{
-        m_hAirIcon = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Icon_Air.pcx");
-        g_pLTClient->OptimizeSurface (m_hAirIcon, hTransColor);
-        g_pLTClient->SetSurfaceAlpha(m_hAirIcon,0.5f);
+		m_hAirIcon = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Icon_Air.pcx");
+		g_pLTClient->OptimizeSurface (m_hAirIcon, hTransColor);
+		g_pLTClient->SetSurfaceAlpha(m_hAirIcon,0.5f);
 	}
 
 	if (!m_hAirStr)
 	{
-        HSTRING hStr = g_pLTClient->CreateString("888");
-        LTIntPt txtSize = g_pInterfaceResMgr->GetAirFont()->GetTextExtents(hStr);
-        g_pLTClient->FreeString(hStr);
+		HSTRING hStr = g_pLTClient->CreateString("888");
+		LTIntPt txtSize = g_pInterfaceResMgr->GetAirFont()->GetTextExtents(hStr);
+		g_pLTClient->FreeString(hStr);
 
-        m_hAirStr = g_pLTClient->CreateSurface(txtSize.x,txtSize.y);
-        g_pLTClient->OptimizeSurface (m_hAirStr, hTransColor);
-        g_pLTClient->SetSurfaceAlpha(m_hAirStr,0.5f);
+		m_hAirStr = g_pLTClient->CreateSurface(txtSize.x,txtSize.y);
+		g_pLTClient->OptimizeSurface (m_hAirStr, hTransColor);
+		g_pLTClient->SetSurfaceAlpha(m_hAirStr,0.5f);
 	}
 
-    m_bAirInit = LTTRUE;
+	m_bAirInit = LTTRUE;
 
 }
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::UpdateAirSurfaces
 //
 //	PURPOSE:	Create a surface to draw the air bar on
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::UpdateAirSurfaces()
 {
 	if (m_hHUDAir)
-        g_pLTClient->DeleteSurface (m_hHUDAir);
-    m_hHUDAir = LTNULL;
+		g_pLTClient->DeleteSurface (m_hHUDAir);
+	m_hHUDAir = LTNULL;
 
-    HLTCOLOR hTransColor = kTransBlack;
+	HLTCOLOR hTransColor = kTransBlack;
 	int nWidth = (int)( 100.0f * m_fBarScale ) + 2;
 	int nHeight = m_nBarHeight + 2;
 
-    m_hHUDAir = g_pLTClient->CreateSurface(nWidth,nHeight);
+	m_hHUDAir = g_pLTClient->CreateSurface(nWidth,nHeight);
 
-    g_pLTClient->OptimizeSurface (m_hHUDAir, hTransColor);
-    g_pLTClient->SetSurfaceAlpha(m_hHUDAir,0.5f);
+	g_pLTClient->OptimizeSurface (m_hHUDAir, hTransColor);
+	g_pLTClient->SetSurfaceAlpha(m_hHUDAir,0.5f);
 
 	m_rcAir.left = 1;
 	m_rcAir.top = 1;
 	m_rcAir.right = (int)(100.0f * m_fBarScale) + m_rcAir.left;
 	m_rcAir.bottom = m_nBarHeight + m_rcAir.top;
-
 }
 
-
-
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DestroyAirSurfaces
 //
 //	PURPOSE:	Destroy surfaces for air display
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::DestroyAirSurfaces()
 {
 	if (m_hHUDAir)
-        g_pLTClient->DeleteSurface (m_hHUDAir);
-    m_hHUDAir = LTNULL;
+		g_pLTClient->DeleteSurface (m_hHUDAir);
+	m_hHUDAir = LTNULL;
 
 	if (m_hAirBar)
-        g_pLTClient->DeleteSurface (m_hAirBar);
-    m_hAirBar = LTNULL;
+		g_pLTClient->DeleteSurface (m_hAirBar);
+	m_hAirBar = LTNULL;
 
 	if (m_hAirIcon)
-        g_pLTClient->DeleteSurface (m_hAirIcon);
-    m_hAirIcon = LTNULL;
+		g_pLTClient->DeleteSurface (m_hAirIcon);
+	m_hAirIcon = LTNULL;
 
 	if (m_hAirStr)
-        g_pLTClient->DeleteSurface (m_hAirStr);
-    m_hAirStr = LTNULL;
+		g_pLTClient->DeleteSurface (m_hAirStr);
+	m_hAirStr = LTNULL;
 
-    m_bAirInit = LTFALSE;
-
+	m_bAirInit = LTFALSE;
 }
 
-
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DrawScope()
 //
 //	PURPOSE:	Draw the mask and crosshairs for the zoomed view
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::DrawScope(HSURFACE hScreen, int nLeft, int nTop, int nRight, int nBottom)
@@ -2845,26 +2709,25 @@ void CPlayerStats::DrawScope(HSURFACE hScreen, int nLeft, int nTop, int nRight, 
 	if (!pWeapon || pWeapon->IsDisabled()) return;
 
 
-    LTRect rect;
+	LTRect rect;
 	int nType = 1;
-	int nScreenWidth		= nRight - nLeft;
-	int nScreenHeight		= nBottom - nTop;
+	int nScreenWidth	= nRight - nLeft;
+	int nScreenHeight	= nBottom - nTop;
 
-    HLTCOLOR hGray  = SETRGB(128,128,128);
-    HLTCOLOR hGold  = SETRGB(140,128,20);
+	HLTCOLOR hGray	= SETRGB(128,128,128);
+	HLTCOLOR hGold	= SETRGB(140,128,20);
 
 	if (g_pGameClientShell->UsingNightVision())
 	{
-		hGold  = SETRGB(128,255,128);
+		hGold	= SETRGB(128,255,128);
 	}
-
 
 	int cx = nLeft + (nScreenWidth) / 2;
 	int cy = nTop + (nScreenHeight) / 2;
 
 	int nRadius = (int)( g_vtScopeLRRadius.GetFloat() * (float)nScreenHeight );
 
-    LTRect srect;
+	LTRect srect;
 	srect.top = 0;
 	srect.left = 0;
 	srect.bottom = 2;
@@ -2902,28 +2765,28 @@ void CPlayerStats::DrawScope(HSURFACE hScreen, int nLeft, int nTop, int nRight, 
 			rect.left = cx - offset;
 			rect.bottom = cy;
 			rect.right = cx + offset;
-            g_pLTClient->ScaleSurfaceToSurface(hScreen, hCrossHighlight, &rect, &srect);
+			g_pLTClient->ScaleSurfaceToSurface(hScreen, hCrossHighlight, &rect, &srect);
 
 			//vertical hilight
 			rect.top = cy - offset;;
 			rect.left = cx -1 ;
 			rect.bottom = cy+offset;
 			rect.right = cx;
-            g_pLTClient->ScaleSurfaceToSurface(hScreen, hCrossHighlight, &rect, &srect);
+			g_pLTClient->ScaleSurfaceToSurface(hScreen, hCrossHighlight, &rect, &srect);
 
 			//horizontal hair
 			rect.top = cy;
 			rect.left = cx - nRadius;
 			rect.bottom = rect.top + 1;
 			rect.right = cx + nRadius;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
 
 			//vertical hair
 			rect.top = cy - nRadius;
 			rect.left = cx;
 			rect.bottom = cy + nRadius;
 			rect.right = rect.left + 1;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
 		}	break;
 	case 1:
 		{
@@ -2934,28 +2797,28 @@ void CPlayerStats::DrawScope(HSURFACE hScreen, int nLeft, int nTop, int nRight, 
 			rect.left = cx - nRadius;
 			rect.bottom = cy + 2;
 			rect.right = cx - nGap;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
 
 			//left post
 			rect.top = cy - 1;
 			rect.left = cx - nRadius;
 			rect.bottom = cy + 1;
 			rect.right = (cx - nGap) - 1;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
 
 			//right outline
 			rect.top = cy - 2;
 			rect.left = cx + nGap;
 			rect.bottom = cy + 2;
 			rect.right = cx + nRadius;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
 
 			//right post
 			rect.top = cy - 1;
 			rect.left = cx + nGap + 1;
 			rect.bottom = cy + 1;
 			rect.right = cx + nRadius;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
 
 			nGap = nScreenHeight / (int)g_vtScopeUDGap.GetFloat();
 			nRadius = (int)( g_vtScopeUDRadius.GetFloat() * (float)nScreenHeight );
@@ -2965,28 +2828,28 @@ void CPlayerStats::DrawScope(HSURFACE hScreen, int nLeft, int nTop, int nRight, 
 			rect.left = cx - 2;
 			rect.bottom = cy - nGap;
 			rect.right = cx + 2;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
 
 			//top post
 			rect.top = cy - nRadius;
 			rect.left = cx - 1;
 			rect.bottom = (cy - nGap) - 1;
 			rect.right = cx + 1;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
 
 			//bottom outline
 			rect.top = cy + nGap;
 			rect.left = cx - 2;
 			rect.bottom = cy + nRadius;
 			rect.right = cx + 2;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
 
 			//bottom post
 			rect.top = cy + nGap + 1;
 			rect.left = cx - 1;
 			rect.bottom = cy+ nRadius;
 			rect.right = cx + 1;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
 
 			nGap = nScreenHeight / (int)g_vtScopeLRGap.GetFloat();
 
@@ -2995,7 +2858,7 @@ void CPlayerStats::DrawScope(HSURFACE hScreen, int nLeft, int nTop, int nRight, 
 			rect.left = cx - nGap;
 			rect.bottom = rect.top + 1;
 			rect.right = cx + nGap;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
 
 			nGap = nScreenHeight / (int)g_vtScopeUDGap.GetFloat();
 
@@ -3004,7 +2867,7 @@ void CPlayerStats::DrawScope(HSURFACE hScreen, int nLeft, int nTop, int nRight, 
 			rect.left = cx;
 			rect.bottom = cy + nGap;
 			rect.right = rect.left + 1;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,kBlack);
 
 			nGap = nScreenHeight / (int)g_vtScopeLRGap.GetFloat();
 
@@ -3013,7 +2876,7 @@ void CPlayerStats::DrawScope(HSURFACE hScreen, int nLeft, int nTop, int nRight, 
 			rect.left = cx - nGap;
 			rect.bottom = rect.top + 1;
 			rect.right = cx + nGap;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
 
 			nGap = nScreenHeight / (int)g_vtScopeUDGap.GetFloat();
 
@@ -3022,20 +2885,16 @@ void CPlayerStats::DrawScope(HSURFACE hScreen, int nLeft, int nTop, int nRight, 
 			rect.left = cx-1;
 			rect.bottom = cy + nGap;
 			rect.right = rect.left + 1;
-            g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
+			g_pOptimizedRenderer->FillRect(hScreen,&rect,hGold);
 
 		}	break;
 	}
-
-
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DrawScuba()
 //
 //	PURPOSE:	Draw the mask for the underwater view
-//
 // ----------------------------------------------------------------------- //
 void CPlayerStats::DrawScuba(HSURFACE hScreen, int nLeft, int nTop, int nRight, int nBottom)
 {
@@ -3044,11 +2903,9 @@ void CPlayerStats::DrawScuba(HSURFACE hScreen, int nLeft, int nTop, int nRight, 
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DrawSunglass()
 //
 //	PURPOSE:	Draw 2d effects for the sunglass overlay
-//
 // ----------------------------------------------------------------------- //
 void CPlayerStats::DrawSunglass(HSURFACE hScreen, int nLeft, int nTop, int nRight, int nBottom)
 {
@@ -3068,23 +2925,23 @@ void CPlayerStats::DrawSunglass(HSURFACE hScreen, int nLeft, int nTop, int nRigh
 	{
 		if (m_hModeStr)
 		{
-            g_pLTClient->FreeString(m_hModeStr);
-            m_hModeStr = LTNULL;
+			g_pLTClient->FreeString(m_hModeStr);
+			m_hModeStr = LTNULL;
 		}
 		m_eLastMode = eCurrMode;
 		switch (eCurrMode)
 		{
 		case SUN_CAMERA:
-            m_hModeStr = g_pLTClient->FormatString(IDS_GLASS_CAMERA);
+			m_hModeStr = g_pLTClient->FormatString(IDS_GLASS_CAMERA);
 			break;
 		case SUN_MINES:
-            m_hModeStr = g_pLTClient->FormatString(IDS_GLASS_MINES);
+			m_hModeStr = g_pLTClient->FormatString(IDS_GLASS_MINES);
 			break;
 		case SUN_IR:
-            m_hModeStr = g_pLTClient->FormatString(IDS_GLASS_IR);
+			m_hModeStr = g_pLTClient->FormatString(IDS_GLASS_IR);
 			break;
 		case SUN_INVIS_INK:
-            m_hModeStr = g_pLTClient->FormatString(IDS_GLASS_INK);
+			m_hModeStr = g_pLTClient->FormatString(IDS_GLASS_INK);
 			break;
 		}
 	}
@@ -3098,19 +2955,16 @@ void CPlayerStats::DrawSunglass(HSURFACE hScreen, int nLeft, int nTop, int nRigh
 	}
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::HaveAirSupply
 //
 //	PURPOSE:	Returns true if current gear provides air supply
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerStats::HaveAirSupply()
 {
-    LTBOOL bAir = LTFALSE;
-    GEAR* pGear = LTNULL;
+	LTBOOL bAir = LTFALSE;
+	GEAR* pGear = LTNULL;
 
 	int numGear = g_pWeaponMgr->GetNumGearTypes();
 	for (int nGearId=0; nGearId < numGear && !bAir; nGearId++)
@@ -3132,7 +2986,7 @@ void CPlayerStats::NextLayout()
 	m_nCurrentLayout++;
 	if (m_nCurrentLayout >= g_pLayoutMgr->GetNumHUDLayouts())
 		m_nCurrentLayout = 0;
-    g_vtHUDLayout.SetFloat((LTFLOAT)m_nCurrentLayout);
+	g_vtHUDLayout.SetFloat((LTFLOAT)m_nCurrentLayout);
 	UpdateLayout();
 }
 
@@ -3140,8 +2994,8 @@ void CPlayerStats::PrevLayout()
 {
 	m_nCurrentLayout--;
 	if (m_nCurrentLayout < 0)
-		m_nCurrentLayout =  g_pLayoutMgr->GetNumHUDLayouts() - 1;
-    g_vtHUDLayout.SetFloat((LTFLOAT)m_nCurrentLayout);
+		m_nCurrentLayout = g_pLayoutMgr->GetNumHUDLayouts() - 1;
+	g_vtHUDLayout.SetFloat((LTFLOAT)m_nCurrentLayout);
 	UpdateLayout();
 }
 
@@ -3182,9 +3036,9 @@ void CPlayerStats::UpdateLayout()
 	m_DamageBasePos		= g_pLayoutMgr->GetDamageBasePos(m_nCurrentLayout);
 
 	int		nOldHeight = m_nBarHeight;
-    LTFLOAT  fOldScale = m_fBarScale;
-	m_nBarHeight		= g_pLayoutMgr->GetBarHeight(m_nCurrentLayout);
-	m_fBarScale			= g_pLayoutMgr->GetBarScale(m_nCurrentLayout);
+	LTFLOAT		fOldScale = m_fBarScale;
+	m_nBarHeight	= g_pLayoutMgr->GetBarHeight(m_nCurrentLayout);
+	m_fBarScale	= g_pLayoutMgr->GetBarScale(m_nCurrentLayout);
 
 	if (nOldHeight != m_nBarHeight || fOldScale != m_fBarScale)
 	{
@@ -3208,18 +3062,18 @@ void CPlayerStats::UpdateLayout()
 
 void CPlayerStats::ClearSurface(HSURFACE hSurf, HLTCOLOR hColor)
 {
-    uint32 dwWidth, dwHeight;
-    g_pLTClient->GetSurfaceDims(hSurf, &dwWidth, &dwHeight);
-    LTRect rcSrc;
+	uint32 dwWidth, dwHeight;
+	g_pLTClient->GetSurfaceDims(hSurf, &dwWidth, &dwHeight);
+	LTRect rcSrc;
 	rcSrc.left = rcSrc.top = 0;
 	rcSrc.right = dwWidth;
 	rcSrc.bottom = dwHeight;
-    g_pOptimizedRenderer->FillRect(hSurf, &rcSrc, hColor);
+	g_pOptimizedRenderer->FillRect(hSurf, &rcSrc, hColor);
 }
 
 void CPlayerStats::UpdateFlash()
 {
-    LTFLOAT fDelta = g_pGameClientShell->GetFrameTime();
+	LTFLOAT fDelta = g_pGameClientShell->GetFrameTime();
 	if (m_fTotalHealthFlash > 0.0f)
 	{
 		m_fTotalHealthFlash -= fDelta;
@@ -3231,7 +3085,7 @@ void CPlayerStats::UpdateFlash()
 		}
 	}
 	else
-        m_bHealthFlash = LTFALSE;
+		m_bHealthFlash = LTFALSE;
 
 	if (m_fTotalArmorFlash > 0.0f)
 	{
@@ -3244,7 +3098,7 @@ void CPlayerStats::UpdateFlash()
 		}
 	}
 	else
-        m_bArmorFlash = LTFALSE;
+		m_bArmorFlash = LTFALSE;
 }
 
 
@@ -3297,27 +3151,24 @@ void CPlayerStats::UpdateCrosshairColors()
 		fLastAlpha = 1.0f;
 		g_vtCrosshairAlpha.SetFloat(1.0f);
 	}
-    HLTCOLOR hCursorColor = g_pLTClient->SetupColor1(fLastColorR,fLastColorG,fLastColorB,LTFALSE);
-    LTRect rect(0,0,2,2);
+	HLTCOLOR hCursorColor = g_pLTClient->SetupColor1(fLastColorR,fLastColorG,fLastColorB,LTFALSE);
+	LTRect rect(0,0,2,2);
 
 	if (!m_hArmedCrosshair)
 	{
-        m_hArmedCrosshair = g_pLTClient->CreateSurface(2,2);
+		m_hArmedCrosshair = g_pLTClient->CreateSurface(2,2);
 	}
 
-    g_pOptimizedRenderer->FillRect(m_hArmedCrosshair,&rect,hCursorColor);
-    g_pLTClient->OptimizeSurface (m_hArmedCrosshair, kTransBlack);
-    g_pLTClient->SetSurfaceAlpha(m_hArmedCrosshair,fLastAlpha);
-
+	g_pOptimizedRenderer->FillRect(m_hArmedCrosshair,&rect,hCursorColor);
+	g_pLTClient->OptimizeSurface (m_hArmedCrosshair, kTransBlack);
+	g_pLTClient->SetSurfaceAlpha(m_hArmedCrosshair,fLastAlpha);
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DrawCrosshair()
 //
 //	PURPOSE:	Draw the crosshair
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::DrawCrosshair(HSURFACE hScreen, int nCenterX,
@@ -3378,11 +3229,9 @@ void CPlayerStats::DrawCrosshair(HSURFACE hScreen, int nCenterX,
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DrawUnArmedCrosshair()
 //
 //	PURPOSE:	Draw the melee weapon crosshair
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::DrawUnArmedCrosshair(HSURFACE hScreen, int nCenterX, int nCenterY)
@@ -3391,11 +3240,9 @@ void CPlayerStats::DrawUnArmedCrosshair(HSURFACE hScreen, int nCenterX, int nCen
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DrawArmedCrosshair()
 //
 //	PURPOSE:	Draw the weapon crosshair
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
@@ -3404,23 +3251,23 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 	if (g_pInterfaceMgr->GetSunglassMode() == SUN_CAMERA) return;
 
 	LTRect srect(0,0,2,2);
-    LTFLOAT  fRad = 0.25;
+	LTFLOAT fRad = 0.25;
 	if (g_vtCrosshairDynamic.GetFloat() >= 1.0f && pWeapon)
 	{
 		float fTemp = pWeapon->GetMovementPerturb();
 		if (fabs(fRad-fTemp) > 0.1f)
 			fRad = fTemp;
 	}
-	int nSize = (int)(g_vtCrosshairBarMin.GetFloat() + (fRad * (g_vtCrosshairBarMax.GetFloat() - g_vtCrosshairBarMin.GetFloat())));
-	int nInside = (int)(g_vtCrosshairGapMin.GetFloat() + (fRad * (g_vtCrosshairGapMax.GetFloat() - g_vtCrosshairGapMin.GetFloat())));
-	int nOutside = nInside + nSize;
-	int nSlide =  nInside + (int)(fRad * nSize);
+	int nSize	= (int)(g_vtCrosshairBarMin.GetFloat() + (fRad * (g_vtCrosshairBarMax.GetFloat() - g_vtCrosshairBarMin.GetFloat())));
+	int nInside	= (int)(g_vtCrosshairGapMin.GetFloat() + (fRad * (g_vtCrosshairGapMax.GetFloat() - g_vtCrosshairGapMin.GetFloat())));
+	int nOutside	= nInside + nSize;
+	int nSlide	= nInside + (int)(fRad * nSize);
 
 
-    LTRect rect;
+	LTRect rect;
 
 	int style = (int)g_vtCrosshairStyle.GetFloat();
-    uint32 dwFlags = 0;
+	uint32 dwFlags = 0;
 	switch (style)
 	{
 	case 0:
@@ -3454,7 +3301,7 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 		rect.left = nCenterX - nOutside;
 		rect.bottom = nCenterY + 1;
 		rect.right = nCenterX - nInside;
-        g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
+		g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
 	}
 	if (dwFlags & CH_XLEFT)
 	{
@@ -3462,7 +3309,7 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 		rect.left = (nCenterX - nSlide) - 1;
 		rect.bottom = nCenterY + nInside/2;
 		rect.right = nCenterX - nSlide;
-        g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
+		g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
 	}
 
 	//right
@@ -3472,7 +3319,7 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 		rect.left = nCenterX + nInside;
 		rect.bottom = nCenterY + 1;
 		rect.right = nCenterX + nOutside;
-        g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
+		g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
 	}
 	if (dwFlags & CH_XRIGHT)
 	{
@@ -3480,7 +3327,7 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 		rect.left = (nCenterX + nSlide);
 		rect.bottom = nCenterY + nInside/2;
 		rect.right = nCenterX + nSlide + 1;
-        g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
+		g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
 	}
 	if (dwFlags & CH_FULLRIGHT)
 	{
@@ -3488,7 +3335,7 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 		rect.left = nCenterX;
 		rect.bottom = nCenterY + 1;
 		rect.right = nCenterX + nOutside;
-        g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
+		g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
 	}
 
 	//top
@@ -3498,7 +3345,7 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 		rect.left = nCenterX - 1;
 		rect.bottom = nCenterY - nInside;
 		rect.right = nCenterX + 1;
-        g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
+		g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
 	}
 	if (dwFlags & CH_XTOP)
 	{
@@ -3506,7 +3353,7 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 		rect.left = nCenterX - nInside/2;
 		rect.bottom = nCenterY - nSlide;
 		rect.right = nCenterX + nInside/2;
-        g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
+		g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
 	}
 
 	//bottom
@@ -3516,7 +3363,7 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 		rect.left = nCenterX - 1;
 		rect.bottom = nCenterY + nOutside;
 		rect.right = nCenterX + 1;
-        g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
+		g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
 	}
 	if (dwFlags & CH_XBOTTOM)
 	{
@@ -3524,7 +3371,7 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 		rect.left = nCenterX - nInside/2;
 		rect.bottom = nCenterY + nSlide + 1;
 		rect.right = nCenterX + nInside/2;
-        g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
+		g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
 	}
 	if (dwFlags & CH_FULLBOTTOM)
 	{
@@ -3532,7 +3379,7 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 		rect.left = nCenterX - 1;
 		rect.bottom = nCenterY + nOutside;
 		rect.right = nCenterX + 1;
-        g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
+		g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
 	}
 
 	if (dwFlags & CH_DOT)
@@ -3541,18 +3388,16 @@ void CPlayerStats::DrawArmedCrosshair(CWeaponModel* pWeapon, HSURFACE hScreen,
 		rect.left = nCenterX -1;
 		rect.bottom = nCenterY + 1;
 		rect.right = nCenterX + 1;
-        g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
+		g_pLTClient->ScaleSurfaceToSurface(hScreen, m_hArmedCrosshair, &rect, &srect);
 	}
 
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::IsGadgetActivatable()
 //
 //	PURPOSE:	Can the passed in object be activated with our
-//				currently selected gadget.
-//
+//			currently selected gadget.
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerStats::IsGadgetActivatable(HOBJECT hObj)
@@ -3565,7 +3410,7 @@ LTBOOL CPlayerStats::IsGadgetActivatable(HOBJECT hObj)
 	DamageType eType = pAmmo->eInstDamageType;
 
 	uint32 dwUserFlags = 0;
-    g_pLTClient->GetObjectUserFlags(hObj, &dwUserFlags);
+	g_pLTClient->GetObjectUserFlags(hObj, &dwUserFlags);
 
 	// If its a character, see if our current weapon is the
 	// lighter...
@@ -3639,13 +3484,10 @@ LTBOOL CPlayerStats::IsGadgetActivatable(HOBJECT hObj)
 	return bIsGadgetActivatable;
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DrawActivateCrosshair()
 //
 //	PURPOSE:	Draw the activate weapon crosshair
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerStats::DrawActivateCrosshair(HOBJECT hObj, HSURFACE hScreen,
@@ -3656,7 +3498,7 @@ LTBOOL CPlayerStats::DrawActivateCrosshair(HOBJECT hObj, HSURFACE hScreen,
 	if (!hObj) return LTFALSE;
 
 	uint32 dwUserFlags = 0;
-    g_pLTClient->GetObjectUserFlags(hObj, &dwUserFlags);
+	g_pLTClient->GetObjectUserFlags(hObj, &dwUserFlags);
 
 	dwUserFlags |= dwInitialUsrFlags;
 
@@ -3721,17 +3563,14 @@ LTBOOL CPlayerStats::DrawActivateCrosshair(HOBJECT hObj, HSURFACE hScreen,
 		}
 	}
 
-
 	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DrawSurfaceCrosshair()
 //
 //	PURPOSE:	Draw the surface crosshair
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::DrawSurfaceCrosshair(HSURFACE hSurf, HSURFACE hScreen,
@@ -3740,10 +3579,10 @@ void CPlayerStats::DrawSurfaceCrosshair(HSURFACE hSurf, HSURFACE hScreen,
 	if (g_pInterfaceMgr->GetSunglassMode() == SUN_CAMERA) return;
 
 	LTRect rect;
-    LTRect srect(0,0,2,2);
+	LTRect srect(0,0,2,2);
 
-    uint32 dwWidth, dwHeight;
-    g_pLTClient->GetSurfaceDims(hSurf, &dwWidth, &dwHeight);
+	uint32 dwWidth, dwHeight;
+	g_pLTClient->GetSurfaceDims(hSurf, &dwWidth, &dwHeight);
 	srect.right = dwWidth;
 	srect.bottom = dwHeight;
 
@@ -3756,14 +3595,11 @@ void CPlayerStats::DrawSurfaceCrosshair(HSURFACE hSurf, HSURFACE hScreen,
 		&srect, kTransBlack);
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::TestForActivationObject()
 //
 //	PURPOSE:	See if there is an activation object directly in front of
-//				the camera.
-//
+//			the camera.
 // ----------------------------------------------------------------------- //
 
 HOBJECT CPlayerStats::TestForActivationObject(uint32 & dwUsrFlags, LTFLOAT & fDistAway)
@@ -3776,25 +3612,25 @@ HOBJECT CPlayerStats::TestForActivationObject(uint32 & dwUsrFlags, LTFLOAT & fDi
 	HOBJECT hCamera = g_pGameClientShell->GetCamera();
 	if (!hCamera) return LTNULL;
 
-    LTRotation rRot;
-    LTVector vU, vR, vF, vPos;
+	LTRotation rRot;
+	LTVector vU, vR, vF, vPos;
 
-    g_pLTClient->GetObjectPos(hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetObjectPos(hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-  	HOBJECT hPlayerObj = g_pLTClient->GetClientObject();
+	HOBJECT hPlayerObj = g_pLTClient->GetClientObject();
 	if (!hPlayerObj) return LTNULL;
 
 	LTVector vDims;
-    g_pLTClient->Physics()->GetObjectDims(hPlayerObj, &vDims);
+	g_pLTClient->Physics()->GetObjectDims(hPlayerObj, &vDims);
 
 	// Use our current weapon's range if it is a gadget...
 
 	WEAPON* pWeaponData = g_pWeaponMgr->GetWeapon(m_nCurrentWeapon);
 	if (!pWeaponData) return LTNULL;
 
-    LTFLOAT fDist = (vDims.x + vDims.z)/2.0f + c_ActivationDist;
+	LTFLOAT fDist = (vDims.x + vDims.z)/2.0f + c_ActivationDist;
 	LTFLOAT fMaxDist = fDist;
 
 	AMMO* pAmmo = g_pWeaponMgr->GetAmmo(m_nCurrentAmmo);
@@ -3814,18 +3650,18 @@ HOBJECT CPlayerStats::TestForActivationObject(uint32 & dwUsrFlags, LTFLOAT & fDi
 	IntersectQuery IQuery;
 	IntersectInfo IInfo;
 
-	IQuery.m_From = vPos;
-	IQuery.m_To   = IQuery.m_From + (vF * fDist);;
+	IQuery.m_From	= vPos;
+	IQuery.m_To	= IQuery.m_From + (vF * fDist);;
 
-	IQuery.m_Flags = INTERSECT_HPOLY | INTERSECT_OBJECTS | IGNORE_NONSOLID;
+	IQuery.m_Flags	= INTERSECT_HPOLY | INTERSECT_OBJECTS | IGNORE_NONSOLID;
 
-	IQuery.m_FilterFn	  = ActivateFilterFn;
-	IQuery.m_pUserData	  = this;
-	IQuery.m_PolyFilterFn = DoVectorPolyFilterFn;
+	IQuery.m_FilterFn	= ActivateFilterFn;
+	IQuery.m_pUserData	= this;
+	IQuery.m_PolyFilterFn	= DoVectorPolyFilterFn;
 
 	if (g_pLTClient->IntersectSegment(&IQuery, &IInfo))
 	{
-        if (IsMainWorld(IInfo.m_hObject))
+		if (IsMainWorld(IInfo.m_hObject))
 		{
 			if (IInfo.m_hPoly != INVALID_HPOLY)
 			{
@@ -3844,7 +3680,7 @@ HOBJECT CPlayerStats::TestForActivationObject(uint32 & dwUsrFlags, LTFLOAT & fDi
 		else
 		{
 			uint32 dwUserFlags = 0;
-		    g_pLTClient->GetObjectUserFlags(IInfo.m_hObject, &dwUserFlags);
+			g_pLTClient->GetObjectUserFlags(IInfo.m_hObject, &dwUserFlags);
 
 			// If its an activatable object, only show the activate
 			// crosshair if we are close enough...
@@ -3871,18 +3707,13 @@ HOBJECT CPlayerStats::TestForActivationObject(uint32 & dwUsrFlags, LTFLOAT & fDi
 
 		hObj = IInfo.m_hObject;
 	}
-
 	return hObj;
 }
 
-
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::ShowObjectives()
 //
 //	PURPOSE:	Draw the stats
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::ShowObjectives()
@@ -3897,16 +3728,14 @@ void CPlayerStats::HideObjectives()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DrawObjectives()
 //
 //	PURPOSE:	Draw the stats
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::DrawObjectives(HSURFACE hScreen)
 {
-    if (!g_pLTClient || !m_bObjVisible) return;
+	if (!g_pLTClient || !m_bObjVisible) return;
 	if (m_Objectives.nNumObjectives < 1) return;
 
 
@@ -3933,7 +3762,7 @@ void CPlayerStats::DrawObjectives(HSURFACE hScreen)
 		}
 	}
 
-   	int nWidth = (int)(xRatio * (float)(g_rcObjectives.right - g_rcObjectives.left));
+	int nWidth = (int)(xRatio * (float)(g_rcObjectives.right - g_rcObjectives.left));
 	int nHeight = (int)(yRatio * (float)(g_rcObjectives.bottom - g_rcObjectives.top));
 
 
@@ -3958,7 +3787,7 @@ void CPlayerStats::DrawObjectives(HSURFACE hScreen)
 	for (int i = m_Objectives.nNumObjectives-1; i >= 0 ; i--)
 	{
 
-        uint32 objID = m_Objectives.dwObjectives[i];
+		uint32 objID = m_Objectives.dwObjectives[i];
 		HSURFACE hCheck = LTNULL;
 		HLTCOLOR hColor = kWhite;
 
@@ -3975,11 +3804,11 @@ void CPlayerStats::DrawObjectives(HSURFACE hScreen)
 
 
 		g_pLTClient->SetOptimized2DBlend(LTSURFACEBLEND_MASK);
-        g_pLTClient->DrawSurfaceToSurface(hScreen, hCheck, LTNULL, x + 2, y + g_nObjBmpOffset + 2);
+		g_pLTClient->DrawSurfaceToSurface(hScreen, hCheck, LTNULL, x + 2, y + g_nObjBmpOffset + 2);
 
 		g_pLTClient->SetOptimized2DBlend(LTSURFACEBLEND_MASKADD);
 		g_pLTClient->SetOptimized2DColor(hColor);
-        g_pLTClient->DrawSurfaceToSurface(hScreen, hCheck, LTNULL, x, y + g_nObjBmpOffset);
+		g_pLTClient->DrawSurfaceToSurface(hScreen, hCheck, LTNULL, x, y + g_nObjBmpOffset);
 
 		g_pLTClient->SetOptimized2DColor(kWhite);
 		g_pLTClient->SetOptimized2DBlend(LTSURFACEBLEND_ALPHA);
@@ -4009,89 +3838,77 @@ void CPlayerStats::DrawObjectives(HSURFACE hScreen)
 
 		rcBanner = LTRect(x,y-2,x+nWidth,y);
 		g_pOptimizedRenderer->FillRect(hScreen,&rcBanner,hTeamColor);
-
 	}
-
-
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DeleteCrosshairs()
 //
 //	PURPOSE:	Free crosshair surfaces
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::DeleteCrosshairs()
 {
-    if (m_hArmedCrosshair) g_pLTClient->DeleteSurface(m_hArmedCrosshair);
-    if (m_hUnarmedCrosshair) g_pLTClient->DeleteSurface(m_hUnarmedCrosshair);
-    if (m_hActivateCrosshair) g_pLTClient->DeleteSurface(m_hActivateCrosshair);
-    if (m_hInnocentCrosshair) g_pLTClient->DeleteSurface(m_hInnocentCrosshair);
-    if (m_hActivateGadgetCrosshair) g_pLTClient->DeleteSurface(m_hActivateGadgetCrosshair);
+	if (m_hArmedCrosshair) g_pLTClient->DeleteSurface(m_hArmedCrosshair);
+	if (m_hUnarmedCrosshair) g_pLTClient->DeleteSurface(m_hUnarmedCrosshair);
+	if (m_hActivateCrosshair) g_pLTClient->DeleteSurface(m_hActivateCrosshair);
+	if (m_hInnocentCrosshair) g_pLTClient->DeleteSurface(m_hInnocentCrosshair);
+	if (m_hActivateGadgetCrosshair) g_pLTClient->DeleteSurface(m_hActivateGadgetCrosshair);
 
 	if (hCrossHighlight) g_pLTClient->DeleteSurface(hCrossHighlight);
 
 
-    m_hArmedCrosshair			= LTNULL;
-    m_hUnarmedCrosshair			= LTNULL;
-    m_hActivateCrosshair		= LTNULL;
+	m_hArmedCrosshair		= LTNULL;
+	m_hUnarmedCrosshair		= LTNULL;
+	m_hActivateCrosshair		= LTNULL;
 	m_hInnocentCrosshair		= LTNULL;
 	m_hActivateGadgetCrosshair	= LTNULL;
-    hCrossHighlight				= LTNULL;
-
+	hCrossHighlight			= LTNULL;
 }
 
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::CreateCrosshairs()
 //
 //	PURPOSE:	Create crosshair surfaces
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerStats::CreateCrosshairs()
 {
-
 	// load the surfaces
 
-    m_hUnarmedCrosshair = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Unarmed.pcx");
-    HLTCOLOR hTransColor = kTransBlack;
-    g_pLTClient->OptimizeSurface (m_hUnarmedCrosshair, hTransColor);
+	m_hUnarmedCrosshair = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Unarmed.pcx");
+	HLTCOLOR hTransColor = kTransBlack;
+	g_pLTClient->OptimizeSurface (m_hUnarmedCrosshair, hTransColor);
 
-    m_hActivateCrosshair = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Activate.pcx");
-    hTransColor = kTransBlack;
-    g_pLTClient->OptimizeSurface(m_hActivateCrosshair, hTransColor);
+	m_hActivateCrosshair = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Activate.pcx");
+	hTransColor = kTransBlack;
+	g_pLTClient->OptimizeSurface(m_hActivateCrosshair, hTransColor);
 
-    m_hInnocentCrosshair = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Innocent.pcx");
-    hTransColor = kTransBlack;
-    g_pLTClient->OptimizeSurface(m_hInnocentCrosshair, hTransColor);
+	m_hInnocentCrosshair = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\Innocent.pcx");
+	hTransColor = kTransBlack;
+	g_pLTClient->OptimizeSurface(m_hInnocentCrosshair, hTransColor);
 
-    m_hActivateGadgetCrosshair = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\ActivateGadget.pcx");
-    hTransColor = kTransBlack;
-    g_pLTClient->OptimizeSurface(m_hActivateGadgetCrosshair, hTransColor);
+	m_hActivateGadgetCrosshair = g_pLTClient->CreateSurfaceFromBitmap("StatBar\\Art\\ActivateGadget.pcx");
+	hTransColor = kTransBlack;
+	g_pLTClient->OptimizeSurface(m_hActivateGadgetCrosshair, hTransColor);
 
 
-    hCrossHighlight     = g_pLTClient->CreateSurface(2,2);
-    LTRect rect(0,0,2,2);
-    g_pOptimizedRenderer->FillRect(hCrossHighlight,&rect,SETRGB(128,128,128));
-    g_pLTClient->OptimizeSurface (hCrossHighlight, hTransColor);
-    g_pLTClient->SetSurfaceAlpha(hCrossHighlight,0.5f);
+	hCrossHighlight	 = g_pLTClient->CreateSurface(2,2);
+	LTRect rect(0,0,2,2);
+	g_pOptimizedRenderer->FillRect(hCrossHighlight,&rect,SETRGB(128,128,128));
+	g_pLTClient->OptimizeSurface (hCrossHighlight, hTransColor);
+	g_pLTClient->SetSurfaceAlpha(hCrossHighlight,0.5f);
 
 	if (!m_hArmedCrosshair)
 	{
 		UpdateCrosshairColors();
 	}
-
-
 }
 
 void CPlayerStats::UpdateWeaponBindings()
 {
-    DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (DEVICETYPE_KEYBOARD);
+	DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (DEVICETYPE_KEYBOARD);
 	if (!pBindings)
 	{
 		return;
@@ -4106,7 +3923,7 @@ void CPlayerStats::UpdateWeaponBindings()
 			m_hWeaponSurf[i] = LTNULL;
 		}
 		int nCommand = COMMAND_ID_WEAPON_BASE;
-        LTBOOL bFound = LTFALSE;
+		LTBOOL bFound = LTFALSE;
 		DeviceBinding* ptr = pBindings;
 		while (!bFound && ptr)
 		{
@@ -4168,7 +3985,7 @@ void CPlayerStats::UpdateWeaponBindings()
 
 	}
 	m_bLargeNumbers = bLarge;
-    g_pLTClient->FreeDeviceBindings (pBindings);
+	g_pLTClient->FreeDeviceBindings (pBindings);
 
 }
 
@@ -4238,11 +4055,9 @@ void CPlayerStats::UpdateConfigSettings()
 
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::CreateDamageSurfaces
 //
 //	PURPOSE:	Create surfaces for displaying current progressive damage
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::CreateDamageSurfaces()
@@ -4292,51 +4107,45 @@ void CPlayerStats::CreateDamageSurfaces()
 		g_pLTClient->OptimizeSurface(m_hElectrocute,kTransBlack);
 		g_pLTClient->SetSurfaceAlpha(m_hElectrocute,0.7f);
 	}
-
-
 }
 
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DestroyDamageSurfaces
 //
 //	PURPOSE:	Destroy surfaces for displaying current progressive damage
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::DestroyDamageSurfaces()
 {
 	if (m_hBleeding)
-        g_pLTClient->DeleteSurface (m_hBleeding);
-    m_hBleeding = LTNULL;
+		g_pLTClient->DeleteSurface (m_hBleeding);
+	m_hBleeding = LTNULL;
 	if (m_hPoisoned)
-        g_pLTClient->DeleteSurface (m_hPoisoned);
-    m_hPoisoned = LTNULL;
+		g_pLTClient->DeleteSurface (m_hPoisoned);
+	m_hPoisoned = LTNULL;
 	if (m_hStunned)
-        g_pLTClient->DeleteSurface (m_hStunned);
-    m_hStunned = LTNULL;
+		g_pLTClient->DeleteSurface (m_hStunned);
+	m_hStunned = LTNULL;
 	if (m_hSleeping)
-        g_pLTClient->DeleteSurface (m_hSleeping);
-    m_hSleeping = LTNULL;
+		g_pLTClient->DeleteSurface (m_hSleeping);
+	m_hSleeping = LTNULL;
 	if (m_hBurning)
-        g_pLTClient->DeleteSurface (m_hBurning);
-    m_hBurning = LTNULL;
+		g_pLTClient->DeleteSurface (m_hBurning);
+	m_hBurning = LTNULL;
 	if (m_hChoking)
-        g_pLTClient->DeleteSurface (m_hChoking);
-    m_hChoking = LTNULL;
+		g_pLTClient->DeleteSurface (m_hChoking);
+	m_hChoking = LTNULL;
 	if (m_hElectrocute)
-        g_pLTClient->DeleteSurface (m_hElectrocute);
-    m_hElectrocute = LTNULL;
+		g_pLTClient->DeleteSurface (m_hElectrocute);
+	m_hElectrocute = LTNULL;
 };
 
 
 // --------------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerStats::DrawTargetName
 //
 //	PURPOSE:	Draws the name of whatever we're targetting
-//
 // --------------------------------------------------------------------------- //
 
 void CPlayerStats::DrawTargetName()
@@ -4348,30 +4157,30 @@ void CPlayerStats::DrawTargetName()
 	HOBJECT hCamera = g_pGameClientShell->GetCamera();
 	if (!hCamera) return;
 
-    LTRotation rRot;
-    LTVector vU, vR, vF, vPos;
+	LTRotation rRot;
+	LTVector vU, vR, vF, vPos;
 
-    g_pLTClient->GetObjectPos(hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetObjectPos(hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-  	HOBJECT hPlayerObj = g_pLTClient->GetClientObject();
+	HOBJECT hPlayerObj = g_pLTClient->GetClientObject();
 	if (!hPlayerObj) return;
 
 	LTVector vDims;
-    g_pLTClient->Physics()->GetObjectDims(hPlayerObj, &vDims);
+	g_pLTClient->Physics()->GetObjectDims(hPlayerObj, &vDims);
 
 	IntersectQuery IQuery;
 	IntersectInfo IInfo;
 
-	IQuery.m_From = vPos;
-	IQuery.m_To   = IQuery.m_From + (vF * 10000000.0f);
+	IQuery.m_From	= vPos;
+	IQuery.m_To	= IQuery.m_From + (vF * 10000000.0f);
 
-	IQuery.m_Flags = INTERSECT_HPOLY | INTERSECT_OBJECTS | IGNORE_NONSOLID;
+	IQuery.m_Flags	= INTERSECT_HPOLY | INTERSECT_OBJECTS | IGNORE_NONSOLID;
 
-	IQuery.m_FilterFn	  = ActivateFilterFn;
-	IQuery.m_pUserData	  = this;
-	IQuery.m_PolyFilterFn = DoVectorPolyFilterFn;
+	IQuery.m_FilterFn	= ActivateFilterFn;
+	IQuery.m_pUserData	= this;
+	IQuery.m_PolyFilterFn	= DoVectorPolyFilterFn;
 
 	if ( g_pLTClient->IntersectSegment(&IQuery, &IInfo) && IInfo.m_hObject )
 	{
