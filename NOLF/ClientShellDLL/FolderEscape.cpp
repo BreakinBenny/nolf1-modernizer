@@ -27,9 +27,9 @@ namespace
 
 CFolderEscape::CFolderEscape()
 {
-    m_pResumeCtrl = LTNULL;
-    m_pSaveCtrl = LTNULL;
-    m_pLoadCtrl = LTNULL;
+	m_pResumeCtrl = LTNULL;
+	m_pSaveCtrl = LTNULL;
+	m_pLoadCtrl = LTNULL;
 
 }
 
@@ -81,7 +81,7 @@ uint32 CFolderEscape::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPara
 		}
 	case FOLDER_CMD_QUIT:
 		{
-            HSTRING hString = g_pLTClient->FormatString(IDS_SUREWANTQUIT);
+			HSTRING hString = g_pLTClient->FormatString(IDS_SUREWANTQUIT);
 			g_pInterfaceMgr->ShowMessageBox(hString,LTMB_YESNO,QuitCallBack,this);
 			g_pLTClient->FreeString(hString);
 			break;
@@ -91,7 +91,7 @@ uint32 CFolderEscape::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPara
 #ifdef _DEMO
 			g_pInterfaceMgr->ShowDemoScreens(LTTRUE);
 #else
-            g_pLTClient->Shutdown();
+			g_pLTClient->Shutdown();
 #endif
 			break;
 		}
@@ -111,7 +111,7 @@ void CFolderEscape::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
 	{
-        HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+		HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 		LTBOOL bInGame = g_pGameClientShell->IsInWorld() && hPlayerObj && !g_pGameClientShell->IsPlayerDead();
 		m_pResumeCtrl->Enable(bInGame);
 
