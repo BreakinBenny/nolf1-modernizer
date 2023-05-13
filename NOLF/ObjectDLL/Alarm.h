@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : Alarm.h
+// MODULE: Alarm.h
 //
 // PURPOSE : An alarm object
 //
 // CREATED : 4/15/99
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __ALARM_H__
@@ -35,20 +33,20 @@ class Alarm : public Prop
 			eStateDisabled,
 		};
 
-        virtual uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
-        virtual uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		virtual uint32	EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		virtual uint32	ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 	protected :
 
-        LTBOOL  ReadProp(ObjectCreateStruct *pData);
-        LTBOOL  Setup(ObjectCreateStruct *pData );
+		LTBOOL	ReadProp(ObjectCreateStruct *pData);
+		LTBOOL	Setup(ObjectCreateStruct *pData );
 		void	PostPropRead(ObjectCreateStruct* pData);
-        LTBOOL  InitialUpdate();
+		LTBOOL	InitialUpdate();
 
 	protected :
 
 		State	m_eState;
-        LTBOOL  m_bPlayerUsable;
+		LTBOOL	m_bPlayerUsable;
 		HSTRING	m_hstrActivateMessage;
 		HSTRING	m_hstrActivateTarget;
 		LTBOOL	m_bLocked;
