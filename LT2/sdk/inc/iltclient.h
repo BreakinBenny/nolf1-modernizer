@@ -1,5 +1,3 @@
-
-
 #ifndef __ILTCLIENT_H__
 #define __ILTCLIENT_H__
 
@@ -14,10 +12,10 @@
 													
 	// Particle system flags. Each one slows it down a little more
 	// except for PS_NEVERDIE which speeds it up..
-	#define PS_BOUNCE		(1<<0)	// Do they bounce?
-	#define PS_NEVERDIE		(1<<2)	// The particles never die (and it doesn't have to check).
-	#define PS_DUMB			(1<<3)	// The engine leaves the system alone.. you must
-									// update and move them.
+	#define PS_BOUNCE	(1<<0)	// Do they bounce?
+	#define PS_NEVERDIE	(1<<2)	// The particles never die (and it doesn't have to check).
+	#define PS_DUMB		(1<<3)	// The engine leaves the system alone.. you must
+					// update and move them.
 
 	// The particle structure for particle systems.
 	struct LTParticle
@@ -47,10 +45,10 @@
 
 	//  Music info
 
-	#define MUSIC_IMMEDIATE			0
-	#define MUSIC_NEXTMEASURE		1
-	#define MUSIC_NEXTSONG			2
-	#define MUSIC_QUEUE				3
+	#define MUSIC_IMMEDIATE		0
+	#define MUSIC_NEXTMEASURE	1
+	#define MUSIC_NEXTSONG		2
+	#define MUSIC_QUEUE		3
 
 
 	class CSoundInstance;
@@ -84,13 +82,11 @@
 	
 	public:
 		
-			
-		
 	// Access to the other interfaces.
 
-		ILTVideoMgr*		VideoMgr()			{return m_pVideoMgr;}
-		ILTTexMod*			GetTexMod()			{return m_pTexMod;}
-		ILTCursor*			Cursor()			{return m_pCursorLT;}
+		ILTVideoMgr*	VideoMgr()	{return m_pVideoMgr;}
+		ILTTexMod*	GetTexMod()	{return m_pTexMod;}
+		ILTCursor*	Cursor()	{return m_pCursorLT;}
 		ILTDirectMusicMgr*  GetDirectMusicMgr() {return m_pDirectMusicMgr;};
 
 	
@@ -116,13 +112,13 @@
 
 		// Disconnect from the server we're on (if any).
 		// NOTE: this will destroy any client-side objects you've created!
-		void		(*Disconnect)();
+		void	(*Disconnect)();
 
 		// Shuts down the app (not right away, but after the current update).
-		void		(*Shutdown)();
+		void	(*Shutdown)();
 
 		// Shuts down the app (not right away, but after the current update).
-		void		(*ShutdownWithMessage)( char *pMsg, ... );
+		void	(*ShutdownWithMessage)( char *pMsg, ... );
 
 		// OBSOLETE: use the CommonDE one.
 		virtual LTRESULT GetPointStatus(LTVector *pPoint)=0;
@@ -217,18 +213,18 @@
 	// Interface stuff.
 
 		// offsets is NUM_AXIS_OFFSETS large.
-		void		(*GetAxisOffsets)(LTFLOAT *offsets);
+		void	(*GetAxisOffsets)(LTFLOAT *offsets);
 
-		void		(*PlayJoystickEffect)(char *pEffectName, float x, float y);
+		void	(*PlayJoystickEffect)(char *pEffectName, float x, float y);
 	
 
 	// Music functions.
 
-		LTBOOL		(*InitMusic)( char *szMusicDLL );
+		LTBOOL	(*InitMusic)( char *szMusicDLL );
 
 		// Sets the directory to find music data files.
 		// IMA only.
-		LTBOOL		(*SetMusicDirectory)( char *szMusicDirectory );
+		LTBOOL	(*SetMusicDirectory)( char *szMusicDirectory );
 
 		// Downloads DLS.
 		// szDLSFile is the Downloadable Synthizer file containing the waves for 
@@ -236,67 +232,67 @@
 		// DLS file.  It must contain bands that define the program changes for
 		// each instrument in DLS...
 		// IMA only.
-		LTBOOL		(*InitInstruments)( char *szDLSFile, char *szStyleFile );
+		LTBOOL	(*InitInstruments)( char *szDLSFile, char *szStyleFile );
 
 		// Cache in a song file.
-		LTBOOL		(*LoadSong)(char *szSong);
+		LTBOOL	(*LoadSong)(char *szSong);
 
 		// Remove all the songs from memory...
-		void		(*DestroyAllSongs)();
+		void	(*DestroyAllSongs)();
 
 		// Plays a playlist.  All songs will be played until end of list.  
 		// Arguments:
-		//		szPlayList - Name of playlist.
-		//		szTransition - Name of transition song to play before playlist starts.  IMA only.
-		//		bLoop - Loop the list.
-		//		dwBoundaryFlags - Can be MUSIC_IMMEDIATE, MUSIC_MEASURE, MUSIC_SONG, MUSIC_QUEUE.  Valid for IMA only.
-		LTBOOL		(*PlayList)( char *szPlayList, char *szTransition, LTBOOL bLoop, uint32 dwBoundaryFlags );
+		//	szPlayList - Name of playlist.
+		//	szTransition - Name of transition song to play before playlist starts.  IMA only.
+		//	bLoop - Loop the list.
+		//	dwBoundaryFlags - Can be MUSIC_IMMEDIATE, MUSIC_MEASURE, MUSIC_SONG, MUSIC_QUEUE.  Valid for IMA only.
+		LTBOOL	(*PlayList)( char *szPlayList, char *szTransition, LTBOOL bLoop, uint32 dwBoundaryFlags );
 
 		// Plays a musical break.
 		// IMA only.
 		// Arguments:
-		//		szSong - Name of song.
-		//		dwBoundaryFlags - Can be MUSIC_IMMEDIATE, MUSIC_MEASURE, MUSIC_SONG, MUSIC_QUEUE.  Valid for IMA only.
-		LTBOOL		(*PlayBreak)( char *szSong, uint32 dwBoundaryFlags );
+		//	szSong - Name of song.
+		//	dwBoundaryFlags - Can be MUSIC_IMMEDIATE, MUSIC_MEASURE, MUSIC_SONG, MUSIC_QUEUE.  Valid for IMA only.
+		LTBOOL	(*PlayBreak)( char *szSong, uint32 dwBoundaryFlags );
 
 		// Stops music.  
 		// Arguments:
-		//		dwBoundaryFlags - Can be MUSIC_IMMEDIATE, MUSIC_MEASURE, MUSIC_SONG, MUSIC_QUEUE.  Valid for IMA only.
-		void		(*StopMusic)( uint32 dwBoundaryFlags );
+		//	dwBoundaryFlags - Can be MUSIC_IMMEDIATE, MUSIC_MEASURE, MUSIC_SONG, MUSIC_QUEUE.  Valid for IMA only.
+		void	(*StopMusic)( uint32 dwBoundaryFlags );
 
 		// Pause music.  Can be resumed...
-		LTBOOL		(*PauseMusic)();
+		LTBOOL	(*PauseMusic)();
 
 		// Resume music...
-		LTBOOL		(*ResumeMusic)();
+		LTBOOL	(*ResumeMusic)();
 
 		// Create and add to playlists....
 		// Arguments:
-		//		szPlayList - Name of playlist.
-		//		szSong - Name of song to add.
-		LTBOOL		(*AddSongToPlayList)(char *szPlayList, char *szSong);
+		//	szPlayList - Name of playlist.
+		//	szSong - Name of song to add.
+		LTBOOL	(*AddSongToPlayList)(char *szPlayList, char *szSong);
 
 		// Removes a whole playlist...
 		// Arguments:
-		//		szPlayList - Name of playlist.
-		void		(*DeletePlayList)(char *szPlayList);
+		//	szPlayList - Name of playlist.
+		void	(*DeletePlayList)(char *szPlayList);
 
 		// Plays a motif.
 		// Ima only.
 		// Arguments:
-		//		szMotif - name of motif.
-		//		bLoop - Loop the motif.
-		LTBOOL		(*PlayMotif)(char *szMotif, LTBOOL bLoop);
+		//	szMotif - name of motif.
+		//	bLoop - Loop the motif.
+		LTBOOL	(*PlayMotif)(char *szMotif, LTBOOL bLoop);
 
 		// Stops a motif for IMA.
 		// IMA only.
 		// Arguments:
-		//		szMotif - name of motif.
-		void		(*StopMotif)(char *szMotif);
+		//	szMotif - name of motif.
+		void	(*StopMotif)(char *szMotif);
 
 		// Volume range is 0-off, 100-full.
-		short		(*GetMusicVolume)();
-		void		(*SetMusicVolume)( short wVolume );
+		short	(*GetMusicVolume)();
+		void	(*SetMusicVolume)( short wVolume );
 
 
 	// Sound functions.
@@ -309,20 +305,20 @@
 		// SOUND3DPROVIDER_CAPS_REVERB cannot be set.  InitSound will report this info in the
 		// m_dwResults flags.
 		// Be sure to release the list with ReleaseSound3DProviderList.
-		LTRESULT		(*GetSound3DProviderLists)( Sound3DProvider *&pSound3DProviderList, LTBOOL bVerify );
-		void			(*ReleaseSound3DProviderList)( Sound3DProvider *pSound3DProviderList );
+		LTRESULT	(*GetSound3DProviderLists)( Sound3DProvider *&pSound3DProviderList, LTBOOL bVerify );
+		void		(*ReleaseSound3DProviderList)( Sound3DProvider *pSound3DProviderList );
 
 		// Initializes the sound driver.
-		LTRESULT		(*InitSound)( InitSoundInfo *pSoundInfo );
+		LTRESULT	(*InitSound)( InitSoundInfo *pSoundInfo );
 
 		// Volume controls between 0 - 100
 		unsigned short	( *GetSoundVolume )();
-		void			( *SetSoundVolume )( unsigned short nVolume );
+		void		( *SetSoundVolume )( unsigned short nVolume );
 
 		// Controls the reverb properties.
 		// Inputs:
-		LTRESULT		( *SetReverbProperties )( ReverbProperties *pReverbProperties );
-		LTRESULT		( *GetReverbProperties )( ReverbProperties *pReverbProperties );
+		LTRESULT	( *SetReverbProperties )( ReverbProperties *pReverbProperties );
+		LTRESULT	( *GetReverbProperties )( ReverbProperties *pReverbProperties );
 
 	// These PlaySound function allows the client shell to initiate and control sounds
 	// without going through the server.  These sounds will only be played 
@@ -334,99 +330,99 @@
 
 		// Play a sound with full control
 		// Arguments:
-		//		pPlaySoundInfo - sound control structure
+		//	pPlaySoundInfo - sound control structure
 		// Return:
-		//		Handle to the client only sound.
+		//	Handle to the client only sound.
 		LTRESULT	(*PlaySound)( PlaySoundInfo *pPlaySoundInfo );
 
 		// Update position and orientation of a client only sound.
 		// Arguments:
-		//		hSound - Handle to client only sound.
-		//		pPos - New position of sound. Can be NULL.
+		//	hSound - Handle to client only sound.
+		//	pPos - New position of sound. Can be NULL.
 		// Return:
-		//		LT_OK - Successful.
-		//		LT_INVALIDPARAM - Invalid parameters.
-		//		LT_ERROR - Unable find hSound
+		//	LT_OK - Successful.
+		//	LT_INVALIDPARAM - Invalid parameters.
+		//	LT_ERROR - Unable find hSound
 		LTRESULT	(*SetSoundPosition)( HLTSOUND hSound, LTVector *pPos );
 
 		// Get current position and orientation of a client only sound.
 		// Arguments:
-		//		hSound - Handle to client only sound.
-		//		pPos - Destination of position. Can be NULL.
-		//		pOrientation - Destination of orientation. Can be NULL.
+		//	hSound - Handle to client only sound.
+		//	pPos - Destination of position. Can be NULL.
+		//	pOrientation - Destination of orientation. Can be NULL.
 		// Return:
-		//		LT_OK - Successful.
-		//		LT_INVALIDPARAM - Invalid parameters.
-		//		LT_ERROR - Unable to find hSound.
+		//	LT_OK - Successful.
+		//	LT_INVALIDPARAM - Invalid parameters.
+		//	LT_ERROR - Unable to find hSound.
 		LTRESULT	(*GetSoundPosition)( HLTSOUND hSound, LTVector *pPos );
 
 		// Pause/resume sounds.
-		void		(*PauseSounds)( );
-		void		(*ResumeSounds)( );
+		void	(*PauseSounds)( );
+		void	(*ResumeSounds)( );
 
 		// Get total length in seconds of sound.
 		// Arguments:
-		//		hSound - Handle to sound.
-		//		fDuration - Duration of sound.
+		//	hSound - Handle to sound.
+		//	fDuration - Duration of sound.
 		// Returns:
-		//		LT_OK if successful.
-		//		LT_INVALIDPARAMS if hSound not available.
+		//	LT_OK if successful.
+		//	LT_INVALIDPARAMS if hSound not available.
 		LTRESULT	(*GetSoundDuration)( HLTSOUND hSound, LTFLOAT *fDuration );
 
 		// Get current time in seconds of sound.
 		// Arguments:
-		//		hSound - Handle to sound.
-		//		fTimer - Current time of sound.
+		//	hSound - Handle to sound.
+		//	fTimer - Current time of sound.
 		// Returns:
-		//		LT_OK if successful,  fTimer is set only if this is returned.
-		//		LT_FINISHED if sound is not playing (may be delayed due to collisions).
-		//		LT_INVALIDPARAMS if hSound not available.
+		//	LT_OK if successful,  fTimer is set only if this is returned.
+		//	LT_FINISHED if sound is not playing (may be delayed due to collisions).
+		//	LT_INVALIDPARAMS if hSound not available.
 		LTRESULT	(*GetSoundTimer)( HLTSOUND hSound, LTFLOAT *fTimer );
 
 		// Get the sound data and information about the data.
 		// This will force the sound to be decompressed.
 		//
 		// Arguments:
-		//		hSound - Handle to sound.
-		//		pSixteenBitData    - Set to data buffer if buffer is 16 bits per sample, else set to NULL.
-		//		pSixteenBitData    - Set to data buffer if buffer is 8 bits per sample, else set to NULL.
-		//		dwSamplesPerSecond - Set to samples per second. 
-		//		dwChannels         - Set to number of channels. (samples alternate between each channel).
+		//	hSound - Handle to sound.
+		//	pSixteenBitData    - Set to data buffer if buffer is 16 bits per sample, else set to NULL.
+		//	pSixteenBitData    - Set to data buffer if buffer is 8 bits per sample, else set to NULL.
+		//	dwSamplesPerSecond - Set to samples per second. 
+		//	dwChannels         - Set to number of channels. (samples alternate between each channel).
 		//		
 		// Returns:
-		//		LT_OK if successful,  fTimer is set only if this is returned.
-		//		LT_ERROR if sound is neither 8 nor 16 bit format.
-		//		LT_INVALIDPARAMS if hSound not available.
+		//	LT_OK if successful,  fTimer is set only if this is returned.
+		//	LT_ERROR if sound is neither 8 nor 16 bit format.
+		//	LT_INVALIDPARAMS if hSound not available.
 		LTRESULT	(*GetSoundData)( HLTSOUND hSound,  
-									 int16 * & pSixteenBitData, int8 * & pEightBitData, 
-									 uint32 * dwSamplesPerSecond, uint32 * dwChannels );
+						 int16 * & pSixteenBitData, int8 * & pEightBitData, 
+						 uint32 * dwSamplesPerSecond, uint32 * dwChannels );
 		
 		// Get current offset into sound buffer of sound.
 		//
 		// Arguments:
-		//		hSound   - Handle to sound.
-		//		dwOffset - Current offset into sound buffer (in buffer increments, bytes if 8 bit, double bytes if 16 bit).
+		//	hSound   - Handle to sound.
+		//	dwOffset - Current offset into sound buffer (in buffer increments, bytes if 8 bit, double bytes if 16 bit).
 		//      dwSize   - Size of sound buffer (in bytes).
 		// Returns:
-		//		LT_OK if successful,  fTimer is set only if this is returned.
-		//		LT_FINISHED if sound is not playing (may be delayed due to collisions, or done).
-		//		LT_INVALIDPARAMS if hSound not available.
+		//	LT_OK if successful,  fTimer is set only if this is returned.
+		//	LT_FINISHED if sound is not playing (may be delayed due to collisions, or done).
+		//	LT_INVALIDPARAMS if hSound not available.
 		LTRESULT	(*GetSoundOffset)( HLTSOUND hSound, uint32 * dwOffset, uint32 * dwSize/* = NULL */);
 
 		// Check if sound finished playing or if object it was attached to was removed.
 		// Arguments:
-		//		pSoundHandle - handle to client only sound
+		//	pSoundHandle - handle to client only sound
 		LTBOOL	(*IsDone)( HLTSOUND pSoundHandle );
 
 		// Kill a sound.
 		// Arguments:
-		//		pSoundHandle - handle to client only sound
+		//	pSoundHandle - handle to client only sound
 		void	(*KillSound)( HLTSOUND pSoundHandle );
 
 		// Kills a looping sound.  Sound will continue to play until it reaches
 		// the end, then remove itself.
 		// Arguments:
-		//		hSoundHandle - handle to client side sound.
+		//	hSoundHandle - handle to client side sound.
 		void	(*KillSoundLoop)( HLTSOUND hSoundHandle );
 
 		// Set the listener status, position and orientation.  If bListenerInClient is TRUE, then
@@ -440,17 +436,17 @@
 
 		// Intersect a line segment.. (used to be raycast, but line segments are WAY faster).
 		// Returns TRUE and fills in pInfo if it hit something.
-		LTBOOL		(*IntersectSegment)(ClientIntersectQuery *pQuery, ClientIntersectInfo *pInfo);
+		LTBOOL	(*IntersectSegment)(ClientIntersectQuery *pQuery, ClientIntersectInfo *pInfo);
 
 		// Same as IntersectSegment, except for it casts a ray from pQuery->m_From
 		// in the direction of pQuery->m_Dir.
-		LTBOOL		(*CastRay)(ClientIntersectQuery *pQuery, ClientIntersectInfo *pInfo);
+		LTBOOL	(*CastRay)(ClientIntersectQuery *pQuery, ClientIntersectInfo *pInfo);
 
 		// Find objects in a sphere.  This is only based on their centerpoints, not
 		// on their dimensions or anything.  inObjects is filled in and nOutObjects 
 		// is set to the number of objects filled in.  nFound might be larger if
 		// it found more objects than nInObjects.
-		LTRESULT		(*FindObjectsInSphere)(LTVector *pCenter, float radius, 
+		LTRESULT	(*FindObjectsInSphere)(LTVector *pCenter, float radius, 
 			HLOCALOBJ *inObjects, uint32 nInObjects, uint32 *nOutObjects, uint32 *nFound);
 
 
@@ -460,7 +456,7 @@
 		HLTFONT		(*CreateFont)(char *pFontName, int width, int height, 
 			LTBOOL bItalic, LTBOOL bUnderline, LTBOOL bBold);
 
-		void		(*DeleteFont)(HLTFONT hFont);
+		void	(*DeleteFont)(HLTFONT hFont);
 
 		// Sets the amount of extra space inbetween the letters of the text (in pixels)
 		LTRESULT	(*SetFontExtraSpace)(HLTFONT hFont, int pixels);
@@ -735,9 +731,9 @@
 
 		// You can set a global light scale that's applied to all rendering.
 		// Colors are RGB 0-1 (values are clamped for you).	
-		void		(*GetGlobalLightScale)(LTVector *pScale);
-		void		(*SetGlobalLightScale)(LTVector *pScale);
-		void		(*OffsetGlobalLightScale)(LTVector *pOffset);
+		void	(*GetGlobalLightScale)(LTVector *pScale);
+		void	(*SetGlobalLightScale)(LTVector *pScale);
+		void	(*OffsetGlobalLightScale)(LTVector *pOffset);
 
 		// Get/set global light direction.
 		virtual LTRESULT	GetGlobalLightDir(LTVector &dir)=0;
@@ -1125,12 +1121,11 @@
 
 	protected:
 		
-		ILTVideoMgr			*m_pVideoMgr;
-		ILTTexMod			*m_pTexMod;
-		ILTCursor			*m_pCursorLT;
+		ILTVideoMgr	*m_pVideoMgr;
+		ILTTexMod	*m_pTexMod;
+		ILTCursor	*m_pCursorLT;
 		ILTDirectMusicMgr	*m_pDirectMusicMgr;
 	};
-
 
 
 #endif  // __ILTCLIENT_H__
