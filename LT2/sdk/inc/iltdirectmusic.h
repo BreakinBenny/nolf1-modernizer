@@ -1,14 +1,12 @@
 /****************************************************************************
-;
-;	MODULE:		ILTDirectMusic (.H)
+;	MODULE:	ILTDirectMusic (.H)
 ;
 ;	PURPOSE:	Define types and classes that need to be exposed to the game 
-;				for the	Lithtech implementation of directmusic.
+;			for the	Lithtech implementation of directmusic.
 ;
 ;	HISTORY:	Aug-1-1999 [BLB]
 ;
-;	NOTICE:		Copyright (c) 1999 Monolith Procutions, Inc.
-;
+;	NOTICE:	Copyright (c) 1999 Monolith Procutions, Inc.
 ***************************************************************************/
 
 #ifndef __ILTDIRECTMUSIC_H__
