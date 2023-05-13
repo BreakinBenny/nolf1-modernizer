@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : LoadingScreen.cpp
+// MODULE: LoadingScreen.cpp
 //
 // PURPOSE : Background-thread loading screen encapsulation class
 //
 // CREATED : 2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -72,8 +70,8 @@ void CLoadingScreen::CreateCharFX(INT_CHAR *pChar)
 	if (pChar)
 	{
 		BSCREATESTRUCT bcs;
-	    LTVector vPos, vTemp, vScale(1.0f,1.0f,1.0f);
-	    LTRotation rRot = m_rRot;
+		LTVector vPos, vTemp, vScale(1.0f,1.0f,1.0f);
+		LTRotation rRot = m_rRot;
 
 		char modName[128];
 		char skinName[128];
@@ -93,9 +91,9 @@ void CLoadingScreen::CreateCharFX(INT_CHAR *pChar)
 		VEC_MULSCALAR(vScale, vScale, pChar->fScale);
 
 		LTVector vModPos = pChar->vPos;
-	    LTFLOAT fRot = pChar->fRot;
-		fRot  = MATH_PI + DEG2RAD(fRot);
-	    g_pLTClient->RotateAroundAxis(&rRot, &m_vU, fRot);
+		LTFLOAT fRot = pChar->fRot;
+		fRot	= MATH_PI + DEG2RAD(fRot);
+		g_pLTClient->RotateAroundAxis(&rRot, &m_vU, fRot);
 
 		VEC_MULSCALAR(vTemp, m_vF, vModPos.z);
 		VEC_MULSCALAR(vTemp, vTemp, 1); //g_pInterfaceResMgr->GetXRatio()
@@ -143,8 +141,8 @@ void CLoadingScreen::CreateAttachFX(INT_ATTACH *pAttach)
 	if (m_nNumAttachments < MAX_INT_ATTACHMENTS)
 	{
 		BSCREATESTRUCT bcs;
-	    LTVector vPos, vTemp, vScale(1.0f,1.0f,1.0f);
-	    LTRotation rRot = m_rRot;
+		LTVector vPos, vTemp, vScale(1.0f,1.0f,1.0f);
+		LTRotation rRot = m_rRot;
 
 		CString str = "";
 		char szModel[128];
@@ -197,9 +195,9 @@ void CLoadingScreen::CreateInterfaceSFX(eFolderID eFolder)
 	HOBJECT hCamera = g_pGameClientShell->GetInterfaceCamera();
 	if (!hCamera) return;
 
-    g_pLTClient->GetObjectPos(hCamera, &m_vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &m_rRot);
-    g_pLTClient->GetRotationVectors(&m_rRot, &m_vU, &m_vR, &m_vF);
+	g_pLTClient->GetObjectPos(hCamera, &m_vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &m_rRot);
+	g_pLTClient->GetRotationVectors(&m_rRot, &m_vU, &m_vR, &m_vF);
 
 	int n = 0;
 	char szAttName[30];
@@ -307,9 +305,8 @@ void CLoadingScreen::UpdateInterfaceSFX()
 		if (g_pModelLT->GetSocketTransform(m_CharSFX.GetObject(), hSocket, transform, LTTRUE) == LT_OK)
 		{
 			g_pTransLT->Get(transform, vPos, rRot);
-            g_pLTClient->SetObjectPos(pSFX->GetObject(), &vPos, LTTRUE);
-            g_pLTClient->SetObjectRotation(pSFX->GetObject(), &rRot);
-
+			g_pLTClient->SetObjectPos(pSFX->GetObject(), &vPos, LTTRUE);
+			g_pLTClient->SetObjectRotation(pSFX->GetObject(), &rRot);
 		}
 	}
 }
@@ -336,12 +333,12 @@ LTBOOL CLoadingScreen::Init()
 	m_TextPos.x *= g_pInterfaceResMgr->GetYRatio();
 	m_TextPos.x += g_pInterfaceResMgr->GetXOffset();
 	m_TextPos.y *= g_pInterfaceResMgr->GetYRatio();
-	m_TextPos.y +=  g_pInterfaceResMgr->GetYOffset();
+	m_TextPos.y += g_pInterfaceResMgr->GetYOffset();
 
 	m_PhotoPos.x *= g_pInterfaceResMgr->GetYRatio();
 	m_PhotoPos.x += g_pInterfaceResMgr->GetXOffset();
 	m_PhotoPos.y *= g_pInterfaceResMgr->GetYRatio();
-	m_PhotoPos.y +=  g_pInterfaceResMgr->GetYOffset();
+	m_PhotoPos.y += g_pInterfaceResMgr->GetYOffset();
 
 	// Remember whether or not we're in multiplayer
 	m_bDrawMultiplayer = g_pGameClientShell->IsMultiplayerGame();// && g_pInterfaceMgr->IsFragCountDrawn();
@@ -431,7 +428,7 @@ LTBOOL CLoadingScreen::Update()
 	g_pInterfaceMgr->DrawSFX();
 
 
-    HSURFACE hDestSurf = g_pLTClient->GetScreenSurface();
+	HSURFACE hDestSurf = g_pLTClient->GetScreenSurface();
 	HLTCOLOR hShadeColor = g_pLayoutMgr->GetShadeColor();
 
 	// Go into optimized2d so the multiplayer info can draw
@@ -459,7 +456,7 @@ LTBOOL CLoadingScreen::Update()
 	pFont->Draw(m_hWorldName, hDestSurf, m_TextPos.x+1, m_TextPos.y+1, LTF_JUSTIFY_CENTER,kBlack);
 	pFont->Draw(m_hWorldName, hDestSurf, m_TextPos.x, m_TextPos.y, LTF_JUSTIFY_CENTER,kWhite);
 
-    g_pLTClient->EndOptimized2D();
+	g_pLTClient->EndOptimized2D();
 
 	g_pLTClient->End3D();
 
@@ -468,27 +465,27 @@ LTBOOL CLoadingScreen::Update()
 
 
 //	HSURFACE hBack = g_pInterfaceResMgr->GetSharedSurface(m_sBackground);
-//  g_pLTClient->DrawSurfaceToSurface(hDestSurf, hBack, LTNULL, xo, yo);
+//	g_pLTClient->DrawSurfaceToSurface(hDestSurf, hBack, LTNULL, xo, yo);
 
 
-    LTRect rect(0,0,g_pInterfaceResMgr->GetScreenWidth(),yo);
-    g_pOptimizedRenderer->FillRect(hDestSurf,&rect,hShadeColor);
+	LTRect rect(0,0,g_pInterfaceResMgr->GetScreenWidth(),yo);
+	g_pOptimizedRenderer->FillRect(hDestSurf,&rect,hShadeColor);
 
 	rect.top = yo;
 	rect.bottom = rect.top;
-    //g_pLTClient->FillRect(hDestSurf,&rect,m_hBarColor);
+	//g_pLTClient->FillRect(hDestSurf,&rect,m_hBarColor);
 
 	rect.bottom = g_pInterfaceResMgr->GetScreenWidth();
 	rect.top = rect.bottom;
-    g_pOptimizedRenderer->FillRect(hDestSurf,&rect,hShadeColor);
+	g_pOptimizedRenderer->FillRect(hDestSurf,&rect,hShadeColor);
 
 	rect.bottom = g_pInterfaceResMgr->GetScreenHeight();
 	rect.top = (rect.bottom - yo);
-    g_pOptimizedRenderer->FillRect(hDestSurf,&rect,hShadeColor);
+	g_pOptimizedRenderer->FillRect(hDestSurf,&rect,hShadeColor);
 
 	rect.bottom = rect.top;
 	rect.top = rect.bottom;
-    //g_pLTClient->FillRect(hDestSurf,&rect,m_hBarColor);
+	//g_pLTClient->FillRect(hDestSurf,&rect,m_hBarColor);
 
 	if (xo > 0)
 	{
@@ -496,16 +493,16 @@ LTBOOL CLoadingScreen::Update()
 		rect.right = xo;
 		rect.top = yo;
 		rect.bottom = (g_pInterfaceResMgr->GetScreenHeight() - yo);
-	    g_pOptimizedRenderer->FillRect(hDestSurf,&rect,hShadeColor);
+		g_pOptimizedRenderer->FillRect(hDestSurf,&rect,hShadeColor);
 
 		rect.right = g_pInterfaceResMgr->GetScreenWidth();
 		rect.left = g_pInterfaceResMgr->GetScreenWidth() - xo;
 		rect.top = yo;
 		rect.bottom = (g_pInterfaceResMgr->GetScreenHeight() - yo);
-	    g_pOptimizedRenderer->FillRect(hDestSurf,&rect,hShadeColor);
+		g_pOptimizedRenderer->FillRect(hDestSurf,&rect,hShadeColor);
 	}
 
-    g_pLTClient->FlipScreen(FLIPSCREEN_CANDRAWCONSOLE);
+	g_pLTClient->FlipScreen(FLIPSCREEN_CANDRAWCONSOLE);
 
 	// Count it..
 	++m_nFrameCounter;
@@ -667,5 +664,4 @@ void CLoadingScreen::SetWorldPhoto(char *pszPhoto)
 	if (m_hWorldPhoto) {
 		g_pLTClient->GetSurfaceDims(m_hWorldPhoto, &m_iPhotoWidth, &m_iPhotoHeight);
 	}
-
 }
