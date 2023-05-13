@@ -14,9 +14,9 @@
 	// Constructors.
 	public:
 
-						LTRotation() {}
-						LTRotation(float a, float b, float c, float d);
-						LTRotation(const LTRotation &other);
+				LTRotation() {}
+				LTRotation(float a, float b, float c, float d);
+				LTRotation(const LTRotation &other);
 
 	// Operators.
 	public:
@@ -41,23 +41,23 @@
 	public:
 
 		// Initialize.  Using default parameters sets it to identity (facing down positive Z).
-		void			Init(float a=0.0f, float b=0.0f, float c=0.0f, float d=1.0f);
+		void		Init(float a=0.0f, float b=0.0f, float c=0.0f, float d=1.0f);
 
 		// Set to identity (facing down Z axis).
-		void			Identity();
+		void		Identity();
 
 		// Returns TRUE if the rotation is at identity.
-		LTBOOL			IsIdentity() const;
+		LTBOOL		IsIdentity() const;
 
 		// Convert to/from matrices.
-		void			ConvertToMatrix(LTMatrix &mat) const;
-		void			ConvertFromMatrix(const LTMatrix &mat);
+		void		ConvertToMatrix(LTMatrix &mat) const;
+		void		ConvertFromMatrix(const LTMatrix &mat);
 
 		// Interpolate between two rotations (stores the result in this quaternion).
-		void			Slerp(const LTRotation &q1, const LTRotation &q2, float t);
+		void		Slerp(const LTRotation &q1, const LTRotation &q2, float t);
 
 		// Gives the conjugate quaternion (which will produce the inverse, or transposed matrix).
-		LTRotation		Conjugate() const;
+		LTRotation	Conjugate() const;
 
 
 
