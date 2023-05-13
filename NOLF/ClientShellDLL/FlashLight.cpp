@@ -1,13 +1,11 @@
  // ----------------------------------------------------------------------- //
-//
-// MODULE  : FlashLight.cpp
+// MODULE: FlashLight.cpp
 //
 // PURPOSE : FlashLight class - Implementation
 //
 // CREATED : 07/21/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -47,53 +45,47 @@ static LTBOOL NonSolidFilterFn(HOBJECT hTest, void *pUserData)
 			return LTFALSE;
 		}
 	}
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLight::CFlashLight()
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 CFlashLight::CFlashLight()
 {
-    m_bOn               = LTFALSE;
+	m_bOn		= LTFALSE;
 
-    m_hLight            = LTNULL;
+	m_hLight	= LTNULL;
 
 	m_fMinLightRadius	= 75.0f;
 	m_fMaxLightRadius	= 500.0f;
 	m_fMaxLightDist		= 10000.0f;
 
-    m_fServerUpdateTimer = (LTFLOAT)INT_MAX;
+	m_fServerUpdateTimer = (LTFLOAT)INT_MAX;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLight::~CFlashLight()
 //
 //	PURPOSE:	Destructor
-//
 // ----------------------------------------------------------------------- //
 
 CFlashLight::~CFlashLight()
 {
 	if (m_hLight)
 	{
-        g_pLTClient->DeleteObject(m_hLight);
-        m_hLight = LTNULL;
+		g_pLTClient->DeleteObject(m_hLight);
+		m_hLight = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLight::TurnOn()
 //
 //	PURPOSE:	Turn light on
-//
 // ----------------------------------------------------------------------- //
 
 void CFlashLight::TurnOn()
@@ -102,9 +94,9 @@ void CFlashLight::TurnOn()
 
 	if (m_hLight)
 	{
-        m_bOn = LTTRUE;
-        uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hLight);
-        g_pLTClient->SetObjectFlags(m_hLight, dwFlags | FLAG_VISIBLE);
+		m_bOn = LTTRUE;
+		uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hLight);
+		g_pLTClient->SetObjectFlags(m_hLight, dwFlags | FLAG_VISIBLE);
 
 		dwFlags = m_LightBeam.GetFlags();
 		m_LightBeam.SetFlags(dwFlags | FLAG_VISIBLE);
@@ -120,20 +112,18 @@ void CFlashLight::TurnOn()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLight::TurnOff()
 //
 //	PURPOSE:	Turn light off
-//
 // ----------------------------------------------------------------------- //
 
 void CFlashLight::TurnOff()
 {
 	if (m_hLight)
 	{
-        m_bOn = LTFALSE;
-        uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hLight);
-        g_pLTClient->SetObjectFlags(m_hLight, dwFlags & ~FLAG_VISIBLE);
+		m_bOn = LTFALSE;
+		uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hLight);
+		g_pLTClient->SetObjectFlags(m_hLight, dwFlags & ~FLAG_VISIBLE);
 
 		dwFlags = m_LightBeam.GetFlags();
 		m_LightBeam.SetFlags(dwFlags & ~FLAG_VISIBLE);
@@ -148,31 +138,28 @@ void CFlashLight::TurnOff()
 	}
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLight::CreateLight()
 //
 //	PURPOSE:	Create the dynamic light
-//
 // ----------------------------------------------------------------------- //
 
 void CFlashLight::CreateLight()
 {
 	if (m_hLight) return;
 
-    g_cvarFLMinLightRadius.Init(g_pLTClient, "FLMinRadius", NULL, m_fMinLightRadius);
-    g_cvarFLMaxLightRadius.Init(g_pLTClient, "FLMaxRadius", NULL, m_fMaxLightRadius);
-    g_cvarFLMaxLightDist.Init(g_pLTClient, "FLMaxDist", NULL, m_fMaxLightDist);
-    g_cvarFLBeamMinRadius.Init(g_pLTClient, "FLBeamMinRadius", NULL, 10.0f);
-    g_cvarFLBeamRadius.Init(g_pLTClient, "FLBeamRadius", NULL, 150.0f);
-    g_cvarFLBeamAlpha.Init(g_pLTClient, "FLBeamAlpha", NULL, 0.2f);
-    g_cvarFLBeamUOffset.Init(g_pLTClient, "FLBeamUOffset", NULL, -10.0f);
-    g_cvarFLBeamROffset.Init(g_pLTClient, "FLBeamROffset", NULL, 0.0f);
-    g_cvarFLNumSegments.Init(g_pLTClient, "FLNumSegments", NULL, 1.0f);
-    g_cvarFLPolyBeam.Init(g_pLTClient, "FLPolyBeam", NULL, 1.0f);
-    g_cvarFLMinBeamLen.Init(g_pLTClient, "FLMinBeamLen", NULL, 0.0f);
-    g_cvarFLServerUpdateTime.Init(g_pLTClient, "FLServerUpdateTime", LTNULL, 0.20f);
+	g_cvarFLMinLightRadius.Init(g_pLTClient, "FLMinRadius", NULL, m_fMinLightRadius);
+	g_cvarFLMaxLightRadius.Init(g_pLTClient, "FLMaxRadius", NULL, m_fMaxLightRadius);
+	g_cvarFLMaxLightDist.Init(g_pLTClient, "FLMaxDist", NULL, m_fMaxLightDist);
+	g_cvarFLBeamMinRadius.Init(g_pLTClient, "FLBeamMinRadius", NULL, 10.0f);
+	g_cvarFLBeamRadius.Init(g_pLTClient, "FLBeamRadius", NULL, 150.0f);
+	g_cvarFLBeamAlpha.Init(g_pLTClient, "FLBeamAlpha", NULL, 0.2f);
+	g_cvarFLBeamUOffset.Init(g_pLTClient, "FLBeamUOffset", NULL, -10.0f);
+	g_cvarFLBeamROffset.Init(g_pLTClient, "FLBeamROffset", NULL, 0.0f);
+	g_cvarFLNumSegments.Init(g_pLTClient, "FLNumSegments", NULL, 1.0f);
+	g_cvarFLPolyBeam.Init(g_pLTClient, "FLPolyBeam", NULL, 1.0f);
+	g_cvarFLMinBeamLen.Init(g_pLTClient, "FLMinBeamLen", NULL, 0.0f);
+	g_cvarFLServerUpdateTime.Init(g_pLTClient, "FLServerUpdateTime", LTNULL, 0.20f);
 
 
 	HOBJECT hCamera = g_pGameClientShell->GetCamera();
@@ -183,18 +170,15 @@ void CFlashLight::CreateLight()
 
 	createStruct.m_ObjectType = OT_LIGHT;
 	createStruct.m_Flags = FLAG_VISIBLE;
-    g_pLTClient->GetObjectPos(hCamera, &(createStruct.m_Pos));
+	g_pLTClient->GetObjectPos(hCamera, &(createStruct.m_Pos));
 
-    m_hLight = g_pLTClient->CreateObject(&createStruct);
+	m_hLight = g_pLTClient->CreateObject(&createStruct);
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLight::Update()
 //
 //	PURPOSE:	Update the flash light
-//
 // ----------------------------------------------------------------------- //
 
 void CFlashLight::Update()
@@ -203,32 +187,32 @@ void CFlashLight::Update()
 
 	// Calculate light position...
 
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (!hPlayerObj) return;
 
-    HOBJECT hFilterList[] = {hPlayerObj, g_pGameClientShell->GetMoveMgr()->GetObject(), LTNULL};
+	HOBJECT hFilterList[] = {hPlayerObj, g_pGameClientShell->GetMoveMgr()->GetObject(), LTNULL};
 
 	IntersectQuery qInfo;
 	IntersectInfo iInfo;
 
-    LTRotation rRot;
+	LTRotation rRot;
 	LTVector vPos, vEndPos, vUOffset, vROffset;
 
 	GetLightPositions(vPos, vEndPos, vUOffset, vROffset);
 
-	qInfo.m_From = vPos;
-	qInfo.m_To   = vEndPos;
+	qInfo.m_From	= vPos;
+	qInfo.m_To	= vEndPos;
 
 	qInfo.m_Flags = INTERSECT_OBJECTS | IGNORE_NONSOLID;
 	qInfo.m_FilterFn = NonSolidFilterFn;
 	qInfo.m_pUserData = hFilterList;
 
-    if (g_pLTClient->IntersectSegment(&qInfo, &iInfo))
+	if (g_pLTClient->IntersectSegment(&qInfo, &iInfo))
 	{
 		vEndPos = iInfo.m_Point;
 	}
 
-    m_fServerUpdateTimer += g_pGameClientShell->GetFrameTime();
+	m_fServerUpdateTimer += g_pGameClientShell->GetFrameTime();
 	if (m_fServerUpdateTimer > g_cvarFLServerUpdateTime.GetFloat())
 	{
 		m_fServerUpdateTimer = 0.0f;
@@ -243,21 +227,21 @@ void CFlashLight::Update()
 		}
 	}
 
-    g_pLTClient->SetObjectPos(m_hLight, &vEndPos);
+	g_pLTClient->SetObjectPos(m_hLight, &vEndPos);
 
-    LTVector vDir = vEndPos - vPos;
-    LTFLOAT fDist = vDir.Mag();
+	LTVector vDir = vEndPos - vPos;
+	LTFLOAT fDist = vDir.Mag();
 	vDir.Norm();
 
-    LTFLOAT fLightRadius = g_cvarFLMinLightRadius.GetFloat() +
+	LTFLOAT fLightRadius = g_cvarFLMinLightRadius.GetFloat() +
 		((g_cvarFLMaxLightRadius.GetFloat() - g_cvarFLMinLightRadius.GetFloat()) * fDist / g_cvarFLMaxLightDist.GetFloat());
 
-    g_pLTClient->SetLightRadius(m_hLight, fLightRadius);
+	g_pLTClient->SetLightRadius(m_hLight, fLightRadius);
 
-    LTVector vColor = LTVector(GetRandom(235.0f, 255.0f), GetRandom(235.0f, 255.0f), GetRandom(200.0f, 235.0f));;
-    LTVector vLightColor = vColor / 255.0f;
+	LTVector vColor = LTVector(GetRandom(235.0f, 255.0f), GetRandom(235.0f, 255.0f), GetRandom(200.0f, 235.0f));;
+	LTVector vLightColor = vColor / 255.0f;
 
-    g_pLTClient->SetLightColor(m_hLight, vLightColor.x, vLightColor.y, vLightColor.z);
+	g_pLTClient->SetLightColor(m_hLight, vLightColor.x, vLightColor.y, vLightColor.z);
 
 
 	// Show the light beam...
@@ -269,30 +253,30 @@ void CFlashLight::Update()
 		vPos += vUOffset;
 		vPos += vROffset;
 
-		pls.pTexture			= "sfx\\test\\fxtest42.dtx";
-		pls.dwTexAddr			= LTTEXADDR_CLAMP;
-		pls.vStartPos			= vPos;
-		pls.vEndPos				= vEndPos;
+		pls.pTexture		= "sfx\\test\\fxtest42.dtx";
+		pls.dwTexAddr		= LTTEXADDR_CLAMP;
+		pls.vStartPos		= vPos;
+		pls.vEndPos		= vEndPos;
 		pls.vInnerColorStart	= vColor;
-		pls.vInnerColorEnd		= vColor;
-        pls.vOuterColorStart    = vColor;
-        pls.vOuterColorEnd      = vColor;
-		pls.fAlphaStart			= g_cvarFLBeamAlpha.GetFloat();
-		pls.fAlphaEnd			= g_cvarFLBeamAlpha.GetFloat();
-		pls.fMinWidth			= g_cvarFLBeamMinRadius.GetFloat();
-		pls.fMaxWidth			= g_cvarFLBeamRadius.GetFloat();
-		pls.fMinDistMult		= 1.0f;
-		pls.fMaxDistMult		= 1.0f;
-		pls.fLifeTime			= 1.0f;
-		pls.fAlphaLifeTime		= 1.0f;
-		pls.fPerturb			= 0.0f;
-        pls.bAdditive           = LTTRUE; // LTFALSE;
-        pls.bNoZ                = LTTRUE;
-		pls.bAlignFlat			= LTTRUE;
-		pls.nWidthStyle			= PLWS_CONSTANT;
-		pls.nNumSegments		= (int)g_cvarFLNumSegments.GetFloat();
+		pls.vInnerColorEnd	= vColor;
+		pls.vOuterColorStart	= vColor;
+		pls.vOuterColorEnd	= vColor;
+		pls.fAlphaStart		= g_cvarFLBeamAlpha.GetFloat();
+		pls.fAlphaEnd		= g_cvarFLBeamAlpha.GetFloat();
+		pls.fMinWidth		= g_cvarFLBeamMinRadius.GetFloat();
+		pls.fMaxWidth		= g_cvarFLBeamRadius.GetFloat();
+		pls.fMinDistMult	= 1.0f;
+		pls.fMaxDistMult	= 1.0f;
+		pls.fLifeTime		= 1.0f;
+		pls.fAlphaLifeTime	= 1.0f;
+		pls.fPerturb		= 0.0f;
+		pls.bAdditive		= LTTRUE; // LTFALSE;
+		pls.bNoZ		= LTTRUE;
+		pls.bAlignFlat		= LTTRUE;
+		pls.nWidthStyle		= PLWS_CONSTANT;
+		pls.nNumSegments	= (int)g_cvarFLNumSegments.GetFloat();
 
-        LTBOOL bUpdateBeam = LTTRUE;
+		LTBOOL bUpdateBeam = LTTRUE;
 
 		if (m_LightBeam.HasBeenDrawn())
 		{
@@ -302,7 +286,7 @@ void CFlashLight::Update()
 
 			// Hide the beam if it is too short...
 
-            uint32 dwFlags = m_LightBeam.GetFlags();
+			uint32 dwFlags = m_LightBeam.GetFlags();
 
 			if (fDist < g_cvarFLMinBeamLen.GetFloat())
 			{
@@ -328,7 +312,7 @@ void CFlashLight::Update()
 		else
 		{
 			m_LightBeam.Init(&pls);
-            m_LightBeam.CreateObject(g_pLTClient);
+			m_LightBeam.CreateObject(g_pLTClient);
 		}
 
 		if (bUpdateBeam)
@@ -339,11 +323,9 @@ void CFlashLight::Update()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLightPlayer::GetLightPositions()
 //
 //	PURPOSE:	Get the flash light position and rotation...
-//
 // ----------------------------------------------------------------------- //
 
 void CFlashLightPlayer::GetLightPositions(LTVector& vStartPos, LTVector& vEndPos, LTVector& vUOffset, LTVector& vROffset)
@@ -397,7 +379,7 @@ void CFlashLightPlayer::GetLightPositions(LTVector& vStartPos, LTVector& vEndPos
 	}
 
 	LTVector vU, vR, vF;
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	vEndPos = vStartPos + (vF * g_cvarFLMaxLightDist.GetFloat());
 
@@ -409,11 +391,9 @@ void CFlashLightPlayer::GetLightPositions(LTVector& vStartPos, LTVector& vEndPos
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLightAI::CFlashLightAI()
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 CFlashLightAI::CFlashLightAI()
@@ -422,11 +402,9 @@ CFlashLightAI::CFlashLightAI()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLightAI::~CFlashLightAI()
 //
 //	PURPOSE:	Destructor
-//
 // ----------------------------------------------------------------------- //
 
 CFlashLightAI::~CFlashLightAI()
@@ -434,11 +412,9 @@ CFlashLightAI::~CFlashLightAI()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLightAI::Init()
 //
 //	PURPOSE:	Initializes the flashlight
-//
 // ----------------------------------------------------------------------- //
 
 void CFlashLightAI::Init(HOBJECT hAI)
@@ -447,11 +423,9 @@ void CFlashLightAI::Init(HOBJECT hAI)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLightAI::Update()
 //
 //	PURPOSE:	Update the flash light
-//
 // ----------------------------------------------------------------------- //
 
 void CFlashLightAI::Update()
@@ -472,11 +446,9 @@ void CFlashLightAI::Update()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CFlashLightAI::GetLightPositions()
 //
 //	PURPOSE:	Get the flash light position and rotation...
-//
 // ----------------------------------------------------------------------- //
 
 void CFlashLightAI::GetLightPositions(LTVector& vStartPos, LTVector& vEndPos, LTVector& vUOffset, LTVector& vROffset)
