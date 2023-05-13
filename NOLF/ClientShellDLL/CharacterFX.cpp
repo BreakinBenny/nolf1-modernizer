@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : CharacterFX.cpp
+// MODULE: CharacterFX.cpp
 //
 // PURPOSE : Character special FX - Implementation
 //
 // CREATED : 8/24/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -42,7 +40,7 @@ extern LTVector g_vPlayerCameraOffset;
 #define DEFAULT_VEHICLE_RADIUS		2500.0f
 
 #define DEFAULT_CIGARETTE_TEXTURE	"SFX\\Impact\\Spr\\Smoke.spr"
-#define DEFAULT_ZZZ_TEXTURE			"SFX\\Particle\\Sleep.dtx"
+#define DEFAULT_ZZZ_TEXTURE		"SFX\\Particle\\Sleep.dtx"
 #define DEFAULT_HEART_TEXTURE		"SFX\\Particle\\Heart.dtx"
 #define DEFAULT_SMOKEPUFF_TEXTURE	"SFX\\smoke\\sprtex\\smoke2_10.dtx"
 
@@ -75,22 +73,20 @@ namespace
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCharacterFX::Init
 //
 //	PURPOSE:	Init the character fx
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCharacterFX::Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage)
 {
-    if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
-    if (!hMessage) return LTFALSE;
+	if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
+	if (!hMessage) return LTFALSE;
 
 	CHARCREATESTRUCT ch;
 
 	ch.hServerObj = hServObj;
-    ch.Read(g_pLTClient, hMessage);
+	ch.Read(g_pLTClient, hMessage);
 
 	if (fCycleTime < 0.1f)
 	{
@@ -102,16 +98,14 @@ LTBOOL CCharacterFX::Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCharacterFX::Init
 //
 //	PURPOSE:	Init the character fx
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCharacterFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	m_cs = *((CHARCREATESTRUCT*)psfxCreateStruct);
 
@@ -126,7 +120,7 @@ LTBOOL CCharacterFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 
 	if ( !m_NodeController.Init(this) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_cs.bIsPlayer )
@@ -134,7 +128,7 @@ LTBOOL CCharacterFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 		m_Flashlight.Init(m_hServerObject);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
@@ -155,7 +149,7 @@ CCharacterFX::~CCharacterFX()
 	RemoveLaserFX();
 	RemoveMarkerFX();
 
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (m_cs.bIsPlayer && (hPlayerObj == m_hServerObject))
 	{
 		// Stop all damage fx...
@@ -194,67 +188,67 @@ CCharacterFX::~CCharacterFX()
 
 LTBOOL CCharacterFX::CreateObject(ILTClient* pClientDE)
 {
-    if (!CSpecialFX::CreateObject(pClientDE) || !m_hServerObject) return LTFALSE;
+	if (!CSpecialFX::CreateObject(pClientDE) || !m_hServerObject) return LTFALSE;
 
 	if (!g_vtBreathTime.IsInitted())
 	{
-        g_vtBreathTime.Init(pClientDE, "BreathTime", LTNULL, 5.0f);
+		g_vtBreathTime.Init(pClientDE, "BreathTime", LTNULL, 5.0f);
 	}
 
 	if (!g_vtZipCord1stWidth.IsInitted())
 	{
-        g_vtZipCord1stWidth.Init(pClientDE, "ZipCord1stWidth", LTNULL, 2.0f);
+		g_vtZipCord1stWidth.Init(pClientDE, "ZipCord1stWidth", LTNULL, 2.0f);
 	}
 
 	if (!g_vtZipCord3rdWidth.IsInitted())
 	{
-        g_vtZipCord3rdWidth.Init(pClientDE, "ZipCord3rdWidth", LTNULL, 40.0f);
+		g_vtZipCord3rdWidth.Init(pClientDE, "ZipCord3rdWidth", LTNULL, 40.0f);
 	}
 
 	if (!g_vtModelKey.IsInitted())
 	{
-        g_vtModelKey.Init(pClientDE, "ModelKey", LTNULL, 0.0f);
+		g_vtModelKey.Init(pClientDE, "ModelKey", LTNULL, 0.0f);
 	}
 
 	if (!g_vtFootPrintBlend.IsInitted())
 	{
-        g_vtFootPrintBlend.Init(pClientDE, "FootPrintBlendMode", LTNULL, 2.0f);
+		g_vtFootPrintBlend.Init(pClientDE, "FootPrintBlendMode", LTNULL, 2.0f);
 	}
 
 	if (!g_vtMinTrailSegment.IsInitted())
 	{
-        g_vtMinTrailSegment.Init(pClientDE, "MinTrailSegment", LTNULL, 25.0f);
+		g_vtMinTrailSegment.Init(pClientDE, "MinTrailSegment", LTNULL, 25.0f);
 	}
 
 	if (!g_vtTrailSegmentLifetime.IsInitted())
 	{
-        g_vtTrailSegmentLifetime.Init(pClientDE, "TrailSegmentLifetime", LTNULL, 15.0f);
+		g_vtTrailSegmentLifetime.Init(pClientDE, "TrailSegmentLifetime", LTNULL, 15.0f);
 	}
 
 	if (!g_vtDialogueCinematicSoundRadius.IsInitted())
 	{
-        g_vtDialogueCinematicSoundRadius.Init(pClientDE, "DialogueCinematicSndRadius", LTNULL, 10000.0f);
+		g_vtDialogueCinematicSoundRadius.Init(pClientDE, "DialogueCinematicSndRadius", LTNULL, 10000.0f);
 	}
 
 	if (!g_vtVehicleTrials.IsInitted())
 	{
-        g_vtVehicleTrials.Init(pClientDE, "VehicleTrails", LTNULL, 0.0f);
+		g_vtVehicleTrials.Init(pClientDE, "VehicleTrails", LTNULL, 0.0f);
 	}
 
 	if (!g_vtDingDelay.IsInitted())
 	{
-        g_vtDingDelay.Init(pClientDE, "DingDelay", LTNULL, 1.0f);
+		g_vtDingDelay.Init(pClientDE, "DingDelay", LTNULL, 1.0f);
 	}
 
 	m_BreathTimer.Start(g_vtBreathTime.GetFloat());
 
 	// NOTE: Since we only use node control for the mouth now, we can safely use CF_INSIDERADIUS
-    uint32 dwCFlags = m_pClientDE->GetObjectClientFlags(m_hServerObject);
+	uint32 dwCFlags = m_pClientDE->GetObjectClientFlags(m_hServerObject);
 	dwCFlags |= CF_NOTIFYMODELKEYS | CF_INSIDERADIUS;
 
 	// Set up MoveMgr's point to us, if applicable...
 
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (m_cs.bIsPlayer && hPlayerObj == m_hServerObject)
 	{
 		g_pGameClientShell->GetMoveMgr()->SetCharacterFX(this);
@@ -272,7 +266,7 @@ LTBOOL CCharacterFX::CreateObject(ILTClient* pClientDE)
 
 	m_pClientDE->SetObjectClientFlags(m_hServerObject, dwCFlags);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
@@ -285,7 +279,7 @@ LTBOOL CCharacterFX::CreateObject(ILTClient* pClientDE)
 
 LTBOOL CCharacterFX::Update()
 {
-    if (!m_pClientDE || !m_hServerObject || m_bWantRemove) return LTFALSE;
+	if (!m_pClientDE || !m_hServerObject || m_bWantRemove) return LTFALSE;
 
 	// See if our server side object is active
 
@@ -299,7 +293,7 @@ LTBOOL CCharacterFX::Update()
 
 	// Make us solid if our ai usrflg solid is set
 
-    uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hServerObject);
+	uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hServerObject);
 
 	if ( dwUserFlags & USRFLG_AI_CLIENT_SOLID )
 	{
@@ -310,17 +304,17 @@ LTBOOL CCharacterFX::Update()
 		dwFlags &= ~FLAG_SOLID;
 	}
 
-    g_pLTClient->SetObjectFlags(m_hServerObject, dwFlags);
+	g_pLTClient->SetObjectFlags(m_hServerObject, dwFlags);
 
 	// Update
 
 	m_Flashlight.Update();
 
-    g_pLTClient->ProcessAttachments(m_hServerObject);
+	g_pLTClient->ProcessAttachments(m_hServerObject);
 
-    LTBOOL bIsLocalClient = LTFALSE;
+	LTBOOL bIsLocalClient = LTFALSE;
 
-    LTVector vPos;
+	LTVector vPos;
 	m_pClientDE->GetObjectPos(m_hServerObject, &vPos);
 
 	// Update an player-specific fx...
@@ -329,10 +323,10 @@ LTBOOL CCharacterFX::Update()
 	{
 		// Only do these if this player is the current client...
 
-        HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+		HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 		if (hPlayerObj == m_hServerObject)
 		{
-		    bIsLocalClient = LTTRUE;
+			bIsLocalClient = LTTRUE;
 
 			// Update our last surface...
 
@@ -343,11 +337,11 @@ LTBOOL CCharacterFX::Update()
 				UpdateDamageFX();
 			}
 		}
-		else  //do these things if it is some player other than the local client
+		else	//do these things if it is some player other than the local client
 		{
 			if (g_pGameClientShell->GetGameType() != SINGLE)
 			{
-			    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+				HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 				if ( hPlayerObj != m_hServerObject )
 				{
 					UpdateMarkerFX();
@@ -362,7 +356,7 @@ LTBOOL CCharacterFX::Update()
 	}
 
 
-    uint32 dwUsrFlags;
+	uint32 dwUsrFlags;
 	m_pClientDE->GetObjectUserFlags(m_hServerObject, &dwUsrFlags);
 
 	// Update 1.002 [KLS] calculate if we're under on the client so
@@ -398,7 +392,7 @@ LTBOOL CCharacterFX::Update()
 			}
 		}
 	}
-	else  // Single player
+	else	// Single player
 	{
 		bUnderWater = ((dwUsrFlags & USRFLG_PLAYER_UNDERWATER) ? LTTRUE : LTFALSE);
 	}
@@ -476,7 +470,7 @@ LTBOOL CCharacterFX::Update()
 
 	// Update being on vehicle if necessary...
 
-    UpdateOnVehicle();
+	UpdateOnVehicle();
 
 
 	// Update breath fx...
@@ -507,7 +501,7 @@ LTBOOL CCharacterFX::Update()
 		g_pPhysicsLT->SetObjectDims(m_hServerObject, &vDims, 0);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
@@ -522,7 +516,7 @@ void CCharacterFX::UpdateDamageFX()
 {
 	if (!m_hServerObject) return;
 
-    uint32 dwUsrFlags;
+	uint32 dwUsrFlags;
 	m_pClientDE->GetObjectUserFlags(m_hServerObject, &dwUsrFlags);
 
 	if (dwUsrFlags & USRFLG_CHAR_BLEEDING || g_vtTestBleedingFX.GetFloat() > 0.0f)
@@ -602,8 +596,8 @@ void CCharacterFX::UpdateDamageFX()
 
 void CCharacterFX::HandleDialogueMsg(HMESSAGEREAD hMessage)
 {
-    HSTRING hSound = g_pLTClient->ReadFromMessageHString(hMessage);
-    LTFLOAT fRadius = g_pLTClient->ReadFromMessageFloat(hMessage);
+	HSTRING hSound = g_pLTClient->ReadFromMessageHString(hMessage);
+	LTFLOAT fRadius = g_pLTClient->ReadFromMessageFloat(hMessage);
 
 	char szSound[128];
 	*szSound = 0;
@@ -611,15 +605,15 @@ void CCharacterFX::HandleDialogueMsg(HMESSAGEREAD hMessage)
 	if (hSound)
 	{
 		strcpy(szSound, g_pLTClient->GetStringData(hSound));
-	    g_pLTClient->FreeString(hSound);
+		g_pLTClient->FreeString(hSound);
 	}
 
 	if (m_hDialogueSnd)
 	{
 		g_pLTClient->KillSound(m_hDialogueSnd);
-        m_hDialogueSnd = LTNULL;
+		m_hDialogueSnd = LTNULL;
 
-        g_pInterfaceMgr->ClearSubtitle();
+		g_pInterfaceMgr->ClearSubtitle();
 	}
 
 	if (*szSound && fRadius > 0.0f)
@@ -639,7 +633,7 @@ void CCharacterFX::HandleDialogueMsg(HMESSAGEREAD hMessage)
 
 void CCharacterFX::HandleTauntMsg(HMESSAGEREAD hMessage)
 {
-    uint32 nTauntID = g_pLTClient->ReadFromMessageDWord(hMessage);
+	uint32 nTauntID = g_pLTClient->ReadFromMessageDWord(hMessage);
 	PlayTaunt(nTauntID, LTFALSE);
 }
 
@@ -697,8 +691,8 @@ void CCharacterFX::UpdateLaserFX()
 {
 	if (!m_hServerObject) return;
 
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
-    LTBOOL bIsLocalClient = (m_cs.bIsPlayer && hPlayerObj == m_hServerObject);
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	LTBOOL bIsLocalClient = (m_cs.bIsPlayer && hPlayerObj == m_hServerObject);
 
 	if (bIsLocalClient)
 	{
@@ -725,12 +719,12 @@ void CCharacterFX::UpdateLaserFX()
 
 	// Calculate the laser pos/rot...
 
-    LTVector vPos;
-    LTRotation rRot;
+	LTVector vPos;
+	LTRotation rRot;
 
 	if (GetAttachmentSocketTransform(m_hServerObject, "Flash", vPos, rRot))
 	{
-        m_pLaser->Update(vPos, &rRot, LTTRUE);
+		m_pLaser->Update(vPos, &rRot, LTTRUE);
 	}
 }
 
@@ -749,20 +743,20 @@ void CCharacterFX::UpdateUnderwaterFX(LTVector & vPos)
 	if (!m_pClientDE || !m_hServerObject) return;
 
 	HOBJECT hCamera = g_pGameClientShell->GetCamera();
-    LTVector vU, vR, vF, vTemp;
-    LTRotation rRot;
+	LTVector vU, vR, vF, vTemp;
+	LTRotation rRot;
 
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
-    LTBOOL bIsLocalClient = (m_cs.bIsPlayer && hPlayerObj == m_hServerObject);
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	LTBOOL bIsLocalClient = (m_cs.bIsPlayer && hPlayerObj == m_hServerObject);
 
 	if ( !bIsLocalClient || !(g_pGameClientShell->IsFirstPerson() && hCamera) )
 	{
-        ILTPhysics* pPhysics = m_pClientDE->Physics();
-        LTVector vDims;
+		ILTPhysics* pPhysics = m_pClientDE->Physics();
+		LTVector vDims;
 
 		pPhysics->GetObjectDims(m_hServerObject, &vDims);
-        g_pLTClient->GetObjectRotation(m_hServerObject, &rRot);
-        g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		g_pLTClient->GetObjectRotation(m_hServerObject, &rRot);
+		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 		VEC_MULSCALAR(vTemp, vF, 20.0f);
 		VEC_ADD(vPos, vPos, vTemp);
@@ -770,9 +764,9 @@ void CCharacterFX::UpdateUnderwaterFX(LTVector & vPos)
 	}
 	else
 	{
-        g_pLTClient->GetObjectPos(hCamera, &vPos);
-        g_pLTClient->GetObjectRotation(hCamera, &rRot);
-        g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		g_pLTClient->GetObjectPos(hCamera, &vPos);
+		g_pLTClient->GetObjectRotation(hCamera, &rRot);
+		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 		VEC_MULSCALAR(vTemp, vF, 20.0f);
 		VEC_ADD(vPos, vPos, vTemp);
 
@@ -811,7 +805,7 @@ void CCharacterFX::CreateUnderwaterFX(LTVector & vPos)
 	CSFXMgr* psfxMgr = g_pGameClientShell->GetSFXMgr();
 	if (!psfxMgr) return;
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
 	if (m_fNextBubbleTime > 0.0f && fTime < m_fNextBubbleTime)
 	{
@@ -834,12 +828,12 @@ void CCharacterFX::CreateUnderwaterFX(LTVector & vPos)
 
 	sm.fVolumeRadius		= 10.0f;
 	sm.fLifeTime			= 0.2f;
-	sm.fRadius				= 1000;
+	sm.fRadius			= 1000;
 	sm.fParticleCreateDelta	= 0.1f;
 	sm.fMinParticleLife		= 1.0f;
 	sm.fMaxParticleLife		= 3.0f;
 	sm.nNumParticles		= GetRandom(2, 5);
-    sm.bIgnoreWind          = LTTRUE;
+	sm.bIgnoreWind		= LTTRUE;
 	sm.hstrTexture			= m_pClientDE->CreateString(DEFAULT_BUBBLE_TEXTURE);
 
 	//m_pBubbles =
@@ -864,7 +858,7 @@ void CCharacterFX::RemoveUnderwaterFX()
 	if (m_pBubbles)
 	{
 		debug_delete(m_pBubbles);
-        m_pBubbles = LTNULL;
+		m_pBubbles = LTNULL;
 	}
 }
 
@@ -881,13 +875,13 @@ void CCharacterFX::UpdateSmokepuffsFX()
 {
 	if (!m_pClientDE || !m_hServerObject) return;
 
-    LTVector vPos(0,0,0);
+	LTVector vPos(0,0,0);
 
 	HMODELSOCKET hSocket;
 	if ( LT_OK == g_pModelLT->GetSocket(m_hServerObject, "Buttcrack", hSocket) )
 	{
 		LTransform transform;
-        if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
+		if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
 		{
 			g_pTransLT->GetPos(transform, vPos);
 		}
@@ -921,7 +915,7 @@ void CCharacterFX::CreateSmokepuffsFX()
 	CSFXMgr* psfxMgr = g_pGameClientShell->GetSFXMgr();
 	if (!psfxMgr) return;
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
 	if (m_fNextSmokepuffTime > 0.0f && fTime < m_fNextSmokepuffTime)
 	{
@@ -934,13 +928,13 @@ void CCharacterFX::CreateSmokepuffsFX()
 
 // ************************************************
 
-    LTVector vPos(0,0,0);
+	LTVector vPos(0,0,0);
 
 	HMODELSOCKET hSocket;
 	if ( LT_OK == g_pModelLT->GetSocket(m_hServerObject, "Buttcrack", hSocket) )
 	{
 		LTransform transform;
-        if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
+		if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
 		{
 			g_pTransLT->GetPos(transform, vPos);
 		}
@@ -948,7 +942,7 @@ void CCharacterFX::CreateSmokepuffsFX()
 
 // *************************************************
 
-    sm.vPos = vPos;//LTVector(0,0,0);
+	sm.vPos = vPos;//LTVector(0,0,0);
 //	sm.vPos.y += 25.0f;
 
 	sm.vColor1.Init(100.0f, 100.0f, 100.0f);
@@ -965,7 +959,7 @@ void CCharacterFX::CreateSmokepuffsFX()
 	sm.fMinParticleLife		= 1.0f;
 	sm.fMaxParticleLife		= 3.0f;
 	sm.nNumParticles		= GetRandom(1, 2);
-    sm.bIgnoreWind          = LTFALSE;
+	sm.bIgnoreWind		= LTFALSE;
 	sm.hstrTexture			= m_pClientDE->CreateString(DEFAULT_SMOKEPUFF_TEXTURE);
 
 	//m_pSmokepuffs =
@@ -990,7 +984,7 @@ void CCharacterFX::RemoveSmokepuffsFX()
 	if (m_pSmokepuffs)
 	{
 		debug_delete(m_pSmokepuffs);
-        m_pSmokepuffs = LTNULL;
+		m_pSmokepuffs = LTNULL;
 	}
 }
 
@@ -1006,13 +1000,13 @@ void CCharacterFX::UpdateZzzFX()
 {
 	if (!m_pClientDE || !m_hServerObject) return;
 
-    LTVector vPos(0,0,0);
+	LTVector vPos(0,0,0);
 
 	HMODELNODE hNode;
 	if ( LT_OK == g_pModelLT->GetNode(m_hServerObject, "eyelid", hNode) )
 	{
 		LTransform transform;
-        if ( LT_OK == g_pModelLT->GetNodeTransform(m_hServerObject, hNode, transform, LTTRUE) )
+		if ( LT_OK == g_pModelLT->GetNodeTransform(m_hServerObject, hNode, transform, LTTRUE) )
 		{
 			g_pTransLT->GetPos(transform, vPos);
 		}
@@ -1046,7 +1040,7 @@ void CCharacterFX::CreateZzzFX()
 	CSFXMgr* psfxMgr = g_pGameClientShell->GetSFXMgr();
 	if (!psfxMgr) return;
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
 	if (m_fNextZzzTime > 0.0f && fTime < m_fNextZzzTime)
 	{
@@ -1059,13 +1053,13 @@ void CCharacterFX::CreateZzzFX()
 
 // ************************************************
 
-    LTVector vPos(0,0,0);
+	LTVector vPos(0,0,0);
 
 	HMODELNODE hNode;
 	if ( LT_OK == g_pModelLT->GetNode(m_hServerObject, "eyelid", hNode) )
 	{
 		LTransform transform;
-        if ( LT_OK == g_pModelLT->GetNodeTransform(m_hServerObject, hNode, transform, LTTRUE) )
+		if ( LT_OK == g_pModelLT->GetNodeTransform(m_hServerObject, hNode, transform, LTTRUE) )
 		{
 			g_pTransLT->GetPos(transform, vPos);
 		}
@@ -1073,7 +1067,7 @@ void CCharacterFX::CreateZzzFX()
 
 // *************************************************
 
-    sm.vPos = vPos;//LTVector(0,0,0);
+	sm.vPos = vPos;//LTVector(0,0,0);
 	sm.vPos.y += 15.0f;
 
 	sm.vColor1.Init(100.0f, 100.0f, 100.0f);
@@ -1090,7 +1084,7 @@ void CCharacterFX::CreateZzzFX()
 	sm.fMinParticleLife		= 1.0f;
 	sm.fMaxParticleLife		= 3.0f;
 	sm.nNumParticles		= GetRandom(1, 1);
-    sm.bIgnoreWind          = LTFALSE;
+	sm.bIgnoreWind		= LTFALSE;
 	sm.hstrTexture			= m_pClientDE->CreateString(DEFAULT_ZZZ_TEXTURE);
 
 	//m_pZzz =
@@ -1099,13 +1093,10 @@ void CCharacterFX::CreateZzzFX()
 	m_pClientDE->FreeString(sm.hstrTexture);
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCharacterFX::RemoveZzzFX
 //
 //	PURPOSE:	Remove the Zzz fx
-//
 // ----------------------------------------------------------------------- //
 
 void CCharacterFX::RemoveZzzFX()
@@ -1115,7 +1106,7 @@ void CCharacterFX::RemoveZzzFX()
 	if (m_pZzz)
 	{
 		debug_delete(m_pZzz);
-        m_pZzz = LTNULL;
+		m_pZzz = LTNULL;
 	}
 }
 
@@ -1132,13 +1123,13 @@ void CCharacterFX::UpdateCigaretteFX()
 {
 	if (!m_pClientDE || !m_hServerObject) return;
 
-    LTVector vPos(0,0,0);
+	LTVector vPos(0,0,0);
 
 	HMODELSOCKET hSocket;
 	if ( LT_OK == g_pModelLT->GetSocket(m_hServerObject, "LeftHand", hSocket) )
 	{
 		LTransform transform;
-        if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
+		if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
 		{
 			g_pTransLT->GetPos(transform, vPos);
 		}
@@ -1172,24 +1163,24 @@ void CCharacterFX::UpdateCigaretteFX()
 		m_scalecs.vFinalScale.Init(1, 1, 1);
 		m_scalecs.vInitialColor.Init(1, 1, 1);
 		m_scalecs.vFinalColor.Init(1, 1, 1);
-        m_scalecs.bUseUserColors    = LTFALSE;
+		m_scalecs.bUseUserColors	= LTFALSE;
 		m_scalecs.fLifeTime			= 1.0f;
 		m_scalecs.fInitialAlpha		= 1.0f;
 		m_scalecs.fFinalAlpha		= 1.0f;
-        m_scalecs.bLoop             = LTFALSE;
+		m_scalecs.bLoop			 = LTFALSE;
 		m_scalecs.fDelayTime		= 0.0f;
-        m_scalecs.bAdditive         = LTFALSE;
+		m_scalecs.bAdditive		 = LTFALSE;
 		m_scalecs.nType				= OT_MODEL;
 
 		m_CigaretteModel.Init(&m_scalecs);
-        m_CigaretteModel.CreateObject(g_pLTClient);
+		m_CigaretteModel.CreateObject(g_pLTClient);
 	}
 	else
 	{
 		// Update fx...
 
-        uint32 dwFlags = g_pLTClient->GetObjectFlags(hObj);
-        g_pLTClient->SetObjectFlags(hObj, dwFlags | FLAG_VISIBLE);
+		uint32 dwFlags = g_pLTClient->GetObjectFlags(hObj);
+		g_pLTClient->SetObjectFlags(hObj, dwFlags | FLAG_VISIBLE);
 		g_pLTClient->SetObjectPos(hObj, &vPos);
 	}
 
@@ -1211,7 +1202,7 @@ void CCharacterFX::CreateCigaretteFX()
 	CSFXMgr* psfxMgr = g_pGameClientShell->GetSFXMgr();
 	if (!psfxMgr) return;
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
 	if (m_fNextCigaretteTime > 0.0f && fTime < m_fNextCigaretteTime)
 	{
@@ -1224,13 +1215,13 @@ void CCharacterFX::CreateCigaretteFX()
 
 // ************************************************
 
-    LTVector vPos(0,0,0);
+	LTVector vPos(0,0,0);
 
 	HMODELSOCKET hSocket;
 	if ( LT_OK == g_pModelLT->GetSocket(m_hServerObject, "LeftHand", hSocket) )
 	{
 		LTransform transform;
-        if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
+		if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
 		{
 			g_pTransLT->GetPos(transform, vPos);
 		}
@@ -1238,7 +1229,7 @@ void CCharacterFX::CreateCigaretteFX()
 
 // *************************************************
 
-    sm.vPos = vPos;//LTVector(0,0,0);
+	sm.vPos = vPos;//LTVector(0,0,0);
 //	sm.vPos.y += 25.0f;
 
 	sm.vColor1.Init(100.0f, 100.0f, 100.0f);
@@ -1255,7 +1246,7 @@ void CCharacterFX::CreateCigaretteFX()
 	sm.fMinParticleLife		= 1.0f;
 	sm.fMaxParticleLife		= 3.0f;
 	sm.nNumParticles		= GetRandom(1, 2);
-    sm.bIgnoreWind          = LTFALSE;
+	sm.bIgnoreWind		= LTFALSE;
 	sm.hstrTexture			= m_pClientDE->CreateString(DEFAULT_CIGARETTE_TEXTURE);
 
 	//m_pCigarette =
@@ -1280,14 +1271,14 @@ void CCharacterFX::RemoveCigaretteFX()
 	if (m_pCigarette)
 	{
 		debug_delete(m_pCigarette);
-        m_pCigarette = LTNULL;
+		m_pCigarette = LTNULL;
 	}
 
 	HOBJECT hObj = m_CigaretteModel.GetObject();
 	if (hObj)
 	{
-        uint32 dwFlags = g_pLTClient->GetObjectFlags(hObj);
-        g_pLTClient->SetObjectFlags(hObj, dwFlags & ~FLAG_VISIBLE);
+		uint32 dwFlags = g_pLTClient->GetObjectFlags(hObj);
+		g_pLTClient->SetObjectFlags(hObj, dwFlags & ~FLAG_VISIBLE);
 	}
 
 }
@@ -1305,13 +1296,13 @@ void CCharacterFX::UpdateHeartsFX()
 {
 	if (!m_pClientDE || !m_hServerObject) return;
 
-    LTVector vPos(0,0,0);
+	LTVector vPos(0,0,0);
 
 	HMODELSOCKET hSocket;
 	if ( LT_OK == g_pModelLT->GetSocket(m_hServerObject, "Heart", hSocket) )
 	{
 		LTransform transform;
-        if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
+		if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
 		{
 			g_pTransLT->GetPos(transform, vPos);
 		}
@@ -1345,7 +1336,7 @@ void CCharacterFX::CreateHeartsFX()
 	CSFXMgr* psfxMgr = g_pGameClientShell->GetSFXMgr();
 	if (!psfxMgr) return;
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
 	if (m_fNextHeartTime > 0.0f && fTime < m_fNextHeartTime)
 	{
@@ -1357,13 +1348,13 @@ void CCharacterFX::CreateHeartsFX()
 	SMCREATESTRUCT sm;
 
 // **************************
-    LTVector vPos(0,0,0);
+	LTVector vPos(0,0,0);
 
 	HMODELSOCKET hSocket;
 	if ( LT_OK == g_pModelLT->GetSocket(m_hServerObject, "Heart", hSocket) )
 	{
 		LTransform transform;
-        if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
+		if ( LT_OK == g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) )
 		{
 			g_pTransLT->GetPos(transform, vPos);
 		}
@@ -1387,7 +1378,7 @@ void CCharacterFX::CreateHeartsFX()
 	sm.fMinParticleLife		= 1.0f;
 	sm.fMaxParticleLife		= 3.0f;
 	sm.nNumParticles		= GetRandom(1, 2);
-    sm.bIgnoreWind          = LTFALSE;
+	sm.bIgnoreWind		= LTFALSE;
 	sm.hstrTexture			= m_pClientDE->CreateString(DEFAULT_HEART_TEXTURE);
 
 	//m_pHearts =
@@ -1412,7 +1403,7 @@ void CCharacterFX::RemoveHeartsFX()
 	if (m_pHearts)
 	{
 		debug_delete(m_pHearts);
-        m_pHearts = LTNULL;
+		m_pHearts = LTNULL;
 	}
 }
 
@@ -1429,7 +1420,7 @@ void CCharacterFX::RemoveLaserFX()
 	if (m_pLaser)
 	{
 		debug_delete(m_pLaser);
-        m_pLaser = LTNULL;
+		m_pLaser = LTNULL;
 	}
 }
 
@@ -1451,7 +1442,7 @@ void CCharacterFX::OnModelKey(HLOCALOBJ hObj, ArgList *pArgs)
 
 	if (g_vtModelKey.GetFloat() > 0.0f)
 	{
-        g_pLTClient->CPrint("%s ModelKey: '%s'", (m_cs.bIsPlayer ? "Player" : "AI"), pKey);
+		g_pLTClient->CPrint("%s ModelKey: '%s'", (m_cs.bIsPlayer ? "Player" : "AI"), pKey);
 	}
 
 	if (stricmp(pKey, KEY_FOOTSTEP_SOUND) == 0)
@@ -1462,11 +1453,11 @@ void CCharacterFX::OnModelKey(HLOCALOBJ hObj, ArgList *pArgs)
 
 			if (stricmp(pArgs->argv[1], "1") == 0)
 			{
-                m_bLeftFoot = LTFALSE;
+				m_bLeftFoot = LTFALSE;
 			}
 			else
 			{
-                m_bLeftFoot = LTTRUE;
+				m_bLeftFoot = LTTRUE;
 			}
 		}
 		else
@@ -1492,15 +1483,15 @@ void CCharacterFX::DoFootStepKey(HLOCALOBJ hObj, LTBOOL bForceSound)
 {
 	if (!hObj) return;
 
-    // Play one-off sounds on vehicles...
+	// Play one-off sounds on vehicles...
 
 	PlayerPhysicsModel eModel = PPM_NORMAL;
-    if (m_cs.bIsPlayer)
-    {
-        uint32 dwFlags;
-	    m_pClientDE->GetObjectUserFlags(m_hServerObject, &dwFlags);
+	if (m_cs.bIsPlayer)
+	{
+		uint32 dwFlags;
+		m_pClientDE->GetObjectUserFlags(m_hServerObject, &dwFlags);
 
-        if (dwFlags & USRFLG_PLAYER_MOTORCYCLE)
+		if (dwFlags & USRFLG_PLAYER_MOTORCYCLE)
 		{
 			eModel = PPM_MOTORCYCLE;
 		}
@@ -1508,14 +1499,14 @@ void CCharacterFX::DoFootStepKey(HLOCALOBJ hObj, LTBOOL bForceSound)
 		{
 			eModel = PPM_SNOWMOBILE;
 		}
-    }
+	}
 
 
 	CMoveMgr* pMoveMgr = g_pGameClientShell->GetMoveMgr();
 	if (!pMoveMgr) return;
 
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
-    LTBOOL bIsLocalClient = (m_cs.bIsPlayer && hPlayerObj == hObj);
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	LTBOOL bIsLocalClient = (m_cs.bIsPlayer && hPlayerObj == hObj);
 
 	m_eLastSurface = ST_UNKNOWN;
 
@@ -1533,35 +1524,35 @@ void CCharacterFX::DoFootStepKey(HLOCALOBJ hObj, LTBOOL bForceSound)
 	}
 
 
-    LTVector vPos;
-    g_pLTClient->GetObjectPos(hObj, &vPos);
+	LTVector vPos;
+	g_pLTClient->GetObjectPos(hObj, &vPos);
 
-	ClientIntersectQuery iQuery;
-	ClientIntersectInfo  iInfo;
+	ClientIntersectQuery	iQuery;
+	ClientIntersectInfo	iInfo;
 
 
 	// Do an intersect segment to determine where to put the footprint
 	// sprites...
 
-    ILTPhysics* pPhysics = g_pLTClient->Physics();
+	ILTPhysics* pPhysics = g_pLTClient->Physics();
 
-	iQuery.m_Flags = IGNORE_NONSOLID | INTERSECT_OBJECTS | INTERSECT_HPOLY;
-	iQuery.m_From  = vPos;
+	iQuery.m_Flags	= IGNORE_NONSOLID | INTERSECT_OBJECTS | INTERSECT_HPOLY;
+	iQuery.m_From	= vPos;
 
 	// If the object has Left/RightFoot sockets, use them to determine
 	// the location for the InteresectSegment...
 
-    ILTModel* pModelLT   = g_pLTClient->GetModelLT();
+	ILTModel* pModelLT = g_pLTClient->GetModelLT();
 
-    char* pSocketName = (char *)(m_bLeftFoot ? "LeftFoot" : "RightFoot");
+	char* pSocketName = (char *)(m_bLeftFoot ? "LeftFoot" : "RightFoot");
 	HMODELSOCKET hSocket;
 
 	if (pModelLT->GetSocket(hObj, pSocketName, hSocket) == LT_OK)
 	{
 		LTransform transform;
-        if (pModelLT->GetSocketTransform(hObj, hSocket, transform, LTTRUE) == LT_OK)
+		if (pModelLT->GetSocketTransform(hObj, hSocket, transform, LTTRUE) == LT_OK)
 		{
-            ILTTransform* pTransLT = g_pLTClient->GetTransformLT();
+			ILTTransform* pTransLT = g_pLTClient->GetTransformLT();
 			pTransLT->GetPos(transform, iQuery.m_From);
 
 			// Testing...
@@ -1574,11 +1565,11 @@ void CCharacterFX::DoFootStepKey(HLOCALOBJ hObj, LTBOOL bForceSound)
 
 	// Don't hit ourself...
 
-    HOBJECT hFilterList[] = {g_pLTClient->GetClientObject(), g_pGameClientShell->GetMoveMgr()->GetObject(), LTNULL};
+	HOBJECT hFilterList[] = {g_pLTClient->GetClientObject(), g_pGameClientShell->GetMoveMgr()->GetObject(), LTNULL};
 
 	if (bIsLocalClient)
 	{
-		iQuery.m_FilterFn  = ObjListFilterFn;
+		iQuery.m_FilterFn	= ObjListFilterFn;
 		iQuery.m_pUserData = hFilterList;
 	}
 
@@ -1599,7 +1590,7 @@ void CCharacterFX::DoFootStepKey(HLOCALOBJ hObj, LTBOOL bForceSound)
 	// 3rd person).  The local client's footsteps are tied to the head bob
 	// in 1st person...
 
-    LTBOOL bPlaySound = (bForceSound || (bIsLocalClient ? !g_pGameClientShell->IsFirstPerson() : LTTRUE));
+	LTBOOL bPlaySound = (bForceSound || (bIsLocalClient ? !g_pGameClientShell->IsFirstPerson() : LTTRUE));
 	if (bPlaySound)
 	{
 		PlayMovementSound(vPos, m_eLastSurface, m_bLeftFoot, eModel);
@@ -1625,9 +1616,9 @@ void CCharacterFX::DoFootStepKey(HLOCALOBJ hObj, LTBOOL bForceSound)
 // ----------------------------------------------------------------------- //
 
 void CCharacterFX::PlayMovementSound(LTVector vPos, SurfaceType eSurface,
-                                     LTBOOL bLeftFoot, PlayerPhysicsModel eModel)
+									 LTBOOL bLeftFoot, PlayerPhysicsModel eModel)
 {
-    char* pSound = LTNULL;
+	char* pSound = LTNULL;
 
 	CMoveMgr* pMoveMgr = g_pGameClientShell->GetMoveMgr();
 	if (!pMoveMgr) return;
@@ -1636,8 +1627,8 @@ void CCharacterFX::PlayMovementSound(LTVector vPos, SurfaceType eSurface,
 
 	if (g_pInterfaceMgr->GetGameState() != GS_PLAYING) return;
 
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
-    LTBOOL bIsLocalClient = (m_cs.bIsPlayer && hPlayerObj == m_hServerObject);
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	LTBOOL bIsLocalClient = (m_cs.bIsPlayer && hPlayerObj == m_hServerObject);
 
 	// If we're on a ladder, make sure it plays sounds...
 
@@ -1654,7 +1645,7 @@ void CCharacterFX::PlayMovementSound(LTVector vPos, SurfaceType eSurface,
 		for (uint32 i=0; i < dwNum; i++)
 		{
 			uint16 code;
-		    if (g_pLTClient->GetContainerCode(objList[i], &code))
+			if (g_pLTClient->GetContainerCode(objList[i], &code))
 			{
 				if (CC_LADDER == (ContainerCode)code)
 				{
@@ -1679,7 +1670,7 @@ void CCharacterFX::PlayMovementSound(LTVector vPos, SurfaceType eSurface,
 
 	if (pSound && *pSound)
 	{
-        uint32 dwFlags = bIsLocalClient ? PLAYSOUND_CLIENTLOCAL : 0;
+		uint32 dwFlags = bIsLocalClient ? PLAYSOUND_CLIENTLOCAL : 0;
 		SoundPriority ePriority = m_cs.bIsPlayer ? SOUNDPRIORITY_PLAYER_HIGH : SOUNDPRIORITY_AI_HIGH;
 
 		LTFLOAT fStealth = (eModel == PPM_NORMAL ? m_cs.fStealthPercent : 1.0f);
@@ -1712,24 +1703,24 @@ void CCharacterFX::CreateFootprint(SurfaceType eType, IntersectInfo & iInfo)
 
 	// Don't do footprints if we are on a vehicle...
 
-    if (m_cs.bIsPlayer && m_bOnVehicle)
+	if (m_cs.bIsPlayer && m_bOnVehicle)
 	{
 		return;
 	}
 
-    LTVector vDir = iInfo.m_Plane.m_Normal;
+	LTVector vDir = iInfo.m_Plane.m_Normal;
 
-    LTRotation rRot;
-    g_pLTClient->GetObjectRotation(m_hServerObject, &rRot);
+	LTRotation rRot;
+	g_pLTClient->GetObjectRotation(m_hServerObject, &rRot);
 
-    LTVector vU, vR, vF;
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTVector vU, vR, vF;
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	// Create a sprite...
 
 	BSCREATESTRUCT scale;
 	scale.dwFlags = FLAG_VISIBLE | FLAG_ROTATEABLESPRITE | FLAG_NOLIGHT;
-    g_pLTClient->AlignRotation(&(scale.rRot), &vDir, &vF);
+	g_pLTClient->AlignRotation(&(scale.rRot), &vDir, &vF);
 
 	// Nope, this isn't a typo, artists just have a problem telling
 	// left from right...
@@ -1743,7 +1734,7 @@ void CCharacterFX::CreateFootprint(SurfaceType eType, IntersectInfo & iInfo)
 	scale.fFinalAlpha		= 0.0f;
 	scale.vInitialColor.Init(0.5f, 0.5f, 0.5f);
 	scale.vFinalColor.Init(0.5f, 0.5f, 0.5f);
-    scale.bUseUserColors    = LTFALSE;
+	scale.bUseUserColors	= LTFALSE;
 	scale.nType				= OT_SPRITE;
 
 	if (g_vtFootPrintBlend.GetFloat() == 1.0f)
@@ -1759,7 +1750,7 @@ void CCharacterFX::CreateFootprint(SurfaceType eType, IntersectInfo & iInfo)
 		scale.vFinalColor.Init(0.0f, 0.0f, 0.0f);
 	}
 
-    CSpecialFX* pFX = LTNULL;
+	CSpecialFX* pFX = LTNULL;
 	pFX = g_pGameClientShell->GetSFXMgr()->CreateSFX(SFX_SCALE_ID, &scale);
 
 	if (pFX)
@@ -1777,49 +1768,49 @@ void CCharacterFX::CreateFootprint(SurfaceType eType, IntersectInfo & iInfo)
 // ----------------------------------------------------------------------- //
 
 void CCharacterFX::CreateVehicleTrail(CPolyLineFX* pTrail, LTVector vDir,
-                                      LTVector vStartPoint, LTVector vEndPoint,
-                                      LTBOOL bMotorcycle, LTBOOL bNewTrail)
+									  LTVector vStartPoint, LTVector vEndPoint,
+									  LTBOOL bMotorcycle, LTBOOL bNewTrail)
 {
-    if (!pTrail) return;
+	if (!pTrail) return;
 
-    LTRotation rRot;
-    g_pLTClient->GetObjectRotation(m_hServerObject, &rRot);
+	LTRotation rRot;
+	g_pLTClient->GetObjectRotation(m_hServerObject, &rRot);
 
-    LTVector vU, vR, vF;
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTVector vU, vR, vF;
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	if (!pTrail->HasBeenDrawn())
 	{
 		PLFXCREATESTRUCT pls;
-		pls.pTexture			= "sfx\\test\\fxtest44.dtx";
-		pls.vStartPos			= vStartPoint + (vDir * 2.0f);
-		pls.vEndPos				= vEndPoint + (vDir * 2.0f);
-        pls.vInnerColorStart    = LTVector(255, 255, 255);
-        pls.vInnerColorEnd      = LTVector(255, 255, 255);
-        pls.vOuterColorStart    = LTVector(255, 255, 255);
-        pls.vOuterColorEnd      = LTVector(255, 255, 255);
-		pls.fAlphaStart			= 0.9f;
-		pls.fAlphaEnd			= 0.0f;
-		pls.fMinWidth			= 0.0f;
-		pls.fMaxWidth			= (bMotorcycle ? 35.0f : 128.0f);
-		pls.fLifeTime			= g_vtTrailSegmentLifetime.GetFloat();
-		pls.fAlphaLifeTime		= g_vtTrailSegmentLifetime.GetFloat();
-        pls.bAdditive           = LTFALSE;
-        pls.bMultiply           = LTTRUE;
+		pls.pTexture		= "sfx\\test\\fxtest44.dtx";
+		pls.vStartPos		= vStartPoint + (vDir * 2.0f);
+		pls.vEndPos		= vEndPoint + (vDir * 2.0f);
+		pls.vInnerColorStart	= LTVector(255, 255, 255);
+		pls.vInnerColorEnd	= LTVector(255, 255, 255);
+		pls.vOuterColorStart	= LTVector(255, 255, 255);
+		pls.vOuterColorEnd	= LTVector(255, 255, 255);
+		pls.fAlphaStart		= 0.9f;
+		pls.fAlphaEnd		= 0.0f;
+		pls.fMinWidth		= 0.0f;
+		pls.fMaxWidth		= (bMotorcycle ? 35.0f : 128.0f);
+		pls.fLifeTime		= g_vtTrailSegmentLifetime.GetFloat();
+		pls.fAlphaLifeTime	= g_vtTrailSegmentLifetime.GetFloat();
+		pls.bAdditive		= LTFALSE;
+		pls.bMultiply		= LTTRUE;
 		pls.nWidthStyle			= PLWS_CONSTANT;
-        pls.bUseObjectRotation  = LTFALSE;
+		pls.bUseObjectRotation	= LTFALSE;
 		pls.nNumSegments		= 1;
 		pls.fMinDistMult		= 1.0f;
 		pls.fMaxDistMult		= 1.0f;
 		pls.fPerturb			= 0.0f;
-        pls.bAlignFlat          = LTTRUE;
-        pls.bAlignUsingRot      = LTTRUE;
-        pls.bNoZ                = LTTRUE;
+		pls.bAlignFlat			= LTTRUE;
+		pls.bAlignUsingRot		= LTTRUE;
+		pls.bNoZ				= LTTRUE;
 
 		pTrail->Init(&pls);
 		pTrail->CreateObject(m_pClientDE);
 
-        LTRotation rRot;
+		LTRotation rRot;
 		m_pClientDE->AlignRotation(&rRot, &vF, &vDir);
 		pTrail->SetRot(rRot);
 	}
@@ -1828,24 +1819,24 @@ void CCharacterFX::CreateVehicleTrail(CPolyLineFX* pTrail, LTVector vDir,
 		PLFXLINESTRUCT ls;
 		ls.vStartPos = vStartPoint + (vDir * 2.0f);
 
-        if (!bNewTrail)
-        {
-		    // Get the last vert position...
+		if (!bNewTrail)
+		{
+			// Get the last vert position...
 
-		    PolyLineList* pLines = pTrail->GetLines();
-		    if (pLines->GetLength() > 0)
-		    {
-			    PolyLine** pLine = pLines->GetItem(TLIT_LAST);
-			    if (pLine && *pLine)
-			    {
-				    PolyVertStruct** pVert = (*pLine)->list.GetItem(TLIT_LAST);
-				    if (pVert && *pVert)
-				    {
-					    ls.vStartPos = pTrail->GetVertPos((*pVert));
-				    }
-			    }
-		    }
-        }
+			PolyLineList* pLines = pTrail->GetLines();
+			if (pLines->GetLength() > 0)
+			{
+				PolyLine** pLine = pLines->GetItem(TLIT_LAST);
+				if (pLine && *pLine)
+				{
+					PolyVertStruct** pVert = (*pLine)->list.GetItem(TLIT_LAST);
+					if (pVert && *pVert)
+					{
+						ls.vStartPos = pTrail->GetVertPos((*pVert));
+					}
+				}
+			}
+		}
 
 		ls.vEndPos = vEndPoint + (vDir * 2.0f);
 
@@ -1854,40 +1845,38 @@ void CCharacterFX::CreateVehicleTrail(CPolyLineFX* pTrail, LTVector vDir,
 		// Only create a segment if we've moved far enough...
 		if (vDist.Mag() >= g_vtMinTrailSegment.GetFloat())
 		{
-			ls.vInnerColorStart     = LTVector(255, 255, 255);
-			ls.vInnerColorEnd       = LTVector(255, 255, 255);
-			ls.vOuterColorStart     = LTVector(255, 255, 255);
-			ls.vOuterColorEnd       = LTVector(255, 255, 255);
-			ls.fAlphaStart			= 0.9f;
-			ls.fAlphaEnd			= 0.0f;
-			ls.fLifeTime			= g_vtTrailSegmentLifetime.GetFloat();
-			ls.fAlphaLifeTime		= g_vtTrailSegmentLifetime.GetFloat();
+			ls.vInnerColorStart	= LTVector(255, 255, 255);
+			ls.vInnerColorEnd	= LTVector(255, 255, 255);
+			ls.vOuterColorStart	= LTVector(255, 255, 255);
+			ls.vOuterColorEnd	= LTVector(255, 255, 255);
+			ls.fAlphaStart		= 0.9f;
+			ls.fAlphaEnd		= 0.0f;
+			ls.fLifeTime		= g_vtTrailSegmentLifetime.GetFloat();
+			ls.fAlphaLifeTime	= g_vtTrailSegmentLifetime.GetFloat();
 
 			pTrail->AddLine(ls);
 		}
-    }
+	}
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCharacterFX::UpdateOnVehicle
 //
 //	PURPOSE:	Update being on a vehicle if appropriate
-//
 // ----------------------------------------------------------------------- //
 
 void CCharacterFX::UpdateOnVehicle()
 {
-    // Only players can be on vehicles...
+	// Only players can be on vehicles...
 
-    if (!m_cs.bIsPlayer) return;
+	if (!m_cs.bIsPlayer) return;
 
-    uint32 dwFlags;
-    m_pClientDE->GetObjectUserFlags(m_hServerObject, &dwFlags);
+	uint32 dwFlags;
+	m_pClientDE->GetObjectUserFlags(m_hServerObject, &dwFlags);
 
-    m_bOnVehicle = ((dwFlags & USRFLG_PLAYER_MOTORCYCLE) ||
-        (dwFlags & USRFLG_PLAYER_SNOWMOBILE));
+	m_bOnVehicle = ((dwFlags & USRFLG_PLAYER_MOTORCYCLE) ||
+		(dwFlags & USRFLG_PLAYER_SNOWMOBILE));
 
 	if (m_bOnVehicle)
 	{
@@ -1900,7 +1889,7 @@ void CCharacterFX::UpdateOnVehicle()
 	{
 		// Don't play sounds for local client...they get their own
 
-        if (g_pLTClient->GetClientObject() != m_hServerObject)
+		if (g_pLTClient->GetClientObject() != m_hServerObject)
 		{
 			UpdateMultiVehicleSounds();
 		}
@@ -1913,67 +1902,67 @@ void CCharacterFX::UpdateOnVehicle()
 
 	// See if we should continue the trail...
 
-    if (m_bOnVehicle && g_vtVehicleTrials.GetFloat())
-    {
-        // Cast a ray down to see if we are on a surface that leaves
-        // a trail...
+	if (m_bOnVehicle && g_vtVehicleTrials.GetFloat())
+	{
+		// Cast a ray down to see if we are on a surface that leaves
+		// a trail...
 
-        LTVector vPos, vDims;
-        g_pLTClient->GetObjectPos(m_hServerObject, &vPos);
-	    g_pPhysicsLT->GetObjectDims(m_hServerObject, &vDims);
+		LTVector vPos, vDims;
+		g_pLTClient->GetObjectPos(m_hServerObject, &vPos);
+		g_pPhysicsLT->GetObjectDims(m_hServerObject, &vDims);
 
-	    ClientIntersectQuery iQuery;
-	    ClientIntersectInfo  iInfo;
+		ClientIntersectQuery	iQuery;
+		ClientIntersectInfo	iInfo;
 
-        ILTPhysics* pPhysics = g_pLTClient->Physics();
+		ILTPhysics* pPhysics = g_pLTClient->Physics();
 
-	    iQuery.m_Flags = IGNORE_NONSOLID | INTERSECT_OBJECTS | INTERSECT_HPOLY;
-	    iQuery.m_From  = vPos;
+		iQuery.m_Flags	= IGNORE_NONSOLID | INTERSECT_OBJECTS | INTERSECT_HPOLY;
+		iQuery.m_From	= vPos;
 
-    	iQuery.m_To	= iQuery.m_From;
-	    iQuery.m_To.y -= (vDims.y + 50.0f);
+		iQuery.m_To	= iQuery.m_From;
+		iQuery.m_To.y -= (vDims.y + 50.0f);
 
-	    // Don't hit ourself...
+		// Don't hit ourself...
 
-        HOBJECT hFilterList[] = {g_pLTClient->GetClientObject(), g_pGameClientShell->GetMoveMgr()->GetObject(), LTNULL};
+		HOBJECT hFilterList[] = {g_pLTClient->GetClientObject(), g_pGameClientShell->GetMoveMgr()->GetObject(), LTNULL};
 
-        LTBOOL bIsLocalClient = (m_cs.bIsPlayer && g_pLTClient->GetClientObject() == m_hServerObject);
+		LTBOOL bIsLocalClient = (m_cs.bIsPlayer && g_pLTClient->GetClientObject() == m_hServerObject);
 
-        if (bIsLocalClient)
-	    {
-		    iQuery.m_FilterFn  = ObjListFilterFn;
-		    iQuery.m_pUserData = hFilterList;
-	    }
+		if (bIsLocalClient)
+		{
+			iQuery.m_FilterFn	= ObjListFilterFn;
+			iQuery.m_pUserData = hFilterList;
+		}
 
-        // We're starting a new trail if the last surface didn't show
-        // footprints (and this one does)...
+		// We're starting a new trail if the last surface didn't show
+		// footprints (and this one does)...
 
-        LTBOOL bNewTrail = !ShowsTracks(m_eLastSurface);
+		LTBOOL bNewTrail = !ShowsTracks(m_eLastSurface);
 
-        m_eLastSurface = ST_UNKNOWN;
+		m_eLastSurface = ST_UNKNOWN;
 
-        if (g_pLTClient->IntersectSegment(&iQuery, &iInfo))
-	    {
-		    m_eLastSurface = GetSurfaceType(iInfo);
-	    }
+		if (g_pLTClient->IntersectSegment(&iQuery, &iInfo))
+		{
+			m_eLastSurface = GetSurfaceType(iInfo);
+		}
 
-        // Only create trails on surfaces that show footprints...
+		// Only create trails on surfaces that show footprints...
 
-    	if (ShowsTracks(m_eLastSurface))
-        {
-            LTRotation rRot;
-            g_pLTClient->GetObjectRotation(m_hServerObject, &rRot);
+		if (ShowsTracks(m_eLastSurface))
+		{
+			LTRotation rRot;
+			g_pLTClient->GetObjectRotation(m_hServerObject, &rRot);
 
-            LTVector vU, vR, vF;
-            g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+			LTVector vU, vR, vF;
+			g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-            LTVector vStartPoint = iInfo.m_Point;
-            LTVector vEndPoint   = iInfo.m_Point + (vF * 25.0f);
+			LTVector vStartPoint = iInfo.m_Point;
+			LTVector vEndPoint	= iInfo.m_Point + (vF * 25.0f);
 
 			// Create trail for the front tire...
 
 			//CreateVehicleTrail(&m_VehicleTrail1, iInfo.m_Plane.m_Normal,
-            //    vStartPoint, vEndPoint, bMotorcycle, bNewTrail);
+			//	vStartPoint, vEndPoint, bMotorcycle, bNewTrail);
 
 			// Create the trail for the back tire...
 
@@ -1982,17 +1971,17 @@ void CCharacterFX::UpdateOnVehicle()
 
 			CreateVehicleTrail(&m_VehicleTrail2, iInfo.m_Plane.m_Normal,
 				vStartPoint, vEndPoint, m_bOnMotorcycle, bNewTrail);
-        }
-    }
+		}
+	}
 
-    // Always update the trail, so it can fade away....
+	// Always update the trail, so it can fade away....
 
 	if (m_VehicleTrail1.HasBeenDrawn())
 	{
 		m_VehicleTrail1.Update();
 	}
 
-    if (m_VehicleTrail2.HasBeenDrawn())
+	if (m_VehicleTrail2.HasBeenDrawn())
 	{
 		m_VehicleTrail2.Update();
 	}
@@ -2017,8 +2006,8 @@ void CCharacterFX::UpdateMultiVehicleSounds()
 		{
 			// Play startup sound...
 
-            const char* pSnd = m_bOnMotorcycle ? "snd\\vehicle\\motorcycle\\startup.wav" : "snd\\vehicle\\snowmobile\\startup.wav";
-            g_pClientSoundMgr->PlaySoundFromObject(m_hServerObject, (char *)pSnd,
+			const char* pSnd = m_bOnMotorcycle ? "snd\\vehicle\\motorcycle\\startup.wav" : "snd\\vehicle\\snowmobile\\startup.wav";
+			g_pClientSoundMgr->PlaySoundFromObject(m_hServerObject, (char *)pSnd,
 				DEFAULT_VEHICLE_RADIUS, SOUNDPRIORITY_PLAYER_HIGH);
 
 
@@ -2028,7 +2017,7 @@ void CCharacterFX::UpdateMultiVehicleSounds()
 
 			pSnd = m_bOnMotorcycle ? "snd\\vehicle\\motorcycle\\MP_Loop.wav" : "snd\\vehicle\\snowmobile\\MP_Loop.wav";
 			m_hVehicleSound = g_pClientSoundMgr->PlaySoundFromObject(m_hServerObject,
-                (char *)pSnd, DEFAULT_VEHICLE_RADIUS, SOUNDPRIORITY_PLAYER_HIGH, dwFlags);
+				(char *)pSnd, DEFAULT_VEHICLE_RADIUS, SOUNDPRIORITY_PLAYER_HIGH, dwFlags);
 		}
 		else
 		{
@@ -2046,8 +2035,8 @@ void CCharacterFX::UpdateMultiVehicleSounds()
 
 		// Play turn-off sound
 
-        const char* pSnd = m_bOnMotorcycle ? "snd\\vehicle\\motorcycle\\turnoff.wav" : "snd\\vehicle\\snowmobile\\turnoff.wav";
-        g_pClientSoundMgr->PlaySoundFromObject(m_hServerObject, (char *)pSnd,
+		const char* pSnd = m_bOnMotorcycle ? "snd\\vehicle\\motorcycle\\turnoff.wav" : "snd\\vehicle\\snowmobile\\turnoff.wav";
+		g_pClientSoundMgr->PlaySoundFromObject(m_hServerObject, (char *)pSnd,
 			DEFAULT_VEHICLE_RADIUS, SOUNDPRIORITY_PLAYER_HIGH);
 	}
 }
@@ -2063,9 +2052,9 @@ void CCharacterFX::UpdateMultiVehicleSounds()
 
 LTBOOL CCharacterFX::OnServerMessage(HMESSAGEREAD hMessage)
 {
-    if (!CSpecialFX::OnServerMessage(hMessage)) return LTFALSE;
+	if (!CSpecialFX::OnServerMessage(hMessage)) return LTFALSE;
 
-    uint8 nMsgId = g_pLTClient->ReadFromMessageByte(hMessage);
+	uint8 nMsgId = g_pLTClient->ReadFromMessageByte(hMessage);
 
 	switch(nMsgId)
 	{
@@ -2098,10 +2087,10 @@ LTBOOL CCharacterFX::OnServerMessage(HMESSAGEREAD hMessage)
 
 		case CFX_RESET_TRACKER:
 		{
-            uint8 iTracker = g_pLTClient->ReadFromMessageByte(hMessage);
+			uint8 iTracker = g_pLTClient->ReadFromMessageByte(hMessage);
 			if ( iTracker == 0 )
 			{
-                g_pLTClient->ResetModelAnimation(m_hServerObject);
+				g_pLTClient->ResetModelAnimation(m_hServerObject);
 			}
 			else
 			{
@@ -2112,19 +2101,19 @@ LTBOOL CCharacterFX::OnServerMessage(HMESSAGEREAD hMessage)
 
 		case CFX_STEALTH_MSG:
 		{
-            m_cs.fStealthPercent = g_pLTClient->ReadFromMessageFloat(hMessage);
+			m_cs.fStealthPercent = g_pLTClient->ReadFromMessageFloat(hMessage);
 		}
 		break;
 
 		case CFX_CLIENTID_MSG:
 		{
-            m_cs.nClientID = g_pLTClient->ReadFromMessageByte(hMessage);
+			m_cs.nClientID = g_pLTClient->ReadFromMessageByte(hMessage);
 		}
 		break;
 
 		case CFX_CHAT_MSG:
 		{
-            m_cs.SetChatting((LTBOOL)g_pLTClient->ReadFromMessageByte(hMessage));
+			m_cs.SetChatting((LTBOOL)g_pLTClient->ReadFromMessageByte(hMessage));
 		}
 		break;
 
@@ -2209,9 +2198,9 @@ LTBOOL CCharacterFX::OnServerMessage(HMESSAGEREAD hMessage)
 		{
 			// Re-init our data...
 
-            m_cs.Read(g_pLTClient, hMessage);
+			m_cs.Read(g_pLTClient, hMessage);
 
-		    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+			HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 			if (m_cs.bIsPlayer && hPlayerObj == m_hServerObject)
 			{
 				InitLocalPlayer();
@@ -2222,7 +2211,7 @@ LTBOOL CCharacterFX::OnServerMessage(HMESSAGEREAD hMessage)
 		default : break;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
@@ -2237,16 +2226,16 @@ HLTSOUND CCharacterFX::PlayLipSyncSound(char* szSound, LTFLOAT fRadius, LTBOOL &
 {
 	bSubtitle = LTFALSE;
 
-    if (!szSound || !szSound[0] || fRadius <= 0.0f) return LTNULL;
+	if (!szSound || !szSound[0] || fRadius <= 0.0f) return LTNULL;
 
-    uint32 dwFlags = PLAYSOUND_GETHANDLE;
+	uint32 dwFlags = PLAYSOUND_GETHANDLE;
 
 	SoundPriority ePriority = SOUNDPRIORITY_AI_HIGH;
 	if (m_cs.bIsPlayer)
 	{
 		ePriority = SOUNDPRIORITY_PLAYER_HIGH;
 
-        LTBOOL bIsLocalClient = (g_pLTClient->GetClientObject() == m_hServerObject);
+		LTBOOL bIsLocalClient = (g_pLTClient->GetClientObject() == m_hServerObject);
 		dwFlags |= bIsLocalClient ? PLAYSOUND_CLIENTLOCAL : 0;
 	}
 
@@ -2363,31 +2352,31 @@ void CCharacterFX::UpdateBreathFX()
 		if (g_pModelLT->GetSocket(m_hServerObject, "Chin", hSocket) == LT_OK)
 		{
 			LTransform transform;
-            if (g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) == LT_OK)
+			if (g_pModelLT->GetSocketTransform(m_hServerObject, hSocket, transform, LTTRUE) == LT_OK)
 			{
-                LTVector vPos;
-                LTRotation rRot;
+				LTVector vPos;
+				LTRotation rRot;
 				g_pTransLT->Get(transform, vPos, rRot);
 
-                LTVector vU, vR, vF;
-                g_pLTClient->GetObjectRotation(m_hServerObject, &rRot);
-                g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+				LTVector vU, vR, vF;
+				g_pLTClient->GetObjectRotation(m_hServerObject, &rRot);
+				g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 				SMCREATESTRUCT sm;
 
-				sm.vPos					= vPos;
-                sm.bAdjustParticleScale = LTTRUE;
-				sm.fStartParticleScale  = GetRandom(g_pClientButeMgr->GetBreathFXAttributeFloat("MinPStartScale"),
+				sm.vPos				= vPos;
+				sm.bAdjustParticleScale	= LTTRUE;
+				sm.fStartParticleScale	= GetRandom(g_pClientButeMgr->GetBreathFXAttributeFloat("MinPStartScale"),
 					g_pClientButeMgr->GetBreathFXAttributeFloat("MaxPStartScale"));
-				sm.fEndParticleScale  = GetRandom(g_pClientButeMgr->GetBreathFXAttributeFloat("MinPEndScale"),
+				sm.fEndParticleScale	= GetRandom(g_pClientButeMgr->GetBreathFXAttributeFloat("MinPEndScale"),
 					g_pClientButeMgr->GetBreathFXAttributeFloat("MaxPEndScale"));
 
-                sm.bAdjustParticleAlpha = LTTRUE;
-				sm.fStartParticleAlpha  = g_pClientButeMgr->GetBreathFXAttributeFloat("PStartAlpha");
-				sm.fEndParticleAlpha    = g_pClientButeMgr->GetBreathFXAttributeFloat("PEndAlpha");
+				sm.bAdjustParticleAlpha	= LTTRUE;
+				sm.fStartParticleAlpha	= g_pClientButeMgr->GetBreathFXAttributeFloat("PStartAlpha");
+				sm.fEndParticleAlpha	= g_pClientButeMgr->GetBreathFXAttributeFloat("PEndAlpha");
 
 				CString str = g_pClientButeMgr->GetBreathFXAttributeString("Sprite");
-                sm.hstrTexture = g_pLTClient->CreateString((char *)(LPCSTR)str);
+				sm.hstrTexture = g_pLTClient->CreateString((char *)(LPCSTR)str);
 
 				sm.vColor1.Init(255.0, 255.0, 255.0);
 				sm.vColor2.Init(255.0, 255.0, 255.0);
@@ -2395,18 +2384,18 @@ void CCharacterFX::UpdateBreathFX()
 				sm.vMinDriftVel = g_pClientButeMgr->GetBreathFXAttributeVector("MinVel");
 				sm.vMaxDriftVel = g_pClientButeMgr->GetBreathFXAttributeVector("MaxVel");
 
-                LTFLOAT fVel = g_pClientButeMgr->GetBreathFXAttributeFloat("ForwardVel");
-				sm.vMinDriftVel			+= (vF * fVel);
-				sm.vMaxDriftVel			+= (vF * fVel * 1.25);
-				sm.fVolumeRadius		= g_pClientButeMgr->GetBreathFXAttributeFloat("Volume");
-				sm.fRadius				= g_pClientButeMgr->GetBreathFXAttributeFloat("Radius");
-				sm.fMinParticleLife		= g_pClientButeMgr->GetBreathFXAttributeFloat("MinPLife");
-				sm.fMaxParticleLife		= g_pClientButeMgr->GetBreathFXAttributeFloat("MaxPLife");
-				sm.nNumParticles		= g_pClientButeMgr->GetBreathFXAttributeInt("NumParticles");
+				LTFLOAT fVel = g_pClientButeMgr->GetBreathFXAttributeFloat("ForwardVel");
+				sm.vMinDriftVel	+= (vF * fVel);
+				sm.vMaxDriftVel	+= (vF * fVel * 1.25);
+				sm.fVolumeRadius	= g_pClientButeMgr->GetBreathFXAttributeFloat("Volume");
+				sm.fRadius		= g_pClientButeMgr->GetBreathFXAttributeFloat("Radius");
+				sm.fMinParticleLife	= g_pClientButeMgr->GetBreathFXAttributeFloat("MinPLife");
+				sm.fMaxParticleLife	= g_pClientButeMgr->GetBreathFXAttributeFloat("MaxPLife");
+				sm.nNumParticles	= g_pClientButeMgr->GetBreathFXAttributeInt("NumParticles");
 
-                sm.bIgnoreWind          = LTFALSE;
+				sm.bIgnoreWind		= LTFALSE;
 				sm.fLifeTime			= sm.fMaxParticleLife;
-				sm.fParticleCreateDelta	= (sm.fLifeTime * 4.0f);  // Only create once
+				sm.fParticleCreateDelta	= (sm.fLifeTime * 4.0f);	// Only create once
 
 				CSFXMgr* psfxMgr = g_pGameClientShell->GetSFXMgr();
 				if (psfxMgr)
@@ -2414,7 +2403,7 @@ void CCharacterFX::UpdateBreathFX()
 					psfxMgr->CreateSFX(SFX_SMOKE_ID, &sm);
 				}
 
-                g_pLTClient->FreeString(sm.hstrTexture);
+				g_pLTClient->FreeString(sm.hstrTexture);
 
 				m_BreathTimer.Start(g_vtBreathTime.GetFloat() * GetRandom(0.75f, 1.25f));
 			}
@@ -2433,14 +2422,14 @@ void CCharacterFX::UpdateBreathFX()
 
 void CCharacterFX::HandleZipcordMsg(HMESSAGEREAD hMessage)
 {
-    uint8 nZipState = g_pLTClient->ReadFromMessageByte(hMessage);
+	uint8 nZipState = g_pLTClient->ReadFromMessageByte(hMessage);
 
 	switch (nZipState)
 	{
 		case ZC_ON :
 		{
-            LTVector vEndPos;
-            g_pLTClient->ReadFromMessageVector(hMessage, &vEndPos);
+			LTVector vEndPos;
+			g_pLTClient->ReadFromMessageVector(hMessage, &vEndPos);
 
 			TurnOnZipCord(vEndPos);
 		}
@@ -2468,9 +2457,9 @@ void CCharacterFX::HandleZipcordMsg(HMESSAGEREAD hMessage)
 void CCharacterFX::TurnOnZipCord(LTVector vEndPoint)
 {
 	m_vZipCordEndPoint = vEndPoint;
-    m_bDrawZipCord = LTTRUE;
+	m_bDrawZipCord = LTTRUE;
 
-    uint32 dwFlags = m_ZipCord.GetFlags();
+	uint32 dwFlags = m_ZipCord.GetFlags();
 	m_ZipCord.SetFlags(dwFlags | FLAG_VISIBLE);
 }
 
@@ -2485,9 +2474,9 @@ void CCharacterFX::TurnOnZipCord(LTVector vEndPoint)
 void CCharacterFX::TurnOffZipCord()
 {
 	m_vZipCordEndPoint.Init();
-    m_bDrawZipCord = LTFALSE;
+	m_bDrawZipCord = LTFALSE;
 
-    uint32 dwFlags = m_ZipCord.GetFlags();
+	uint32 dwFlags = m_ZipCord.GetFlags();
 	m_ZipCord.SetFlags(dwFlags & ~FLAG_VISIBLE);
 }
 
@@ -2505,10 +2494,10 @@ void CCharacterFX::UpdateZipCordFX()
 
 	// Calculate start point (1st person, or 3rd person...)
 
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
-    LTBOOL bIsLocalClient = (m_cs.bIsPlayer && hPlayerObj == m_hServerObject);
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	LTBOOL bIsLocalClient = (m_cs.bIsPlayer && hPlayerObj == m_hServerObject);
 
-    LTBOOL bFirstPerson = LTFALSE;
+	LTBOOL bFirstPerson = LTFALSE;
 
 	if (bIsLocalClient)
 	{
@@ -2521,7 +2510,7 @@ void CCharacterFX::UpdateZipCordFX()
 	PLFXCREATESTRUCT pls;
 	pls.vEndPos	= m_vZipCordEndPoint;
 
-    g_pLTClient->GetObjectPos(m_hServerObject, &(pls.vStartPos));
+	g_pLTClient->GetObjectPos(m_hServerObject, &(pls.vStartPos));
 
 	if (bFirstPerson)
 	{
@@ -2533,7 +2522,7 @@ void CCharacterFX::UpdateZipCordFX()
 			if (LT_OK == g_pModelLT->GetSocket(hModelObject, "ZipCord", hSocket))
 			{
 				LTransform transform;
-                if (LT_OK == g_pModelLT->GetSocketTransform(hModelObject, hSocket, transform, LTTRUE))
+				if (LT_OK == g_pModelLT->GetSocketTransform(hModelObject, hSocket, transform, LTTRUE))
 				{
 					g_pTransLT->GetPos(transform, pls.vStartPos);
 
@@ -2541,17 +2530,17 @@ void CCharacterFX::UpdateZipCordFX()
 					// drawn relative to the camera...
 
 					HOBJECT hCamera = g_pGameClientShell->GetCamera();
-                    LTVector vPos;
-                    g_pLTClient->GetObjectPos(hCamera, &vPos);
+					LTVector vPos;
+					g_pLTClient->GetObjectPos(hCamera, &vPos);
 					pls.vStartPos += vPos;
 
-                    // g_pLTClient->CPrint("Pos %.2f, %.2f, %.2f", VEC_EXPAND(pls.vStartPos));
+					// g_pLTClient->CPrint("Pos %.2f, %.2f, %.2f", VEC_EXPAND(pls.vStartPos));
 
 					// Add the player-view weapon model pos to the start point to get
 					// the camera-relative pos.
 
-                    //LTVector vPos;
-                    //g_pLTClient->GetObjectPos(hModelObject, &vPos);
+					//LTVector vPos;
+					//g_pLTClient->GetObjectPos(hModelObject, &vPos);
 
 					//pls.vStartPos += vPos;
 
@@ -2559,7 +2548,7 @@ void CCharacterFX::UpdateZipCordFX()
 					// camera-relative pos for this...
 
 					//HOBJECT hCamera = g_pGameClientShell->GetCamera();
-                    //g_pLTClient->GetObjectPos(hCamera, &vPos);
+					//g_pLTClient->GetObjectPos(hCamera, &vPos);
 					//pls.vEndPos -= vPos;
 				}
 			}
@@ -2569,32 +2558,32 @@ void CCharacterFX::UpdateZipCordFX()
 	{
 		// Use the hand-held flash position...
 
-        LTRotation rRot;
+		LTRotation rRot;
 		GetAttachmentSocketTransform(m_hServerObject, "Flash", pls.vStartPos, rRot);
 	}
 
-	pls.pTexture			= "sfx\\test\\zipcord.dtx";
-    pls.dwTexAddr           = LTTEXADDR_CLAMP;
-    pls.vInnerColorStart    = LTVector(255, 255, 255);
-	pls.vInnerColorEnd		= pls.vInnerColorStart;
+	pls.pTexture		= "sfx\\test\\zipcord.dtx";
+	pls.dwTexAddr		= LTTEXADDR_CLAMP;
+	pls.vInnerColorStart	= LTVector(255, 255, 255);
+	pls.vInnerColorEnd	= pls.vInnerColorStart;
 	pls.vOuterColorStart	= pls.vInnerColorStart;
-	pls.vOuterColorEnd		= pls.vInnerColorStart;
-	pls.fAlphaStart			= 1.0f;
-	pls.fAlphaEnd			= 1.0f;
-	pls.fMinWidth			= 0.0f;
-	pls.fMaxWidth			= bFirstPerson ? g_vtZipCord1stWidth.GetFloat() : g_vtZipCord3rdWidth.GetFloat();
-	pls.fLifeTime			= 10000000.0f;
-	pls.fAlphaLifeTime		= 10000000.0f;
-    pls.bAdditive           = LTFALSE;
-    pls.bMultiply           = LTFALSE;
+	pls.vOuterColorEnd	= pls.vInnerColorStart;
+	pls.fAlphaStart		= 1.0f;
+	pls.fAlphaEnd		= 1.0f;
+	pls.fMinWidth		= 0.0f;
+	pls.fMaxWidth		= bFirstPerson ? g_vtZipCord1stWidth.GetFloat() : g_vtZipCord3rdWidth.GetFloat();
+	pls.fLifeTime		= 10000000.0f;
+	pls.fAlphaLifeTime	= 10000000.0f;
+	pls.bAdditive		= LTFALSE;
+	pls.bMultiply		= LTFALSE;
 	pls.nWidthStyle			= PLWS_CONSTANT;
-    pls.bUseObjectRotation  = LTFALSE;
+	pls.bUseObjectRotation	= LTFALSE;
 	pls.nNumSegments		= 2;
 	pls.fMinDistMult		= 1.0f;
 	pls.fMaxDistMult		= 1.0f;
 	pls.fPerturb			= 0.0f;
-    pls.bAlignFlat          = LTTRUE;
-    pls.bNoZ                = LTTRUE;
+	pls.bAlignFlat			= LTTRUE;
+	pls.bNoZ				= LTTRUE;
 
 	// Update the zipcord...
 
@@ -2605,7 +2594,7 @@ void CCharacterFX::UpdateZipCordFX()
 		// Hide the zipcord in portals if 1st person...Also set flag really
 		// close to true...
 
-        uint32 dwFlags2, dwFlags;
+		uint32 dwFlags2, dwFlags;
 
 		dwFlags = m_ZipCord.GetFlags();
 		dwFlags2 = m_ZipCord.GetFlags2();
@@ -2631,7 +2620,7 @@ void CCharacterFX::UpdateZipCordFX()
 		// First time, create it...
 
 		m_ZipCord.Init(&pls);
-        m_ZipCord.CreateObject(g_pLTClient);
+		m_ZipCord.CreateObject(g_pLTClient);
 	}
 
 
@@ -2650,14 +2639,14 @@ void CCharacterFX::UpdateMarkerFX()
 {
 	if (!m_pClientDE || !m_hServerObject) return;
 
-    uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hServerObject);
+	uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hServerObject);
 	if (!(dwFlags & FLAG_VISIBLE))
 	{
 		RemoveMarkerFX();
 		return;
 	}
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
 	static const LTFLOAT s_fNextTimeDelta = 1.0f;
 
@@ -2682,10 +2671,10 @@ void CCharacterFX::UpdateMarkerFX()
 		}
 	}
 
-    LTVector vU, vR, vF, vTemp, vDims, vPos;
-    LTRotation rRot;
+	LTVector vU, vR, vF, vTemp, vDims, vPos;
+	LTRotation rRot;
 
-    ILTPhysics* pPhysics = m_pClientDE->Physics();
+	ILTPhysics* pPhysics = m_pClientDE->Physics();
 
 	m_pClientDE->GetObjectPos(m_hServerObject, &vPos);
 	pPhysics->GetObjectDims(m_hServerObject, &vDims);
@@ -2695,19 +2684,17 @@ void CCharacterFX::UpdateMarkerFX()
 	if (m_hMarker)
 	{
 		m_pClientDE->SetObjectPos(m_hMarker, &vPos);
-//        g_pLTClient->RotateAroundAxis(&rRot, &vU, g_pGameClientShell->GetFrameTime());
-//		  g_pLTClient->SetObjectRotation(m_pTeamMarker->GetObject(),&rRot);
+//		g_pLTClient->RotateAroundAxis(&rRot, &vU, g_pGameClientShell->GetFrameTime());
+//		g_pLTClient->SetObjectRotation(m_pTeamMarker->GetObject(),&rRot);
 
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCharacterFX::CreateTeamFX
 //
 //	PURPOSE:	Create Team special fx
-//
 // ----------------------------------------------------------------------- //
 
 void CCharacterFX::CreateTeamFX()
@@ -2754,11 +2741,9 @@ void CCharacterFX::CreateTeamFX()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCharacterFX::CreateChatFX
 //
 //	PURPOSE:	Create chat special fx
-//
 // ----------------------------------------------------------------------- //
 
 void CCharacterFX::CreateChatFX()
@@ -2799,11 +2784,9 @@ void CCharacterFX::CreateChatFX()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCharacterFX::RemoveMarkerFX
 //
 //	PURPOSE:	Remove the marker fx
-//
 // ----------------------------------------------------------------------- //
 
 void CCharacterFX::RemoveMarkerFX()
@@ -2819,11 +2802,9 @@ void CCharacterFX::RemoveMarkerFX()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCharacterFX::NextMarkerState
 //
 //	PURPOSE:	Find next valid marker state, return LTTRUE if it changed
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCharacterFX::NextMarkerState()
@@ -2836,7 +2817,7 @@ LTBOOL CCharacterFX::NextMarkerState()
 
 	int nState = (int)m_eMarkerState;
 	// if we don't have any client info, we'd better be in a single player game
-	if (!pInfo ||  !pLocalInfo)
+	if (!pInfo || !pLocalInfo)
 	{
 		if (g_pGameClientShell->GetGameType() == SINGLE)
 		{
@@ -2909,11 +2890,9 @@ LTBOOL CCharacterFX::NextMarkerState()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCharacterFX::ResetMarkerState
 //
 //	PURPOSE:	Find next valid marker state, return LTTRUE if it changed
-//
 // ----------------------------------------------------------------------- //
 
 void CCharacterFX::ResetMarkerState()
@@ -2923,11 +2902,9 @@ void CCharacterFX::ResetMarkerState()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCharacterFX::PlayDingSound
 //
 //	PURPOSE:	Play an impact ding sound
-//
 // ----------------------------------------------------------------------- //
 
 void CCharacterFX::PlayDingSound()
@@ -2949,16 +2926,14 @@ void CCharacterFX::PlayDingSound()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CCharacterFX::InitLocalPlayer
 //
 //	PURPOSE:	Initialize the local player
-//
 // ----------------------------------------------------------------------- //
 
 void CCharacterFX::InitLocalPlayer()
 {
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (m_cs.bIsPlayer && hPlayerObj == m_hServerObject)
 	{
 		// check for needed overlays
