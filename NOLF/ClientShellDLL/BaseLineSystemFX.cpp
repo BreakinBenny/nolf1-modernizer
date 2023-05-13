@@ -1,48 +1,39 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : BaseLineSystemFX.cpp
+// MODULE: BaseLineSystemFX.cpp
 //
 // PURPOSE : BaseLineSystem special FX - Implementation
 //
 // CREATED : 1/17/98
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
 #include "BaseLineSystemFX.h"
 #include "iltclient.h"
 
-
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CBaseLineSystemFX::Init
 //
 //	PURPOSE:	Init the base line system
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseLineSystemFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
-
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CBaseLineSystemFX::CreateObject
 //
 //	PURPOSE:	Create object associated the line system.
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseLineSystemFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
+	if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
 
-    LTVector vPos;
+	LTVector vPos;
 	VEC_COPY(vPos, m_vPos);
 
 	if (m_vPos.x == 0.0f && m_vPos.y == 0.0f && m_vPos.z == 0.0f)
@@ -53,8 +44,8 @@ LTBOOL CBaseLineSystemFX::CreateObject(ILTClient *pClientDE)
 		}
 	}
 
-    LTRotation rRot;
-    rRot = m_rRot;
+	LTRotation rRot;
+	rRot = m_rRot;
 
 	if (m_rRot.m_Quat[3] == 0.0f)
 	{
@@ -72,26 +63,24 @@ LTBOOL CBaseLineSystemFX::CreateObject(ILTClient *pClientDE)
 	createStruct.m_ObjectType = OT_LINESYSTEM;
 	createStruct.m_Flags = FLAG_VISIBLE;
 	VEC_COPY(createStruct.m_Pos, vPos);
-    createStruct.m_Rotation = rRot;
+	createStruct.m_Rotation = rRot;
 
 	m_hObject = m_pClientDE->CreateObject(&createStruct);
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CBaseLineSystemFX::Update
 //
 //	PURPOSE:	Update the line system
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseLineSystemFX::Update()
 {
-    if(!m_hObject || !m_pClientDE) return LTFALSE;
+	if(!m_hObject || !m_pClientDE) return LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
