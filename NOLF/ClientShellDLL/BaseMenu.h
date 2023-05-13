@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : BaseMenu.h
+// MODULE: BaseMenu.h
 //
 // PURPOSE : Base Class for In-game Menus
 //
 // CREATED : 3/20/00
-//
 // ----------------------------------------------------------------------- //
 
 
@@ -20,8 +18,8 @@ public:
 	CBaseMenu();
 
 	virtual void	Init(CLTMenuWnd *pMenuWnd) {m_pMenuWnd = pMenuWnd;}
-    virtual void    Show(LTBOOL bShow);
-    virtual void    Select(uint8 byItem) {}
+	virtual void	Show(LTBOOL bShow);
+	virtual void	Select(uint8 byItem) {}
 
 protected:
 	virtual void	Build() {}
