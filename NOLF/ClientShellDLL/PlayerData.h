@@ -11,7 +11,7 @@
 
 #include "SharedMission.h"
 
-class CPlayerData  
+class CPlayerData
 {
 public:
 	CPlayerData();
@@ -20,8 +20,8 @@ public:
 	void ReadClientData(HMESSAGEREAD hMessage);
 
 	MISSIONSUMMARY	ms;
-	PLAYERRANK		CurRank;
-	PLAYERRANK		GlobalRank;
+	PLAYERRANK	CurRank;
+	PLAYERRANK	GlobalRank;
 };
 
 #endif // !defined(AFX_PLAYERDATA_H__4E96EB40_4A57_11D3_B2DB_006097097C7B__INCLUDED_)
