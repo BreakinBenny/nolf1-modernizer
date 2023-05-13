@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : SecurityCamera.cpp
+// MODULE: SecurityCamera.cpp
 //
 // PURPOSE : Implementation of Security Camera
 //
 // CREATED : 3/27/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -34,23 +32,21 @@ static char s_szTripped[]	= "TRIPPED";
 
 // Defines
 
-#define DEFAULT_FILENAME		"Props\\Models\\SecurityCam.abc"
-#define DEFAULT_SKIN			"Props\\Skins\\SecurityCam.dtx"
+#define DEFAULT_FILENAME	"Props\\Models\\SecurityCam.abc"
+#define DEFAULT_SKIN		"Props\\Skins\\SecurityCam.dtx"
 
 #define DEFAULT_BROKE_FILENAME	"Props\\Models\\SecurityCamBroke.abc"
-#define DEFAULT_BROKE_SKIN		"Props\\Skins\\SecurityCamBroke.dtx"
+#define DEFAULT_BROKE_SKIN	"Props\\Skins\\SecurityCamBroke.dtx"
 
-#define FOCUSING_SOUND			"Snd\\Props\\SecurityCamera\\Focusing.wav"
-#define	LOOP_SOUND				"Snd\\Props\\SecurityCamera\\Loop.wav"
-#define DETECT_SOUND			"Snd\\Props\\SecurityCamera\\Detect.wav"
+#define FOCUSING_SOUND		"Snd\\Props\\SecurityCamera\\Focusing.wav"
+#define	LOOP_SOUND		"Snd\\Props\\SecurityCamera\\Loop.wav"
+#define DETECT_SOUND		"Snd\\Props\\SecurityCamera\\Detect.wav"
 
 
 // ----------------------------------------------------------------------- //
-//
 //	CLASS:		SecurityCamera
 //
 //	PURPOSE:	Scans for players
-//
 // ----------------------------------------------------------------------- //
 
 BEGIN_CLASS(SecurityCamera)
@@ -77,45 +73,41 @@ BEGIN_CLASS(SecurityCamera)
 END_CLASS_DEFAULT(SecurityCamera, CScanner, NULL, NULL)
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::SecurityCamera()
 //
 //	PURPOSE:	Initialize object
-//
 // ----------------------------------------------------------------------- //
 
 SecurityCamera::SecurityCamera() : CScanner()
 {
 	m_ePreviousState	= eStatePausingAt1;
-	m_eState			= eStatePausingAt1;
+	m_eState		= eStatePausingAt1;
 
-	m_fYaw				= 0.0f;
-	m_fYaw1				= 0.0f;
-	m_fYaw2				= 0.0f;
-	m_fYawSpeed			= 0.0f;
+	m_fYaw			= 0.0f;
+	m_fYaw1			= 0.0f;
+	m_fYaw2			= 0.0f;
+	m_fYawSpeed		= 0.0f;
 	m_fYaw1PauseTime	= 0.0f;
 	m_fYaw2PauseTime	= 0.0f;
 	m_fYawPauseTimer	= 0.0f;
 
 	m_fSoundRadius		= 500.0f;
 
-    m_hFocusingSound    = LTNULL;
-    m_hLoopSound        = LTNULL;
-    m_hDisablerModel    = LTNULL;
-    m_hLight            = LTNULL;
+	m_hFocusingSound	= LTNULL;
+	m_hLoopSound		= LTNULL;
+	m_hDisablerModel	= LTNULL;
+	m_hLight		= LTNULL;
 
-    m_bDisabled         = LTFALSE;
-	m_bTripped			= LTFALSE;
+	m_bDisabled		= LTFALSE;
+	m_bTripped		= LTFALSE;
 
 	m_dwUsrFlgs |= USRFLG_GADGET_CAMERA_DISABLER;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::~SecurityCamera()
 //
 //	PURPOSE:	Deallocate object
-//
 // ----------------------------------------------------------------------- //
 
 SecurityCamera::~SecurityCamera()
@@ -127,36 +119,33 @@ SecurityCamera::~SecurityCamera()
 		// Remove the model...
 
 		HATTACHMENT hAttachment;
-        if (g_pLTServer->FindAttachment(m_hObject, m_hDisablerModel, &hAttachment) == LT_OK)
+		if (g_pLTServer->FindAttachment(m_hObject, m_hDisablerModel, &hAttachment) == LT_OK)
 		{
-            g_pLTServer->RemoveAttachment(hAttachment);
+			g_pLTServer->RemoveAttachment(hAttachment);
 		}
 
-        g_pLTServer->RemoveObject(m_hDisablerModel);
-        m_hDisablerModel = LTNULL;
+		g_pLTServer->RemoveObject(m_hDisablerModel);
+		m_hDisablerModel = LTNULL;
 	}
 
 	if (m_hLight)
 	{
 		// Remove the light...
-
 		HATTACHMENT hAttachment;
-        if (g_pLTServer->FindAttachment(m_hObject, m_hLight, &hAttachment) == LT_OK)
+		if (g_pLTServer->FindAttachment(m_hObject, m_hLight, &hAttachment) == LT_OK)
 		{
-            g_pLTServer->RemoveAttachment(hAttachment);
+			g_pLTServer->RemoveAttachment(hAttachment);
 		}
 
-        g_pLTServer->RemoveObject(m_hLight);
-        m_hLight = LTNULL;
+		g_pLTServer->RemoveObject(m_hLight);
+		m_hLight = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::EngineMessageFn
 //
 //	PURPOSE:	Handle engine messages
-//
 // ----------------------------------------------------------------------- //
 
 uint32 SecurityCamera::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -171,7 +160,7 @@ uint32 SecurityCamera::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fD
 
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = CScanner::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = CScanner::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE || fData == PRECREATE_STRINGPROP)
 			{
@@ -218,22 +207,20 @@ uint32 SecurityCamera::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fD
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::ObjectMessageFn
 //
 //	PURPOSE:	Handle object-to-object messages
-//
 // ----------------------------------------------------------------------- //
 
 uint32 SecurityCamera::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
 {
-    if (!g_pLTServer) return 0;
+	if (!g_pLTServer) return 0;
 
 	switch(messageID)
 	{
 		case MID_TRIGGER:
 		{
-            ILTCommon* pCommon = g_pLTServer->Common();
+			ILTCommon* pCommon = g_pLTServer->Common();
 			if (!pCommon) return 0;
 
 			const char *szMsg = (const char*)g_pLTServer->ReadFromMessageDWord(hRead);
@@ -280,11 +267,9 @@ uint32 SecurityCamera::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSA
 		case MID_DAMAGE:
 		{
 			// Let our damage aggregate process the message first...
-
-            uint32 dwRet = CScanner::ObjectMessageFn(hSender, messageID, hRead);
+			uint32 dwRet = CScanner::ObjectMessageFn(hSender, messageID, hRead);
 
 			// Check to see if we have been destroyed
-
 			if (m_damage.IsDead())
 			{
 				SetState(eStateDestroyed);
@@ -301,46 +286,42 @@ uint32 SecurityCamera::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSA
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::ReadProp
 //
 //	PURPOSE:	Set property value
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL SecurityCamera::ReadProp(ObjectCreateStruct *pInfo)
 {
-    if (!pInfo) return LTFALSE;
+	if (!pInfo) return LTFALSE;
 
 	GenericProp genProp;
 
-    if ( g_pLTServer->GetPropGeneric("Yaw1", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("Yaw1", &genProp ) == LT_OK )
 		m_fYaw1 = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("Yaw2", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("Yaw2", &genProp ) == LT_OK )
 		m_fYaw2 = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("YawTime", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("YawTime", &genProp ) == LT_OK )
 		m_fYawSpeed = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("Yaw1PauseTime", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("Yaw1PauseTime", &genProp ) == LT_OK )
 		m_fYaw1PauseTime = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("Yaw2PauseTime", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("Yaw2PauseTime", &genProp ) == LT_OK )
 		m_fYaw2PauseTime = genProp.m_Float;
 
-    g_pLTServer->GetPropReal( "SoundRadius", &m_fSoundRadius );
+	g_pLTServer->GetPropReal( "SoundRadius", &m_fSoundRadius );
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::PostPropRead()
 //
 //	PURPOSE:	Update Properties
-//
 // ----------------------------------------------------------------------- //
 
 void SecurityCamera::PostPropRead(ObjectCreateStruct *pStruct)
@@ -348,16 +329,13 @@ void SecurityCamera::PostPropRead(ObjectCreateStruct *pStruct)
 	if (!pStruct) return;
 
 	// Convert all our stuff into radians
-
 	m_fYaw1 = DEG2RAD(m_fYaw1);
 	m_fYaw2 = DEG2RAD(m_fYaw2);
 
 	// YawSpeed was actually specified as time, so make it a rate
-
 	m_fYawSpeed = (m_fYaw2 - m_fYaw1)/m_fYawSpeed;
 
 	// Adjust yaws based on initial pitch yaw roll
-
 	m_fYaw1 += m_vInitialPitchYawRoll.y;
 	m_fYaw2 += m_vInitialPitchYawRoll.y;
 
@@ -375,32 +353,27 @@ void SecurityCamera::PostPropRead(ObjectCreateStruct *pStruct)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::InitialUpdate()
 //
 //	PURPOSE:	First update
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL SecurityCamera::InitialUpdate()
 {
-    SetNextUpdate(0.001f);
+	SetNextUpdate(0.001f);
 
-    g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
+	g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
 
 	// Create the light...
-
 	CreateLight();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::CreateLight()
 //
 //	PURPOSE:	Create the sprite on the security camera
-//
 // ----------------------------------------------------------------------- //
 
 void SecurityCamera::CreateLight()
@@ -419,41 +392,38 @@ void SecurityCamera::CreateLight()
 	theStruct.m_Flags2 = FLAG2_ADDITIVE;
 	theStruct.m_ObjectType = OT_SPRITE;
 
-    HCLASS hClass = g_pLTServer->GetClass("BaseClass");
-    LPBASECLASS pSprite = g_pLTServer->CreateObject(hClass, &theStruct);
+	HCLASS hClass = g_pLTServer->GetClass("BaseClass");
+	LPBASECLASS pSprite = g_pLTServer->CreateObject(hClass, &theStruct);
 	if (!pSprite) return;
 
 	m_hLight = pSprite->m_hObject;
 
-    LTVector vScale(1, 1, 1);
+	LTVector vScale(1, 1, 1);
 	vScale.x = g_pServerButeMgr->GetSecurityCameraFloat("LightScale");
 	vScale.y = vScale.x;
 
-    g_pLTServer->ScaleObject(m_hLight, &vScale);
+	g_pLTServer->ScaleObject(m_hLight, &vScale);
 
 	// Attach the sprite to the the camera...
-
-    LTVector vOffset(0, 0, 0);
-    LTRotation rOffset;
+	LTVector vOffset(0, 0, 0);
+	LTRotation rOffset;
 	rOffset.Init();
 
 	HATTACHMENT hAttachment;
-    LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, m_hLight, "Light",
-											     &vOffset, &rOffset, &hAttachment);
-    if (dRes != LT_OK)
+	LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, m_hLight, "Light",
+										&vOffset, &rOffset, &hAttachment);
+	if (dRes != LT_OK)
 	{
-        g_pLTServer->RemoveObject(m_hLight);
-        m_hLight = LTNULL;
+		g_pLTServer->RemoveObject(m_hLight);
+		m_hLight = LTNULL;
 		return;
 	}
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::Update()
 //
 //	PURPOSE:	Update
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL SecurityCamera::Update()
@@ -469,8 +439,8 @@ LTBOOL SecurityCamera::Update()
 
 	if (m_eState == eStateDestroyed || m_eState == eStateOff)
 	{
-        SetNextUpdate(0.0f);
-        return LTTRUE;
+		SetNextUpdate(0.0f);
+		return LTTRUE;
 	}
 
 	UpdateRotation();
@@ -482,20 +452,18 @@ LTBOOL SecurityCamera::Update()
 
 	UpdateSounds(eStatePrevious);
 
-    SetNextUpdate(0.001f);
+	SetNextUpdate(0.001f);
 
 	UpdateFlashingLight();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::UpdateFlashingLight()
 //
 //	PURPOSE:	Update flashing the light
-//
 // ----------------------------------------------------------------------- //
 
 void SecurityCamera::UpdateFlashingLight()
@@ -503,18 +471,16 @@ void SecurityCamera::UpdateFlashingLight()
 	if (m_eState == eStateFocusing || m_bTripped)
 	{
 		// Flash the light sprite...
-
 		if (m_hLight)
 		{
 			// Start the timer if necessary...
-
 			if (!m_LightTimer.GetDuration())
 			{
 				m_LightTimer.Start(g_pServerButeMgr->GetSecurityCameraFloat("LightTimer"));
 			}
 			else if (m_LightTimer.Stopped())
 			{
-                uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hLight);
+				uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hLight);
 
 				if (dwFlags & FLAG_VISIBLE)
 				{
@@ -527,7 +493,7 @@ void SecurityCamera::UpdateFlashingLight()
 
 				m_LightTimer.Start(g_pServerButeMgr->GetSecurityCameraFloat("LightTimer"));
 
-                g_pLTServer->SetObjectFlags(m_hLight, dwFlags);
+				g_pLTServer->SetObjectFlags(m_hLight, dwFlags);
 			}
 		}
 	}
@@ -562,7 +528,7 @@ void SecurityCamera::StartLoopSound()
 
 	KillAllSounds();
 
-    uint32 dwFlags = (PLAYSOUND_LOOP | PLAYSOUND_GETHANDLE);
+	uint32 dwFlags = (PLAYSOUND_LOOP | PLAYSOUND_GETHANDLE);
 
 	m_hLoopSound = g_pServerSoundMgr->PlaySoundFromPos(m_vPos, LOOP_SOUND,
 			m_fSoundRadius, SOUNDPRIORITY_MISC_LOW, dwFlags);
@@ -572,8 +538,8 @@ void SecurityCamera::StopLoopSound()
 {
 	if (m_hLoopSound)
 	{
-        g_pLTServer->KillSoundLoop(m_hLoopSound);
-        m_hLoopSound = LTNULL;
+		g_pLTServer->KillSoundLoop(m_hLoopSound);
+		m_hLoopSound = LTNULL;
 	}
 }
 
@@ -590,21 +556,20 @@ void SecurityCamera::StartFocusingSound()
 	KillAllSounds();
 
 	// Turn on the red sprite...
-
 	if (m_hLight)
 	{
-        uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hLight);
+		uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hLight);
 		dwFlags |= FLAG_VISIBLE;
-        g_pLTServer->SetObjectFlags(m_hLight, dwFlags);
+		g_pLTServer->SetObjectFlags(m_hLight, dwFlags);
 
 		char buf[128];
 		g_pServerButeMgr->GetSecurityCameraString("YellowLight",
 			buf, ARRAY_LEN(buf));
 
-        g_pLTServer->SetObjectFilenames(m_hLight, buf, "");
+		g_pLTServer->SetObjectFilenames(m_hLight, buf, "");
 	}
 
-    uint32 dwFlags = (PLAYSOUND_LOOP | PLAYSOUND_GETHANDLE);
+	uint32 dwFlags = (PLAYSOUND_LOOP | PLAYSOUND_GETHANDLE);
 
 	m_hFocusingSound = g_pServerSoundMgr->PlaySoundFromPos(m_vPos,
 		FOCUSING_SOUND, m_fSoundRadius, SOUNDPRIORITY_MISC_LOW, dwFlags);
@@ -614,8 +579,8 @@ void SecurityCamera::StopFocusingSound()
 {
 	if (m_hFocusingSound)
 	{
-        g_pLTServer->KillSoundLoop(m_hFocusingSound);
-        m_hFocusingSound = LTNULL;
+		g_pLTServer->KillSoundLoop(m_hFocusingSound);
+		m_hFocusingSound = LTNULL;
 	}
 }
 
@@ -627,11 +592,9 @@ void SecurityCamera::KillAllSounds()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::UpdateDetect()
 //
 //	PURPOSE:	Checks to see if we can see anything
-//
 // ----------------------------------------------------------------------- //
 
 CScanner::DetectState SecurityCamera::UpdateDetect()
@@ -656,7 +619,6 @@ CScanner::DetectState SecurityCamera::UpdateDetect()
 		{
 			// Set us back to whatever we were doing before we
 			// start focusing...
-
 			if (m_eState == eStateFocusing)
 			{
 				StopFocusingSound();
@@ -664,20 +626,19 @@ CScanner::DetectState SecurityCamera::UpdateDetect()
 			}
 
 			// Turn on the green light sprite...
-
 			if (m_eState != eStateFocusing && m_eState != eStateDetected)
 			{
 				if (m_hLight)
 				{
-                    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hLight);
+					uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hLight);
 					dwFlags |= FLAG_VISIBLE;
-                    g_pLTServer->SetObjectFlags(m_hLight, dwFlags);
+					g_pLTServer->SetObjectFlags(m_hLight, dwFlags);
 
 					char buf[128];
 					g_pServerButeMgr->GetSecurityCameraString("GreenLight",
 						buf, ARRAY_LEN(buf));
 
-                    g_pLTServer->SetObjectFilenames(m_hLight, buf, "");
+					g_pLTServer->SetObjectFilenames(m_hLight, buf, "");
 				}
 			}
 		}
@@ -691,33 +652,29 @@ CScanner::DetectState SecurityCamera::UpdateDetect()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::GetScanRotation()
 //
 //	PURPOSE:	Get the scan rotation (just use our yaw value)
-//
 // ----------------------------------------------------------------------- //
 
 LTRotation SecurityCamera::GetScanRotation()
 {
-    LTRotation rRot;
-    g_pLTServer->SetupEuler(&rRot, 0.0f, m_fYaw, 0.0f);
+	LTRotation rRot;
+	g_pLTServer->SetupEuler(&rRot, 0.0f, m_fYaw, 0.0f);
 
 	return rRot;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::UpdateRotation()
 //
 //	PURPOSE:	Handles updating the camera's rotation
-//
 // ----------------------------------------------------------------------- //
 
 void SecurityCamera::UpdateRotation()
 {
-    LTFLOAT fTimeDelta = g_pLTServer->GetFrameTime();
+	LTFLOAT fTimeDelta = g_pLTServer->GetFrameTime();
 
 	if ( m_eState == eStateDetected ||
 		m_eState == eStateDestroyed ||
@@ -728,7 +685,7 @@ void SecurityCamera::UpdateRotation()
 
 	if ( m_eState == eStateTurningTo1 || m_eState == eStateTurningTo2 )
 	{
-        LTFLOAT fYaw = g_pLTServer->GetFrameTime()*m_fYawSpeed;
+		LTFLOAT fYaw = g_pLTServer->GetFrameTime()*m_fYawSpeed;
 
 		if ( m_eState == eStateTurningTo1 )
 		{
@@ -764,11 +721,11 @@ void SecurityCamera::UpdateRotation()
 			}
 		}
 
-        static LTVector vUp(0.0f,1.0f,0.0f);
-        LTRotation rRot;
-        g_pLTServer->GetObjectRotation(m_hObject, &rRot);
-        g_pLTServer->RotateAroundAxis(&rRot, &vUp, fYaw);
-        g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+		static LTVector vUp(0.0f,1.0f,0.0f);
+		LTRotation rRot;
+		g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+		g_pLTServer->RotateAroundAxis(&rRot, &vUp, fYaw);
+		g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 	}
 
 	if ( m_eState == eStatePausingAt1 )
@@ -796,20 +753,17 @@ void SecurityCamera::UpdateRotation()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::CacheFiles
 //
 //	PURPOSE:	Cache whatever resources this object uses
-//
 // ----------------------------------------------------------------------- //
 
 void SecurityCamera::CacheFiles()
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE) return;
 
 	// Cache sounds...
-
 	pServerDE->CacheFile(FT_SOUND, DETECT_SOUND);
 	pServerDE->CacheFile(FT_SOUND, LOOP_SOUND);
 	pServerDE->CacheFile(FT_SOUND, FOCUSING_SOUND);
@@ -849,11 +803,9 @@ void SecurityCamera::CacheFiles()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::SetState
 //
 //	PURPOSE:	Change our current state
-//
 // ----------------------------------------------------------------------- //
 
 void SecurityCamera::SetState(State eNewState)
@@ -861,26 +813,23 @@ void SecurityCamera::SetState(State eNewState)
 	if (m_eState == eNewState) return;
 
 	// Handle switching to the new state...
-
 	switch (eNewState)
 	{
 		case eStateDestroyed:
 		{
 			// Turn off the sprite...
-
 			if (m_hLight)
 			{
-                uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hLight);
+				uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hLight);
 				dwFlags &= ~FLAG_VISIBLE;
-                g_pLTServer->SetObjectFlags(m_hLight, dwFlags);
+				g_pLTServer->SetObjectFlags(m_hLight, dwFlags);
 			}
 
 			SetDestroyedModel();
 
 			// Camera can't be disabled now...
-
-            uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-            g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags & ~USRFLG_GADGET_CAMERA_DISABLER);
+			uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+			g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags & ~USRFLG_GADGET_CAMERA_DISABLER);
 
 			KillAllSounds();
 		}
@@ -891,11 +840,9 @@ void SecurityCamera::SetState(State eNewState)
 			KillAllSounds();
 
 			// Leave the light on if the camera was tripped...
-
 			if (!m_bTripped)
 			{
 				// Turn off the light...
-
 				if (m_hLight)
 				{
 					uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hLight);
@@ -914,14 +861,13 @@ void SecurityCamera::SetState(State eNewState)
 		case eStateDisabled:
 		{
 			SetupDisabledState();
-			return;  // Don't change states...
+			return;	// Don't change states...
 		}
 		break;
 
 		case eStateFocusing:
 		{
 			// If we're in the detected state, don't re-focus...
-
 			if (m_eState == eStateDetected) return;
 
 			StartFocusingSound();
@@ -931,18 +877,17 @@ void SecurityCamera::SetState(State eNewState)
 		case eStateDetected:
 		{
 			// Turn on Red sprite...
-
 			if (m_hLight)
 			{
-                uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hLight);
+				uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hLight);
 				dwFlags |= FLAG_VISIBLE;
-                g_pLTServer->SetObjectFlags(m_hLight, dwFlags);
+				g_pLTServer->SetObjectFlags(m_hLight, dwFlags);
 
 				char buf[128];
 				g_pServerButeMgr->GetSecurityCameraString("RedLight",
 					buf, ARRAY_LEN(buf));
 
-                g_pLTServer->SetObjectFilenames(m_hLight, buf, "");
+				g_pLTServer->SetObjectFilenames(m_hLight, buf, "");
 			}
 		}
 		break;
@@ -952,25 +897,23 @@ void SecurityCamera::SetState(State eNewState)
 			m_bTripped = LTFALSE;
 
 			// Reset the camera...
-
 			if (m_fYaw > m_fYaw1)
 			{
 				m_ePreviousState = eStatePausingAt1;
-				m_eState		 = eStateTurningTo2;
+				m_eState	= eStateTurningTo2;
 
 				UpdateSounds(m_ePreviousState);
 			}
 			else
 			{
 				m_ePreviousState = eStatePausingAt1;
-				m_eState		 = eStatePausingAt1;
+				m_eState	= eStatePausingAt1;
 			}
 
-            SetNextUpdate(0.001f);
+			SetNextUpdate(0.001f);
 
 			// Make sure we processes detection...
-
-            m_bCanProcessDetection = LTTRUE;
+			m_bCanProcessDetection = LTTRUE;
 			return;
 		}
 		break;
@@ -984,22 +927,19 @@ void SecurityCamera::SetState(State eNewState)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::SetupDisabledState
 //
 //	PURPOSE:	Setup the disabled state
-//
 // ----------------------------------------------------------------------- //
 
 void SecurityCamera::SetupDisabledState()
 {
 	if (m_eState == eStateDisabled || m_hDisablerModel) return;
 
-    uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags & ~USRFLG_GADGET_CAMERA_DISABLER);
+	uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags & ~USRFLG_GADGET_CAMERA_DISABLER);
 
 	// Create the camera disabler model, and attach it to the camera...
-
 	ObjectCreateStruct theStruct;
 	INIT_OBJECTCREATESTRUCT(theStruct);
 
@@ -1008,61 +948,55 @@ void SecurityCamera::SetupDisabledState()
 	SAFE_STRCPY(theStruct.m_Filename, "Guns\\Models_HH\\Cameradis_hh.abc");
 	SAFE_STRCPY(theStruct.m_SkinName, "Guns\\Skins_HH\\Cameradis_hh.dtx");
 
-	theStruct.m_Flags = FLAG_VISIBLE | FLAG_GOTHRUWORLD;
-	theStruct.m_ObjectType  = OT_MODEL;
+	theStruct.m_Flags	= FLAG_VISIBLE | FLAG_GOTHRUWORLD;
+	theStruct.m_ObjectType	= OT_MODEL;
 
-    HCLASS hClass = g_pLTServer->GetClass("BaseClass");
-    LPBASECLASS pModel = g_pLTServer->CreateObject(hClass, &theStruct);
+	HCLASS hClass = g_pLTServer->GetClass("BaseClass");
+	LPBASECLASS pModel = g_pLTServer->CreateObject(hClass, &theStruct);
 	if (!pModel) return;
 
 	m_hDisablerModel = pModel->m_hObject;
 
 	// Attach the model to the the camera...
-
-    LTVector vOffset;
+	LTVector vOffset;
 	VEC_INIT(vOffset);
 
-    LTRotation rOffset;
-    rOffset.Init();
+	LTRotation rOffset;
+	rOffset.Init();
 
 	HATTACHMENT hAttachment;
-    LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, m_hDisablerModel, "Disabler",
-											     &vOffset, &rOffset, &hAttachment);
-    if (dRes != LT_OK)
+	LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, m_hDisablerModel, "Disabler",
+											&vOffset, &rOffset, &hAttachment);
+	if (dRes != LT_OK)
 	{
-        g_pLTServer->RemoveObject(m_hDisablerModel);
-        m_hDisablerModel = LTNULL;
+		g_pLTServer->RemoveObject(m_hDisablerModel);
+		m_hDisablerModel = LTNULL;
 		return;
 	}
 
 	// Set the Disabler's animation...
-
-    HMODELANIM hAni = g_pLTServer->GetAnimIndex(m_hDisablerModel, "DownUp");
+	HMODELANIM hAni = g_pLTServer->GetAnimIndex(m_hDisablerModel, "DownUp");
 	if (hAni)
 	{
-        g_pLTServer->SetModelLooping(m_hDisablerModel, LTFALSE);
-        g_pLTServer->SetModelAnimation(m_hDisablerModel, hAni);
+		g_pLTServer->SetModelLooping(m_hDisablerModel, LTFALSE);
+		g_pLTServer->SetModelAnimation(m_hDisablerModel, hAni);
 	}
 
 
 	// Play the activate sound...
-
 	char* pSound = "Guns\\Snd\\Cam_dis\\activate.wav";
 	g_pServerSoundMgr->PlaySoundFromPos(m_vPos, pSound, 500.0f, SOUNDPRIORITY_MISC_LOW);
 
 
 	// Camera is now disabled...
-
-    m_bDisabled = LTTRUE;
+	m_bDisabled = LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::HandleGadgetMsg
 //
 //	PURPOSE:	Handle the camer disabler gadget
-//
 // ----------------------------------------------------------------------- //
 
 void SecurityCamera::HandleGadgetMsg(ConParse & parse)
@@ -1080,16 +1014,14 @@ void SecurityCamera::HandleGadgetMsg(ConParse & parse)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::GetFocusTime
 //
 //	PURPOSE:	Get the time it takes the camera to focus
-//
 // ----------------------------------------------------------------------- //
 
 LTFLOAT SecurityCamera::GetFocusTime()
 {
-    LTFLOAT fTime = 0.0f;
+	LTFLOAT fTime = 0.0f;
 
 	switch (g_pGameServerShell->GetDifficulty())
 	{
@@ -1116,16 +1048,14 @@ LTFLOAT SecurityCamera::GetFocusTime()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::Save
 //
 //	PURPOSE:	Save the object
-//
 // ----------------------------------------------------------------------- //
 
 void SecurityCamera::Save(HMESSAGEWRITE hWrite)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hWrite) return;
 
 	m_LightTimer.Save(hWrite);
@@ -1133,64 +1063,61 @@ void SecurityCamera::Save(HMESSAGEWRITE hWrite)
 	g_pLTServer->WriteToMessageVector(hWrite, &m_vPos);
 
 	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hDisablerModel);
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hLight);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hLight);
 
-    g_pLTServer->WriteToMessageDWord(hWrite, m_eState);
-    g_pLTServer->WriteToMessageDWord(hWrite, m_ePreviousState);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_eState);
+	 g_pLTServer->WriteToMessageDWord(hWrite, m_ePreviousState);
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw1);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw2);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYawSpeed);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw1PauseTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw2PauseTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYawPauseTimer);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw1);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw2);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYawSpeed);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw1PauseTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw2PauseTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYawPauseTimer);
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fSoundRadius);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fSoundRadius);
 
-    g_pLTServer->WriteToMessageByte(hWrite, m_bDisabled);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bTripped);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bDisabled);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bTripped);
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	SecurityCamera::Load
 //
 //	PURPOSE:	Load the object
-//
 // ----------------------------------------------------------------------- //
 
 void SecurityCamera::Load(HMESSAGEREAD hRead)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hRead) return;
 
 	m_LightTimer.Load(hRead);
 
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vPos);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vPos);
 
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hDisablerModel);
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hLight);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hDisablerModel);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hLight);
 
-    m_eState            = (State)g_pLTServer->ReadFromMessageDWord(hRead);
-    m_ePreviousState    = (State)g_pLTServer->ReadFromMessageDWord(hRead);
+	m_eState		= (State)g_pLTServer->ReadFromMessageDWord(hRead);
+	m_ePreviousState	= (State)g_pLTServer->ReadFromMessageDWord(hRead);
 
-    m_fYaw              = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fYaw1             = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fYaw2             = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fYawSpeed         = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fYaw1PauseTime    = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fYaw2PauseTime    = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fYawPauseTimer    = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYaw			= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYaw1			= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYaw2			= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYawSpeed		= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYaw1PauseTime	= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYaw2PauseTime	= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYawPauseTimer	= g_pLTServer->ReadFromMessageFloat(hRead);
 
-    m_fSoundRadius      = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fSoundRadius	= g_pLTServer->ReadFromMessageFloat(hRead);
 
-    m_bDisabled         = (LTBOOL)g_pLTServer->ReadFromMessageByte(hRead);
-    m_bTripped			= (LTBOOL)g_pLTServer->ReadFromMessageByte(hRead);
+	m_bDisabled	= (LTBOOL)g_pLTServer->ReadFromMessageByte(hRead);
+	m_bTripped	= (LTBOOL)g_pLTServer->ReadFromMessageByte(hRead);
 
 	// Restore our sounds...
-
 	if (m_eState == eStateFocusing)
 	{
 		StartFocusingSound();
