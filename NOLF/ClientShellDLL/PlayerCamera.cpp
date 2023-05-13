@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : PlayerCamera.cpp
+// MODULE: PlayerCamera.cpp
 //
 // PURPOSE : PlayerCamera - Implementation
 //
 // CREATED : 10/5/97
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -16,10 +14,10 @@
 #include "VarTrack.h"
 #include "VehicleMgr.h"
 
-VarTrack		g_vtCameraMoveUpTime;
-VarTrack		g_vtCameraMoveUpMinVel;
-VarTrack		g_vtCameraMaxYDifference;
-VarTrack		g_vtCameraClipDistance;
+VarTrack	g_vtCameraMoveUpTime;
+VarTrack	g_vtCameraMoveUpMinVel;
+VarTrack	g_vtCameraMaxYDifference;
+VarTrack	g_vtCameraClipDistance;
 
 // Camera's distance back from the player's position
 #define DEFAULT_CAMERA_DIST_BACK	110
@@ -40,21 +38,21 @@ extern CGameClientShell*	g_pGameClientShell;
 
 LTBOOL Equal(LTVector & v1, LTVector & v2)
 {
-    LTVector v;
+	LTVector v;
 	VEC_SUB(v, v1, v2);
-    return LTBOOL(VEC_MAG(v) < 1.0f);
+	return LTBOOL(VEC_MAG(v) < 1.0f);
 }
 
 LTBOOL Equal(LTRotation & r1, LTRotation & r2)
 {
-    LTBOOL bRet = LTTRUE;
+	LTBOOL bRet = LTTRUE;
 
 	if (r1.m_Quat[0] != r2.m_Quat[0] ||
 		r1.m_Quat[1] != r2.m_Quat[1] ||
 		r1.m_Quat[2] != r2.m_Quat[2] ||
 		r1.m_Quat[3] != r2.m_Quat[3])
 	{
-        bRet = LTFALSE;
+		bRet = LTFALSE;
 	}
 
 	return bRet;
@@ -67,7 +65,7 @@ void CalcNonClipPos(LTVector & vPos, LTRotation & rRot)
 
 	// Make sure we aren't clipping into walls...
 
-    LTFLOAT fClipDistance = g_vtCameraClipDistance.GetFloat();
+	LTFLOAT fClipDistance = g_vtCameraClipDistance.GetFloat();
 
 
 	// Check for walls to the right...
@@ -75,16 +73,16 @@ void CalcNonClipPos(LTVector & vPos, LTRotation & rRot)
 	vTemp = (vR * fClipDistance);
 	vTemp += vPos;
 
-	ClientIntersectQuery iQuery;
-	ClientIntersectInfo  iInfo;
+	ClientIntersectQuery	iQuery;
+	ClientIntersectInfo	iInfo;
 
-	iQuery.m_From = vPos;
-	iQuery.m_To   = vTemp;
+	iQuery.m_From	= vPos;
+	iQuery.m_To	= vTemp;
 
 	if (g_pLTClient->IntersectSegment(&iQuery, &iInfo))
 	{
 		vTemp = iInfo.m_Point - vPos;
-        LTFLOAT fDist = (fClipDistance - vTemp.Mag());
+		LTFLOAT fDist = (fClipDistance - vTemp.Mag());
 
 		vTemp = (vR * -fDist);
 		vPos += vTemp;
@@ -102,7 +100,7 @@ void CalcNonClipPos(LTVector & vPos, LTRotation & rRot)
 		if (g_pLTClient->IntersectSegment(&iQuery, &iInfo))
 		{
 			vTemp = iInfo.m_Point - vPos;
-            LTFLOAT fDist = (fClipDistance - vTemp.Mag());
+			LTFLOAT fDist = (fClipDistance - vTemp.Mag());
 
 			vTemp = (vR * fDist);
 			vPos += vTemp;
@@ -121,7 +119,7 @@ void CalcNonClipPos(LTVector & vPos, LTRotation & rRot)
 	if (g_pLTClient->IntersectSegment(&iQuery, &iInfo))
 	{
 		vTemp = iInfo.m_Point - vPos;
-        LTFLOAT fDist = (fClipDistance - vTemp.Mag());
+		LTFLOAT fDist = (fClipDistance - vTemp.Mag());
 
 		vTemp = vU * -fDist;
 		vPos += vTemp;
@@ -139,7 +137,7 @@ void CalcNonClipPos(LTVector & vPos, LTRotation & rRot)
 		if (g_pLTClient->IntersectSegment(&iQuery, &iInfo))
 		{
 			vTemp = iInfo.m_Point - vPos;
-            LTFLOAT fDist = (fClipDistance - vTemp.Mag());
+			LTFLOAT fDist = (fClipDistance - vTemp.Mag());
 
 			vTemp = vU * fDist;
 			vPos += vTemp;
@@ -148,20 +146,18 @@ void CalcNonClipPos(LTVector & vPos, LTRotation & rRot)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::CPlayerCamera()
 //
 //	PURPOSE:	Constructor
-//
 // ----------------------------------------------------------------------- //
 
 CPlayerCamera::CPlayerCamera()
 {
-    m_hTarget           = LTNULL;
-    m_pClientDE         = LTNULL;
+	m_hTarget	= LTNULL;
+	m_pClientDE	= LTNULL;
 
-    m_rRotation.Init();
-    m_rLastTargetRot.Init();
+	m_rRotation.Init();
+	m_rLastTargetRot.Init();
 	m_vPos.Init();
 	m_vLastTargetPos.Init();
 	m_vLastOptPos.Init();
@@ -169,30 +165,30 @@ CPlayerCamera::CPlayerCamera()
 	m_eOrientation		= SOUTH;
 	m_eSaveOrientation	= SOUTH;
 
-	m_OptX				= 0.0f;
-	m_OptY				= 0.0f;
-	m_OptZ				= 0.0f;
+	m_OptX			= 0.0f;
+	m_OptY			= 0.0f;
+	m_OptZ			= 0.0f;
 	m_CircleStartTime	= 0.0f;
 	m_SaveAnglesY		= 0.0f;
 
-    m_bSlide            = LTTRUE;
+	m_bSlide		= LTTRUE;
 
 	m_CameraDistBack	= DEFAULT_CAMERA_DIST_BACK;
 	m_CameraDistUp		= DEFAULT_CAMERA_DIST_UP;
 	m_CameraDistDiag	= DEFAULT_CAMERA_DIST_DIAG;
 
-	m_ePointType			= AT_POSITION;
-    m_bStartCircle          = LTFALSE;
+	m_ePointType		= AT_POSITION;
+	m_bStartCircle		= LTFALSE;
 	m_CircleHeightOffset	= 0.0f;
-	m_CircleRadius			= 75.0f;
-	m_CircleTime			= 3.0f;
-    m_bRestoreFirstPerson   = LTFALSE;
+	m_CircleRadius		= 75.0f;
+	m_CircleTime		= 3.0f;
+	m_bRestoreFirstPerson	= LTFALSE;
 
 	m_GoingFirstPersonStart	= 0.0f;
 	m_GoingFirstPersonTransition = 1.5f;
 
-	m_eCameraMode			= CHASE;
-	m_eSaveCameraMode		= CHASE;
+	m_eCameraMode		= CHASE;
+	m_eSaveCameraMode	= CHASE;
 
 	m_TargetFirstPersonOffset.Init();
 	m_TargetChaseOffset.Init();
@@ -200,16 +196,14 @@ CPlayerCamera::CPlayerCamera()
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::Init()
 //
 //	PURPOSE:	Init the camera
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerCamera::Init(ILTClient* pClientDE)
 {
-    if (!pClientDE) return LTFALSE;
+	if (!pClientDE) return LTFALSE;
 	m_pClientDE = pClientDE;
 
 	g_vtCameraMoveUpTime.Init(pClientDE, "CameraMoveUpTime", NULL, 0.1f);
@@ -217,29 +211,27 @@ LTBOOL CPlayerCamera::Init(ILTClient* pClientDE)
 	g_vtCameraMaxYDifference.Init(pClientDE, "CameraMoveMaxYDiff", NULL, 30.0f);
 	g_vtCameraClipDistance.Init(pClientDE, "CameraClipDist", NULL, 30.0f);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::CameraUpdate()
 //
 //	PURPOSE:	Update the position & orientation of the camera based
 //				on the target
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerCamera::CameraUpdate(LTFLOAT deltaTime)
 {
 	if (!m_pClientDE || !m_hTarget) return;
 
-    LTRotation rRot;
-    LTVector vOpt, vPos;
+	LTRotation rRot;
+	LTVector vOpt, vPos;
 
 	m_pClientDE->GetObjectPos(m_hTarget, &vPos);
 	m_pClientDE->GetObjectRotation(m_hTarget, &rRot);
 
-    LTVector vU, vR, vF;
+	LTVector vU, vR, vF;
 	m_pClientDE->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	if (m_hTarget)
@@ -304,7 +296,7 @@ void CPlayerCamera::CameraUpdate(LTFLOAT deltaTime)
 		// Either point the camera at the player or MLOOK
 		if(m_eOrientation == MLOOK)
 		{
-            m_rRotation = rRot;
+			m_rRotation = rRot;
 		}
 		else
 		{
@@ -317,7 +309,7 @@ void CPlayerCamera::CameraUpdate(LTFLOAT deltaTime)
 				case AT_POSITION:
 				default:
 				{
-                    LTVector vTemp;
+					LTVector vTemp;
 					vTemp = vPos + m_TargetPointAtOffset;
 					PointAtPosition(vTemp, rRot, vOpt);
 				}
@@ -328,11 +320,9 @@ void CPlayerCamera::CameraUpdate(LTFLOAT deltaTime)
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::UpdateFirstPerson()
 //
 //	PURPOSE:	Update the position of the camera when in first person
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerCamera::UpdateFirstPerson(LTVector vF, LTVector vPos, LTFLOAT fDeltaTime)
@@ -345,11 +335,11 @@ void CPlayerCamera::UpdateFirstPerson(LTVector vF, LTVector vPos, LTFLOAT fDelta
 
 	if (vPos.y > (m_vPos.y + 1.0f))
 	{
-        LTFLOAT fNewY = m_vPos.y;
+		LTFLOAT fNewY = m_vPos.y;
 		CMoveMgr* pMoveMgr = g_pGameClientShell->GetMoveMgr();
 		if (!pMoveMgr) return;
 
-        LTBOOL bFreeMovement =
+		LTBOOL bFreeMovement =
 			(IsFreeMovement(g_pGameClientShell->GetCurContainerCode()) ||
 			pMoveMgr->IsBodyOnLadder() ||
 			pMoveMgr->GetVehicleMgr()->IsVehiclePhysics() ||
@@ -358,19 +348,19 @@ void CPlayerCamera::UpdateFirstPerson(LTVector vF, LTVector vPos, LTFLOAT fDelta
 
 		if (!bFreeMovement)
 		{
-            LTFLOAT fMaxYDiff = g_vtCameraMaxYDifference.GetFloat();
-            LTFLOAT fYDiff = (vPos.y - fNewY);
+			LTFLOAT fMaxYDiff = g_vtCameraMaxYDifference.GetFloat();
+			LTFLOAT fYDiff = (vPos.y - fNewY);
 
 			// Force the camera to never be more than fMaxYDiff away from
 			// its "real" position...
 
 			if (fYDiff > fMaxYDiff)
 			{
-				fNewY  += (fYDiff - fMaxYDiff);
-				fYDiff = fMaxYDiff;
+				fNewY	+= (fYDiff - fMaxYDiff);
+				fYDiff	= fMaxYDiff;
 			}
 
-            LTFLOAT fVel = fYDiff / g_vtCameraMoveUpTime.GetFloat();
+			LTFLOAT fVel = fYDiff / g_vtCameraMoveUpTime.GetFloat();
 			fVel = fVel < g_vtCameraMoveUpMinVel.GetFloat() ? g_vtCameraMoveUpMinVel.GetFloat() : fVel;
 
 			fNewY += (fDeltaTime * fVel);
@@ -387,16 +377,14 @@ void CPlayerCamera::UpdateFirstPerson(LTVector vF, LTVector vPos, LTFLOAT fDelta
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::Apply()
 //
 //	PURPOSE:	Matrix apply function
-//
 // ----------------------------------------------------------------------- //
 
 LTVector CPlayerCamera::Apply(LTVector right, LTVector up, LTVector forward, LTVector copy)
 {
-    LTVector target;
+	LTVector target;
 
 	target.x = copy.x*right.x + copy.y*right.y + copy.z*right.z;
 	target.y = copy.x*up.x + copy.y*up.y + copy.z*up.z;
@@ -407,28 +395,26 @@ LTVector CPlayerCamera::Apply(LTVector right, LTVector up, LTVector forward, LTV
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::PointAtPosition()
 //
 //	PURPOSE:	Point the camera at a position from a position
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerCamera::PointAtPosition(LTVector pos, LTRotation rRot, LTVector pointFrom)
 {
 	if (!m_pClientDE) return;
 
-    LTVector vAngles;
+	LTVector vAngles;
 	vAngles.Init();
 
 	m_rRotation = rRot;
 
-    LTFLOAT diffX = pos.x - m_vPos.x;
-    LTFLOAT diffY = pos.z - m_vPos.z;
-    vAngles.y = (LTFLOAT)atan2(diffX, diffY);
+	LTFLOAT diffX = pos.x - m_vPos.x;
+	LTFLOAT diffY = pos.z - m_vPos.z;
+	vAngles.y = (LTFLOAT)atan2(diffX, diffY);
 
-    LTVector     target, copy;
-    LTVector up, right, forward;
+	LTVector target, copy;
+	LTVector up, right, forward;
 
 	m_pClientDE->GetRotationVectors(&m_rRotation, &up, &right, &forward);
 
@@ -440,26 +426,24 @@ void CPlayerCamera::PointAtPosition(LTVector pos, LTRotation rRot, LTVector poin
 	diffY = target.y;
 
 
-    vAngles.x = (LTFLOAT)-atan2(diffY, diffX);
+	vAngles.x = (LTFLOAT)-atan2(diffY, diffX);
 
-    LTRotation rOldRot;
-    rOldRot = m_rRotation;
+	LTRotation rOldRot;
+	rOldRot = m_rRotation;
 
 	m_pClientDE->SetupEuler(&m_rRotation, vAngles.x, vAngles.y, vAngles.z);
 
 	// Make sure rotation is valid...
 
 	m_pClientDE->GetRotationVectors(&m_rRotation, &up, &right, &forward);
-    if (up.y < 0) m_rRotation = rOldRot;
+	if (up.y < 0) m_rRotation = rOldRot;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::SetCameraState()
 //
 //	PURPOSE:	Set the state/orientation of the camera
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerCamera::SetCameraState(CameraState eOrientation)
@@ -529,12 +513,10 @@ void CPlayerCamera::SetCameraState(CameraState eOrientation)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::RotateCameraState()
 //
 //	PURPOSE:	Rotate the camera clockwise or counterclockwise around
-//				the target
-//
+//			the target
 // ----------------------------------------------------------------------- //
 
 void CPlayerCamera::RotateCameraState(LTBOOL bClockwise)
@@ -605,11 +587,9 @@ void CPlayerCamera::RotateCameraState(LTBOOL bClockwise)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::MoveCameraToPosition()
 //
 //	PURPOSE:	Move the camera to a position over a time period
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerCamera::MoveCameraToPosition(LTVector pos, LTFLOAT deltaTime)
@@ -620,13 +600,13 @@ void CPlayerCamera::MoveCameraToPosition(LTVector pos, LTFLOAT deltaTime)
 	{
 		m_eCameraMode = FIRSTPERSON;
 
-        LTRotation rRot;
+		LTRotation rRot;
 		m_pClientDE->GetObjectRotation(m_hTarget, &rRot);
 
-        LTVector vU, vR, vF;
+		LTVector vU, vR, vF;
 		m_pClientDE->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-        LTVector vPos;
+		LTVector vPos;
 		m_pClientDE->GetObjectPos(m_hTarget, &vPos);
 
 		vF.y = 0.0f;
@@ -639,15 +619,15 @@ void CPlayerCamera::MoveCameraToPosition(LTVector pos, LTFLOAT deltaTime)
 		return;
 	}
 
-    LTVector dir;
+	LTVector dir;
 	dir = (pos - m_vPos);
 
-    LTFLOAT multiplier = 1.0f; // 0.5f;
+	LTFLOAT multiplier = 1.0f; // 0.5f;
 
-    LTVector toMove;
+	LTVector toMove;
 	toMove = (dir * multiplier);
 
-    LTFLOAT moveMag;
+	LTFLOAT moveMag;
 
 	if (m_bSlide)
 	{
@@ -673,28 +653,26 @@ void CPlayerCamera::MoveCameraToPosition(LTVector pos, LTFLOAT deltaTime)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::FindOptimalCameraPosition()
 //
 //	PURPOSE:	Find the optimal camera position
-//
 // ----------------------------------------------------------------------- //
 
 LTVector CPlayerCamera::FindOptimalCameraPosition()
 {
-    LTVector pos;
+	LTVector pos;
 	VEC_INIT(pos);
 
 	if (!m_pClientDE || !m_hTarget) return pos;
 
-    LTVector     up, right, forward, dir;
-    LTFLOAT      distToOptimal;
-    LTVector     TargetPlusOffset;
+	LTVector	 up, right, forward, dir;
+	LTFLOAT	  distToOptimal;
+	LTVector	 TargetPlusOffset;
 
-    LTVector vTargetPos;
+	LTVector vTargetPos;
 	m_pClientDE->GetObjectPos(m_hTarget, &vTargetPos);
 
-    LTRotation rRot;
+	LTRotation rRot;
 	m_pClientDE->GetObjectRotation(m_hTarget, &rRot);
 
 	if (Equal(vTargetPos, m_vLastTargetPos) && Equal(rRot, m_rLastTargetRot))
@@ -704,10 +682,10 @@ LTVector CPlayerCamera::FindOptimalCameraPosition()
 	else
 	{
 		VEC_COPY(m_vLastTargetPos, vTargetPos);
-        m_rLastTargetRot = rRot;
+		m_rLastTargetRot = rRot;
 	}
 
-    LTVector vTemp;
+	LTVector vTemp;
 	VEC_ADD(vTemp, vTargetPos, m_TargetChaseOffset);
 	VEC_COPY(TargetPlusOffset, vTemp);
 
@@ -715,13 +693,13 @@ LTVector CPlayerCamera::FindOptimalCameraPosition()
 
 	//	pos = TargetPlusOffset + right*m_OptX + up*m_OptY + forward*m_OptZ;
 
-    LTVector vTemp1, vTemp2;
+	LTVector vTemp1, vTemp2;
 	VEC_MULSCALAR(vTemp, right, m_OptX);
 	VEC_MULSCALAR(vTemp1, up, m_OptY)
 	VEC_MULSCALAR(vTemp2, forward, m_OptZ);
 
-	ClientIntersectQuery iQuery;
-	ClientIntersectInfo  iInfo;
+	ClientIntersectQuery	iQuery;
+	ClientIntersectInfo	iInfo;
 
 	VEC_ADD(vTemp, vTemp, vTemp1);
 	VEC_ADD(vTemp, vTemp, vTemp2);
@@ -757,11 +735,9 @@ LTVector CPlayerCamera::FindOptimalCameraPosition()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::PrintVector()
 //
 //	PURPOSE:	Print it!
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerCamera::PrintVector(LTVector v)
@@ -775,11 +751,9 @@ void CPlayerCamera::PrintVector(LTVector v)
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::StartCircle()
 //
 //	PURPOSE:	Start the circle...jerk!
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerCamera::StartCircle(LTFLOAT HeightOffset, LTFLOAT Radius, LTFLOAT PointAtOffset, LTFLOAT Time)
@@ -788,14 +762,14 @@ void CPlayerCamera::StartCircle(LTFLOAT HeightOffset, LTFLOAT Radius, LTFLOAT Po
 
 	if(m_eCameraMode != CIRCLING)
 	{
-		m_CircleHeightOffset = HeightOffset;
-		m_CircleRadius		 = Radius;
-		m_CircleHeightOffset = PointAtOffset;
-		m_CircleTime		 = Time;
-        m_bStartCircle       = LTFALSE;
+		m_CircleHeightOffset	= HeightOffset;
+		m_CircleRadius		= Radius;
+		m_CircleHeightOffset	= PointAtOffset;
+		m_CircleTime		= Time;
+		m_bStartCircle		= LTFALSE;
 
-        LTVector vTargetPos, up, right, forward;
-        LTRotation rRot;
+		LTVector vTargetPos, up, right, forward;
+		LTRotation rRot;
 
 		m_pClientDE->GetObjectRotation(m_hTarget, &rRot);
 		m_pClientDE->GetRotationVectors(&rRot, &up, &right, &forward);
@@ -811,7 +785,7 @@ void CPlayerCamera::StartCircle(LTFLOAT HeightOffset, LTFLOAT Radius, LTFLOAT Po
 
 
 		//	m_Pos.Copy(m_Target.m_Pos + right*0 + up*m_CircleHeightOffset - forward*m_CircleRadius);
-        LTVector vTemp, vTemp1;
+		LTVector vTemp, vTemp1;
 		VEC_MULSCALAR(vTemp, forward, m_CircleRadius);
 		VEC_MULSCALAR(vTemp1, up, m_CircleHeightOffset);
 		VEC_SUB(vTemp, vTemp1, vTemp);
@@ -829,18 +803,16 @@ void CPlayerCamera::StartCircle(LTFLOAT HeightOffset, LTFLOAT Radius, LTFLOAT Po
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::CircleAroundTarget()
 //
 //	PURPOSE:	Circle the target
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerCamera::CircleAroundTarget()
 {
 	if (!m_pClientDE || !m_hTarget) return;
 
-    LTFLOAT diff = (m_pClientDE->GetTime() - m_CircleStartTime) / m_CircleTime;
+	LTFLOAT diff = (m_pClientDE->GetTime() - m_CircleStartTime) / m_CircleTime;
 
 	if(diff >= 1.0f)
 	{
@@ -853,16 +825,16 @@ void CPlayerCamera::CircleAroundTarget()
 	//m_Angles.y = m_SaveAnglesY + (MATH_CIRCLE*diff);
 	m_pClientDE->EulerRotateY(&m_rRotation, (MATH_CIRCLE*diff));
 
-    LTVector up, right, forward;
+	LTVector up, right, forward;
 	m_pClientDE->GetRotationVectors(&m_rRotation, &up, &right, &forward);
 
-    LTVector vTargetPos;
-    LTRotation rRot;
+	LTVector vTargetPos;
+	LTRotation rRot;
 	m_pClientDE->GetObjectPos(m_hTarget, &vTargetPos);
 	m_pClientDE->GetObjectRotation(m_hTarget, &rRot);
 
 	// m_Pos.Copy(m_Target.m_Pos + right*0 + up*m_CircleHeightOffset - forward*m_CircleRadius);
-    LTVector vTemp, vTemp1;
+	LTVector vTemp, vTemp1;
 	VEC_MULSCALAR(vTemp, forward, m_CircleRadius);
 	VEC_MULSCALAR(vTemp1, up, m_CircleHeightOffset);
 	VEC_SUB(vTemp, vTemp1, vTemp);
@@ -877,28 +849,24 @@ void CPlayerCamera::CircleAroundTarget()
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::VCompare()
 //
 //	PURPOSE:	Compare two vectors
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerCamera::VCompare(LTVector a, LTVector b)
 {
 	if((fabs(a.x - b.x) > 5.0f) || (fabs(a.y - b.y) > 5.0f) || (fabs(a.z - b.z) > 5.0f))
-        return LTFALSE;
+		return LTFALSE;
 	else
-        return LTTRUE;
+		return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerCamera::AttachToObject()
 //
 //	PURPOSE:	Attach camera to an object
-//
 // ----------------------------------------------------------------------- //
 
 void CPlayerCamera::AttachToObject(HLOCALOBJ hObj)
@@ -913,10 +881,10 @@ void CPlayerCamera::AttachToObject(HLOCALOBJ hObj)
 
 		// Assume for now first person...
 
-        LTRotation rRot;
+		LTRotation rRot;
 		m_pClientDE->GetObjectRotation(m_hTarget, &rRot);
 
-        LTVector vU, vR, vF;
+		LTVector vU, vR, vF;
 		m_pClientDE->GetRotationVectors(&rRot, &vU, &vR, &vF);
 		vF.y = 0.0f;
 
@@ -929,8 +897,8 @@ void CPlayerCamera::GoFirstPerson()
 {
 	if((m_eCameraMode != GOINGFIRSTPERSON) && (m_eCameraMode != FIRSTPERSON))
 	{
-        m_GoingFirstPersonStart = g_pLTClient->GetTime();
+		m_GoingFirstPersonStart = g_pLTClient->GetTime();
 		m_eCameraMode = GOINGFIRSTPERSON;
-        CameraUpdate(g_pGameClientShell->GetFrameTime());
+		CameraUpdate(g_pGameClientShell->GetFrameTime());
 	}
 }
