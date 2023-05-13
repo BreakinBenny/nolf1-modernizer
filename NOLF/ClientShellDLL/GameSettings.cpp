@@ -11,20 +11,18 @@ extern CGameClientShell* g_pGameClientShell;
 
 CGameSettings::CGameSettings()
 {
-    m_pClientDE = LTNULL;
-    m_pClientShell = LTNULL;
+	m_pClientDE = LTNULL;
+	m_pClientShell = LTNULL;
 	m_bAllowGore = LTTRUE;
 }
 
 //////////////////////////////////////////////////////////////////
-//
 //	INIT THE SETTINGS...
-//
 //////////////////////////////////////////////////////////////////
 
 LTBOOL CGameSettings::Init (ILTClient* pClientDE, CGameClientShell* pClientShell)
 {
-    if (!pClientDE || !pClientShell) return LTFALSE;
+	if (!pClientDE || !pClientShell) return LTFALSE;
 
 	m_pClientDE = pClientDE;
 	m_pClientShell = pClientShell;
@@ -40,8 +38,7 @@ LTBOOL CGameSettings::Init (ILTClient* pClientDE, CGameClientShell* pClientShell
 		m_pClientDE->RunConsoleString("gore 0");
 	}
 
-
-    uint32 dwAdvancedOptions = g_pInterfaceMgr->GetAdvancedOptions();
+	uint32 dwAdvancedOptions = g_pInterfaceMgr->GetAdvancedOptions();
 
 	if (dwAdvancedOptions & AO_MUSIC)
 	{
@@ -64,7 +61,7 @@ LTBOOL CGameSettings::Init (ILTClient* pClientDE, CGameClientShell* pClientShell
 	{
 		char strJoystick[128];
 		memset (strJoystick, 0, 128);
-        LTRESULT result = m_pClientDE->GetDeviceName (DEVICETYPE_JOYSTICK, strJoystick, 127);
+		LTRESULT result = m_pClientDE->GetDeviceName (DEVICETYPE_JOYSTICK, strJoystick, 127);
 		if (result == LT_OK)
 		{
 			char strConsole[256];
@@ -84,8 +81,7 @@ LTBOOL CGameSettings::Init (ILTClient* pClientDE, CGameClientShell* pClientShell
 	}
 
 	// implement settings that need implementing
-
-    ImplementMouseSensitivity();
+	ImplementMouseSensitivity();
 
 
 	ImplementMusicSource();
@@ -96,52 +92,45 @@ LTBOOL CGameSettings::Init (ILTClient* pClientDE, CGameClientShell* pClientShell
 	ImplementSoundVolume();
 	ImplementSoundQuality();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
-
-
-
-
-
 //////////////////////////////////////////////////////////////////
-//
 //	IMPLEMENT CURRENT RENDERER SETTING
-//
 //////////////////////////////////////////////////////////////////
 LTBOOL CGameSettings::ImplementRendererSetting()
 {
-    if (!m_pClientDE || !m_pClientShell) return LTFALSE;
+	if (!m_pClientDE || !m_pClientShell) return LTFALSE;
 
 	// make sure the active mode isn't what we're trying to set...
 
 	RMode current;
 	memset (&current, 0, sizeof (RMode));
-    if (m_pClientDE->GetRenderMode (&current) != LT_OK) return LTFALSE;
+	if (m_pClientDE->GetRenderMode (&current) != LT_OK) return LTFALSE;
 
 	if (strcmp (CurrentRenderer.m_RenderDLL, current.m_RenderDLL) == 0 && strcmp (CurrentRenderer.m_Description, current.m_Description) == 0)
 	{
 		if (CurrentRenderer.m_Width == current.m_Width && CurrentRenderer.m_Height == current.m_Height)
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
 	// attempt to set the render mode
 
-    g_pInterfaceMgr->SetSwitchingRenderModes(LTTRUE);
-    LTRESULT hResult = m_pClientDE->SetRenderMode(&CurrentRenderer);
-    g_pInterfaceMgr->SetSwitchingRenderModes(LTFALSE);
+	g_pInterfaceMgr->SetSwitchingRenderModes(LTTRUE);
+	LTRESULT hResult = m_pClientDE->SetRenderMode(&CurrentRenderer);
+	g_pInterfaceMgr->SetSwitchingRenderModes(LTFALSE);
 
-    if (hResult == LT_KEPTSAMEMODE || hResult == LT_UNABLETORESTOREVIDEO)
+	if (hResult == LT_KEPTSAMEMODE || hResult == LT_UNABLETORESTOREVIDEO)
 	{
 		if (hResult == LT_KEPTSAMEMODE)
 		{
 			// reset the structure
 			m_pClientDE->GetRenderMode (&CurrentRenderer);
 		}
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pClientDE->GetRenderMode (&current);
@@ -152,40 +141,39 @@ LTBOOL CGameSettings::ImplementRendererSetting()
 		// SetRenderMode() returned success, but it really didn't work
 		// reset the structure
 		m_pClientDE->GetRenderMode (&CurrentRenderer);
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	// adjust the screen and camera rects
 
-    uint32 nScreenWidth = 0;
-    uint32 nScreenHeight = 0;
+	uint32 nScreenWidth = 0;
+	uint32 nScreenHeight = 0;
 	HSURFACE hScreen = m_pClientDE->GetScreenSurface();
 	m_pClientDE->GetSurfaceDims (hScreen, &nScreenWidth, &nScreenHeight);
 	int nLeft = 0;
 	int nTop = 0;
 	int nRight = (int)nScreenWidth;
 	int nBottom = (int)nScreenHeight;
-    LTBOOL bFullScreen = LTTRUE;
+	LTBOOL bFullScreen = LTTRUE;
 	m_pClientDE->SetCameraRect (m_pClientShell->GetCamera(), bFullScreen, nLeft, nTop, nRight, nBottom);
 	m_pClientDE->SetCameraRect (m_pClientShell->GetInterfaceCamera(), bFullScreen, nLeft, nTop, nRight, nBottom);
 	g_pInterfaceMgr->ResetMenuRestoreCamera (0, 0, nRight, nBottom);
 	g_pInterfaceMgr->ScreenDimsChanged();
 
 	// make sure the structure is completely filled in
-
 	m_pClientDE->GetRenderMode (&CurrentRenderer);
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 void CGameSettings::ImplementMusicSource()
 {
 	if (!m_pClientDE || !m_pClientShell) return;
 
-    uint32 dwAdvancedOptions = g_pInterfaceMgr->GetAdvancedOptions();
+	uint32 dwAdvancedOptions = g_pInterfaceMgr->GetAdvancedOptions();
 
-    LTBOOL bPlay = MusicEnabled() && (dwAdvancedOptions & AO_MUSIC);
+	LTBOOL bPlay = MusicEnabled() && (dwAdvancedOptions & AO_MUSIC);
 
 	if (bPlay)
 	{
@@ -245,7 +233,7 @@ void CGameSettings::ImplementMouseSensitivity()
 
 	char strDevice[128];
 	memset (strDevice, 0, 128);
-    LTRESULT result = m_pClientDE->GetDeviceName (DEVICETYPE_MOUSE, strDevice, 127);
+	LTRESULT result = m_pClientDE->GetDeviceName (DEVICETYPE_MOUSE, strDevice, 127);
 	if (result == LT_OK)
 	{
 		// get mouse x- and y- axis names
@@ -255,8 +243,8 @@ void CGameSettings::ImplementMouseSensitivity()
 		char strYAxis[32];
 		memset (strYAxis, 0, 32);
 
-        LTBOOL bFoundXAxis = LTFALSE;
-        LTBOOL bFoundYAxis = LTFALSE;
+		LTBOOL bFoundXAxis = LTFALSE;
+		LTBOOL bFoundYAxis = LTFALSE;
 
 		DeviceObject* pList = m_pClientDE->GetDeviceObjects (DEVICETYPE_MOUSE);
 		DeviceObject* ptr = pList;
@@ -265,13 +253,13 @@ void CGameSettings::ImplementMouseSensitivity()
 			if (ptr->m_ObjectType == CONTROLTYPE_XAXIS)
 			{
 				SAFE_STRCPY(strXAxis, ptr->m_ObjectName);
-                bFoundXAxis = LTTRUE;
+				bFoundXAxis = LTTRUE;
 			}
 
 			if (ptr->m_ObjectType == CONTROLTYPE_YAXIS)
 			{
 				SAFE_STRCPY(strYAxis, ptr->m_ObjectName);
-                bFoundYAxis = LTTRUE;
+				bFoundYAxis = LTTRUE;
 			}
 
 			ptr = ptr->m_pNext;
@@ -281,7 +269,6 @@ void CGameSettings::ImplementMouseSensitivity()
 		if (bFoundXAxis && bFoundYAxis)
 		{
 			// run the console string
-
 			char strConsole[64];
 			sprintf (strConsole, "scale \"%s\" \"%s\" %f", strDevice, strXAxis, 0.00125f + ((float)nMouseSensitivity * 0.001125f));
 			m_pClientDE->RunConsoleString (strConsole);
@@ -290,9 +277,6 @@ void CGameSettings::ImplementMouseSensitivity()
 		}
 	}
 }
-
-
-
 
 namespace
 {
