@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : PlayerSoundFX.cpp
+// MODULE: PlayerSoundFX.cpp
 //
 // PURPOSE : Player sound special FX - Implementation
 //
 // CREATED : 7/28/98 (was WeaponSoundFX)
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -19,16 +17,14 @@
 extern CGameClientShell* g_pGameClientShell;
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerSoundFX::Init
 //
 //	PURPOSE:	Init the fx
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerSoundFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	PLAYERSOUNDCREATESTRUCT* pPSCS = (PLAYERSOUNDCREATESTRUCT*)psfxCreateStruct;
 
@@ -37,27 +33,25 @@ LTBOOL CPlayerSoundFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 	m_nType		= pPSCS->nType;
 	m_nWeaponId	= pPSCS->nWeaponId;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
-//
 //	ROUTINE:	CPlayerSoundFX::CreateObject
 //
 //	PURPOSE:	Create object associated with the CPlayerSoundFX
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerSoundFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
+	if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
 
-    uint32 dwId;
-    if (m_pClientDE->GetLocalClientID(&dwId) != LT_OK) return LTFALSE;
+	uint32 dwId;
+	if (m_pClientDE->GetLocalClientID(&dwId) != LT_OK) return LTFALSE;
 
 	// Don't play sounds for this client...
 
-    if (int(dwId) == m_nClientId) return LTFALSE;
+	if (int(dwId) == m_nClientId) return LTFALSE;
 
 	PlayerSoundId eSndType = (PlayerSoundId)m_nType;
 
@@ -92,6 +86,5 @@ LTBOOL CPlayerSoundFX::CreateObject(ILTClient *pClientDE)
 		}
 	}
 
-
-    return LTFALSE;  // Delete me, I'm done :)
+	return LTFALSE;	// Delete me, I'm done :)
 }
