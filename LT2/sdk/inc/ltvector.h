@@ -14,10 +14,10 @@
 
 
 	// Defines....
-	#define	ZERO					0.0f
-	#define ONE						1.0f
-	#define	DIFF(x,y)				( (x)<(y) ? ((y)-(x)) : ((x)-(y)) )
-	#define	ABS(x)					( (x)<0 ? (-(x)) : (x) )
+	#define	ZERO		0.0f
+	#define ONE		1.0f
+	#define	DIFF(x,y)	( (x)<(y) ? ((y)-(x)) : ((x)-(y)) )
+	#define	ABS(x)		( (x)<0 ? (-(x)) : (x) )
 
 
 	template<class T>
@@ -26,45 +26,45 @@
 		public:
 									
 
-							_CVector() {}
-							_CVector(T mx, T my, T mz) {x=mx; y=my; z=mz;}
+				_CVector() {}
+				_CVector(T mx, T my, T mz) {x=mx; y=my; z=mz;}
 
 			// Member Functions
-			void				Init(T px=0.0f, T py=0.0f, T pz=0.0f) { x = px; y = py; z = pz; }
-			void				Term();
+			void	Init(T px=0.0f, T py=0.0f, T pz=0.0f) { x = px; y = py; z = pz; }
+			void	Term();
 
-			T					Dist(const _CVector<T> &vec) const {return (*this - vec).Mag();}
-			T					DistSqr(const _CVector<T> &vec) const {return (*this - vec).MagSqr();}
+			T		Dist(const _CVector<T> &vec) const {return (*this - vec).Mag();}
+			T		DistSqr(const _CVector<T> &vec) const {return (*this - vec).MagSqr();}
 
-			T					Mag() const { return (T)sqrt((x * x) + (y * y) + (z * z)); }
-			T					MagSqr() const { return (x * x) + (y * y) + (z * z); }
-			T					MagApprox() const;
+			T		Mag() const { return (T)sqrt((x * x) + (y * y) + (z * z)); }
+			T		MagSqr() const { return (x * x) + (y * y) + (z * z); }
+			T		MagApprox() const;
 
-			T					Dot(_CVector<T> v)	const { return (x * v.x) + (y * v.y) + (z * v.z); }
+			T		Dot(_CVector<T> v)	const { return (x * v.x) + (y * v.y) + (z * v.z); }
 
-			void				Norm(T nVal = ONE);
-			void				NormApprox(T nVal = ONE);
-			_CVector<T>			Cross( const _CVector<T> v ) const;
+			void		Norm(T nVal = ONE);
+			void		NormApprox(T nVal = ONE);
+			_CVector<T>	Cross( const _CVector<T> v ) const;
 
 			_CVector<float>		FVec() const {return _CVector<float>((float)x, (float)y, (float)z);}
 			_CVector<double>	DVec() const {return _CVector<double>((double)x, (double)y, (double)z);}
 
-			LTBOOL				Equals( const _CVector<T> &v, T variance=ZERO ) const;
+			LTBOOL			Equals( const _CVector<T> &v, T variance=ZERO ) const;
 
 			// Operators
-			_CVector<T> operator		- () const { return _CVector<T>(-x, -y, -z); }
+			_CVector<T> operator	- () const { return _CVector<T>(-x, -y, -z); }
 
-			_CVector<T> operator		+ (const _CVector<T> v) const { return _CVector<T>(x + v.x, y + v.y, z + v.z); }
-			_CVector<T> operator		- (const _CVector<T> v) const { return _CVector<T>(x - v.x, y - v.y, z - v.z); }
-			_CVector<T> operator		* (const _CVector<T> v) const { return _CVector<T>(x * v.x, y * v.y, z * v.z); }
-			_CVector<T> operator		/ (const _CVector<T> v) const { return _CVector<T>(x / v.x, y / v.y, z / v.z); }
+			_CVector<T> operator	+ (const _CVector<T> v) const { return _CVector<T>(x + v.x, y + v.y, z + v.z); }
+			_CVector<T> operator	- (const _CVector<T> v) const { return _CVector<T>(x - v.x, y - v.y, z - v.z); }
+			_CVector<T> operator	* (const _CVector<T> v) const { return _CVector<T>(x * v.x, y * v.y, z * v.z); }
+			_CVector<T> operator	/ (const _CVector<T> v) const { return _CVector<T>(x / v.x, y / v.y, z / v.z); }
 							
-			_CVector<T> operator		+ (T v) const { return _CVector<T>(x + v, y + v, z + v); }
-			_CVector<T> operator		- (T v) const { return _CVector<T>(x - v, y - v, z - v); }
-			_CVector<T> operator		* (T v) const { return _CVector<T>(x * v, y * v, z * v); }
-			_CVector<T> operator		/ (T v) const { return _CVector<T>(x / v, y / v, z / v); }
+			_CVector<T> operator	+ (T v) const { return _CVector<T>(x + v, y + v, z + v); }
+			_CVector<T> operator	- (T v) const { return _CVector<T>(x - v, y - v, z - v); }
+			_CVector<T> operator	* (T v) const { return _CVector<T>(x * v, y * v, z * v); }
+			_CVector<T> operator	/ (T v) const { return _CVector<T>(x / v, y / v, z / v); }
 
-			_CVector<T>					Inverse() const
+			_CVector<T>	Inverse() const
 			{
 				_CVector<T> temp;
 				temp = *this;
@@ -73,26 +73,26 @@
 				return temp;
 			}
 
-			void operator			+= (const _CVector<T> v) { x += v.x; y += v.y; z += v.z; }
-			void operator			-= (const _CVector<T> v) { x -= v.x; y -= v.y; z -= v.z; }
-			void operator			*= (const _CVector<T> v) { x *= v.x; y *= v.y; z *= v.z; }
-			void operator			/= (const _CVector<T> v) { x /= v.x; y /= v.y; z /= v.z; }
+			void operator		+= (const _CVector<T> v) { x += v.x; y += v.y; z += v.z; }
+			void operator		-= (const _CVector<T> v) { x -= v.x; y -= v.y; z -= v.z; }
+			void operator		*= (const _CVector<T> v) { x *= v.x; y *= v.y; z *= v.z; }
+			void operator		/= (const _CVector<T> v) { x /= v.x; y /= v.y; z /= v.z; }
 									
-			void operator			+= (T v) { x += v; y += v; z += v; }
-			void operator			-= (T v) { x -= v; y -= v; z -= v; }
-			void operator			*= (T v) { x *= v; y *= v; z *= v; }
-			void operator			/= (T v) { x /= v; y /= v; z /= v; }
+			void operator		+= (T v) { x += v; y += v; z += v; }
+			void operator		-= (T v) { x -= v; y -= v; z -= v; }
+			void operator		*= (T v) { x *= v; y *= v; z *= v; }
+			void operator		/= (T v) { x /= v; y /= v; z /= v; }
 
-			LTBOOL operator			> ( const _CVector<T> &other ) const { return ((x>other.x) && (y>other.y) && (z>other.z)); }
-			LTBOOL operator			< ( const _CVector<T> &other ) const { return ((x<other.x) && (y<other.y) && (z<other.z)); }
+			LTBOOL operator		> ( const _CVector<T> &other ) const { return ((x>other.x) && (y>other.y) && (z>other.z)); }
+			LTBOOL operator		< ( const _CVector<T> &other ) const { return ((x<other.x) && (y<other.y) && (z<other.z)); }
 
-			LTBOOL operator			>= ( const _CVector<T> &other ) const { return ((x>=other.x) && (y>=other.y) && (z>=other.z)); }
-			LTBOOL operator			<= ( const _CVector<T> &other ) const { return ((x<=other.x) && (y<=other.y) && (z<=other.z)); }
+			LTBOOL operator		>= ( const _CVector<T> &other ) const { return ((x>=other.x) && (y>=other.y) && (z>=other.z)); }
+			LTBOOL operator		<= ( const _CVector<T> &other ) const { return ((x<=other.x) && (y<=other.y) && (z<=other.z)); }
 
-			LTBOOL operator			== ( const _CVector<T> &other ) const { return ((x==other.x) && (y==other.y) && (z==other.z)); }
-			LTBOOL operator			!= ( const _CVector<T> &other ) const { return ((x!=other.x) || (y!=other.y) || (z!=other.z)); }
+			LTBOOL operator		== ( const _CVector<T> &other ) const { return ((x==other.x) && (y==other.y) && (z==other.z)); }
+			LTBOOL operator		!= ( const _CVector<T> &other ) const { return ((x!=other.x) || (y!=other.y) || (z!=other.z)); }
 
-			_CVector<T> operator		^ ( const _CVector<T> v ) const { return Cross(v); }
+			_CVector<T> operator	^ ( const _CVector<T> v ) const { return Cross(v); }
 			T   &operator		[] ( uint32 i ) { return ((T*)this)[i]; }
 
 			// Member Variables
@@ -128,13 +128,11 @@
 	
 
 	//------------------------------------------------------------------
-	//
 	// Function	: CVector::Equals
 	//
 	// Purpose	: Returns if two vectors are equal (it sees if the
-	//            difference between each coordinate is less than
-	//            variance)
-	//
+	//		difference between each coordinate is less than
+	//		variance)
 	//------------------------------------------------------------------
 
 	template<class T>
@@ -143,14 +141,10 @@
 		return ((DIFF(x,v.x)<=variance) && (DIFF(y,v.y)<=variance) && (DIFF(z,v.z)<=variance));
 	}
 
-
-
 	//------------------------------------------------------------------
-	//
 	// Function	: MagApprox
 	//
 	// Purpose	: Approximate magnitude of vector (within 12%)
-	//
 	//------------------------------------------------------------------
 
 	template<class T>
@@ -180,14 +174,10 @@
 		return max + ((med + min) * 0.25f);
 	}
 
-
-
 	//------------------------------------------------------------------
-	//
 	// Function	: Norm
 	//
 	// Purpose	: Normalises a vector
-	//
 	//------------------------------------------------------------------
 
 	template<class T>
@@ -205,15 +195,11 @@
 		z = z * inv;
 	}
 
-
-
 	//------------------------------------------------------------------
-	//
 	// Function	: NormApprox
 	//
 	// Purpose	: Normalises a vector using an approximation to the
-	//            magnitude.
-	//
+	//		magnitude.
 	//------------------------------------------------------------------
 
 	template<class T>
@@ -231,23 +217,19 @@
 		z = z * inv;
 	}
 
-
-
 	//------------------------------------------------------------------
-	//
 	// Function	: Cross
 	//
 	// Purpose	: Calculates cross product of vector
-	//
 	//------------------------------------------------------------------
 
 	template<class T>
 	inline _CVector<T> _CVector<T>::Cross ( const _CVector<T> v ) const
 	{
 		return _CVector<T>(
-						((v.y * z) - (v.z * y)),
-					   ((v.z * x) - (v.x * z)),
-					   ((v.x * y) - (v.y * x)) 
+					((v.y * z) - (v.z * y)),
+					((v.z * x) - (v.x * z)),
+					((v.x * y) - (v.y * x)) 
 						);
 	}
 
