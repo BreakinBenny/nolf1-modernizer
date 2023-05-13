@@ -37,42 +37,42 @@
 	#define NUM_PROPERTYTYPES 8
 
 	// Property flags.
-	#define PF_HIDDEN			(1<<0)	// Property doesn't show up in DEdit.
-	#define PF_RADIUS			(1<<1)	// Property is a number to use as radius for drawing circle.  There can be more than one.
-	#define PF_DIMS				(1<<2)	// Property is a vector to use as dimensions for drawing box. There can be only one.
-	#define PF_FIELDOFVIEW		(1<<3)	// Property is a field of view.
-	#define PF_LOCALDIMS		(1<<4)	// Used with PF_DIMS.  Causes DEdit to show dimensions rotated with the object.
-	#define PF_GROUPOWNER		(1<<5)	// This property owns the group it's in.
-	#define PF_GROUP1			(1<<6)	// This property is in group 1.
-	#define PF_GROUP2			(1<<7)	// This property is in group 2.
-	#define PF_GROUP3			(1<<8)	// This property is in group 3.
-	#define PF_GROUP4			(1<<9)	// This property is in group 4.
-	#define PF_GROUP5			(1<<10)	// This property is in group 5.
-	#define PF_GROUP6			(1<<11)	// This property is in group 6.
-	#define PF_FOVRADIUS		(1<<12) // If PF_FIELDOFVIEW is set, this defines the radius for it.
-	#define PF_OBJECTLINK		(1<<13) // If the object is selected, DEdit draws a line to any objects
-										// referenced (by name) in PF_OBJECTLINK properties.  It won't
+	#define PF_HIDDEN	(1<<0)	// Property doesn't show up in DEdit.
+	#define PF_RADIUS	(1<<1)	// Property is a number to use as radius for drawing circle.  There can be more than one.
+	#define PF_DIMS		(1<<2)	// Property is a vector to use as dimensions for drawing box. There can be only one.
+	#define PF_FIELDOFVIEW	(1<<3)	// Property is a field of view.
+	#define PF_LOCALDIMS	(1<<4)	// Used with PF_DIMS.  Causes DEdit to show dimensions rotated with the object.
+	#define PF_GROUPOWNER	(1<<5)	// This property owns the group it's in.
+	#define PF_GROUP1	(1<<6)	// This property is in group 1.
+	#define PF_GROUP2	(1<<7)	// This property is in group 2.
+	#define PF_GROUP3	(1<<8)	// This property is in group 3.
+	#define PF_GROUP4	(1<<9)	// This property is in group 4.
+	#define PF_GROUP5	(1<<10)	// This property is in group 5.
+	#define PF_GROUP6	(1<<11)	// This property is in group 6.
+	#define PF_FOVRADIUS	(1<<12) // If PF_FIELDOFVIEW is set, this defines the radius for it.
+	#define PF_OBJECTLINK	(1<<13) // If the object is selected, DEdit draws a line to any objects
+										// referenced (by name) in PF_OBJECTLINK properties. It won't
 										// draw any more than MAX_OBJECTLINK_OBJECTS.
-	#define PF_FILENAME			(1<<14)	// This indicates to DEdit that a string property is a filename in the resource
+	#define PF_FILENAME		(1<<14)	// This indicates to DEdit that a string property is a filename in the resource
 	
 	// If this property is a vector and its object is on a path,
 	// the path is drawn as a bezier curve.  The curve segment from
 	// this object to the next is defined as 
 	// (THIS.Pos, THIS.Pos + THIS.NextTangent, NEXT.Pos + NEXT.PrevTangent, NEXT.Pos).
-	#define PF_BEZIERPREVTANGENT		(1<<15)	
-	#define PF_BEZIERNEXTTANGENT		(1<<16)
+	#define PF_BEZIERPREVTANGENT	(1<<15)	
+	#define PF_BEZIERNEXTTANGENT	(1<<16)
 
-	#define PF_STATICLIST		(1<<17)	// This string property has a populatable combobox with dropdown-list style (ie listbox, no edit control)
-	#define PF_DYNAMICLIST		(1<<18)	// This string property has a populatable combobox with dropdown style (ie listbox+edit control)
+	#define PF_STATICLIST	(1<<17)	// This string property has a populatable combobox with dropdown-list style (ie listbox, no edit control)
+	#define PF_DYNAMICLIST	(1<<18)	// This string property has a populatable combobox with dropdown style (ie listbox+edit control)
 
 	// Used internally..
 	#define PF_GROUPMASK	(PF_GROUP1|PF_GROUP2|PF_GROUP3|PF_GROUP4|PF_GROUP5|PF_GROUP6)
 
 	// Class flags.
-	#define CF_HIDDEN		(1<<0)	// Instances of the class can't be created in DEdit.
+	#define CF_HIDDEN	(1<<0)	// Instances of the class can't be created in DEdit.
 	#define CF_NORUNTIME	(1<<1)	// This class doesn't get used at runtime (the engine 
 									// won't instantiate these objects out of the world file).
-	#define CF_STATIC		(1<<2)	// This is a special class that the server creates an
+	#define CF_STATIC	(1<<2)	// This is a special class that the server creates an
 									// instance of at the same time that it creates the
 									// server shell.  The object is always around.  This
 									// should be used as much as possible instead of adding
@@ -82,10 +82,10 @@
 
 
 
-	#define PRECREATE_NORMAL		0.0f	// Object is being created at runtime.
-	#define PRECREATE_WORLDFILE		1.0f	// Object is being loaded from a world file.  Read props in.
+	#define PRECREATE_NORMAL	0.0f	// Object is being created at runtime.
+	#define PRECREATE_WORLDFILE	1.0f	// Object is being loaded from a world file.  Read props in.
 	#define PRECREATE_STRINGPROP	2.0f	// Object is created from CreateObjectProps.  Use GetPropGeneric to read props.
-	#define PRECREATE_SAVEGAME		3.0f	// Object comes from a savegame.
+	#define PRECREATE_SAVEGAME	3.0f	// Object comes from a savegame.
 									
 	#define INITIALUPDATE_NORMAL		0.0f	// Normal creation.
 	#define INITIALUPDATE_WORLDFILE		1.0f	// Being created from a world file.
@@ -107,7 +107,7 @@
 	#define MID_INITIALUPDATE	1
 	
 	// This is called when NextUpdate goes to zero.
-	#define MID_UPDATE			2
+	#define MID_UPDATE		2
 
 	// This is called when you touch another object.
 	// pData is an HOBJECT for the other object.
@@ -123,11 +123,11 @@
 	// pData is an ArgList*.
 	#define MID_MODELSTRINGKEY	5
 
-	// Called when an object pushes you into a wall.  It won't
+	// Called when an object pushes you into a wall. It won't
 	// move any further unless you make yourself nonsolid (ie: a player would
 	// take damage from each crush notification, then die).
 	// pData is the HOBJECT of the object crushing you.
-	#define MID_CRUSH			6
+	#define MID_CRUSH		6
 
 	// Load and save yourself for a serialization.
 	// pData is an HMESSAGEREAD or HMESSAGEWRITE.
@@ -144,7 +144,7 @@
 	// The parent of an attachment between you and it is being removed.
 	#define MID_PARENTATTACHMENTREMOVED	10
 
-	// Called every frame on client objects.  This gives you a chance to force
+	// Called every frame on client objects. This gives you a chance to force
 	// updates on certain objects so they never get removed for the client.
 	// pData is a ForceUpdate*.
 	// (LT automatically adds the client object and the sky objects to this list to start with).
@@ -219,7 +219,7 @@
 	{
 	public:
 
-		CProjectClass*	DEditGetClassHook()							{return (CProjectClass*)m_pInternal[0];}
+		CProjectClass*	DEditGetClassHook()					{return (CProjectClass*)m_pInternal[0];}
 		void			DEditSetClassHook(CProjectClass *pClass)	{m_pInternal[0] = pClass;}
 
 	
@@ -258,8 +258,6 @@
 
 	// Used to avoid crashes from version mismatches.
 	#define SERVEROBJ_VERSION 1
-
-
 
 
 	// You MUST have one source file that lists out all the classes you have defined
@@ -363,8 +361,6 @@
 			}
 
 	#endif // !COMPILE_WITH_C
-
-
 
 
 	// -------------------------------------------------------- //
