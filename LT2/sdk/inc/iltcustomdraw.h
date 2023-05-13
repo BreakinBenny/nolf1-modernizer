@@ -1,15 +1,14 @@
-
 #ifndef __ILTCUSTOMDRAW_H__
 #define __ILTCUSTOMDRAW_H__
 
 
 	// Blend modes.
 	#define LTBLEND_ZERO		1
-	#define LTBLEND_ONE         2
-	#define LTBLEND_SRCCOLOR    3
-	#define LTBLEND_INVSRCCOLOR 4
-	#define LTBLEND_SRCALPHA    5
-	#define LTBLEND_INVSRCALPHA 6
+	#define LTBLEND_ONE		2
+	#define LTBLEND_SRCCOLOR	3
+	#define LTBLEND_INVSRCCOLOR	4
+	#define LTBLEND_SRCALPHA	5
+	#define LTBLEND_INVSRCALPHA	6
 
 	// Texture addressing modes
 	#define LTTEXADDR_WRAP		1
@@ -19,20 +18,20 @@
 	#define LTOP_SELECTTEXTURE	1
 	#define LTOP_SELECTDIFFUSE	2
 	#define LTOP_MODULATE		3
-	#define LTOP_ADD			4
+	#define LTOP_ADD		4
 	#define LTOP_ADDSIGNED		5
 
 	typedef enum
 	{
-										// Defaults:
+						// Defaults:
 		LTRSTATE_ALPHABLENDENABLE=0,	// FALSE
-		LTRSTATE_ZREADENABLE,			// TRUE
-		LTRSTATE_ZWRITEENABLE,			// TRUE
-		LTRSTATE_SRCBLEND,				// LTBLEND_SRCALPHA
-		LTRSTATE_DESTBLEND,				// LTBLEND_INVSRCALPHA
-		LTRSTATE_TEXADDR,				// LTTEXADDR_WRAP
-		LTRSTATE_COLOROP,				// LTOP_MODULATE
-		LTRSTATE_ALPHAOP,				// LTOP_SELECTTEXTURE
+		LTRSTATE_ZREADENABLE,		// TRUE
+		LTRSTATE_ZWRITEENABLE,		// TRUE
+		LTRSTATE_SRCBLEND,		// LTBLEND_SRCALPHA
+		LTRSTATE_DESTBLEND,		// LTBLEND_INVSRCALPHA
+		LTRSTATE_TEXADDR,		// LTTEXADDR_WRAP
+		LTRSTATE_COLOROP,		// LTOP_MODULATE
+		LTRSTATE_ALPHAOP,		// LTOP_SELECTTEXTURE
 		NUM_LTRSTATES
 	} LTRState;	
 
@@ -57,11 +56,11 @@
 	{
 	public:
 		
-		LTVector		m_Vec;
-		float			m_RHW;		// Don't touch.
+		LTVector	m_Vec;
+		float		m_RHW;		// Don't touch.
 		LTVertexColor	m_Color;
 		LTVertexColor	m_Specular;	// Don't touch.
-		float			m_TU, m_TV;
+		float		m_TU, m_TV;
 	};
 
 
