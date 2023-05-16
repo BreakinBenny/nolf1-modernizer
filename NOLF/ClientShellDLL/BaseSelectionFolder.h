@@ -32,38 +32,38 @@ public:
 	CBaseSelectionFolder();
 	virtual ~CBaseSelectionFolder();
 
-    virtual LTBOOL   Build();
+	virtual LTBOOL	Build();
 	virtual void	Escape();
 	virtual void	Term();
 
 	// Renders the folder to a surface
-    virtual LTBOOL   Render(HSURFACE hDestSurf);
+	virtual LTBOOL	Render(HSURFACE hDestSurf);
 
 	// This is called when the folder gets or loses focus
-    virtual void    OnFocus(LTBOOL bFocus);
+	virtual void	OnFocus(LTBOOL bFocus);
 
 
 	// Handles a key press.  Returns FALSE if the key was not processed through this method.
 	// Left, Up, Down, Right, and Enter are automatically passed through OnUp(), OnDown(), etc.
-    virtual LTBOOL   HandleKeyDown(int key, int rep);
+	virtual LTBOOL	HandleKeyDown(int key, int rep);
 
-    virtual uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	virtual uint32	OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
 	// Mouse messages
-    virtual LTBOOL   OnLButtonDown(int x, int y);
-    virtual LTBOOL   OnLButtonUp(int x, int y);
-    virtual LTBOOL   OnLButtonDblClick(int x, int y);
-    virtual LTBOOL   OnRButtonDown(int x, int y);
-    virtual LTBOOL   OnRButtonUp(int x, int y);
-    virtual LTBOOL   OnRButtonDblClick(int x, int y);
-    virtual LTBOOL   OnMouseMove(int x, int y);
+	virtual LTBOOL	OnLButtonDown(int x, int y);
+	virtual LTBOOL	OnLButtonUp(int x, int y);
+	virtual LTBOOL	OnLButtonDblClick(int x, int y);
+	virtual LTBOOL	OnRButtonDown(int x, int y);
+	virtual LTBOOL	OnRButtonUp(int x, int y);
+	virtual LTBOOL	OnRButtonDblClick(int x, int y);
+	virtual LTBOOL	OnMouseMove(int x, int y);
 
-    int		AddToSlot(int nItemId, int nNameId, LTBOOL bRequired);
-    int		AddEmptySlot();
+	int	AddToSlot(int nItemId, int nNameId, LTBOOL bRequired);
+	int	AddEmptySlot();
 	void	RemoveFromSlot(int nItemId);
 	void	ClearSlots();
 
-	int		AddItem(int nItemId, int nNameId);
+	int	AddItem(int nItemId, int nNameId);
 	void	RemoveItem(int nItemId);
 
 
@@ -71,20 +71,20 @@ public:
 	void	SlotToItem(int nItemId, int nNameId);
 
 	//searches slots and list, returns index of item
-	int		FindItemIndex(int nItemId);
+	int	FindItemIndex(int nItemId);
 
 	static const int kEmptySlot;
 
 protected:
 
 	// Handle input
-    virtual LTBOOL   OnUp();
-    virtual LTBOOL   OnDown();
-    virtual LTBOOL   OnLeft();
-    virtual LTBOOL   OnRight();
-    virtual LTBOOL   OnEnter();
-    virtual LTBOOL   OnPageUp();
-    virtual LTBOOL   OnPageDown();
+	virtual LTBOOL	OnUp();
+	virtual LTBOOL	OnDown();
+	virtual LTBOOL	OnLeft();
+	virtual LTBOOL	OnRight();
+	virtual LTBOOL	OnEnter();
+	virtual LTBOOL	OnPageUp();
+	virtual LTBOOL	OnPageDown();
 
 	virtual LTBOOL	UpdateSelection();
 	virtual void	ClearSelection();
@@ -96,22 +96,22 @@ protected:
 
 protected:
 
-	int		m_nNumSlots;
-	int		m_nSlotsFilled;
-	int		m_nSlotsLocked;
+	int	m_nNumSlots;
+	int	m_nSlotsFilled;
+	int	m_nSlotsLocked;
 	LTBOOL	m_bSaveSelection;
-	int		m_nLastListItem;
-	int		m_nFirstSlot;
+	int	m_nLastListItem;
+	int	m_nFirstSlot;
 
 	CLTGUITextItemCtrl*	m_pName;
 	CStaticTextCtrl*	m_pDescription;
 
 
-    LTBOOL   m_bReadLayout;
-    LTIntPt  m_SlotOffset;
-    LTRect   m_ListRect;
-    LTRect   m_NameRect;
-    LTRect   m_DescriptionRect;
+	LTBOOL	m_bReadLayout;
+	LTIntPt	m_SlotOffset;
+	LTRect	m_ListRect;
+	LTRect	m_NameRect;
+	LTRect	m_DescriptionRect;
 
 
 	static 	char	m_sSelectStr[32];
@@ -122,20 +122,18 @@ protected:
 	static 	char	m_sEmptyStr[32];
 
 	char	m_sPhoto[128];
-    LTIntPt  m_PhotoPos;
+	LTIntPt	m_PhotoPos;
 
 	// Array of photo surfaces
 	CMoArray<HSURFACE>	m_sharedSurfaceArray;
-    HSURFACE m_hPhotoSurf;
+	HSURFACE m_hPhotoSurf;
 
 	CBaseScaleFX	m_ModelSFX;
-	char			m_szModel[WMGR_MAX_FILE_PATH];
-	char			m_szSkin[WMGR_MAX_FILE_PATH];
-	LTFLOAT			m_fSFXRot;
-	LTFLOAT			m_fScale;
-	LTVector		m_vOffset;
-
-
+	char		m_szModel[WMGR_MAX_FILE_PATH];
+	char		m_szSkin[WMGR_MAX_FILE_PATH];
+	LTFLOAT		m_fSFXRot;
+	LTFLOAT		m_fScale;
+	LTVector	m_vOffset;
 };
 
 //the current folder is passed in rather than calculated, because the function might be called
