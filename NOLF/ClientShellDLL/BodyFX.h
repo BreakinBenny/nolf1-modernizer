@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : BodyFX.h
+// MODULE: BodyFX.h
 //
 // PURPOSE : Body special fx class - Definition
 //
 // CREATED : 02.01.2000
 //
 // (c) 1998-1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __BODY_FX_H__
@@ -27,22 +25,19 @@ class CBodyFX : public CSpecialFX
 		CBodyFX();
 		~CBodyFX();
 
-        LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage);
-        LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
+		LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage);
+		LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
 
-        LTBOOL CreateObject(ILTClient* pClientDE);
+		LTBOOL CreateObject(ILTClient* pClientDE);
 
 		// Updates
-
-        LTBOOL Update();
+		LTBOOL Update();
 
 		// Handlers
-
-        LTBOOL OnServerMessage(HMESSAGEREAD hMessage);
+		LTBOOL OnServerMessage(HMESSAGEREAD hMessage);
 		void OnModelKey(HLOCALOBJ hObj, ArgList *pArgs);
 
 		// Helpers
-
 		uint8 GetClientId() const { return m_bs.nClientId; }
 
 
@@ -60,16 +55,16 @@ class CBodyFX : public CSpecialFX
 
 	protected :
 
-		BODYCREATESTRUCT	m_bs;					// Our createstruct
+		BODYCREATESTRUCT	m_bs;	// Our createstruct
 
-		LTFLOAT				m_fFaderTime;
-		LTFLOAT				m_fFaderTimer;
+		LTFLOAT		m_fFaderTime;
+		LTFLOAT		m_fFaderTimer;
 
-		HOBJECT				m_hMarker;
+		HOBJECT		m_hMarker;
 
-		LTAnimTracker		m_TwitchTracker;
+		LTAnimTracker	m_TwitchTracker;
 
-		LTBOOL				m_bHasNodeControl;
+		LTBOOL		m_bHasNodeControl;
 };
 
 #endif
