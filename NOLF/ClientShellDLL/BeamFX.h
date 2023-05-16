@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : BeamFX.h
+// MODULE: BeamFX.h
 //
 // PURPOSE : Tracer special fx class - Definition
 //
 // CREATED : 5/15/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __BEAM_FX_H__
@@ -21,8 +19,8 @@ struct BEAMCREATESTRUCT : public SFXCREATESTRUCT
 {
 	BEAMCREATESTRUCT();
 
-    LTVector     vStartPos;
-    LTVector     vEndPos;
+	LTVector	vStartPos;
+	LTVector	vEndPos;
 	BEAMFX*		pBeamFX;
 };
 
@@ -30,7 +28,7 @@ inline BEAMCREATESTRUCT::BEAMCREATESTRUCT()
 {
 	vStartPos.Init();
 	vEndPos.Init();
-    pBeamFX = LTNULL;
+	pBeamFX = LTNULL;
 }
 
 
@@ -40,13 +38,13 @@ class CBeamFX : public CSpecialFX
 
 		CBeamFX() : CSpecialFX()
 		{
-            m_bFirstUpdate  = LTTRUE;
+			m_bFirstUpdate	= LTTRUE;
 			m_fStartTime	= 0.0f;
 		}
 
-        virtual LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hRead);
-        virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
-        virtual LTBOOL Update();
+		virtual LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hRead);
+		virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
+		virtual LTBOOL Update();
 
 		virtual uint32 GetSFXID() { return SFX_BEAM_ID; }
 
@@ -54,10 +52,10 @@ class CBeamFX : public CSpecialFX
 
 		BEAMCREATESTRUCT	m_cs;
 
-        LTBOOL           m_bFirstUpdate;
-        LTFLOAT          m_fStartTime;
+		LTBOOL	m_bFirstUpdate;
+		LTFLOAT	m_fStartTime;
 
-		CPolyLineFX		m_Beam;
+		CPolyLineFX	m_Beam;
 };
 
 #endif // __BEAM_FX_H__
