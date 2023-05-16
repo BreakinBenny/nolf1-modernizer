@@ -17,7 +17,7 @@ class CBitmapCtrl : public CLTGUICtrl
 public:
 	CBitmapCtrl();
 	virtual ~CBitmapCtrl();
-    LTBOOL   Create(ILTClient *pClientDE, char *lpszNormalBmp,char *lpszSelectedBmp = NULL,char *lpszDisabledBmp = NULL,
+	LTBOOL	Create(ILTClient *pClientDE, char *lpszNormalBmp,char *lpszSelectedBmp = NULL,char *lpszDisabledBmp = NULL,
                         CLTGUICommandHandler *pCommandHandler = LTNULL, uint32 dwCommandID = LTNULL, uint32 dwParam1 = 0, uint32 dwParam2 = 0);
 
 
@@ -28,40 +28,40 @@ public:
 	virtual void	Render ( HSURFACE hDestSurf );
 
 	// Width/Height calculations
-	virtual int		GetWidth ( );
-	virtual int		GetHeight ( );
+	virtual int	GetWidth ( );
+	virtual int	GetHeight ( );
 
-    virtual LTBOOL   OnEnter();
-    virtual LTBOOL   OnLButtonUp (int x, int y) {return OnEnter();}
+	virtual LTBOOL	OnEnter();
+	virtual LTBOOL	OnLButtonUp (int x, int y) {return OnEnter();}
 	//determines whether the surfaces should be freed when changing bitmaps and on destruction
-    void            AutoFreeSurfaces(LTBOOL bFreeSurf) {m_bFreeSurfaces = bFreeSurf;}
+	void	AutoFreeSurfaces(LTBOOL bFreeSurf) {m_bFreeSurfaces = bFreeSurf;}
 
 
-    virtual LTBOOL   SetBitmap(char *lpszNormalBmp,char *lpszSelectedBmp = NULL,char *lpszDisabledBmp = NULL);
+	virtual LTBOOL	SetBitmap(char *lpszNormalBmp,char *lpszSelectedBmp = NULL,char *lpszDisabledBmp = NULL);
 	virtual void	FreeSurfaces();
 
-	void			GetNormalBitmap(char* pBuf, int nBufLen);
-	void			GetSelectedBitmap(char* pBuf, int nBufLen);
-	void			GetDisabledBitmap(char* pBuf, int nBufLen);
+	void	GetNormalBitmap(char* pBuf, int nBufLen);
+	void	GetSelectedBitmap(char* pBuf, int nBufLen);
+	void	GetDisabledBitmap(char* pBuf, int nBufLen);
 
-    void            SetTransparentColor(HLTCOLOR hTrans) {m_hTrans = hTrans;}
+	void	SetTransparentColor(HLTCOLOR hTrans) {m_hTrans = hTrans;}
 
 
 protected:
-	char			m_sNormalSurface[128];
-	char			m_sSelectedSurface[128];
-	char			m_sDisabledSurface[128];
+	char	m_sNormalSurface[128];
+	char	m_sSelectedSurface[128];
+	char	m_sDisabledSurface[128];
 
-	int				m_nNormalWidth;
-	int				m_nNormalHeight;
-	int				m_nSelectedWidth;
-	int				m_nSelectedHeight;
-	int				m_nDisabledWidth;
-	int				m_nDisabledHeight;
+	int	m_nNormalWidth;
+	int	m_nNormalHeight;
+	int	m_nSelectedWidth;
+	int	m_nSelectedHeight;
+	int	m_nDisabledWidth;
+	int	m_nDisabledHeight;
 
-    LTBOOL           m_bFreeSurfaces;
+	LTBOOL	m_bFreeSurfaces;
 
-    HLTCOLOR        m_hTrans;
+	HLTCOLOR	m_hTrans;
 
 	// Receives a message when the "enter" key is pressed.
 	CLTGUICommandHandler	*m_pCommandHandler;
