@@ -26,73 +26,73 @@ public:
 	// nBufferSize	   - The size of the buffer to store the string in.
 	// pMessageCtrl    - control which receives messages when the "enter" key is pressed.
 	// pStringValue	   - pointer to the string to be modified in UpdateData.
-    virtual LTBOOL   Create ( ILTClient *pClientDE, uint32 dwCommandID, HSTRING hDescription, CLTGUIFont *pFont,
+	virtual LTBOOL   Create ( ILTClient *pClientDE, uint32 dwCommandID, HSTRING hDescription, CLTGUIFont *pFont,
                              int nTextOffset, int nBufferSize, CLTGUICommandHandler *pCommandHandler=LTNULL,
                              char *pStringValue=LTNULL, uint32 dwParam1 = 0, uint32 dwParam2 = 0 );
 
 	// Destroys the control
-	void			Destroy ( );
+	void	Destroy ( );
 
 	// Update data
-    void            UpdateData(LTBOOL bSaveAndValidate=LTTRUE);
+	void	UpdateData(LTBOOL bSaveAndValidate=LTTRUE);
 
 	// Render the control
-	void			Render ( HSURFACE hDestSurf );
+	void	Render ( HSURFACE hDestSurf );
 
 	// Set the font
-	void			SetFont ( CLTGUIFont *pFont );
+	void	SetFont ( CLTGUIFont *pFont );
 
 	// Set/Get the text for the edit string
-	void			SetText(char *lpszString);
-	char			*GetText()						{ return m_lpszString; }
+	void	SetText(char *lpszString);
+	char	*GetText()	{ return m_lpszString; }
 
 	// Sets the alignment for the description text (LTF_JUSTIFY_LEFT, LTF_JUSTIFY_CENTER, LTF_JUSTIFY_RIGHT)
-	void			SetAlignment(int nAlignment)	{ m_nAlignment=nAlignment; }
+	void	SetAlignment(int nAlignment)	{ m_nAlignment=nAlignment; }
 
 	// Width/Height calculations
-	int				GetWidth ( );
-	int				GetHeight ( );
+	int	GetWidth ( );
+	int	GetHeight ( );
 
 	// Handles a key press
-    LTBOOL           HandleKeyDown(int key, int rep);
-    LTBOOL           HandleChar(char c);
+	LTBOOL	HandleKeyDown(int key, int rep);
+	LTBOOL	HandleChar(char c);
 
 	// Handle the Enter key being pressed
-    virtual LTBOOL   OnEnter ( );
-    virtual LTBOOL   OnLButtonUp(int x, int y) {return OnEnter();}
+	virtual LTBOOL	OnEnter ( );
+	virtual LTBOOL	 OnLButtonUp(int x, int y) {return OnEnter();}
 
 	// Set the cursor usage (default is no cursor)
-    void            EnableCursor(float fToggleTime = 0.333f, HLTCOLOR hColor = SETRGB(255,255,255));
-    void            DisableCursor() {m_bCursorEnabled = LTFALSE;}
+	void	EnableCursor(float fToggleTime = 0.333f, HLTCOLOR hColor = SETRGB(255,255,255));
+	void	DisableCursor() {m_bCursorEnabled = LTFALSE;}
 
 protected:
 	// The selection for this control has changed
-	void			OnSelChange();
+	void	OnSelChange();
 
 	// Add a character to the end
-	void			AddCharacter(char c);
+	void	AddCharacter(char c);
 
 	// Remove a character from the end
-	void			RemoveCharacter();
+	void	RemoveCharacter();
 
 	// Should the cursor be rendered
-    LTBOOL           IsCursorOn();
+	LTBOOL	IsCursorOn();
 
 protected:
 
-	CLTGUIFont		*m_pFont;				// The font for this control
-	char			*m_lpszString;			// The text for the control
+	CLTGUIFont	*m_pFont;		// The font for this control
+	char			*m_lpszString;		// The text for the control
 
-	HSTRING			m_hDescription;			// The description of the edit string displayed on the left
-	int				m_nAlignment;			// The alignment for the description text
-	int				m_nTextOffset;			// The number of pixels that the edit string is offset from the left side of the control
+	HSTRING	m_hDescription;	// The description of the edit string displayed on the left
+	int			m_nAlignment;		// The alignment for the description text
+	int			m_nTextOffset;	// The number of pixels that the edit string is offset from the left side of the control
 
-	int				m_nBufferSize;			// The maximum length for the string
-	int				m_nCursorPos;
-	char			*m_pStringValue;		// The pointer that is updated in the UpdateData function
+	int			m_nBufferSize;	// The maximum length for the string
+	int			m_nCursorPos;
+	char			*m_pStringValue;	// The pointer that is updated in the UpdateData function
 
-    LTBOOL           m_bCursorEnabled;
-    HLTCOLOR        m_hCursorColor;
+	LTBOOL		m_bCursorEnabled;
+	HLTCOLOR	m_hCursorColor;
 	float			m_fCursorTime;
 
 	// Receives a message when the "enter" key is pressed.

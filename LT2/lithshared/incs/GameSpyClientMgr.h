@@ -1,12 +1,11 @@
 /****************************************************************************
+;	 MODULE: GAMESPYCLIENTMGR (.H)
 ;
-;	 MODULE:		GAMESPYCLIENTMGR (.H)
+;	PURPOSE: Game Spy Client Manager
 ;
-;	PURPOSE:		Game Spy Client Manager
+;	HISTORY: 08/01/00  [blg]  This file was created
 ;
-;	HISTORY:		08/01/00  [blg]  This file was created
-;
-;	COMMENT:		Copyright (c) 2000, LithTech, Inc.
+;	COMMENT: Copyright (c) 2000, LithTech, Inc.
 ;
 ****************************************************************************/
 
@@ -31,8 +30,8 @@
 
 // Defines...
 
-#define	GSCM_MAX_STRING		128
-#define	GSCM_MAX_UPDATES	12
+#define GSCM_MAX_STRING	128
+#define GSCM_MAX_UPDATES	12
 
 
 // Classes...
@@ -45,24 +44,24 @@ public:
 	CGameSpyClientMgr() { Clear(); }
 	~CGameSpyClientMgr() { Term(); }
 
-	BOOL				Init(const char* sGameName, const char* sSecretKey);
+	BOOL			Init(const char* sGameName, const char* sSecretKey);
 	void				Term();
 
-	BOOL				IsInitialized() { return(m_bInit); }
+	BOOL			IsInitialized() { return(m_bInit); }
 
-	int					GetNumServers();
-	int					GetState();
-	int					GetProgress() { return(m_nProgress); }
+	int				GetNumServers();
+	int				GetState();
+	int				GetProgress() { return(m_nProgress); }
 
 	void				ClearServers();
-	BOOL				RefreshServers(BOOL bAsync = TRUE);
+	BOOL			RefreshServers(BOOL bAsync = TRUE);
 
-	CGameSpyServer*		GetServer(int nIndex);
-	CGameSpyServer*		GetServerFromHandle(void* pHandle);
-	CGameSpyServer*		GetFirstServer();
-	CGameSpyServer*		GetNextServer();
+	CGameSpyServer*	GetServer(int nIndex);
+	CGameSpyServer*	GetServerFromHandle(void* pHandle);
+	CGameSpyServer*	GetFirstServer();
+	CGameSpyServer*	GetNextServer();
 
-	BOOL				ExistNewServer();
+	BOOL			ExistNewServer();
 
 	void				SortServersByName(BOOL bAscending = TRUE);
 	void				SortServersByPing(BOOL bAscending = TRUE);
@@ -79,27 +78,21 @@ public:
 protected:
 	void				Clear();
 
-	BOOL				CreateServerList();
+	BOOL			CreateServerList();
 	void				FreeServerList();
 
-	CGameSpyServer*		CreateGameSpyServer(GServer pGServer);
+	CGameSpyServer*	CreateGameSpyServer(GServer pGServer);
 
 
 	// Member variables...
 
 private:
-	BOOL				m_bInit;
-	GServerList			m_pServerList;
+	BOOL			m_bInit;
+	GServerList		m_pServerList;
 	char				m_sGameName[GSCM_MAX_STRING];
 	char				m_sSecretKey[GSCM_MAX_STRING];
-	int					m_nGetServerIndex;
-	int					m_nProgress;
-	BOOL				m_bNewServer;
-	CGameSpyServer		m_CurServer;
+	int				m_nGetServerIndex;
+	int				m_nProgress;
+	BOOL			m_bNewServer;
+	CGameSpyServer	m_CurServer;
 };
-
-
-
-
-
-

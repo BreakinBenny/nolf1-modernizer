@@ -77,24 +77,24 @@ typedef void   (*free_func)  OF((voidpf opaque, voidpf address));
 struct internal_state;
 
 typedef struct z_stream_s {
-    Bytef    *next_in;  /* next input byte */
-    uInt     avail_in;  /* number of bytes available at next_in */
-    uLong    total_in;  /* total nb of input bytes read so far */
+	Bytef	*next_in;	/* next input byte */
+	uInt		avail_in;	/* number of bytes available at next_in */
+	uLong	total_in;	/* total nb of input bytes read so far */
 
-    Bytef    *next_out; /* next output byte should be put there */
-    uInt     avail_out; /* remaining free space at next_out */
-    uLong    total_out; /* total nb of bytes output so far */
+	Bytef	*next_out; /* next output byte should be put there */
+	uInt		avail_out;	/* remaining free space at next_out */
+	uLong	total_out;	/* total nb of bytes output so far */
 
-    char     *msg;      /* last error message, NULL if no error */
-    struct internal_state FAR *state; /* not visible by applications */
+	char		*msg;	/* last error message, NULL if no error */
+	struct	internal_state FAR *state; /* not visible by applications */
 
-    alloc_func zalloc;  /* used to allocate the internal state */
-    free_func  zfree;   /* used to free the internal state */
-    voidpf     opaque;  /* private data object passed to zalloc and zfree */
+	alloc_func	zalloc;	/* used to allocate the internal state */
+	free_func	zfree;	/* used to free the internal state */
+	voidpf	opaque;	/* private data object passed to zalloc and zfree */
 
-    int     data_type;  /* best guess about the data type: ascii or binary */
-    uLong   adler;      /* adler32 value of the uncompressed data */
-    uLong   reserved;   /* reserved for future use */
+	int		data_type; /* best guess about the data type: ascii or binary */
+	uLong	adler;	/* adler32 value of the uncompressed data */
+	uLong	reserved;	/* reserved for future use */
 } z_stream;
 
 typedef z_stream FAR *z_streamp;
@@ -130,46 +130,46 @@ typedef z_stream FAR *z_streamp;
 
                         /* constants */
 
-#define Z_NO_FLUSH      0
+#define Z_NO_FLUSH	0
 #define Z_PARTIAL_FLUSH 1
-#define Z_SYNC_FLUSH    2
-#define Z_FULL_FLUSH    3
-#define Z_FINISH        4
+#define Z_SYNC_FLUSH 2
+#define Z_FULL_FLUSH	3
+#define Z_FINISH		4
 /* Allowed flush values; see deflate() below for details */
 
-#define Z_OK            0
-#define Z_STREAM_END    1
-#define Z_NEED_DICT     2
-#define Z_ERRNO        (-1)
-#define Z_STREAM_ERROR (-2)
-#define Z_DATA_ERROR   (-3)
-#define Z_MEM_ERROR    (-4)
-#define Z_BUF_ERROR    (-5)
-#define Z_VERSION_ERROR (-6)
+#define Z_OK				0
+#define Z_STREAM_END	1
+#define Z_NEED_DICT		2
+#define Z_ERRNO			(-1)
+#define Z_STREAM_ERROR	(-2)
+#define Z_DATA_ERROR	(-3)
+#define Z_MEM_ERROR	(-4)
+#define Z_BUF_ERROR		(-5)
+#define Z_VERSION_ERROR	(-6)
 /* Return codes for the compression/decompression functions. Negative
  * values are errors, positive values are used for special but normal events.
  */
 
-#define Z_NO_COMPRESSION         0
-#define Z_BEST_SPEED             1
-#define Z_BEST_COMPRESSION       9
-#define Z_DEFAULT_COMPRESSION  (-1)
+#define Z_NO_COMPRESSION	0
+#define Z_BEST_SPEED			1
+#define Z_BEST_COMPRESSION	9
+#define Z_DEFAULT_COMPRESSION (-1)
 /* compression levels */
 
-#define Z_FILTERED            1
-#define Z_HUFFMAN_ONLY        2
-#define Z_DEFAULT_STRATEGY    0
+#define Z_FILTERED			1
+#define Z_HUFFMAN_ONLY		2
+#define Z_DEFAULT_STRATEGY	0
 /* compression strategy; see deflateInit2() below for details */
 
-#define Z_BINARY   0
-#define Z_ASCII    1
-#define Z_UNKNOWN  2
+#define Z_BINARY		0
+#define Z_ASCII		1
+#define Z_UNKNOWN	2
 /* Possible values of the data_type field */
 
-#define Z_DEFLATED   8
+#define Z_DEFLATED	8
 /* The deflate compression method (the only one supported in this version) */
 
-#define Z_NULL  0  /* for initializing zalloc, zfree, opaque */
+#define Z_NULL		0  /* for initializing zalloc, zfree, opaque */
 
 #define zlib_version zlibVersion()
 /* for compatibility with versions < 1.0.2 */

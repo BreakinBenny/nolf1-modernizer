@@ -4,14 +4,14 @@
 // Purpose:		A general font method for bitmap and system fonts
 //*********************************************************************************
 // File:		LithFontMgr.h
-// Created:		April 8, 1999
-// Updated:		April 8, 1999
+// Created:	April 8, 1999
+// Updated:	April 8, 1999
 // Author:		Andy Mattingly
 //*********************************************************************************
 //*********************************************************************************
 
-#ifndef		_LITHTECH_FONT_MGR_H_
-#define		_LITHTECH_FONT_MGR_H_
+#ifndef	_LITHTECH_FONT_MGR_H_
+#define	_LITHTECH_FONT_MGR_H_
 
 //*********************************************************************************
 
@@ -75,12 +75,12 @@
 //
 // Here are the members of LITHCURSORCREATESTRUCT:
 //
-// char			*szRefName;		// Reference name from each cursor (will NOT be set automatically)
-// LithFont		*pFont;			// The font to use when drawing the string
-// HSURFACE		pDest;			// The surface to draw the string onto
-// int			nXLoc;			// X location of the cursor on the destination surface
-// int			nYLoc;			// Y location of the cursor on the destination surface
-// LITHFONTDRAWDATA	lfDD;		// Initial drawing data for this cursor
+// char		*szRefName;	// Reference name from each cursor (will NOT be set automatically)
+// LithFont		*pFont;		// The font to use when drawing the string
+// HSURFACE	pDest;		// The surface to draw the string onto
+// int			nXLoc;		// X location of the cursor on the destination surface
+// int			nYLoc;		// Y location of the cursor on the destination surface
+// LITHFONTDRAWDATA lfDD;	// Initial drawing data for this cursor
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 
@@ -88,9 +88,9 @@
 // Use these functions for general purpose creating and deleting fonts and cursors
 
 extern LithFont*	CreateLithFont(ILTClient *pClient, LITHFONTCREATESTRUCT *lfCS, LTBOOL bEnglish = LTTRUE);
-extern void			FreeLithFont(LithFont* lf);
+extern void		FreeLithFont(LithFont* lf);
 extern LithCursor*	CreateLithCursor(ILTClient *pClient, LITHCURSORCREATESTRUCT *lcCS);
-extern void			FreeLithCursor(LithCursor* lc);
+extern void		FreeLithCursor(LithCursor* lc);
 
 //*********************************************************************************
 // Use this class if you want the fonts and cursors managed for you and accessible
@@ -109,8 +109,8 @@ class LithFontMgr
 
 		// Font functions
 		LithFont*	AddFont(LITHFONTCREATESTRUCT *lfCS, int nIndex = -1);	// -1 places the font at the first available slot
-		LTBOOL		DeleteFont(int nIndex);
-		LTBOOL		DeleteFont(char *szName);
+		LTBOOL	DeleteFont(int nIndex);
+		LTBOOL	DeleteFont(char *szName);
 
 		LithFont*	Font(int nIndex);
 		LithFont*	Font(char *szName);
@@ -137,10 +137,10 @@ class LithFontMgr
 		LithFont		*m_pFontList[LTF_MGR_MAX_FONTS];
 
 		// Cursor data
-		LithCursor		*m_pCursorList[LTF_MGR_MAX_CURSORS];
+		LithCursor	*m_pCursorList[LTF_MGR_MAX_CURSORS];
 
 		// FontMgr data
-		LTBOOL			m_bEnglish;
+		LTBOOL		m_bEnglish;
 };
 
 //*********************************************************************************

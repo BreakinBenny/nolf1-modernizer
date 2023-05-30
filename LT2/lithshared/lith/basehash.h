@@ -1,13 +1,11 @@
 /****************************************************************************
-;
-;	MODULE:		BASEHASH (.H)
+;	MODULE: BASEHASH (.H)
 ;
 ;	PURPOSE:
 ;
-;	HISTORY:	05/29/95 [m]
+;	HISTORY: 05/29/95 [m]
 ;
-;	NOTICE:		Copyright (c) 1995, MONOLITH, Inc.
-;
+;	NOTICE:	Copyright (c) 1995, MONOLITH, Inc.
 ****************************************************************************/
 
 #ifndef BASEHASH_H
@@ -24,20 +22,20 @@ class CBaseHashItem;
 class CBaseHash {
 public:
 	// constructors and destructors
-	CBaseHash(); // only use this one if you are not going to use the hash table at all (UNUSUAL!)
-    CBaseHash(unsigned int NumBins);	
+	CBaseHash();	// only use this one if you are not going to use the hash table at all (UNUSUAL!)
+	CBaseHash(unsigned int NumBins);	
 	~CBaseHash();
 
 	// access functions
-	void			Insert(CBaseHashItem* pItem);
-	void			Delete(CBaseHashItem* pItem);
+	void				Insert(CBaseHashItem* pItem);
+	void				Delete(CBaseHashItem* pItem);
 	CBaseHashItem*	GetFirst();
 	CBaseHashItem*	GetLast();
 
 protected:
-    // protected access functions
-    CBaseHashItem*  GetFirstInBin(unsigned int Bin);
-	unsigned int	GetNumBins() { return m_nNumBins; };
+	// protected access functions
+	CBaseHashItem*	GetFirstInBin(unsigned int Bin);
+	unsigned int		GetNumBins() { return m_nNumBins; };
 
 private:
 	friend class CBaseHashItem;
@@ -50,7 +48,7 @@ private:
 
 	// internal member variables
 	unsigned int	m_nNumBins;
-	CHashBin* 		m_pBinAry;
+	CHashBin*	m_pBinAry;
 };
 
 
@@ -70,8 +68,8 @@ protected:
 private:
 	friend class CBaseHash;
 
-	CBaseHash*		m_pParentHash;			// The hash table that contains this item
-	unsigned int	m_nCurBin;				// The bin we are currently stored in
+	CBaseHash*	m_pParentHash;	// The hash table that contains this item
+	unsigned int	m_nCurBin;		// The bin we are currently stored in
 };
 
 

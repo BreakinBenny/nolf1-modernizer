@@ -1,13 +1,11 @@
 /****************************************************************************
+;	MODULE: LITHTYPES (.H)
 ;
-;	MODULE:		LITHTYPES (.H)
+;	PURPOSE: basic data types
 ;
-;	PURPOSE:	basic data types
+;	HISTORY: 04/19/98 [blb] 
 ;
-;	HISTORY:	04/19/98 [blb] 
-;
-;	NOTICE:		Copyright (c) 1998, MONOLITH, Inc.
-;
+;	NOTICE: Copyright (c) 1998, MONOLITH, Inc.
 ****************************************************************************/
 
 #ifndef LITHTYPES_H
@@ -20,25 +18,25 @@
 
 // 8 bit
 #ifndef BYTE
-typedef unsigned char 		BYTE;
+typedef unsigned char	BYTE;
 #endif
 #ifndef UINT8
-typedef unsigned char 		UINT8;
+typedef unsigned char	UINT8;
 #endif
 #ifndef INT8
-typedef signed char 		INT8;
+typedef signed char		INT8;
 #endif
 
 // 16 bit
 #ifndef WORD
-typedef unsigned short int 	WORD;
+typedef unsigned short int	WORD;
 #endif
 #ifndef UINT16
-typedef unsigned short int 	UINT16;
+typedef unsigned short int	UINT16;
 #endif
 
 #ifndef INT16
-typedef signed short int 	INT16;
+typedef signed short int	INT16;
 #endif
 
 // 32 bit
@@ -47,10 +45,10 @@ typedef unsigned long int	DWORD;
 #endif
 
 #ifndef UINT32
-typedef unsigned int 		UINT32;
+typedef unsigned int		UINT32;
 #endif
 #ifndef INT32
-typedef int 				INT32;
+typedef int			INT32;
 #endif
 
 // boolean
@@ -58,28 +56,25 @@ typedef int 				INT32;
 typedef int BOOL;
 #endif
 #ifndef TRUE
-# define TRUE    1
+# define TRUE		1
 #endif
 #ifndef FALSE
-# define FALSE   0
+# define FALSE	0
 #endif
 
 // NULL
 #ifndef NULL
-#define NULL    0
+#define NULL		0
 #endif
 
 // ASSERT
 #ifndef ASSERT
 #ifdef _DEBUG
 #include "assert.h"
-#define	ASSERT(exp)		assert(exp)
+#define	ASSERT(exp)	assert(exp)
 #else
-#define ASSERT(exp)		/* */
+#define ASSERT(exp)	/* */
 #endif
 #endif
 
 #endif
-
-
-

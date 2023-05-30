@@ -1,13 +1,11 @@
 /****************************************************************************
-;
-;	MODULE:		VIRTBASELIST (.H)
+;	MODULE: VIRTBASELIST (.H)
 ;
 ;	PURPOSE:
 ;
-;	HISTORY:	05/29/95 [m]
+;	HISTORY: 05/29/95 [m]
 ;
-;	NOTICE:		Copyright (c) 1995, MONOLITH, Inc.
-;
+;	NOTICE: Copyright (c) 1995, MONOLITH, Inc.
 ****************************************************************************/
 
 #ifndef VIRTBASELIST_H
@@ -19,8 +17,8 @@
 // User must derive all list elements from this class.
 class CVirtBaseListItem {
 public:
-	CVirtBaseListItem* 	Next()		{ return m_pNext; };							// Returns the next element in the list after this one
-	CVirtBaseListItem*	Prev()		{ return m_pPrev; };							// Returns the previous element in the list before this one
+	CVirtBaseListItem* 	Next()	{ return m_pNext; };	// Returns the next element in the list after this one
+	CVirtBaseListItem*	Prev()	{ return m_pPrev; };	// Returns the previous element in the list before this one
 
 	virtual void VirtualFoo() = 0;
 public:
@@ -41,15 +39,15 @@ public:
 
 	// member insert and delete functions
 	void	Insert(CVirtBaseListItem* pItem) { InsertFirst(pItem); };				// Same as InsertFirst
-	void	InsertFirst(CVirtBaseListItem* pItem);									// Inserts item at the start of the list
-	void	InsertLast(CVirtBaseListItem* pItem);									// Inserts item at the end of the list
+	void	InsertFirst(CVirtBaseListItem* pItem);								// Inserts item at the start of the list
+	void	InsertLast(CVirtBaseListItem* pItem);								// Inserts item at the end of the list
 	void	InsertAfter(CVirtBaseListItem* pBeforeItem, CVirtBaseListItem* pNewItem);	// Inserts item after pBeforeItem in the list (if pBeforeItem is NULL puts at start of list)
 	void	InsertBefore(CVirtBaseListItem* pAfterItem, CVirtBaseListItem* pNewItem);	// Inserts item before pAfterItem in the list (if pAfterItem is NULL puts at end of list)
-	void	Delete(CVirtBaseListItem* pItem);										// Removes the given item from the list
+	void	Delete(CVirtBaseListItem* pItem);									// Removes the given item from the list
 
 	// member access functions
-	CVirtBaseListItem*	GetFirst() { return m_pFirst; };							// Returns the first element in the list (NULL if list is empty)
-	CVirtBaseListItem*	GetLast() { return m_pLast; };								// Returns the last element in the list (NULL if list is empty)
+	CVirtBaseListItem*	GetFirst() { return m_pFirst; };	// Returns the first element in the list (NULL if list is empty)
+	CVirtBaseListItem*	GetLast() { return m_pLast; };	// Returns the last element in the list (NULL if list is empty)
 
 	virtual void VirtualFoo() = 0;
 private:

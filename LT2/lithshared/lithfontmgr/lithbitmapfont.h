@@ -4,14 +4,14 @@
 // Purpose:		A general font method for bitmap and system fonts
 //*********************************************************************************
 // File:		LithBitmapFont.h
-// Created:		April 7, 1999
-// Updated:		July 15, 1999
+// Created:	April 7, 1999
+// Updated:	July 15, 1999
 // Author:		Andy Mattingly
 //*********************************************************************************
 //*********************************************************************************
 
-#ifndef		_LITHTECH_BITMAP_FONT_H_
-#define		_LITHTECH_BITMAP_FONT_H_
+#ifndef	_LITHTECH_BITMAP_FONT_H_
+#define	_LITHTECH_BITMAP_FONT_H_
 
 //*********************************************************************************
 
@@ -49,19 +49,19 @@ class LithBitmapFont : public LithFont
 
 	protected:
 		// The surface of the font and which groups are included in the graphic
-		HSURFACE	m_pFont;				// Bitmap which stores the font
-		uint32		m_nSurfWidth;			// Width of the bitmap surface
-		uint32		m_nSurfHeight;			// Height of the bitmap surface
-		uint32		m_nGroupFlags;			// Flags for which groups are available
-		uint32		m_nAvgWidth;			// Average character width
+		HSURFACE	m_pFont;			// Bitmap which stores the font
+		uint32		m_nSurfWidth;		// Width of the bitmap surface
+		uint32		m_nSurfHeight;	// Height of the bitmap surface
+		uint32		m_nGroupFlags;	// Flags for which groups are available
+		uint32		m_nAvgWidth;		// Average character width
 
 		// Transparency color data
-		HLTCOLOR	m_hTransColor;			// Transparency color for the font
-		LTBOOL		m_bChromaKey;			// TRUE is the font uses a transparent color
-											// FALSEE is the font uses a blending modes
+		HLTCOLOR	m_hTransColor;	// Transparency color for the font
+		LTBOOL		m_bChromaKey;	// TRUE is the font uses a transparent color
+									// FALSEE is the font uses a blending modes
 
 		// Data needed to choose the correct character to draw
-		LITHFONTOFFSETDATA	m_lfOD;			// Offset data for the rectangle placement
+		LITHFONTOFFSETDATA	m_lfOD;	// Offset data for the rectangle placement
 		LTRect				m_rRect;		// Rectangle to draw from within the font surface
 
 		// Temporary save data used when no save structure is passed in
@@ -71,12 +71,12 @@ class LithBitmapFont : public LithFont
 		HSURFACE			m_pDest;
 		uint32				m_nDestSurfWidth;
 		uint32				m_nDestSurfHeight;
-		char				*m_szString;
+		char					*m_szString;
 		LITHFONTDRAWDATA	*m_lfDD;
 		LITHFONTSAVEDATA	*m_lfSD;
-		LITHFONTFORMATDATA	*m_lfFD;		// Temporary format data for the string
+		LITHFONTFORMATDATA	*m_lfFD;	// Temporary format data for the string
 		uint32				m_dwFlags;
-		uint8				m_byJustify;
+		uint8					m_byJustify;
 		int					m_nX;
 		int					m_nY;
 		int					m_nExtraLetterSpace;

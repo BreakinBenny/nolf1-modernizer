@@ -1,17 +1,17 @@
 //*********************************************************************************
 //*********************************************************************************
 // Project:		Lith Tech Font Manager
-// Purpose:		A general font method for bitmap and system fonts
+// Purpose:	A general font method for bitmap and system fonts
 //*********************************************************************************
 // File:		LithSystemFont.h
-// Created:		April 7, 1999
-// Updated:		April 7, 1999
+// Created:	April 7, 1999
+// Updated:	April 7, 1999
 // Author:		Andy Mattingly
 //*********************************************************************************
 //*********************************************************************************
 
-#ifndef		_LITHTECH_SYSTEM_FONT_H_
-#define		_LITHTECH_SYSTEM_FONT_H_
+#ifndef	_LITHTECH_SYSTEM_FONT_H_
+#define	_LITHTECH_SYSTEM_FONT_H_
 
 //*********************************************************************************
 
@@ -48,11 +48,11 @@ class LithSystemFont : public LithFont
 
 	protected:
 		// Font device and rendering surface
-		HLTFONT		m_pFont;				// Handle to the engine font
-		HSURFACE	m_pStringSurf;			// Surface to draw the string onto
+		HLTFONT	m_pFont;		// Handle to the engine font
+		HSURFACE	m_pStringSurf;	// Surface to draw the string onto
 
 		// Data needed to draw the correct characters
-		LTRect				m_rRect;		// Rectangle to draw within the render surface
+		LTRect		m_rRect;	// Rectangle to draw within the render surface
 
 		// Temporary save data used when no save structure is passed in
 		LITHFONTSAVEDATA	m_temp_lfSD;
@@ -61,12 +61,12 @@ class LithSystemFont : public LithFont
 		HSURFACE			m_pDest;
 		uint32				m_nDestSurfWidth;
 		uint32				m_nDestSurfHeight;
-		char				*m_szString;
+		char					*m_szString;
 		LITHFONTDRAWDATA	*m_lfDD;
 		LITHFONTSAVEDATA	*m_lfSD;
-		LITHFONTFORMATDATA	*m_lfFD;		// Temporary format data for the string
+		LITHFONTFORMATDATA	*m_lfFD;	// Temporary format data for the string
 		uint32				m_dwFlags;
-		uint8				m_byJustify;
+		uint8					m_byJustify;
 		int					m_nX;
 		int					m_nY;
 		int					m_nExtraLetterSpace;

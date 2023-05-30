@@ -1,13 +1,11 @@
 /****************************************************************************
-;
-;	MODULE:		LITH (.H)
+;	MODULE: LITH (.H)
 ;
 ;	PURPOSE:	
 ;
-;	HISTORY:	04/19/98 [blb] 
+;	HISTORY: 04/19/98 [blb] 
 ;
-;	NOTICE:		Copyright (c) 1998, MONOLITH, Inc.
-;
+;	NOTICE: Copyright (c) 1998, MONOLITH, Inc.
 ****************************************************************************/
 
 #ifndef LITH_H
@@ -30,7 +28,6 @@
 		#pragma comment (lib, "\\Proj\\Libs\\Release\\lith.lib")
 	#endif
 #endif
-
 
 
 #endif

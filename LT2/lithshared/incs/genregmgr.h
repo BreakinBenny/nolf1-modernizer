@@ -15,7 +15,7 @@ class CGenRegMgr
 public:
 
 	CGenRegMgr()		{ m_pKeys = NULL; m_nKeys = 0; }
-	~CGenRegMgr()		{ if (m_pKeys) delete [] m_pKeys; }
+	~CGenRegMgr()	{ if (m_pKeys) delete [] m_pKeys; }
 
 	// in all of the following functions, the first part of the "path" in 
 	// the string must be one of the following or the function will fail:

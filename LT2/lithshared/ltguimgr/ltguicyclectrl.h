@@ -25,7 +25,7 @@ public:
 	// nSpacerWidth	- The width to use for the space between the header and text
 	// pnValue		- Pointer to the value which receives the selection index when UpdateData is called.
 	// alignment	- Justification to use when rendering
-    LTBOOL           Create ( ILTClient *pClientDE, HSTRING hText, CLTGUIFont *pFont,
+	LTBOOL	Create ( ILTClient *pClientDE, HSTRING hText, CLTGUIFont *pFont,
                             int nHeaderWidth, int nSpacerWidth = 25, int *pnValue=LTNULL, int alignment = LTF_JUSTIFY_CENTER);
 
 	//this function sets up a notification when the control's value changes
@@ -42,18 +42,18 @@ public:
 
 	// Since cycle controls do not have command ID's or command handlers,
 	// Enter should cycle through the strings, just like the arrow keys.
-    virtual LTBOOL   OnEnter ( )         { return OnRight(); }
-    virtual LTBOOL   OnLButtonUp(int x, int y) {return OnRight();}
-    virtual LTBOOL   OnRButtonUp(int x, int y) {return OnLeft();}
+	virtual LTBOOL	OnEnter ( )	{ return OnRight(); }
+	virtual LTBOOL	OnLButtonUp(int x, int y) {return OnRight();}
+	virtual LTBOOL	OnRButtonUp(int x, int y) {return OnLeft();}
 
 
 protected:
-	HSTRING			m_hHeaderText;
-	int				m_nHeaderWidth;
-	int				m_nSpacerWidth;
-	int				m_nAlign;
+	HSTRING	m_hHeaderText;
+	int			m_nHeaderWidth;
+	int			m_nSpacerWidth;
+	int			m_nAlign;
 
-    LTBOOL           m_bInUpdate;
+	LTBOOL	m_bInUpdate;
 
 };
 

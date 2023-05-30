@@ -1,13 +1,11 @@
 /****************************************************************************
+;	 MODULE:	WonShared (.h)
 ;
-;	 MODULE:		WonShared (.h)
+;	PURPOSE:	Implements shared server and client side WON functionality
 ;
-;	PURPOSE:		Implements shared server and client side WON functionality
+;	HISTORY:	11/18/99  [blg]  This file was created
 ;
-;	HISTORY:		11/18/99  [blg]  This file was created
-;
-;	COMMENT:		Copyright (c) 1999, Monolith Productions, Inc.
-;
+;	COMMENT:	Copyright (c) 1999, Monolith Productions, Inc.
 ****************************************************************************/
 
 
@@ -62,14 +60,14 @@ class CWonShared
 	// Static Member functions...
 
 public:
-	static	void			Init();
-	static	void			Term();
+	static	void	Init();
+	static	void	Term();
 
 
 	// Static member variables...
 
 private:
-	static	int				m_nRef;
+	static	int	m_nRef;
 };
 
 

@@ -17,8 +17,8 @@ class CLTGUIBitmapCtrl : public CLTGUIFadeColorCtrl
 {
 public:
 	CLTGUIBitmapCtrl();
-	virtual ~CLTGUIBitmapCtrl();
-    LTBOOL   Create( ILTClient *pClientDE, HSURFACE hNormalBmp,
+	virtual	~CLTGUIBitmapCtrl();
+	LTBOOL	Create( ILTClient *pClientDE, HSURFACE hNormalBmp,
 					HSURFACE hSelectedBmp = NULL,HSURFACE hDisabledBmp = NULL,
 					HSURFACE m_hClickedOnSurface = NULL,
                     CLTGUICommandHandler *pCommandHandler = LTNULL,
@@ -40,50 +40,50 @@ public:
 	virtual int		GetWidth ( );
 	virtual int		GetHeight ( );
 
-    virtual LTBOOL   OnEnter();
-    virtual LTBOOL   OnLButtonDown(int x, int y);
-    virtual LTBOOL   OnLButtonUp(int x, int y);
+	virtual LTBOOL	OnEnter();
+	virtual LTBOOL	OnLButtonDown(int x, int y);
+	virtual LTBOOL	OnLButtonUp(int x, int y);
 
 	//determines whether the surfaces should be freed when changing bitmaps and on destruction
-    void            AutoFreeSurfaces(LTBOOL bFreeSurf) {m_bFreeSurfaces = bFreeSurf;}
+	void	AutoFreeSurfaces(LTBOOL bFreeSurf) {m_bFreeSurfaces = bFreeSurf;}
 
 
-    virtual LTBOOL   SetBitmap(HSURFACE hNormalBmp,HSURFACE hSelectedBmp=LTNULL,HSURFACE hDisabledBmp=LTNULL, HSURFACE hClickedBmp=LTNULL);
+	virtual LTBOOL SetBitmap(HSURFACE hNormalBmp,HSURFACE hSelectedBmp=LTNULL,HSURFACE hDisabledBmp=LTNULL, HSURFACE hClickedBmp=LTNULL);
 	virtual void	FreeSurfaces();
 
-	HSURFACE		GetNormalBitmap(){return m_hNormalSurface;}
-	HSURFACE		GetSelectedBitmap(){return m_hSelectedSurface;}
-	HSURFACE		GetDisabledBitmap(){return m_hDisabledSurface;}
+	HSURFACE	GetNormalBitmap(){return m_hNormalSurface;}
+	HSURFACE	GetSelectedBitmap(){return m_hSelectedSurface;}
+	HSURFACE	GetDisabledBitmap(){return m_hDisabledSurface;}
 
 	// Set the font. Set nNumFonts > 1 to use fade fonts.
-	void			SetFont ( CLTGUIFont *pFont);
+	void	SetFont ( CLTGUIFont *pFont);
 
 	// Sets the text for the button
-	void			SetText(HSTRING hString);
+	void	SetText(HSTRING hString);
 
 
 protected:
-	HSURFACE			m_hNormalSurface;
-	HSURFACE			m_hSelectedSurface;
-	HSURFACE			m_hDisabledSurface;
-	HSURFACE			m_hClickedOnSurface;
+	HSURFACE	m_hNormalSurface;
+	HSURFACE	m_hSelectedSurface;
+	HSURFACE	m_hDisabledSurface;
+	HSURFACE	m_hClickedOnSurface;
 
-	HSTRING				m_hText;
-	CLTGUIFont*			m_pFont;
-	int				m_nNumFonts;			// The number of fonts
-    LTIntPt          m_ptOffset;             // Offset for text display
-    LTBOOL           m_bButtonDown;
+	HSTRING	m_hText;
+	CLTGUIFont*	m_pFont;
+	int			m_nNumFonts;	// The number of fonts
+	LTIntPt		m_ptOffset;	// Offset for text display
+	LTBOOL		m_bButtonDown;
 
-	int				m_nNormalWidth;
-	int				m_nNormalHeight;
-	int				m_nSelectedWidth;
-	int				m_nSelectedHeight;
-	int				m_nDisabledWidth;
-	int				m_nDisabledHeight;
-	int				m_nClickedWidth;
-	int				m_nClickedHeight;
+	int		m_nNormalWidth;
+	int		m_nNormalHeight;
+	int		m_nSelectedWidth;
+	int		m_nSelectedHeight;
+	int		m_nDisabledWidth;
+	int		m_nDisabledHeight;
+	int		m_nClickedWidth;
+	int		m_nClickedHeight;
 
-    LTBOOL           m_bFreeSurfaces;
+	LTBOOL	m_bFreeSurfaces;
 
 	// Receives a message when the "enter" key is pressed.
 	CLTGUICommandHandler	*m_pCommandHandler;

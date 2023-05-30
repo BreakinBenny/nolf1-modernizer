@@ -1,13 +1,11 @@
 /****************************************************************************
-;
-;	MODULE:		LithTmpl (.H)
+;	MODULE:	LithTmpl (.H)
 ;
 ;	PURPOSE:	Includes all of the different class header files in the lib
 ;
 ;	HISTORY:	04/19/98 [blb] 
 ;
 ;	NOTICE:		Copyright (c) 1998, MONOLITH, Inc.
-;
 ****************************************************************************/
 
 #ifndef LithTmpl_H

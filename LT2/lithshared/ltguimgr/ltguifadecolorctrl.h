@@ -18,10 +18,10 @@ public:
 	virtual ~CLTGUIFadeColorCtrl();
 
 	// Sets the fade duration
-    void    SetFadeTime(uint32 dwFadeTime)          { m_dwFadeTime = dwFadeTime; }
+	void	SetFadeTime(uint32 dwFadeTime)	{ m_dwFadeTime = dwFadeTime; }
 
 	// Sets the colors to fade to and from
-    void    SetColor(HLTCOLOR selColor, HLTCOLOR nonSelColor, HLTCOLOR disabledColor=SETRGB(128,128,128));
+	void	SetColor(HLTCOLOR selColor, HLTCOLOR nonSelColor, HLTCOLOR disabledColor=SETRGB(128,128,128));
 
 	// Starts the fade animation
 	void	StartFade();
@@ -30,20 +30,20 @@ public:
 	void	StopFade();
 
 	// Returns the current color as it is fading
-    HLTCOLOR    GetCurrentColor();
+	HLTCOLOR	GetCurrentColor();
 
 	// Returns the current fade percentage.  0.0f is selected and 1.0f is non-selected
-	float		GetCurrentFadePercentage();
+	float	GetCurrentFadePercentage();
 
 	// Reset the animation
-	virtual void	ResetAnimation()					{ StopFade(); }
+	virtual void	ResetAnimation()	{ StopFade(); }
 
 protected:
-    uint32          m_dwFadeTime;           // The "fade out" time in milliseconds
-    HLTCOLOR        m_selColor;             // The selected color
-    HLTCOLOR        m_nonSelColor;          // The non-selected color
-    HLTCOLOR        m_disabledColor;        // The disabled color
-	float			m_fStartTime;			// The last selection time
+	uint32		m_dwFadeTime;	// The "fade out" time in milliseconds
+	HLTCOLOR	m_selColor;		// The selected color
+	HLTCOLOR	m_nonSelColor;	// The non-selected color
+	HLTCOLOR	m_disabledColor;	// The disabled color
+	float			m_fStartTime;		// The last selection time
 };
 
 #endif // !defined(AFX_LTGUIFADECOLORCTRL_H__470388F3_63A2_11D2_BDA9_0060971BDC6D__INCLUDED_)

@@ -4,14 +4,14 @@
 // Purpose:		A general font method for bitmap and system fonts
 //*********************************************************************************
 // File:		LithFont.h
-// Created:		April 7, 1999
-// Updated:		July 15, 1999
+// Created:	April 7, 1999
+// Updated:	July 15, 1999
 // Author:		Andy Mattingly
 //*********************************************************************************
 //*********************************************************************************
 
-#ifndef		_LITHTECH_FONT_H_
-#define		_LITHTECH_FONT_H_
+#ifndef	_LITHTECH_FONT_H_
+#define	_LITHTECH_FONT_H_
 
 //*********************************************************************************
 
@@ -56,8 +56,8 @@ class LithFont
 
 		// Get font information
 		void		SetRefName(char *szName)	{ strcpy(m_szRefName, szName); }
-		char*		GetRefName()				{ return m_szRefName; }
-		int			Height()					{ return m_nHeight; }
+		char*	GetRefName()			{ return m_szRefName; }
+		int		Height()				{ return m_nHeight; }
 
 		virtual LTBOOL	IsChromaKeyed() = 0;
 		virtual LTBOOL	IsSystemFont() = 0;
@@ -67,8 +67,8 @@ class LithFont
 		ILTClient	*m_pClient;
 
 		// Font data variables
-		char		m_szRefName[LTF_REF_NAME_SIZE];		// Reference name for the font
-		int			m_nHeight;							// Height of the font characters...
+		char	m_szRefName[LTF_REF_NAME_SIZE];	// Reference name for the font
+		int	m_nHeight;							// Height of the font characters...
 
 	protected:
 		// Function to extract the root filename from an entire path, filename, and extension
