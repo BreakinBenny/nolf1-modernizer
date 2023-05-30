@@ -19,16 +19,16 @@ class CAmmoData
 	 CAmmoData() {m_nID = WMGR_INVALID_ID; m_nCount = 0;}
 	virtual ~CAmmoData() {}
 
-    inline void WriteToMessage(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
+	inline void WriteToMessage(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
 	{
-        pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_nID);
-        pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_nCount);
+		pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_nID);
+		pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_nCount);
 	}
 
-    inline void ReadFromMessage(ILTCSBase *pInterface, HMESSAGEREAD hRead)
+	inline void ReadFromMessage(ILTCSBase *pInterface, HMESSAGEREAD hRead)
 	{
-        m_nID    = (int) pInterface->ReadFromMessageFloat(hRead);
-        m_nCount = (int) pInterface->ReadFromMessageFloat(hRead);
+		m_nID	= (int) pInterface->ReadFromMessageFloat(hRead);
+		m_nCount = (int) pInterface->ReadFromMessageFloat(hRead);
 	}
 
 	int		m_nID;
@@ -42,14 +42,14 @@ class CWeaponData
 	CWeaponData() {m_nID = WMGR_INVALID_ID;}
 	virtual ~CWeaponData() {}
 
-    inline void WriteToMessage(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
+	inline void WriteToMessage(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
 	{
-        pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_nID);
+		pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_nID);
 	}
 
-    inline void ReadFromMessage(ILTCSBase *pInterface, HMESSAGEREAD hRead)
+	inline void ReadFromMessage(ILTCSBase *pInterface, HMESSAGEREAD hRead)
 	{
-        m_nID = (int) pInterface->ReadFromMessageFloat(hRead);
+		m_nID = (int) pInterface->ReadFromMessageFloat(hRead);
 	}
 
 	int		m_nID;
@@ -62,14 +62,14 @@ class CModData
 	CModData() {m_nID = WMGR_INVALID_ID;}
 	virtual ~CModData() {}
 
-    inline void WriteToMessage(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
+	inline void WriteToMessage(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
 	{
-        pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_nID);
+		pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_nID);
 	}
 
-    inline void ReadFromMessage(ILTCSBase *pInterface, HMESSAGEREAD hRead)
+	inline void ReadFromMessage(ILTCSBase *pInterface, HMESSAGEREAD hRead)
 	{
-        m_nID = (int) pInterface->ReadFromMessageFloat(hRead);
+		m_nID = (int) pInterface->ReadFromMessageFloat(hRead);
 	}
 
 	int		m_nID;
@@ -82,14 +82,14 @@ class CGearData
 	CGearData() {m_nID = WMGR_INVALID_ID;}
 	virtual ~CGearData() {}
 
-    inline void WriteToMessage(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
+	inline void WriteToMessage(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
 	{
-        pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_nID);
+		pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_nID);
 	}
 
-    inline void ReadFromMessage(ILTCSBase *pInterface, HMESSAGEREAD hRead)
+	inline void ReadFromMessage(ILTCSBase *pInterface, HMESSAGEREAD hRead)
 	{
-        m_nID       = (int) pInterface->ReadFromMessageFloat(hRead);
+		m_nID	   = (int) pInterface->ReadFromMessageFloat(hRead);
 	}
 
 	int		m_nID;
@@ -101,8 +101,8 @@ public:
 	CMissionData();
 	virtual ~CMissionData();
 
-    void        WriteToMessage(ILTCSBase *pInterface, HMESSAGEWRITE hMessage);
-    void        ReadFromMessage(ILTCSBase *pInterface, HMESSAGEREAD hMessage);
+	void		WriteToMessage(ILTCSBase *pInterface, HMESSAGEWRITE hMessage);
+	void		ReadFromMessage(ILTCSBase *pInterface, HMESSAGEREAD hMessage);
 
 	void		NewMission(int mission);
 	int			GetMissionNum()	const {return m_nMission;}
@@ -111,8 +111,8 @@ public:
 
 	void		ClearWeapons();
 	void		ClearGadgets();
-    LTBOOL       AddWeapon(int weaponID);
-    LTBOOL       RemoveWeapon(int weaponID);
+	LTBOOL	   AddWeapon(int weaponID);
+	LTBOOL	   RemoveWeapon(int weaponID);
 	int			GetWeapons(CWeaponData **weapons, int nArraySize);
 	int			GetNumWeapons();
 	int			GetNumGadgets();
@@ -120,22 +120,22 @@ public:
 
 	void		ClearAmmo();
 	void		ClearSupplies();
-    LTBOOL       AddAmmo(int ammoID, int count);
-    LTBOOL       RemoveAmmo(int ammoID);
+	LTBOOL	   AddAmmo(int ammoID, int count);
+	LTBOOL	   RemoveAmmo(int ammoID);
 	int			GetAmmo(CAmmoData **ammo, int nArraySize);
 	int			GetNumAmmoTypes() {return (int)m_Ammo.GetSize();}
 	CAmmoData*	GetAmmoData(int nID);
 
 	void		ClearMods();
-    LTBOOL       AddMod(int modID);
-    LTBOOL       RemoveMod(int modID);
+	LTBOOL	   AddMod(int modID);
+	LTBOOL	   RemoveMod(int modID);
 	int			GetMods(CModData **mod, int nArraySize);
 	int			GetNumModTypes() {return (int)m_Mods.GetSize();}
 	CModData*	GetModData(int nID);
 
 	void		ClearGear();
-    LTBOOL       AddGear(int modID);
-    LTBOOL       RemoveGear(int modID);
+	LTBOOL	   AddGear(int modID);
+	LTBOOL	   RemoveGear(int modID);
 	int			GetGear(CGearData **mod, int nArraySize);
 	int			GetNumGearTypes() {return (int)m_Gear.GetSize();}
 	CGearData*	GetGearData(int nID);

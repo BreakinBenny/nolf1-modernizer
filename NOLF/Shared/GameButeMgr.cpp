@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: GameButeMgr.cpp
 //
-// MODULE  : GameButeMgr.cpp
+// PURPOSE: GameButeMgr - Implementation
 //
-// PURPOSE : GameButeMgr - Implementation
-//
-// CREATED : 03/30/99
-//
+// CREATED: 03/30/99
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -15,57 +13,55 @@
 
 void GBM_DisplayError(const char* szMsg)
 {
-    LTFLOAT fVal = 0.0f;
+	LTFLOAT fVal = 0.0f;
 
 #ifdef _CLIENTBUILD
 
-    if (!g_pLTClient) return;
+	if (!g_pLTClient) return;
 
-    HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("DebugLevel");
+	HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("DebugLevel");
 	if(hVar)
 	{
-        fVal = g_pLTClient->GetVarValueFloat(hVar);
+		fVal = g_pLTClient->GetVarValueFloat(hVar);
 	}
 #else
 
-    if (!g_pLTServer) return;
+	if (!g_pLTServer) return;
 
-    HCONVAR hVar = g_pLTServer->GetGameConVar("DebugLevel");
+	HCONVAR hVar = g_pLTServer->GetGameConVar("DebugLevel");
 	if (hVar)
 	{
-        fVal = g_pLTServer->GetVarValueFloat(hVar);
+		fVal = g_pLTServer->GetVarValueFloat(hVar);
 	}
 #endif
 
 	if (fVal >= BUTE_DEBUG_LEVEL)
 	{
 #ifdef _CLIENTBUILD
-        if (g_pLTClient)
+		if (g_pLTClient)
 		{
-            g_pLTClient->CPrint((char*)szMsg);
+			g_pLTClient->CPrint((char*)szMsg);
 		}
 #else
-        if (g_pLTServer)
+		if (g_pLTServer)
 		{
-            g_pLTServer->CPrint((char*)szMsg);
+			g_pLTServer->CPrint((char*)szMsg);
 		}
 #endif
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameButeMgr::Parse()
 //
-//	ROUTINE:	CGameButeMgr::Parse()
-//
-//	PURPOSE:	Parse from a rez file
-//
+//	PURPOSE: Parse from a rez file
 // ----------------------------------------------------------------------- //
 
 LTBOOL CGameButeMgr::Parse(ILTCSBase *pInterface, const char* sButeFile)
 {
 	// Sanity checks...
 
-    if (!sButeFile)	return(LTFALSE);
+	if (!sButeFile)	return(LTFALSE);
 
 
 	BOOL bRet = TRUE;
@@ -112,18 +108,18 @@ LTBOOL CGameButeMgr::Parse(ILTCSBase *pInterface, const char* sButeFile)
 	char sConstFile[256];
 	strncpy(sConstFile, sButeFile, 255);
 
-    ILTStream* pDStream;
+	ILTStream* pDStream;
 
-    LTRESULT dr = pInterface->OpenFile(sConstFile, &pDStream);
+	LTRESULT dr = pInterface->OpenFile(sConstFile, &pDStream);
 
-    if (dr != LT_OK)
+	if (dr != LT_OK)
 	{
 		char sError[512];
 		sprintf(sError,"ERROR CGameButeMgr couldn't open file %s!",sButeFile);
 		GBM_DisplayError(sError);
 
 #ifdef _CLIENTBUILD
-        g_pLTClient->ShutdownWithMessage(sError);
+		g_pLTClient->ShutdownWithMessage(sError);
 #endif
 		return(FALSE);
 	}

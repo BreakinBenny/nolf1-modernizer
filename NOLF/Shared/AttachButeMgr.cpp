@@ -13,42 +13,36 @@ static char s_aAttName[100];
 
 // Defines
 
-#define	ABM_ATTACHMENT						"Attachment"
-#define	ABM_ATTACHMENT_NAME					"Name"
-#define	ABM_ATTACHMENT_PROPERTIES			"Properties"
-#define	ABM_ATTACHMENT_TYPE					"Type"
-#define	ABM_ATTACHMENT_WEAPON				"Weapon"
-#define	ABM_ATTACHMENT_CLASS				"Class"
-#define	ABM_ATTACHMENT_MODEL				"Model"
-#define	ABM_ATTACHMENT_SKIN					"Skin"
-#define	ABM_ATTACHMENT_DEATH				"Death"
-#define	ABM_ATTACHMENT_SHOT					"Shot"
+#define	ABM_ATTACHMENT					"Attachment"
+#define	ABM_ATTACHMENT_NAME			"Name"
+#define	ABM_ATTACHMENT_PROPERTIES		"Properties"
+#define	ABM_ATTACHMENT_TYPE			"Type"
+#define	ABM_ATTACHMENT_WEAPON			"Weapon"
+#define	ABM_ATTACHMENT_CLASS			"Class"
+#define	ABM_ATTACHMENT_MODEL			"Model"
+#define	ABM_ATTACHMENT_SKIN				"Skin"
+#define	ABM_ATTACHMENT_DEATH			"Death"
+#define	ABM_ATTACHMENT_SHOT			"Shot"
 
-#define	ABM_REQUIREMENT						"Requirement"
-#define	ABM_REQUIREMENT_MODEL				"Model"
-#define	ABM_REQUIREMENT_STYLE				"Style"
-#define	ABM_REQUIREMENT_ATTACHMENT			"Attachment"
-#define	ABM_REQUIREMENT_SOCKET				"Socket"
+#define	ABM_REQUIREMENT					"Requirement"
+#define	ABM_REQUIREMENT_MODEL			"Model"
+#define	ABM_REQUIREMENT_STYLE			"Style"
+#define	ABM_REQUIREMENT_ATTACHMENT	"Attachment"
+#define	ABM_REQUIREMENT_SOCKET			"Socket"
 
-
-// ----------------------------------------------------------------------- //
-//
-//	ROUTINE:	CAttachButeMgr::CAttachButeMgr()
-//
-//	PURPOSE:	Constructor
-//
-// ----------------------------------------------------------------------- //
-
-CAttachButeMgr::CAttachButeMgr()
-{
-}
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachButeMgr::CAttachButeMgr()
 //
-//	ROUTINE:	CAttachButeMgr::~CAttachButeMgr()
+//	PURPOSE: Constructor
+// ----------------------------------------------------------------------- //
+
+CAttachButeMgr::CAttachButeMgr(){}
+
+// ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachButeMgr::~CAttachButeMgr()
 //
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CAttachButeMgr::~CAttachButeMgr()
@@ -57,24 +51,20 @@ CAttachButeMgr::~CAttachButeMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachButeMgr::Init()
 //
-//	ROUTINE:	CAttachButeMgr::Init()
-//
-//	PURPOSE:	Init mgr
-//
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAttachButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 {
-    if (g_pAttachButeMgr || !szAttributeFile) return LTFALSE;
-    if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
+	if (g_pAttachButeMgr || !szAttributeFile) return LTFALSE;
+	if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
 
 	// Set up global pointer
-
 	g_pAttachButeMgr = this;
 
 	// See how many attribute templates there are
-
 	m_cAttachmentID = 0;
 	sprintf(s_aTagName, "%s%d", ABM_ATTACHMENT, m_cAttachmentID);
 
@@ -93,29 +83,25 @@ LTBOOL CAttachButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		sprintf(s_aTagName, "%s%d", ABM_REQUIREMENT, m_cRequirementID);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachButeMgr::Term()
 //
-//	ROUTINE:	CAttachButeMgr::Term()
-//
-//	PURPOSE:	Clean up.
-//
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CAttachButeMgr::Term()
 {
 	m_buteMgr.Term();
-    g_pAttachButeMgr = LTNULL;
+	g_pAttachButeMgr = LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachButeMgr::GetAttachment*()
 //
-//	ROUTINE:	CAttachButeMgr::GetAttachment*()
-//
-//	PURPOSE:	Gets an attribute template property or information
-//
+//	PURPOSE: Gets an attribute template property or information
 // ----------------------------------------------------------------------- //
 
 int CAttachButeMgr::GetAttachmentIDByName(const char *szName)

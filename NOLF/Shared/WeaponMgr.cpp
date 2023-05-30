@@ -1,9 +1,7 @@
 // ----------------------------------------------------------------------- //
 // MODULE: WeaponMgr.cpp
-//
-// PURPOSE : WeaponMgr implementation - Controls attributes of all weapons
-//
-// CREATED : 12/02/98
+// PURPOSE: WeaponMgr implementation - Controls attributes of all weapons
+// CREATED: 12/02/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //
@@ -197,9 +195,9 @@ CWeaponMgr CWeaponMgrPlugin::sm_ButeMgr;
 #endif // _CLIENTBUILD
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::CWeaponMgr()
+//	ROUTINE: CWeaponMgr::CWeaponMgr()
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CWeaponMgr::CWeaponMgr()
@@ -218,9 +216,9 @@ CWeaponMgr::CWeaponMgr()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::~CWeaponMgr()
+//	ROUTINE: CWeaponMgr::~CWeaponMgr()
 //
-//	PURPOSE:	Destructor
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CWeaponMgr::~CWeaponMgr()
@@ -230,9 +228,9 @@ CWeaponMgr::~CWeaponMgr()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::Init()
+//	ROUTINE: CWeaponMgr::Init()
 //
-//	PURPOSE:	Init mgr
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
@@ -417,9 +415,9 @@ LTBOOL CWeaponMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::Term()
+//	ROUTINE: CWeaponMgr::Term()
 //
-//	PURPOSE:	Clean up.
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CWeaponMgr::Term()
@@ -440,9 +438,9 @@ void CWeaponMgr::Term()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::WriteFile()
+//	ROUTINE: CWeaponMgr::WriteFile()
 //
-//	PURPOSE:	Write necessary data back out to bute file
+//	PURPOSE: Write necessary data back out to bute file
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeaponMgr::WriteFile(ILTCSBase *pInterface)
@@ -481,9 +479,9 @@ LTBOOL CWeaponMgr::WriteFile(ILTCSBase *pInterface)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::Reload()
+//	ROUTINE: CWeaponMgr::Reload()
 //
-//	PURPOSE:	Reload data from the bute file
+//	PURPOSE: Reload data from the bute file
 // ----------------------------------------------------------------------- //
 
 void CWeaponMgr::Reload(ILTCSBase *pInterface)
@@ -494,9 +492,9 @@ void CWeaponMgr::Reload(ILTCSBase *pInterface)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::CalculateWeaponPath()
+//	ROUTINE: CWeaponMgr::CalculateWeaponPath()
 //
-//	PURPOSE:	Utility function used to calculate a path based on the
+//	PURPOSE: Utility function used to calculate a path based on the
 //			perturb of the weapon
 // ----------------------------------------------------------------------- //
 
@@ -534,9 +532,9 @@ void CWeaponMgr::CalculateWeaponPath(WeaponPath & wp)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::GetWeapon
+//	ROUTINE: CWeaponMgr::GetWeapon
 //
-//	PURPOSE:	Get the specified weapon struct
+//	PURPOSE: Get the specified weapon struct
 // ----------------------------------------------------------------------- //
 
 WEAPON* CWeaponMgr::GetWeapon(int nWeaponId)
@@ -559,9 +557,9 @@ WEAPON* CWeaponMgr::GetWeapon(int nWeaponId)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::GetWeapon
+//	ROUTINE: CWeaponMgr::GetWeapon
 //
-//	PURPOSE:	Get the specified weapon struct
+//	PURPOSE: Get the specified weapon struct
 // ----------------------------------------------------------------------- //
 
 WEAPON* CWeaponMgr::GetWeapon(char* pWeaponName)
@@ -586,9 +584,9 @@ WEAPON* CWeaponMgr::GetWeapon(char* pWeaponName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::GetAmmo
+//	ROUTINE: CWeaponMgr::GetAmmo
 //
-//	PURPOSE:	Get the specified ammo struct
+//	PURPOSE: Get the specified ammo struct
 // ----------------------------------------------------------------------- //
 
 AMMO* CWeaponMgr::GetAmmo(int nAmmoId)
@@ -611,9 +609,9 @@ AMMO* CWeaponMgr::GetAmmo(int nAmmoId)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::GetAmmo
+//	ROUTINE: CWeaponMgr::GetAmmo
 //
-//	PURPOSE:	Get the specified ammo struct
+//	PURPOSE: Get the specified ammo struct
 // ----------------------------------------------------------------------- //
 
 AMMO* CWeaponMgr::GetAmmo(char* pAmmoName)
@@ -638,9 +636,9 @@ AMMO* CWeaponMgr::GetAmmo(char* pAmmoName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::GetMod
+//	ROUTINE: CWeaponMgr::GetMod
 //
-//	PURPOSE:	Get the specified mod struct
+//	PURPOSE: Get the specified mod struct
 // ----------------------------------------------------------------------- //
 
 MOD* CWeaponMgr::GetMod(int nModId)
@@ -663,9 +661,9 @@ MOD* CWeaponMgr::GetMod(int nModId)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::GetMod
+//	ROUTINE: CWeaponMgr::GetMod
 //
-//	PURPOSE:	Get the specified mod struct
+//	PURPOSE: Get the specified mod struct
 // ----------------------------------------------------------------------- //
 
 MOD* CWeaponMgr::GetMod(char* pModName)
@@ -690,9 +688,9 @@ MOD* CWeaponMgr::GetMod(char* pModName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::GetGear
+//	ROUTINE: CWeaponMgr::GetGear
 //
-//	PURPOSE:	Get the specified gear struct
+//	PURPOSE: Get the specified gear struct
 // ----------------------------------------------------------------------- //
 
 GEAR* CWeaponMgr::GetGear(int nGearId)
@@ -715,9 +713,9 @@ GEAR* CWeaponMgr::GetGear(int nGearId)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::GetGear
+//	ROUTINE: CWeaponMgr::GetGear
 //
-//	PURPOSE:	Get the specified gear struct
+//	PURPOSE: Get the specified gear struct
 // ----------------------------------------------------------------------- //
 
 GEAR* CWeaponMgr::GetGear(char* pGearName)
@@ -742,9 +740,9 @@ GEAR* CWeaponMgr::GetGear(char* pGearName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::GetWeaponAnis
+//	ROUTINE: CWeaponMgr::GetWeaponAnis
 //
-//	PURPOSE:	Get the specified weapon anis struct
+//	PURPOSE: Get the specified weapon anis struct
 // ----------------------------------------------------------------------- //
 
 WEAPONANIS* CWeaponMgr::GetWeaponAnis(char* pAnisName)
@@ -774,9 +772,9 @@ WEAPONANIS* CWeaponMgr::GetWeaponAnis(char* pAnisName)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	WEAPON::WEAPON
+//	ROUTINE: WEAPON::WEAPON
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 WEAPON::WEAPON()
@@ -877,9 +875,9 @@ WEAPON::WEAPON()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	WEAPON::Init
+//	ROUTINE: WEAPON::Init
 //
-//	PURPOSE:	Build the weapon struct
+//	PURPOSE: Build the weapon struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL WEAPON::Init(CButeMgr & buteMgr, char* aTagName)
@@ -1118,9 +1116,9 @@ LTBOOL WEAPON::Init(CButeMgr & buteMgr, char* aTagName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	WEAPON::Cache
+//	ROUTINE: WEAPON::Cache
 //
-//	PURPOSE:	Cache all the resources associated with the weapon
+//	PURPOSE: Cache all the resources associated with the weapon
 // ----------------------------------------------------------------------- //
 
 void WEAPON::Cache(CWeaponMgr* pWeaponMgr)
@@ -1226,9 +1224,9 @@ void WEAPON::Cache(CWeaponMgr* pWeaponMgr)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	WEAPON::Save()
+//	ROUTINE: WEAPON::Save()
 //
-//	PURPOSE:	Save any necessary data to the bute file...
+//	PURPOSE: Save any necessary data to the bute file...
 // ----------------------------------------------------------------------- //
 
 void WEAPON::Save(CButeMgr & buteMgr)
@@ -1251,9 +1249,9 @@ void WEAPON::Save(CButeMgr & buteMgr)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	WEAPONANIS::WEAPONANIS
+//	ROUTINE: WEAPONANIS::WEAPONANIS
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 WEAPONANIS::WEAPONANIS()
@@ -1280,9 +1278,9 @@ WEAPONANIS::WEAPONANIS()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	WEAPONANIS::Init
+//	ROUTINE: WEAPONANIS::Init
 //
-//	PURPOSE:	Build the ammo struct
+//	PURPOSE: Build the ammo struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL WEAPONANIS::Init(CButeMgr & buteMgr, char* aTagName)
@@ -1356,9 +1354,9 @@ LTBOOL WEAPONANIS::Init(CButeMgr & buteMgr, char* aTagName)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	AMMO::AMMO
+//	ROUTINE: AMMO::AMMO
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 AMMO::AMMO()
@@ -1401,9 +1399,9 @@ AMMO::AMMO()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	AMMO::Init
+//	ROUTINE: AMMO::Init
 //
-//	PURPOSE:	Build the ammo struct
+//	PURPOSE: Build the ammo struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL AMMO::Init(CButeMgr & buteMgr, char* aTagName)
@@ -1511,9 +1509,9 @@ LTBOOL AMMO::Init(CButeMgr & buteMgr, char* aTagName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	AMMO::Cache
+//	ROUTINE: AMMO::Cache
 //
-//	PURPOSE:	Cache all the resources associated with the ammo
+//	PURPOSE: Cache all the resources associated with the ammo
 // ----------------------------------------------------------------------- //
 
 void AMMO::Cache(CWeaponMgr* pWeaponMgr)
@@ -1546,9 +1544,9 @@ void AMMO::Cache(CWeaponMgr* pWeaponMgr)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	AMMO::GetMaxAmount()
+//	ROUTINE: AMMO::GetMaxAmount()
 //
-//	PURPOSE:	Calculate max amount of ammo of this type allowed for
+//	PURPOSE: Calculate max amount of ammo of this type allowed for
 //			the character
 // ----------------------------------------------------------------------- //
 
@@ -1579,9 +1577,9 @@ int AMMO::GetMaxAmount(HOBJECT hCharacter)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MOD::MOD
+//	ROUTINE: MOD::MOD
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 MOD::MOD()
@@ -1624,9 +1622,9 @@ MOD::MOD()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MOD::Init
+//	ROUTINE: MOD::Init
 //
-//	PURPOSE:	Build the mod struct
+//	PURPOSE: Build the mod struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL MOD::Init(CButeMgr & buteMgr, char* aTagName)
@@ -1736,9 +1734,9 @@ LTBOOL MOD::Init(CButeMgr & buteMgr, char* aTagName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MOD::Cache
+//	ROUTINE: MOD::Cache
 //
-//	PURPOSE:	Cache all the resources associated with the mod
+//	PURPOSE: Cache all the resources associated with the mod
 // ----------------------------------------------------------------------- //
 
 void MOD::Cache(CWeaponMgr* pWeaponMgr)
@@ -1780,9 +1778,9 @@ void MOD::Cache(CWeaponMgr* pWeaponMgr)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MOD::GetWeaponId()
+//	ROUTINE: MOD::GetWeaponId()
 //
-//	PURPOSE:	What is the weapon that uses this mod
+//	PURPOSE: What is the weapon that uses this mod
 // ----------------------------------------------------------------------- //
 
 int MOD::GetWeaponId()
@@ -1815,9 +1813,9 @@ int MOD::GetWeaponId()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	GEAR::GEAR
+//	ROUTINE: GEAR::GEAR
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 GEAR::GEAR()
@@ -1853,9 +1851,9 @@ GEAR::GEAR()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	GEAR::Init
+//	ROUTINE: GEAR::Init
 //
-//	PURPOSE:	Build the gear struct
+//	PURPOSE: Build the gear struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL GEAR::Init(CButeMgr & buteMgr, char* aTagName)
@@ -1942,9 +1940,9 @@ LTBOOL GEAR::Init(CButeMgr & buteMgr, char* aTagName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	GEAR::Cache
+//	ROUTINE: GEAR::Cache
 //
-//	PURPOSE:	Cache all the resources associated with the gear
+//	PURPOSE: Cache all the resources associated with the gear
 // ----------------------------------------------------------------------- //
 
 void GEAR::Cache(CWeaponMgr* pWeaponMgr)
@@ -1985,9 +1983,9 @@ void GEAR::Cache(CWeaponMgr* pWeaponMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::CacheAll()
+//	ROUTINE: CWeaponMgr::CacheAll()
 //
-//	PURPOSE:	Cache all the weapon related resources...
+//	PURPOSE: Cache all the weapon related resources...
 // ----------------------------------------------------------------------- //
 
 void CWeaponMgr::CacheAll()
@@ -2015,9 +2013,9 @@ void CWeaponMgr::CacheAll()
 #ifndef _CLIENTBUILD	// Server-side only
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::ReadWeaponProp
+//	ROUTINE: CWeaponMgr::ReadWeaponProp
 //
-//	PURPOSE:	Read in the weapon properties
+//	PURPOSE: Read in the weapon properties
 // ----------------------------------------------------------------------- //
 
 LTBOOL CWeaponMgr::ReadWeaponProp(char* pPropName, uint8 & nWeaponId, uint8 & nAmmoId)
@@ -2056,9 +2054,9 @@ LTBOOL CWeaponMgr::ReadWeaponProp(char* pPropName, uint8 & nWeaponId, uint8 & nA
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgr::ReadWeapon
+//	ROUTINE: CWeaponMgr::ReadWeapon
 //
-//	PURPOSE:	Read in the weapon properties
+//	PURPOSE: Read in the weapon properties
 // ----------------------------------------------------------------------- //
 
 void CWeaponMgr::ReadWeapon(char* szString, uint8 & nWeaponId, uint8 & nAmmoId)
@@ -2093,9 +2091,9 @@ void CWeaponMgr::ReadWeapon(char* szString, uint8 & nWeaponId, uint8 & nAmmoId)
 ////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgrPlugin::PreHook_EditStringList
+//	ROUTINE: CWeaponMgrPlugin::PreHook_EditStringList
 //
-//	PURPOSE:	Fill the string list
+//	PURPOSE: Fill the string list
 // ----------------------------------------------------------------------- //
 
 LTRESULT CWeaponMgrPlugin::PreHook_EditStringList(
@@ -2134,9 +2132,9 @@ LTRESULT CWeaponMgrPlugin::PreHook_EditStringList(
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CWeaponMgrPlugin::PopulateStringList
+//	ROUTINE: CWeaponMgrPlugin::PopulateStringList
 //
-//	PURPOSE:	Populate the list
+//	PURPOSE: Populate the list
 // ----------------------------------------------------------------------- //
 
 void CWeaponMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,

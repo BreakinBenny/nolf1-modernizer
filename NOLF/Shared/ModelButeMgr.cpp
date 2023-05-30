@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ModelButeMgr.cpp
 //
-// MODULE  : ModelButeMgr.cpp
+// PURPOSE: ModelButeMgr implementation - Controls attributes of all ModelButes
 //
-// PURPOSE : ModelButeMgr implementation - Controls attributes of all ModelButes
-//
-// CREATED : 12/02/98
-//
+// CREATED: 12/02/98
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -22,57 +20,57 @@ static char s_szBuffer[1024];
 
 // Defines
 
-#define	MODELBMGR_MODEL					"Model"
+#define MODELBMGR_MODEL	"Model"
 
-	#define	MODELBMGR_MODEL_NAME								"Name"
-	#define	MODELBMGR_MODEL_SEX									"Sex"
-	#define	MODELBMGR_MODEL_NATIONALITY							"Nationality"
-	#define	MODELBMGR_MODEL_SKELETON							"Skeleton"
-	#define	MODELBMGR_MODEL_TYPE								"Type"
-	#define MODELBMGR_MODEL_ENVIRONMENTMAP						"EnvironmentMap"
-	#define	MODELBMGR_MODEL_MASS								"Mass"
-	#define	MODELBMGR_MODEL_HIT_POINTS							"HitPoints"
-	#define	MODELBMGR_MODEL_MAX_HIT_POINTS						"MaxHitPoints"
-	#define	MODELBMGR_MODEL_ARMOR								"Armor"
-	#define	MODELBMGR_MODEL_MAX_ARMOR							"MaxArmor"
+	#define MODELBMGR_MODEL_NAME			"Name"
+	#define MODELBMGR_MODEL_SEX				"Sex"
+	#define MODELBMGR_MODEL_NATIONALITY		"Nationality"
+	#define MODELBMGR_MODEL_SKELETON		"Skeleton"
+	#define MODELBMGR_MODEL_TYPE				"Type"
+	#define MODELBMGR_MODEL_ENVIRONMENTMAP "EnvironmentMap"
+	#define MODELBMGR_MODEL_MASS				"Mass"
+	#define MODELBMGR_MODEL_HIT_POINTS		"HitPoints"
+	#define MODELBMGR_MODEL_MAX_HIT_POINTS	"MaxHitPoints"
+	#define MODELBMGR_MODEL_ARMOR			"Armor"
+	#define MODELBMGR_MODEL_MAX_ARMOR		"MaxArmor"
 
-#define	MODELBMGR_STYLE					"Style"
+#define MODELBMGR_STYLE			"Style"
 
-	#define	MODELBMGR_STYLE_NAME								"Name"
+	#define MODELBMGR_STYLE_NAME	"Name"
 
-#define MODELBMGR_SKELETON				"Skeleton"
+#define MODELBMGR_SKELETON		"Skeleton"
 
-	#define MODELBMGR_SKELETON_DEFAULT_FRONT_DEATH_ANI			"DefaultFrontDeathAni"
-	#define MODELBMGR_SKELETON_DEFAULT_BACK_DEATH_ANI			"DefaultBackDeathAni"
-	#define MODELBMGR_SKELETON_DEFAULT_FRONT_LONGRECOIL_ANI		"DefaultFrontLongRecoilAni"
-	#define MODELBMGR_SKELETON_DEFAULT_BACK_LONGRECOIL_ANI		"DefaultBackLongRecoilAni"
+	#define MODELBMGR_SKELETON_DEFAULT_FRONT_DEATH_ANI		"DefaultFrontDeathAni"
+	#define MODELBMGR_SKELETON_DEFAULT_BACK_DEATH_ANI		"DefaultBackDeathAni"
+	#define MODELBMGR_SKELETON_DEFAULT_FRONT_LONGRECOIL_ANI	"DefaultFrontLongRecoilAni"
+	#define MODELBMGR_SKELETON_DEFAULT_BACK_LONGRECOIL_ANI	"DefaultBackLongRecoilAni"
 	#define MODELBMGR_SKELETON_DEFAULT_FRONT_SHORTRECOIL_ANI	"DefaultFrontShortRecoilAni"
-	#define MODELBMGR_SKELETON_DEFAULT_BACK_SHORTRECOIL_ANI		"DefaultBackShortRecoilAni"
-	#define MODELBMGR_SKELETON_DEFAULT_HIT_NODE					"DefaultHitNode"
+	#define MODELBMGR_SKELETON_DEFAULT_BACK_SHORTRECOIL_ANI	"DefaultBackShortRecoilAni"
+	#define MODELBMGR_SKELETON_DEFAULT_HIT_NODE				"DefaultHitNode"
 
 	#define MODELBMGR_SKELETON_NODE_NAME						"Node%dName"
 	#define MODELBMGR_SKELETON_NODE_FLAGS						"Node%dFlags"
-	#define MODELBMGR_SKELETON_NODE_FRONT_DEATH_ANI				"Node%dFrontDeathAni"
-	#define MODELBMGR_SKELETON_NODE_BACK_DEATH_ANI				"Node%dBackDeathAni"
+	#define MODELBMGR_SKELETON_NODE_FRONT_DEATH_ANI			"Node%dFrontDeathAni"
+	#define MODELBMGR_SKELETON_NODE_BACK_DEATH_ANI			"Node%dBackDeathAni"
 	#define MODELBMGR_SKELETON_NODE_FRONT_LONGRECOIL_ANI		"Node%dFrontLongRecoilAni"
-	#define MODELBMGR_SKELETON_NODE_BACK_LONGRECOIL_ANI			"Node%dBackLongRecoilAni"
-	#define MODELBMGR_SKELETON_NODE_FRONT_SHORTRECOIL_ANI		"Node%dFrontShortRecoilAni"
+	#define MODELBMGR_SKELETON_NODE_BACK_LONGRECOIL_ANI		"Node%dBackLongRecoilAni"
+	#define MODELBMGR_SKELETON_NODE_FRONT_SHORTRECOIL_ANI	"Node%dFrontShortRecoilAni"
 	#define MODELBMGR_SKELETON_NODE_BACK_SHORTRECOIL_ANI		"Node%dBackShortRecoilAni"
-	#define MODELBMGR_SKELETON_NODE_DAMAGE_FACTOR				"Node%dDamageFactor"
+	#define MODELBMGR_SKELETON_NODE_DAMAGE_FACTOR			"Node%dDamageFactor"
 	#define MODELBMGR_SKELETON_NODE_PARENT						"Node%dParent"
 	#define MODELBMGR_SKELETON_NODE_RECOILPARENT				"Node%dRecoilParent"
 	#define MODELBMGR_SKELETON_NODE_LOCATION					"Node%dLocation"
 	#define MODELBMGR_SKELETON_NODE_RADIUS						"Node%dRadius"
 	#define MODELBMGR_SKELETON_NODE_PRIORITY					"Node%dPriority"
 
-#define MODELBMGR_NODE_SCRIPT			"NodeScript"
+#define MODELBMGR_NODE_SCRIPT	"NodeScript"
 
-	#define MODELBMGR_NSCRIPT_NODE_NAME							"NodeName"
-	#define MODELBMGR_NSCRIPT_FLAGS								"Flags"
+	#define MODELBMGR_NSCRIPT_NODE_NAME				"NodeName"
+	#define MODELBMGR_NSCRIPT_FLAGS					"Flags"
 
-	#define MODELBMGR_NSCRIPT_NODE_TIME							"Pt%dTime"
-	#define MODELBMGR_NSCRIPT_NODE_POSITION_OFFSET				"Pt%dPosOffset"
-	#define MODELBMGR_NSCRIPT_NODE_ROTATION_OFFSET				"Pt%dRotOffset"
+	#define MODELBMGR_NSCRIPT_NODE_TIME				"Pt%dTime"
+	#define MODELBMGR_NSCRIPT_NODE_POSITION_OFFSET	"Pt%dPosOffset"
+	#define MODELBMGR_NSCRIPT_NODE_ROTATION_OFFSET	"Pt%dRotOffset"
 
 #ifndef _CLIENTBUILD
 
@@ -83,34 +81,30 @@ CModelButeMgr CModelButeMgrPlugin::sm_ButeMgr;
 #endif // _CLIENTBUILD
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModelButeMgr::CModelButeMgr()
 //
-//	ROUTINE:	CModelButeMgr::CModelButeMgr()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CModelButeMgr::CModelButeMgr()
 {
 	m_cModels = 0;
-    m_aModels = LTNULL;
+	m_aModels = LTNULL;
 
 	m_cStyles = 0;
-    m_aStyles = LTNULL;
+	m_aStyles = LTNULL;
 
 	m_cSkeletons = 0;
-    m_aSkeletons = LTNULL;
+	m_aSkeletons = LTNULL;
 
 	m_cNScripts = 0;
-    m_aNScripts = LTNULL;
+	m_aNScripts = LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModelButeMgr::~CModelButeMgr()
 //
-//	ROUTINE:	CModelButeMgr::~CModelButeMgr()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CModelButeMgr::~CModelButeMgr()
@@ -119,17 +113,15 @@ CModelButeMgr::~CModelButeMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModelButeMgr::Init()
 //
-//	ROUTINE:	CModelButeMgr::Init()
-//
-//	PURPOSE:	Init mgr
-//
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CModelButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 {
-    if (g_pModelButeMgr || !szAttributeFile) return LTFALSE;
-    if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
+	if (g_pModelButeMgr || !szAttributeFile) return LTFALSE;
+	if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
 
 	// Set up global pointer
 
@@ -167,7 +159,7 @@ LTBOOL CModelButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 
 		// Get the skeleton's default hit node
 
-        m_aSkeletons[iSkeleton].m_eModelNodeDefaultHit = (ModelNode)(uint8)m_buteMgr.GetInt(s_aTagName, MODELBMGR_SKELETON_DEFAULT_HIT_NODE);
+		m_aSkeletons[iSkeleton].m_eModelNodeDefaultHit = (ModelNode)(uint8)m_buteMgr.GetInt(s_aTagName, MODELBMGR_SKELETON_DEFAULT_HIT_NODE);
 
 		// Count the number of nodes
 
@@ -219,32 +211,32 @@ LTBOOL CModelButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 			// Get the node's damage factor
 
 			sprintf(s_aAttName, MODELBMGR_SKELETON_NODE_DAMAGE_FACTOR, iNode);
-            m_aSkeletons[iSkeleton].m_aNodes[iNode].m_fDamageFactor = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, s_aAttName);
+			m_aSkeletons[iSkeleton].m_aNodes[iNode].m_fDamageFactor = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, s_aAttName);
 
 			// Get the node's parent
 
 			sprintf(s_aAttName, MODELBMGR_SKELETON_NODE_PARENT, iNode);
-            m_aSkeletons[iSkeleton].m_aNodes[iNode].m_eModelNodeParent = (ModelNode)(uint8)m_buteMgr.GetInt(s_aTagName, s_aAttName);
+			m_aSkeletons[iSkeleton].m_aNodes[iNode].m_eModelNodeParent = (ModelNode)(uint8)m_buteMgr.GetInt(s_aTagName, s_aAttName);
 
 			// Get the node's recoil parent
 
 			sprintf(s_aAttName, MODELBMGR_SKELETON_NODE_RECOILPARENT, iNode);
-            m_aSkeletons[iSkeleton].m_aNodes[iNode].m_eModelNodeRecoilParent = (ModelNode)(uint8)m_buteMgr.GetInt(s_aTagName, s_aAttName);
+			m_aSkeletons[iSkeleton].m_aNodes[iNode].m_eModelNodeRecoilParent = (ModelNode)(uint8)m_buteMgr.GetInt(s_aTagName, s_aAttName);
 
 			// Get the node's hit location
 
 			sprintf(s_aAttName, MODELBMGR_SKELETON_NODE_LOCATION, iNode);
-            m_aSkeletons[iSkeleton].m_aNodes[iNode].m_eHitLocation = (HitLocation)(uint8)m_buteMgr.GetInt(s_aTagName, s_aAttName, HL_UNKNOWN);
+			m_aSkeletons[iSkeleton].m_aNodes[iNode].m_eHitLocation = (HitLocation)(uint8)m_buteMgr.GetInt(s_aTagName, s_aAttName, HL_UNKNOWN);
 
 			// Get the node's hit radius
 
 			sprintf(s_aAttName, MODELBMGR_SKELETON_NODE_RADIUS, iNode);
-            m_aSkeletons[iSkeleton].m_aNodes[iNode].m_fHitRadius = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, s_aAttName);
+			m_aSkeletons[iSkeleton].m_aNodes[iNode].m_fHitRadius = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, s_aAttName);
 
 			// Get the node's hit radius
 
 			sprintf(s_aAttName, MODELBMGR_SKELETON_NODE_PRIORITY, iNode);
-            m_aSkeletons[iSkeleton].m_aNodes[iNode].m_fHitPriority = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, s_aAttName);
+			m_aSkeletons[iSkeleton].m_aNodes[iNode].m_fHitPriority = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, s_aAttName);
 		}
 	}
 
@@ -271,7 +263,7 @@ LTBOOL CModelButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		strcpy(m_aNScripts[iNScript].m_szName, m_buteMgr.GetString(s_aTagName, MODELBMGR_NSCRIPT_NODE_NAME));
 
 		// Get the scripts flags
-        m_aNScripts[iNScript].m_bFlags = (uint8)m_buteMgr.GetInt(s_aTagName, MODELBMGR_NSCRIPT_FLAGS);
+		m_aNScripts[iNScript].m_bFlags = (uint8)m_buteMgr.GetInt(s_aTagName, MODELBMGR_NSCRIPT_FLAGS);
 
 		// Count the number of script sections
 		m_aNScripts[iNScript].m_cNScriptPts = 0;
@@ -290,7 +282,7 @@ LTBOOL CModelButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		{
 			// Get the node's time
 			sprintf(s_aAttName, MODELBMGR_NSCRIPT_NODE_TIME, iNScriptPt);
-            m_aNScripts[iNScript].m_aNScriptPts[iNScriptPt].m_fTime = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, s_aAttName);
+			m_aNScripts[iNScript].m_aNScriptPts[iNScriptPt].m_fTime = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, s_aAttName);
 
 			// Each time must be greater than the previous... and the first one must be zero
 			if(iNScriptPt > 0)
@@ -356,25 +348,23 @@ LTBOOL CModelButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		strcpy(m_aModels[iModel].m_szName, m_buteMgr.GetString(s_aTagName, MODELBMGR_MODEL_NAME));
 		strcpy(m_aModels[iModel].m_szSex, m_buteMgr.GetString(s_aTagName, MODELBMGR_MODEL_SEX));
 		strcpy(m_aModels[iModel].m_szNationality, m_buteMgr.GetString(s_aTagName, MODELBMGR_MODEL_NATIONALITY));
-        m_aModels[iModel].m_eModelSkeleton = (ModelSkeleton)(uint8)m_buteMgr.GetInt(s_aTagName, MODELBMGR_MODEL_SKELETON);
-        m_aModels[iModel].m_eModelType = (ModelType)(uint8)m_buteMgr.GetInt(s_aTagName, MODELBMGR_MODEL_TYPE);
-        m_aModels[iModel].m_bModelEnvironmentMap = (LTBOOL)m_buteMgr.GetBool(s_aTagName, MODELBMGR_MODEL_ENVIRONMENTMAP);
-        m_aModels[iModel].m_fModelMass = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, MODELBMGR_MODEL_MASS);
-        m_aModels[iModel].m_fModelHitPoints = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, MODELBMGR_MODEL_HIT_POINTS);
-        m_aModels[iModel].m_fModelMaxHitPoints = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, MODELBMGR_MODEL_MAX_HIT_POINTS);
-        m_aModels[iModel].m_fModelArmor = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, MODELBMGR_MODEL_ARMOR);
-        m_aModels[iModel].m_fModelMaxArmor = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, MODELBMGR_MODEL_MAX_ARMOR);
+		m_aModels[iModel].m_eModelSkeleton = (ModelSkeleton)(uint8)m_buteMgr.GetInt(s_aTagName, MODELBMGR_MODEL_SKELETON);
+		m_aModels[iModel].m_eModelType = (ModelType)(uint8)m_buteMgr.GetInt(s_aTagName, MODELBMGR_MODEL_TYPE);
+		m_aModels[iModel].m_bModelEnvironmentMap = (LTBOOL)m_buteMgr.GetBool(s_aTagName, MODELBMGR_MODEL_ENVIRONMENTMAP);
+		m_aModels[iModel].m_fModelMass = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, MODELBMGR_MODEL_MASS);
+		m_aModels[iModel].m_fModelHitPoints = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, MODELBMGR_MODEL_HIT_POINTS);
+		m_aModels[iModel].m_fModelMaxHitPoints = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, MODELBMGR_MODEL_MAX_HIT_POINTS);
+		m_aModels[iModel].m_fModelArmor = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, MODELBMGR_MODEL_ARMOR);
+		m_aModels[iModel].m_fModelMaxArmor = (LTFLOAT)m_buteMgr.GetDouble(s_aTagName, MODELBMGR_MODEL_MAX_ARMOR);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModelButeMgr::Term()
 //
-//	ROUTINE:	CModelButeMgr::Term()
-//
-//	PURPOSE:	Clean up.
-//
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CModelButeMgr::Term()
@@ -382,13 +372,13 @@ void CModelButeMgr::Term()
 	if (m_aModels)
 	{
 		debug_deletea(m_aModels);
-        m_aModels = LTNULL;
+		m_aModels = LTNULL;
 	}
 
 	if (m_aStyles)
 	{
 		debug_deletea(m_aStyles);
-        m_aStyles = LTNULL;
+		m_aStyles = LTNULL;
 	}
 
 	if (m_aSkeletons)
@@ -399,7 +389,7 @@ void CModelButeMgr::Term()
 		}
 
 		debug_deletea(m_aSkeletons);
-        m_aSkeletons = LTNULL;
+		m_aSkeletons = LTNULL;
 	}
 
 	if (m_aNScripts)
@@ -410,30 +400,28 @@ void CModelButeMgr::Term()
 		}
 
 		debug_deletea(m_aNScripts);
-        m_aNScripts = LTNULL;
+		m_aNScripts = LTNULL;
 	}
 
 	m_buteMgr.Term();
 
-    g_pModelButeMgr = LTNULL;
+	g_pModelButeMgr = LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModelButeMgr::GetModel...
 //
-//	ROUTINE:	CModelButeMgr::GetModel...
-//
-//	PURPOSE:	Various model attribute lookups
-//
+//	PURPOSE: Various model attribute lookups
 // ----------------------------------------------------------------------- //
 
 ModelId CModelButeMgr::GetModelId(const char *szName)
 {
 	_ASSERT(szName);
 
-    int iModel;
-    for ( iModel = 0 ; iModel < m_cModels ; iModel++ )
+	int iModel;
+	for ( iModel = 0 ; iModel < m_cModels ; iModel++ )
 	{
-        if ( !_stricmp(szName, m_aModels[iModel].m_szName) )
+		if ( !_stricmp(szName, m_aModels[iModel].m_szName) )
 		{
 			return (ModelId)iModel;
 		}
@@ -441,8 +429,8 @@ ModelId CModelButeMgr::GetModelId(const char *szName)
 
 	// Couldn't find anything, return any intentionally bogus value
 
-// !!!    pInterface->CPrint("CModelButeMgr::GetModel - Could not find Model \"%s\"", szName);
-    _ASSERT(LTFALSE);
+// !!!	pInterface->CPrint("CModelButeMgr::GetModel - Could not find Model \"%s\"", szName);
+	_ASSERT(LTFALSE);
 
 	return (ModelId)iModel;
 }
@@ -526,21 +514,19 @@ LTFLOAT CModelButeMgr::GetModelMaxArmor(ModelId eModelId)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModelButeMgr::GetStyle...
 //
-//	ROUTINE:	CModelButeMgr::GetStyle...
-//
-//	PURPOSE:	Various style attribute lookups
-//
+//	PURPOSE: Various style attribute lookups
 // ----------------------------------------------------------------------- //
 
 ModelStyle CModelButeMgr::GetStyle(const char *szName)
 {
 	_ASSERT(szName);
 
-    int iStyle;
-    for ( iStyle = 0 ; iStyle < m_cStyles ; iStyle++ )
+	int iStyle;
+	for ( iStyle = 0 ; iStyle < m_cStyles ; iStyle++ )
 	{
-        if ( !_stricmp(szName, m_aStyles[iStyle].m_szName) )
+		if ( !_stricmp(szName, m_aStyles[iStyle].m_szName) )
 		{
 			return (ModelStyle)iStyle;
 		}
@@ -548,8 +534,8 @@ ModelStyle CModelButeMgr::GetStyle(const char *szName)
 
 	// Couldn't find anything, return any intentionally bogus value
 
-// !!!    pInterface->CPrint("CModelButeMgr::GetStyle - Could not find Style \"%s\"", szName);
-    _ASSERT(LTFALSE);
+// !!!	pInterface->CPrint("CModelButeMgr::GetStyle - Could not find Style \"%s\"", szName);
+	_ASSERT(LTFALSE);
 
 	return (ModelStyle)iStyle;
 }
@@ -567,7 +553,7 @@ ModelStyle CModelButeMgr::GetModelStyleFromProperty(char* pPropVal)
 
 	for ( int iStyle = 0 ; iStyle < m_cStyles ; iStyle++ )
 	{
-        LTBOOL bStyle = LTFALSE;
+		LTBOOL bStyle = LTFALSE;
 
 		if (_stricmp(m_aStyles[iStyle].m_szName, pPropVal) == 0)
 		{
@@ -583,11 +569,9 @@ ModelStyle CModelButeMgr::GetModelStyleFromProperty(char* pPropVal)
 #endif
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModelButeMgr::GetSkeleton...
 //
-//	ROUTINE:	CModelButeMgr::GetSkeleton...
-//
-//	PURPOSE:	Various skeleton attribute lookups
-//
+//	PURPOSE: Various skeleton attribute lookups
 // ----------------------------------------------------------------------- //
 
 int CModelButeMgr::GetSkeletonNumNodes(ModelSkeleton eModelSkeleton)
@@ -605,7 +589,7 @@ ModelNode CModelButeMgr::GetSkeletonNode(ModelSkeleton eModelSkeleton, const cha
 
 	for ( int iNode = 0 ; iNode < m_aSkeletons[eModelSkeleton].m_cNodes ; iNode++ )
 	{
-        if ( !_stricmp(m_aSkeletons[eModelSkeleton].m_aNodes[iNode].m_szName, szName) )
+		if ( !_stricmp(m_aSkeletons[eModelSkeleton].m_aNodes[iNode].m_szName, szName) )
 		{
 			return (ModelNode)iNode;
 		}
@@ -794,11 +778,9 @@ LTFLOAT CModelButeMgr::GetSkeletonNodeHitPriority(ModelSkeleton eModelSkeleton, 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModelButeMgr::GetNScript...
 //
-//	ROUTINE:	CModelButeMgr::GetNScript...
-//
-//	PURPOSE:	Various node script attribute lookups
-//
+//	PURPOSE: Various node script attribute lookups
 // ----------------------------------------------------------------------- //
 
 int CModelButeMgr::GetNScriptNumPts(ModelNScript eModelNScript)
@@ -847,11 +829,9 @@ const LTVector& CModelButeMgr::GetNScriptPtRotOffset(ModelNScript eModelNScript,
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModelButeMgr::Get*Filename
 //
-//	ROUTINE:	CModelButeMgr::Get*Filename
-//
-//	PURPOSE:	Filename generating functions
-//
+//	PURPOSE: Filename generating functions
 // ----------------------------------------------------------------------- //
 
 const char* CModelButeMgr::GetModelFilename(ModelId eModelId, ModelStyle eModelStyle, const char* szCinematicExtension /* = LTNULL */)
@@ -911,44 +891,40 @@ const char* CModelButeMgr::GetMultiModelFilename(ModelId eModelId, ModelStyle eM
 #ifndef _CLIENTBUILD  // Server-side only
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModelButeMgrPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CModelButeMgrPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Initialize the bute mgr...
-//
+//	PURPOSE: Initialize the bute mgr...
 // ----------------------------------------------------------------------- //
 
 LTRESULT CModelButeMgrPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 
 	if (!sm_bInitted)
 	{
 		char szFile[256];
 		sprintf(szFile, "%s\\%s", szRezPath, MBMGR_DEFAULT_FILE);
-        sm_ButeMgr.SetInRezFile(LTFALSE);
-        sm_ButeMgr.Init(g_pLTServer, szFile);
-        sm_bInitted = LTTRUE;
+		sm_ButeMgr.SetInRezFile(LTFALSE);
+		sm_ButeMgr.Init(g_pLTServer, szFile);
+		sm_bInitted = LTTRUE;
 	}
 
 	return LT_UNSUPPORTED;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModelButeMgrPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CModelButeMgrPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Initialize the bute mgr...
-//
+//	PURPOSE: Initialize the bute mgr...
 // ----------------------------------------------------------------------- //
 
 void CModelButeMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,
-    const uint32 cMaxStrings, const uint32 cMaxStringLength)
+	const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {
 	if (!aszStrings || !pcStrings) return;
 

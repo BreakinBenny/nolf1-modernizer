@@ -1,11 +1,7 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : Factory.h
-//
-// PURPOSE : Factory definition
-//
-// CREATED : 05.12.1999
-//
+// MODULE: Factory.h
+// PURPOSE: Factory definition
+// CREATED: 05.12.1999
 // ----------------------------------------------------------------------- //
 
 #ifndef __FACTORY_H__
@@ -100,7 +96,7 @@ template<class TYPE> class CFactory
 		static int		s_cTYPE;
 		static int		s_iCursor;
 		static CCleaner	s_Cleaner;
-		int				m_iPTYPE;
+		int			m_iPTYPE;
 };
 
 template<class TYPE>

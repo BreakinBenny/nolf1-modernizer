@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: VersionMgr.h
 //
-// MODULE  : VersionMgr.h
+// PURPOSE:  Definition of versioning manager
 //
-// PURPOSE : Definition of versioning manager
-//
-// CREATED : 11/16/2000
+// CREATED: 11/16/2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -30,11 +28,9 @@ static const float s_fLatestPatch = 3.2f;
 CVersionMgr* g_pVersionMgr = NULL;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CVersionMgr::CVersionMgr()
 //
-//	ROUTINE:	CVersionMgr::CVersionMgr()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CVersionMgr::CVersionMgr()
@@ -74,11 +70,9 @@ CVersionMgr::CVersionMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CVersionMgr::GetVersion()
 //
-//	ROUTINE:	CVersionMgr::GetVersion()
-//
-//	PURPOSE:	Get the current version string
-//
+//	PURPOSE: Get the current version string
 // ----------------------------------------------------------------------- //
 
 const char* CVersionMgr::GetVersion()
@@ -87,11 +81,9 @@ const char* CVersionMgr::GetVersion()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CVersionMgr::GetSaveVersion()
 //
-//	ROUTINE:	CVersionMgr::GetSaveVersion()
-//
-//	PURPOSE:	Get the current save version 
-//
+//	PURPOSE: Get the current save version 
 // ----------------------------------------------------------------------- //
 
 const uint32 CVersionMgr::GetSaveVersion()
@@ -105,11 +97,9 @@ const float CVersionMgr::GetLatestPatchVersion()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CVersionMgr::GetBuild()
 //
-//	ROUTINE:	CVersionMgr::GetBuild()
-//
-//	PURPOSE:	Get the current build string
-//
+//	PURPOSE: Get the current build string
 // ----------------------------------------------------------------------- //
 
 const char* CVersionMgr::GetBuild()

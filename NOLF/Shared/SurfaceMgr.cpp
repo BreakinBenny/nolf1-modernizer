@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: SurfaceMgr.cpp
 //
-// MODULE  : SurfaceMgr.cpp
+// PURPOSE: SurfaceMgr - Implementation
 //
-// PURPOSE : SurfaceMgr - Implementation
-//
-// CREATED : 07/07/99
+// CREATED: 07/07/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -15,7 +13,7 @@
 #include "CommonUtilities.h"
 #include "FXButeMgr.h"
 
-#define SRFMGR_GLOBAL_TAG                       "Global"
+#define SRFMGR_GLOBAL_TAG					   "Global"
 
 #define SRFMGR_SURFACE_TAG						"Surface"
 
@@ -28,50 +26,50 @@
 #define SRFMGR_SURFACE_MAXSHOOTTHROUGHPERTURB	"MaxShootThroughPerturb"
 #define SRFMGR_SURFACE_MAXSHOOTTHROUGHTHICKNESS	"MaxShootThroughThickness"
 #define SRFMGR_SURFACE_BULLETHOLESPR			"BulletHoleSpr"
-#define SRFMGR_SURFACE_BULLETHOLEMINSCALE		"BulletHoleMinScale"
-#define SRFMGR_SURFACE_BULLETHOLEMAXSCALE		"BulletHoleMaxScale"
-#define SRFMGR_SURFACE_BULLETRANGEDAMPEN		"BulletRangeDampen"
-#define SRFMGR_SURFACE_BULLETDAMAGEDAMPEN		"BulletDamageDampen"
-#define SRFMGR_SURFACE_BULLETIMPACTSND			"BulletImpactSnd"
+#define SRFMGR_SURFACE_BULLETHOLEMINSCALE	"BulletHoleMinScale"
+#define SRFMGR_SURFACE_BULLETHOLEMAXSCALE	"BulletHoleMaxScale"
+#define SRFMGR_SURFACE_BULLETRANGEDAMPEN	"BulletRangeDampen"
+#define SRFMGR_SURFACE_BULLETDAMAGEDAMPEN	"BulletDamageDampen"
+#define SRFMGR_SURFACE_BULLETIMPACTSND		"BulletImpactSnd"
 #define SRFMGR_SURFACE_PROJIMPACTSND			"ProjectileImpactSnd"
-#define SRFMGR_SURFACE_MELEEIMPACTSND			"MeleeImpactSnd"
-#define SRFMGR_SURFACE_SHELLSNDRADIUS			"ShellSndRadius"
-#define SRFMGR_SURFACE_SHELLIMPACTSND			"ShellImpactSnd"
-#define SRFMGR_SURFACE_GRENADESNDRADIUS			"GrenadeSndRadius"
-#define SRFMGR_SURFACE_GRENADEIMPACTSND			"GrenadeImpactSnd"
-#define SRFMGR_SURFACE_RTFOOTPRINTSPR			"RtFootPrintSpr"
-#define SRFMGR_SURFACE_LTFOOTPRINTSPR			"LtFootPrintSpr"
-#define SRFMGR_SURFACE_FOOTPRINTSCALE			"FootPrintScale"
+#define SRFMGR_SURFACE_MELEEIMPACTSND		"MeleeImpactSnd"
+#define SRFMGR_SURFACE_SHELLSNDRADIUS		"ShellSndRadius"
+#define SRFMGR_SURFACE_SHELLIMPACTSND		"ShellImpactSnd"
+#define SRFMGR_SURFACE_GRENADESNDRADIUS		"GrenadeSndRadius"
+#define SRFMGR_SURFACE_GRENADEIMPACTSND		"GrenadeImpactSnd"
+#define SRFMGR_SURFACE_RTFOOTPRINTSPR		"RtFootPrintSpr"
+#define SRFMGR_SURFACE_LTFOOTPRINTSPR		"LtFootPrintSpr"
+#define SRFMGR_SURFACE_FOOTPRINTSCALE		"FootPrintScale"
 #define SRFMGR_SURFACE_FOOTPRINTLIFETIME		"FootPrintLifetime"
-#define SRFMGR_SURFACE_MOTOVELMULTIPLIER		"MotorcycleVelMult"
-#define SRFMGR_SURFACE_SNOWVELMULTIPLIER		"SnowmobileVelMult"
+#define SRFMGR_SURFACE_MOTOVELMULTIPLIER	"MotorcycleVelMult"
+#define SRFMGR_SURFACE_SNOWVELMULTIPLIER	"SnowmobileVelMult"
 #define SRFMGR_SURFACE_RTFOOTSND				"RtFootSnd"
 #define SRFMGR_SURFACE_LTFOOTSND				"LtFootSnd"
-#define SRFMGR_SURFACE_MOTORCYCLESND			"MotorcycleSnd"
-#define SRFMGR_SURFACE_SNOWMOBILESND			"SnowmobileSnd"
-#define SRFMGR_SURFACE_BODYFALLSND				"BodyFallSnd"
-#define SRFMGR_SURFACE_BODYFALLSNDRADIUS		"BodyFallSndRadius"
-#define SRFMGR_SURFACE_BODYLEDGEFALLSND			"BodyLedgeFallSnd"
+#define SRFMGR_SURFACE_MOTORCYCLESND		"MotorcycleSnd"
+#define SRFMGR_SURFACE_SNOWMOBILESND		"SnowmobileSnd"
+#define SRFMGR_SURFACE_BODYFALLSND			"BodyFallSnd"
+#define SRFMGR_SURFACE_BODYFALLSNDRADIUS	"BodyFallSndRadius"
+#define SRFMGR_SURFACE_BODYLEDGEFALLSND		"BodyLedgeFallSnd"
 #define SRFMGR_SURFACE_BODYLEDGEFALLSNDRADIUS	"BodyLedgeFallSndRadius"
 #define SRFMGR_SURFACE_ACTIVATIONSND			"ActivationSnd"
-#define SRFMGR_SURFACE_ACTIVATIONSNDRADIUS		"ActivationSndRadius"
-#define SRFMGR_SURFACE_DEATHNOISEMOD			"DeathNoiseMod"
-#define SRFMGR_SURFACE_MOVENOISEMOD				"MoveNoiseMod"
-#define SRFMGR_SURFACE_IMPACTNOISEMOD			"ImpactNoiseMod"
-#define SRFMGR_SURFACE_HARDNESS					"Hardness"
-#define SRFMGR_SURFACE_MAGNETIC					"Magnetic"
-#define SRFMGR_SURFACE_IMPACTSCALENAME			"ImpactScaleName"
-#define SRFMGR_SURFACE_IMPACTPSHOWERNAME		"ImpactPShowerName"
-#define SRFMGR_SURFACE_IMPACTPOLYDEBRISNAME		"ImpactPolyDebrisName"
-#define SRFMGR_SURFACE_UWIMPACTPSHOWERNAME		"UWImpactPShowerName"
+#define SRFMGR_SURFACE_ACTIVATIONSNDRADIUS	"ActivationSndRadius"
+#define SRFMGR_SURFACE_DEATHNOISEMOD		"DeathNoiseMod"
+#define SRFMGR_SURFACE_MOVENOISEMOD			"MoveNoiseMod"
+#define SRFMGR_SURFACE_IMPACTNOISEMOD		"ImpactNoiseMod"
+#define SRFMGR_SURFACE_HARDNESS				"Hardness"
+#define SRFMGR_SURFACE_MAGNETIC				"Magnetic"
+#define SRFMGR_SURFACE_IMPACTSCALENAME		"ImpactScaleName"
+#define SRFMGR_SURFACE_IMPACTPSHOWERNAME	"ImpactPShowerName"
+#define SRFMGR_SURFACE_IMPACTPOLYDEBRISNAME "ImpactPolyDebrisName"
+#define SRFMGR_SURFACE_UWIMPACTPSHOWERNAME "UWImpactPShowerName"
 #define SRFMGR_SURFACE_EXITSCALENAME			"ExitScaleName"
-#define SRFMGR_SURFACE_EXITPSHOWERNAME			"ExitPShowerName"
-#define SRFMGR_SURFACE_EXITPOLYDEBRISNAME		"ExitPolyDebrisName"
-#define SRFMGR_SURFACE_UWEXITPSHOWERNAME		"UWExitPShowerName"
+#define SRFMGR_SURFACE_EXITPSHOWERNAME		"ExitPShowerName"
+#define SRFMGR_SURFACE_EXITPOLYDEBRISNAME	"ExitPolyDebrisName"
+#define SRFMGR_SURFACE_UWEXITPSHOWERNAME	"UWExitPShowerName"
 
 // Global pointer to surface mgr...
 
-CSurfaceMgr*    g_pSurfaceMgr = LTNULL;
+CSurfaceMgr*	g_pSurfaceMgr = LTNULL;
 
 static char s_aTagName[30];
 static char s_aAttName[100];
@@ -85,24 +83,20 @@ CSurfaceMgr CSurfaceMgrPlugin::sm_SurfaceMgr;
 #endif // _CLIENTBUILD
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSurfaceMgr::CSurfaceMgr
 //
-//	ROUTINE:	CSurfaceMgr::CSurfaceMgr
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CSurfaceMgr::CSurfaceMgr()
 {
-    m_SurfaceList.Init(LTTRUE);
+	m_SurfaceList.Init(LTTRUE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSurfaceMgr::~CSurfaceMgr
 //
-//	ROUTINE:	CSurfaceMgr::~CSurfaceMgr
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CSurfaceMgr::~CSurfaceMgr()
@@ -111,17 +105,15 @@ CSurfaceMgr::~CSurfaceMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSurfaceMgr::Init()
 //
-//	ROUTINE:	CSurfaceMgr::Init()
-//
-//	PURPOSE:	Init mgr
-//
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CSurfaceMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 {
-    if (g_pSurfaceMgr || !szAttributeFile) return LTFALSE;
-    if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
+	if (g_pSurfaceMgr || !szAttributeFile) return LTFALSE;
+	if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
 
 	g_pSurfaceMgr = this;
 
@@ -146,7 +138,7 @@ LTBOOL CSurfaceMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pSurf);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -154,21 +146,19 @@ LTBOOL CSurfaceMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 	}
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSurfaceMgr::GetSurface
 //
-//	ROUTINE:	CSurfaceMgr::GetSurface
-//
-//	PURPOSE:	Get the specified surface
-//
+//	PURPOSE: Get the specified surface
 // ----------------------------------------------------------------------- //
 
 SURFACE* CSurfaceMgr::GetSurface(SurfaceType eType)
 {
-    SURFACE** pCur  = LTNULL;
+	SURFACE** pCur  = LTNULL;
 
 	pCur = m_SurfaceList.GetItem(TLIT_FIRST);
 
@@ -182,22 +172,20 @@ SURFACE* CSurfaceMgr::GetSurface(SurfaceType eType)
 		pCur = m_SurfaceList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSurfaceMgr::GetSurface
 //
-//	ROUTINE:	CSurfaceMgr::GetSurface
-//
-//	PURPOSE:	Get the specified surface
-//
+//	PURPOSE: Get the specified surface
 // ----------------------------------------------------------------------- //
 
 SURFACE* CSurfaceMgr::GetSurface(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    SURFACE** pCur  = LTNULL;
+	SURFACE** pCur  = LTNULL;
 
 	pCur = m_SurfaceList.GetItem(TLIT_FIRST);
 
@@ -211,31 +199,27 @@ SURFACE* CSurfaceMgr::GetSurface(char* pName)
 		pCur = m_SurfaceList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSurfaceMgr::Term()
 //
-//	ROUTINE:	CSurfaceMgr::Term()
-//
-//	PURPOSE:	Clean up.
-//
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CSurfaceMgr::Term()
 {
-    g_pSurfaceMgr = LTNULL;
+	g_pSurfaceMgr = LTNULL;
 
 	m_SurfaceList.Clear();
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSurfaceMgr::CacheAll
 //
-//	ROUTINE:	CSurfaceMgr::CacheAll
-//
-//	PURPOSE:	Cache all the surface related resources
-//
+//	PURPOSE: Cache all the surface related resources
 // ----------------------------------------------------------------------- //
 
 void CSurfaceMgr::CacheAll()
@@ -244,7 +228,7 @@ void CSurfaceMgr::CacheAll()
 
 	// Cache all the surfaces...
 
-    SURFACE** pCurSurf  = LTNULL;
+	SURFACE** pCurSurf  = LTNULL;
 	pCurSurf = m_SurfaceList.GetItem(TLIT_FIRST);
 
 	while (pCurSurf)
@@ -262,19 +246,17 @@ void CSurfaceMgr::CacheAll()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SURFACE::SURFACE
 //
-//	ROUTINE:	SURFACE::SURFACE
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 SURFACE::SURFACE()
 {
 	eType						= ST_UNKNOWN;
-    bShowsMark                  = LTFALSE;
-    bCanSeeThrough              = LTFALSE;
-    bCanSeeThrough              = LTFALSE;
+	bShowsMark				  = LTFALSE;
+	bCanSeeThrough			  = LTFALSE;
+	bCanSeeThrough			  = LTFALSE;
 	nMaxShootThroughPerturb		= 0;
 	nMaxShootThroughThickness	= 0;
 	szBulletHoleSpr[0]			= '\0';
@@ -284,8 +266,8 @@ SURFACE::SURFACE()
 
 	vFootPrintScale.Init(1, 1, 1);
 
-    int i;
-    for (i=0; i < SRF_MAX_IMPACT_SNDS; i++)
+	int i;
+	for (i=0; i < SRF_MAX_IMPACT_SNDS; i++)
 	{
 		szBulletImpactSnds[i][0]	= '\0';
 	}
@@ -343,7 +325,7 @@ SURFACE::SURFACE()
 	fGrenadeSndRadius		= 0;
 
 	fHardness				= 0.0f;
-    bMagnetic               = LTFALSE;
+	bMagnetic			   = LTFALSE;
 
 	nNumImpactScaleFX			= 0;
 	aImpactScaleFXIds[0]		= -1;
@@ -372,41 +354,39 @@ SURFACE::SURFACE()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SURFACE::Init
 //
-//	ROUTINE:	SURFACE::Init
-//
-//	PURPOSE:	Build the surface struct
-//
+//	PURPOSE: Build the surface struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL SURFACE::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	eType					= (SurfaceType) buteMgr.GetInt(aTagName, SRFMGR_SURFACE_ID);
-    bShowsMark              = (LTBOOL) buteMgr.GetInt(aTagName, SRFMGR_SURFACE_SHOWSMARK);
-    bCanSeeThrough          = (LTBOOL) buteMgr.GetInt(aTagName, SRFMGR_SURFACE_CANSEETHROUGH);
-    bCanShootThrough        = (LTBOOL) buteMgr.GetInt(aTagName, SRFMGR_SURFACE_CANSHOOTTHROUGH);
-    bShowBreath             = (LTBOOL) buteMgr.GetInt(aTagName, SRFMGR_SURFACE_SHOWBREATH);
+	bShowsMark			  = (LTBOOL) buteMgr.GetInt(aTagName, SRFMGR_SURFACE_SHOWSMARK);
+	bCanSeeThrough		  = (LTBOOL) buteMgr.GetInt(aTagName, SRFMGR_SURFACE_CANSEETHROUGH);
+	bCanShootThrough		= (LTBOOL) buteMgr.GetInt(aTagName, SRFMGR_SURFACE_CANSHOOTTHROUGH);
+	bShowBreath			 = (LTBOOL) buteMgr.GetInt(aTagName, SRFMGR_SURFACE_SHOWBREATH);
 	nMaxShootThroughPerturb	= buteMgr.GetInt(aTagName, SRFMGR_SURFACE_MAXSHOOTTHROUGHPERTURB);
 	nMaxShootThroughThickness= buteMgr.GetInt(aTagName, SRFMGR_SURFACE_MAXSHOOTTHROUGHTHICKNESS);
-    fDeathNoiseModifier     = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_DEATHNOISEMOD);
-    fMovementNoiseModifier  = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_MOVENOISEMOD);
-    fImpactNoiseModifier    = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_IMPACTNOISEMOD);
-    fBodyFallSndRadius      = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BODYFALLSNDRADIUS);
-    fBodyLedgeFallSndRadius = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BODYLEDGEFALLSNDRADIUS);
-    fBulletHoleMinScale     = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BULLETHOLEMINSCALE);
-    fBulletHoleMaxScale     = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BULLETHOLEMAXSCALE);
-    fBulletRangeDampen      = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BULLETRANGEDAMPEN);
-    fBulletDamageDampen     = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BULLETDAMAGEDAMPEN);
-    fActivationSndRadius    = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_ACTIVATIONSNDRADIUS);
-    fShellSndRadius         = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_SHELLSNDRADIUS);
-    fGrenadeSndRadius       = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_GRENADESNDRADIUS);
-    fHardness               = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_HARDNESS);
-    fFootPrintLifetime      = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_FOOTPRINTLIFETIME);
-    fMotoVelMult			= (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_MOTOVELMULTIPLIER);
-    fSnowVelMult			= (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_SNOWVELMULTIPLIER);
-    bMagnetic               = (LTBOOL) buteMgr.GetInt(aTagName, SRFMGR_SURFACE_MAGNETIC);
+	fDeathNoiseModifier	 = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_DEATHNOISEMOD);
+	fMovementNoiseModifier  = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_MOVENOISEMOD);
+	fImpactNoiseModifier	= (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_IMPACTNOISEMOD);
+	fBodyFallSndRadius	  = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BODYFALLSNDRADIUS);
+	fBodyLedgeFallSndRadius = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BODYLEDGEFALLSNDRADIUS);
+	fBulletHoleMinScale	 = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BULLETHOLEMINSCALE);
+	fBulletHoleMaxScale	 = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BULLETHOLEMAXSCALE);
+	fBulletRangeDampen	  = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BULLETRANGEDAMPEN);
+	fBulletDamageDampen	 = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_BULLETDAMAGEDAMPEN);
+	fActivationSndRadius	= (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_ACTIVATIONSNDRADIUS);
+	fShellSndRadius		 = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_SHELLSNDRADIUS);
+	fGrenadeSndRadius	   = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_GRENADESNDRADIUS);
+	fHardness			   = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_HARDNESS);
+	fFootPrintLifetime	  = (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_FOOTPRINTLIFETIME);
+	fMotoVelMult			= (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_MOTOVELMULTIPLIER);
+	fSnowVelMult			= (LTFLOAT) buteMgr.GetDouble(aTagName, SRFMGR_SURFACE_SNOWVELMULTIPLIER);
+	bMagnetic			   = (LTBOOL) buteMgr.GetInt(aTagName, SRFMGR_SURFACE_MAGNETIC);
 
 	vFootPrintScale			= buteMgr.GetVector(aTagName, SRFMGR_SURFACE_FOOTPRINTSCALE);
 
@@ -434,8 +414,8 @@ LTBOOL SURFACE::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szLtFootPrintSpr, (char*)(LPCSTR)str, ARRAY_LEN(szLtFootPrintSpr));
 	}
 
-    int i;
-    for (i=1; i <= SRF_MAX_FOOTSTEP_SNDS; i++)
+	int i;
+	for (i=1; i <= SRF_MAX_FOOTSTEP_SNDS; i++)
 	{
 		sprintf(s_aAttName, "%s%d", SRFMGR_SURFACE_RTFOOTSND, i);
 		str = buteMgr.GetString(aTagName, s_aAttName);
@@ -722,15 +702,13 @@ LTBOOL SURFACE::Init(CButeMgr & buteMgr, char* aTagName)
 		sprintf(s_aAttName, "%s%d", SRFMGR_SURFACE_UWIMPACTPSHOWERNAME, nNumUWExitPShowerFX);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SURFACE::Cache
 //
-//	ROUTINE:	SURFACE::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the surface
-//
+//	PURPOSE: Cache all the resources associated with the surface
 // ----------------------------------------------------------------------- //
 
 void SURFACE::Cache(CSurfaceMgr* pSurfaceMgr)
@@ -743,28 +721,28 @@ void SURFACE::Cache(CSurfaceMgr* pSurfaceMgr)
 
 	if (szBulletHoleSpr[0])
 	{
-        g_pLTServer->CacheFile(FT_SPRITE, szBulletHoleSpr);
+		g_pLTServer->CacheFile(FT_SPRITE, szBulletHoleSpr);
 	}
 
 	if (szRtFootPrintSpr[0])
 	{
-        g_pLTServer->CacheFile(FT_SPRITE, szRtFootPrintSpr);
+		g_pLTServer->CacheFile(FT_SPRITE, szRtFootPrintSpr);
 	}
 
 	if (szLtFootPrintSpr[0])
 	{
-        g_pLTServer->CacheFile(FT_SPRITE, szLtFootPrintSpr);
+		g_pLTServer->CacheFile(FT_SPRITE, szLtFootPrintSpr);
 	}
 
 
 	// Cache sounds...
 
-    int i;
-    for (i=0; i < SRF_MAX_IMPACT_SNDS; i++)
+	int i;
+	for (i=0; i < SRF_MAX_IMPACT_SNDS; i++)
 	{
 		if (szBulletImpactSnds[i][0])
 		{
-            g_pLTServer->CacheFile(FT_SOUND, szBulletImpactSnds[i]);
+			g_pLTServer->CacheFile(FT_SOUND, szBulletImpactSnds[i]);
 		}
 	}
 
@@ -772,7 +750,7 @@ void SURFACE::Cache(CSurfaceMgr* pSurfaceMgr)
 	{
 		if (szMeleeImpactSnds[i][0])
 		{
-            g_pLTServer->CacheFile(FT_SOUND, szMeleeImpactSnds[i]);
+			g_pLTServer->CacheFile(FT_SOUND, szMeleeImpactSnds[i]);
 		}
 	}
 
@@ -780,7 +758,7 @@ void SURFACE::Cache(CSurfaceMgr* pSurfaceMgr)
 	{
 		if (szProjectileImpactSnds[i][0])
 		{
-            g_pLTServer->CacheFile(FT_SOUND, szProjectileImpactSnds[i]);
+			g_pLTServer->CacheFile(FT_SOUND, szProjectileImpactSnds[i]);
 		}
 	}
 
@@ -788,7 +766,7 @@ void SURFACE::Cache(CSurfaceMgr* pSurfaceMgr)
 	{
 		if (szShellImpactSnds[i][0])
 		{
-            g_pLTServer->CacheFile(FT_SOUND, szShellImpactSnds[i]);
+			g_pLTServer->CacheFile(FT_SOUND, szShellImpactSnds[i]);
 		}
 	}
 
@@ -796,12 +774,12 @@ void SURFACE::Cache(CSurfaceMgr* pSurfaceMgr)
 	{
 		if (szRtFootStepSnds[i][0])
 		{
-            g_pLTServer->CacheFile(FT_SOUND, szRtFootStepSnds[i]);
+			g_pLTServer->CacheFile(FT_SOUND, szRtFootStepSnds[i]);
 		}
 
 		if (szLtFootStepSnds[i][0])
 		{
-            g_pLTServer->CacheFile(FT_SOUND, szLtFootStepSnds[i]);
+			g_pLTServer->CacheFile(FT_SOUND, szLtFootStepSnds[i]);
 		}
 	}
 
@@ -809,7 +787,7 @@ void SURFACE::Cache(CSurfaceMgr* pSurfaceMgr)
 	{
 		if (szMotorcycleSnds[i][0])
 		{
-            g_pLTServer->CacheFile(FT_SOUND, szMotorcycleSnds[i]);
+			g_pLTServer->CacheFile(FT_SOUND, szMotorcycleSnds[i]);
 		}
 	}
 
@@ -817,28 +795,28 @@ void SURFACE::Cache(CSurfaceMgr* pSurfaceMgr)
 	{
 		if (szSnowmobileSnds[i][0])
 		{
-            g_pLTServer->CacheFile(FT_SOUND, szSnowmobileSnds[i]);
+			g_pLTServer->CacheFile(FT_SOUND, szSnowmobileSnds[i]);
 		}
 	}
 
 	if (szBodyFallSnd[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szBodyFallSnd);
+		g_pLTServer->CacheFile(FT_SOUND, szBodyFallSnd);
 	}
 
 	if (szBodyLedgeFallSnd[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szBodyLedgeFallSnd);
+		g_pLTServer->CacheFile(FT_SOUND, szBodyLedgeFallSnd);
 	}
 
 	if (szActivationSnd[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szActivationSnd);
+		g_pLTServer->CacheFile(FT_SOUND, szActivationSnd);
 	}
 
 	if (szGrenadeImpactSnd[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szGrenadeImpactSnd);
+		g_pLTServer->CacheFile(FT_SOUND, szGrenadeImpactSnd);
 	}
 
 	for (i=0; i < nNumImpactScaleFX; i++)
@@ -891,20 +869,18 @@ void SURFACE::Cache(CSurfaceMgr* pSurfaceMgr)
 ////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSurfaceMgrPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CSurfaceMgrPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Fill the string list
-//
+//	PURPOSE: Fill the string list
 // ----------------------------------------------------------------------- //
 
 LTRESULT CSurfaceMgrPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 	if (!g_pSurfaceMgr)
 	{
@@ -913,35 +889,33 @@ LTRESULT CSurfaceMgrPlugin::PreHook_EditStringList(
 
 		char szFile[256];
 		sprintf(szFile, "%s\\%s", szRezPath, SRFMGR_DEFAULT_FILE);
-        sm_SurfaceMgr.SetInRezFile(LTFALSE);
-        sm_SurfaceMgr.Init(g_pLTServer, szFile);
+		sm_SurfaceMgr.SetInRezFile(LTFALSE);
+		sm_SurfaceMgr.Init(g_pLTServer, szFile);
 	}
 
 	return LT_UNSUPPORTED;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSurfaceMgrPlugin::PopulateStringList
 //
-//	ROUTINE:	CSurfaceMgrPlugin::PopulateStringList
-//
-//	PURPOSE:	Populate the list
-//
+//	PURPOSE: Populate the list
 // ----------------------------------------------------------------------- //
 
 LTBOOL CSurfaceMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,
-    const uint32 cMaxStrings, const uint32 cMaxStringLength)
+	const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {
 	_ASSERT(aszStrings && pcStrings && g_pSurfaceMgr);
-    if (!aszStrings || !pcStrings || !g_pSurfaceMgr) return LTFALSE;
+	if (!aszStrings || !pcStrings || !g_pSurfaceMgr) return LTFALSE;
 
 	// Add an entry for each surface
 
 	SurfaceList* pList = g_pSurfaceMgr->GetSurfaceList();
-    if (!pList || pList->GetLength() < 1) return LTFALSE;
+	if (!pList || pList->GetLength() < 1) return LTFALSE;
 
 	// Cache all the surfaces...
 
-    SURFACE** pCurSurf  = LTNULL;
+	SURFACE** pCurSurf  = LTNULL;
 	pCurSurf = pList->GetItem(TLIT_FIRST);
 
 	while (pCurSurf)
@@ -950,7 +924,7 @@ LTBOOL CSurfaceMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcString
 
 		if (*pCurSurf && (*pCurSurf)->szName[0])
 		{
-            uint32 dwSurfaceNameLen = strlen((*pCurSurf)->szName);
+			uint32 dwSurfaceNameLen = strlen((*pCurSurf)->szName);
 
 			if (dwSurfaceNameLen < cMaxStringLength && ((*pcStrings) + 1) < cMaxStrings)
 			{
@@ -961,7 +935,7 @@ LTBOOL CSurfaceMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcString
 		pCurSurf = pList->GetItem(TLIT_NEXT);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 #endif // #ifndef _CLIENTBUILD

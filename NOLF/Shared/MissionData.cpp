@@ -56,7 +56,7 @@ void CMissionData::ClearWeaponsAndGadgets()
 
 void CMissionData::ClearWeapons()
 {
-    uint32 index = 0;
+	uint32 index = 0;
 	while (index < m_Weapons.GetSize())
 	{
 		WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(m_Weapons[index]->m_nID);
@@ -77,7 +77,7 @@ void CMissionData::ClearWeapons()
 
 void CMissionData::ClearGadgets()
 {
-    uint32 index = 0;
+	uint32 index = 0;
 	while (index < m_Weapons.GetSize())
 	{
 		WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(m_Weapons[index]->m_nID);
@@ -135,31 +135,31 @@ int CMissionData::GetNumGadgets()
 LTBOOL CMissionData::AddWeapon(int weaponID)
 {
 	CWeaponData* pData = GetWeaponData(weaponID);
-    if (pData == LTNULL)
+	if (pData == LTNULL)
 	{
 		pData = debug_new(CWeaponData);
 		m_Weapons.Add(pData);
 		pData->m_nID = weaponID;
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CMissionData::RemoveWeapon(int weaponID)
 {
 	DWORD ndx = GetWeaponIndex(weaponID);
 	if (ndx >= m_Weapons.GetSize())
-        return LTFALSE;
+		return LTFALSE;
 	debug_delete(m_Weapons[ndx]);
 	m_Weapons.Remove(ndx);
-    return LTTRUE;
+	return LTTRUE;
 }
 
 int CMissionData::GetWeapons(CWeaponData **weapons, int nArraySize)
 {
-    int i;
-    for (i = 0; i < nArraySize && i < (int)m_Weapons.GetSize(); i++)
+	int i;
+	for (i = 0; i < nArraySize && i < (int)m_Weapons.GetSize(); i++)
 	{
 		*weapons = m_Weapons.GetAt(i);
 		weapons++;
@@ -171,7 +171,7 @@ CWeaponData* CMissionData::GetWeaponData(int nID)
 {
 	DWORD ndx = GetWeaponIndex(nID);
 	if (ndx >= m_Weapons.GetSize())
-        return LTNULL;
+		return LTNULL;
 	return m_Weapons[ndx];
 }
 
@@ -189,7 +189,7 @@ void CMissionData::ClearAllAmmo()
 
 void CMissionData::ClearAmmo()
 {
-    uint32 index = 0;
+	uint32 index = 0;
 	while (index < m_Ammo.GetSize())
 	{
 		AMMO* pAmmo = g_pWeaponMgr->GetAmmo(m_Ammo[index]->m_nID);
@@ -210,7 +210,7 @@ void CMissionData::ClearAmmo()
 
 void CMissionData::ClearSupplies()
 {
-    uint32 index = 0;
+	uint32 index = 0;
 	while (index < m_Ammo.GetSize())
 	{
 		AMMO* pAmmo = g_pWeaponMgr->GetAmmo(m_Ammo[index]->m_nID);
@@ -234,9 +234,9 @@ void CMissionData::ClearSupplies()
 LTBOOL CMissionData::AddAmmo(int ammoID, int count)
 {
 	if (count == 0)
-        return LTFALSE;
+		return LTFALSE;
 	CAmmoData* pData = GetAmmoData(ammoID);
-    if (pData == LTNULL)
+	if (pData == LTNULL)
 	{
 		pData = debug_new(CAmmoData);
 		m_Ammo.Add(pData);
@@ -244,28 +244,28 @@ LTBOOL CMissionData::AddAmmo(int ammoID, int count)
 	}
 
 	if (!g_pWeaponMgr->IsValidAmmoType(ammoID))
-        return LTFALSE;
+		return LTFALSE;
 
 
 	pData->m_nCount += count;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 LTBOOL CMissionData::RemoveAmmo(int ammoID)
 {
 	DWORD ndx = GetAmmoIndex(ammoID);
 	if (ndx >= m_Ammo.GetSize())
-        return LTFALSE;
+		return LTFALSE;
 	debug_delete(m_Ammo[ndx]);
 	m_Ammo.Remove(ndx);
-    return LTTRUE;
+	return LTTRUE;
 }
 
 int CMissionData::GetAmmo(CAmmoData **ammo, int nArraySize)
 {
-    int i;
-    for (i = 0; i < nArraySize && i < (int)m_Ammo.GetSize(); i++)
+	int i;
+	for (i = 0; i < nArraySize && i < (int)m_Ammo.GetSize(); i++)
 	{
 		*ammo = m_Ammo.GetAt(i);
 		ammo++;
@@ -277,7 +277,7 @@ CAmmoData*	CMissionData::GetAmmoData(int nID)
 {
 	DWORD ndx = GetAmmoIndex(nID);
 	if (ndx >= m_Ammo.GetSize())
-        return LTNULL;
+		return LTNULL;
 	return m_Ammo[ndx];
 }
 
@@ -296,31 +296,31 @@ void CMissionData::ClearMods()
 LTBOOL CMissionData::AddMod(int modID)
 {
 	CModData* pData = GetModData(modID);
-    if (pData == LTNULL)
+	if (pData == LTNULL)
 	{
 		pData = debug_new(CModData);
 		m_Mods.Add(pData);
 		pData->m_nID = modID;
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CMissionData::RemoveMod(int modID)
 {
 	DWORD ndx = GetModIndex(modID);
 	if (ndx >= m_Mods.GetSize())
-        return LTFALSE;
+		return LTFALSE;
 	debug_delete(m_Mods[ndx]);
 	m_Mods.Remove(ndx);
-    return LTTRUE;
+	return LTTRUE;
 }
 
 int CMissionData::GetMods(CModData **mod, int nArraySize)
 {
-    int i;
-    for (i = 0; i < nArraySize && i < (int)m_Mods.GetSize(); i++)
+	int i;
+	for (i = 0; i < nArraySize && i < (int)m_Mods.GetSize(); i++)
 	{
 		*mod = m_Mods.GetAt(i);
 		mod++;
@@ -332,7 +332,7 @@ CModData*	CMissionData::GetModData(int nID)
 {
 	DWORD ndx = GetModIndex(nID);
 	if (ndx >= m_Mods.GetSize())
-        return LTNULL;
+		return LTNULL;
 	return m_Mods[ndx];
 }
 
@@ -348,31 +348,31 @@ void CMissionData::ClearGear()
 LTBOOL CMissionData::AddGear(int gearID)
 {
 	CGearData* pData = GetGearData(gearID);
-    if (pData == LTNULL)
+	if (pData == LTNULL)
 	{
 		pData = debug_new(CGearData);
 		m_Gear.Add(pData);
 		pData->m_nID = gearID;
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CMissionData::RemoveGear(int gearID)
 {
 	DWORD ndx = GetGearIndex(gearID);
 	if (ndx >= m_Gear.GetSize())
-        return LTFALSE;
+		return LTFALSE;
 	debug_delete(m_Gear[ndx]);
 	m_Gear.Remove(ndx);
-    return LTTRUE;
+	return LTTRUE;
 }
 
 int CMissionData::GetGear(CGearData **gear, int nArraySize)
 {
-    int i;
-    for (i = 0; i < nArraySize && i < (int)m_Gear.GetSize(); i++)
+	int i;
+	for (i = 0; i < nArraySize && i < (int)m_Gear.GetSize(); i++)
 	{
 		*gear = m_Gear.GetAt(i);
 		gear++;
@@ -384,7 +384,7 @@ CGearData*	CMissionData::GetGearData(int nID)
 {
 	DWORD ndx = GetGearIndex(nID);
 	if (ndx >= m_Gear.GetSize())
-        return LTNULL;
+		return LTNULL;
 	return m_Gear[ndx];
 }
 
@@ -426,56 +426,56 @@ void CMissionData::WriteToMessage(ILTCSBase *pInterface, HMESSAGEWRITE hMessage)
 {
 	if (!hMessage) return;
 
-    pInterface->WriteToMessageFloat(hMessage, (LTFLOAT)m_nMission);
-    pInterface->WriteToMessageFloat(hMessage, (LTFLOAT)m_nLevel);
+	pInterface->WriteToMessageFloat(hMessage, (LTFLOAT)m_nMission);
+	pInterface->WriteToMessageFloat(hMessage, (LTFLOAT)m_nLevel);
 
 	int nSize = m_Weapons.GetSize();
 
-    pInterface->WriteToMessageDWord(hMessage, (uint32)nSize);
+	pInterface->WriteToMessageDWord(hMessage, (uint32)nSize);
 
-    int i;
-    for (i = 0; i < nSize; i++)
+	int i;
+	for (i = 0; i < nSize; i++)
 	{
 		CWeaponData *pWeapon = m_Weapons.GetAt(i);
 		if (pWeapon)
 		{
-            pWeapon->WriteToMessage(pInterface, hMessage);
+			pWeapon->WriteToMessage(pInterface, hMessage);
 		}
 	}
 
 	nSize = m_Ammo.GetSize();
-    pInterface->WriteToMessageDWord(hMessage, (uint32)nSize);
+	pInterface->WriteToMessageDWord(hMessage, (uint32)nSize);
 
 	for (i = 0; i < nSize; i++)
 	{
 		CAmmoData *pAmmo = m_Ammo.GetAt(i);
 		if (pAmmo)
 		{
-            pAmmo->WriteToMessage(pInterface, hMessage);
+			pAmmo->WriteToMessage(pInterface, hMessage);
 		}
 	}
 
 	nSize = m_Mods.GetSize();
-    pInterface->WriteToMessageDWord(hMessage, (uint32)nSize);
+	pInterface->WriteToMessageDWord(hMessage, (uint32)nSize);
 
 	for (i = 0; i < nSize; i++)
 	{
 		CModData *pMods = m_Mods.GetAt(i);
 		if (pMods)
 		{
-            pMods->WriteToMessage(pInterface, hMessage);
+			pMods->WriteToMessage(pInterface, hMessage);
 		}
 	}
 
 	nSize = m_Gear.GetSize();
-    pInterface->WriteToMessageDWord(hMessage, (uint32)nSize);
+	pInterface->WriteToMessageDWord(hMessage, (uint32)nSize);
 
 	for (i = 0; i < nSize; i++)
 	{
 		CGearData *pGear = m_Gear.GetAt(i);
 		if (pGear)
 		{
-            pGear->WriteToMessage(pInterface, hMessage);
+			pGear->WriteToMessage(pInterface, hMessage);
 		}
 	}
 
@@ -492,44 +492,43 @@ void CMissionData::ReadFromMessage(ILTCSBase *pInterface, HMESSAGEREAD hMessage)
 
 	// Read in the new data...
 
-    m_nMission = (int) pInterface->ReadFromMessageFloat(hMessage);
-    m_nLevel   = (int) pInterface->ReadFromMessageFloat(hMessage);
+	m_nMission = (int) pInterface->ReadFromMessageFloat(hMessage);
+	m_nLevel   = (int) pInterface->ReadFromMessageFloat(hMessage);
 
-    int nSize = (int) pInterface->ReadFromMessageDWord(hMessage);
+	int nSize = (int) pInterface->ReadFromMessageDWord(hMessage);
 
-    int i;
+	int i;
 	CWeaponData Weapon;
-    for (i = 0; i < nSize; i++)
+	for (i = 0; i < nSize; i++)
 	{
-        Weapon.ReadFromMessage(pInterface, hMessage);
+		Weapon.ReadFromMessage(pInterface, hMessage);
 		AddWeapon(Weapon.m_nID);
 	}
 
-    nSize = (int) pInterface->ReadFromMessageDWord(hMessage);
+	nSize = (int) pInterface->ReadFromMessageDWord(hMessage);
 
 	CAmmoData Ammo;
 	for (i = 0; i < nSize; i++)
 	{
-        Ammo.ReadFromMessage(pInterface, hMessage);
+		Ammo.ReadFromMessage(pInterface, hMessage);
 		AddAmmo(Ammo.m_nID, Ammo.m_nCount);
 	}
 
-    nSize = (int) pInterface->ReadFromMessageDWord(hMessage);
+	nSize = (int) pInterface->ReadFromMessageDWord(hMessage);
 
 	CModData Mod;
 	for (i = 0; i < nSize; i++)
 	{
-        Mod.ReadFromMessage(pInterface, hMessage);
+		Mod.ReadFromMessage(pInterface, hMessage);
 		AddMod(Mod.m_nID);
 	}
 
-    nSize = (int) pInterface->ReadFromMessageDWord(hMessage);
+	nSize = (int) pInterface->ReadFromMessageDWord(hMessage);
 
 	CGearData Gear;
 	for (i = 0; i < nSize; i++)
 	{
-        Gear.ReadFromMessage(pInterface, hMessage);
+		Gear.ReadFromMessage(pInterface, hMessage);
 		AddGear(Gear.m_nID);
 	}
 }
-

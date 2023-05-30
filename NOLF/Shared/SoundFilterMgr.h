@@ -1,9 +1,9 @@
 // ----------------------------------------------------------------------- //
 // MODULE: SoundFilterMgr.h
 //
-// PURPOSE : Definition of debris mgr
+// PURPOSE: Definition of debris mgr
 //
-// CREATED : 7/16/2000
+// CREATED: 7/16/2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //

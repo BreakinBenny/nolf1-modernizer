@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: SharedMovement.cpp
 //
-// MODULE  : SharedMovement.cpp
+// PURPOSE: Shared movement implementation.
 //
-// PURPOSE : Shared movement implementation.
-//
-// CREATED : 8/27/99
+// CREATED: 8/27/99
 //
 // (c)	1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -29,7 +27,7 @@ char* GetPropertyNameFromPlayerPhysicsModel(PlayerPhysicsModel ePPModel)
 		return aPPMStrings[ePPModel];
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 

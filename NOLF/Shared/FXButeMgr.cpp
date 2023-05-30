@@ -1,13 +1,8 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : FXButeMgr.cpp
-//
-// PURPOSE : FXButeMgr implementation - Controls attributes of special fx
-//
-// CREATED : 12/08/98
-//
+// MODULE: FXButeMgr.cpp
+// PURPOSE: FXButeMgr implementation - Controls attributes of special fx
+// CREATED: 12/08/98
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -224,40 +219,36 @@ CFXButeMgr CFXButeMgrPlugin::sm_FXButeMgr;
 #endif // _CLIENTBUILD
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::CFXButeMgr()
 //
-//	ROUTINE:	CFXButeMgr::CFXButeMgr()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CFXButeMgr::CFXButeMgr()
 {
-    m_ProjectileFXList.Init(LTTRUE);
-    m_ProjClassDataList.Init(LTTRUE);
-    m_ImpactFXList.Init(LTTRUE);
-    m_FireFXList.Init(LTTRUE);
-    m_ScaleFXList.Init(LTTRUE);
-    m_PShowerFXList.Init(LTTRUE);
-    m_PolyDebrisFXList.Init(LTTRUE);
-    m_PExplFXList.Init(LTTRUE);
-    m_DLightFXList.Init(LTTRUE);
-    m_SoundFXList.Init(LTTRUE);
-    m_PusherFXList.Init(LTTRUE);
-    m_PVFXList.Init(LTTRUE);
-    m_PartMuzzleFXList.Init(LTTRUE);
-    m_MuzzleFXList.Init(LTTRUE);
-    m_TracerFXList.Init(LTTRUE);
-    m_BeamFXList.Init(LTTRUE);
+	m_ProjectileFXList.Init(LTTRUE);
+	m_ProjClassDataList.Init(LTTRUE);
+	m_ImpactFXList.Init(LTTRUE);
+	m_FireFXList.Init(LTTRUE);
+	m_ScaleFXList.Init(LTTRUE);
+	m_PShowerFXList.Init(LTTRUE);
+	m_PolyDebrisFXList.Init(LTTRUE);
+	m_PExplFXList.Init(LTTRUE);
+	m_DLightFXList.Init(LTTRUE);
+	m_SoundFXList.Init(LTTRUE);
+	m_PusherFXList.Init(LTTRUE);
+	m_PVFXList.Init(LTTRUE);
+	m_PartMuzzleFXList.Init(LTTRUE);
+	m_MuzzleFXList.Init(LTTRUE);
+	m_TracerFXList.Init(LTTRUE);
+	m_BeamFXList.Init(LTTRUE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::~CFXButeMgr()
 //
-//	ROUTINE:	CFXButeMgr::~CFXButeMgr()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CFXButeMgr::~CFXButeMgr()
@@ -267,17 +258,15 @@ CFXButeMgr::~CFXButeMgr()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::Init()
 //
-//	ROUTINE:	CFXButeMgr::Init()
-//
-//	PURPOSE:	Init mgr
-//
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 {
-    if (g_pFXButeMgr || !szAttributeFile) return LTFALSE;
-    if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
+	if (g_pFXButeMgr || !szAttributeFile) return LTFALSE;
+	if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
 
 
 	// Set up global pointer...
@@ -326,7 +315,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pPFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -351,7 +340,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -376,7 +365,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pFFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -401,7 +390,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pPEFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -426,7 +415,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pDLightFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -451,7 +440,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -476,7 +465,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -501,7 +490,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pIFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -526,7 +515,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -551,7 +540,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -576,7 +565,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -601,7 +590,7 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -614,21 +603,19 @@ LTBOOL CFXButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 	m_buteMgr.Term();
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::Term()
 //
-//	ROUTINE:	CFXButeMgr::Term()
-//
-//	PURPOSE:	Clean up.
-//
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CFXButeMgr::Term()
 {
-    g_pFXButeMgr = LTNULL;
+	g_pFXButeMgr = LTNULL;
 
 	m_ProjectileFXList.Clear();
 	m_ProjClassDataList.Clear();
@@ -644,31 +631,27 @@ void CFXButeMgr::Term()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::Reload()
 //
-//	ROUTINE:	CFXButeMgr::Reload()
-//
-//	PURPOSE:	Reload data from the bute file
-//
+//	PURPOSE: Reload data from the bute file
 // ----------------------------------------------------------------------- //
 
 void CFXButeMgr::Reload(ILTCSBase *pInterface)
 {
 	Term();
-    Init(pInterface);
+	Init(pInterface);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetScaleFX
 //
-//	ROUTINE:	CFXButeMgr::GetScaleFX
-//
-//	PURPOSE:	Get the specified scale fx struct
-//
+//	PURPOSE: Get the specified scale fx struct
 // ----------------------------------------------------------------------- //
 
 CScaleFX* CFXButeMgr::GetScaleFX(int nScaleFXId)
 {
-    CScaleFX** pCur  = LTNULL;
+	CScaleFX** pCur  = LTNULL;
 
 	pCur = m_ScaleFXList.GetItem(TLIT_FIRST);
 
@@ -682,22 +665,20 @@ CScaleFX* CFXButeMgr::GetScaleFX(int nScaleFXId)
 		pCur = m_ScaleFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetScaleFX
 //
-//	ROUTINE:	CFXButeMgr::GetScaleFX
-//
-//	PURPOSE:	Get the specified scale fx struct
-//
+//	PURPOSE: Get the specified scale fx struct
 // ----------------------------------------------------------------------- //
 
 CScaleFX* CFXButeMgr::GetScaleFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    CScaleFX** pCur  = LTNULL;
+	CScaleFX** pCur  = LTNULL;
 
 	pCur = m_ScaleFXList.GetItem(TLIT_FIRST);
 
@@ -711,20 +692,18 @@ CScaleFX* CFXButeMgr::GetScaleFX(char* pName)
 		pCur = m_ScaleFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetPShowerFX
 //
-//	ROUTINE:	CFXButeMgr::GetPShowerFX
-//
-//	PURPOSE:	Get the specified PShower fx struct
-//
+//	PURPOSE: Get the specified PShower fx struct
 // ----------------------------------------------------------------------- //
 
 CPShowerFX* CFXButeMgr::GetPShowerFX(int nPShowerFXId)
 {
-    if (nPShowerFXId < 0 || nPShowerFXId > m_PShowerFXList.GetLength()) return LTNULL;
+	if (nPShowerFXId < 0 || nPShowerFXId > m_PShowerFXList.GetLength()) return LTNULL;
 
 	CPShowerFX** pCur = m_PShowerFXList.GetItem(TLIT_FIRST);
 
@@ -738,20 +717,18 @@ CPShowerFX* CFXButeMgr::GetPShowerFX(int nPShowerFXId)
 		pCur = m_PShowerFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetPShowerFX
 //
-//	ROUTINE:	CFXButeMgr::GetPShowerFX
-//
-//	PURPOSE:	Get the specified PShower fx struct
-//
+//	PURPOSE: Get the specified PShower fx struct
 // ----------------------------------------------------------------------- //
 
 CPShowerFX* CFXButeMgr::GetPShowerFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
 	CPShowerFX** pCur = m_PShowerFXList.GetItem(TLIT_FIRST);
 
@@ -765,20 +742,18 @@ CPShowerFX* CFXButeMgr::GetPShowerFX(char* pName)
 		pCur = m_PShowerFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetPolyDebrisFX
 //
-//	ROUTINE:	CFXButeMgr::GetPolyDebrisFX
-//
-//	PURPOSE:	Get the specified PolyDebris fx struct
-//
+//	PURPOSE: Get the specified PolyDebris fx struct
 // ----------------------------------------------------------------------- //
 
 CPolyDebrisFX* CFXButeMgr::GetPolyDebrisFX(int nPolyDebrisFXId)
 {
-    if (nPolyDebrisFXId < 0 || nPolyDebrisFXId > m_PolyDebrisFXList.GetLength()) return LTNULL;
+	if (nPolyDebrisFXId < 0 || nPolyDebrisFXId > m_PolyDebrisFXList.GetLength()) return LTNULL;
 
 	CPolyDebrisFX** pCur = m_PolyDebrisFXList.GetItem(TLIT_FIRST);
 
@@ -792,20 +767,18 @@ CPolyDebrisFX* CFXButeMgr::GetPolyDebrisFX(int nPolyDebrisFXId)
 		pCur = m_PolyDebrisFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetPolyDebrisFX
 //
-//	ROUTINE:	CFXButeMgr::GetPolyDebrisFX
-//
-//	PURPOSE:	Get the specified PolyDebris fx struct
-//
+//	PURPOSE: Get the specified PolyDebris fx struct
 // ----------------------------------------------------------------------- //
 
 CPolyDebrisFX* CFXButeMgr::GetPolyDebrisFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
 	CPolyDebrisFX** pCur = m_PolyDebrisFXList.GetItem(TLIT_FIRST);
 
@@ -819,20 +792,18 @@ CPolyDebrisFX* CFXButeMgr::GetPolyDebrisFX(char* pName)
 		pCur = m_PolyDebrisFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetProjectileFX
 //
-//	ROUTINE:	CFXButeMgr::GetProjectileFX
-//
-//	PURPOSE:	Get the specified projectile fx struct
-//
+//	PURPOSE: Get the specified projectile fx struct
 // ----------------------------------------------------------------------- //
 
 PROJECTILEFX* CFXButeMgr::GetProjectileFX(int nProjectileFXId)
 {
-    PROJECTILEFX** pCur  = LTNULL;
+	PROJECTILEFX** pCur  = LTNULL;
 
 	pCur = m_ProjectileFXList.GetItem(TLIT_FIRST);
 
@@ -846,22 +817,20 @@ PROJECTILEFX* CFXButeMgr::GetProjectileFX(int nProjectileFXId)
 		pCur = m_ProjectileFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetProjectileFX
 //
-//	ROUTINE:	CFXButeMgr::GetProjectileFX
-//
-//	PURPOSE:	Get the specified projectile fx struct
-//
+//	PURPOSE: Get the specified projectile fx struct
 // ----------------------------------------------------------------------- //
 
 PROJECTILEFX* CFXButeMgr::GetProjectileFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    PROJECTILEFX** pCur  = LTNULL;
+	PROJECTILEFX** pCur  = LTNULL;
 
 	pCur = m_ProjectileFXList.GetItem(TLIT_FIRST);
 
@@ -875,22 +844,20 @@ PROJECTILEFX* CFXButeMgr::GetProjectileFX(char* pName)
 		pCur = m_ProjectileFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetProjectileClassData
 //
-//	ROUTINE:	CFXButeMgr::GetProjectileClassData
-//
-//	PURPOSE:	Get the specified projectile class data struct
-//
+//	PURPOSE: Get the specified projectile class data struct
 // ----------------------------------------------------------------------- //
 
 PROJECTILECLASSDATA* CFXButeMgr::GetProjectileClassData(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    PROJECTILECLASSDATA** pCur  = LTNULL;
+	PROJECTILECLASSDATA** pCur  = LTNULL;
 
 	pCur = m_ProjClassDataList.GetItem(TLIT_FIRST);
 
@@ -904,20 +871,18 @@ PROJECTILECLASSDATA* CFXButeMgr::GetProjectileClassData(char* pName)
 		pCur = m_ProjClassDataList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetImpactFX
 //
-//	ROUTINE:	CFXButeMgr::GetImpactFX
-//
-//	PURPOSE:	Get the specified impact fx struct
-//
+//	PURPOSE: Get the specified impact fx struct
 // ----------------------------------------------------------------------- //
 
 IMPACTFX* CFXButeMgr::GetImpactFX(int nImpactFXId)
 {
-    IMPACTFX** pCur  = LTNULL;
+	IMPACTFX** pCur  = LTNULL;
 
 	pCur = m_ImpactFXList.GetItem(TLIT_FIRST);
 
@@ -931,22 +896,20 @@ IMPACTFX* CFXButeMgr::GetImpactFX(int nImpactFXId)
 		pCur = m_ImpactFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetImpactFX
 //
-//	ROUTINE:	CFXButeMgr::GetImpactFX
-//
-//	PURPOSE:	Get the specified impact fx struct
-//
+//	PURPOSE: Get the specified impact fx struct
 // ----------------------------------------------------------------------- //
 
 IMPACTFX* CFXButeMgr::GetImpactFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    IMPACTFX** pCur  = LTNULL;
+	IMPACTFX** pCur  = LTNULL;
 
 	pCur = m_ImpactFXList.GetItem(TLIT_FIRST);
 
@@ -960,20 +923,18 @@ IMPACTFX* CFXButeMgr::GetImpactFX(char* pName)
 		pCur = m_ImpactFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetFireFX
 //
-//	ROUTINE:	CFXButeMgr::GetFireFX
-//
-//	PURPOSE:	Get the specified fire fx struct
-//
+//	PURPOSE: Get the specified fire fx struct
 // ----------------------------------------------------------------------- //
 
 FIREFX* CFXButeMgr::GetFireFX(int nFireFXId)
 {
-    FIREFX** pCur  = LTNULL;
+	FIREFX** pCur  = LTNULL;
 
 	pCur = m_FireFXList.GetItem(TLIT_FIRST);
 
@@ -987,22 +948,20 @@ FIREFX* CFXButeMgr::GetFireFX(int nFireFXId)
 		pCur = m_FireFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetFireFX
 //
-//	ROUTINE:	CFXButeMgr::GetFireFX
-//
-//	PURPOSE:	Get the specified fire fx struct
-//
+//	PURPOSE: Get the specified fire fx struct
 // ----------------------------------------------------------------------- //
 
 FIREFX* CFXButeMgr::GetFireFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    FIREFX** pCur  = LTNULL;
+	FIREFX** pCur  = LTNULL;
 
 	pCur = m_FireFXList.GetItem(TLIT_FIRST);
 
@@ -1016,20 +975,18 @@ FIREFX* CFXButeMgr::GetFireFX(char* pName)
 		pCur = m_FireFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetPExplFX
 //
-//	ROUTINE:	CFXButeMgr::GetPExplFX
-//
-//	PURPOSE:	Get the specified PExpl fx struct
-//
+//	PURPOSE: Get the specified PExpl fx struct
 // ----------------------------------------------------------------------- //
 
 PEXPLFX* CFXButeMgr::GetPExplFX(int nPExpFXId)
 {
-    PEXPLFX** pCur  = LTNULL;
+	PEXPLFX** pCur  = LTNULL;
 
 	pCur = m_PExplFXList.GetItem(TLIT_FIRST);
 
@@ -1043,22 +1000,20 @@ PEXPLFX* CFXButeMgr::GetPExplFX(int nPExpFXId)
 		pCur = m_PExplFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetPExplFX
 //
-//	ROUTINE:	CFXButeMgr::GetPExplFX
-//
-//	PURPOSE:	Get the specified PExpl fx struct
-//
+//	PURPOSE: Get the specified PExpl fx struct
 // ----------------------------------------------------------------------- //
 
 PEXPLFX* CFXButeMgr::GetPExplFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    PEXPLFX** pCur  = LTNULL;
+	PEXPLFX** pCur  = LTNULL;
 
 	pCur = m_PExplFXList.GetItem(TLIT_FIRST);
 
@@ -1072,20 +1027,18 @@ PEXPLFX* CFXButeMgr::GetPExplFX(char* pName)
 		pCur = m_PExplFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetDLightFX
 //
-//	ROUTINE:	CFXButeMgr::GetDLightFX
-//
-//	PURPOSE:	Get the specified DLIGHT fx struct
-//
+//	PURPOSE: Get the specified DLIGHT fx struct
 // ----------------------------------------------------------------------- //
 
 DLIGHTFX* CFXButeMgr::GetDLightFX(int nDLightFXId)
 {
-    DLIGHTFX** pCur  = LTNULL;
+	DLIGHTFX** pCur  = LTNULL;
 
 	pCur = m_DLightFXList.GetItem(TLIT_FIRST);
 
@@ -1099,22 +1052,20 @@ DLIGHTFX* CFXButeMgr::GetDLightFX(int nDLightFXId)
 		pCur = m_DLightFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetDLightFX
 //
-//	ROUTINE:	CFXButeMgr::GetDLightFX
-//
-//	PURPOSE:	Get the specified DLIGHT fx struct
-//
+//	PURPOSE: Get the specified DLIGHT fx struct
 // ----------------------------------------------------------------------- //
 
 DLIGHTFX* CFXButeMgr::GetDLightFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    DLIGHTFX** pCur  = LTNULL;
+	DLIGHTFX** pCur  = LTNULL;
 
 	pCur = m_DLightFXList.GetItem(TLIT_FIRST);
 
@@ -1128,20 +1079,18 @@ DLIGHTFX* CFXButeMgr::GetDLightFX(char* pName)
 		pCur = m_DLightFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetSoundFX
 //
-//	ROUTINE:	CFXButeMgr::GetSoundFX
-//
-//	PURPOSE:	Get the specified SOUNDFX struct
-//
+//	PURPOSE: Get the specified SOUNDFX struct
 // ----------------------------------------------------------------------- //
 
 SOUNDFX* CFXButeMgr::GetSoundFX(int nSoundFXId)
 {
-    SOUNDFX** pCur  = LTNULL;
+	SOUNDFX** pCur  = LTNULL;
 
 	pCur = m_SoundFXList.GetItem(TLIT_FIRST);
 
@@ -1155,22 +1104,20 @@ SOUNDFX* CFXButeMgr::GetSoundFX(int nSoundFXId)
 		pCur = m_SoundFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetSoundFX
 //
-//	ROUTINE:	CFXButeMgr::GetSoundFX
-//
-//	PURPOSE:	Get the specified SOUNDFX struct
-//
+//	PURPOSE: Get the specified SOUNDFX struct
 // ----------------------------------------------------------------------- //
 
 SOUNDFX* CFXButeMgr::GetSoundFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    SOUNDFX** pCur  = LTNULL;
+	SOUNDFX** pCur  = LTNULL;
 
 	pCur = m_SoundFXList.GetItem(TLIT_FIRST);
 
@@ -1184,20 +1131,18 @@ SOUNDFX* CFXButeMgr::GetSoundFX(char* pName)
 		pCur = m_SoundFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetPusherFX
 //
-//	ROUTINE:	CFXButeMgr::GetPusherFX
-//
-//	PURPOSE:	Get the specified PUSHERFX struct
-//
+//	PURPOSE: Get the specified PUSHERFX struct
 // ----------------------------------------------------------------------- //
 
 PUSHERFX* CFXButeMgr::GetPusherFX(int nSoundFXId)
 {
-    PUSHERFX** pCur  = LTNULL;
+	PUSHERFX** pCur  = LTNULL;
 
 	pCur = m_PusherFXList.GetItem(TLIT_FIRST);
 
@@ -1211,22 +1156,20 @@ PUSHERFX* CFXButeMgr::GetPusherFX(int nSoundFXId)
 		pCur = m_PusherFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetPusherFX
 //
-//	ROUTINE:	CFXButeMgr::GetPusherFX
-//
-//	PURPOSE:	Get the specified PUSHERFX struct
-//
+//	PURPOSE: Get the specified PUSHERFX struct
 // ----------------------------------------------------------------------- //
 
 PUSHERFX* CFXButeMgr::GetPusherFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    PUSHERFX** pCur  = LTNULL;
+	PUSHERFX** pCur  = LTNULL;
 
 	pCur = m_PusherFXList.GetItem(TLIT_FIRST);
 
@@ -1240,20 +1183,18 @@ PUSHERFX* CFXButeMgr::GetPusherFX(char* pName)
 		pCur = m_PusherFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetPVFX
 //
-//	ROUTINE:	CFXButeMgr::GetPVFX
-//
-//	PURPOSE:	Get the specified pv fx struct
-//
+//	PURPOSE: Get the specified pv fx struct
 // ----------------------------------------------------------------------- //
 
 PVFX* CFXButeMgr::GetPVFX(int nPVFXId)
 {
-    PVFX** pCur = LTNULL;
+	PVFX** pCur = LTNULL;
 
 	pCur = m_PVFXList.GetItem(TLIT_FIRST);
 
@@ -1267,22 +1208,20 @@ PVFX* CFXButeMgr::GetPVFX(int nPVFXId)
 		pCur = m_PVFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetPVFX
 //
-//	ROUTINE:	CFXButeMgr::GetPVFX
-//
-//	PURPOSE:	Get the specified pv fx struct
-//
+//	PURPOSE: Get the specified pv fx struct
 // ----------------------------------------------------------------------- //
 
 PVFX* CFXButeMgr::GetPVFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    PVFX** pCur  = LTNULL;
+	PVFX** pCur  = LTNULL;
 
 	pCur = m_PVFXList.GetItem(TLIT_FIRST);
 
@@ -1296,21 +1235,19 @@ PVFX* CFXButeMgr::GetPVFX(char* pName)
 		pCur = m_PVFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetParticleMuzzleFX
 //
-//	ROUTINE:	CFXButeMgr::GetParticleMuzzleFX
-//
-//	PURPOSE:	Get the specified particle muzzle fx struct
-//
+//	PURPOSE: Get the specified particle muzzle fx struct
 // ----------------------------------------------------------------------- //
 
 CParticleMuzzleFX* CFXButeMgr::GetParticleMuzzleFX(int nPMFXId)
 {
-    CParticleMuzzleFX** pCur = LTNULL;
+	CParticleMuzzleFX** pCur = LTNULL;
 
 	pCur = m_PartMuzzleFXList.GetItem(TLIT_FIRST);
 
@@ -1324,22 +1261,20 @@ CParticleMuzzleFX* CFXButeMgr::GetParticleMuzzleFX(int nPMFXId)
 		pCur = m_PartMuzzleFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetParticleMuzzleFX
 //
-//	ROUTINE:	CFXButeMgr::GetParticleMuzzleFX
-//
-//	PURPOSE:	Get the specified particle muzzle fx struct
-//
+//	PURPOSE: Get the specified particle muzzle fx struct
 // ----------------------------------------------------------------------- //
 
 CParticleMuzzleFX* CFXButeMgr::GetParticleMuzzleFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    CParticleMuzzleFX** pCur  = LTNULL;
+	CParticleMuzzleFX** pCur  = LTNULL;
 
 	pCur = m_PartMuzzleFXList.GetItem(TLIT_FIRST);
 
@@ -1353,21 +1288,19 @@ CParticleMuzzleFX* CFXButeMgr::GetParticleMuzzleFX(char* pName)
 		pCur = m_PartMuzzleFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetMuzzleFX
 //
-//	ROUTINE:	CFXButeMgr::GetMuzzleFX
-//
-//	PURPOSE:	Get the specified muzzle fx struct
-//
+//	PURPOSE: Get the specified muzzle fx struct
 // ----------------------------------------------------------------------- //
 
 CMuzzleFX* CFXButeMgr::GetMuzzleFX(int nMuzzleFXId)
 {
-    CMuzzleFX** pCur = LTNULL;
+	CMuzzleFX** pCur = LTNULL;
 
 	pCur = m_MuzzleFXList.GetItem(TLIT_FIRST);
 
@@ -1381,22 +1314,20 @@ CMuzzleFX* CFXButeMgr::GetMuzzleFX(int nMuzzleFXId)
 		pCur = m_MuzzleFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetMuzzleFX
 //
-//	ROUTINE:	CFXButeMgr::GetMuzzleFX
-//
-//	PURPOSE:	Get the specified muzzle fx struct
-//
+//	PURPOSE: Get the specified muzzle fx struct
 // ----------------------------------------------------------------------- //
 
 CMuzzleFX* CFXButeMgr::GetMuzzleFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    CMuzzleFX** pCur  = LTNULL;
+	CMuzzleFX** pCur  = LTNULL;
 
 	pCur = m_MuzzleFXList.GetItem(TLIT_FIRST);
 
@@ -1410,20 +1341,18 @@ CMuzzleFX* CFXButeMgr::GetMuzzleFX(char* pName)
 		pCur = m_MuzzleFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetTracerFX
 //
-//	ROUTINE:	CFXButeMgr::GetTracerFX
-//
-//	PURPOSE:	Get the specified tracer fx struct
-//
+//	PURPOSE: Get the specified tracer fx struct
 // ----------------------------------------------------------------------- //
 
 TRACERFX* CFXButeMgr::GetTracerFX(int nTracerFXId)
 {
-    TRACERFX** pCur = LTNULL;
+	TRACERFX** pCur = LTNULL;
 
 	pCur = m_TracerFXList.GetItem(TLIT_FIRST);
 
@@ -1437,22 +1366,20 @@ TRACERFX* CFXButeMgr::GetTracerFX(int nTracerFXId)
 		pCur = m_TracerFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetTracerFX
 //
-//	ROUTINE:	CFXButeMgr::GetTracerFX
-//
-//	PURPOSE:	Get the specified tracer fx struct
-//
+//	PURPOSE: Get the specified tracer fx struct
 // ----------------------------------------------------------------------- //
 
 TRACERFX* CFXButeMgr::GetTracerFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    TRACERFX** pCur  = LTNULL;
+	TRACERFX** pCur  = LTNULL;
 
 	pCur = m_TracerFXList.GetItem(TLIT_FIRST);
 
@@ -1466,20 +1393,18 @@ TRACERFX* CFXButeMgr::GetTracerFX(char* pName)
 		pCur = m_TracerFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetBeamFX
 //
-//	ROUTINE:	CFXButeMgr::GetBeamFX
-//
-//	PURPOSE:	Get the specified beam fx struct
-//
+//	PURPOSE: Get the specified beam fx struct
 // ----------------------------------------------------------------------- //
 
 BEAMFX* CFXButeMgr::GetBeamFX(int nBeamFXId)
 {
-    BEAMFX** pCur = LTNULL;
+	BEAMFX** pCur = LTNULL;
 
 	pCur = m_BeamFXList.GetItem(TLIT_FIRST);
 
@@ -1493,22 +1418,20 @@ BEAMFX* CFXButeMgr::GetBeamFX(int nBeamFXId)
 		pCur = m_BeamFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::GetBeamFX
 //
-//	ROUTINE:	CFXButeMgr::GetBeamFX
-//
-//	PURPOSE:	Get the specified beam fx struct
-//
+//	PURPOSE: Get the specified beam fx struct
 // ----------------------------------------------------------------------- //
 
 BEAMFX* CFXButeMgr::GetBeamFX(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    BEAMFX** pCur  = LTNULL;
+	BEAMFX** pCur  = LTNULL;
 
 	pCur = m_BeamFXList.GetItem(TLIT_FIRST);
 
@@ -1522,7 +1445,7 @@ BEAMFX* CFXButeMgr::GetBeamFX(char* pName)
 		pCur = m_BeamFXList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 
@@ -1535,11 +1458,9 @@ BEAMFX* CFXButeMgr::GetBeamFX(char* pName)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PEXPLFX::PEXPLFX
 //
-//	ROUTINE:	PEXPLFX::PEXPLFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 PEXPLFX::PEXPLFX()
@@ -1552,12 +1473,12 @@ PEXPLFX::PEXPLFX()
 	nNumPerPuff		= 0;
 	nNumEmitters	= 0;
 	nNumSteps		= 0;
-    bCreateDebris   = LTFALSE;
-    bRotateDebris   = LTFALSE;
-    bIgnoreWind     = LTFALSE;
-    bDoBubbles      = LTFALSE;
-    bAdditive       = LTFALSE;
-    bMultiply       = LTFALSE;
+	bCreateDebris   = LTFALSE;
+	bRotateDebris   = LTFALSE;
+	bIgnoreWind	 = LTFALSE;
+	bDoBubbles	  = LTFALSE;
+	bAdditive	   = LTFALSE;
+	bMultiply	   = LTFALSE;
 	fLifeTime		= 0.0f;
 	fFadeTime		= 0.0f;
 	fOffsetTime		= 0.0f;
@@ -1574,33 +1495,31 @@ PEXPLFX::PEXPLFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PEXPLFX::Init
 //
-//	ROUTINE:	PEXPLFX::Init
-//
-//	PURPOSE:	Build the particle explosion struct
-//
+//	PURPOSE: Build the particle explosion struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL PEXPLFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	nNumPerPuff		= buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_NUMPERPUFF);
 	nNumEmitters	= buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_NUMEMITTERS);
 	nNumSteps		= buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_NUMSTEPS);
 
-    bCreateDebris   = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_CREATEDEBRIS);
-    bRotateDebris   = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_ROTATEDEBRIS);
-    bIgnoreWind     = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_IGNOREWIND);
-    bDoBubbles      = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_DOBUBBLES);
-    bAdditive       = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_ADDITIVE);
-    bMultiply       = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_MULTIPLY);
+	bCreateDebris   = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_CREATEDEBRIS);
+	bRotateDebris   = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_ROTATEDEBRIS);
+	bIgnoreWind	 = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_IGNOREWIND);
+	bDoBubbles	  = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_DOBUBBLES);
+	bAdditive	   = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_ADDITIVE);
+	bMultiply	   = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PEXPLFX_MULTIPLY);
 
-    fLifeTime       = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PEXPLFX_LIFETIME);
-    fFadeTime       = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PEXPLFX_FADETIME);
-    fOffsetTime     = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PEXPLFX_OFFSETTIME);
-    fRadius         = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PEXPLFX_RADIUS);
-    fGravity        = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PEXPLFX_GRAVITY);
+	fLifeTime	   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PEXPLFX_LIFETIME);
+	fFadeTime	   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PEXPLFX_FADETIME);
+	fOffsetTime	 = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PEXPLFX_OFFSETTIME);
+	fRadius		 = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PEXPLFX_RADIUS);
+	fGravity		= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PEXPLFX_GRAVITY);
 
 	vPosOffset		= buteMgr.GetVector(aTagName, FXBMGR_PEXPLFX_POSOFFSET);
 	vColor1			= buteMgr.GetVector(aTagName, FXBMGR_PEXPLFX_COLOR1);
@@ -1622,16 +1541,14 @@ LTBOOL PEXPLFX::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szName, (char*)(LPCSTR)str, ARRAY_LEN(szName));
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PEXPLFX::Cache
 //
-//	ROUTINE:	PEXPLFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the particle
+//	PURPOSE: Cache all the resources associated with the particle
 //				explosion struct
-//
 // ----------------------------------------------------------------------- //
 
 void PEXPLFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -1643,11 +1560,11 @@ void PEXPLFX::Cache(CFXButeMgr* pFXButeMgr)
 	{
 		if (strstr(szFile, ".spr"))
 		{
-            g_pLTServer->CacheFile(FT_SPRITE, szFile);
+			g_pLTServer->CacheFile(FT_SPRITE, szFile);
 		}
 		else
 		{
-            g_pLTServer->CacheFile(FT_TEXTURE, szFile);
+			g_pLTServer->CacheFile(FT_TEXTURE, szFile);
 		}
 	}
 #endif
@@ -1661,11 +1578,9 @@ void PEXPLFX::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DLIGHTFX::DLIGHTFX
 //
-//	ROUTINE:	DLIGHTFX::DLIGHTFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 DLIGHTFX::DLIGHTFX()
@@ -1685,23 +1600,21 @@ DLIGHTFX::DLIGHTFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DLIGHTFX::Init
 //
-//	ROUTINE:	DLIGHTFX::Init
-//
-//	PURPOSE:	Build the dynamic light struct
-//
+//	PURPOSE: Build the dynamic light struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL DLIGHTFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
-    fMinRadius      = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_MINRADIUS);
-    fMaxRadius      = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_MAXRADIUS);
-    fMinTime        = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_MINTIME);
-    fMaxTime        = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_MAXTIME);
-    fRampUpTime     = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_RAMPUPTIME);
-    fRampDownTime   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_RAMPDOWNTIME);
+	fMinRadius	  = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_MINRADIUS);
+	fMaxRadius	  = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_MAXRADIUS);
+	fMinTime		= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_MINTIME);
+	fMaxTime		= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_MAXTIME);
+	fRampUpTime	 = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_RAMPUPTIME);
+	fRampDownTime   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_DLIGHTFX_RAMPDOWNTIME);
 
 	vColor			= buteMgr.GetVector(aTagName, FXBMGR_DLIGHTFX_COLOR);
 	vColor /= 255.0f;
@@ -1712,16 +1625,14 @@ LTBOOL DLIGHTFX::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szName, (char*)(LPCSTR)str, ARRAY_LEN(szName));
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DLIGHTFX::Cache
 //
-//	ROUTINE:	DLIGHTFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the dynamic
+//	PURPOSE: Cache all the resources associated with the dynamic
 //				light struct
-//
 // ----------------------------------------------------------------------- //
 
 void DLIGHTFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -1739,11 +1650,9 @@ void DLIGHTFX::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: IMPACTFX::IMPACTFX
 //
-//	ROUTINE:	IMPACTFX::IMPACTFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 IMPACTFX::IMPACTFX()
@@ -1766,7 +1675,7 @@ IMPACTFX::IMPACTFX()
 	fBlastTimeMax	= 0.0f;
 	fBlastFadeMin	= 0.0f;
 	fBlastFadeMax	= 0.0f;
-    bDoSurfaceFX    = LTFALSE;
+	bDoSurfaceFX	= LTFALSE;
 	bIgnoreFlesh	= LTFALSE;
 	bIgnoreLiquid	= LTFALSE;
 
@@ -1776,8 +1685,8 @@ IMPACTFX::IMPACTFX()
 	pPusherFX		= LTNULL;
 
 	nNumDebrisFXTypes = 0;
-    int i;
-    for (i=0; i < IMPACT_MAX_DEBRISFX_TYPES; i++)
+	int i;
+	for (i=0; i < IMPACT_MAX_DEBRISFX_TYPES; i++)
 	{
 		aDebrisFXTypes[i] = FXBMGR_INVALID_ID;
 	}
@@ -1814,16 +1723,14 @@ IMPACTFX::IMPACTFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: IMPACTFX::Init
 //
-//	ROUTINE:	IMPACTFX::Init
-//
-//	PURPOSE:	Build the impact fx struct
-//
+//	PURPOSE: Build the impact fx struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL IMPACTFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, FXBMGR_IMPACTFX_SOUND);
 	if (!str.IsEmpty())
@@ -1853,14 +1760,14 @@ LTBOOL IMPACTFX::Init(CButeMgr & buteMgr, char* aTagName)
 	nAISoundRadius	= buteMgr.GetInt(aTagName, FXBMGR_IMPACTFX_AISOUNDRADIUS);
 	bAIIgnoreSurface= buteMgr.GetInt(aTagName, FXBMGR_IMPACTFX_AIIGNORESURFACE);
 
-    fMarkScale      = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_MARKSCALE);
-    fTintRampUp     = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_TINTRAMPUP);
-    fTintRampDown   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_TINTRAMPDOWN);
-    fTintMaxTime    = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_TINTMAXTIME);
-    fBlastTimeMin   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_BLASTTIMEMIN);
-    fBlastTimeMax   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_BLASTTIMEMAX);
-    fBlastFadeMin   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_BLASTFADEMIN);
-    fBlastFadeMax   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_BLASTFADEMAX);
+	fMarkScale	  = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_MARKSCALE);
+	fTintRampUp	 = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_TINTRAMPUP);
+	fTintRampDown   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_TINTRAMPDOWN);
+	fTintMaxTime	= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_TINTMAXTIME);
+	fBlastTimeMin   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_BLASTTIMEMIN);
+	fBlastTimeMax   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_BLASTTIMEMAX);
+	fBlastFadeMin   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_BLASTFADEMIN);
+	fBlastFadeMax   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_IMPACTFX_BLASTFADEMAX);
 
 	vTintColor		= buteMgr.GetVector(aTagName, FXBMGR_IMPACTFX_TINTCOLOR);
 	vTintColor /= 255.0f;
@@ -1868,9 +1775,9 @@ LTBOOL IMPACTFX::Init(CButeMgr & buteMgr, char* aTagName)
 	vBlastColor		= buteMgr.GetVector(aTagName, FXBMGR_IMPACTFX_BLASTCOLOR);
 	vBlastColor /= 255.0f;
 
-    bDoSurfaceFX    = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_IMPACTFX_DOSURFACEFX);
-    bIgnoreFlesh    = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_IMPACTFX_IGNOREFLESH);
-    bIgnoreLiquid   = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_IMPACTFX_IGNORELIQUID);
+	bDoSurfaceFX	= (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_IMPACTFX_DOSURFACEFX);
+	bIgnoreFlesh	= (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_IMPACTFX_IGNOREFLESH);
+	bIgnoreLiquid   = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_IMPACTFX_IGNORELIQUID);
 
 	// Build our debris fx types id array...
 
@@ -2023,16 +1930,14 @@ LTBOOL IMPACTFX::Init(CButeMgr & buteMgr, char* aTagName)
 		nFlags |= WFX_IMPACTONSKY;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: IMPACTFX::Cache
 //
-//	ROUTINE:	IMPACTFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the impact
+//	PURPOSE: Cache all the resources associated with the impact
 //				fx struct
-//
 // ----------------------------------------------------------------------- //
 
 void IMPACTFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -2046,16 +1951,16 @@ void IMPACTFX::Cache(CFXButeMgr* pFXButeMgr)
 
 	if (szSound[0] && strstr(szSound, ".wav"))
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szSound);
+		g_pLTServer->CacheFile(FT_SOUND, szSound);
 	}
 
 	if (szMark[0] && strstr(szMark, ".spr"))
 	{
-        g_pLTServer->CacheFile(FT_SPRITE, szMark);
+		g_pLTServer->CacheFile(FT_SPRITE, szMark);
 	}
 
-    int i;
-    for (i=0; i < nNumDebrisFXTypes; i++)
+	int i;
+	for (i=0; i < nNumDebrisFXTypes; i++)
 	{
 		DEBRIS* pDebrisFX = g_pDebrisMgr->GetDebris(aDebrisFXTypes[i]);
 		if (pDebrisFX)
@@ -2123,11 +2028,9 @@ void IMPACTFX::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: FIREFX::FIREFX
 //
-//	ROUTINE:	FIREFX::FIREFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 FIREFX::FIREFX()
@@ -2150,16 +2053,14 @@ FIREFX::FIREFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: FIREFX::Init
 //
-//	ROUTINE:	FIREFX::Init
-//
-//	PURPOSE:	Build the fire fx struct
-//
+//	PURPOSE: Build the fire fx struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL FIREFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, FXBMGR_FIREFX_SHELLMODEL);
 	if (!str.IsEmpty())
@@ -2234,16 +2135,14 @@ LTBOOL FIREFX::Init(CButeMgr & buteMgr, char* aTagName)
 		sprintf(s_aAttName, "%s%d", FXBMGR_FIREFX_BEAMFXNAME, nNumBeamFX);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: FIREFX::Cache
 //
-//	ROUTINE:	FIREFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the fire
+//	PURPOSE: Cache all the resources associated with the fire
 //				fx struct
-//
 // ----------------------------------------------------------------------- //
 
 void FIREFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -2252,12 +2151,12 @@ void FIREFX::Cache(CFXButeMgr* pFXButeMgr)
 
 	if (szShellModel[0])
 	{
-        g_pLTServer->CacheFile(FT_MODEL, szShellModel);
+		g_pLTServer->CacheFile(FT_MODEL, szShellModel);
 	}
 
 	if (szShellSkin[0])
 	{
-        g_pLTServer->CacheFile(FT_TEXTURE, szShellSkin);
+		g_pLTServer->CacheFile(FT_TEXTURE, szShellSkin);
 	}
 
 	for (int i=0; i < nNumBeamFX; i++)
@@ -2282,11 +2181,9 @@ void FIREFX::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PROJECTILEFX::PROJECTILEFX
 //
-//	ROUTINE:	PROJECTILEFX::PROJECTILEFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 PROJECTILEFX::PROJECTILEFX()
@@ -2310,23 +2207,21 @@ PROJECTILEFX::PROJECTILEFX()
 	fFlareScale		= 0.0f;
 	dwObjectFlags	= 0;
 
-    pClassData      = LTNULL;
+	pClassData	  = LTNULL;
 
 	vLightColor.Init();
 	vModelScale.Init();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PROJECTILEFX::Init
 //
-//	ROUTINE:	PROJECTILEFX::Init
-//
-//	PURPOSE:	Build the projectile fx struct
-//
+//	PURPOSE: Build the projectile fx struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL PROJECTILEFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, FXBMGR_PROJECTILEFX_FLARESPRITE);
 	if (!str.IsEmpty())
@@ -2375,8 +2270,8 @@ LTBOOL PROJECTILEFX::Init(CButeMgr & buteMgr, char* aTagName)
 	nVelocity		= buteMgr.GetInt(aTagName, FXBMGR_PROJECTILEFX_VELOCITY);
 	nLightRadius	= buteMgr.GetInt(aTagName, FXBMGR_PROJECTILEFX_LIGHTRADIUS);
 	nSoundRadius	= buteMgr.GetInt(aTagName, FXBMGR_PROJECTILEFX_SOUNDRADIUS);
-    fLifeTime       = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PROJECTILEFX_LIFETIME);
-    fFlareScale     = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PROJECTILEFX_FLARESCALE);
+	fLifeTime	   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PROJECTILEFX_LIFETIME);
+	fFlareScale	 = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PROJECTILEFX_FLARESCALE);
 
 	vLightColor	= buteMgr.GetVector(aTagName, FXBMGR_PROJECTILEFX_LIGHTCOLOR);
 	vLightColor /= 255.0f;
@@ -2429,16 +2324,14 @@ LTBOOL PROJECTILEFX::Init(CButeMgr & buteMgr, char* aTagName)
 		break;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PROJECTILEFX::Cache
 //
-//	ROUTINE:	PROJECTILEFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the projectile
+//	PURPOSE: Cache all the resources associated with the projectile
 //				fx struct
-//
 // ----------------------------------------------------------------------- //
 
 void PROJECTILEFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -2447,22 +2340,22 @@ void PROJECTILEFX::Cache(CFXButeMgr* pFXButeMgr)
 
 	if (szFlareSprite[0])
 	{
-        g_pLTServer->CacheFile(FT_SPRITE, szFlareSprite);
+		g_pLTServer->CacheFile(FT_SPRITE, szFlareSprite);
 	}
 
 	if (szSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szSound);
+		g_pLTServer->CacheFile(FT_SOUND, szSound);
 	}
 
 	if (szModel[0])
 	{
-        g_pLTServer->CacheFile(FT_MODEL, szModel);
+		g_pLTServer->CacheFile(FT_MODEL, szModel);
 	}
 
 	if (szSkin[0])
 	{
-        g_pLTServer->CacheFile(FT_TEXTURE, szSkin);
+		g_pLTServer->CacheFile(FT_TEXTURE, szSkin);
 	}
 
 	if (pClassData)
@@ -2482,20 +2375,18 @@ void PROJECTILEFX::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PROJECTILECLASSDATA::Init
 //
-//	ROUTINE:	PROJECTILECLASSDATA::Init
-//
-//	PURPOSE:	Build the projectile class data struct
-//
+//	PURPOSE: Build the projectile class data struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL PROJECTILECLASSDATA::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	strncpy(szName, aTagName, ARRAY_LEN(szName));
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2505,11 +2396,9 @@ LTBOOL PROJECTILECLASSDATA::Init(CButeMgr & buteMgr, char* aTagName)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PROXCLASSDATA::PROXCLASSDATA
 //
-//	ROUTINE:	PROXCLASSDATA::PROXCLASSDATA
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 PROXCLASSDATA::PROXCLASSDATA()
@@ -2526,17 +2415,15 @@ PROXCLASSDATA::PROXCLASSDATA()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PROXCLASSDATA::Init
 //
-//	ROUTINE:	PROXCLASSDATA::Init
-//
-//	PURPOSE:	Build the prox class data class data struct
-//
+//	PURPOSE: Build the prox class data class data struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL PROXCLASSDATA::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
-    if (!PROJECTILECLASSDATA::Init(buteMgr, aTagName)) return LTFALSE;
+	if (!aTagName) return LTFALSE;
+	if (!PROJECTILECLASSDATA::Init(buteMgr, aTagName)) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, FXBMGR_PROXCLASS_ARMSND);
 	if (!str.IsEmpty())
@@ -2554,19 +2441,17 @@ LTBOOL PROXCLASSDATA::Init(CButeMgr & buteMgr, char* aTagName)
 	nArmSndRadius		= buteMgr.GetInt(aTagName, FXBMGR_PROXCLASS_ARMSNDRADIUS);
 	nActivateSndRadius	= buteMgr.GetInt(aTagName, FXBMGR_PROXCLASS_ACTSNDRADIUS);
 
-    fArmDelay       = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PROXCLASS_ARMDELAY);
-    fActivateDelay  = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PROXCLASS_ACTDELAY);
+	fArmDelay	   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PROXCLASS_ARMDELAY);
+	fActivateDelay  = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PROXCLASS_ACTDELAY);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PROXCLASSDATA::Cache
 //
-//	ROUTINE:	PROXCLASSDATA::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the prox class
+//	PURPOSE: Cache all the resources associated with the prox class
 //				data struct
-//
 // ----------------------------------------------------------------------- //
 
 void PROXCLASSDATA::Cache(CFXButeMgr* pFXButeMgr)
@@ -2577,12 +2462,12 @@ void PROXCLASSDATA::Cache(CFXButeMgr* pFXButeMgr)
 
 	if (szArmSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szArmSound);
+		g_pLTServer->CacheFile(FT_SOUND, szArmSound);
 	}
 
 	if (szActivateSound[0])
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szActivateSound);
+		g_pLTServer->CacheFile(FT_SOUND, szActivateSound);
 	}
 
 #endif
@@ -2599,11 +2484,9 @@ void PROXCLASSDATA::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PVFX::PVFX
 //
-//	ROUTINE:	PVFX::PVFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 PVFX::PVFX()
@@ -2614,8 +2497,8 @@ PVFX::PVFX()
 	szSocket[0] = '\0';
 
 	nNumScaleFXTypes = 0;
-    int i;
-    for (i=0; i < PV_MAX_SCALEFX_TYPES; i++)
+	int i;
+	for (i=0; i < PV_MAX_SCALEFX_TYPES; i++)
 	{
 		aScaleFXTypes[i] = FXBMGR_INVALID_ID;
 	}
@@ -2634,16 +2517,14 @@ PVFX::PVFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PVFX::Init
 //
-//	ROUTINE:	PVFX::Init
-//
-//	PURPOSE:	Build the pv fx struct
-//
+//	PURPOSE: Build the pv fx struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL PVFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, FXBMGR_PVFX_NAME);
 	if (!str.IsEmpty())
@@ -2722,16 +2603,14 @@ LTBOOL PVFX::Init(CButeMgr & buteMgr, char* aTagName)
 		sprintf(s_aAttName, "%s%d", FXBMGR_PVFX_SOUNDNAME, nNumSoundFX);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PVFX::Cache
 //
-//	ROUTINE:	PVFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the pv
+//	PURPOSE: Cache all the resources associated with the pv
 //				fx struct
-//
 // ----------------------------------------------------------------------- //
 
 void PVFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -2739,8 +2618,8 @@ void PVFX::Cache(CFXButeMgr* pFXButeMgr)
 #ifndef _CLIENTBUILD
 	if (!pFXButeMgr) return;
 
-    int i;
-    for (i=0; i < nNumScaleFXTypes; i++)
+	int i;
+	for (i=0; i < nNumScaleFXTypes; i++)
 	{
 		CScaleFX* pScaleFX = pFXButeMgr->GetScaleFX(aScaleFXTypes[i]);
 		if (pScaleFX)
@@ -2778,11 +2657,9 @@ void PVFX::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleMuzzleFX::CParticleMuzzleFX
 //
-//	ROUTINE:	CParticleMuzzleFX::CParticleMuzzleFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CParticleMuzzleFX::CParticleMuzzleFX()
@@ -2796,24 +2673,22 @@ CParticleMuzzleFX::CParticleMuzzleFX()
 	fMaxScale		= 0.0f;
 	nNumParticles	= 0;
 
-    bAdditive       = LTFALSE;
-    bMultiply       = LTFALSE;
+	bAdditive	   = LTFALSE;
+	bMultiply	   = LTFALSE;
 
 	vColor1.Init();
 	vColor2.Init();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleMuzzleFX::Init
 //
-//	ROUTINE:	CParticleMuzzleFX::Init
-//
-//	PURPOSE:	Build the particle muzzle fx struct
-//
+//	PURPOSE: Build the particle muzzle fx struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL CParticleMuzzleFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, FXBMGR_PARTMUZZLEFX_NAME);
 	if (!str.IsEmpty())
@@ -2827,28 +2702,26 @@ LTBOOL CParticleMuzzleFX::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szFile, (char*)(LPCSTR)str, ARRAY_LEN(szFile));
 	}
 
-    fLength         = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PARTMUZZLEFX_LENGTH);
-    fDuration       = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PARTMUZZLEFX_DURATION);
-    fRadius         = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PARTMUZZLEFX_RADIUS);
-    fMaxScale       = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PARTMUZZLEFX_MAXSCALE);
+	fLength		 = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PARTMUZZLEFX_LENGTH);
+	fDuration	   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PARTMUZZLEFX_DURATION);
+	fRadius		 = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PARTMUZZLEFX_RADIUS);
+	fMaxScale	   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PARTMUZZLEFX_MAXSCALE);
 	nNumParticles	= buteMgr.GetInt(aTagName, FXBMGR_PARTMUZZLEFX_NUMBER);
 
-    bAdditive       = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PARTMUZZLEFX_ADDITIVE);
-    bMultiply       = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PARTMUZZLEFX_MULTIPLY);
+	bAdditive	   = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PARTMUZZLEFX_ADDITIVE);
+	bMultiply	   = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_PARTMUZZLEFX_MULTIPLY);
 
 	vColor1			= buteMgr.GetVector(aTagName, FXBMGR_PARTMUZZLEFX_COLOR1);
 	vColor2			= buteMgr.GetVector(aTagName, FXBMGR_PARTMUZZLEFX_COLOR2);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleMuzzleFX::Cache
 //
-//	ROUTINE:	CParticleMuzzleFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the particle
+//	PURPOSE: Cache all the resources associated with the particle
 //				muzzle fx struct
-//
 // ----------------------------------------------------------------------- //
 
 void CParticleMuzzleFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -2860,11 +2733,11 @@ void CParticleMuzzleFX::Cache(CFXButeMgr* pFXButeMgr)
 	{
 		if (strstr(szFile, ".spr"))
 		{
-            g_pLTServer->CacheFile(FT_SPRITE, szFile);
+			g_pLTServer->CacheFile(FT_SPRITE, szFile);
 		}
 		else
 		{
-            g_pLTServer->CacheFile(FT_TEXTURE, szFile);
+			g_pLTServer->CacheFile(FT_TEXTURE, szFile);
 		}
 	}
 
@@ -2881,11 +2754,9 @@ void CParticleMuzzleFX::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFX::CMuzzleFX
 //
-//	ROUTINE:	CMuzzleFX::CMuzzleFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CMuzzleFX::CMuzzleFX()
@@ -2894,22 +2765,20 @@ CMuzzleFX::CMuzzleFX()
 	szName[0]		= '\0';
 	fDuration		= 0.0f;
 
-    pPMuzzleFX      = LTNULL;
-    pScaleFX        = LTNULL;
-    pDLightFX       = LTNULL;
+	pPMuzzleFX	  = LTNULL;
+	pScaleFX		= LTNULL;
+	pDLightFX	   = LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFX::Init
 //
-//	ROUTINE:	CMuzzleFX::Init
-//
-//	PURPOSE:	Build the muzzle fx struct
-//
+//	PURPOSE: Build the muzzle fx struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL CMuzzleFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, FXBMGR_MUZZLEFX_NAME);
 	if (!str.IsEmpty())
@@ -2935,17 +2804,15 @@ LTBOOL CMuzzleFX::Init(CButeMgr & buteMgr, char* aTagName)
 		pDLightFX = g_pFXButeMgr->GetDLightFX((char*)(LPCSTR)str);
 	}
 
-    fDuration = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_MUZZLEFX_DURATION);
+	fDuration = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_MUZZLEFX_DURATION);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFX::Cache
 //
-//	ROUTINE:	CMuzzleFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the muzzle fx struct
-//
+//	PURPOSE: Cache all the resources associated with the muzzle fx struct
 // ----------------------------------------------------------------------- //
 
 void CMuzzleFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -2978,11 +2845,9 @@ void CMuzzleFX::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: TRACERFX::TRACERFX
 //
-//	ROUTINE:	TRACERFX::TRACERFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 TRACERFX::TRACERFX()
@@ -3000,16 +2865,14 @@ TRACERFX::TRACERFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: TRACERFX::Init
 //
-//	ROUTINE:	TRACERFX::Init
-//
-//	PURPOSE:	Build the tracer fx struct
-//
+//	PURPOSE: Build the tracer fx struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL TRACERFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, FXBMGR_TRACERFX_NAME);
 	if (!str.IsEmpty())
@@ -3024,21 +2887,19 @@ LTBOOL TRACERFX::Init(CButeMgr & buteMgr, char* aTagName)
 	}
 
 	nFrequency		= buteMgr.GetInt(aTagName, FXBMGR_TRACERFX_FREQUENCY);
-    fVelocity       = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_TRACERFX_VELOCITY);
-    fWidth          = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_TRACERFX_WIDTH);
-    fInitialAlpha   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_TRACERFX_INITIALALPHA);
-    fFinalAlpha     = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_TRACERFX_FINALALPHA);
+	fVelocity	   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_TRACERFX_VELOCITY);
+	fWidth		  = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_TRACERFX_WIDTH);
+	fInitialAlpha   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_TRACERFX_INITIALALPHA);
+	fFinalAlpha	 = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_TRACERFX_FINALALPHA);
 	vColor			= buteMgr.GetVector(aTagName, FXBMGR_TRACERFX_COLOR);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: TRACERFX::Cache
 //
-//	ROUTINE:	TRACERFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the tracer fx struct
-//
+//	PURPOSE: Cache all the resources associated with the tracer fx struct
 // ----------------------------------------------------------------------- //
 
 void TRACERFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -3059,11 +2920,9 @@ void TRACERFX::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: BEAMFX::BEAMFX
 //
-//	ROUTINE:	BEAMFX::BEAMFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 BEAMFX::BEAMFX()
@@ -3082,16 +2941,14 @@ BEAMFX::BEAMFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: BEAMFX::Init
 //
-//	ROUTINE:	BEAMFX::Init
-//
-//	PURPOSE:	Build the beam fx struct
-//
+//	PURPOSE: Build the beam fx struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL BEAMFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, FXBMGR_BEAMFX_NAME);
 	if (!str.IsEmpty())
@@ -3105,23 +2962,21 @@ LTBOOL BEAMFX::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szTexture, (char*)(LPCSTR)str, ARRAY_LEN(szTexture));
 	}
 
-    fDuration       = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_BEAMFX_DURATION);
-    fWidth          = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_BEAMFX_WIDTH);
-    fInitialAlpha   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_BEAMFX_INITIALALPHA);
-    fFinalAlpha     = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_BEAMFX_FINALALPHA);
+	fDuration	   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_BEAMFX_DURATION);
+	fWidth		  = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_BEAMFX_WIDTH);
+	fInitialAlpha   = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_BEAMFX_INITIALALPHA);
+	fFinalAlpha	 = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_BEAMFX_FINALALPHA);
 	vColor			= buteMgr.GetVector(aTagName, FXBMGR_BEAMFX_COLOR);
-    bAlignUp        = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_BEAMFX_ALIGNUP);
-    bAlignFlat      = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_BEAMFX_ALIGNFLAT);
+	bAlignUp		= (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_BEAMFX_ALIGNUP);
+	bAlignFlat	  = (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_BEAMFX_ALIGNFLAT);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: BEAMFX::Cache
 //
-//	ROUTINE:	BEAMFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the beam fx struct
-//
+//	PURPOSE: Cache all the resources associated with the beam fx struct
 // ----------------------------------------------------------------------- //
 
 void BEAMFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -3142,11 +2997,9 @@ void BEAMFX::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SOUNDFX::SOUNDFX
 //
-//	ROUTINE:	SOUNDFX::SOUNDFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 SOUNDFX::SOUNDFX()
@@ -3161,16 +3014,14 @@ SOUNDFX::SOUNDFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SOUNDFX::Init
 //
-//	ROUTINE:	SOUNDFX::Init
-//
-//	PURPOSE:	Build the sound fx struct
-//
+//	PURPOSE: Build the sound fx struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL SOUNDFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, FXBMGR_SOUNDFX_NAME);
 	if (!str.IsEmpty())
@@ -3184,19 +3035,17 @@ LTBOOL SOUNDFX::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szFile, (char*)(LPCSTR)str, ARRAY_LEN(szFile));
 	}
 
-    fRadius     = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_SOUNDFX_RADIUS);
-    fPitchShift	= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_SOUNDFX_PITCHSHIFT);
-    bLoop		= (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_SOUNDFX_LOOP);
+	fRadius	 = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_SOUNDFX_RADIUS);
+	fPitchShift	= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_SOUNDFX_PITCHSHIFT);
+	bLoop		= (LTBOOL) buteMgr.GetInt(aTagName, FXBMGR_SOUNDFX_LOOP);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SOUNDFX::Cache
 //
-//	ROUTINE:	SOUNDFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the sound fx struct
-//
+//	PURPOSE: Cache all the resources associated with the sound fx struct
 // ----------------------------------------------------------------------- //
 
 void SOUNDFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -3205,7 +3054,7 @@ void SOUNDFX::Cache(CFXButeMgr* pFXButeMgr)
 
 	if (szFile[0] && strstr(szFile, ".wav"))
 	{
-        g_pLTServer->CacheFile(FT_SOUND, szFile);
+		g_pLTServer->CacheFile(FT_SOUND, szFile);
 	}
 
 #endif
@@ -3219,11 +3068,9 @@ void SOUNDFX::Cache(CFXButeMgr* pFXButeMgr)
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PUSHERFX::PUSHERFX
 //
-//	ROUTINE:	PUSHERFX::PUSHERFX
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 PUSHERFX::PUSHERFX()
@@ -3238,16 +3085,14 @@ PUSHERFX::PUSHERFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PUSHERFX::Init
 //
-//	ROUTINE:	PUSHERFX::Init
-//
-//	PURPOSE:	Build the pusher fx struct
-//
+//	PURPOSE: Build the pusher fx struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL PUSHERFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	CString str = buteMgr.GetString(aTagName, FXBMGR_PUSHERFX_NAME);
 	if (!str.IsEmpty())
@@ -3255,20 +3100,18 @@ LTBOOL PUSHERFX::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szName, (char*)(LPCSTR)str, ARRAY_LEN(szName));
 	}
 
-    fRadius		= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PUSHERFX_RADIUS);
-    fStartDelay = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PUSHERFX_STARTDELAY);
-    fDuration	= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PUSHERFX_DURATION);
-    fStrength	= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PUSHERFX_STRENGTH);
+	fRadius		= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PUSHERFX_RADIUS);
+	fStartDelay = (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PUSHERFX_STARTDELAY);
+	fDuration	= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PUSHERFX_DURATION);
+	fStrength	= (LTFLOAT) buteMgr.GetDouble(aTagName, FXBMGR_PUSHERFX_STRENGTH);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PUSHERFX::Cache
 //
-//	ROUTINE:	PUSHERFX::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the pusher fx struct
-//
+//	PURPOSE: Cache all the resources associated with the pusher fx struct
 // ----------------------------------------------------------------------- //
 
 void PUSHERFX::Cache(CFXButeMgr* pFXButeMgr)
@@ -3301,18 +3144,16 @@ void PUSHERFX::Cache(CFXButeMgr* pFXButeMgr)
 #if defined(_CLIENTBUILD)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::CreateScaleFX()
 //
-//	ROUTINE:	CFXButeMgr::CreateScaleFX()
-//
-//	PURPOSE:	Create a scale fx
-//
+//	PURPOSE: Create a scale fx
 // ----------------------------------------------------------------------- //
 
 CSpecialFX* CFXButeMgr::CreateScaleFX(CScaleFX* pScaleFX, LTVector vPos,
-                                     LTVector vDir, LTVector* pvSurfaceNormal,
-                                     LTRotation* prRot, CBaseScaleFX* pFX)
+									 LTVector vDir, LTVector* pvSurfaceNormal,
+									 LTRotation* prRot, CBaseScaleFX* pFX)
 {
-    if (!pScaleFX || !pScaleFX->szFile[0]) return LTNULL;
+	if (!pScaleFX || !pScaleFX->szFile[0]) return LTNULL;
 
 	// Create scale fx...
 
@@ -3331,7 +3172,7 @@ CSpecialFX* CFXButeMgr::CreateScaleFX(CScaleFX* pScaleFX, LTVector vPos,
 		if (pScaleFX->bAlignToSurface && pvSurfaceNormal)
 		{
 			scale.dwFlags |= FLAG_ROTATEABLESPRITE;
-            g_pLTClient->AlignRotation(&(scale.rRot), pvSurfaceNormal, LTNULL);
+			g_pLTClient->AlignRotation(&(scale.rRot), pvSurfaceNormal, LTNULL);
 		}
 		else if (!pScaleFX->bReallyClose)
 		{
@@ -3368,8 +3209,8 @@ CSpecialFX* CFXButeMgr::CreateScaleFX(CScaleFX* pScaleFX, LTVector vPos,
 		else
 			hCam = g_pGameClientShell->GetCamera();
 
-        LTVector vOffset;
-        g_pLTClient->GetObjectPos(hCam, &vOffset);
+		LTVector vOffset;
+		g_pLTClient->GetObjectPos(hCam, &vOffset);
 
 		vPos -= vOffset;
 	}
@@ -3380,11 +3221,11 @@ CSpecialFX* CFXButeMgr::CreateScaleFX(CScaleFX* pScaleFX, LTVector vPos,
 
 	if (pScaleFX->fDirROffset || pScaleFX->fDirUOffset)
 	{
-        LTRotation rTempRot;
+		LTRotation rTempRot;
 		rTempRot.Init();
-        LTVector vUp(0, 1, 0), vR, vF, vU;
-        g_pLTClient->AlignRotation(&rTempRot, &vDir, &vUp);
-        g_pLTClient->GetRotationVectors(&rTempRot, &vU, &vR, &vF);
+		LTVector vUp(0, 1, 0), vR, vF, vU;
+		g_pLTClient->AlignRotation(&rTempRot, &vDir, &vUp);
+		g_pLTClient->GetRotationVectors(&rTempRot, &vU, &vR, &vF);
 
 		scale.vPos += (vR * pScaleFX->fDirROffset);
 		scale.vPos += (vU * pScaleFX->fDirUOffset);
@@ -3406,7 +3247,7 @@ CSpecialFX* CFXButeMgr::CreateScaleFX(CScaleFX* pScaleFX, LTVector vPos,
 	scale.bAdditive			= pScaleFX->bAdditive;
 	scale.bMultiply			= pScaleFX->bMultiply;
 	scale.nType				= (pScaleFX->eType == SCALEFX_MODEL) ? OT_MODEL : OT_SPRITE;
-    scale.bUseUserColors    = LTTRUE;
+	scale.bUseUserColors	= LTTRUE;
 	scale.bFaceCamera		= pScaleFX->bFaceCamera;
 	scale.nRotationAxis		= pScaleFX->nRotationAxis;
 	scale.bRotate			= pScaleFX->bRotate;
@@ -3426,24 +3267,22 @@ CSpecialFX* CFXButeMgr::CreateScaleFX(CScaleFX* pScaleFX, LTVector vPos,
 	else
 	{
 		pFX->Init(&scale);
-        pFX->CreateObject(g_pLTClient);
+		pFX->CreateObject(g_pLTClient);
 	}
 
 	return pFX;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::CreatePShowerFX()
 //
-//	ROUTINE:	CFXButeMgr::CreatePShowerFX()
-//
-//	PURPOSE:	Create a particle shower fx
-//
+//	PURPOSE: Create a particle shower fx
 // ----------------------------------------------------------------------- //
 
 CSpecialFX* CFXButeMgr::CreatePShowerFX(CPShowerFX* pPShowerFX, LTVector vPos,
-                                        LTVector vDir, LTVector vSurfaceNormal)
+										LTVector vDir, LTVector vSurfaceNormal)
 {
-    if (!pPShowerFX || !pPShowerFX->szTexture[0]) return LTNULL;
+	if (!pPShowerFX || !pPShowerFX->szTexture[0]) return LTNULL;
 
 	// Create particle shower fx...
 
@@ -3467,17 +3306,15 @@ CSpecialFX* CFXButeMgr::CreatePShowerFX(CPShowerFX* pPShowerFX, LTVector vPos,
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::CreatePolyDebrisFX()
 //
-//	ROUTINE:	CFXButeMgr::CreatePolyDebrisFX()
-//
-//	PURPOSE:	Create a poly debris fx
-//
+//	PURPOSE: Create a poly debris fx
 // ----------------------------------------------------------------------- //
 
 CSpecialFX* CFXButeMgr::CreatePolyDebrisFX(CPolyDebrisFX* pPolyDebrisFX, LTVector vPos,
-                                          LTVector vDir, LTVector vSurfaceNormal)
+										  LTVector vDir, LTVector vSurfaceNormal)
 {
-    if (!pPolyDebrisFX) return LTNULL;
+	if (!pPolyDebrisFX) return LTNULL;
 
 	POLYDEBRISCREATESTRUCT pdebris;
 
@@ -3490,17 +3327,15 @@ CSpecialFX* CFXButeMgr::CreatePolyDebrisFX(CPolyDebrisFX* pPolyDebrisFX, LTVecto
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::CreateBeamFX()
 //
-//	ROUTINE:	CFXButeMgr::CreateBeamFX()
-//
-//	PURPOSE:	Create a beam fx
-//
+//	PURPOSE: Create a beam fx
 // ----------------------------------------------------------------------- //
 
 CSpecialFX* CFXButeMgr::CreateBeamFX(BEAMFX* pBeamFX, LTVector vStartPos,
-                                     LTVector vEndPos)
+									 LTVector vEndPos)
 {
-    if (!pBeamFX) return LTNULL;
+	if (!pBeamFX) return LTNULL;
 
 	BEAMCREATESTRUCT beam;
 
@@ -3513,17 +3348,15 @@ CSpecialFX* CFXButeMgr::CreateBeamFX(BEAMFX* pBeamFX, LTVector vStartPos,
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::CreateSoundFX()
 //
-//	ROUTINE:	CFXButeMgr::CreateSoundFX()
-//
-//	PURPOSE:	Create a sound fx
-//
+//	PURPOSE: Create a sound fx
 // ----------------------------------------------------------------------- //
 
 CSpecialFX* CFXButeMgr::CreateSoundFX(SOUNDFX* pSoundFX, LTVector vPos,
-                                     CSoundFX* pFX)
+									 CSoundFX* pFX)
 {
-    if (!pSoundFX) return LTNULL;
+	if (!pSoundFX) return LTNULL;
 
 	SNDCREATESTRUCT snd;
 
@@ -3534,12 +3367,12 @@ CSpecialFX* CFXButeMgr::CreateSoundFX(SOUNDFX* pSoundFX, LTVector vPos,
 	snd.pSndName	= pSoundFX->szFile;
 
 	CSFXMgr* psfxMgr = g_pGameClientShell->GetSFXMgr();
-    if (!psfxMgr) return LTNULL;
+	if (!psfxMgr) return LTNULL;
 
 	if (pFX)
 	{
 		pFX->Init(&snd);
-        pFX->CreateObject(g_pLTClient);
+		pFX->CreateObject(g_pLTClient);
 
 		return pFX;
 	}
@@ -3548,16 +3381,14 @@ CSpecialFX* CFXButeMgr::CreateSoundFX(SOUNDFX* pSoundFX, LTVector vPos,
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::CreatePusherFX()
 //
-//	ROUTINE:	CFXButeMgr::CreatePusherFX()
-//
-//	PURPOSE:	Create a pusher fx
-//
+//	PURPOSE: Create a pusher fx
 // ----------------------------------------------------------------------- //
 
 void CFXButeMgr::CreatePusherFX(PUSHERFX* pPusherFX, LTVector vPos)
 {
-    if (!pPusherFX) return;
+	if (!pPusherFX) return;
 
 	g_pGameClientShell->GetMoveMgr()->AddPusher(vPos, pPusherFX->fRadius,
 		pPusherFX->fStartDelay, pPusherFX->fDuration, pPusherFX->fStrength);
@@ -3565,23 +3396,21 @@ void CFXButeMgr::CreatePusherFX(PUSHERFX* pPusherFX, LTVector vPos)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::CreatePExplFX()
 //
-//	ROUTINE:	CFXButeMgr::CreatePExplFX()
-//
-//	PURPOSE:	Create a paritlce explosion specific fx
-//
+//	PURPOSE: Create a paritlce explosion specific fx
 // ----------------------------------------------------------------------- //
 
 CSpecialFX* CFXButeMgr::CreatePExplFX(PEXPLFX* pPExplFX, LTRotation rSurfaceRot,
-                                     SurfaceType eSurfaceType, LTVector vPos,
+									 SurfaceType eSurfaceType, LTVector vPos,
 									 ContainerCode eCode)
 {
-    if (!pPExplFX) return LTNULL;
+	if (!pPExplFX) return LTNULL;
 
 	// Create a particle explosion...
 
 	PESCREATESTRUCT pe;
-    pe.rSurfaceRot = rSurfaceRot;
+	pe.rSurfaceRot = rSurfaceRot;
 
 	pe.nSurfaceType		= eSurfaceType;
 	pe.vPos				= vPos + pPExplFX->vPosOffset;
@@ -3620,22 +3449,20 @@ CSpecialFX* CFXButeMgr::CreatePExplFX(PEXPLFX* pPExplFX, LTRotation rSurfaceRot,
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::CreateDLightFX()
 //
-//	ROUTINE:	CFXButeMgr::CreateDLightFX()
-//
-//	PURPOSE:	Create a dynamic light specific fx
-//
+//	PURPOSE: Create a dynamic light specific fx
 // ----------------------------------------------------------------------- //
 
 CSpecialFX* CFXButeMgr::CreateDLightFX(DLIGHTFX* pDLightFX, LTVector vPos,
 									   CDynamicLightFX* pFX)
 {
-    if (!pDLightFX) return LTNULL;
+	if (!pDLightFX) return LTNULL;
 
 	DLCREATESTRUCT dl;
 	dl.vPos			 = vPos;
 	dl.vColor		 = pDLightFX->vColor;
-	dl.fMinRadius    = pDLightFX->fMinRadius;
+	dl.fMinRadius	= pDLightFX->fMinRadius;
 	dl.fMaxRadius	 = pDLightFX->fMaxRadius;
 	dl.fRampUpTime	 = pDLightFX->fRampUpTime;
 	dl.fMaxTime		 = pDLightFX->fMaxTime;
@@ -3644,12 +3471,12 @@ CSpecialFX* CFXButeMgr::CreateDLightFX(DLIGHTFX* pDLightFX, LTVector vPos,
 	dl.dwFlags		 = FLAG_VISIBLE | FLAG_DONTLIGHTBACKFACING;
 
 	CSFXMgr* psfxMgr = g_pGameClientShell->GetSFXMgr();
-    if (!psfxMgr) return LTNULL;
+	if (!psfxMgr) return LTNULL;
 
 	if (pFX)
 	{
 		pFX->Init(&dl);
-        pFX->CreateObject(g_pLTClient);
+		pFX->CreateObject(g_pLTClient);
 
 		return pFX;
 	}
@@ -3659,11 +3486,9 @@ CSpecialFX* CFXButeMgr::CreateDLightFX(DLIGHTFX* pDLightFX, LTVector vPos,
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::CreateImpactFX()
 //
-//	ROUTINE:	CFXButeMgr::CreateImpactFX()
-//
-//	PURPOSE:	Create the specified impact fx
-//
+//	PURPOSE: Create the specified impact fx
 // ----------------------------------------------------------------------- //
 
 void CFXButeMgr::CreateImpactFX(IMPACTFX* pImpactFX, IFXCS & cs)
@@ -3688,7 +3513,7 @@ void CFXButeMgr::CreateImpactFX(IMPACTFX* pImpactFX, IFXCS & cs)
 
 	if (cs.bPlaySound && pImpactFX->szSound[0])
 	{
-        LTFLOAT fSndRadius = (LTFLOAT) pImpactFX->nSoundRadius;
+		LTFLOAT fSndRadius = (LTFLOAT) pImpactFX->nSoundRadius;
 
 		g_pClientSoundMgr->PlaySoundFromPos(cs.vPos, pImpactFX->szSound, fSndRadius,
 				SOUNDPRIORITY_MISC_MEDIUM);
@@ -3703,8 +3528,8 @@ void CFXButeMgr::CreateImpactFX(IMPACTFX* pImpactFX, IFXCS & cs)
 
 	// Create any debris fx...
 
-    int i;
-    for (i=0; i < pImpactFX->nNumDebrisFXTypes; i++)
+	int i;
+	for (i=0; i < pImpactFX->nNumDebrisFXTypes; i++)
 	{
 		DEBRISCREATESTRUCT debris;
 		debris.rRot			= cs.rSurfRot;
@@ -3783,7 +3608,7 @@ void CFXButeMgr::CreateImpactFX(IMPACTFX* pImpactFX, IFXCS & cs)
 
 		dl.vPos			 = cs.vPos;
 		dl.vColor		 = pImpactFX->vBlastColor;
-		dl.fMinRadius    = cs.fBlastRadius / 2.0f;
+		dl.fMinRadius	= cs.fBlastRadius / 2.0f;
 		dl.fMaxRadius	 = cs.fBlastRadius / 4.0f;
 		dl.fRampUpTime	 = 0.0f;
 		dl.fMaxTime		 = GetRandom(pImpactFX->fBlastTimeMin, pImpactFX->fBlastTimeMax);
@@ -3798,33 +3623,33 @@ void CFXButeMgr::CreateImpactFX(IMPACTFX* pImpactFX, IFXCS & cs)
 
 	if ((pImpactFX->nFlags & WFX_TINTSCREEN))
 	{
-        LTVector vTintColor  = pImpactFX->vTintColor;
-        LTFLOAT fRampUp      = pImpactFX->fTintRampUp;
-        LTFLOAT fRampDown    = pImpactFX->fTintRampDown;
-        LTFLOAT fTintTime    = pImpactFX->fTintMaxTime;
+		LTVector vTintColor  = pImpactFX->vTintColor;
+		LTFLOAT fRampUp	  = pImpactFX->fTintRampUp;
+		LTFLOAT fRampDown	= pImpactFX->fTintRampDown;
+		LTFLOAT fTintTime	= pImpactFX->fTintMaxTime;
 
 		g_pGameClientShell->FlashScreen(vTintColor, cs.vPos, cs.fTintRange,
 			fRampUp, fTintTime, fRampDown);
 
 		// If close enough, shake the screen...
 
-        HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+		HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 		if (hPlayerObj)
 		{
-            LTVector vPlayerPos, vDir;
-            g_pLTClient->GetObjectPos(hPlayerObj, &vPlayerPos);
+			LTVector vPlayerPos, vDir;
+			g_pLTClient->GetObjectPos(hPlayerObj, &vPlayerPos);
 
 			vDir = vPlayerPos - cs.vPos;
-            LTFLOAT fDist = vDir.Mag();
+			LTFLOAT fDist = vDir.Mag();
 
-            LTFLOAT fRadius = cs.fBlastRadius;
+			LTFLOAT fRadius = cs.fBlastRadius;
 
 			if (fDist < fRadius * 2.0f)
 			{
-                LTFLOAT fVal = fDist < 1.0f ? 3.0f : fRadius / fDist;
+				LTFLOAT fVal = fDist < 1.0f ? 3.0f : fRadius / fDist;
 				fVal = fVal > 3.0f ? 3.0f : fVal;
 
-                LTVector vShake(fVal, fVal, fVal);
+				LTVector vShake(fVal, fVal, fVal);
 				g_pGameClientShell->ShakeScreen(vShake);
 			}
 		}
@@ -3842,20 +3667,18 @@ void CFXButeMgr::CreateImpactFX(IMPACTFX* pImpactFX, IFXCS & cs)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgr::ReadImpactFXProp
 //
-//	ROUTINE:	CFXButeMgr::ReadImpactFXProp
-//
-//	PURPOSE:	Read in the impact fx properties
-//
+//	PURPOSE: Read in the impact fx properties
 // ----------------------------------------------------------------------- //
 
 LTBOOL CFXButeMgr::ReadImpactFXProp(char* pPropName, uint8 & nImpactFXId)
 {
-    if (!pPropName || !pPropName[0]) return LTFALSE;
+	if (!pPropName || !pPropName[0]) return LTFALSE;
 
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric(pPropName, &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric(pPropName, &genProp) == LT_OK)
 	{
 		// Get the impact fx
 
@@ -3865,10 +3688,10 @@ LTBOOL CFXButeMgr::ReadImpactFXProp(char* pPropName, uint8 & nImpactFXId)
 			nImpactFXId = pImpactFX->nId;
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -3879,20 +3702,18 @@ LTBOOL CFXButeMgr::ReadImpactFXProp(char* pPropName, uint8 & nImpactFXId)
 ////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgrPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CFXButeMgrPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Fill the string list
-//
+//	PURPOSE: Fill the string list
 // ----------------------------------------------------------------------- //
 
 LTRESULT CFXButeMgrPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 	if (!g_pFXButeMgr)
 	{
@@ -3906,25 +3727,23 @@ LTRESULT CFXButeMgrPlugin::PreHook_EditStringList(
 
 		char szFile[256];
 		sprintf(szFile, "%s\\%s", szRezPath, FXBMGR_DEFAULT_FILE);
-        sm_FXButeMgr.SetInRezFile(LTFALSE);
-        sm_FXButeMgr.Init(g_pLTServer, szFile);
+		sm_FXButeMgr.SetInRezFile(LTFALSE);
+		sm_FXButeMgr.Init(g_pLTServer, szFile);
 	}
 
 	return LT_UNSUPPORTED;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFXButeMgrPlugin::PopulateStringList
 //
-//	ROUTINE:	CFXButeMgrPlugin::PopulateStringList
-//
-//	PURPOSE:	Populate the list
-//
+//	PURPOSE: Populate the list
 // ----------------------------------------------------------------------- //
 
 LTBOOL CFXButeMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,
-    const uint32 cMaxStrings, const uint32 cMaxStringLength)
+	const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {
-    if (!aszStrings || !pcStrings) return LTFALSE;
+	if (!aszStrings || !pcStrings) return LTFALSE;
 	_ASSERT(aszStrings && pcStrings);
 
 	// Add an entry for each impact fx
@@ -3932,14 +3751,14 @@ LTBOOL CFXButeMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings
 	int nNumImpactFX = g_pFXButeMgr->GetNumImpactFX();
 	_ASSERT(nNumImpactFX > 0);
 
-    IMPACTFX* pImpactFX = LTNULL;
+	IMPACTFX* pImpactFX = LTNULL;
 
 	for (int i=0; i < nNumImpactFX; i++)
 	{
 		_ASSERT(cMaxStrings > (*pcStrings) + 1);
 
 		pImpactFX = g_pFXButeMgr->GetImpactFX(i);
-        uint32 dwImpactFXNameLen = strlen(pImpactFX->szName);
+		uint32 dwImpactFXNameLen = strlen(pImpactFX->szName);
 
 		if (pImpactFX && pImpactFX->szName[0] &&
 			dwImpactFXNameLen < cMaxStringLength &&
@@ -3949,7 +3768,7 @@ LTBOOL CFXButeMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 #endif // _CLIENTBUILD

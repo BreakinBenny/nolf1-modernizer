@@ -1,9 +1,7 @@
 // ----------------------------------------------------------------------- //
 // MODULE: SoundFilterMgr.cpp
-//
-// PURPOSE : SoundFilterMgr - Implementation
-//
-// CREATED : 7/16/2000
+// PURPOSE: SoundFilterMgr - Implementation
+// CREATED: 7/16/2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //
@@ -36,9 +34,9 @@ CSoundFilterMgr CSoundFilterMgrPlugin::sm_SoundFilterMgr;
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CSoundFilterMgr::CSoundFilterMgr
+//	ROUTINE: CSoundFilterMgr::CSoundFilterMgr
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CSoundFilterMgr::CSoundFilterMgr()
@@ -47,9 +45,9 @@ CSoundFilterMgr::CSoundFilterMgr()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CSoundFilterMgr::~CSoundFilterMgr
+//	ROUTINE: CSoundFilterMgr::~CSoundFilterMgr
 //
-//	PURPOSE:	Destructor
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CSoundFilterMgr::~CSoundFilterMgr()
@@ -58,9 +56,9 @@ CSoundFilterMgr::~CSoundFilterMgr()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CSoundFilterMgr::Init()
+//	ROUTINE: CSoundFilterMgr::Init()
 //
-//	PURPOSE:	Init mgr
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CSoundFilterMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
@@ -100,9 +98,9 @@ LTBOOL CSoundFilterMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CSoundFilterMgr::GetFilter
+//	ROUTINE: CSoundFilterMgr::GetFilter
 //
-//	PURPOSE:	Get the specified sound filter record
+//	PURPOSE: Get the specified sound filter record
 // ----------------------------------------------------------------------- //
 
 SOUNDFILTER* CSoundFilterMgr::GetFilter(uint8 nId)
@@ -125,9 +123,9 @@ SOUNDFILTER* CSoundFilterMgr::GetFilter(uint8 nId)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CSoundFilterMgr::GetFilter
+//	ROUTINE: CSoundFilterMgr::GetFilter
 //
-//	PURPOSE:	Get the specified sound filter record
+//	PURPOSE: Get the specified sound filter record
 // ----------------------------------------------------------------------- //
 
 SOUNDFILTER* CSoundFilterMgr::GetFilter(char* pName)
@@ -152,9 +150,9 @@ SOUNDFILTER* CSoundFilterMgr::GetFilter(char* pName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CSoundFilterMgr::Term()
+//	ROUTINE: CSoundFilterMgr::Term()
 //
-//	PURPOSE:	Clean up.
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CSoundFilterMgr::Term()
@@ -173,9 +171,9 @@ void CSoundFilterMgr::Term()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	SOUNDFILTER::SOUNDFILTER
+//	ROUTINE: SOUNDFILTER::SOUNDFILTER
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 SOUNDFILTER::SOUNDFILTER()
@@ -194,9 +192,9 @@ SOUNDFILTER::SOUNDFILTER()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	SOUNDFILTER::Init
+//	ROUTINE: SOUNDFILTER::Init
 //
-//	PURPOSE:	Build the surface struct
+//	PURPOSE: Build the surface struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL SOUNDFILTER::Init(CButeMgr & buteMgr, char* aTagName)
@@ -263,9 +261,9 @@ LTBOOL SOUNDFILTER::Init(CButeMgr & buteMgr, char* aTagName)
 ////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CSoundFilterMgrPlugin::PreHook_EditStringList
+//	ROUTINE: CSoundFilterMgrPlugin::PreHook_EditStringList
 //
-//	PURPOSE:	Fill the string list
+//	PURPOSE: Fill the string list
 // ----------------------------------------------------------------------- //
 
 LTRESULT CSoundFilterMgrPlugin::PreHook_EditStringList(
@@ -291,9 +289,9 @@ LTRESULT CSoundFilterMgrPlugin::PreHook_EditStringList(
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CSoundFilterMgrPlugin::PopulateStringList
+//	ROUTINE: CSoundFilterMgrPlugin::PopulateStringList
 //
-//	PURPOSE:	Populate the list
+//	PURPOSE: Populate the list
 // ----------------------------------------------------------------------- //
 
 LTBOOL CSoundFilterMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,

@@ -120,4 +120,3 @@ uint32 CRC32::CalcRezFileCRC(const char *pFilename)
 
 	return nAccumulator ^ 0xFFFFFFFF;
 }
-

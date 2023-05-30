@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CommonUtilities.h
 //
-// MODULE  : CommonUtilities.h
+// PURPOSE: Utility functions
 //
-// PURPOSE : Utility functions
-//
-// CREATED : 5/4/98
+// CREATED: 5/4/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __COMMON_UTILITIES_H__

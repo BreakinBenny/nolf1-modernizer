@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Globals.h
 //
-// MODULE  : Globals.h
+// PURPOSE: Global data
 //
-// PURPOSE : Global data
-//
-// CREATED : 4/26/99
+// CREATED: 4/26/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef _GLOBALS_H_
@@ -53,25 +51,25 @@ class CRange
 template< class T >
 inline T MinAbs( T a, T b)
 {
-    return (T)fabs(a) < (T)fabs(b) ? a : b;
+	return (T)fabs(a) < (T)fabs(b) ? a : b;
 }
 
 template< class T >
 inline T MaxAbs( T a, T b)
 {
-    return (T)fabs(a) > (T)fabs(b) ? a : b;
+	return (T)fabs(a) > (T)fabs(b) ? a : b;
 }
 
 template< class T >
 inline T Min( T a, T b)
 {
-    return a < b ? a : b;
+	return a < b ? a : b;
 }
 
 template< class T >
 inline T Max( T a, T b)
 {
-    return a > b ? a : b;
+	return a > b ? a : b;
 }
 
 template< class T >

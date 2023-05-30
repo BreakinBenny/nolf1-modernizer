@@ -1,9 +1,9 @@
 // ----------------------------------------------------------------------- //
 // MODULE: SurfaceDefs.h
 //
-// PURPOSE : Definition of surface related stuff
+// PURPOSE: Definition of surface related stuff
 //
-// CREATED : 12/09/99
+// CREATED: 12/09/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //

@@ -22,7 +22,7 @@ class CFastStack
 
 	protected :
 
-		int		m_iTYPE;			// The next free TYPE
+		int		m_iTYPE;		// The next free TYPE
 		TYPE*	m_aTYPEs[SIZE];	// The array of types
 };
 

@@ -14,11 +14,9 @@ static char s_aTagName[30];
 static char s_aAttribute[30];
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: OPTION::OPTION()
 //
-//	ROUTINE:	OPTION::OPTION()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 OPTION::OPTION()
@@ -26,16 +24,14 @@ OPTION::OPTION()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: OPTION::Init
 //
-//	ROUTINE:	OPTION::Init
-//
-//	PURPOSE:	Build the setting struct
-//
+//	PURPOSE: Build the setting struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL OPTION::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!InitializeFromBute( buteMgr, aTagName )) return LTFALSE;
+	if (!InitializeFromBute( buteMgr, aTagName )) return LTFALSE;
 #ifdef _CLIENTBUILD
 	SetValue(fDefault);
 #endif
@@ -44,19 +40,19 @@ LTBOOL OPTION::Init(CButeMgr & buteMgr, char* aTagName)
 
 LTFLOAT OPTION::GetValue()
 {
-    LTFLOAT fValue = fDefault;
+	LTFLOAT fValue = fDefault;
 #ifdef _CLIENTBUILD
-    HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar(szVariable);
+	HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar(szVariable);
 	if (hVar)
 	{
-        fValue = g_pLTClient->GetVarValueFloat(hVar);
+		fValue = g_pLTClient->GetVarValueFloat(hVar);
 	}
 
 #else
-    HCONVAR hVar = g_pLTServer->GetGameConVar(szServVariable);
+	HCONVAR hVar = g_pLTServer->GetGameConVar(szServVariable);
 	if (hVar)
 	{
-        fValue = g_pLTServer->GetVarValueFloat(hVar);
+		fValue = g_pLTServer->GetVarValueFloat(hVar);
 	}
 #endif
 
@@ -77,11 +73,11 @@ void OPTION::SetValue(LTFLOAT val)
 	}
 #ifdef _CLIENTBUILD
 	sprintf(sTemp, "+%s %f", szVariable, val);
-    g_pLTClient->RunConsoleString(sTemp);
+	g_pLTClient->RunConsoleString(sTemp);
 #else
 	sprintf(sTemp, "%s %f", szServVariable, val);
-//    g_pLTServer->CPrint(sTemp);
-    g_pLTServer->RunGameConString(sTemp);
+//	g_pLTServer->CPrint(sTemp);
+	g_pLTServer->RunGameConString(sTemp);
 #endif
 }
 
@@ -91,7 +87,7 @@ void OPTION::SetValue(LTFLOAT val)
 
 CServerOptionMgr::CServerOptionMgr()
 {
-    m_OptionList.Init(LTTRUE);
+	m_OptionList.Init(LTTRUE);
 }
 
 CServerOptionMgr::~CServerOptionMgr()
@@ -102,17 +98,15 @@ CServerOptionMgr::~CServerOptionMgr()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerOptionMgr::Init()
 //
-//	ROUTINE:	CServerOptionMgr::Init()
-//
-//	PURPOSE:	Init mgr
-//
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CServerOptionMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 {
-    if (g_pServerOptionMgr || !szAttributeFile) return LTFALSE;
-    if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
+	if (g_pServerOptionMgr || !szAttributeFile) return LTFALSE;
+	if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
 
 
 	// Set up global pointer...
@@ -135,7 +129,7 @@ LTBOOL CServerOptionMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile
 		else
 		{
 			debug_delete(pSet);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -143,41 +137,37 @@ LTBOOL CServerOptionMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile
 	}
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerOptionMgr::Term()
 //
-//	ROUTINE:	CServerOptionMgr::Term()
-//
-//	PURPOSE:	Clean up.
-//
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CServerOptionMgr::Term()
 {
-    g_pServerOptionMgr = LTNULL;
+	g_pServerOptionMgr = LTNULL;
 	m_OptionList.Clear();
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerOptionMgr::GetOption
 //
-//	ROUTINE:	CServerOptionMgr::GetOption
-//
-//	PURPOSE:	Get the specified setting struct
-//
+//	PURPOSE: Get the specified setting struct
 // ----------------------------------------------------------------------- //
 
 OPTION* CServerOptionMgr::GetOption(int nIndex)
 {
 
 	if (nIndex < 0 || nIndex > m_OptionList.GetLength())
-        return LTNULL;
+		return LTNULL;
 
-    OPTION** pCur  = LTNULL;
+	OPTION** pCur  = LTNULL;
 
 	pCur = m_OptionList.GetItem(TLIT_FIRST);
 
@@ -191,22 +181,20 @@ OPTION* CServerOptionMgr::GetOption(int nIndex)
 		pCur = m_OptionList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerOptionMgr::GetOption
 //
-//	ROUTINE:	CServerOptionMgr::GetOption
-//
-//	PURPOSE:	Get the specified setting struct
-//
+//	PURPOSE: Get the specified setting struct
 // ----------------------------------------------------------------------- //
 
 OPTION* CServerOptionMgr::GetOption(char* pVariableName)
 {
-    if (!pVariableName) return LTNULL;
+	if (!pVariableName) return LTNULL;
 
-    OPTION** pCur  = LTNULL;
+	OPTION** pCur  = LTNULL;
 
 	pCur = m_OptionList.GetItem(TLIT_FIRST);
 
@@ -226,5 +214,5 @@ OPTION* CServerOptionMgr::GetOption(char* pVariableName)
 		pCur = m_OptionList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }

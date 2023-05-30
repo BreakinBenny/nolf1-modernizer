@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: SharedMovement.h
 //
-// MODULE  : SharedMovement.h
+// PURPOSE: Shared movement definitions.
 //
-// PURPOSE : Shared movement definitions.
-//
-// CREATED : 11/25/98
+// CREATED: 11/25/98
 //
 // (c) 1998-1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __SHAREDMOVEMENT_H__
@@ -30,13 +28,13 @@ inline LTBOOL IsVehicleModel(PlayerPhysicsModel eModel)
 	{
 		case PPM_MOTORCYCLE :
 		case PPM_SNOWMOBILE :
-            return LTTRUE;
+			return LTTRUE;
 		break;
 
 		default : break;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 #if !defined(_CLIENTBUILD)
@@ -71,10 +69,10 @@ PlayerPhysicsModel GetPlayerPhysicsModelFromPropertyName(char* pPropertyName);
 
 // Control flags (movement, weapons)...
 
-#define BC_CFLG_FORWARD			(1<<0)
+#define BC_CFLG_FORWARD		(1<<0)
 #define BC_CFLG_REVERSE			(1<<1)
 #define BC_CFLG_RIGHT			(1<<2)
-#define BC_CFLG_LEFT			(1<<3)
+#define BC_CFLG_LEFT				(1<<3)
 #define BC_CFLG_JUMP			(1<<4)
 #define BC_CFLG_DUCK			(1<<5)
 #define BC_CFLG_STRAFE			(1<<6)

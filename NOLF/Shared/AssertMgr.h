@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: AssertMgr.h
 //
-// MODULE  : AssertMgr.h
+// PURPOSE: AssertMgr definition
 //
-// PURPOSE : AssertMgr definition
-//
-// CREATED : 05.06.1999
-//
+// CREATED: 05.06.1999
 // ----------------------------------------------------------------------- //
 
 #ifndef __ASSERT_MGR_H__
@@ -24,8 +22,8 @@ class CAssertMgr
 
 	protected : // Protected member variables
 
-        static LTBOOL            m_bEnabled;
-		static _CRT_REPORT_HOOK	m_crhPrevious;
+		static LTBOOL			m_bEnabled;
+		static _CRT_REPORT_HOOK m_crhPrevious;
 };
 
 #endif

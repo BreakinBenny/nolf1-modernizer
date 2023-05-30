@@ -1,13 +1,11 @@
 /****************************************************************************
+;	MODULE: NetDefs (.CPP)
 ;
-;	 MODULE:		NetDefs (.CPP)
+;	PURPOSE: Network game definitions
 ;
-;	PURPOSE:		Network game definitions
+;	HISTORY: 11/12/99 [kls] This file was created
 ;
-;	HISTORY:		11/12/99 [kls] This file was created
-;
-;	COMMENT:		Copyright (c) 1999, Monolith Productions Inc.
-;
+;	COMMENT: Copyright (c) 1999, Monolith Productions Inc.
 ****************************************************************************/
 
 #include "stdafx.h"
@@ -45,15 +43,15 @@ const char* GameTypeToString(GameType eType)
 		return g_kaGameTypeString[eType];
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 ServerOption::ServerOption()
 {
 	nId = -1;
 
-    szVariable[0] = LTNULL;
-    szServVariable[0] = LTNULL;
+	szVariable[0] = LTNULL;
+	szServVariable[0] = LTNULL;
 
 	nNameId = 0;
 	nHelpId = 0;
@@ -74,7 +72,7 @@ ServerOption::ServerOption()
 
 LTBOOL ServerOption::InitializeFromBute(CButeMgr & buteMgr, const char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 
 	CString str = buteMgr.GetString(aTagName, SO_VARIABLE);
@@ -83,7 +81,7 @@ LTBOOL ServerOption::InitializeFromBute(CButeMgr & buteMgr, const char* aTagName
 		strncpy(szVariable, (char*)(LPCSTR)str, sizeof(szVariable));
 	}
 	else
-        szVariable[0] = LTNULL;
+		szVariable[0] = LTNULL;
 
 	str = buteMgr.GetString(aTagName, SO_SERV_VARIABLE);
 	if (!str.IsEmpty())
@@ -91,7 +89,7 @@ LTBOOL ServerOption::InitializeFromBute(CButeMgr & buteMgr, const char* aTagName
 		strncpy(szServVariable, (char*)(LPCSTR)str, sizeof(szServVariable));
 	}
 	else
-        strncpy(szServVariable, szVariable, sizeof(szServVariable));
+		strncpy(szServVariable, szVariable, sizeof(szServVariable));
 
 	nNameId = buteMgr.GetInt(aTagName, SO_NAME,0);
 	nHelpId = buteMgr.GetInt(aTagName, SO_HELP,0);
@@ -119,15 +117,15 @@ LTBOOL ServerOption::InitializeFromBute(CButeMgr & buteMgr, const char* aTagName
 	for (int i = nNumStrings; i < SO_MAX_STRINGS; i++)
 		nStringId[i] = 0;
 
-    CPoint zero(0, 0);
-    CPoint tmp = buteMgr.GetPoint(aTagName, SO_RANGE, zero);
+	CPoint zero(0, 0);
+	CPoint tmp = buteMgr.GetPoint(aTagName, SO_RANGE, zero);
 	nSliderMin = tmp.x;
 	nSliderMax = tmp.y;
 
 	nSliderInc = buteMgr.GetInt(aTagName, SO_INCREMENT,0);
-    fSliderScale = (LTFLOAT)buteMgr.GetDouble(aTagName, SO_SCALE,1.0f);
+	fSliderScale = (LTFLOAT)buteMgr.GetDouble(aTagName, SO_SCALE,1.0f);
 
-    fDefault = fSliderScale * (LTFLOAT)buteMgr.GetDouble(aTagName, SO_DEFAULT,0.0f);
+	fDefault = fSliderScale * (LTFLOAT)buteMgr.GetDouble(aTagName, SO_DEFAULT,0.0f);
 
-    return LTTRUE;
+	return LTTRUE;
 }

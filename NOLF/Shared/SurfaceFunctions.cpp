@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: SurfaceFunctions.cpp
 //
-// MODULE  : SurfaceFunctions.cpp
+// PURPOSE: Implementation of shared surface functions
 //
-// PURPOSE : Implementation of shared surface functions
-//
-// CREATED : 7/13/99
-//
+// CREATED: 7/13/99
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -18,11 +16,9 @@
 extern char s_FileBuffer[MAX_CS_FILENAME_LEN];
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ShowsMark
 //
-//	ROUTINE:	ShowsMark
-//
-//	PURPOSE:	Does this type of surface show marks
-//
+//	PURPOSE: Does this type of surface show marks
 // ----------------------------------------------------------------------- //
 
 LTBOOL ShowsMark(SurfaceType eSurfType)
@@ -33,15 +29,13 @@ LTBOOL ShowsMark(SurfaceType eSurfType)
 		return pSurf->bShowsMark;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ShowsTracks
 //
-//	ROUTINE:	ShowsTracks
-//
-//	PURPOSE:	Does this type of surface show tracks
-//
+//	PURPOSE: Does this type of surface show tracks
 // ----------------------------------------------------------------------- //
 
 LTBOOL ShowsTracks(SurfaceType eSurfType)
@@ -52,15 +46,13 @@ LTBOOL ShowsTracks(SurfaceType eSurfType)
 		return (pSurf->szLtFootPrintSpr[0] && pSurf->szRtFootPrintSpr[0]);
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetImpactSprite()
 //
-//	ROUTINE:	GetImpactSprite()
-//
-//	PURPOSE:	Get impact sprite with this surface
-//
+//	PURPOSE: Get impact sprite with this surface
 // ----------------------------------------------------------------------- //
 
 LTBOOL GetImpactSprite(SurfaceType eSurfType, LTFLOAT & fScale, int nAmmoId,
@@ -68,16 +60,16 @@ LTBOOL GetImpactSprite(SurfaceType eSurfType, LTFLOAT & fScale, int nAmmoId,
 {
 	if (!g_pWeaponMgr || !ShowsMark(eSurfType) || !pBuf)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	AMMO* pAmmo = g_pWeaponMgr->GetAmmo(nAmmoId);
-    if (!pAmmo || !pAmmo->pImpactFX) return LTFALSE;
+	if (!pAmmo || !pAmmo->pImpactFX) return LTFALSE;
 
 	// Get the impact mark filename...
 
 	strncpy(pBuf, pAmmo->pImpactFX->szMark, nBufLen);
-    if (!pBuf[0]) return LTFALSE;
+	if (!pBuf[0]) return LTFALSE;
 
 	if (stricmp(pBuf, "SURFACE") == 0)
 	{
@@ -92,19 +84,17 @@ LTBOOL GetImpactSprite(SurfaceType eSurfType, LTFLOAT & fScale, int nAmmoId,
 		}
 		else
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: UserFlagToSurface()
 //
-//	ROUTINE:	UserFlagToSurface()
-//
-//	PURPOSE:	Convert a user flag to a surface type
-//
+//	PURPOSE: Convert a user flag to a surface type
 // ----------------------------------------------------------------------- //
 
 SurfaceType UserFlagToSurface(uint32 dwUserFlag)
@@ -117,37 +107,33 @@ SurfaceType UserFlagToSurface(uint32 dwUserFlag)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SurfaceToUserFlag()
 //
-//	ROUTINE:	SurfaceToUserFlag()
-//
-//	PURPOSE:	Convert surface type to a user flag
-//
+//	PURPOSE: Convert surface type to a user flag
 // ----------------------------------------------------------------------- //
 
 uint32 SurfaceToUserFlag(SurfaceType eSurfType)
 {
 	// Top byte should contain surface flag
 
-    uint32 dwUserFlag = (uint32)eSurfType;
+	uint32 dwUserFlag = (uint32)eSurfType;
 	dwUserFlag = (dwUserFlag << 24);
 
 	return dwUserFlag;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetMovementSound()
 //
-//	ROUTINE:	GetMovementSound()
-//
-//	PURPOSE:	Get movement sounds associated with this surface
-//
+//	PURPOSE: Get movement sounds associated with this surface
 // ----------------------------------------------------------------------- //
 
 char* GetMovementSound(SurfaceType eSurfType, LTBOOL bLeftFoot,
 					   PlayerPhysicsModel eModel)
 {
 	SURFACE* pSurf = g_pSurfaceMgr->GetSurface(eSurfType);
-    _ASSERT(pSurf);
-    if (!pSurf) return LTNULL;
+	_ASSERT(pSurf);
+	if (!pSurf) return LTNULL;
 
 	switch (eModel)
 	{
@@ -181,27 +167,25 @@ char* GetMovementSound(SurfaceType eSurfType, LTBOOL bLeftFoot,
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetImpactSound()
 //
-//	ROUTINE:	GetImpactSound()
-//
-//	PURPOSE:	Get impact sounds associated with this surface
-//
+//	PURPOSE: Get impact sounds associated with this surface
 // ----------------------------------------------------------------------- //
 
 char* GetImpactSound(SurfaceType eSurfType, int nAmmoId)
 {
 	AMMO* pAmmo = g_pWeaponMgr->GetAmmo(nAmmoId);
 	_ASSERT(pAmmo);
-    if (!pAmmo) return LTNULL;
+	if (!pAmmo) return LTNULL;
 
-    if (!(pAmmo->pImpactFX->szSound[0])) return LTNULL;
+	if (!(pAmmo->pImpactFX->szSound[0])) return LTNULL;
 	SAFE_STRCPY(s_FileBuffer, pAmmo->pImpactFX->szSound);
 
 	if (_stricmp(s_FileBuffer, "SURFACE") == 0)
 	{
 		SURFACE* pSurf = g_pSurfaceMgr->GetSurface(eSurfType);
 		_ASSERT(pSurf);
-        if (!pSurf) return LTNULL;
+		if (!pSurf) return LTNULL;
 
 		if (pAmmo->eType == VECTOR)
 		{
@@ -224,65 +208,59 @@ char* GetImpactSound(SurfaceType eSurfType, int nAmmoId)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: IsMoveable()
 //
-//	ROUTINE:	IsMoveable()
-//
-//	PURPOSE:	Determine if the passed in object is moveable
-//
+//	PURPOSE: Determine if the passed in object is moveable
 // ----------------------------------------------------------------------- //
 
 LTBOOL IsMoveable(HOBJECT hObj)
 {
-    if (!hObj) return LTFALSE;
+	if (!hObj) return LTFALSE;
 
-    uint32 dwUserFlags;
+	uint32 dwUserFlags;
 
 #ifdef _CLIENTBUILD
-    g_pLTClient->GetObjectUserFlags(hObj, &dwUserFlags);
+	g_pLTClient->GetObjectUserFlags(hObj, &dwUserFlags);
 #else
-    dwUserFlags = g_pLTServer->GetObjectUserFlags(hObj);
+	dwUserFlags = g_pLTServer->GetObjectUserFlags(hObj);
 #endif
 
 	return !!(dwUserFlags & USRFLG_MOVEABLE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CanMarkObject()
 //
-//	ROUTINE:	CanMarkObject()
-//
-//	PURPOSE:	Determine if the passed in object can be marked
-//
+//	PURPOSE: Determine if the passed in object can be marked
 // ----------------------------------------------------------------------- //
 
 LTBOOL CanMarkObject(HOBJECT hObj)
 {
-    if (!hObj) return LTFALSE;
+	if (!hObj) return LTFALSE;
 
 	// Objects that don't move can be marked...
 
-    if (!IsMoveable(hObj)) return LTTRUE;
+	if (!IsMoveable(hObj)) return LTTRUE;
 
 #ifndef _CLIENTBUILD
 
 	// Can also mark world models on the server...
 
-    if (g_pLTServer->GetObjectType(hObj) == OT_WORLDMODEL)
+	if (g_pLTServer->GetObjectType(hObj) == OT_WORLDMODEL)
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 #endif
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetSurfaceType()
 //
-//	ROUTINE:	GetSurfaceType()
-//
-//	PURPOSE:	Determine the type of surface associated with the info
+//	PURPOSE: Determine the type of surface associated with the info
 //				returned from an intersection...
-//
 // ----------------------------------------------------------------------- //
 
 SurfaceType GetSurfaceType(IntersectInfo & iInfo)
@@ -315,12 +293,10 @@ SurfaceType GetSurfaceType(IntersectInfo & iInfo)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetSurfaceType()
 //
-//	ROUTINE:	GetSurfaceType()
-//
-//	PURPOSE:	Determine the type of surface associated with the info
+//	PURPOSE: Determine the type of surface associated with the info
 //				returned from a collision...
-//
 // ----------------------------------------------------------------------- //
 
 SurfaceType GetSurfaceType(CollisionInfo & iInfo)
@@ -348,11 +324,9 @@ SurfaceType GetSurfaceType(CollisionInfo & iInfo)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetSurfaceType()
 //
-//	ROUTINE:	GetSurfaceType()
-//
-//	PURPOSE:	Determine the type of surface associated with a poly
-//
+//	PURPOSE: Determine the type of surface associated with a poly
 // ----------------------------------------------------------------------- //
 
 SurfaceType GetSurfaceType(HPOLY hPoly)
@@ -363,12 +337,12 @@ SurfaceType GetSurfaceType(HPOLY hPoly)
 	{
 		// Get the flags associated with the poly...
 
-        uint32 dwTextureFlags;
+		uint32 dwTextureFlags;
 
 #ifdef _CLIENTBUILD
-        g_pLTClient->GetPolyTextureFlags(hPoly, &dwTextureFlags);
+		g_pLTClient->GetPolyTextureFlags(hPoly, &dwTextureFlags);
 #else
-        g_pLTServer->GetPolyTextureFlags(hPoly, &dwTextureFlags);
+		g_pLTServer->GetPolyTextureFlags(hPoly, &dwTextureFlags);
 #endif
 
 		eType = (SurfaceType)dwTextureFlags;
@@ -379,11 +353,9 @@ SurfaceType GetSurfaceType(HPOLY hPoly)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetSurfaceType()
 //
-//	ROUTINE:	GetSurfaceType()
-//
-//	PURPOSE:	Determine the type of surface associated with an object
-//
+//	PURPOSE: Determine the type of surface associated with an object
 // ----------------------------------------------------------------------- //
 
 SurfaceType GetSurfaceType(HOBJECT hObj)
@@ -392,17 +364,17 @@ SurfaceType GetSurfaceType(HOBJECT hObj)
 
 	SurfaceType eType = ST_UNKNOWN;
 
-    uint32 dwUserFlags;
+	uint32 dwUserFlags;
 
 #ifdef _CLIENTBUILD
-    g_pLTClient->GetObjectUserFlags(hObj, &dwUserFlags);
+	g_pLTClient->GetObjectUserFlags(hObj, &dwUserFlags);
 #else
-    dwUserFlags = g_pLTServer->GetObjectUserFlags(hObj);
+	dwUserFlags = g_pLTServer->GetObjectUserFlags(hObj);
 #endif
 
-    uint16 code;
+	uint16 code;
 
-    if (!IsMainWorld(hObj))
+	if (!IsMainWorld(hObj))
 	{
 		if (dwUserFlags & USRFLG_CHARACTER)
 		{
@@ -414,11 +386,11 @@ SurfaceType GetSurfaceType(HOBJECT hObj)
 			}
 		}
 #ifdef _CLIENTBUILD
-        else if (g_pLTClient->GetContainerCode(hObj, &code))
+		else if (g_pLTClient->GetContainerCode(hObj, &code))
 #else
-        else if (g_pLTServer->GetContainerCode(hObj, &code))
+		else if (g_pLTServer->GetContainerCode(hObj, &code))
 #endif
-        {
+		{
 			if (IsLiquid((ContainerCode)code))
 			{
 				eType = ST_LIQUID;

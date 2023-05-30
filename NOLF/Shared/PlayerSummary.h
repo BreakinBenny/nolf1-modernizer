@@ -1,9 +1,7 @@
 // ----------------------------------------------------------------------- //
 // MODULE: PlayerSummaryMgr.h
-//
-// PURPOSE : PlayerSummaryMgr definition - Server-side attributes
-//
-// CREATED : 2/02/99
+// PURPOSE: PlayerSummaryMgr definition - Server-side attributes
+// CREATED: 2/02/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //

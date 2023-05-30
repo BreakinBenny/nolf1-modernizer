@@ -52,4 +52,3 @@ void debug_delete_fna(T* pPtr)
 {
 	delete[] pPtr;
 }
-

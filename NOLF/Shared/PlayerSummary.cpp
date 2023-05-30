@@ -1,9 +1,7 @@
 // ----------------------------------------------------------------------- //
 // MODULE: PlayerSummaryMgr.cpp
-//
-// PURPOSE : PlayerSummaryMgr implementation - Player summary
-//
-// CREATED : 9/08/99
+// PURPOSE: PlayerSummaryMgr implementation - Player summary
+// CREATED: 9/08/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //
@@ -29,15 +27,15 @@ extern LTBOOL g_bAllowAllMissions;
 #include "PlayerObj.h"
 #endif
 
-#define PSMGR_DEFAULT_CRYPT_KEY		"ThisIsTheKey"
+#define PSMGR_DEFAULT_CRYPT_KEY	"ThisIsTheKey"
 
 #define PSMGR_MISSIONSUMMARY_TAG	"MissionSummary"
-#define PSMGR_STATUS_TAG		"Status"
-#define PSMGR_WEAPONS			"Weapons"
+#define PSMGR_STATUS_TAG	"Status"
+#define PSMGR_WEAPONS		"Weapons"
 #define PSMGR_AMMO			"Ammo"
 #define PSMGR_MODS			"Mods"
 #define PSMGR_GEAR			"Gear"
-#define PSMGR_MISSION			"NextMission"
+#define PSMGR_MISSION		"NextMission"
 
 
 static char s_aAttributeFile[256];
@@ -45,9 +43,9 @@ static char s_aTagName[30];
 static char s_aAttName[100];
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::CPlayerSummaryMgr()
+//	ROUTINE: CPlayerSummaryMgr::CPlayerSummaryMgr()
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CPlayerSummaryMgr::CPlayerSummaryMgr()
@@ -60,9 +58,9 @@ CPlayerSummaryMgr::CPlayerSummaryMgr()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::~CPlayerSummaryMgr()
+//	ROUTINE: CPlayerSummaryMgr::~CPlayerSummaryMgr()
 //
-//	PURPOSE:	Destructor
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CPlayerSummaryMgr::~CPlayerSummaryMgr()
@@ -71,9 +69,9 @@ CPlayerSummaryMgr::~CPlayerSummaryMgr()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::Term()
+//	ROUTINE: CPlayerSummaryMgr::Term()
 //
-//	PURPOSE:	Clean up.
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::Term()
@@ -83,9 +81,9 @@ void CPlayerSummaryMgr::Term()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::Init()
+//	ROUTINE: CPlayerSummaryMgr::Init()
 //
-//	PURPOSE:	Init mgr
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerSummaryMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
@@ -159,9 +157,9 @@ LTBOOL CPlayerSummaryMgr::Init(ILTCSBase *pInterface, const char* szAttributeFil
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::Save()
+//	ROUTINE: CPlayerSummaryMgr::Save()
 //
-//	PURPOSE:	Save the current player summary...
+//	PURPOSE: Save the current player summary...
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerSummaryMgr::Save(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
@@ -215,9 +213,9 @@ LTBOOL CPlayerSummaryMgr::Save(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::Load()
+//	ROUTINE: CPlayerSummaryMgr::Load()
 //
-//	PURPOSE:	Load the current player summary...
+//	PURPOSE: Load the current player summary...
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerSummaryMgr::Load(ILTCSBase *pInterface, HMESSAGEREAD hRead)
@@ -246,9 +244,9 @@ LTBOOL CPlayerSummaryMgr::Load(ILTCSBase *pInterface, HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::RefreshData()
+//	ROUTINE: CPlayerSummaryMgr::RefreshData()
 //
-//	PURPOSE:	Make sure our bute mgr is up-to-date with what is in the
+//	PURPOSE: Make sure our bute mgr is up-to-date with what is in the
 //			file (i.e., keep client and server version in synch).
 // ----------------------------------------------------------------------- //
 
@@ -266,9 +264,9 @@ void CPlayerSummaryMgr::RefreshData(ILTCSBase *pInterface)
 #ifndef _CLIENTBUILD
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::HandleLevelStart()
+//	ROUTINE: CPlayerSummaryMgr::HandleLevelStart()
 //
-//	PURPOSE:	Handle a level starting...
+//	PURPOSE: Handle a level starting...
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::HandleLevelStart()
@@ -307,9 +305,9 @@ void CPlayerSummaryMgr::HandleLevelStart()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::HandleLevelEnd()
+//	ROUTINE: CPlayerSummaryMgr::HandleLevelEnd()
 //
-//	PURPOSE:	Handle a level ending...
+//	PURPOSE: Handle a level ending...
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::HandleLevelEnd(CPlayerObj* pPlayer)
@@ -333,9 +331,9 @@ void CPlayerSummaryMgr::HandleLevelEnd(CPlayerObj* pPlayer)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::IncIntelligenceCount()
+//	ROUTINE: CPlayerSummaryMgr::IncIntelligenceCount()
 //
-//	PURPOSE:	Increment the count of intelligence found
+//	PURPOSE: Increment the count of intelligence found
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::IncIntelligenceCount()
@@ -368,9 +366,9 @@ void CPlayerSummaryMgr::IncIntelligenceCount()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::UpdateTotalMissionTime()
+//	ROUTINE: CPlayerSummaryMgr::UpdateTotalMissionTime()
 //
-//	PURPOSE:	Update our total mission time
+//	PURPOSE: Update our total mission time
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::UpdateTotalMissionTime()
@@ -387,9 +385,9 @@ void CPlayerSummaryMgr::UpdateTotalMissionTime()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::IncShotsFired()
+//	ROUTINE: CPlayerSummaryMgr::IncShotsFired()
 //
-//	PURPOSE:	Increment the number of shots fired
+//	PURPOSE: Increment the number of shots fired
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::IncShotsFired()
@@ -406,9 +404,9 @@ void CPlayerSummaryMgr::IncShotsFired()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::IncNumHits()
+//	ROUTINE: CPlayerSummaryMgr::IncNumHits()
 //
-//	PURPOSE:	Increment the number of hits made
+//	PURPOSE: Increment the number of hits made
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::IncNumHits(HitLocation eHitLocation)
@@ -430,9 +428,9 @@ void CPlayerSummaryMgr::IncNumHits(HitLocation eHitLocation)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::IncNumTimesDetected()
+//	ROUTINE: CPlayerSummaryMgr::IncNumTimesDetected()
 //
-//	PURPOSE:	Increment the number of times detected
+//	PURPOSE: Increment the number of times detected
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::IncNumTimesDetected()
@@ -449,9 +447,9 @@ void CPlayerSummaryMgr::IncNumTimesDetected()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::IncNumDisturbances()
+//	ROUTINE: CPlayerSummaryMgr::IncNumDisturbances()
 //
-//	PURPOSE:	Increment the number of times player caused disturbances
+//	PURPOSE: Increment the number of times player caused disturbances
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::IncNumDisturbances()
@@ -468,9 +466,9 @@ void CPlayerSummaryMgr::IncNumDisturbances()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::IncNumBodies()
+//	ROUTINE: CPlayerSummaryMgr::IncNumBodies()
 //
-//	PURPOSE:	Increment the number of bodies found by AI
+//	PURPOSE: Increment the number of bodies found by AI
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::IncNumBodies()
@@ -488,9 +486,9 @@ void CPlayerSummaryMgr::IncNumBodies()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::IncNumKills()
+//	ROUTINE: CPlayerSummaryMgr::IncNumKills()
 //
-//	PURPOSE:	Increment the number of kills
+//	PURPOSE: Increment the number of kills
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::IncNumEnemyKills()
@@ -533,9 +531,9 @@ void CPlayerSummaryMgr::IncNumNeutralKills()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::IncNumTimesHit()
+//	ROUTINE: CPlayerSummaryMgr::IncNumTimesHit()
 //
-//	PURPOSE:	Increment the number of times hit
+//	PURPOSE: Increment the number of times hit
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::IncNumTimesHit()
@@ -552,9 +550,9 @@ void CPlayerSummaryMgr::IncNumTimesHit()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::SendDataToClient
+//	ROUTINE: CPlayerSummaryMgr::SendDataToClient
 //
-//	PURPOSE:	Send the player summary data to the client
+//	PURPOSE: Send the player summary data to the client
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::SendDataToClient(HCLIENT hClient)
@@ -577,9 +575,9 @@ void CPlayerSummaryMgr::SendDataToClient(HCLIENT hClient)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::WriteRankData()
+//	ROUTINE: CPlayerSummaryMgr::WriteRankData()
 //
-//	PURPOSE:	Write the current player rank to the bute file
+//	PURPOSE: Write the current player rank to the bute file
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerSummaryMgr::WriteRankData()
@@ -596,9 +594,9 @@ LTBOOL CPlayerSummaryMgr::WriteRankData()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::CalcNumIntelObjects()
+//	ROUTINE: CPlayerSummaryMgr::CalcNumIntelObjects()
 //
-//	PURPOSE:	Calculate the number of intelligence objects in the level
+//	PURPOSE: Calculate the number of intelligence objects in the level
 // ----------------------------------------------------------------------- //
 
 int CPlayerSummaryMgr::CalcNumIntelObjects()
@@ -642,9 +640,9 @@ int CPlayerSummaryMgr::CalcNumIntelObjects()
 // *******************************************************************************
 #if defined(_CLIENTBUILD)
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::ReadClientData
+//	ROUTINE: CPlayerSummaryMgr::ReadClientData
 //
-//	PURPOSE:	Read the player summary data sent from the server
+//	PURPOSE: Read the player summary data sent from the server
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::ReadClientData(HMESSAGEREAD hRead)
@@ -662,9 +660,9 @@ void CPlayerSummaryMgr::ReadClientData(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::ReadRankData()
+//	ROUTINE: CPlayerSummaryMgr::ReadRankData()
 //
-//	PURPOSE:	Read the current player rank from the bute file
+//	PURPOSE: Read the current player rank from the bute file
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerSummaryMgr::ReadRankData()
@@ -686,9 +684,9 @@ LTBOOL CPlayerSummaryMgr::ReadRankData()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::WriteWeaponData()
+//	ROUTINE: CPlayerSummaryMgr::WriteWeaponData()
 //
-//	PURPOSE:	Write the current player weapon data to the bute file
+//	PURPOSE: Write the current player weapon data to the bute file
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::WriteWeaponData(LTBOOL *pbCanUseWeapon, int numWeapons)
@@ -705,9 +703,9 @@ void CPlayerSummaryMgr::WriteWeaponData(LTBOOL *pbCanUseWeapon, int numWeapons)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::ReadWeaponData()
+//	ROUTINE: CPlayerSummaryMgr::ReadWeaponData()
 //
-//	PURPOSE:	Read the current player weapon data from the bute file
+//	PURPOSE: Read the current player weapon data from the bute file
 // ----------------------------------------------------------------------- //
 
 
@@ -726,9 +724,9 @@ void CPlayerSummaryMgr::ReadWeaponData(LTBOOL *pbCanUseWeapon, int numWeapons)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::WriteAmmoData()
+//	ROUTINE: CPlayerSummaryMgr::WriteAmmoData()
 //
-//	PURPOSE:	Write the current player Ammo data to the bute file
+//	PURPOSE: Write the current player Ammo data to the bute file
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::WriteAmmoData(LTBOOL *pbCanUseAmmo, int numAmmos)
@@ -745,9 +743,9 @@ void CPlayerSummaryMgr::WriteAmmoData(LTBOOL *pbCanUseAmmo, int numAmmos)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::ReadAmmoData()
+//	ROUTINE: CPlayerSummaryMgr::ReadAmmoData()
 //
-//	PURPOSE:	Read the current player Ammo data from the bute file
+//	PURPOSE: Read the current player Ammo data from the bute file
 // ----------------------------------------------------------------------- //
 
 
@@ -766,9 +764,9 @@ void CPlayerSummaryMgr::ReadAmmoData(LTBOOL *pbCanUseAmmo, int numAmmos)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::WriteModData()
+//	ROUTINE: CPlayerSummaryMgr::WriteModData()
 //
-//	PURPOSE:	Write the current player Mod data to the bute file
+//	PURPOSE: Write the current player Mod data to the bute file
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::WriteModData(LTBOOL *pbCanUseMod, int numMods)
@@ -785,9 +783,9 @@ void CPlayerSummaryMgr::WriteModData(LTBOOL *pbCanUseMod, int numMods)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::ReadModData()
+//	ROUTINE: CPlayerSummaryMgr::ReadModData()
 //
-//	PURPOSE:	Read the current player Mod data from the bute file
+//	PURPOSE: Read the current player Mod data from the bute file
 // ----------------------------------------------------------------------- //
 
 
@@ -806,9 +804,9 @@ void CPlayerSummaryMgr::ReadModData(LTBOOL *pbCanUseMod, int numMods)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::WriteGearData()
+//	ROUTINE: CPlayerSummaryMgr::WriteGearData()
 //
-//	PURPOSE:	Write the current player Gear data to the bute file
+//	PURPOSE: Write the current player Gear data to the bute file
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::WriteGearData(LTBOOL *pbCanUseGear, int numGears)
@@ -826,9 +824,9 @@ void CPlayerSummaryMgr::WriteGearData(LTBOOL *pbCanUseGear, int numGears)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::ReadGearData()
+//	ROUTINE: CPlayerSummaryMgr::ReadGearData()
 //
-//	PURPOSE:	Read the current player Gear data from the bute file
+//	PURPOSE: Read the current player Gear data from the bute file
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::ReadGearData(LTBOOL *pbCanUseGear, int numGears)
@@ -847,9 +845,9 @@ void CPlayerSummaryMgr::ReadGearData(LTBOOL *pbCanUseGear, int numGears)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::GetNextMission()
+//	ROUTINE: CPlayerSummaryMgr::GetNextMission()
 //
-//	PURPOSE:	Get the number of the next uncompleted mission
+//	PURPOSE: Get the number of the next uncompleted mission
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerSummaryMgr::GetNextMission()
@@ -861,9 +859,9 @@ LTBOOL CPlayerSummaryMgr::GetNextMission()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::CompleteMission()
+//	ROUTINE: CPlayerSummaryMgr::CompleteMission()
 //
-//	PURPOSE:	Mark the specified mission as complete
+//	PURPOSE: Mark the specified mission as complete
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::CompleteMission(int nMissionNum)
@@ -879,9 +877,9 @@ void CPlayerSummaryMgr::CompleteMission(int nMissionNum)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::ClearStatus()
+//	ROUTINE: CPlayerSummaryMgr::ClearStatus()
 //
-//	PURPOSE:	Clear the players status
+//	PURPOSE: Clear the players status
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::ClearStatus()
@@ -920,9 +918,9 @@ void CPlayerSummaryMgr::ClearStatus()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::GetMissionSummary
+//	ROUTINE: CPlayerSummaryMgr::GetMissionSummary
 //
-//	PURPOSE:	Get the specified mission summary
+//	PURPOSE: Get the specified mission summary
 // ----------------------------------------------------------------------- //
 
 MISSIONSUMMARY* CPlayerSummaryMgr::GetMissionSummary(int nMissionId)
@@ -948,9 +946,9 @@ MISSIONSUMMARY* CPlayerSummaryMgr::GetMissionSummary(int nMissionId)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::CalcCurPlayerRank()
+//	ROUTINE: CPlayerSummaryMgr::CalcCurPlayerRank()
 //
-//	PURPOSE:	Calculate the player's current rank
+//	PURPOSE: Calculate the player's current rank
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::CalcCurPlayerRank()
@@ -974,9 +972,9 @@ void CPlayerSummaryMgr::CalcCurPlayerRank()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::CalcPlayerGlobalRank()
+//	ROUTINE: CPlayerSummaryMgr::CalcPlayerGlobalRank()
 //
-//	PURPOSE:	Calculate the player's global rank
+//	PURPOSE: Calculate the player's global rank
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::CalcPlayerGlobalRank()
@@ -1068,9 +1066,9 @@ void CPlayerSummaryMgr::CalcPlayerGlobalRank()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::CalcMissionRank()
+//	ROUTINE: CPlayerSummaryMgr::CalcMissionRank()
 //
-//	PURPOSE:	Calculate the player's rank for the specified mission...
+//	PURPOSE: Calculate the player's rank for the specified mission...
 // ----------------------------------------------------------------------- //
 
 void CPlayerSummaryMgr::CalcMissionRank(MISSION* pMission, MISSIONSUMMARY* pSummary)
@@ -1118,9 +1116,9 @@ void CPlayerSummaryMgr::CalcMissionRank(MISSION* pMission, MISSIONSUMMARY* pSumm
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CPlayerSummaryMgr::Parse()
+//	ROUTINE: CPlayerSummaryMgr::Parse()
 //
-//	PURPOSE:	Parse from a rez file
+//	PURPOSE: Parse from a rez file
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPlayerSummaryMgr::Parse(ILTCSBase *pInterface, const char* sButeFile)

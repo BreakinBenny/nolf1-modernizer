@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: VersionMgr.h
 //
-// MODULE  : VersionMgr.h
+// PURPOSE: Definition of versioning manager
 //
-// PURPOSE : Definition of versioning manager
-//
-// CREATED : 11/16/2000
+// CREATED: 11/16/2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __VERSION_MGR_H__

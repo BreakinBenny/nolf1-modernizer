@@ -1,9 +1,7 @@
 // ----------------------------------------------------------------------- //
 // MODULE: SoundTypes.h
-//
-// PURPOSE : Sound types
-//
-// CREATED : 11/12/97
+// PURPOSE: Sound types
+// CREATED: 11/12/97
 // ----------------------------------------------------------------------- //
 
 #ifndef __SOUND_TYPES_H__
@@ -16,7 +14,7 @@ enum SoundPriority
 	SOUNDPRIORITYBASE_PLAYER	= 4,
 
 	SOUNDPRIORITYMOD_LOW		= 0,
-	SOUNDPRIORITYMOD_MEDIUM		= 1,
+	SOUNDPRIORITYMOD_MEDIUM	= 1,
 	SOUNDPRIORITYMOD_HIGH		= 2,
 
 	SOUNDPRIORITY_MISC_LOW		= SOUNDPRIORITYBASE_MISC + SOUNDPRIORITYMOD_LOW,

@@ -1,4 +1,3 @@
-
 #include "DebugMgr.h"
 
 // NOTES: this code is in general mostly broken when it comes to unicode
@@ -95,19 +94,19 @@ long __stdcall CDebugMgr::ExceptionHandler(PEXCEPTION_POINTERS pExceptionPointer
 
 void CDebugMgr::RecordException(PEXCEPTION_POINTERS pExceptionInfo)
 {
-    PEXCEPTION_RECORD pExceptionRecord = pExceptionInfo->ExceptionRecord;
-    // First print information about the type of fault
-    m_pchBuffer += wsprintf(m_pchBuffer,  "Exception code: %08X\n",
+	PEXCEPTION_RECORD pExceptionRecord = pExceptionInfo->ExceptionRecord;
+	// First print information about the type of fault
+	m_pchBuffer += wsprintf(m_pchBuffer,  "Exception code: %08X\n",
 		pExceptionRecord->ExceptionCode);
-    // Now print information about where the fault occured
-    TCHAR szFaultingModule[MAX_PATH];    DWORD section, offset;
-    FindLogicalAddress(  pExceptionRecord->ExceptionAddress,
-                        szFaultingModule,
-                        sizeof( szFaultingModule ),
-                        section, offset );
-    m_pchBuffer += wsprintf(m_pchBuffer,"Fault address:  %08X %02X:%08X %s",
-              pExceptionRecord->ExceptionAddress,
-              section, offset, szFaultingModule );
+	// Now print information about where the fault occured
+	TCHAR szFaultingModule[MAX_PATH];	DWORD section, offset;
+	FindLogicalAddress(  pExceptionRecord->ExceptionAddress,
+						szFaultingModule,
+						sizeof( szFaultingModule ),
+						section, offset );
+	m_pchBuffer += wsprintf(m_pchBuffer,"Fault address:  %08X %02X:%08X %s",
+			  pExceptionRecord->ExceptionAddress,
+			  section, offset, szFaultingModule );
 
 	TCHAR szMap[MAX_PATH] = "";
 	wsprintf(szMap, szFaultingModule);
@@ -160,44 +159,42 @@ void CDebugMgr::RecordException(PEXCEPTION_POINTERS pExceptionInfo)
 		m_pchBuffer += wsprintf(m_pchBuffer, "\n");
 	}
 
-    PCONTEXT pCtx = pExceptionInfo->ContextRecord;    // Show the registers
-    m_pchBuffer += wsprintf(m_pchBuffer, "EAX:%08X\nEBX:%08X\nECX:%08X\nEDX:%08X\nESI:%08X\nEDI:%08X\n",
-             pCtx->Eax, pCtx->Ebx, pCtx->Ecx, pCtx->Edx, pCtx->Esi, pCtx->Edi );
-    m_pchBuffer += wsprintf(m_pchBuffer,"CS:EIP:%04X:%08X\n", pCtx->SegCs, pCtx->Eip );
-    m_pchBuffer += wsprintf(m_pchBuffer,"SS:ESP:%04X:%08X  EBP:%08X\n",
-              pCtx->SegSs, pCtx->Esp, pCtx->Ebp );
-    m_pchBuffer += wsprintf(m_pchBuffer,"DS:%04X  ES:%04X  FS:%04X  GS:%04X\n",
-              pCtx->SegDs, pCtx->SegEs, pCtx->SegFs, pCtx->SegGs );
-    m_pchBuffer += wsprintf(m_pchBuffer,"Flags:%08X\n", pCtx->EFlags );
+	PCONTEXT pCtx = pExceptionInfo->ContextRecord;	// Show the registers
+	m_pchBuffer += wsprintf(m_pchBuffer, "EAX:%08X\nEBX:%08X\nECX:%08X\nEDX:%08X\nESI:%08X\nEDI:%08X\n",
+			 pCtx->Eax, pCtx->Ebx, pCtx->Ecx, pCtx->Edx, pCtx->Esi, pCtx->Edi );
+	m_pchBuffer += wsprintf(m_pchBuffer,"CS:EIP:%04X:%08X\n", pCtx->SegCs, pCtx->Eip );
+	m_pchBuffer += wsprintf(m_pchBuffer,"SS:ESP:%04X:%08X  EBP:%08X\n",
+			  pCtx->SegSs, pCtx->Esp, pCtx->Ebp );
+	m_pchBuffer += wsprintf(m_pchBuffer,"DS:%04X  ES:%04X  FS:%04X  GS:%04X\n",
+			  pCtx->SegDs, pCtx->SegEs, pCtx->SegFs, pCtx->SegGs );
+	m_pchBuffer += wsprintf(m_pchBuffer,"Flags:%08X\n", pCtx->EFlags );
 }
 
 void CDebugMgr::RecordStack(const CONTEXT* pContext)
 {
-    m_pchBuffer += wsprintf(m_pchBuffer,"\nCall stack:\n" );
+	m_pchBuffer += wsprintf(m_pchBuffer,"\nCall stack:\n" );
 
-    m_pchBuffer += wsprintf(m_pchBuffer,"Address   Frame     Logical addr  Module\n" );
+	m_pchBuffer += wsprintf(m_pchBuffer,"Address   Frame	 Logical addr  Module\n" );
 
-    DWORD pc = pContext->Eip;
-    PDWORD pFrame, pPrevFrame;
-    
-    pFrame = (PDWORD)pContext->Ebp;
+	DWORD pc = pContext->Eip;
+	PDWORD pFrame, pPrevFrame;
+	
+	pFrame = (PDWORD)pContext->Ebp;
 
-    do
-    {
-        TCHAR szModule[MAX_PATH] = "";
-        DWORD section = 0, offset = 0;
+	do
+	{
+		TCHAR szModule[MAX_PATH] = "";
+		DWORD section = 0, offset = 0;
 
-        FindLogicalAddress((PVOID)pc, szModule,sizeof(szModule),section,offset );
+		FindLogicalAddress((PVOID)pc, szModule,sizeof(szModule),section,offset );
 
-        m_pchBuffer += wsprintf(m_pchBuffer,"%08X  %08X  %04X:%08X %s",
-                  pc, pFrame, section, offset, szModule );
+		m_pchBuffer += wsprintf(m_pchBuffer,"%08X  %08X  %04X:%08X %s",
+				  pc, pFrame, section, offset, szModule );
 
 		// See if we need to spit out symbol/source/line info
-
 		if ( m_dwOptions & DEBUGMGR_RESOLVESYMBOLS )
 		{
 			// Generate the name of the map file
-
 			TCHAR szMap[MAX_PATH] = "";
 			wsprintf(szMap, szModule);
 			wsprintf(&szMap[lstrlen(szMap)-3], "MAP");
@@ -245,71 +242,70 @@ void CDebugMgr::RecordStack(const CONTEXT* pContext)
 		}
 
 		// Go on to the next stack frame
+		pc = pFrame[1];
 
-        pc = pFrame[1];
+		pPrevFrame = pFrame;
 
-        pPrevFrame = pFrame;
+		pFrame = (PDWORD)pFrame[0]; // proceed to next higher frame on stack
 
-        pFrame = (PDWORD)pFrame[0]; // proceed to next higher frame on stack
+		if ( (DWORD)pFrame & 3 )	// Frame pointer must be aligned on a
+			break;				// DWORD boundary.  Bail if not so.
 
-        if ( (DWORD)pFrame & 3 )    // Frame pointer must be aligned on a
-            break;                  // DWORD boundary.  Bail if not so.
+		if ( pFrame <= pPrevFrame )
+			break;
 
-        if ( pFrame <= pPrevFrame )
-            break;
+		// Can two DWORDs be read from the supposed frame address?		  
+		if ( IsBadWritePtr(pFrame, sizeof(PVOID)*2) )
+			break;
 
-        // Can two DWORDs be read from the supposed frame address?          
-        if ( IsBadWritePtr(pFrame, sizeof(PVOID)*2) )
-            break;
-
-    } while ( 1 );
+	} while ( 1 );
 }
 
 BOOL CDebugMgr::FindLogicalAddress(PVOID addr, PTSTR szModule, DWORD len, DWORD& section, DWORD& offset)
 {
-    MEMORY_BASIC_INFORMATION mbi;
+	MEMORY_BASIC_INFORMATION mbi;
 
-    if ( !VirtualQuery( addr, &mbi, sizeof(mbi) ) )
-        return FALSE;
+	if ( !VirtualQuery( addr, &mbi, sizeof(mbi) ) )
+		return FALSE;
 
-    DWORD hMod = (DWORD)mbi.AllocationBase;
+	DWORD hMod = (DWORD)mbi.AllocationBase;
 
-    if ( !GetModuleFileName( (HMODULE)hMod, szModule, len ) )
-        return FALSE;
+	if ( !GetModuleFileName( (HMODULE)hMod, szModule, len ) )
+		return FALSE;
 
-    // Point to the DOS header in memory
-    PIMAGE_DOS_HEADER pDosHdr = (PIMAGE_DOS_HEADER)hMod;
+	// Point to the DOS header in memory
+	PIMAGE_DOS_HEADER pDosHdr = (PIMAGE_DOS_HEADER)hMod;
 
-    // From the DOS header, find the NT (PE) header
-    PIMAGE_NT_HEADERS pNtHdr = (PIMAGE_NT_HEADERS)(hMod + pDosHdr->e_lfanew);
+	// From the DOS header, find the NT (PE) header
+	PIMAGE_NT_HEADERS pNtHdr = (PIMAGE_NT_HEADERS)(hMod + pDosHdr->e_lfanew);
 
-    PIMAGE_SECTION_HEADER pSection = IMAGE_FIRST_SECTION( pNtHdr );
+	PIMAGE_SECTION_HEADER pSection = IMAGE_FIRST_SECTION( pNtHdr );
 
-    DWORD rva = (DWORD)addr - hMod; // RVA is offset from module load address
+	DWORD rva = (DWORD)addr - hMod; // RVA is offset from module load address
 
-    // Iterate through the section table, looking for the one that encompasses
-    // the linear address.
-    for (   unsigned i = 0;
-            i < pNtHdr->FileHeader.NumberOfSections;
-            i++, pSection++ )
-    {
-        DWORD sectionStart = pSection->VirtualAddress;
-        DWORD sectionEnd = sectionStart
-                    + max(pSection->SizeOfRawData, pSection->Misc.VirtualSize);
+	// Iterate through the section table, looking for the one that encompasses
+	// the linear address.
+	for (   unsigned i = 0;
+			i < pNtHdr->FileHeader.NumberOfSections;
+			i++, pSection++ )
+	{
+		DWORD sectionStart = pSection->VirtualAddress;
+		DWORD sectionEnd = sectionStart
+					+ max(pSection->SizeOfRawData, pSection->Misc.VirtualSize);
 
-        // Is the address in this section???
-        if ( (rva >= sectionStart) && (rva <= sectionEnd) )
-        {
-            // Yes, address is in the section.  Calculate section and offset,
-            // and store in the "section" & "offset" params, which were
-            // passed by reference.
-            section = i+1;
-            offset = rva - sectionStart;
-            return TRUE;
-        }
-    }
+		// Is the address in this section???
+		if ( (rva >= sectionStart) && (rva <= sectionEnd) )
+		{
+			// Yes, address is in the section.  Calculate section and offset,
+			// and store in the "section" & "offset" params, which were
+			// passed by reference.
+			section = i+1;
+			offset = rva - sectionStart;
+			return TRUE;
+		}
+	}
 
-    return FALSE;   // Should never get here!
+	return FALSE;   // Should never get here!
 }
 
 BOOL CDebugMgr::FindSymbol(const char* szMap, DWORD dwSection, DWORD dwOffset, char* szSymbol, char* szObject)

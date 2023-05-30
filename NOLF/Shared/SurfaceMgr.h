@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: SurfaceMgr.h
 //
-// MODULE  : SurfaceMgr.h
+// PURPOSE: Definition of surface mgr
 //
-// PURPOSE : Definition of surface mgr
-//
-// CREATED : 7/06/99
+// CREATED: 7/06/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __SURFACE_MGR_H__
@@ -24,45 +22,45 @@ extern CSurfaceMgr* g_pSurfaceMgr;
 #define SRFMGR_DEFAULT_FILE		"Attributes\\Surface.txt"
 
 #define SRF_MAX_FILE_PATH			64
-#define SRF_MAX_NAME_LENGTH			32
+#define SRF_MAX_NAME_LENGTH		32
 #define SRF_MAX_FOOTSTEP_SNDS		2
-#define SRF_MAX_MOTORCYCLE_SNDS		2
-#define SRF_MAX_SNOWMOBILE_SNDS		2
-#define SRF_MAX_IMPACT_SNDS			2
+#define SRF_MAX_MOTORCYCLE_SNDS	2
+#define SRF_MAX_SNOWMOBILE_SNDS	2
+#define SRF_MAX_IMPACT_SNDS		2
 #define SRF_MAX_SHELL_SNDS			1
-#define SRF_MAX_IMPACT_SCALEFX		5
+#define SRF_MAX_IMPACT_SCALEFX	5
 #define SRF_MAX_IMPACT_PSHOWERFX	5
 #define SRF_MAX_IMPACT_POLYDEBRISFX	5
 #define SRF_MAX_EXIT_SCALEFX		5
-#define SRF_MAX_EXIT_PSHOWERFX		5
+#define SRF_MAX_EXIT_PSHOWERFX	5
 #define SRF_MAX_EXIT_POLYDEBRISFX	5
 
 struct SURFACE
 {
 	SURFACE();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
 	void	Cache(CSurfaceMgr* pSurfaceMgr);
 
 	char	szName[SRF_MAX_NAME_LENGTH];
 
 	SurfaceType	eType;
 
-    LTBOOL   bCanSeeThrough;
+	LTBOOL   bCanSeeThrough;
 
 	// Shoot through info...
 
-    LTBOOL   bCanShootThrough;
+	LTBOOL   bCanShootThrough;
 	int		nMaxShootThroughPerturb;
 	int		nMaxShootThroughThickness;
 
 	// Show cold breath when standing on this surface...
 
-    LTBOOL   bShowBreath;
+	LTBOOL   bShowBreath;
 
 	// Bullet info...
 
-    LTBOOL  bShowsMark;
+	LTBOOL  bShowsMark;
 	char	szBulletHoleSpr[SRF_MAX_FILE_PATH];
 	float	fBulletHoleMinScale;
 	float	fBulletHoleMaxScale;
@@ -89,8 +87,8 @@ struct SURFACE
 	LTFLOAT	fMotoVelMult;
 	LTFLOAT	fSnowVelMult;
 
-    LTFLOAT  fFootPrintLifetime;
-    LTVector vFootPrintScale;
+	LTFLOAT  fFootPrintLifetime;
+	LTVector vFootPrintScale;
 
 	// Death noise info...
 
@@ -105,7 +103,7 @@ struct SURFACE
 	// Object Impact info...
 
 	float	fHardness;
-    LTBOOL   bMagnetic;
+	LTBOOL   bMagnetic;
 
 	// Activation info...
 
@@ -172,9 +170,9 @@ class CSurfaceMgr : public CGameButeMgr
 		~CSurfaceMgr();
 
 		void			CacheAll();
-        void            Reload(ILTCSBase *pInterface) { Term(); m_buteMgr.Term(); Init(pInterface); }
+		void			Reload(ILTCSBase *pInterface) { Term(); m_buteMgr.Term(); Init(pInterface); }
 
-        LTBOOL           Init(ILTCSBase *pInterface, const char* szAttributeFile=SRFMGR_DEFAULT_FILE);
+		LTBOOL		   Init(ILTCSBase *pInterface, const char* szAttributeFile=SRFMGR_DEFAULT_FILE);
 		void			Term();
 
 		SURFACE*		GetSurface(SurfaceType eId);
@@ -183,9 +181,9 @@ class CSurfaceMgr : public CGameButeMgr
 		int				GetNumSurface() const { return m_SurfaceList.GetLength(); }
 
 		// Helper functions...
-        CScaleFX*        GetScaleFX(int nScaleFXId) const { return g_pFXButeMgr->GetScaleFX(nScaleFXId); }
-        CPShowerFX*      GetPShowerFX(int nPShowerFXId) const { return g_pFXButeMgr->GetPShowerFX(nPShowerFXId); }
-        CPolyDebrisFX*   GetPolyDebrisFX(int nPolyDebrisFXId) const { return g_pFXButeMgr->GetPolyDebrisFX(nPolyDebrisFXId); }
+		CScaleFX*		GetScaleFX(int nScaleFXId) const { return g_pFXButeMgr->GetScaleFX(nScaleFXId); }
+		CPShowerFX*	  GetPShowerFX(int nPShowerFXId) const { return g_pFXButeMgr->GetPShowerFX(nPShowerFXId); }
+		CPolyDebrisFX*   GetPolyDebrisFX(int nPolyDebrisFXId) const { return g_pFXButeMgr->GetPolyDebrisFX(nPolyDebrisFXId); }
 
 		SurfaceList*	GetSurfaceList()	{ return &m_SurfaceList; }
 
@@ -208,16 +206,16 @@ class CSurfaceMgrPlugin : public IObjectPlugin
 {
 	public:
 
-        virtual LTRESULT PreHook_EditStringList(
+		virtual LTRESULT PreHook_EditStringList(
 			const char* szRezPath,
 			const char* szPropName,
 			char** aszStrings,
-            uint32* pcStrings,
-            const uint32 cMaxStrings,
-            const uint32 cMaxStringLength);
+			uint32* pcStrings,
+			const uint32 cMaxStrings,
+			const uint32 cMaxStringLength);
 
-        LTBOOL PopulateStringList(char** aszStrings, uint32* pcStrings,
-            const uint32 cMaxStrings, const uint32 cMaxStringLength);
+		LTBOOL PopulateStringList(char** aszStrings, uint32* pcStrings,
+			const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
 	protected :
 

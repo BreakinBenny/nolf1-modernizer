@@ -1,8 +1,7 @@
 // ----------------------------------------------------------------------- //
 // MODULE: PlayerShared.h
-//
-// PURPOSE : Types and globals shared between the client and the server
-//			 associated with the player.
+// PURPOSE: Types and globals shared between the client and the server
+//			associated with the player.
 //
 // CREATED : 09/06/00
 //

@@ -21,9 +21,9 @@ struct OPTION : public ServerOption
 {
 	OPTION();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
-    LTFLOAT  GetValue();
-    void    SetValue(LTFLOAT val);
+	LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
+	LTFLOAT  GetValue();
+	void	SetValue(LTFLOAT val);
 };
 
 typedef CTList<OPTION*> OptionList;
@@ -34,20 +34,20 @@ public:
 	CServerOptionMgr();
 	virtual ~CServerOptionMgr();
 
-    LTBOOL       Init(ILTCSBase *pInterface, const char* szAttributeFile=SO_DEFAULT_FILE);
+	LTBOOL	Init(ILTCSBase *pInterface, const char* szAttributeFile=SO_DEFAULT_FILE);
 	void		Term();
 
-    LTBOOL       WriteFile() { return m_buteMgr.Save(); }
-	void		Reload()    { m_buteMgr.Parse(m_strAttributeFile); }
+	LTBOOL	WriteFile() { return m_buteMgr.Save(); }
+	void		Reload()	{ m_buteMgr.Parse(m_strAttributeFile); }
 
-	int			GetNumOptions()	const { return m_OptionList.GetLength(); }
+	int		GetNumOptions()	const { return m_OptionList.GetLength(); }
 
-	OPTION*		GetOption(int nIndex);
-	OPTION*		GetOption(char* pVariableName);
+	OPTION*	GetOption(int nIndex);
+	OPTION*	GetOption(char* pVariableName);
 
 
 protected:
-	OptionList			m_OptionList;			// Global Options
+	OptionList		m_OptionList;	// Global Options
 
 };
 

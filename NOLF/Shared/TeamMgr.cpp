@@ -1,11 +1,8 @@
 /****************************************************************************
-;	 MODULE:	TEAMMGR (.CPP)
-;
-;	PURPOSE:	Team Manager for multiplayer teams
-;
-;	HISTORY:	12/21/98 [blg] This file was created
-;
-;	COMMENT:	Copyright (c) 1998, Monolith Productions Inc.
+;	 MODULE: TEAMMGR (.CPP)
+;	PURPOSE: Team Manager for multiplayer teams
+;	HISTORY: 12/21/98 [blg] This file was created
+;	COMMENT: Copyright (c) 1998, Monolith Productions Inc.
 ****************************************************************************/
 
 // Includes...
@@ -20,9 +17,9 @@
 // CTeamPlayer
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamPlayer::Init
+//	ROUTINE: CTeamPlayer::Init
 //
-//	PURPOSE:	Initialization
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeamPlayer::Init(uint32 dwPlayerID, uint32 dwFlags)
@@ -43,9 +40,9 @@ LTBOOL CTeamPlayer::Init(uint32 dwPlayerID, uint32 dwFlags)
 // CTeam
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeam::Init
+//	ROUTINE: CTeam::Init
 //
-//	PURPOSE:	Initialization
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeam::Init(uint32 dwTeamID, char* sTeamName, uint32 dwFlags)
@@ -67,9 +64,9 @@ LTBOOL CTeam::Init(uint32 dwTeamID, char* sTeamName, uint32 dwFlags)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeam::Term
+//	ROUTINE: CTeam::Term
 //
-//	PURPOSE:	Termination
+//	PURPOSE: Termination
 // ----------------------------------------------------------------------- //
 
 void CTeam::Term()
@@ -86,9 +83,9 @@ void CTeam::Term()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeam::Reset
+//	ROUTINE: CTeam::Reset
 //
-//	PURPOSE:	Resets our values and all of the players in the list
+//	PURPOSE: Resets our values and all of the players in the list
 // ----------------------------------------------------------------------- //
 
 void CTeam::Reset()
@@ -96,7 +93,7 @@ void CTeam::Reset()
 	// Reset our score values...
 	m_nScore	= 0;
 	m_nFrags	= 0;
-	m_nDeaths	= 0;
+	m_nDeaths = 0;
 
 
 	// Reset all of the players...
@@ -105,9 +102,9 @@ void CTeam::Reset()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeam::AddPlayer
+//	ROUTINE: CTeam::AddPlayer
 //
-//	PURPOSE:	Adds the given player to the team
+//	PURPOSE: Adds the given player to the team
 // ----------------------------------------------------------------------- //
 
 CTeamPlayer* CTeam::AddPlayer(uint32 dwPlayerID, uint32 dwFlags)
@@ -157,9 +154,9 @@ LTBOOL CTeam::AddPlayer(CTeamPlayer* pPlayer)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeam::RemovePlayer
+//	ROUTINE: CTeam::RemovePlayer
 //
-//	PURPOSE:	Removes the given player from the team
+//	PURPOSE: Removes the given player from the team
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeam::RemovePlayer(uint32 dwPlayerID)
@@ -238,9 +235,9 @@ LTBOOL CTeam::ChangePlayerTeam(CTeamPlayer* pPlayer, CTeam* pNewTeam, LTBOOL bRe
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeam::GetPlayer
+//	ROUTINE: CTeam::GetPlayer
 //
-//	PURPOSE:	Gets the player with the given client handle
+//	PURPOSE: Gets the player with the given client handle
 // ----------------------------------------------------------------------- //
 
 CTeamPlayer* CTeam::GetPlayer(uint32 dwPlayerID)
@@ -265,9 +262,9 @@ CTeamPlayer* CTeam::GetPlayer(uint32 dwPlayerID)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeam::SetScore
+//	ROUTINE: CTeam::SetScore
 //
-//	PURPOSE:	Sets the given score value
+//	PURPOSE: Sets the given score value
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeam::SetScore(int nScore)
@@ -282,9 +279,9 @@ LTBOOL CTeam::SetScore(int nScore)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeam::AddScore
+//	ROUTINE: CTeam::AddScore
 //
-//	PURPOSE:	Adds the given score value to the team score
+//	PURPOSE: Adds the given score value to the team score
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeam::AddScore(int nScore)
@@ -299,9 +296,9 @@ LTBOOL CTeam::AddScore(int nScore)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeam::AddFrags
+//	ROUTINE: CTeam::AddFrags
 //
-//	PURPOSE:	Adds the given frags to the team score
+//	PURPOSE: Adds the given frags to the team score
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeam::AddFrags(uint32 dwPlayerID, int nFrags)
@@ -322,9 +319,9 @@ LTBOOL CTeam::AddFrags(uint32 dwPlayerID, int nFrags)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeam::AddDeaths
+//	ROUTINE: CTeam::AddDeaths
 //
-//	PURPOSE:	Adds the given deaths to the team score
+//	PURPOSE: Adds the given deaths to the team score
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeam::AddDeaths(uint32 dwPlayerID, int nDeaths)
@@ -345,9 +342,9 @@ LTBOOL CTeam::AddDeaths(uint32 dwPlayerID, int nDeaths)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeam::ResetPlayers
+//	ROUTINE: CTeam::ResetPlayers
 //
-//	PURPOSE:	Resets each player in the team
+//	PURPOSE: Resets each player in the team
 // ----------------------------------------------------------------------- //
 
 void CTeam::ResetAllPlayers()
@@ -363,9 +360,9 @@ void CTeam::ResetAllPlayers()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::SortPlayers
+//	ROUTINE: CTeamMgr::SortPlayers
 //
-//	PURPOSE:	Sorts the players using the given sort key
+//	PURPOSE: Sorts the players using the given sort key
 // ----------------------------------------------------------------------- //
 
 void CTeam::SortPlayers(int nSortKey, int nDir)
@@ -439,9 +436,9 @@ void CTeam::SortPlayers(int nSortKey, int nDir)
 // CTeamMgr
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::Init
+//	ROUTINE: CTeamMgr::Init
 //
-//	PURPOSE:	Initialization
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeamMgr::Init()
@@ -458,9 +455,9 @@ LTBOOL CTeamMgr::Init()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::Term
+//	ROUTINE: CTeamMgr::Term
 //
-//	PURPOSE:	Termination
+//	PURPOSE: Termination
 // ----------------------------------------------------------------------- //
 
 void CTeamMgr::Term()
@@ -474,9 +471,9 @@ void CTeamMgr::Term()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::GetTeam
+//	ROUTINE: CTeamMgr::GetTeam
 //
-//	PURPOSE:	Gets the team with the given ID
+//	PURPOSE: Gets the team with the given ID
 // ----------------------------------------------------------------------- //
 
 CTeam* CTeamMgr::GetTeam(uint32 dwTeamID)
@@ -554,9 +551,9 @@ CTeam* CTeamMgr::GetTeamFromPlayerID(uint32 dwPlayerID)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::AddTeam
+//	ROUTINE: CTeamMgr::AddTeam
 //
-//	PURPOSE:	Adds a new team with the given values
+//	PURPOSE: Adds a new team with the given values
 // ----------------------------------------------------------------------- //
 
 CTeam* CTeamMgr::AddTeam(uint32 dwTeamID, char* sTeamName, uint32 dwFlags)
@@ -587,9 +584,9 @@ CTeam* CTeamMgr::AddTeam(uint32 dwTeamID, char* sTeamName, uint32 dwFlags)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::AddPlayer
+//	ROUTINE: CTeamMgr::AddPlayer
 //
-//	PURPOSE:	Adds a new player to the specified team
+//	PURPOSE: Adds a new player to the specified team
 // ----------------------------------------------------------------------- //
 
 CTeamPlayer* CTeamMgr::AddPlayer(uint32 dwTeamID, uint32 dwPlayerID, uint32 dwFlags)
@@ -626,9 +623,9 @@ CTeamPlayer* CTeamMgr::AddPlayer(CTeam* pTeam, uint32 dwPlayerID, uint32 dwFlags
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::SetTeamScore
+//	ROUTINE: CTeamMgr::SetTeamScore
 //
-//	PURPOSE:	Sets the given score value for the specified team
+//	PURPOSE: Sets the given score value for the specified team
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeamMgr::SetTeamScore(uint32 dwTeamID, int nScore)
@@ -669,9 +666,9 @@ LTBOOL CTeamMgr::SetTeamScore(CTeam* pTeam, int nScore)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::AddTeamScore
+//	ROUTINE: CTeamMgr::AddTeamScore
 //
-//	PURPOSE:	Adds the given score value to the specified team
+//	PURPOSE: Adds the given score value to the specified team
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeamMgr::AddTeamScore(uint32 dwTeamID, int nScore)
@@ -712,9 +709,9 @@ LTBOOL CTeamMgr::AddTeamScore(CTeam* pTeam, int nScore)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::AddPlayerFrags
+//	ROUTINE: CTeamMgr::AddPlayerFrags
 //
-//	PURPOSE:	Adds the given frags to the given team and player
+//	PURPOSE: Adds the given frags to the given team and player
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeamMgr::AddPlayerFrags(uint32 dwPlayerID, int nFrags)
@@ -766,9 +763,9 @@ LTBOOL CTeamMgr::AddPlayerFrags(CTeam* pTeam, uint32 dwPlayerID, int nFrags)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::AddPlayerDeaths
+//	ROUTINE: CTeamMgr::AddPlayerDeaths
 //
-//	PURPOSE:	Adds the given deaths to the given team and player
+//	PURPOSE: Adds the given deaths to the given team and player
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeamMgr::AddPlayerDeaths(uint32 dwPlayerID, int nDeaths)
@@ -820,9 +817,9 @@ LTBOOL CTeamMgr::AddPlayerDeaths(CTeam* pTeam, uint32 dwPlayerID, int nDeaths)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::RemoveTeam
+//	ROUTINE: CTeamMgr::RemoveTeam
 //
-//	PURPOSE:	Removes the given team
+//	PURPOSE: Removes the given team
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeamMgr::RemoveTeam(uint32 dwTeamID)
@@ -864,9 +861,9 @@ LTBOOL CTeamMgr::RemoveTeam(CTeam* pTeam)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::RemovePlayer
+//	ROUTINE: CTeamMgr::RemovePlayer
 //
-//	PURPOSE:	Removes the given player from the team it's on
+//	PURPOSE: Removes the given player from the team it's on
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeamMgr::RemovePlayer(uint32 dwPlayerID)
@@ -886,9 +883,9 @@ LTBOOL CTeamMgr::RemovePlayer(uint32 dwPlayerID)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::ResetAllTeams
+//	ROUTINE: CTeamMgr::ResetAllTeams
 //
-//	PURPOSE:	Resets all of the team in the list
+//	PURPOSE: Resets all of the team in the list
 // ----------------------------------------------------------------------- //
 
 void CTeamMgr::ResetAllTeams()
@@ -904,9 +901,9 @@ void CTeamMgr::ResetAllTeams()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::SortTeams
+//	ROUTINE: CTeamMgr::SortTeams
 //
-//	PURPOSE:	Sorts the teams using the given sort key
+//	PURPOSE: Sorts the teams using the given sort key
 // ----------------------------------------------------------------------- //
 
 void CTeamMgr::SortTeams(int nSortKey, int nDir)
@@ -977,9 +974,9 @@ void CTeamMgr::SortTeams(int nSortKey, int nDir)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::SortPlayers
+//	ROUTINE: CTeamMgr::SortPlayers
 //
-//	PURPOSE:	Sorts the players on each team using the given sort key
+//	PURPOSE: Sorts the players on each team using the given sort key
 // ----------------------------------------------------------------------- //
 
 void CTeamMgr::SortPlayers(int nSortKey, int nDir)
@@ -997,9 +994,9 @@ void CTeamMgr::SortPlayers(int nSortKey, int nDir)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::ChangePlayerTeam
+//	ROUTINE: CTeamMgr::ChangePlayerTeam
 //
-//	PURPOSE:	Removes the player from its current team and adds it
+//	PURPOSE: Removes the player from its current team and adds it
 //			to the specified team.
 // ----------------------------------------------------------------------- //
 
@@ -1049,9 +1046,9 @@ LTBOOL CTeamMgr::ChangePlayerTeam(uint32 dwPlayerID, CTeam* pNewTeam, LTBOOL bRe
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::GetTeamWithMostPlayers
+//	ROUTINE: CTeamMgr::GetTeamWithMostPlayers
 //
-//	PURPOSE:	Gets the team that has the most players
+//	PURPOSE: Gets the team that has the most players
 // ----------------------------------------------------------------------- //
 
 CTeam* CTeamMgr::GetTeamWithMostPlayers(LTBOOL bRandomizeTies)
@@ -1093,9 +1090,9 @@ CTeam* CTeamMgr::GetTeamWithMostPlayers(LTBOOL bRandomizeTies)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::GetTeamWithLeastPlayers
+//	ROUTINE: CTeamMgr::GetTeamWithLeastPlayers
 //
-//	PURPOSE:	Gets the team that has the least players
+//	PURPOSE: Gets the team that has the least players
 // ----------------------------------------------------------------------- //
 
 CTeam* CTeamMgr::GetTeamWithLeastPlayers(LTBOOL bRandomizeTies)
@@ -1136,9 +1133,9 @@ CTeam* CTeamMgr::GetTeamWithLeastPlayers(LTBOOL bRandomizeTies)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::CreateTeamTransIDs
+//	ROUTINE: CTeamMgr::CreateTeamTransIDs
 //
-//	PURPOSE:	Creates a list of player team IDs
+//	PURPOSE: Creates a list of player team IDs
 // ----------------------------------------------------------------------- //
 
 LTBOOL CTeamMgr::CreateTeamTransIDs()
@@ -1177,9 +1174,9 @@ LTBOOL CTeamMgr::CreateTeamTransIDs()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::GetTeamTransID
+//	ROUTINE: CTeamMgr::GetTeamTransID
 //
-//	PURPOSE:	Gets a level transition team ID from the given player ID
+//	PURPOSE: Gets a level transition team ID from the given player ID
 // ----------------------------------------------------------------------- //
 
 uint32 CTeamMgr::GetTeamTransID(uint32 dwPlayerID)
@@ -1197,9 +1194,9 @@ uint32 CTeamMgr::GetTeamTransID(uint32 dwPlayerID)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CTeamMgr::RemoveTeamTransID
+//	ROUTINE: CTeamMgr::RemoveTeamTransID
 //
-//	PURPOSE:	Removes the given player ID from the team transition info
+//	PURPOSE: Removes the given player ID from the team transition info
 // ----------------------------------------------------------------------- //
 
 void CTeamMgr::RemoveTeamTransID(uint32 dwPlayerID)

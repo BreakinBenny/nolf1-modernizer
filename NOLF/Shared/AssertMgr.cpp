@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: AssertMgr.cpp
 //
-// MODULE  : AssertMgr.cpp
+// PURPOSE: AssertMgr implementation
 //
-// PURPOSE : AssertMgr implementation
-//
-// CREATED : 05.06.1999
-//
+// CREATED: 05.06.1999
 // ----------------------------------------------------------------------- //
 
 #include "StdAfx.h"
@@ -21,9 +19,9 @@ _CRT_REPORT_HOOK CAssertMgr::m_crhPrevious = LTNULL;
 void CAssertMgr::Enable()
 {
 #ifdef _DEBUG
-    if ( LTTRUE == m_bEnabled ) return;
+	if ( LTTRUE == m_bEnabled ) return;
 
-    m_bEnabled = LTTRUE;
+	m_bEnabled = LTTRUE;
 	m_crhPrevious = _CrtSetReportHook(CAssertMgr::ReportHook);
 #endif
 }
@@ -31,18 +29,18 @@ void CAssertMgr::Enable()
 void CAssertMgr::Disable()
 {
 #ifdef _DEBUG
-    if ( LTFALSE == m_bEnabled ) return;
+	if ( LTFALSE == m_bEnabled ) return;
 
 	_CrtSetReportHook(m_crhPrevious);
 
-    m_bEnabled = LTFALSE;
-    m_crhPrevious = LTNULL;
+	m_bEnabled = LTFALSE;
+	m_crhPrevious = LTNULL;
 #endif
 }
 
 int CAssertMgr::ReportHook(int nReportType, char* szMessage, int* pnReturnValue)
 {
-    if ( LTFALSE == m_bEnabled )
+	if ( LTFALSE == m_bEnabled )
 	{
 		*pnReturnValue = 0;
 		return 0;
@@ -52,20 +50,20 @@ int CAssertMgr::ReportHook(int nReportType, char* szMessage, int* pnReturnValue)
 
 #ifdef _CLIENTBUILD
 	HCONSOLEVAR hAssertVar;
-    hAssertVar = g_pLTClient->GetConsoleVar("assert");
+	hAssertVar = g_pLTClient->GetConsoleVar("assert");
 	if ( hAssertVar )
 	{
-        szAssert = g_pLTClient->GetVarValueString(hAssertVar);
+		szAssert = g_pLTClient->GetVarValueString(hAssertVar);
 	}
 #else
 	HCONVAR hAssertVar;
-    hAssertVar = g_pLTServer->GetGameConVar("assert");
+	hAssertVar = g_pLTServer->GetGameConVar("assert");
 	if (!hAssertVar)
 	{
-        g_pLTServer->SetGameConVar("assert", "console");
-        hAssertVar = g_pLTServer->GetGameConVar("assert");
+		g_pLTServer->SetGameConVar("assert", "console");
+		hAssertVar = g_pLTServer->GetGameConVar("assert");
 	}
-    szAssert = g_pLTServer->GetVarValueString(hAssertVar);
+	szAssert = g_pLTServer->GetVarValueString(hAssertVar);
 #endif
 
 	if ( szAssert && !_stricmp(szAssert, "fullscreen") )
@@ -147,9 +145,9 @@ running the game under a debugger.\n", szMessage);
 		// if assert convar = "console" or none of the above, put the assert into the console
 
 #ifdef _CLIENTBUILD
-        g_pLTClient->CPrint(szMessage);
+		g_pLTClient->CPrint(szMessage);
 #else
-        g_pLTServer->CPrint(szMessage);
+		g_pLTServer->CPrint(szMessage);
 #endif
 		*pnReturnValue = 0;
 		return TRUE;

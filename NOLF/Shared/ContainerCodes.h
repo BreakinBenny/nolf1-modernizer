@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ContainerCodes.h
 //
-// MODULE  : ContainerCodes.h
+// PURPOSE: Container code definitions
 //
-// PURPOSE : Container code definitions
-//
-// CREATED : 1/29/98
-//
+// CREATED: 1/29/98
 // ----------------------------------------------------------------------- //
 
 #ifndef __CONTAINER_CODES_H__
@@ -13,7 +11,7 @@
 
 #include "ClientServerShared.h"
 
-#define DEFAULT_BUBBLE_TEXTURE		"SFX\\Particle\\GreySphere_1.dtx"
+#define DEFAULT_BUBBLE_TEXTURE	"SFX\\Particle\\GreySphere_1.dtx"
 
 #define MAX_CONTAINER_VISCOSITY 5000.0f
 
@@ -41,12 +39,12 @@ enum ContainerCode {
 #define WFLAG_LIGHT_RAIN	(1<<0)
 #define WFLAG_NORMAL_RAIN	(1<<1)
 #define WFLAG_HEAVY_RAIN	(1<<2)
-#define	WFLAG_LIGHT_SNOW	(1<<3)
-#define	WFLAG_NORMAL_SNOW	(1<<4)
-#define	WFLAG_HEAVY_SNOW	(1<<5)
+#define WFLAG_LIGHT_SNOW	(1<<3)
+#define WFLAG_NORMAL_SNOW	(1<<4)
+#define WFLAG_HEAVY_SNOW	(1<<5)
 
-#define	WFLAG_RAIN			(WFLAG_LIGHT_RAIN | WFLAG_NORMAL_RAIN | WFLAG_HEAVY_RAIN)
-#define	WFLAG_SNOW			(WFLAG_LIGHT_SNOW | WFLAG_NORMAL_SNOW | WFLAG_HEAVY_SNOW)
+#define WFLAG_RAIN	(WFLAG_LIGHT_RAIN | WFLAG_NORMAL_RAIN | WFLAG_HEAVY_RAIN)
+#define WFLAG_SNOW	(WFLAG_LIGHT_SNOW | WFLAG_NORMAL_SNOW | WFLAG_HEAVY_SNOW)
 
 
 inline ContainerCode GetContainerCode(ILTCSBase *pInterface, LTVector vPos)

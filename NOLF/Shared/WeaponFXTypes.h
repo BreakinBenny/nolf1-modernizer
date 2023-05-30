@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------- //
 // MODULE: WeaponFXTypes.h
 //
-// PURPOSE : Weapon FX types contains the different types and enums associated
+// PURPOSE: Weapon FX types contains the different types and enums associated
 //		with the weapon fx class.
 //
-// CREATED : 2/22/98
+// CREATED: 2/22/98
 //
 // (c) 1997-1999 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //
@@ -14,12 +14,12 @@
 
 // Weapon fx (impact and fire)...
 
-#define	WFX_MARK	(1<<0)
+#define WFX_MARK	(1<<0)
 
 #define WFX_TINTSCREEN	(1<<2)
 #define WFX_BLASTMARK	(1<<3)
 
-#define	WFX_TRACER	(1<<4)
+#define WFX_TRACER	(1<<4)
 #define WFX_MUZZLE	(1<<5)
 #define WFX_SHELL	(1<<6)
 #define WFX_LIGHT	(1<<7)
@@ -34,8 +34,8 @@
 #define WFX_EXITSURFACE (WFX_EXITMARK | WFX_EXITDEBRIS)
 
 // Projectile FX...
-#define	PFX_SMOKETRAIL	(1<<0)
-#define	PFX_FLARE	(1<<1)
+#define PFX_SMOKETRAIL	(1<<0)
+#define PFX_FLARE	(1<<1)
 #define PFX_LIGHT	(1<<2)
 #define PFX_FLYSOUND	(1<<3)
 

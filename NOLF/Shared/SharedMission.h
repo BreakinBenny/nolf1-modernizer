@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: SharedMission.h
 //
-// MODULE  : SharedMission.h
+// PURPOSE: SharedMission - shared mission summary stuff
 //
-// PURPOSE : SharedMission - shared mission summary stuff
-//
-// CREATED : 9/16/99
+// CREATED: 9/16/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __SHARED_MISSION_H__
@@ -25,8 +23,8 @@ struct PLAYERRANK
 	PLAYERRANK();
 
 	void	Reset();
-    void    Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    void    Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	void	Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	void	Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
 	void	WriteRankData(CButeMgr & buteMgr);
 	void	ReadRankData(CButeMgr & buteMgr);
 	void	ClearRankData(CButeMgr & buteMgr);
@@ -35,14 +33,14 @@ struct PLAYERRANK
 	// current stats
 
 	// (between 1.0 and ?)...
-    LTFLOAT  fHealthMultiplier;
-    LTFLOAT  fArmorMultiplier;
-    LTFLOAT  fAmmoMultiplier;
-    LTFLOAT  fDamageMultiplier;
+	LTFLOAT  fHealthMultiplier;
+	LTFLOAT  fArmorMultiplier;
+	LTFLOAT  fAmmoMultiplier;
+	LTFLOAT  fDamageMultiplier;
 
 	// (between 0.0 and 1.0)...
-    LTFLOAT  fPerturbMultiplier;
-    LTFLOAT  fStealthMultiplier;
+	LTFLOAT  fPerturbMultiplier;
+	LTFLOAT  fStealthMultiplier;
 
 	// The global reputation of the player...
 
@@ -67,13 +65,13 @@ struct MISSIONSUMMARY
 {
 	MISSIONSUMMARY();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName, MISSION* pMission);
+	LTBOOL   Init(CButeMgr & buteMgr, char* aTagName, MISSION* pMission);
 	void	WriteGlobalData(CButeMgr & buteMgr, char* aTagName);
 	void	ClearGlobalData(CButeMgr & buteMgr, char* aTagName);
-    void    WriteInstantData(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    void    ReadInstantData(ILTCSBase *pInterface, HMESSAGEREAD hRead);
-    void    WriteClientData(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    void    ReadClientData(ILTCSBase *pInterface, HMESSAGEREAD hWrite);
+	void	WriteInstantData(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	void	ReadInstantData(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	void	WriteClientData(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	void	ReadClientData(ILTCSBase *pInterface, HMESSAGEREAD hWrite);
 
 	// These values are not stored in the butes file...
 
@@ -84,21 +82,21 @@ struct MISSIONSUMMARY
 
 	LEVELSUMMARY Levels[MMGR_MAX_MISSION_LEVELS];
 
-    LTFLOAT  fBestRank;          // Player's best rank for this mission
-    LTFLOAT  fOldBestRank;          // Player's best rank for this mission
-    LTFLOAT  fCurRank;           // Player's current rank for this mission
-    LTFLOAT  fTotalMissionTime;  // Total time in mission
-    uint32  dwNumShotsFired;    // Number of total shots fired
-    uint32  dwNumHits;          // Number of times characters were hit
-    uint32  dwNumTimesDetected; // Number of times AI detected the player
-    uint32  dwNumDisturbances;  // Number of times AI was disturbed the player
-    uint32  dwNumBodies;        // Number of times AI found dead bodies
-    uint32  dwNumEnemyKills;    // Number of enemies killed
-    uint32  dwNumFriendKills;   // Number of friendlies killed
-    uint32  dwNumNeutralKills;  // Number of neutrals killed
-    uint32  dwNumTimesHit;      // Number of times hit during the mission
+	LTFLOAT  fBestRank;		  // Player's best rank for this mission
+	LTFLOAT  fOldBestRank;		  // Player's best rank for this mission
+	LTFLOAT  fCurRank;		   // Player's current rank for this mission
+	LTFLOAT  fTotalMissionTime;  // Total time in mission
+	uint32  dwNumShotsFired;	// Number of total shots fired
+	uint32  dwNumHits;		  // Number of times characters were hit
+	uint32  dwNumTimesDetected; // Number of times AI detected the player
+	uint32  dwNumDisturbances;  // Number of times AI was disturbed the player
+	uint32  dwNumBodies;		// Number of times AI found dead bodies
+	uint32  dwNumEnemyKills;	// Number of enemies killed
+	uint32  dwNumFriendKills;   // Number of friendlies killed
+	uint32  dwNumNeutralKills;  // Number of neutrals killed
+	uint32  dwNumTimesHit;	  // Number of times hit during the mission
 
-    uint32  dwHitLocations[HL_NUM_LOCS];  // Number of times player hit each body part hit
+	uint32  dwHitLocations[HL_NUM_LOCS];  // Number of times player hit each body part hit
 
 	uint8 m_nMissionTotalIntel;
 	uint8 m_nMissionMaxIntel;

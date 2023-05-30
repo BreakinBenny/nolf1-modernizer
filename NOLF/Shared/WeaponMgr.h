@@ -1,9 +1,9 @@
 // ----------------------------------------------------------------------- //
 // MODULE: WeaponMgr.h
 //
-// PURPOSE : WeaponMgr definition - Controls attributes of all weapons
+// PURPOSE: WeaponMgr definition - Controls attributes of all weapons
 //
-// CREATED : 12/02/98
+// CREATED: 12/02/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //
@@ -80,9 +80,9 @@ struct MOD
 	LTBOOL	Init(CButeMgr & buteMgr, char* aTagName);
 	void	Cache(CWeaponMgr* pWeaponMgr);
 
-	int	GetWeaponId();	// CWeaponMgr::GetWeaponIdFromModId(int nModId)
+	int GetWeaponId();	// CWeaponMgr::GetWeaponIdFromModId(int nModId)
 
-	int	nId;
+	int nId;
 
 	ModType	eType;
 
@@ -103,18 +103,18 @@ struct MOD
 
 	LTVector vAttachScale;
 
-	LTVector	vScreenTintColor;
-	LTFLOAT	 fScreenTintTime;
+	LTVector vScreenTintColor;
+	LTFLOAT fScreenTintTime;
 
-	int	nNameId;
-	int	nDescriptionId;
-	int	nZoomLevel;
-	int	nPriority;
+	int nNameId;
+	int nDescriptionId;
+	int nZoomLevel;
+	int nPriority;
 
 	LTBOOL	bNightVision;
 	LTBOOL	bIntegrated;
-	LTFLOAT	fInterfaceScale;
-	LTFLOAT	fPowerupScale;
+	LTFLOAT fInterfaceScale;
+	LTFLOAT fPowerupScale;
 	LTVector vInterfaceOffset;
 };
 
@@ -143,15 +143,15 @@ struct GEAR
 	char	szPickUpSound[WMGR_MAX_FILE_PATH];
 	char	szRespawnSound[WMGR_MAX_FILE_PATH];
 
-	DamageType	eProtectionType;
-	LTFLOAT	fProtection;
-	LTFLOAT	fArmor;
-	LTFLOAT	fStealth;
+	DamageType eProtectionType;
+	LTFLOAT fProtection;
+	LTFLOAT fArmor;
+	LTFLOAT fStealth;
 	LTBOOL	bSelectable;
 	LTBOOL	bExclusive;
 	LTVector	vScreenTintColor;
-	LTFLOAT	fScreenTintTime;
-	LTFLOAT	fInterfaceScale;
+	LTFLOAT fScreenTintTime;
+	LTFLOAT fInterfaceScale;
 	LTVector	vInterfaceOffset;
 };
 
@@ -214,10 +214,10 @@ struct AMMO
 
 	float		fFireRecoilMult;
 
-	LTFLOAT		fProgDamage;
-	LTFLOAT		fProgDamageDuration;
-	LTFLOAT		fProgDamageRadius;
-	LTFLOAT		fProgDamageLifetime;
+	LTFLOAT	fProgDamage;
+	LTFLOAT	fProgDamageDuration;
+	LTFLOAT	fProgDamageRadius;
+	LTFLOAT	fProgDamageLifetime;
 	DamageType	eProgDamageType;
 
 	PROJECTILEFX*	pProjectileFX;	// Points at CFXButeMgr::m_ProjectileFXList element
@@ -537,7 +537,7 @@ class CWeaponMgrPlugin : public IObjectPlugin
 
 		CFXButeMgrPlugin	m_FXButeMgrPlugin;
 
-		static LTBOOL		sm_bInitted;
+		static LTBOOL	sm_bInitted;
 		static CWeaponMgr	sm_ButeMgr;
 };
 

@@ -1,11 +1,8 @@
 /****************************************************************************
-;	 MODULE:	TEAMMGR (.H)
-;
-;	PURPOSE:	Team Manager for multiplayer teams
-;
-;	HISTORY:	12/21/98 [blg] This file was created
-;
-;	COMMENT:	Copyright (c) 1998, Monolith Productions Inc.
+;	 MODULE: TEAMMGR (.H)
+;	PURPOSE: Team Manager for multiplayer teams
+;	HISTORY: 12/21/98 [blg] This file was created
+;	COMMENT: Copyright (c) 1998, Monolith Productions Inc.
 ****************************************************************************/
 
 

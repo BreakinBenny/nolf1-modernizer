@@ -1,13 +1,9 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : FXStructs.cpp
-//
-// PURPOSE : Implementation of common FX structs/classes
-//
-// CREATED : 7/15/99
+// MODULE: FXStructs.cpp
+// PURPOSE: Implementation of common FX structs/classes
+// CREATED: 7/15/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -103,16 +99,14 @@ static char s_aTagName[30];
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: BuildScaleFXList()
 //
-//	ROUTINE:	BuildScaleFXList()
-//
-//	PURPOSE:	Build the list of scale fx structs
-//
+//	PURPOSE: Build the list of scale fx structs
 // ----------------------------------------------------------------------- //
 
 LTBOOL BuildScaleFXList(ScaleFXList & list, CButeMgr & buteMgr, char* pTagBase)
 {
-    if (!pTagBase) return LTFALSE;
+	if (!pTagBase) return LTFALSE;
 
 	int nNum = 0;
 	sprintf(s_aTagName, "%s%d", pTagBase, nNum);
@@ -131,22 +125,20 @@ LTBOOL BuildScaleFXList(ScaleFXList & list, CButeMgr & buteMgr, char* pTagBase)
 		else
 		{
 			debug_delete(pFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
 		sprintf(s_aTagName, "%s%d", pTagBase, nNum);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CScaleFX::CScaleFX()
 //
-//	ROUTINE:	CScaleFX::CScaleFX()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CScaleFX::CScaleFX()
@@ -162,16 +154,16 @@ CScaleFX::CScaleFX()
 	fDelayTime		= 0.0f;
 	fMinRotVel		= 0.0f;
 	fMaxRotVel		= 0.0f;
-    bUseColors      = LTFALSE;
-    bLoop           = LTFALSE;
-    bAlignToSurface = LTFALSE;
-    bNoZ            = LTFALSE;
-    bReallyClose    = LTFALSE;
-    bAdditive       = LTFALSE;
-    bMultiply       = LTFALSE;
+	bUseColors	  = LTFALSE;
+	bLoop		   = LTFALSE;
+	bAlignToSurface = LTFALSE;
+	bNoZ			= LTFALSE;
+	bReallyClose	= LTFALSE;
+	bAdditive	   = LTFALSE;
+	bMultiply	   = LTFALSE;
 	bChromakey		= LTFALSE;
-    bRotate         = LTFALSE;
-    bFaceCamera     = LTFALSE;
+	bRotate		 = LTFALSE;
+	bFaceCamera	 = LTFALSE;
 	nRotationAxis	= 0;
 
 	szName[0]		= '\0';
@@ -186,38 +178,36 @@ CScaleFX::CScaleFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CScaleFX::Init
 //
-//	ROUTINE:	CScaleFX::Init
-//
-//	PURPOSE:	Init the scale fx struct from the bute mgr
-//
+//	PURPOSE: Init the scale fx struct from the bute mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CScaleFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	eType			= (ScaleFXType) buteMgr.GetInt(aTagName, SCALEFX_TYPE);
-    fInitialAlpha   = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_INITIALALPHA);
-    fFinalAlpha     = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_FINALALPHA);
-    fDirOffset      = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_DIROFFSET);
-    fDirROffset     = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_DIRROFFSET);
-    fDirUOffset     = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_DIRUOFFSET);
-    fLifeTime       = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_LIFETIME);
-    fDelayTime      = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_DELAYTIME);
-    fMinRotVel      = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_MINROTVEL);
-    fMaxRotVel      = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_MAXROTVEL);
-    bUseColors      = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_USECOLORS);
-    bLoop           = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_LOOP);
-    bAlignToSurface = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_ALIGNTOSURFACE);
-    bNoZ            = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_SPRITENOZ);
-    bReallyClose    = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_MODELREALLYCLOSE);
-    bAdditive       = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_ADDITIVE);
-    bMultiply       = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_MULTIPLY);
-    bChromakey      = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_CHROMAKEY);
-    bRotate         = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_ROTATE);
-    bFaceCamera     = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_FACECAMERA);
-    nRotationAxis   = buteMgr.GetInt(aTagName, SCALEFX_ROTAXIS);
+	fInitialAlpha   = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_INITIALALPHA);
+	fFinalAlpha	 = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_FINALALPHA);
+	fDirOffset	  = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_DIROFFSET);
+	fDirROffset	 = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_DIRROFFSET);
+	fDirUOffset	 = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_DIRUOFFSET);
+	fLifeTime	   = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_LIFETIME);
+	fDelayTime	  = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_DELAYTIME);
+	fMinRotVel	  = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_MINROTVEL);
+	fMaxRotVel	  = (LTFLOAT) buteMgr.GetDouble(aTagName, SCALEFX_MAXROTVEL);
+	bUseColors	  = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_USECOLORS);
+	bLoop		   = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_LOOP);
+	bAlignToSurface = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_ALIGNTOSURFACE);
+	bNoZ			= (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_SPRITENOZ);
+	bReallyClose	= (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_MODELREALLYCLOSE);
+	bAdditive	   = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_ADDITIVE);
+	bMultiply	   = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_MULTIPLY);
+	bChromakey	  = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_CHROMAKEY);
+	bRotate		 = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_ROTATE);
+	bFaceCamera	 = (LTBOOL) buteMgr.GetInt(aTagName, SCALEFX_FACECAMERA);
+	nRotationAxis   = buteMgr.GetInt(aTagName, SCALEFX_ROTAXIS);
 
 	vInitialScale	= buteMgr.GetVector(aTagName, SCALEFX_INITIALSCALE);
 	vFinalScale		= buteMgr.GetVector(aTagName, SCALEFX_FINALSCALE);
@@ -247,16 +237,14 @@ LTBOOL CScaleFX::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szName, (char*)(LPCSTR)str, ARRAY_LEN(szName));
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CScaleFX::Cache()
 //
-//	ROUTINE:	CScaleFX::Cache()
-//
-//	PURPOSE:	Cache all the resources associated with the CScaleFX.
-//
+//	PURPOSE: Cache all the resources associated with the CScaleFX.
 // ----------------------------------------------------------------------- //
 
 void CScaleFX::Cache()
@@ -269,12 +257,12 @@ void CScaleFX::Cache()
 		{
 			if (szFile[0])
 			{
-                g_pLTServer->CacheFile(FT_MODEL, szFile);
+				g_pLTServer->CacheFile(FT_MODEL, szFile);
 			}
 
 			if (szSkin[0])
 			{
-                g_pLTServer->CacheFile(FT_TEXTURE, szSkin);
+				g_pLTServer->CacheFile(FT_TEXTURE, szSkin);
 			}
 		}
 		break;
@@ -283,7 +271,7 @@ void CScaleFX::Cache()
 		{
 			if (szFile[0])
 			{
-                g_pLTServer->CacheFile(FT_SPRITE, szFile);
+				g_pLTServer->CacheFile(FT_SPRITE, szFile);
 			}
 		}
 		break;
@@ -305,17 +293,15 @@ void CScaleFX::Cache()
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: BuildPShowerFXList()
 //
-//	ROUTINE:	BuildPShowerFXList()
-//
-//	PURPOSE:	Build the list of particle shower fx structs
-//
+//	PURPOSE: Build the list of particle shower fx structs
 // ----------------------------------------------------------------------- //
 
 LTBOOL BuildPShowerFXList(PShowerFXList & list, CButeMgr & buteMgr,
 						 char* pTagBase)
 {
-    if (!pTagBase) return LTFALSE;
+	if (!pTagBase) return LTFALSE;
 
 	int nNum = 0;
 	sprintf(s_aTagName, "%s%d", pTagBase, nNum);
@@ -334,22 +320,20 @@ LTBOOL BuildPShowerFXList(PShowerFXList & list, CButeMgr & buteMgr,
 		else
 		{
 			debug_delete(pFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
 		sprintf(s_aTagName, "%s%d", pTagBase, nNum);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CPShowerFX::CPShowerFX()
 //
-//	ROUTINE:	CPShowerFX::CPShowerFX()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CPShowerFX::CPShowerFX()
@@ -371,36 +355,34 @@ CPShowerFX::CPShowerFX()
 	vColor1.Init();
 	vColor2.Init();
 
-    bAdditive           = LTFALSE;
-    bMultiply           = LTFALSE;
+	bAdditive		   = LTFALSE;
+	bMultiply		   = LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CPShowerFX::Init
 //
-//	ROUTINE:	CPShowerFX::Init
-//
-//	PURPOSE:	Init the particle shower fx struct from the bute mgr
-//
+//	PURPOSE: Init the particle shower fx struct from the bute mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPShowerFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	nMinParticles		= buteMgr.GetInt(aTagName, PSHOWERFX_MINPARTICLES);
 	nMaxParticles		= buteMgr.GetInt(aTagName, PSHOWERFX_MAXPARTICLES);
-    fMinVel             = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_MINVEL);
-    fMaxVel             = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_MAXVEL);
-    fDirOffset          = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_DIROFFSET);
-    fMinDuration        = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_MINDURATION);
-    fMaxDuration        = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_MAXDURATION);
-    fEmissionRadius     = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_EMISSIONRADIUS);
-    fRadius             = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_RADIUS);
-    fGravity            = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_GRAVITY);
+	fMinVel			 = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_MINVEL);
+	fMaxVel			 = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_MAXVEL);
+	fDirOffset		  = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_DIROFFSET);
+	fMinDuration		= (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_MINDURATION);
+	fMaxDuration		= (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_MAXDURATION);
+	fEmissionRadius	 = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_EMISSIONRADIUS);
+	fRadius			 = (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_RADIUS);
+	fGravity			= (LTFLOAT) buteMgr.GetDouble(aTagName, PSHOWERFX_GRAVITY);
 	vColor1				= buteMgr.GetVector(aTagName, PSHOWERFX_COLOR1);
 	vColor2				= buteMgr.GetVector(aTagName, PSHOWERFX_COLOR2);
-    bAdditive           = (LTBOOL) buteMgr.GetInt(aTagName, PSHOWERFX_ADDITIVE);
-    bMultiply           = (LTBOOL) buteMgr.GetInt(aTagName, PSHOWERFX_MULTIPLY);
+	bAdditive		   = (LTBOOL) buteMgr.GetInt(aTagName, PSHOWERFX_ADDITIVE);
+	bMultiply		   = (LTBOOL) buteMgr.GetInt(aTagName, PSHOWERFX_MULTIPLY);
 
 	CString str = buteMgr.GetString(aTagName, PSHOWERFX_TEXTURE);
 	if (!str.IsEmpty())
@@ -414,16 +396,14 @@ LTBOOL CPShowerFX::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szName, (char*)(LPCSTR)str, ARRAY_LEN(szName));
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CPShowerFX::Cache()
 //
-//	ROUTINE:	CPShowerFX::Cache()
-//
-//	PURPOSE:	Cache all the resources associated with the CPShowerFX.
-//
+//	PURPOSE: Cache all the resources associated with the CPShowerFX.
 // ----------------------------------------------------------------------- //
 
 void CPShowerFX::Cache()
@@ -432,9 +412,9 @@ void CPShowerFX::Cache()
 
 	if (szTexture[0])
 	{
-        if (g_pLTServer->CacheFile(FT_SPRITE, szTexture) != LT_OK)
+		if (g_pLTServer->CacheFile(FT_SPRITE, szTexture) != LT_OK)
 		{
-            g_pLTServer->CacheFile(FT_TEXTURE, szTexture);
+			g_pLTServer->CacheFile(FT_TEXTURE, szTexture);
 		}
 	}
 
@@ -452,17 +432,15 @@ void CPShowerFX::Cache()
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: BuildPShowerFXList()
 //
-//	ROUTINE:	BuildPShowerFXList()
-//
-//	PURPOSE:	Build the list of particle shower fx structs
-//
+//	PURPOSE: Build the list of particle shower fx structs
 // ----------------------------------------------------------------------- //
 
 LTBOOL BuildPolyDebrisFXList(PolyDebrisFXList & list, CButeMgr & buteMgr,
 							char* pTagBase)
 {
-    if (!pTagBase) return LTFALSE;
+	if (!pTagBase) return LTFALSE;
 
 	int nNum = 0;
 	sprintf(s_aTagName, "%s%d", pTagBase, nNum);
@@ -481,22 +459,20 @@ LTBOOL BuildPolyDebrisFXList(PolyDebrisFXList & list, CButeMgr & buteMgr,
 		else
 		{
 			debug_delete(pFX);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
 		sprintf(s_aTagName, "%s%d", pTagBase, nNum);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CPolyDebrisFX::CPolyDebrisFX()
 //
-//	ROUTINE:	CPolyDebrisFX::CPolyDebrisFX()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CPolyDebrisFX::CPolyDebrisFX()
@@ -511,10 +487,10 @@ CPolyDebrisFX::CPolyDebrisFX()
 	nMaxDebris		= 0;
 	nMinBounce		= 0;
 	nMaxBounce		= 0;
-    bAdditive       = LTFALSE;
-    bMultiply       = LTFALSE;
-    bShowTrail      = LTFALSE;
-    bDirOffsetOnly  = LTFALSE;
+	bAdditive	   = LTFALSE;
+	bMultiply	   = LTFALSE;
+	bShowTrail	  = LTFALSE;
+	bDirOffsetOnly  = LTFALSE;
 	fDirOffset		= 0.0f;
 	fMinDuration	= 0.0f;
 	fMaxDuration	= 0.0f;
@@ -536,36 +512,34 @@ CPolyDebrisFX::CPolyDebrisFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CPolyDebrisFX::Init
 //
-//	ROUTINE:	CPolyDebrisFX::Init
-//
-//	PURPOSE:	Init the particle shower fx struct from the bute mgr
-//
+//	PURPOSE: Init the particle shower fx struct from the bute mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CPolyDebrisFX::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	nStyle			= buteMgr.GetInt(aTagName, POLYDEBRISFX_STYLE);
 	nMinDebris		= buteMgr.GetInt(aTagName, POLYDEBRISFX_MINDEBRIS);
 	nMaxDebris		= buteMgr.GetInt(aTagName, POLYDEBRISFX_MAXDEBRIS);
 	nMinBounce		= buteMgr.GetInt(aTagName, POLYDEBRISFX_MINBOUNCE);
 	nMaxBounce		= buteMgr.GetInt(aTagName, POLYDEBRISFX_MAXBOUNCE);
-    bAdditive       = (LTBOOL) buteMgr.GetInt(aTagName, POLYDEBRISFX_ADDITIVE);
-    bMultiply       = (LTBOOL) buteMgr.GetInt(aTagName, POLYDEBRISFX_MULTIPLY);
-    bShowTrail      = (LTBOOL) buteMgr.GetInt(aTagName, POLYDEBRISFX_SHOWTRAIL);
-    bDirOffsetOnly  = (LTBOOL) buteMgr.GetInt(aTagName, POLYDEBRISFX_DIROFFSETONLY);
-    fDirOffset      = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_DIROFFSET);
-    fGravityScale   = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_GRAVITYSCALE);
-    fMinDuration    = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MINDURATION);
-    fMaxDuration    = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MAXDURATION);
-    fInitialAlpha   = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_INITIALALPHA);
-    fFinalAlpha     = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_FINALALPHA);
-    fMinWidth       = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MINWIDTH);
-    fMaxWidth       = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MAXWIDTH);
-    fMinLength      = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MINLENGTH);
-    fMaxLength      = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MAXLENGTH);
+	bAdditive	   = (LTBOOL) buteMgr.GetInt(aTagName, POLYDEBRISFX_ADDITIVE);
+	bMultiply	   = (LTBOOL) buteMgr.GetInt(aTagName, POLYDEBRISFX_MULTIPLY);
+	bShowTrail	  = (LTBOOL) buteMgr.GetInt(aTagName, POLYDEBRISFX_SHOWTRAIL);
+	bDirOffsetOnly  = (LTBOOL) buteMgr.GetInt(aTagName, POLYDEBRISFX_DIROFFSETONLY);
+	fDirOffset	  = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_DIROFFSET);
+	fGravityScale   = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_GRAVITYSCALE);
+	fMinDuration	= (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MINDURATION);
+	fMaxDuration	= (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MAXDURATION);
+	fInitialAlpha   = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_INITIALALPHA);
+	fFinalAlpha	 = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_FINALALPHA);
+	fMinWidth	   = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MINWIDTH);
+	fMaxWidth	   = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MAXWIDTH);
+	fMinLength	  = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MINLENGTH);
+	fMaxLength	  = (LTFLOAT) buteMgr.GetDouble(aTagName, POLYDEBRISFX_MAXLENGTH);
 	vMinColor1		= buteMgr.GetVector(aTagName, POLYDEBRISFX_MINCOLOR1);
 	vMaxColor1		= buteMgr.GetVector(aTagName, POLYDEBRISFX_MAXCOLOR1);
 	vMinColor2		= buteMgr.GetVector(aTagName, POLYDEBRISFX_MINCOLOR2);
@@ -587,16 +561,14 @@ LTBOOL CPolyDebrisFX::Init(CButeMgr & buteMgr, char* aTagName)
 		strncpy(szTexture, (char*)(LPCSTR)str, ARRAY_LEN(szTexture));
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CPolyDebrisFX::Cache()
 //
-//	ROUTINE:	CPolyDebrisFX::Cache()
-//
-//	PURPOSE:	Cache all the resources associated with the CPolyDebrisFX.
-//
+//	PURPOSE: Cache all the resources associated with the CPolyDebrisFX.
 // ----------------------------------------------------------------------- //
 
 void CPolyDebrisFX::Cache()
@@ -610,5 +582,3 @@ void CPolyDebrisFX::Cache()
 
 #endif  // !_CLIENTBUILD
 }
-
-

@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: GibTypes.h
 //
-// MODULE  : GibTypes.h
+// PURPOSE: Definitions for different model gib types
 //
-// PURPOSE : Definitions for different model gib types
-//
-// CREATED : 4/26/98
-//
+// CREATED: 4/26/98
 // ----------------------------------------------------------------------- //
 
 #ifndef __GIB_TYPES_H__

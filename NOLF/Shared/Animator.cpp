@@ -1,22 +1,18 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Animator.cpp
 //
-// MODULE  : Animator.cpp
+// PURPOSE: Implementations of Animator classes
 //
-// PURPOSE : Implementations of Animator classes
-//
-// CREATED : 08.20.1999
-//
+// CREATED: 08.20.1999
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
 #include "Animator.h"
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::CAnimator()
 //
-//	ROUTINE:	CAnimator::CAnimator()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CAnimator::CAnimator()
@@ -31,7 +27,7 @@ CAnimator::CAnimator()
 	m_eAniTrackerPitchUp = eAniTrackerInvalid;
 	m_eAniTrackerPitch = eAniTrackerInvalid;
 
-    m_bInitialized = LTFALSE;
+	m_bInitialized = LTFALSE;
 
 	m_bHackToAvoidTheUsualOneFrameOffBullshit = LTFALSE;
 
@@ -40,11 +36,9 @@ CAnimator::CAnimator()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::CAnimator()
 //
-//	ROUTINE:	CAnimator::CAnimator()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CAnimator::~CAnimator()
@@ -52,11 +46,9 @@ CAnimator::~CAnimator()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::Init()
 //
-//	ROUTINE:	CAnimator::Init()
-//
-//	PURPOSE:	Init
-//
+//	PURPOSE: Init
 // ----------------------------------------------------------------------- //
 
 void CAnimator::Init(ILTCSBase *pInterface, HOBJECT hObject)
@@ -67,20 +59,18 @@ void CAnimator::Init(ILTCSBase *pInterface, HOBJECT hObject)
 
 	m_hObject = hObject;
 
-    LTRESULT dwResult = g_pModelLT->GetMainTracker(m_hObject, m_aAniTrackers[eAniTrackerMain].m_pAnimTracker);
+	LTRESULT dwResult = g_pModelLT->GetMainTracker(m_hObject, m_aAniTrackers[eAniTrackerMain].m_pAnimTracker);
 	_ASSERT(LT_OK == dwResult);
 
 	m_eAniTrackerDims = eAniTrackerInvalid;
 
-    m_bInitialized = LTTRUE;
+	m_bInitialized = LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::Update()
 //
-//	ROUTINE:	CAnimator::Update()
-//
-//	PURPOSE:	Update
-//
+//	PURPOSE: Update
 // ----------------------------------------------------------------------- //
 
 void CAnimator::Update()
@@ -88,31 +78,27 @@ void CAnimator::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::IsAniTrackerDone()
 //
-//	ROUTINE:	CAnimator::IsAniTrackerDone()
-//
-//	PURPOSE:	Checks to see if the Ani tracker playback state is MS_PLAYDONE
-//
+//	PURPOSE: Checks to see if the Ani tracker playback state is MS_PLAYDONE
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAnimator::IsAniTrackerDone(AniTracker eAniTracker) const
 {
 	_ASSERT(eAniTracker != eAniTrackerInvalid);
-    if ( eAniTrackerInvalid == eAniTracker ) return LTTRUE;
+	if ( eAniTrackerInvalid == eAniTracker ) return LTTRUE;
 
-    uint32 dwFlags;
-    uint32 dwResult = g_pModelLT->GetPlaybackState(m_aAniTrackers[eAniTracker].m_pAnimTracker, dwFlags);
+	uint32 dwFlags;
+	uint32 dwResult = g_pModelLT->GetPlaybackState(m_aAniTrackers[eAniTracker].m_pAnimTracker, dwFlags);
 	_ASSERT(LT_OK == dwResult);
 
-    return (dwFlags & MS_PLAYDONE) ? LTTRUE : LTFALSE;
+	return (dwFlags & MS_PLAYDONE) ? LTTRUE : LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::AddAniTracker()
 //
-//	ROUTINE:	CAnimator::AddAniTracker()
-//
-//	PURPOSE:	Generates a hokey AniTracker value given a name
-//
+//	PURPOSE: Generates a hokey AniTracker value given a name
 // ----------------------------------------------------------------------- //
 
 AniTracker CAnimator::AddAniTracker(const char* szWeightset)
@@ -120,9 +106,9 @@ AniTracker CAnimator::AddAniTracker(const char* szWeightset)
 	_ASSERT(szWeightset);
 	if (!szWeightset) return eAniTrackerInvalid;
 
-    if ( LT_OK != g_pModelLT->AddTracker(m_hObject, &m_aAniTrackers[m_cAniTrackers].m_AnimTracker) )
+	if ( LT_OK != g_pModelLT->AddTracker(m_hObject, &m_aAniTrackers[m_cAniTrackers].m_AnimTracker) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return eAniTrackerInvalid;
 	}
 
@@ -132,11 +118,9 @@ AniTracker CAnimator::AddAniTracker(const char* szWeightset)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::EnableAniTracker()
 //
-//	ROUTINE:	CAnimator::EnableAniTracker()
-//
-//	PURPOSE:	Enables an anitracker
-//
+//	PURPOSE: Enables an anitracker
 // ----------------------------------------------------------------------- //
 
 void CAnimator::EnableAniTracker(AniTracker eAniTracker)
@@ -148,25 +132,23 @@ void CAnimator::EnableAniTracker(AniTracker eAniTracker)
 
 	if ( LT_OK != g_pModelLT->FindWeightSet(m_hObject, (char*)m_aAniTrackers[eAniTracker].m_szWeightset, hWeightset) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return;
 	}
 
-    if ( LT_OK != g_pModelLT->SetWeightSet(m_aAniTrackers[eAniTracker].m_pAnimTracker, hWeightset) )
+	if ( LT_OK != g_pModelLT->SetWeightSet(m_aAniTrackers[eAniTracker].m_pAnimTracker, hWeightset) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return;
 	}
 
-    g_pModelLT->ResetAnim(m_aAniTrackers[eAniTracker].m_pAnimTracker);
+	g_pModelLT->ResetAnim(m_aAniTrackers[eAniTracker].m_pAnimTracker);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::DisableAniTracker()
 //
-//	ROUTINE:	CAnimator::DisableAniTracker()
-//
-//	PURPOSE:	Disables an anitracker
-//
+//	PURPOSE: Disables an anitracker
 // ----------------------------------------------------------------------- //
 
 void CAnimator::DisableAniTracker(AniTracker eAniTracker)
@@ -178,23 +160,21 @@ void CAnimator::DisableAniTracker(AniTracker eAniTracker)
 
 	if ( LT_OK != g_pModelLT->FindWeightSet(m_hObject, (char*)"Null", hWeightset) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return;
 	}
 
-    if ( LT_OK != g_pModelLT->SetWeightSet(m_aAniTrackers[eAniTracker].m_pAnimTracker, hWeightset) )
+	if ( LT_OK != g_pModelLT->SetWeightSet(m_aAniTrackers[eAniTracker].m_pAnimTracker, hWeightset) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::StartAniTracker()
 //
-//	ROUTINE:	CAnimator::StartAniTracker()
-//
-//	PURPOSE:	Starts an anitracker
-//
+//	PURPOSE: Starts an anitracker
 // ----------------------------------------------------------------------- //
 
 void CAnimator::StartAniTracker(AniTracker eAniTracker)
@@ -202,19 +182,17 @@ void CAnimator::StartAniTracker(AniTracker eAniTracker)
 	_ASSERT(eAniTrackerInvalid != eAniTracker);
 	if (eAniTrackerInvalid == eAniTracker) return;
 
-    if ( LT_OK != g_pModelLT->SetPlaying(m_aAniTrackers[eAniTracker].m_pAnimTracker, LTTRUE) )
+	if ( LT_OK != g_pModelLT->SetPlaying(m_aAniTrackers[eAniTracker].m_pAnimTracker, LTTRUE) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::StopAniTracker()
 //
-//	ROUTINE:	CAnimator::StopAniTracker()
-//
-//	PURPOSE:	Stops an anitracker
-//
+//	PURPOSE: Stops an anitracker
 // ----------------------------------------------------------------------- //
 
 void CAnimator::StopAniTracker(AniTracker eAniTracker)
@@ -222,19 +200,17 @@ void CAnimator::StopAniTracker(AniTracker eAniTracker)
 	_ASSERT(eAniTrackerInvalid != eAniTracker);
 	if (eAniTrackerInvalid == eAniTracker) return;
 
-    if ( LT_OK != g_pModelLT->SetPlaying(m_aAniTrackers[eAniTracker].m_pAnimTracker, LTFALSE) )
+	if ( LT_OK != g_pModelLT->SetPlaying(m_aAniTrackers[eAniTracker].m_pAnimTracker, LTFALSE) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::StopAniTracker()
 //
-//	ROUTINE:	CAnimator::StopAniTracker()
-//
-//	PURPOSE:	Stops an anitracker
-//
+//	PURPOSE: Stops an anitracker
 // ----------------------------------------------------------------------- //
 
 void CAnimator::PositionAniTracker(AniTracker eAniTracker, LTFLOAT fPercent)
@@ -242,65 +218,57 @@ void CAnimator::PositionAniTracker(AniTracker eAniTracker, LTFLOAT fPercent)
 	_ASSERT(eAniTrackerInvalid != eAniTracker);
 	if (eAniTrackerInvalid == eAniTracker) return;
 
-    LTAnimTracker* pTracker = m_aAniTrackers[eAniTracker].m_pAnimTracker;
+	LTAnimTracker* pTracker = m_aAniTrackers[eAniTracker].m_pAnimTracker;
 
-    uint32 dwAnimLength;
+	uint32 dwAnimLength;
 	g_pModelLT->GetCurAnimLength(pTracker, dwAnimLength);
 
-    uint32 dwAnimTime = (uint32)((LTFLOAT)dwAnimLength*fPercent);
+	uint32 dwAnimTime = (uint32)((LTFLOAT)dwAnimLength*fPercent);
 
 	if ( LT_OK != g_pModelLT->SetCurAnimTime(pTracker, dwAnimTime) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::ResetAniTracker()
 //
-//	ROUTINE:	CAnimator::ResetAniTracker()
-//
-//	PURPOSE:	Resets an anitracker
-//
+//	PURPOSE: Resets an anitracker
 // ----------------------------------------------------------------------- //
 
 void CAnimator::ResetAniTracker(AniTracker eAniTracker)
 {
-    g_pModelLT->ResetAnim(m_aAniTrackers[eAniTracker].m_pAnimTracker);
+	g_pModelLT->ResetAnim(m_aAniTrackers[eAniTracker].m_pAnimTracker);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::IsAniTrackerLooping()
 //
-//	ROUTINE:	CAnimator::IsAniTrackerLooping()
-//
-//	PURPOSE:	Gets an ani tracker's looping status
-//
+//	PURPOSE: Gets an ani tracker's looping status
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAnimator::IsAniTrackerLooping(AniTracker eAniTracker) const
 {
-    return LT_YES == g_pModelLT->GetLooping(m_aAniTrackers[eAniTracker].m_pAnimTracker);
+	return LT_YES == g_pModelLT->GetLooping(m_aAniTrackers[eAniTracker].m_pAnimTracker);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::LoopAniTracker()
 //
-//	ROUTINE:	CAnimator::LoopAniTracker()
-//
-//	PURPOSE:	Sets an ani tracker's looping status
-//
+//	PURPOSE: Sets an ani tracker's looping status
 // ----------------------------------------------------------------------- //
 
 void CAnimator::LoopAniTracker(AniTracker eAniTracker, LTBOOL bLoop)
 {
-    g_pModelLT->SetLooping(m_aAniTrackers[eAniTracker].m_pAnimTracker, bLoop);
+	g_pModelLT->SetLooping(m_aAniTrackers[eAniTracker].m_pAnimTracker, bLoop);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::AddAni()
 //
-//	ROUTINE:	CAnimator::AddAni()
-//
-//	PURPOSE:	Generates a hokey Ani value given an ani name
-//
+//	PURPOSE: Generates a hokey Ani value given an ani name
 // ----------------------------------------------------------------------- //
 
 Ani CAnimator::AddAni(const char* szAni)
@@ -310,19 +278,19 @@ Ani CAnimator::AddAni(const char* szAni)
 	char szOverrideAni[128];
 	sprintf(szOverrideAni, "+%s", szAni);
 
-    HMODELANIM hAni = m_pInterface->GetAnimIndex(m_hObject, (char*)szOverrideAni);
+	HMODELANIM hAni = m_pInterface->GetAnimIndex(m_hObject, (char*)szOverrideAni);
 
 	if ( hAni == INVALID_MODEL_ANIM )
 	{
 		// Override could not be found. Just use the normal ani.
 
-        hAni = m_pInterface->GetAnimIndex(m_hObject, (char*)szAni);
+		hAni = m_pInterface->GetAnimIndex(m_hObject, (char*)szAni);
 
 		if ( hAni == INVALID_MODEL_ANIM )
 		{
 			// We couldn't even find the normal ani.
 
-//          _ASSERT(LTFALSE);
+//			_ASSERT(LTFALSE);
 			return eAniInvalid;
 		}
 		else
@@ -361,11 +329,9 @@ Ani CAnimator::AddAni(const char* szAni)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::SetAni()
 //
-//	ROUTINE:	CAnimator::SetAni()
-//
-//	PURPOSE:	Starts playing an animation on a given ani tracker
-//
+//	PURPOSE: Starts playing an animation on a given ani tracker
 // ----------------------------------------------------------------------- //
 
 void CAnimator::SetAni(Ani eAni, AniTracker eAniTracker)
@@ -403,13 +369,13 @@ void CAnimator::SetAni(Ani eAni, AniTracker eAniTracker)
 		{
 			if ( SetDims(hNewAni) )
 			{
-                LTRESULT dwResult = g_pModelLT->SetCurAnim(m_aAniTrackers[eAniTracker].m_pAnimTracker, hNewAni);
+				LTRESULT dwResult = g_pModelLT->SetCurAnim(m_aAniTrackers[eAniTracker].m_pAnimTracker, hNewAni);
 				_ASSERT(LT_OK == dwResult);
 			}
 		}
 		else
 		{
-            LTRESULT dwResult = g_pModelLT->SetCurAnim(m_aAniTrackers[eAniTracker].m_pAnimTracker, hNewAni);
+			LTRESULT dwResult = g_pModelLT->SetCurAnim(m_aAniTrackers[eAniTracker].m_pAnimTracker, hNewAni);
 			_ASSERT(LT_OK == dwResult);
 		}
 	}
@@ -425,18 +391,16 @@ void CAnimator::SetAni(Ani eAni, AniTracker eAniTracker)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimator::GetAni()
 //
-//	ROUTINE:	CAnimator::GetAni()
-//
-//	PURPOSE:	Gets the HMODELANIM currently playing on a tracker
-//
+//	PURPOSE: Gets the HMODELANIM currently playing on a tracker
 // ----------------------------------------------------------------------- //
 
 HMODELANIM CAnimator::GetAni(AniTracker eAniTracker)
 {
 	HMODELANIM hAni;
 
-    uint32 dwResult = g_pModelLT->GetCurAnim(m_aAniTrackers[eAniTracker].m_pAnimTracker, hAni);
+	uint32 dwResult = g_pModelLT->GetCurAnim(m_aAniTrackers[eAniTracker].m_pAnimTracker, hAni);
 	if ( dwResult == LT_OK )
 	{
 		return hAni;

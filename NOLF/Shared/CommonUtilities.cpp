@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CommonUtilities.cpp
 //
-// MODULE  : CommonUtilities.cpp
+// PURPOSE: Utility functions
 //
-// PURPOSE : Utility functions
-//
-// CREATED : 9/25/97
-//
+// CREATED: 9/25/97
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -14,11 +12,11 @@
 
 // Model and transform interface pointers
 
-ILTMath*             g_pMathLT = LTNULL;
-ILTModel*            g_pModelLT = LTNULL;
-ILTTransform*        g_pTransLT = LTNULL;
-ILTPhysics*          g_pPhysicsLT = LTNULL;
-ILTCSBase*			 g_pBaseLT = LTNULL;
+ILTMath*	g_pMathLT = LTNULL;
+ILTModel*	g_pModelLT = LTNULL;
+ILTTransform*	g_pTransLT = LTNULL;
+ILTPhysics*	g_pPhysicsLT = LTNULL;
+ILTCSBase*	g_pBaseLT = LTNULL;
 
 // Temp buffer...
 
@@ -43,7 +41,7 @@ int GetRandom(int range)
 
 int GetRandom(int lo, int hi)
 {
-	if ((hi - lo + 1) == 0)		// check for divide-by-zero case
+	if ((hi - lo + 1) == 0)	// check for divide-by-zero case
 	{
 		if (rand() & 1) return(lo);
 		else return(hi);
@@ -108,9 +106,9 @@ float WaveFn_Linear(float val)
 float WaveFn_Sine(float val)
 {
 	val = MATH_HALFPI + val * MATH_PI;	// PI/2 to 3PI/2
-	val = (float)sin(val);				// 1 to -1
-	val = -val;							// -1 to 1
-	val = (val + 1.0f) * 0.5f;			// 0 to 1
+	val = (float)sin(val);		// 1 to -1
+	val = -val;				// -1 to 1
+	val = (val + 1.0f) * 0.5f;	// 0 to 1
 	return val;
 }
 
@@ -138,22 +136,22 @@ float WaveFn_SlowOn(float val)
 // Arguments:
 //		pVal - Color vector
 // Return:
-//      uint16 - converted color.
+//	  uint16 - converted color.
 //-------------------------------------------------------------------------------------------
 uint16 Color255VectorToWord( LTVector *pVal )
 {
-    uint16 wColor;
+	uint16 wColor;
 
 	// For red, multiply by 5 bits and divide by 8, which is a net division of 3 bits.  Then shift it
 	// to the left 11 bits to fit into result, which is a net shift of 8 to left.
-    wColor = ( uint16 )(((( uint32 )pVal->x & 0xFF ) << 8 ) & 0xF800 );
+	wColor = ( uint16 )(((( uint32 )pVal->x & 0xFF ) << 8 ) & 0xF800 );
 
 	// For green, multiply by 6 bits and divide by 8, which is a net division of 2 bits.  Then shift it
 	// to the left 5 bits to fit into result, which is a net shift of 3 to left.
-    wColor |= ( uint16 )(((( uint32 )pVal->y & 0xFF ) << 3 ) & 0x07E0 );
+	wColor |= ( uint16 )(((( uint32 )pVal->y & 0xFF ) << 3 ) & 0x07E0 );
 
 	// For blue, multiply by 5 bits and divide by 8 = divide by 3.
-    wColor |= ( uint16 )((( uint32 )pVal->z & 0xFF ) >> 3 );
+	wColor |= ( uint16 )((( uint32 )pVal->z & 0xFF ) >> 3 );
 
 	return wColor;
 }
@@ -171,18 +169,18 @@ uint16 Color255VectorToWord( LTVector *pVal )
 void Color255WordToVector( uint16 wVal, LTVector *pVal )
 {
 	// For red, divide by 11 bits then multiply by 8 bits and divide by 5 bits = divide by 8 bits...
-    pVal->x = ( LTFLOAT )(( wVal & 0xF800 ) >> 8 );
+	pVal->x = ( LTFLOAT )(( wVal & 0xF800 ) >> 8 );
 
 	// For green, divide by 5 bits, multiply by 8 bits, divide by 6 bits = divide by 3 bits.
-    pVal->y = ( LTFLOAT )(( wVal & 0x07E0 ) >> 3 );
+	pVal->y = ( LTFLOAT )(( wVal & 0x07E0 ) >> 3 );
 
 	// For blue, divide by 5 bits, multiply by 8 bits = multiply by 3 bits
-    pVal->z = ( LTFLOAT )(( wVal & 0x001F ) << 3 );
+	pVal->z = ( LTFLOAT )(( wVal & 0x001F ) << 3 );
 }
 
 uint8 CompressRotationByte(ILTCommon *pCommon, LTRotation *pRotation)
 {
-    LTVector up, right, forward;
+	LTVector up, right, forward;
 	float angle;
 	char cAngle;
 
@@ -190,7 +188,7 @@ uint8 CompressRotationByte(ILTCommon *pCommon, LTRotation *pRotation)
 
 	angle = (float)atan2(forward.x, forward.z);
 	cAngle = (char)(angle * (127.0f / MATH_PI));
-    return (uint8)cAngle;
+	return (uint8)cAngle;
 }
 
 

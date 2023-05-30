@@ -1,9 +1,7 @@
 // ----------------------------------------------------------------------- //
 // MODULE: SoundMgr.h
-//
-// PURPOSE : SoundMgr definition - Controls sound
-//
-// CREATED : 2/08/99
+// PURPOSE: SoundMgr definition - Controls sound
+// CREATED: 2/08/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //
@@ -45,7 +43,7 @@ class CGameSoundMgr : public CGameButeMgr
 		virtual	LTVector GetObjectPos(HOBJECT hObj) = 0;
 
 		ILTCSBase*	m_pInterface;
-		LTFLOAT		m_fInnerRadiusPercent;	// Percent of outer radius used for inner radius
+		LTFLOAT	m_fInnerRadiusPercent;	// Percent of outer radius used for inner radius
 };
 
 #endif // __SOUND_MGR_H__

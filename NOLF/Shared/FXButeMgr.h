@@ -1,13 +1,9 @@
 // ----------------------------------------------------------------------- //
-//
-// MODULE  : FXButeMgr.h
-//
-// PURPOSE : FXButeMgr definition - Controls attributes of all weapons
-//
-// CREATED : 12/09/99
+// MODULE: FXButeMgr.h
+// PURPOSE: FXButeMgr definition - Controls attributes of all weapons
+// CREATED: 12/09/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __FX_BUTE_MGR_H__
@@ -30,24 +26,24 @@
 class CFXButeMgr;
 extern CFXButeMgr* g_pFXButeMgr;
 
-#define FXBMGR_DEFAULT_FILE			"Attributes\\Fx.txt"
+#define FXBMGR_DEFAULT_FILE	"Attributes\\Fx.txt"
 
 #define FXBMGR_INVALID_ID			255
 
 #define FXBMGR_MAX_FILE_PATH		64
-#define FXBMGR_MAX_NAME_LENGTH		32
+#define FXBMGR_MAX_NAME_LENGTH	32
 
-#define	IMPACT_MAX_DEBRISFX_TYPES	10
-#define	IMPACT_MAX_SCALEFX_TYPES	25
-#define	IMPACT_MAX_PEXPLFX_TYPES	5
-#define	IMPACT_MAX_DLIGHTFX_TYPES	5
-#define	IMPACT_MAX_PDEBRISFX_TYPES	3
+#define IMPACT_MAX_DEBRISFX_TYPES	10
+#define IMPACT_MAX_SCALEFX_TYPES	25
+#define IMPACT_MAX_PEXPLFX_TYPES	5
+#define IMPACT_MAX_DLIGHTFX_TYPES	5
+#define IMPACT_MAX_PDEBRISFX_TYPES 3
 #define IMPACT_MAX_PSHOWERFX		5
 
-#define FIRE_MAX_BEAMFX				5
+#define FIRE_MAX_BEAMFX		5
 
-#define	PV_MAX_SCALEFX_TYPES	10
-#define	PV_MAX_DLIGHTFX_TYPES	10
+#define PV_MAX_SCALEFX_TYPES	10
+#define PV_MAX_DLIGHTFX_TYPES	10
 #define PV_MAX_SOUNDFX_TYPES	10
 
 struct PROJECTILECLASSDATA
@@ -57,7 +53,7 @@ struct PROJECTILECLASSDATA
 		szName[0] = '\0';
 	}
 
-    virtual LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
+	virtual LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
 	virtual void	Cache(CFXButeMgr* pFXButeMgr) {}
 
 	char	szName[FXBMGR_MAX_NAME_LENGTH];
@@ -69,47 +65,47 @@ struct PROXCLASSDATA : public PROJECTILECLASSDATA
 {
 	PROXCLASSDATA();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
 	void	Cache(CFXButeMgr* pFXButeMgr);
 
 	char	szArmSound[FXBMGR_MAX_FILE_PATH];
  	char	szActivateSound[FXBMGR_MAX_FILE_PATH];
 
-	int		nActivateRadius;
-	int		nArmSndRadius;
-	int		nActivateSndRadius;
+	int	nActivateRadius;
+	int	nArmSndRadius;
+	int	nActivateSndRadius;
 
-    LTFLOAT  fArmDelay;
-    LTFLOAT  fActivateDelay;
+	LTFLOAT fArmDelay;
+	LTFLOAT fActivateDelay;
 };
 
 struct PROJECTILEFX
 {
 	PROJECTILEFX();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
-	void	Cache(CFXButeMgr* pFXButeMgr);
+	LTBOOL Init(CButeMgr & buteMgr, char* aTagName);
+	void Cache(CFXButeMgr* pFXButeMgr);
 
-	int			nId;
+	int	nId;
 
-	char		szName[FXBMGR_MAX_NAME_LENGTH];
-	char		szFlareSprite[FXBMGR_MAX_FILE_PATH];
-	char		szSound[FXBMGR_MAX_FILE_PATH];
-	char		szClass[FXBMGR_MAX_FILE_PATH];
-	char		szModel[FXBMGR_MAX_FILE_PATH];
-	char		szSkin[FXBMGR_MAX_FILE_PATH];
+	char	szName[FXBMGR_MAX_NAME_LENGTH];
+	char	szFlareSprite[FXBMGR_MAX_FILE_PATH];
+	char	szSound[FXBMGR_MAX_FILE_PATH];
+	char	szClass[FXBMGR_MAX_FILE_PATH];
+	char	szModel[FXBMGR_MAX_FILE_PATH];
+	char	szSkin[FXBMGR_MAX_FILE_PATH];
 
 	int			nAltVelocity;
 	int			nVelocity;
-    LTFLOAT     fLifeTime;
+	LTFLOAT	fLifeTime;
 	int			nFlags;
-    LTVector    vLightColor;
+	LTVector	vLightColor;
 	int			nLightRadius;
 	int			nSoundRadius;
-    LTFLOAT     fFlareScale;
-    uint32      dwObjectFlags;
-    LTVector    vModelScale;
-	int			nSmokeTrailType;
+	LTFLOAT	fFlareScale;
+	uint32	dwObjectFlags;
+	LTVector	vModelScale;
+	int		nSmokeTrailType;
 
 	// Data specific to our class (i.e., szClass)...
 	PROJECTILECLASSDATA* pClassData;
@@ -125,7 +121,7 @@ struct IMPACTFX
 {
 	IMPACTFX();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
 	void	Cache(CFXButeMgr* pFXButeMgr);
 
 	int			nId;
@@ -138,17 +134,17 @@ struct IMPACTFX
 	int			nAISoundRadius;
 	LTBOOL		bAIIgnoreSurface;
 	int			nFlags;
-    LTFLOAT     fMarkScale;
-    LTVector    vTintColor;
-    LTFLOAT     fTintRampUp;
-    LTFLOAT     fTintRampDown;
-    LTFLOAT     fTintMaxTime;
-    LTVector    vBlastColor;
-    LTFLOAT     fBlastTimeMin;
-    LTFLOAT     fBlastTimeMax;
-    LTFLOAT     fBlastFadeMin;
-    LTFLOAT     fBlastFadeMax;
-    LTBOOL      bDoSurfaceFX;
+	LTFLOAT	 fMarkScale;
+	LTVector	vTintColor;
+	LTFLOAT	 fTintRampUp;
+	LTFLOAT	 fTintRampDown;
+	LTFLOAT	 fTintMaxTime;
+	LTVector	vBlastColor;
+	LTFLOAT	 fBlastTimeMin;
+	LTFLOAT	 fBlastTimeMax;
+	LTFLOAT	 fBlastFadeMin;
+	LTFLOAT	 fBlastFadeMax;
+	LTBOOL	  bDoSurfaceFX;
 	LTBOOL		bIgnoreFlesh;
 	LTBOOL		bIgnoreLiquid;
 
@@ -187,20 +183,20 @@ struct IFXCS
 		rSurfRot.Init();
 		eSurfType		= ST_UNKNOWN;
 		eCode			= CC_NO_CONTAINER;
-        bPlaySound      = LTFALSE;
+		bPlaySound	  = LTFALSE;
 		fBlastRadius	= 0.0f;
 		fTintRange		= 0.0f;
 	}
 
-    LTVector         vPos;           // Position of FX
-    LTVector         vDir;           // Direction for scale fx
-    LTVector         vSurfNormal;    // Normal of surface of impact
-    LTRotation       rSurfRot;       // Rotation aligned with surface normal
-	SurfaceType		 eSurfType;		// Type of surface impacting on
-	ContainerCode	 eCode;			// Container code fx is currently in
-    LTBOOL           bPlaySound;     // Should the sound be played
-    LTFLOAT          fBlastRadius;   // Radius for blast mark
-    LTFLOAT          fTintRange;     // Max range for screen tints
+	LTVector		vPos;		// Position of FX
+	LTVector		vDir;		// Direction for scale fx
+	LTVector		vSurfNormal;	// Normal of surface of impact
+	LTRotation	rSurfRot;		// Rotation aligned with surface normal
+	SurfaceType	eSurfType;	// Type of surface impacting on
+	ContainerCode	eCode;		// Container code fx is currently in
+	LTBOOL		bPlaySound;	// Should the sound be played
+	LTFLOAT	fBlastRadius;	// Radius for blast mark
+	LTFLOAT	fTintRange;	// Max range for screen tints
 };
 
 struct BEAMFX;
@@ -208,7 +204,7 @@ struct FIREFX
 {
 	FIREFX();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
 	void	 Cache(CFXButeMgr* pFXButeMgr);
 
 	int			nId;
@@ -218,10 +214,10 @@ struct FIREFX
 	char		szShellSkin[FXBMGR_MAX_FILE_PATH];
 
 	int			nFlags;
-    LTVector    vShellScale;
+	LTVector	vShellScale;
 
 	int			nNumBeamFX;
-	BEAMFX*		pBeamFX[FIRE_MAX_BEAMFX];
+	BEAMFX*	pBeamFX[FIRE_MAX_BEAMFX];
 };
 
 typedef CTList<FIREFX*> FireFXList;
@@ -231,34 +227,34 @@ struct PEXPLFX
 {
 	PEXPLFX();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
 	void	Cache(CFXButeMgr* pFXButeMgr);
 
-	int			nId;
+	int		nId;
 
 	char		szName[FXBMGR_MAX_NAME_LENGTH];
 	char		szFile[FXBMGR_MAX_FILE_PATH];
-    LTVector     vPosOffset;
-	int			nNumPerPuff;
-	int			nNumEmitters;
-	int			nNumSteps;
-    LTBOOL       bCreateDebris;
-    LTBOOL       bRotateDebris;
-    LTBOOL       bIgnoreWind;
-    LTBOOL       bDoBubbles;
-    LTBOOL       bAdditive;
-    LTBOOL       bMultiply;
-    LTVector     vColor1;
-    LTVector     vColor2;
-    LTVector     vMinVel;
-    LTVector     vMaxVel;
-    LTVector     vMinDriftVel;
-    LTVector     vMaxDriftVel;
-    LTFLOAT      fLifeTime;
-    LTFLOAT      fFadeTime;
-    LTFLOAT      fOffsetTime;
-    LTFLOAT      fRadius;
-    LTFLOAT      fGravity;
+	LTVector	vPosOffset;
+	int		nNumPerPuff;
+	int		nNumEmitters;
+	int		nNumSteps;
+	LTBOOL	bCreateDebris;
+	LTBOOL	bRotateDebris;
+	LTBOOL	bIgnoreWind;
+	LTBOOL	bDoBubbles;
+	LTBOOL	bAdditive;
+	LTBOOL	bMultiply;
+	LTVector	vColor1;
+	LTVector	vColor2;
+	LTVector	vMinVel;
+	LTVector	vMaxVel;
+	LTVector	vMinDriftVel;
+	LTVector	vMaxDriftVel;
+	LTFLOAT fLifeTime;
+	LTFLOAT fFadeTime;
+	LTFLOAT fOffsetTime;
+	LTFLOAT fRadius;
+	LTFLOAT fGravity;
 };
 
 typedef CTList<PEXPLFX*> PExplFXList;
@@ -268,20 +264,20 @@ struct DLIGHTFX
 {
 	DLIGHTFX();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
 	void	Cache(CFXButeMgr* pFXButeMgr);
 
 	int		nId;
 
 	char	szName[FXBMGR_MAX_NAME_LENGTH];
 
-    LTVector vColor;
-    LTFLOAT  fMinRadius;
-    LTFLOAT  fMaxRadius;
-    LTFLOAT  fMinTime;
-    LTFLOAT  fMaxTime;
-    LTFLOAT  fRampUpTime;
-    LTFLOAT  fRampDownTime;
+	LTVector vColor;
+	LTFLOAT  fMinRadius;
+	LTFLOAT  fMaxRadius;
+	LTFLOAT  fMinTime;
+	LTFLOAT  fMaxTime;
+	LTFLOAT  fRampUpTime;
+	LTFLOAT  fRampDownTime;
 };
 
 typedef CTList<DLIGHTFX*> DLightFXList;
@@ -291,7 +287,7 @@ struct PVFX
 {
 	PVFX();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
 	void	Cache(CFXButeMgr* pFXButeMgr);
 
 	int		nId;
@@ -316,22 +312,22 @@ struct CParticleMuzzleFX
 {
 	CParticleMuzzleFX();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
 	void	Cache(CFXButeMgr* pFXButeMgr);
 
 	char	szName[FXBMGR_MAX_NAME_LENGTH];
 	int		nId;
 
-    LTVector     vColor1;
-    LTVector     vColor2;
-    LTFLOAT      fLength;
-    LTFLOAT      fDuration;
-    LTFLOAT      fRadius;
-    LTFLOAT      fMaxScale;
+	LTVector	 vColor1;
+	LTVector	 vColor2;
+	LTFLOAT	  fLength;
+	LTFLOAT	  fDuration;
+	LTFLOAT	  fRadius;
+	LTFLOAT	  fMaxScale;
 	int			 nNumParticles;
 	char		 szFile[FXBMGR_MAX_FILE_PATH];
-    LTBOOL       bAdditive;
-    LTBOOL       bMultiply;
+	LTBOOL	   bAdditive;
+	LTBOOL	   bMultiply;
 };
 
 typedef CTList<CParticleMuzzleFX*> ParticleMuzzleFXList;
@@ -342,7 +338,7 @@ struct CMuzzleFX
 {
 	CMuzzleFX();
 
-    LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL   Init(CButeMgr & buteMgr, char* aTagName);
 	void	Cache(CFXButeMgr* pFXButeMgr);
 
 	char	szName[FXBMGR_MAX_NAME_LENGTH];
@@ -361,7 +357,7 @@ struct TRACERFX
 {
 	TRACERFX();
 
-    LTBOOL      Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL	  Init(CButeMgr & buteMgr, char* aTagName);
 	void		Cache(CFXButeMgr* pFXButeMgr);
 
 	int			nId;
@@ -374,7 +370,7 @@ struct TRACERFX
 	float		fWidth;
 	float		fInitialAlpha;
 	float		fFinalAlpha;
-    LTVector    vColor;
+	LTVector	vColor;
 };
 
 typedef CTList<TRACERFX*> TracerFXList;
@@ -384,7 +380,7 @@ struct BEAMFX
 {
 	BEAMFX();
 
-    LTBOOL      Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL	  Init(CButeMgr & buteMgr, char* aTagName);
 	void		Cache(CFXButeMgr* pFXButeMgr);
 
 	int			nId;
@@ -396,9 +392,9 @@ struct BEAMFX
 	float		fWidth;
 	float		fInitialAlpha;
 	float		fFinalAlpha;
-    LTVector    vColor;
-    LTBOOL      bAlignUp;
-    LTBOOL      bAlignFlat;
+	LTVector	vColor;
+	LTBOOL	  bAlignUp;
+	LTBOOL	  bAlignFlat;
 };
 
 typedef CTList<BEAMFX*> BeamFXList;
@@ -408,7 +404,7 @@ struct SOUNDFX
 {
 	SOUNDFX();
 
-    LTBOOL      Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL	  Init(CButeMgr & buteMgr, char* aTagName);
 	void		Cache(CFXButeMgr* pFXButeMgr);
 
 	int			nId;
@@ -428,7 +424,7 @@ struct PUSHERFX
 {
 	PUSHERFX();
 
-    LTBOOL      Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL	  Init(CButeMgr & buteMgr, char* aTagName);
 	void		Cache(CFXButeMgr* pFXButeMgr);
 
 	int			nId;
@@ -452,29 +448,29 @@ class CFXButeMgr : public CGameButeMgr
 		CFXButeMgr();
 		~CFXButeMgr();
 
-        LTBOOL           Init(ILTCSBase *pInterface, const char* szAttributeFile=FXBMGR_DEFAULT_FILE);
+		LTBOOL		   Init(ILTCSBase *pInterface, const char* szAttributeFile=FXBMGR_DEFAULT_FILE);
 		void			Term();
 
-        void            Reload(ILTCSBase *pInterface);
+		void			Reload(ILTCSBase *pInterface);
 
 #if defined(_CLIENTBUILD)
-        CSpecialFX* CreateScaleFX(CScaleFX* pScaleFX, LTVector vPos,
-            LTVector vDir, LTVector* pvSurfaceNormal, LTRotation* prRot,
-            CBaseScaleFX* pFX=LTNULL);
+		CSpecialFX* CreateScaleFX(CScaleFX* pScaleFX, LTVector vPos,
+			LTVector vDir, LTVector* pvSurfaceNormal, LTRotation* prRot,
+			CBaseScaleFX* pFX=LTNULL);
 
-        CSpecialFX* CreatePShowerFX(CPShowerFX* pPShowerFX, LTVector vPos,
-            LTVector vDir, LTVector vSurfaceNormal);
+		CSpecialFX* CreatePShowerFX(CPShowerFX* pPShowerFX, LTVector vPos,
+			LTVector vDir, LTVector vSurfaceNormal);
 
 		CSpecialFX*	CreatePolyDebrisFX(CPolyDebrisFX* pPolyDebrisFX,
-            LTVector vPos, LTVector vDir, LTVector vSurfaceNormal);
+			LTVector vPos, LTVector vDir, LTVector vSurfaceNormal);
 
-        CSpecialFX* CreatePExplFX(PEXPLFX* pPExplFX, LTRotation rSurfaceRot,
-            SurfaceType eSurfaceType, LTVector vPos, ContainerCode eCode);
+		CSpecialFX* CreatePExplFX(PEXPLFX* pPExplFX, LTRotation rSurfaceRot,
+			SurfaceType eSurfaceType, LTVector vPos, ContainerCode eCode);
 
-        CSpecialFX* CreateDLightFX(DLIGHTFX* pDLightFX, LTVector vPos,
-            CDynamicLightFX* pFX=LTNULL);
+		CSpecialFX* CreateDLightFX(DLIGHTFX* pDLightFX, LTVector vPos,
+			CDynamicLightFX* pFX=LTNULL);
 
-        CSpecialFX* CreateBeamFX(BEAMFX* pBeamFX, LTVector vStartPos,
+		CSpecialFX* CreateBeamFX(BEAMFX* pBeamFX, LTVector vStartPos,
 			LTVector vEndPos);
 
 		void CreateImpactFX(IMPACTFX* pImpactFX, IFXCS & cs);
@@ -524,7 +520,7 @@ class CFXButeMgr : public CGameButeMgr
 
 #ifndef _CLIENTBUILD
 		int				GetNumImpactFX() const { return m_ImpactFXList.GetLength(); }
-        LTBOOL           ReadImpactFXProp(char* pPropName, uint8 & nImpactFXId);
+		LTBOOL		   ReadImpactFXProp(char* pPropName, uint8 & nImpactFXId);
 #endif // _CLIENTBUILD
 
 		IMPACTFX*		GetImpactFX(int nImpactFXId);
@@ -535,27 +531,27 @@ class CFXButeMgr : public CGameButeMgr
 
 		PROJECTILECLASSDATA*	GetProjectileClassData(char* pName);
 
-		FIREFX*			GetFireFX(int nFireFXId);
-		FIREFX*			GetFireFX(char* pName);
+		FIREFX*	GetFireFX(int nFireFXId);
+		FIREFX*	GetFireFX(char* pName);
 
 	protected :
 
 		ProjectileFXList		m_ProjectileFXList;	// All projectile fx types
 		ProjClassDataList		m_ProjClassDataList;// All projectile class data
-		ImpactFXList			m_ImpactFXList;		// All impact fx types
-		FireFXList				m_FireFXList;		// All fire fx types
-		ScaleFXList				m_ScaleFXList;		// All scale fx types
-		PExplFXList				m_PExplFXList;		// All particle explosion fx types
-		DLightFXList			m_DLightFXList;		// All dynamic light fx types
-		PShowerFXList			m_PShowerFXList;	// All particle shower fx
+		ImpactFXList			m_ImpactFXList;	// All impact fx types
+		FireFXList			m_FireFXList;		// All fire fx types
+		ScaleFXList			m_ScaleFXList;	// All scale fx types
+		PExplFXList			m_PExplFXList;	// All particle explosion fx types
+		DLightFXList			m_DLightFXList;	// All dynamic light fx types
+		PShowerFXList		m_PShowerFXList;	// All particle shower fx
 		PolyDebrisFXList		m_PolyDebrisFXList; // All poly debris fx
-		PVFXList				m_PVFXList;			// All player-view fx
+		PVFXList				m_PVFXList;		// All player-view fx
 		ParticleMuzzleFXList	m_PartMuzzleFXList; // All particle muzzle fx
-		MuzzleFXList			m_MuzzleFXList;		// All weapon muzzle fx
-		TracerFXList			m_TracerFXList;		// All weapon tracer fx
-		BeamFXList				m_BeamFXList;		// All weapon beam fx
-		SoundFXList				m_SoundFXList;		// All sound fx
-		PusherFXList			m_PusherFXList;		// All pusher fx
+		MuzzleFXList			m_MuzzleFXList;	// All weapon muzzle fx
+		TracerFXList			m_TracerFXList;	// All weapon tracer fx
+		BeamFXList			m_BeamFXList;	// All weapon beam fx
+		SoundFXList			m_SoundFXList;	// All sound fx
+		PusherFXList			m_PusherFXList;	// All pusher fx
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -572,16 +568,16 @@ class CFXButeMgrPlugin : public IObjectPlugin
 {
 	public:
 
-        virtual LTRESULT PreHook_EditStringList(
+		virtual LTRESULT PreHook_EditStringList(
 			const char* szRezPath,
 			const char* szPropName,
 			char** aszStrings,
-            uint32* pcStrings,
-            const uint32 cMaxStrings,
-            const uint32 cMaxStringLength);
+			uint32* pcStrings,
+			const uint32 cMaxStrings,
+			const uint32 cMaxStringLength);
 
-        LTBOOL PopulateStringList(char** aszStrings, uint32* pcStrings,
-            const uint32 cMaxStrings, const uint32 cMaxStringLength);
+		LTBOOL PopulateStringList(char** aszStrings, uint32* pcStrings,
+			const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
 	protected :
 

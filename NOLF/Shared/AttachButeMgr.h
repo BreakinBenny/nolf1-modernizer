@@ -16,33 +16,32 @@ class CAttachButeMgr : public CGameButeMgr
 		CAttachButeMgr();
 		~CAttachButeMgr();
 
-        LTBOOL       Init(ILTCSBase *pInterface, const char* szAttributeFile = "Attributes\\Attachments.txt");
+		LTBOOL	   Init(ILTCSBase *pInterface, const char* szAttributeFile = "Attributes\\Attachments.txt");
 		void		Term();
 
 		// Attachments
+		int		GetAttachmentIDByName(const char *szName);
+		int		GetNumAttachments() { return m_cAttachmentID; }
+		CString	GetAttachmentName(int nAttachmentID);
+		int		GetAttachmentType(int nAttachmentID);
+		CString	GetAttachmentProperties(int nAttachmentID);
+		int		GetAttachmentWeapon(int nAttachmentID);
+		CString	GetAttachmentClass(int nAttachmentID);
+		CString	GetAttachmentModel(int nAttachmentID);
+		CString	GetAttachmentSkin(int nAttachmentID);
+		int		GetAttachmentDeath(int nAttachmentID);
+		int		GetAttachmentShot(int nAttachmentID);
 
-		int			GetAttachmentIDByName(const char *szName);
-		int			GetNumAttachments() { return m_cAttachmentID; }
-		CString		GetAttachmentName(int nAttachmentID);
-		int			GetAttachmentType(int nAttachmentID);
-		CString		GetAttachmentProperties(int nAttachmentID);
-		int			GetAttachmentWeapon(int nAttachmentID);
-		CString		GetAttachmentClass(int nAttachmentID);
-		CString		GetAttachmentModel(int nAttachmentID);
-		CString		GetAttachmentSkin(int nAttachmentID);
-		int			GetAttachmentDeath(int nAttachmentID);
-		int			GetAttachmentShot(int nAttachmentID);
 
-
-		int			GetNumRequirements(char *szModelName,char *szStyleName);
-		int			GetRequirementIDs(char *szModelName,char *szStyleName,int *pBuf,int nBufLen);
-		int			GetRequirementAttachment(int nRequirementID);
-		CString		GetRequirementSocket(int nRequirementID);
+		int		GetNumRequirements(char *szModelName,char *szStyleName);
+		int		GetRequirementIDs(char *szModelName,char *szStyleName,int *pBuf,int nBufLen);
+		int		GetRequirementAttachment(int nRequirementID);
+		CString	GetRequirementSocket(int nRequirementID);
 
 	private :
 
-		int			m_cAttachmentID;
-		int			m_cRequirementID;
+		int	m_cAttachmentID;
+		int	m_cRequirementID;
 };
 
 #endif // __AttachBUTE_MGR_H__

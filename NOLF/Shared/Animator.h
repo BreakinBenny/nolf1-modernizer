@@ -11,12 +11,12 @@
 enum AniTracker
 {
 	eAniTrackerInvalid	= -1,
-	eAniTrackerMain		= 0,
+	eAniTrackerMain	= 0,
 };
 
 enum Ani
 {
-	eAniInvalid			= -1,
+	eAniInvalid	= -1,
 };
 
 // Structs
@@ -25,12 +25,12 @@ struct ANIMTRACKER
 {
 	ANIMTRACKER()
 	{
-        m_pAnimTracker  = &m_AnimTracker;
+		m_pAnimTracker  = &m_AnimTracker;
 		m_szWeightset	= "";
 	}
 
-    LTAnimTracker*    m_pAnimTracker;
-    LTAnimTracker     m_AnimTracker;
+	LTAnimTracker*	m_pAnimTracker;
+	LTAnimTracker	m_AnimTracker;
 	const char*		m_szWeightset;
 };
 
@@ -59,7 +59,7 @@ class CAnimator
 
 		// Simple accessors
 
-        inline LTBOOL        IsInitialized() const { return m_bInitialized; }
+		inline LTBOOL		IsInitialized() const { return m_bInitialized; }
 		inline AniTracker	GetDimsTracker() const { return m_eAniTrackerDims; }
 		inline int			GetNumTrackers() const { return m_cAniTrackers; }
 
@@ -82,48 +82,48 @@ class CAnimator
 		void DisableAniTracker(AniTracker eAniTracker);
 		void StartAniTracker(AniTracker eAniTracker);
 		void StopAniTracker(AniTracker eAniTracker);
-        LTBOOL IsAniTrackerDone(AniTracker eAniTracker) const;
-        LTBOOL IsAniTrackerLooping(AniTracker eAniTracker) const;
-        void LoopAniTracker(AniTracker eAniTracker, LTBOOL bLoop);
-        void PositionAniTracker(AniTracker eAniTracker, LTFLOAT fPercent);
+		LTBOOL IsAniTrackerDone(AniTracker eAniTracker) const;
+		LTBOOL IsAniTrackerLooping(AniTracker eAniTracker) const;
+		void LoopAniTracker(AniTracker eAniTracker, LTBOOL bLoop);
+		void PositionAniTracker(AniTracker eAniTracker, LTFLOAT fPercent);
 
 		void EnablePitch(Ani eAni);
 		void DisablePitch();
 
 		// Ani methods
 
-        Ani AddAni(const char* szAni);
-        void SetAni(Ani eAni, AniTracker eAniTracker);
+		Ani AddAni(const char* szAni);
+		void SetAni(Ani eAni, AniTracker eAniTracker);
 		HMODELANIM GetAni(AniTracker eAniTracker);
 
 		// Misc
 
-        virtual LTBOOL SetDims(HMODELANIM hAni) { return LTTRUE; }
+		virtual LTBOOL SetDims(HMODELANIM hAni) { return LTTRUE; }
 
 	protected :
 
-		HOBJECT			m_hObject;								// The model we're animating
+		HOBJECT m_hObject;	// The model we're animating
 
-		HMODELANIM		m_ahAnis[kMaxAnis][3];					// Ani -> HMODELANIM mapping
-		int				m_cAnis;								// Number of Anis for this Animator
+		HMODELANIM m_ahAnis[kMaxAnis][3];		// Ani -> HMODELANIM mapping
+		int	m_cAnis;								// Number of Anis for this Animator
 
-		ANIMTRACKER		m_aAniTrackers[kMaxAniTrackers];		// The array of animtrackers we'll use
-		int				m_cAniTrackers;							// Number of Ani trackers on this Animator
+		ANIMTRACKER	m_aAniTrackers[kMaxAniTrackers];	// The array of animtrackers we'll use
+		int				m_cAniTrackers;					// Number of Ani trackers on this Animator
 
-		AniTracker		m_eAniTrackerDims;						// The ani tracker that determines our dims (aside from main)
+		AniTracker	m_eAniTrackerDims;	// The ani tracker that determines our dims (aside from main)
 
-		AniTracker		m_eAniTrackerPitchDown;
-		AniTracker		m_eAniTrackerPitchUp;
-		AniTracker		m_eAniTrackerPitch;
+		AniTracker	m_eAniTrackerPitchDown;
+		AniTracker	m_eAniTrackerPitchUp;
+		AniTracker	m_eAniTrackerPitch;
 
-		ILTCSBase*		m_pInterface;
+		ILTCSBase*	m_pInterface;
 
-		LTBOOL			m_bHackToAvoidTheUsualOneFrameOffBullshit;
+		LTBOOL				m_bHackToAvoidTheUsualOneFrameOffBullshit;
 		LTFLOAT			m_fPitchTarget;
 		LTFLOAT			m_fPitch;
 		HMODELWEIGHTSET	m_ahPitchWeightsets[kNumPitchWeightsets];
 
-        LTBOOL           m_bInitialized;                         // Initialized?
+		LTBOOL m_bInitialized;	 // Initialized?
 };
 
  #endif // __ANIMATOR_H__

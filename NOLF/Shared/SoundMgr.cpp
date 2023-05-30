@@ -1,9 +1,9 @@
 // ----------------------------------------------------------------------- //
 // MODULE: SoundMgr.cpp
 //
-// PURPOSE : SoundMgr - Implementation
+// PURPOSE: SoundMgr - Implementation
 //
-// CREATED : 02/05/99
+// CREATED: 02/05/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //
@@ -13,8 +13,8 @@
 #include "CommonUtilities.h"
 
 #define SMGR_DEFAULT_INNERRADIUSPERCENT	0.25f
-#define SMGR_BASE_SOUND_ID		1000
-#define SMGR_PATH_TAG			"Paths"
+#define SMGR_BASE_SOUND_ID	1000
+#define SMGR_PATH_TAG		"Paths"
 
 
 // Global pointer to sound mgr...
@@ -23,9 +23,9 @@ static char s_aTagName[30];
 static char s_aAttName[100];
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CGameSoundMgr::CGameSoundMgr
+//	ROUTINE: CGameSoundMgr::CGameSoundMgr
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CGameSoundMgr::CGameSoundMgr()
@@ -35,9 +35,9 @@ CGameSoundMgr::CGameSoundMgr()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CGameSoundMgr::~CGameSoundMgr
+//	ROUTINE: CGameSoundMgr::~CGameSoundMgr
 //
-//	PURPOSE:	Destructor
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CGameSoundMgr::~CGameSoundMgr()
@@ -45,9 +45,9 @@ CGameSoundMgr::~CGameSoundMgr()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CGameSoundMgr::Init()
+//	ROUTINE: CGameSoundMgr::Init()
 //
-//	PURPOSE:	Init mgr
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CGameSoundMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
@@ -58,9 +58,9 @@ LTBOOL CGameSoundMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CGameSoundMgr::GetRandomSoundFilename()
+//	ROUTINE: CGameSoundMgr::GetRandomSoundFilename()
 //
-//	PURPOSE:	Get a random sound filename...
+//	PURPOSE: Get a random sound filename...
 // ----------------------------------------------------------------------- //
 
 CString CGameSoundMgr::GetRandomSoundFilename(const char* pTag, const char* pAttributeBase)
@@ -92,9 +92,9 @@ CString CGameSoundMgr::GetRandomSoundFilename(const char* pTag, const char* pAtt
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CGameSoundMgr::GetSoundFilename()
+//	ROUTINE: CGameSoundMgr::GetSoundFilename()
 //
-//	PURPOSE:	Get a particular sound filename...
+//	PURPOSE: Get a particular sound filename...
 // ----------------------------------------------------------------------- //
 
 CString CGameSoundMgr::GetSoundFilename(const char* pTag, const char* pAttribute)
@@ -106,9 +106,9 @@ CString CGameSoundMgr::GetSoundFilename(const char* pTag, const char* pAttribute
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CGameSoundMgr::GetSoundFilenameFromId()
+//	ROUTINE: CGameSoundMgr::GetSoundFilenameFromId()
 //
-//	PURPOSE:	Get a particular sound filename based on the path attribute
+//	PURPOSE: Get a particular sound filename based on the path attribute
 //			and id...
 //
 // ----------------------------------------------------------------------- //
@@ -132,9 +132,9 @@ CString CGameSoundMgr::GetSoundFilenameFromId(const char* pPathAttribute, uint32
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CGameSoundMgr::GetSoundIdFromFilename()
+//	ROUTINE: CGameSoundMgr::GetSoundIdFromFilename()
 //
-//	PURPOSE:	Get a particular sound id based the file name.
+//	PURPOSE: Get a particular sound id based the file name.
 // ----------------------------------------------------------------------- //
 
 uint32 CGameSoundMgr::GetSoundIdFromFilename(const char* pSoundFile)
@@ -174,9 +174,9 @@ uint32 CGameSoundMgr::GetSoundIdFromFilename(const char* pSoundFile)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CGameSoundMgr::PlaySoundFromObject()
+//	ROUTINE: CGameSoundMgr::PlaySoundFromObject()
 //
-//	PURPOSE:	Plays sound attached to object.
+//	PURPOSE: Plays sound attached to object.
 // ----------------------------------------------------------------------- //
 
 HLTSOUND CGameSoundMgr::PlaySoundFromObject(HOBJECT hObject, char *pName, LTFLOAT fRadius,
@@ -219,9 +219,9 @@ HLTSOUND CGameSoundMgr::PlaySoundFromObject(HOBJECT hObject, char *pName, LTFLOA
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CGameSoundMgr::PlaySoundFromPos()
+//	ROUTINE: CGameSoundMgr::PlaySoundFromPos()
 //
-//	PURPOSE:	Plays sound from a specific position
+//	PURPOSE: Plays sound from a specific position
 // ----------------------------------------------------------------------- //
 
 HLTSOUND CGameSoundMgr::PlaySoundFromPos(LTVector & vPos, char *pName, LTFLOAT fRadius,

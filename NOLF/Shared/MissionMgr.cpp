@@ -1,8 +1,7 @@
 // ----------------------------------------------------------------------- //
 // MODULE: MissionMgr.cpp
-//
-// PURPOSE : MissionMgr implementation - Controls attributes of all
-//			 missions
+// PURPOSE: MissionMgr implementation - Controls attributes of all
+//			missions
 //
 // CREATED : 07/26/99
 // ----------------------------------------------------------------------- //
@@ -16,7 +15,7 @@
 
 #define MMGR_MISSIONRATING_SUCCESSPTS	"SuccessPoints"
 #define MMGR_MISSIONRATING_INTELPTS	"IntelPoints"
-#define MMGR_MISSIONRATING_REPINC	"ReputationInc"
+#define MMGR_MISSIONRATING_REPINC		"ReputationInc"
 #define MMGR_MISSIONRATING_REPMAX	"ReputationMax"
 #define MMGR_MISSIONRATING_HEALTHINC	"HealthInc"
 #define MMGR_MISSIONRATING_ARMORINC	"ArmorInc"
@@ -82,12 +81,12 @@
 #define MMGR_AWARDS_TAG			"Awards"
 
 #define MMGR_AWARDS_ACC_PCT		"Accuracy"
-#define MMGR_AWARDS_MARK_PCT		"Marksman"
-#define MMGR_AWARDS_HIGHAMMO		"HighAmmoAward"
-#define MMGR_AWARDS_LOWAMMO		"LowAmmoAward"
-#define MMGR_AWARDS_ACCURACY		"MarksmanAward"
-#define MMGR_AWARDS_MARKSMAN		"AccuracyAward"
-#define MMGR_AWARDS_NONINJURY		"NonInjuryAward"
+#define MMGR_AWARDS_MARK_PCT	"Marksman"
+#define MMGR_AWARDS_HIGHAMMO	"HighAmmoAward"
+#define MMGR_AWARDS_LOWAMMO	"LowAmmoAward"
+#define MMGR_AWARDS_ACCURACY	"MarksmanAward"
+#define MMGR_AWARDS_MARKSMAN	"AccuracyAward"
+#define MMGR_AWARDS_NONINJURY	"NonInjuryAward"
 #define MMGR_AWARDS_NOTSHOT		"NotShotAward"
 #define MMGR_AWARDS_STEALTH		"StealthAward"
 
@@ -99,9 +98,9 @@ static char s_FileBuffer[MAX_CS_FILENAME_LEN];
 CMissionMgr* g_pMissionMgr = LTNULL;
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CMissionMgr::CMissionMgr()
+//	ROUTINE: CMissionMgr::CMissionMgr()
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CMissionMgr::CMissionMgr()
@@ -111,9 +110,9 @@ CMissionMgr::CMissionMgr()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CMissionMgr::~CMissionMgr()
+//	ROUTINE: CMissionMgr::~CMissionMgr()
 //
-//	PURPOSE:	Destructor
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CMissionMgr::~CMissionMgr()
@@ -123,9 +122,9 @@ CMissionMgr::~CMissionMgr()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CMissionMgr::Init()
+//	ROUTINE: CMissionMgr::Init()
 //
-//	PURPOSE:	Init mgr
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CMissionMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
@@ -173,9 +172,9 @@ LTBOOL CMissionMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CMissionMgr::Term()
+//	ROUTINE: CMissionMgr::Term()
 //
-//	PURPOSE:	Clean up.
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CMissionMgr::Term()
@@ -187,9 +186,9 @@ void CMissionMgr::Term()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CMissionMgr::GetMission
+//	ROUTINE: CMissionMgr::GetMission
 //
-//	PURPOSE:	Get the specified mission
+//	PURPOSE: Get the specified mission
 // ----------------------------------------------------------------------- //
 
 MISSION* CMissionMgr::GetMission(int nMissionId)
@@ -214,12 +213,12 @@ MISSION* CMissionMgr::GetMission(int nMissionId)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	CMissionMgr::IsMissionLevel()
+//	ROUTINE: CMissionMgr::IsMissionLevel()
 //
-//	PURPOSE:	Determine if the passed in string is a level of one of the
-//				missions.
+//	PURPOSE: Determine if the passed in string is a level of one of the
+//			missions.
 //
-//	RETURNS:	True if a mission level, else false.  Also nMissionId and
+//	RETURNS: True if a mission level, else false.  Also nMissionId and
 //			nLevel are filled in with the correct values.
 // ----------------------------------------------------------------------- //
 
@@ -253,9 +252,9 @@ LTBOOL CMissionMgr::IsMissionLevel(char* pWorldFile, int & nMissionId, int & nLe
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSION::MISSION
+//	ROUTINE: MISSION::MISSION
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 MISSION::MISSION()
@@ -265,14 +264,14 @@ MISSION::MISSION()
 	nNameId			= -1;
 	nDescriptionId		= -1;
 	nBriefingId		= -1;
-	nNumObjectives		= 0;
+	nNumObjectives	= 0;
 	aObjectiveIds[0]	= -1;
 
 	nNumWeapons		= -1;
 	nNumGadgets		= -1;
 	nNumAmmo		= -1;
 	nNumSupplies		= -1;
-	nNumWeaponMods		= -1;
+	nNumWeaponMods	= -1;
 	nNumGear		= -1;
 
 	szPhoto[0]		= '\0';
@@ -291,7 +290,7 @@ MISSION::MISSION()
 
 	nNumAllowedAmmo		= 0;
 	nNumRequiredAmmo	= 0;
-	nNumOneTimeAmmo		= 0;
+	nNumOneTimeAmmo	= 0;
 	nNumDeniedAmmo		= 0;
 
 	aDefaultWeapons[0]	= WMGR_INVALID_ID;
@@ -315,14 +314,12 @@ MISSION::MISSION()
 	nHighAmmo	= -1;
 	nLowAmmo	= -1;
 	nMaxDetect	= -1;
-
-
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSION::Init
+//	ROUTINE: MISSION::Init
 //
-//	PURPOSE:	Build the mission struct
+//	PURPOSE: Build the mission struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL MISSION::Init(CButeMgr & buteMgr, char* aTagName)
@@ -497,12 +494,12 @@ LTBOOL MISSION::Init(CButeMgr & buteMgr, char* aTagName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSION::BuildObjectivesList()
+//	ROUTINE: MISSION::BuildObjectivesList()
 //
-//	PURPOSE:	Builds an array of ints from the string associated with
+//	PURPOSE: Builds an array of ints from the string associated with
 //			the given string;
 //
-//	RETURNS:	Number of objectives added to list
+//	RETURNS: Number of objectives added to list
 // ----------------------------------------------------------------------- //
 
 int MISSION::BuildObjectivesList(CString str, int* pArray, int nArrayLen)
@@ -534,12 +531,12 @@ int MISSION::BuildObjectivesList(CString str, int* pArray, int nArrayLen)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSION::BuildWeaponsList()
+//	ROUTINE: MISSION::BuildWeaponsList()
 //
-//	PURPOSE:	Builds an array of ints from the string associated with
+//	PURPOSE: Builds an array of ints from the string associated with
 //			the given string;
 //
-//	RETURNS:	Number of weapons added to list
+//	RETURNS: Number of weapons added to list
 // ----------------------------------------------------------------------- //
 
 int MISSION::BuildWeaponsList(CString str, int* pArray, int nArrayLen)
@@ -590,12 +587,12 @@ int MISSION::BuildWeaponsList(CString str, int* pArray, int nArrayLen)
 
 // ----------------------------------------------------------------------- //
 //
-//	ROUTINE:	MISSION::BuildGadgetsList()
+//	ROUTINE: MISSION::BuildGadgetsList()
 //
-//	PURPOSE:	Builds an array of ints from the string associated with
+//	PURPOSE: Builds an array of ints from the string associated with
 //					the given string;
 //
-//	RETURNS:	Number of gadgets added to list
+//	RETURNS: Number of gadgets added to list
 //
 // ----------------------------------------------------------------------- //
 
@@ -647,12 +644,12 @@ int MISSION::BuildGadgetsList(CString str, int* pArray, int nArrayLen)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSION::BuildAmmoList()
+//	ROUTINE: MISSION::BuildAmmoList()
 //
-//	PURPOSE:	Builds an array of ints from the string associated with
+//	PURPOSE: Builds an array of ints from the string associated with
 //			the given string;
 //
-//	RETURNS:	Number of ammo added to list
+//	RETURNS: Number of ammo added to list
 // ----------------------------------------------------------------------- //
 
 int MISSION::BuildAmmoList(CString str, int* pArray, int nArrayLen)
@@ -691,12 +688,12 @@ int MISSION::BuildAmmoList(CString str, int* pArray, int nArrayLen)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSION::BuildModsList()
+//	ROUTINE: MISSION::BuildModsList()
 //
-//	PURPOSE:	Builds an array of ints from the string associated with
+//	PURPOSE: Builds an array of ints from the string associated with
 //			the given string;
 //
-//	RETURNS:	Number of mods added to list
+//	RETURNS: Number of mods added to list
 // ----------------------------------------------------------------------- //
 
 int MISSION::BuildModsList(CString str, int* pArray, int nArrayLen)
@@ -735,12 +732,12 @@ int MISSION::BuildModsList(CString str, int* pArray, int nArrayLen)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSION::BuildGearList()
+//	ROUTINE: MISSION::BuildGearList()
 //
-//	PURPOSE:	Builds an array of ints from the string associated with
+//	PURPOSE: Builds an array of ints from the string associated with
 //			the given string;
 //
-//	RETURNS:	Number of gear types added to list
+//	RETURNS: Number of gear types added to list
 // ----------------------------------------------------------------------- //
 
 int MISSION::BuildGearList(CString str, int* pArray, int nArrayLen)
@@ -780,9 +777,9 @@ int MISSION::BuildGearList(CString str, int* pArray, int nArrayLen)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSION::GetRankBonus()
+//	ROUTINE: MISSION::GetRankBonus()
 //
-//	PURPOSE:	Calculate the various bonusses granted by the mission
+//	PURPOSE: Calculate the various bonusses granted by the mission
 //			for a given score (0.0 to 1.0).
 // ----------------------------------------------------------------------- //
 void MISSION::GetRankBonus(LTFLOAT fScorePercent,RANKBONUS *pBonus)
@@ -807,9 +804,9 @@ void MISSION::GetRankBonus(LTFLOAT fScorePercent,RANKBONUS *pBonus)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONRATING::MISSIONRATING
+//	ROUTINE: MISSIONRATING::MISSIONRATING
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 MISSIONRATING::MISSIONRATING()
@@ -838,9 +835,9 @@ MISSIONRATING::MISSIONRATING()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONRATING::Init
+//	ROUTINE: MISSIONRATING::Init
 //
-//	PURPOSE:	Build the missionrating struct
+//	PURPOSE: Build the missionrating struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL MISSIONRATING::Init(CButeMgr & buteMgr, char* aTagName)
@@ -884,9 +881,9 @@ LTBOOL MISSIONRATING::Init(CButeMgr & buteMgr, char* aTagName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONRATING::GetRank
+//	ROUTINE: MISSIONRATING::GetRank
 //
-//	PURPOSE:	Get the rank associated with the given score
+//	PURPOSE: Get the rank associated with the given score
 // ----------------------------------------------------------------------- //
 int MISSIONRATING::GetRank(LTFLOAT fScorePercent)
 {
@@ -922,9 +919,9 @@ RANKDATA::RANKDATA()
 };
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONAWARDS::MISSIONAWARDS
+//	ROUTINE: MISSIONAWARDS::MISSIONAWARDS
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 MISSIONAWARDS::MISSIONAWARDS()
@@ -943,12 +940,12 @@ MISSIONAWARDS::MISSIONAWARDS()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONAWARDS::BuildAwardsList()
+//	ROUTINE: MISSIONAWARDS::BuildAwardsList()
 //
-//	PURPOSE:	Builds an array of ints from the string associated with
+//	PURPOSE: Builds an array of ints from the string associated with
 //			the given string;
 //
-//	RETURNS:	Number of Awards types added to list
+//	RETURNS: Number of Awards types added to list
 // ----------------------------------------------------------------------- //
 
 int MISSIONAWARDS::BuildAwardsList(CString str, int* pArray, int nArrayLen)
@@ -975,9 +972,9 @@ int MISSIONAWARDS::BuildAwardsList(CString str, int* pArray, int nArrayLen)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONAWARDS::Init
+//	ROUTINE: MISSIONAWARDS::Init
 //
-//	PURPOSE:	Build the MISSIONAWARDS struct
+//	PURPOSE: Build the MISSIONAWARDS struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL MISSIONAWARDS::Init(CButeMgr & buteMgr, char* aTagName)

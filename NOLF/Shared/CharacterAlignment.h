@@ -1,26 +1,22 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CharacterAlignment.h
 //
-// MODULE  : CharacterAlignment.h
+// PURPOSE: Character alignment
 //
-// PURPOSE : Character alignment
-//
-// CREATED : 12/23/97
-//
+// CREATED: 12/23/97
 // ----------------------------------------------------------------------- //
 
 #ifndef __CHARACTER_ALIGNEMENT_H__
 #define __CHARACTER_ALIGNEMENT_H__
 
-enum CharacterClass   	{ UNKNOWN=0, GOOD, BAD, NEUTRAL };
-enum CharacterAlignment { LIKE=0, TOLERATE, HATE };
-enum CharacterSide { CS_ENEMY = 0, CS_FRIEND, CS_NEUTRAL };
+enum CharacterClass	{ UNKNOWN=0, GOOD, BAD, NEUTRAL };
+enum CharacterAlignment	{ LIKE=0, TOLERATE, HATE };
+enum CharacterSide		{ CS_ENEMY = 0, CS_FRIEND, CS_NEUTRAL };
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetAlignement
 //
-//	ROUTINE:	GetAlignement
-//
-//	PURPOSE:	Determine how c1 feels about c2
-//
+//	PURPOSE: Determine how c1 feels about c2
 // ----------------------------------------------------------------------- //
 
 inline CharacterAlignment GetAlignement(CharacterClass c1, CharacterClass c2)
@@ -74,11 +70,9 @@ inline CharacterAlignment GetAlignement(CharacterClass c1, CharacterClass c2)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetSide
 //
-//	ROUTINE:	GetSide
-//
-//	PURPOSE:	Determine whether c1 is on the same side as c2
-//
+//	PURPOSE: Determine whether c1 is on the same side as c2
 // ----------------------------------------------------------------------- //
 
 inline CharacterSide GetSide(CharacterClass c1, CharacterClass c2)

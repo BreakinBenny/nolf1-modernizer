@@ -1,9 +1,9 @@
 // ----------------------------------------------------------------------- //
 // MODULE: MissionMgr.h
 //
-// PURPOSE : MissionMgr definition - Controls attributes of all Missions
+// PURPOSE: MissionMgr definition - Controls attributes of all Missions
 //
-// CREATED : 07/26/99
+// CREATED: 07/26/99
 // ----------------------------------------------------------------------- //
 
 #ifndef __MISSION_MGR_H__
@@ -24,15 +24,15 @@ extern CMissionMgr* g_pMissionMgr;
 
 #define MMGR_MAX_FILE_PATH		64
 #define MMGR_MAX_LEVEL_FILE_PATH	34
-#define MMGR_MAX_MISSION_LEVELS		10
+#define MMGR_MAX_MISSION_LEVELS	10
 #define MMGR_MAX_WEAPONS		25
 #define MMGR_MAX_GADGETS		10
-#define MMGR_MAX_AMMO			25
+#define MMGR_MAX_AMMO		25
 #define MMGR_MAX_MODS			25
 #define MMGR_MAX_GEAR			10
-#define MMGR_MAX_OBJECTIVES		10
-#define	MMGR_MAX_RANKS			10
-#define	MMGR_MAX_AWARDS			10
+#define MMGR_MAX_OBJECTIVES	10
+#define MMGR_MAX_RANKS		10
+#define MMGR_MAX_AWARDS		10
 
 struct LEVEL
 {
@@ -224,18 +224,18 @@ struct MISSIONRATING
 	uint8	nReputationInc;
 	uint8	nReputationMax;
 
-	LTFLOAT	fHealthInc;
-	LTFLOAT	fHealthMax;
-	LTFLOAT	fArmorInc;
-	LTFLOAT	fArmorMax;
-	LTFLOAT	fAmmoInc;
-	LTFLOAT	fAmmoMax;
-	LTFLOAT	fPerturbInc;
-	LTFLOAT	fPerturbMin;
-	LTFLOAT	fDamageInc;
-	LTFLOAT	fDamageMax;
-	LTFLOAT	fStealthInc;
-	LTFLOAT	fStealthMin;
+	LTFLOAT fHealthInc;
+	LTFLOAT fHealthMax;
+	LTFLOAT fArmorInc;
+	LTFLOAT fArmorMax;
+	LTFLOAT fAmmoInc;
+	LTFLOAT fAmmoMax;
+	LTFLOAT fPerturbInc;
+	LTFLOAT fPerturbMin;
+	LTFLOAT fDamageInc;
+	LTFLOAT fDamageMax;
+	LTFLOAT fStealthInc;
+	LTFLOAT fStealthMin;
 
 	int	nNumRanks;
 	RANKDATA aRanks[MMGR_MAX_RANKS];

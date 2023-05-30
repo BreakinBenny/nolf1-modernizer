@@ -1,9 +1,9 @@
 // ----------------------------------------------------------------------- //
 // MODULE: Timer.h
 //
-// PURPOSE : Definition/Implementation of the CTimer class
+// PURPOSE: Definition/Implementation of the CTimer class
 //
-// CREATED : 8/31/99 (header created)
+// CREATED: 8/31/99 (header created)
 //
 // (c) 1996-1999 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //

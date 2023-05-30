@@ -1,9 +1,9 @@
 // ----------------------------------------------------------------------- //
 // MODULE: SharedMission.cpp
 //
-// PURPOSE : SharedMission implementation - shared mission summary stuff
+// PURPOSE:  SharedMission implementation - shared mission summary stuff
 //
-// CREATED : 9/16/99
+// CREATED:  9/16/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
 // ----------------------------------------------------------------------- //
@@ -14,21 +14,21 @@
 #define PLAYERRANK_TAG		"RankData"
 #define PLAYERRANK_HEALTH	"Health"
 #define PLAYERRANK_ARMOR	"Armor"
-#define PLAYERRANK_AMMO		"Ammo"
-#define PLAYERRANK_DAM		"Damage"
-#define PLAYERRANK_PERTURB	"Perturb"
-#define PLAYERRANK_STEALTH	"Stealth"
+#define PLAYERRANK_AMMO	"Ammo"
+#define PLAYERRANK_DAM	"Damage"
+#define PLAYERRANK_PERTURB "Perturb"
+#define PLAYERRANK_STEALTH "Stealth"
 #define PLAYERRANK_REP		"Reputation"
 
 #define MISSIONSUMMARY_TOTALLEVELINTEL	"TotalLevelIntel"
-#define MISSIONSUMMARY_MAXNUMLEVELINTEL	"MaxNumLevelIntel"
+#define MISSIONSUMMARY_MAXNUMLEVELINTEL "MaxNumLevelIntel"
 
 static char s_aAttName[100];
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	PLAYERRANK::PLAYERRANK
+//	ROUTINE: PLAYERRANK::PLAYERRANK
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 PLAYERRANK::PLAYERRANK()
@@ -37,16 +37,16 @@ PLAYERRANK::PLAYERRANK()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	PLAYERRANK::Reset
+//	ROUTINE: PLAYERRANK::Reset
 //
-//	PURPOSE:	Reset all the data
+//	PURPOSE: Reset all the data
 // ----------------------------------------------------------------------- //
 
 void PLAYERRANK::Reset()
 {
 	fHealthMultiplier	= 1.0f;
 	fArmorMultiplier	= 1.0f;
-	fAmmoMultiplier		= 1.0f;
+	fAmmoMultiplier	= 1.0f;
 	fDamageMultiplier	= 1.0f;
 	fPerturbMultiplier	= 1.0f;
 	fStealthMultiplier	= 1.0f;
@@ -54,9 +54,9 @@ void PLAYERRANK::Reset()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	PLAYERRANK::Write
+//	ROUTINE: PLAYERRANK::Write
 //
-//	PURPOSE:	Write the data to be sent to the client
+//	PURPOSE: Write the data to be sent to the client
 // ----------------------------------------------------------------------- //
 
 void PLAYERRANK::Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
@@ -74,9 +74,9 @@ void PLAYERRANK::Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	PLAYERRANK::ReadClientData
+//	ROUTINE: PLAYERRANK::ReadClientData
 //
-//	PURPOSE:	Read the data sent to the client
+//	PURPOSE: Read the data sent to the client
 // ----------------------------------------------------------------------- //
 
 void PLAYERRANK::Read(ILTCSBase *pInterface, HMESSAGEREAD hRead)
@@ -85,7 +85,7 @@ void PLAYERRANK::Read(ILTCSBase *pInterface, HMESSAGEREAD hRead)
 
 	fHealthMultiplier	= pInterface->ReadFromMessageFloat(hRead);
 	fArmorMultiplier	= pInterface->ReadFromMessageFloat(hRead);
-	fAmmoMultiplier		= pInterface->ReadFromMessageFloat(hRead);
+	fAmmoMultiplier	= pInterface->ReadFromMessageFloat(hRead);
 	fDamageMultiplier	= pInterface->ReadFromMessageFloat(hRead);
 	fPerturbMultiplier	= pInterface->ReadFromMessageFloat(hRead);
 	fStealthMultiplier	= pInterface->ReadFromMessageFloat(hRead);
@@ -94,9 +94,9 @@ void PLAYERRANK::Read(ILTCSBase *pInterface, HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	PLAYERRANK::WriteRankData
+//	ROUTINE: PLAYERRANK::WriteRankData
 //
-//	PURPOSE:	Write the data to the butefile
+//	PURPOSE: Write the data to the butefile
 // ----------------------------------------------------------------------- //
 
 void PLAYERRANK::WriteRankData(CButeMgr & buteMgr)
@@ -112,9 +112,9 @@ void PLAYERRANK::WriteRankData(CButeMgr & buteMgr)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	PLAYERRANK::ClearRankData
+//	ROUTINE: PLAYERRANK::ClearRankData
 //
-//	PURPOSE:	Reset the data in the butefile
+//	PURPOSE: Reset the data in the butefile
 // ----------------------------------------------------------------------- //
 
 void PLAYERRANK::ClearRankData(CButeMgr & buteMgr)
@@ -124,9 +124,9 @@ void PLAYERRANK::ClearRankData(CButeMgr & buteMgr)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	PLAYERRANK::ReadRankData
+//	ROUTINE: PLAYERRANK::ReadRankData
 //
-//	PURPOSE:	Read the data from the butefile
+//	PURPOSE: Read the data from the butefile
 // ----------------------------------------------------------------------- //
 
 void PLAYERRANK::ReadRankData(CButeMgr & buteMgr)
@@ -134,7 +134,7 @@ void PLAYERRANK::ReadRankData(CButeMgr & buteMgr)
 	// Write the global data for each level...
 	fHealthMultiplier	= buteMgr.GetFloat(PLAYERRANK_TAG, PLAYERRANK_HEALTH,	1.0f);
 	fArmorMultiplier	= buteMgr.GetFloat(PLAYERRANK_TAG, PLAYERRANK_ARMOR,	1.0f);
-	fAmmoMultiplier		= buteMgr.GetFloat(PLAYERRANK_TAG, PLAYERRANK_AMMO,	1.0f);
+	fAmmoMultiplier	= buteMgr.GetFloat(PLAYERRANK_TAG, PLAYERRANK_AMMO,	1.0f);
 	fDamageMultiplier	= buteMgr.GetFloat(PLAYERRANK_TAG, PLAYERRANK_DAM,	1.0f);
 	fPerturbMultiplier	= buteMgr.GetFloat(PLAYERRANK_TAG, PLAYERRANK_PERTURB,	1.0f);
 	fStealthMultiplier	= buteMgr.GetFloat(PLAYERRANK_TAG, PLAYERRANK_STEALTH,	1.0f);
@@ -143,9 +143,9 @@ void PLAYERRANK::ReadRankData(CButeMgr & buteMgr)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	LEVELSUMMARY::LEVELSUMMARY
+//	ROUTINE: LEVELSUMMARY::LEVELSUMMARY
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 LEVELSUMMARY::LEVELSUMMARY()
@@ -160,9 +160,9 @@ LEVELSUMMARY::LEVELSUMMARY()
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONSUMMARY::MISSIONSUMMARY
+//	ROUTINE: MISSIONSUMMARY::MISSIONSUMMARY
 //
-//	PURPOSE:	Constructor
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 MISSIONSUMMARY::MISSIONSUMMARY()
@@ -192,9 +192,9 @@ MISSIONSUMMARY::MISSIONSUMMARY()
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONSUMMARY::Init
+//	ROUTINE: MISSIONSUMMARY::Init
 //
-//	PURPOSE:	Build the mission summary struct
+//	PURPOSE: Build the mission summary struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL MISSIONSUMMARY::Init(CButeMgr & buteMgr, char* aTagName, MISSION* pMission)
@@ -231,9 +231,9 @@ LTBOOL MISSIONSUMMARY::Init(CButeMgr & buteMgr, char* aTagName, MISSION* pMissio
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONSUMMARY::WriteClientData
+//	ROUTINE: MISSIONSUMMARY::WriteClientData
 //
-//	PURPOSE:	Write the data to be sent to the client
+//	PURPOSE: Write the data to be sent to the client
 // ----------------------------------------------------------------------- //
 
 void MISSIONSUMMARY::WriteClientData(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
@@ -275,9 +275,9 @@ void MISSIONSUMMARY::WriteClientData(ILTCSBase *pInterface, HMESSAGEWRITE hWrite
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONSUMMARY::ReadClientData
+//	ROUTINE: MISSIONSUMMARY::ReadClientData
 //
-//	PURPOSE:	Read the data sent to the client
+//	PURPOSE: Read the data sent to the client
 // ----------------------------------------------------------------------- //
 
 void MISSIONSUMMARY::ReadClientData(ILTCSBase *pInterface, HMESSAGEREAD hRead)
@@ -314,9 +314,9 @@ void MISSIONSUMMARY::ReadClientData(ILTCSBase *pInterface, HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONSUMMARY::WriteGlobalData
+//	ROUTINE: MISSIONSUMMARY::WriteGlobalData
 //
-//	PURPOSE:	Write the global data to the bute mgr
+//	PURPOSE: Write the global data to the bute mgr
 // ----------------------------------------------------------------------- //
 
 void MISSIONSUMMARY::WriteGlobalData(CButeMgr & buteMgr, char* aTagName)
@@ -335,9 +335,9 @@ void MISSIONSUMMARY::WriteGlobalData(CButeMgr & buteMgr, char* aTagName)
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONSUMMARY::ClearGlobalData
+//	ROUTINE: MISSIONSUMMARY::ClearGlobalData
 //
-//	PURPOSE:	Clear the global data in the bute mgr
+//	PURPOSE: Clear the global data in the bute mgr
 // ----------------------------------------------------------------------- //
 
 void MISSIONSUMMARY::ClearGlobalData(CButeMgr & buteMgr, char* aTagName)
@@ -355,9 +355,9 @@ void MISSIONSUMMARY::ClearGlobalData(CButeMgr & buteMgr, char* aTagName)
 
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONSUMMARY::WriteIntantData
+//	ROUTINE: MISSIONSUMMARY::WriteIntantData
 //
-//	PURPOSE:	Write the instant data
+//	PURPOSE: Write the instant data
 // ----------------------------------------------------------------------- //
 
 void MISSIONSUMMARY::WriteInstantData(ILTCSBase *pInterface, HMESSAGEWRITE hWrite)
@@ -388,9 +388,9 @@ void MISSIONSUMMARY::WriteInstantData(ILTCSBase *pInterface, HMESSAGEWRITE hWrit
 }
 
 // ----------------------------------------------------------------------- //
-//	ROUTINE:	MISSIONSUMMARY::ReadIntantData
+//	ROUTINE: MISSIONSUMMARY::ReadIntantData
 //
-//	PURPOSE:	Read the instant data
+//	PURPOSE: Read the instant data
 // ----------------------------------------------------------------------- //
 
 void MISSIONSUMMARY::ReadInstantData(ILTCSBase *pInterface, HMESSAGEREAD hRead)
@@ -400,15 +400,15 @@ void MISSIONSUMMARY::ReadInstantData(ILTCSBase *pInterface, HMESSAGEREAD hRead)
 	// Read the instant summary data...
 
 	fTotalMissionTime	= pInterface->ReadFromMessageFloat(hRead);
-	dwNumShotsFired		= pInterface->ReadFromMessageDWord(hRead);
+	dwNumShotsFired	= pInterface->ReadFromMessageDWord(hRead);
 	dwNumHits		= pInterface->ReadFromMessageDWord(hRead);
-	dwNumTimesDetected	= pInterface->ReadFromMessageDWord(hRead);
+	dwNumTimesDetected = pInterface->ReadFromMessageDWord(hRead);
 	dwNumDisturbances	= pInterface->ReadFromMessageDWord(hRead);
 	dwNumBodies		= pInterface->ReadFromMessageDWord(hRead);
-	dwNumEnemyKills		= pInterface->ReadFromMessageDWord(hRead);
+	dwNumEnemyKills	= pInterface->ReadFromMessageDWord(hRead);
 	dwNumFriendKills	= pInterface->ReadFromMessageDWord(hRead);
 	dwNumNeutralKills	= pInterface->ReadFromMessageDWord(hRead);
-	dwNumTimesHit		= pInterface->ReadFromMessageDWord(hRead);
+	dwNumTimesHit	= pInterface->ReadFromMessageDWord(hRead);
 
 	int i;
 	for (i = 0; i < HL_NUM_LOCS; i++)

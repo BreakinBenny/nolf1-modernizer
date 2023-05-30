@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: SharedFXStructs.h
 //
-// MODULE  : SharedFXStructs.h
+// PURPOSE: Shared Special FX structs
 //
-// PURPOSE : Shared Special FX structs
-//
-// CREATED : 10/21/99
+// CREATED: 10/21/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __SHARED_FX_STRUCTS_H__
@@ -32,9 +30,9 @@ struct CHARCREATESTRUCT : public SFXCREATESTRUCT
 {
 	enum Flags
 	{
-		eSmokepuffs		= 0x01,
-		eHearts			= 0x02,
-		eChat			= 0x04,
+		eSmokepuffs	= 0x01,
+		eHearts		= 0x02,
+		eChat		= 0x04,
 		eZzz			= 0x08,
 		eCigarette		= 0x10,
 		eCigaretteSmoke = 0x20,
@@ -52,34 +50,34 @@ struct CHARCREATESTRUCT : public SFXCREATESTRUCT
 	void SetChatting(LTBOOL bChatting) { if ( bChatting ) byFXFlags |= eChat; else byFXFlags &= ~eChat; }
 	inline LTBOOL IsChatting() const { return byFXFlags & eChat ? LTTRUE : LTFALSE; }
 
-    virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
 
-    LTBOOL          bIsPlayer;
-    uint8           byFXFlags;
-	ModelId			eModelId;
+	LTBOOL		bIsPlayer;
+	uint8			byFXFlags;
+	ModelId		eModelId;
 	ModelSkeleton	eModelSkeleton;
-	ModelType		eModelType;
-	ModelStyle		eModelStyle;
-    uint8           nTrackers;
-    uint8           nDimsTracker;
-    LTFLOAT         fStealthPercent;
+	ModelType	eModelType;
+	ModelStyle	eModelStyle;
+	uint8			nTrackers;
+	uint8			nDimsTracker;
+	LTFLOAT	 fStealthPercent;
 	uint8			nClientID;
 	CharacterClass	eCrosshairCharacterClass;
 };
 
 inline void CHARCREATESTRUCT::Clear()
 {
-    bIsPlayer					= LTFALSE;
-	byFXFlags					= 0;
-	eModelId					= eModelIdInvalid;
-	eModelSkeleton				= eModelSkeletonInvalid;
-	eModelType					= eModelTypeInvalid;
-	eModelStyle					= eModelStyleInvalid;
-	nTrackers					= 0;
-	nDimsTracker				= 0;
-	fStealthPercent				= 0.0f;
-	nClientID					= (uint8)-1;
+	bIsPlayer				= LTFALSE;
+	byFXFlags			= 0;
+	eModelId				= eModelIdInvalid;
+	eModelSkeleton		= eModelSkeletonInvalid;
+	eModelType			= eModelTypeInvalid;
+	eModelStyle			= eModelStyleInvalid;
+	nTrackers				= 0;
+	nDimsTracker			= 0;
+	fStealthPercent			= 0.0f;
+	nClientID				= (uint8)-1;
 	eCrosshairCharacterClass	= UNKNOWN;
 }
 
@@ -95,14 +93,14 @@ struct BODYCREATESTRUCT : public SFXCREATESTRUCT
 {
 	BODYCREATESTRUCT();
 
-    virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
 
-//	ModelId			eModelId;
+//	ModelId		eModelId;
 //	ModelSkeleton	eModelSkeleton;
-//	ModelType		eModelType;
-//	ModelStyle		eModelStyle;
-//  uint8           nTrackers;
+//	ModelType	eModelType;
+//	ModelStyle	eModelStyle;
+//	uint8			nTrackers;
 	BodyState		eBodyState;
 	uint8			nClientId;
 };
@@ -110,11 +108,11 @@ struct BODYCREATESTRUCT : public SFXCREATESTRUCT
 inline BODYCREATESTRUCT::BODYCREATESTRUCT()
 {
 //	eModelId		= eModelIdInvalid;
-//	eModelSkeleton	= eModelSkeletonInvalid;
-//	eModelType		= eModelTypeInvalid;
-//	eModelStyle		= eModelStyleInvalid;
+//	eModelSkeleton = eModelSkeletonInvalid;
+//	eModelType	= eModelTypeInvalid;
+//	eModelStyle	= eModelStyleInvalid;
 //	nTrackers		= 0;
-	eBodyState		= eBodyStateNormal;
+	eBodyState	= eBodyStateNormal;
 	nClientId		= (uint8)-1;
 
 }
@@ -155,47 +153,47 @@ struct STEAMCREATESTRUCT : public SFXCREATESTRUCT
 	STEAMCREATESTRUCT();
 	~STEAMCREATESTRUCT();
 
-    virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
 
 	// Server-side only...
 
-	virtual	void ReadProps();
+	virtual void ReadProps();
 
-    LTFLOAT  fRange;
-    LTFLOAT  fVel;
-    LTFLOAT  fSoundRadius;
-    LTFLOAT  fParticleRadius;
-    LTFLOAT  fStartAlpha;
-    LTFLOAT  fEndAlpha;
-    LTFLOAT  fStartScale;
-    LTFLOAT  fEndScale;
-    LTFLOAT  fCreateDelta;
-    LTFLOAT  fVolumeRadius;
-    uint8   nNumParticles;
-	HSTRING	hstrSoundName;
-	HSTRING	hstrParticle;
-    LTVector vColor1;
-    LTVector vColor2;
-    LTVector vMinDriftVel;
-    LTVector vMaxDriftVel;
+	LTFLOAT fRange;
+	LTFLOAT fVel;
+	LTFLOAT fSoundRadius;
+	LTFLOAT fParticleRadius;
+	LTFLOAT fStartAlpha;
+	LTFLOAT fEndAlpha;
+	LTFLOAT fStartScale;
+	LTFLOAT fEndScale;
+	LTFLOAT fCreateDelta;
+	LTFLOAT fVolumeRadius;
+	uint8		nNumParticles;
+	HSTRING hstrSoundName;
+	HSTRING hstrParticle;
+	LTVector vColor1;
+	LTVector vColor2;
+	LTVector vMinDriftVel;
+	LTVector vMaxDriftVel;
 };
 
 inline STEAMCREATESTRUCT::STEAMCREATESTRUCT()
 {
-	fRange			= 0.0f;
+	fRange		= 0.0f;
 	fVel			= 0.0f;
 	fSoundRadius	= 0.0f;
 	fParticleRadius	= 0.0f;
-	fStartAlpha		= 0.0f;
-	fEndAlpha		= 0.0f;
-	fStartScale		= 0.0f;
+	fStartAlpha	= 0.0f;
+	fEndAlpha	= 0.0f;
+	fStartScale	= 0.0f;
 	fEndScale		= 0.0f;
 	fCreateDelta	= 0.0f;
 	fVolumeRadius	= 0.0f;
 	nNumParticles	= 0;
-    hstrSoundName   = LTNULL;
-    hstrParticle    = LTNULL;
+	hstrSoundName = LTNULL;
+	hstrParticle	= LTNULL;
 	vColor1.Init();
 	vColor2.Init();
 	vMinDriftVel.Init();
@@ -215,19 +213,19 @@ struct EXPLOSIONCREATESTRUCT : public SFXCREATESTRUCT
 {
 	EXPLOSIONCREATESTRUCT();
 
-    virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
 
-    uint8       nImpactFX;
-    LTFLOAT      fDamageRadius;
-    LTVector     vPos;
-    LTRotation   rRot;
+	uint8	   nImpactFX;
+	LTFLOAT	  fDamageRadius;
+	LTVector	 vPos;
+	LTRotation   rRot;
 };
 
 inline EXPLOSIONCREATESTRUCT::EXPLOSIONCREATESTRUCT()
 {
-	nImpactFX		= 0;
-	fDamageRadius	= 0.0f;
+	nImpactFX	= 0;
+	fDamageRadius = 0.0f;
 	vPos.Init();
 	rRot.Init();
 }
@@ -242,31 +240,31 @@ inline EXPLOSIONCREATESTRUCT::EXPLOSIONCREATESTRUCT()
 
 struct SPRINKLETYPECREATESTRUCT
 {
-    SPRINKLETYPECREATESTRUCT();
+	SPRINKLETYPECREATESTRUCT();
 	~SPRINKLETYPECREATESTRUCT();
 
-    virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
 
-    HSTRING      m_hFilename;
-    HSTRING      m_hSkinName;
-    uint32       m_Count;
-    float        m_Speed;
-    float        m_Size;
-    float        m_SpawnRadius;
-    LTVector     m_AnglesVel;
-    LTVector     m_ColorMin;
-    LTVector     m_ColorMax;
+	HSTRING m_hFilename;
+	HSTRING m_hSkinName;
+	uint32	m_Count;
+	float		m_Speed;
+	float		m_Size;
+	float		m_SpawnRadius;
+	LTVector	m_AnglesVel;
+	LTVector	m_ColorMin;
+	LTVector	m_ColorMax;
 };
 
 inline SPRINKLETYPECREATESTRUCT::SPRINKLETYPECREATESTRUCT()
 {
-    m_hFilename     = LTNULL;
-    m_hSkinName     = LTNULL;
-	m_Count			= 0;
-	m_Speed			= 0.0f;
-	m_Size			= 0.0f;
-	m_SpawnRadius	= 0.0f;
+	m_hFilename	= LTNULL;
+	m_hSkinName	= LTNULL;
+	m_Count		= 0;
+	m_Speed		= 0.0f;
+	m_Size		= 0.0f;
+	m_SpawnRadius = 0.0f;
 	m_AnglesVel.Init();
 	m_ColorMin.Init();
 	m_ColorMax.Init();
@@ -284,12 +282,12 @@ inline SPRINKLETYPECREATESTRUCT::SPRINKLETYPECREATESTRUCT()
 
 struct SPRINKLESCREATESTRUCT : public SFXCREATESTRUCT
 {
-    SPRINKLESCREATESTRUCT();
+	SPRINKLESCREATESTRUCT();
 
-    virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
 
-    uint32                      m_nTypes;
+	uint32 m_nTypes;
 	SPRINKLETYPECREATESTRUCT	m_Types[MAX_SPRINKLE_TYPES];
 
 };
@@ -312,25 +310,25 @@ struct LTCREATESTRUCT : public SFXCREATESTRUCT
 	LTCREATESTRUCT();
 	~LTCREATESTRUCT();
 
-    virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
 
-    LTVector     vColor;
-    LTVector     vDims;
-    LTFLOAT      fAlpha;
-    LTFLOAT      fSpriteScale;
-    LTBOOL       bCreateSprite;
-	HSTRING		hstrSpriteFilename;
+	LTVector	vColor;
+	LTVector	vDims;
+	LTFLOAT fAlpha;
+	LTFLOAT fSpriteScale;
+	LTBOOL	bCreateSprite;
+	HSTRING hstrSpriteFilename;
 };
 
 inline LTCREATESTRUCT::LTCREATESTRUCT()
 {
 	vColor.Init();
 	vDims.Init();
-	fAlpha			= 0.0f;
+	fAlpha		= 0.0f;
 	fSpriteScale	= 1.0f;
-    bCreateSprite   = LTTRUE;
-    hstrSpriteFilename = LTNULL;
+	bCreateSprite	= LTTRUE;
+	hstrSpriteFilename = LTNULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -345,11 +343,11 @@ struct MINECREATESTRUCT : public SFXCREATESTRUCT
 {
 	MINECREATESTRUCT();
 
-    virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
 
-    LTFLOAT  fMinRadius;
-    LTFLOAT  fMaxRadius;
+	LTFLOAT  fMinRadius;
+	LTFLOAT  fMaxRadius;
 };
 
 inline MINECREATESTRUCT::MINECREATESTRUCT()
@@ -371,8 +369,8 @@ struct PVCREATESTRUCT : public SFXCREATESTRUCT
 {
 	PVCREATESTRUCT();
 
-    virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
 
 	PlayerPhysicsModel	ePhysicsModel;
 };
@@ -403,8 +401,8 @@ struct OBJSPRITECREATESTRUCT : public SFXCREATESTRUCT
 	OBJSPRITECREATESTRUCT();
 	~OBJSPRITECREATESTRUCT();
 
-    virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
-    virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
+	virtual void Write(ILTCSBase *pInterface, HMESSAGEWRITE hWrite);
+	virtual void Read(ILTCSBase *pInterface, HMESSAGEREAD hRead);
 
 	// Server-side only...
 

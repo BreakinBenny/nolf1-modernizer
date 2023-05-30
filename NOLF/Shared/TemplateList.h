@@ -1,18 +1,16 @@
 // ----------------------------------------------------------------------- //
+// MODULE: TList.h
 //
-// MODULE  : TList.h
-//
-// PURPOSE : TList class definition
+// PURPOSE: TList class definition
 //
 // NOTES:
 //		This class uses the == operator to search for items in the list (see
 //		Remove()).  If  the == operator isn't defined correctly for the
 //		object type you are storing on the list, you may have problems.
 //
-// CREATED : 7/11/98
+// CREATED: 7/11/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __TEMPLATE_LIST_H__
@@ -38,14 +36,14 @@ class CTList
 		CTList();
 		~CTList();
 
-        void Save(ILTCSBase *pInterface, HMESSAGEWRITE hWrite, SaveDataFn saveFn);
-        void Load(ILTCSBase *pInterface, HMESSAGEREAD hRead, LoadDataFn loadFn);
+		void Save(ILTCSBase *pInterface, HMESSAGEWRITE hWrite, SaveDataFn saveFn);
+		void Load(ILTCSBase *pInterface, HMESSAGEREAD hRead, LoadDataFn loadFn);
 
-        LTBOOL   Init(LTBOOL bManageData=LTFALSE);
+		LTBOOL   Init(LTBOOL bManageData=LTFALSE);
 		void	Add(T);
 		void	AddTail(T);
-        LTBOOL   RemoveHead();
-        LTBOOL   Remove(T);
+		LTBOOL   RemoveHead();
+		LTBOOL   Remove(T);
 		int		GetLength() const { return m_list.m_nElements; }
 		void	Clear();
 
@@ -60,9 +58,9 @@ class CTList
 			return s_pLTLinkBank;
 		}
 
-        LTList   m_list;
-        LTBOOL   m_bManageData;
-        LTLink*  m_pCurGetItemLink;  // Used to loop over list (not saved)
+		LTList   m_list;
+		LTBOOL   m_bManageData;
+		LTLink*  m_pCurGetItemLink;  // Used to loop over list (not saved)
 
 		void	RemoveAllData();
 };
@@ -77,10 +75,10 @@ CTList<T>::CTList()
 	
 	s_cLTLinkBankRefCount++;
 
-    m_bManageData = LTFALSE;
-    m_pCurGetItemLink = LTNULL;
+	m_bManageData = LTFALSE;
+	m_pCurGetItemLink = LTNULL;
 	dl_InitList(&m_list);
-    m_list.m_Head.m_pData = LTNULL;
+	m_list.m_Head.m_pData = LTNULL;
 }
 
 template <class T>
@@ -89,11 +87,11 @@ LTBOOL CTList<T>::Init(LTBOOL bManageData)
 	m_bManageData = bManageData;
 
 	dl_InitList(&m_list);
-    m_list.m_Head.m_pData = LTNULL;
+	m_list.m_Head.m_pData = LTNULL;
 
-    m_pCurGetItemLink = LTNULL;
+	m_pCurGetItemLink = LTNULL;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 template <class T>
@@ -113,21 +111,21 @@ CTList<T>::~CTList()
 template <class T>
 void CTList<T>::Add(T t)
 {
-    LTLink* pLink = GetBank()->New();
+	LTLink* pLink = GetBank()->New();
 	if (pLink) dl_AddHead(&m_list, pLink, (void*)t);
 }
 
 template <class T>
 void CTList<T>::AddTail(T t)
 {
-    LTLink* pLink = GetBank()->New();
+	LTLink* pLink = GetBank()->New();
 	if (pLink) dl_AddTail(&m_list, pLink, (void*)t);
 }
 
 template <class T>
 LTBOOL CTList<T>::RemoveHead()
 {
-    LTLink* pCur = m_list.m_Head.m_pNext;
+	LTLink* pCur = m_list.m_Head.m_pNext;
 	if (pCur)
 	{
 		// Clean up m_pCurGetItemLink if necessary...
@@ -145,16 +143,16 @@ LTBOOL CTList<T>::RemoveHead()
 		}
 
 		GetBank()->Delete(pCur);
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 template <class T>
 LTBOOL CTList<T>::Remove(T t)
 {
-    LTLink* pCur = m_list.m_Head.m_pNext;
+	LTLink* pCur = m_list.m_Head.m_pNext;
 	while (pCur && pCur != &(m_list.m_Head))
 	{
 		if (pCur->m_pData == t)
@@ -174,13 +172,13 @@ LTBOOL CTList<T>::Remove(T t)
 			}
 
 			GetBank()->Delete(pCur);
-            return LTTRUE;
+			return LTTRUE;
 		}
 
 		pCur = pCur->m_pNext;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
@@ -189,11 +187,11 @@ void CTList<T>::RemoveAllData()
 {
 	if (!m_bManageData) return;
 
-    LTLink* pCur = m_list.m_Head.m_pNext;
+	LTLink* pCur = m_list.m_Head.m_pNext;
 	while (pCur && pCur != &(m_list.m_Head))
 	{
 		debug_delete((T)pCur->m_pData);
-        pCur->m_pData = LTNULL;
+		pCur->m_pData = LTNULL;
 		pCur = pCur->m_pNext;
 	}
 }
@@ -207,8 +205,8 @@ void CTList<T>::Clear()
 		RemoveAllData();
 	}
 
-    LTLink* pNext;
-    LTLink *pCur = m_list.m_Head.m_pNext;
+	LTLink* pNext;
+	LTLink *pCur = m_list.m_Head.m_pNext;
 	while (pCur && pCur != &(m_list.m_Head))
 	{
 		pNext = pCur->m_pNext;
@@ -223,9 +221,9 @@ void CTList<T>::Clear()
 template <class T>
 T* CTList<T>::GetItem(TListItemType et)
 {
-    T* pT = LTNULL;
+	T* pT = LTNULL;
 
-    if (m_list.m_nElements < 1) return LTNULL;
+	if (m_list.m_nElements < 1) return LTNULL;
 
 	switch(et)
 	{
@@ -272,10 +270,10 @@ void CTList<T>::Save(ILTCSBase *pInterface, HMESSAGEWRITE hWrite, SaveDataFn sav
 {
 	if (!hWrite  || !saveFn) return;
 
-    pInterface->WriteToMessageByte(hWrite, m_bManageData);
-    pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_list.m_nElements);
+	pInterface->WriteToMessageByte(hWrite, m_bManageData);
+	pInterface->WriteToMessageFloat(hWrite, (LTFLOAT)m_list.m_nElements);
 
-    LTLink *pCur = m_list.m_Head.m_pNext;
+	LTLink *pCur = m_list.m_Head.m_pNext;
 	while (pCur && pCur != &(m_list.m_Head) && pCur->m_pData)
 	{
 		T* pT = (T*)&(pCur->m_pData);
@@ -290,8 +288,8 @@ void CTList<T>::Load(ILTCSBase *pInterface, HMESSAGEREAD hRead, LoadDataFn loadF
 {
 	if (!hRead || !loadFn) return;
 
-    m_bManageData = (LTBOOL) pInterface->ReadFromMessageByte(hRead);
-    int nElements = (int) pInterface->ReadFromMessageFloat(hRead);
+	m_bManageData = (LTBOOL) pInterface->ReadFromMessageByte(hRead);
+	int nElements = (int) pInterface->ReadFromMessageFloat(hRead);
 
 	for (int i=0; i < nElements; i++)
 	{

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: GlobalMgr.h
 //
-// MODULE  : GlobalMgr.h
+// PURPOSE: Definition of global definitions
 //
-// PURPOSE : Definition of global definitions
-//
-// CREATED : 7/07/99
+// CREATED: 7/07/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __GLOBAL_MGR_H__
@@ -30,19 +28,19 @@ class CGlobalMgr
 		CGlobalMgr() {}
 		virtual ~CGlobalMgr();
 
-        LTBOOL Init(ILTCSBase *pInterface);
+		LTBOOL Init(ILTCSBase *pInterface);
 
-		CFXButeMgr		m_FXButeMgr;		// Same as g_pFXButeMgr
+		CFXButeMgr		m_FXButeMgr;	// Same as g_pFXButeMgr
 		CDebrisMgr		m_DebrisMgr;		// Same as g_pDebrisMgr
 		CSoundFilterMgr	m_SoundFilterMgr;	// Same as g_pSoundFilterMgr
 
-		CWeaponMgr		m_WeaponMgr;		// Same as g_pWeaponMgr
-		CModelButeMgr	m_ModelButeMgr;		// Same as g_pModelButeMgr
-		CSurfaceMgr		m_SurfaceMgr;		// Same as g_pSurfaceMgr
-		CMissionMgr		m_MissionMgr;		// Same as g_pMissionMgr
-		CVersionMgr		m_VersionMgr;		// Same as g_pVersionMgr
+		CWeaponMgr		m_WeaponMgr;	// Same as g_pWeaponMgr
+		CModelButeMgr	m_ModelButeMgr;	// Same as g_pModelButeMgr
+		CSurfaceMgr		m_SurfaceMgr;	// Same as g_pSurfaceMgr
+		CMissionMgr		m_MissionMgr;	// Same as g_pMissionMgr
+		CVersionMgr		m_VersionMgr;	// Same as g_pVersionMgr
 
-		virtual void	ShutdownWithError(char* pMgrName, char* pButeFilePath) = 0;
+		virtual void ShutdownWithError(char* pMgrName, char* pButeFilePath) = 0;
 };
 
 #endif // __GLOBAL_MGR_H__

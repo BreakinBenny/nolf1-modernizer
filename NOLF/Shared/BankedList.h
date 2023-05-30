@@ -29,8 +29,8 @@ class CBankedListIter;
 template <typename T>
 class CBankedList
 {
-    friend class CBankedListIter<T>;
-    friend class CBankedListBank<T>;
+	friend class CBankedListIter<T>;
+	friend class CBankedListBank<T>;
 public:
 	CBankedList();
 	~CBankedList();
@@ -106,7 +106,7 @@ private:
 template <typename T>
 class CBankedListIter
 {
-    friend class CBankedList<T>;
+	friend class CBankedList<T>;
 public:
 	typedef CBankedList<T> t_Parent;
 	typedef CBankedListIter<T> t_This;

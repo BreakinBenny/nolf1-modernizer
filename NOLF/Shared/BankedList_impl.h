@@ -15,12 +15,12 @@ public:
 	CBankedListBank();
 
 private:
-    typedef CBankedList<T> t_Parent;
-    typedef CBankedListBank<T> t_This;
+	typedef CBankedList<T> t_Parent;
+	typedef CBankedListBank<T> t_This;
 	typedef T t_Type;
 
-    friend t_Parent;
-    friend t_Parent::t_Iter;
+	friend t_Parent;
+	friend t_Parent::t_Iter;
 
 	// Is this bank currently full?
 	LTBOOL IsFull();
@@ -47,7 +47,7 @@ private:
 	// Remove the item at index nIndex
 	void Remove(uint32 nIndex);
 	// Allocate an item
-    T *New(typename t_Parent::t_NewOp eOp);
+	T *New(typename t_Parent::t_NewOp eOp);
 	// Read-only bank pointer access
 	t_This *GetNext();
 	t_This *GetPrev();
