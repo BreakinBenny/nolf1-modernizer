@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: PropType.cpp
 //
-// MODULE  : PropType.cpp
+// PURPOSE: Model PropType - Definition
 //
-// PURPOSE : Model PropType - Definition
-//
-// CREATED : 4/26/2000
+// CREATED: 4/26/2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -25,15 +23,15 @@ BEGIN_CLASS(PropType)
 	ADD_SOLID_FLAG(0, PF_HIDDEN)
 	ADD_GRAVITY_FLAG(0, PF_HIDDEN)
 	ADD_SHADOW_FLAG(0, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(MoveToFloor, LTTRUE, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(DetailTexture, LTFALSE, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(Chrome, LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(MoveToFloor, LTTRUE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(DetailTexture, LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(Chrome, LTFALSE, PF_HIDDEN)
 	ADD_REALPROP_FLAG(Alpha, 1.0f, PF_HIDDEN)
 	ADD_COLORPROP_FLAG(ObjectColor, 255.0f, 255.0f, 255.0f, PF_HIDDEN)
-    ADD_CHROMAKEY_FLAG(LTFALSE, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(Additive, LTFALSE, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(Multiply, LTFALSE, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(RayHit, LTTRUE, PF_HIDDEN)
+	ADD_CHROMAKEY_FLAG(LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(Additive, LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(Multiply, LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(RayHit, LTTRUE, PF_HIDDEN)
 	ADD_STRINGPROP_FLAG(TouchSound, "", PF_FILENAME | PF_HIDDEN)
 	ADD_REALPROP_FLAG(TouchSoundRadius, 500.0, PF_RADIUS | PF_HIDDEN)
 
@@ -45,9 +43,9 @@ LTRESULT CPropTypePlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 
 	if ( LT_OK == CPropPlugin::PreHook_EditStringList(szRezPath, szPropName,
@@ -85,11 +83,9 @@ LTRESULT CPropTypePlugin::PreHook_Dims(
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PropType::EngineMessageFn
 //
-//	ROUTINE:	PropType::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 PropType::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -98,7 +94,7 @@ uint32 PropType::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 	{
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = Prop::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = Prop::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE || fData == PRECREATE_STRINGPROP)
 			{
@@ -119,21 +115,19 @@ uint32 PropType::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PropType::PropRead()
 //
-//	ROUTINE:	PropType::PropRead()
-//
-//	PURPOSE:	Update properties
-//
+//	PURPOSE: Update properties
 // ----------------------------------------------------------------------- //
 
 void PropType::ReadProp(ObjectCreateStruct *pData)
 {
 	if (!pData) return;
 
-    PROPTYPE* pPropType = LTNULL;
+	PROPTYPE* pPropType = LTNULL;
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("Type", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Type", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
@@ -148,7 +142,7 @@ void PropType::ReadProp(ObjectCreateStruct *pData)
 	uint32 iSkin = 0;
 	ConParse conParse;
 	conParse.Init(pPropType->szSkin);
-    while (g_pLTServer->Common()->Parse(&conParse) == LT_OK)
+	while (g_pLTServer->Common()->Parse(&conParse) == LT_OK)
 	{
 		if (conParse.m_nArgs > 0)
 		{
@@ -161,7 +155,7 @@ void PropType::ReadProp(ObjectCreateStruct *pData)
 	}
 	pData->m_SkinName[MAX_CS_FILENAME_LEN] = '\0';
 
-    m_fTouchSoundRadius = (LTFLOAT) pPropType->nTouchSoundRadius;
+	m_fTouchSoundRadius = (LTFLOAT) pPropType->nTouchSoundRadius;
 
 	m_vObjectColor	= pPropType->vObjectColor;
 	m_bMoveToFloor	= pPropType->bMoveToFloor;
@@ -226,26 +220,26 @@ void PropType::ReadProp(ObjectCreateStruct *pData)
 	{
 		FREE_HSTRING(m_hstrTouchSound);
 
-        m_hstrTouchSound = g_pLTServer->CreateString(pPropType->szTouchSound);
+		m_hstrTouchSound = g_pLTServer->CreateString(pPropType->szTouchSound);
 		m_dwFlags |= FLAG_TOUCH_NOTIFY;
 	}
 
 	m_damage.SetArmorPoints(0.0f);
 	m_damage.SetMaxArmorPoints(0.0f);
-    m_damage.SetCanHeal(LTFALSE);
-    m_damage.SetCanRepair(LTFALSE);
-    m_damage.SetApplyDamagePhysics(LTFALSE);
+	m_damage.SetCanHeal(LTFALSE);
+	m_damage.SetCanRepair(LTFALSE);
+	m_damage.SetApplyDamagePhysics(LTFALSE);
 
 	if (pPropType->nHitPoints >= 0)
 	{
-        m_damage.SetMaxHitPoints((LTFLOAT)pPropType->nHitPoints);
-        m_damage.SetHitPoints((LTFLOAT)pPropType->nHitPoints);
+		m_damage.SetMaxHitPoints((LTFLOAT)pPropType->nHitPoints);
+		m_damage.SetHitPoints((LTFLOAT)pPropType->nHitPoints);
 	}
 	else
 	{
 		m_damage.SetMaxHitPoints(1.0f);
 		m_damage.SetHitPoints(1.0f);
-        m_damage.SetCanDamage(LTFALSE);
+		m_damage.SetCanDamage(LTFALSE);
 	}
 
 	// Set the debris type...

@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ServerButeMgr.cpp
 //
-// MODULE  : ServerButeMgr.cpp
+// PURPOSE: ServerButeMgr implementation - Server-side attributes
 //
-// PURPOSE : ServerButeMgr implementation - Server-side attributes
-//
-// CREATED : 2/02/99
-//
+// CREATED: 2/02/99
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -24,11 +22,9 @@ static char s_aAttName[100];
 CServerButeMgr* g_pServerButeMgr = LTNULL;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerButeMgr::CServerButeMgr()
 //
-//	ROUTINE:	CServerButeMgr::CServerButeMgr()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CServerButeMgr::CServerButeMgr()
@@ -37,11 +33,9 @@ CServerButeMgr::CServerButeMgr()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerButeMgr::~CServerButeMgr()
 //
-//	ROUTINE:	CServerButeMgr::~CServerButeMgr()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CServerButeMgr::~CServerButeMgr()
@@ -51,51 +45,47 @@ CServerButeMgr::~CServerButeMgr()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerButeMgr::Init()
 //
-//	ROUTINE:	CServerButeMgr::Init()
-//
-//	PURPOSE:	Init mgr
-//
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CServerButeMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 {
-    if (g_pServerButeMgr || !szAttributeFile) return LTFALSE;
-    if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
+	if (g_pServerButeMgr || !szAttributeFile) return LTFALSE;
+	if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
 
 	// Set up global pointer...
 
 	g_pServerButeMgr = this;
 
 	m_nNumWONServers = 0;
-    LTBOOL bDone = LTFALSE;
+	LTBOOL bDone = LTFALSE;
 	while (!bDone)
 	{
 		sprintf(s_aAttName,"%s%d",SBMGR_WON_ADDR, m_nNumWONServers);
 		if (m_buteMgr.Exist(SBMGR_WON_TAG,s_aAttName))
 			m_nNumWONServers++;
 		else
-            bDone = LTTRUE;
+			bDone = LTTRUE;
 	}
 
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerButeMgr::Tem()
 //
-//	ROUTINE:	CServerButeMgr::Tem()
-//
-//	PURPOSE:	Clean up.
-//
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CServerButeMgr::Term()
 {
 	m_buteMgr.Term();
-    g_pServerButeMgr = LTNULL;
+	g_pServerButeMgr = LTNULL;
 }
 
 
@@ -106,11 +96,9 @@ void CServerButeMgr::Term()
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerButeMgr::GetPlayerAtrributeInt()
 //
-//	ROUTINE:	CServerButeMgr::GetPlayerAtrributeInt()
-//
-//	PURPOSE:	Get a player attribute as an int
-//
+//	PURPOSE: Get a player attribute as an int
 // ----------------------------------------------------------------------- //
 
 int CServerButeMgr::GetPlayerAttributeInt(char* pAttribute)
@@ -119,11 +107,9 @@ int CServerButeMgr::GetPlayerAttributeInt(char* pAttribute)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerButeMgr::GetPlayerAtrributeFloat()
 //
-//	ROUTINE:	CServerButeMgr::GetPlayerAtrributeFloat()
-//
-//	PURPOSE:	Get a player attribute as a float
-//
+//	PURPOSE: Get a player attribute as a float
 // ----------------------------------------------------------------------- //
 
 float CServerButeMgr::GetPlayerAttributeFloat(char* pAttribute)
@@ -132,11 +118,9 @@ float CServerButeMgr::GetPlayerAttributeFloat(char* pAttribute)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerButeMgr::GetPlayerAtrributeString()
 //
-//	ROUTINE:	CServerButeMgr::GetPlayerAtrributeString()
-//
-//	PURPOSE:	Get a player attribute as a string
-//
+//	PURPOSE: Get a player attribute as a string
 // ----------------------------------------------------------------------- //
 
 void CServerButeMgr::GetPlayerAttributeString(char* pAttribute, char* pBuf, int nBufLen)
@@ -159,11 +143,9 @@ void CServerButeMgr::GetPlayerAttributeString(char* pAttribute, char* pBuf, int 
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerButeMgr::GetSecurityCameraInt()
 //
-//	ROUTINE:	CServerButeMgr::GetSecurityCameraInt()
-//
-//	PURPOSE:	Get a secuirty camera attribute as an int
-//
+//	PURPOSE: Get a secuirty camera attribute as an int
 // ----------------------------------------------------------------------- //
 
 int CServerButeMgr::GetSecurityCameraInt(char* pAttribute)
@@ -172,11 +154,9 @@ int CServerButeMgr::GetSecurityCameraInt(char* pAttribute)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerButeMgr::GetSecurityCameraFloat()
 //
-//	ROUTINE:	CServerButeMgr::GetSecurityCameraFloat()
-//
-//	PURPOSE:	Get a security camera attribute as a float
-//
+//	PURPOSE: Get a security camera attribute as a float
 // ----------------------------------------------------------------------- //
 
 float CServerButeMgr::GetSecurityCameraFloat(char* pAttribute)
@@ -185,11 +165,9 @@ float CServerButeMgr::GetSecurityCameraFloat(char* pAttribute)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerButeMgr::GetSecurityCameraString()
 //
-//	ROUTINE:	CServerButeMgr::GetSecurityCameraString()
-//
-//	PURPOSE:	Get a security camera attribute as a string
-//
+//	PURPOSE: Get a security camera attribute as a string
 // ----------------------------------------------------------------------- //
 
 void CServerButeMgr::GetSecurityCameraString(char* pAttribute, char* pBuf, int nBufLen)

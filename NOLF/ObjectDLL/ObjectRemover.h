@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ObjectRemover.h
 //
-// MODULE  : ObjectRemover.h
+// PURPOSE: ObjectRemover - Definition
 //
-// PURPOSE : ObjectRemover - Definition
-//
-// CREATED : 04.23.1999
-//
+// CREATED: 04.23.1999
 // ----------------------------------------------------------------------- //
 
 #ifndef __OBJECT_REMOVER_H__
@@ -26,13 +24,13 @@ class ObjectRemover : public BaseClass
 		ObjectRemover();
 		~ObjectRemover();
 
-        uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
 
 	protected :
 
-        LTBOOL   ReadProp(ObjectCreateStruct *pData);
+		LTBOOL   ReadProp(ObjectCreateStruct *pData);
 
-        LTBOOL   Update();
+		LTBOOL   Update();
 
 		void	Save(HMESSAGEWRITE hWrite);
 		void	Load(HMESSAGEREAD hRead);

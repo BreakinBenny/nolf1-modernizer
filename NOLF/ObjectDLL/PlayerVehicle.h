@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: PlayerVehicle.h
 //
-// MODULE  : PlayerVehicle.h
+// PURPOSE: An PlayerVehicle object
 //
-// PURPOSE : An PlayerVehicle object
-//
-// CREATED : 8/31/99
+// CREATED: 8/31/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __PLAYER_VEHICLE_H__
@@ -31,8 +29,8 @@ class PlayerVehicle : public Prop
 
 	protected :
 
-        virtual uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
-        virtual uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		virtual uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		virtual uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 		void	ReadProp(ObjectCreateStruct *pData);
 		void	PostPropRead(ObjectCreateStruct* pData);
@@ -49,11 +47,11 @@ class PlayerVehicle : public Prop
 	private :
 
 		CTimer		m_RespawnTimer;
-        LTFLOAT     m_fRespawnTime;
+		LTFLOAT	 m_fRespawnTime;
 
-		LTVector    m_vOriginalDims;
-        LTVector    m_vOriginalPos;
-        LTRotation  m_rOriginalRot;
+		LTVector	m_vOriginalDims;
+		LTVector	m_vOriginalPos;
+		LTRotation  m_rOriginalRot;
 
 		PlayerPhysicsModel m_ePPhysicsModel;  // Corresponds to vehicle type
 
@@ -64,13 +62,13 @@ class CPlayerVehiclePlugin : public IObjectPlugin
 {
   public:
 
-    virtual LTRESULT PreHook_EditStringList(
+	virtual LTRESULT PreHook_EditStringList(
 		const char* szRezPath,
 		const char* szPropName,
 		char** aszStrings,
-        uint32* pcStrings,
-        const uint32 cMaxStrings,
-        const uint32 cMaxStringLength);
+		uint32* pcStrings,
+		const uint32 cMaxStrings,
+		const uint32 cMaxStringLength);
 };
 
 #endif // __PLAYER_VEHICLE_H__

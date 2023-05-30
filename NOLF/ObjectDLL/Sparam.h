@@ -2,7 +2,7 @@
 ;
 ;	 MODULE:		SPARAM (.H)
 ;
-;	PURPOSE:		String Parameter funcions
+;	PURPOSE: 	String Parameter funcions
 ;
 ;	HISTORY:		10/13/96 [blg] This file was created
 ;

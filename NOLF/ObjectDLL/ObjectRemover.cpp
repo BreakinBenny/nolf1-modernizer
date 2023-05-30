@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ObjectRemover.h
 //
-// MODULE  : ObjectRemover.h
+// PURPOSE: ObjectRemover - Implementation
 //
-// PURPOSE : ObjectRemover - Implementation
-//
-// CREATED : 04.23.1999
-//
+// CREATED: 04.23.1999
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -164,11 +162,9 @@ BEGIN_CLASS(ObjectRemover)
 END_CLASS_DEFAULT(ObjectRemover, BaseClass, NULL, NULL)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectRemover::ObjectRemover()
 //
-//	ROUTINE:	ObjectRemover::ObjectRemover()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 ObjectRemover::ObjectRemover() : BaseClass()
@@ -179,17 +175,15 @@ ObjectRemover::ObjectRemover() : BaseClass()
 	{
 		for ( int iObject = 0 ; iObject < kMaxObjectsPerGroup ; iObject++ )
 		{
-            m_ahstrObjects[iGroup][iObject] = LTNULL;
+			m_ahstrObjects[iGroup][iObject] = LTNULL;
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectRemover::~ObjectRemover()
 //
-//	ROUTINE:	ObjectRemover::~ObjectRemover()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 ObjectRemover::~ObjectRemover()
@@ -204,11 +198,9 @@ ObjectRemover::~ObjectRemover()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectRemover::EngineMessageFn
 //
-//	ROUTINE:	ObjectRemover::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 ObjectRemover::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -235,7 +227,7 @@ uint32 ObjectRemover::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDa
 		{
 			if (fData != INITIALUPDATE_SAVEGAME)
 			{
-                g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
+				g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
 			}
 
 			break;
@@ -260,16 +252,14 @@ uint32 ObjectRemover::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDa
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectRemover::ReadProp
 //
-//	ROUTINE:	ObjectRemover::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL ObjectRemover::ReadProp(ObjectCreateStruct *pInfo)
 {
-    if (!pInfo) return LTFALSE;
+	if (!pInfo) return LTFALSE;
 
 	GenericProp genProp;
 
@@ -279,36 +269,34 @@ LTBOOL ObjectRemover::ReadProp(ObjectCreateStruct *pInfo)
 		{
 			char szProp[128];
 			sprintf(szProp, "Group%2.2dObject%2.2d", iGroup, iObject);
-            if ( g_pLTServer->GetPropGeneric( szProp, &genProp ) == LT_OK )
+			if ( g_pLTServer->GetPropGeneric( szProp, &genProp ) == LT_OK )
 				if ( genProp.m_String[0] )
-                    m_ahstrObjects[iGroup][iObject] = g_pLTServer->CreateString( genProp.m_String );
+					m_ahstrObjects[iGroup][iObject] = g_pLTServer->CreateString( genProp.m_String );
 		}
 	}
 
-    if ( g_pLTServer->GetPropGeneric( "GroupsToKeep", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "GroupsToKeep", &genProp ) == LT_OK )
 		m_cGroupsToKeep = genProp.m_Long;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectRemover::Update()
 //
-//	ROUTINE:	ObjectRemover::Update()
-//
-//	PURPOSE:	Update
-//
+//	PURPOSE: Update
 // ----------------------------------------------------------------------- //
 
 LTBOOL ObjectRemover::Update()
 {
 	HOBJECT ahObjects[kMaxGroups][kMaxObjectsPerGroup][128];
-    memset(ahObjects, LTNULL, sizeof(HOBJECT)*kMaxGroups*kMaxObjectsPerGroup*128);
+	memset(ahObjects, LTNULL, sizeof(HOBJECT)*kMaxGroups*kMaxObjectsPerGroup*128);
 
 	int cGroupsWithObjects = 0;
 
 	{for ( int iGroup = 0 ; iGroup < kMaxGroups ; iGroup++ )
 	{
-        LTBOOL bGroupHasObjects = LTFALSE;
+		LTBOOL bGroupHasObjects = LTFALSE;
 
 		{for ( int iObject = 0 ; iObject < kMaxObjectsPerGroup ; iObject++ )
 		{
@@ -343,8 +331,8 @@ LTBOOL ObjectRemover::Update()
 
 	// Remove the objects
 
-    LTBOOL abRemoved[kMaxGroups];
-    memset(abRemoved, LTFALSE, sizeof(LTBOOL)*kMaxGroups);
+	LTBOOL abRemoved[kMaxGroups];
+	memset(abRemoved, LTFALSE, sizeof(LTBOOL)*kMaxGroups);
 	int iSafety = 50000;
 	int cRemove = cGroupsWithObjects-m_cGroupsToKeep;
 
@@ -371,29 +359,27 @@ LTBOOL ObjectRemover::Update()
 				}
 			}
 
-            abRemoved[iRemove] = LTTRUE;
+			abRemoved[iRemove] = LTTRUE;
 			cRemove--;
 		}
 	}
 
 	// Remove ourselves...
 
-    g_pLTServer->RemoveObject(m_hObject);
+	g_pLTServer->RemoveObject(m_hObject);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectRemover::Save
 //
-//	ROUTINE:	ObjectRemover::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void ObjectRemover::Save(HMESSAGEWRITE hWrite)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hWrite) return;
 
 	for ( int iGroup = 0 ; iGroup < kMaxGroups ; iGroup++ )
@@ -408,16 +394,14 @@ void ObjectRemover::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectRemover::Load
 //
-//	ROUTINE:	ObjectRemover::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void ObjectRemover::Load(HMESSAGEREAD hRead)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hRead) return;
 
 	for ( int iGroup = 0 ; iGroup < kMaxGroups ; iGroup++ )

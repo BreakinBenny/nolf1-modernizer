@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ParticleSystem.cpp
 //
-// MODULE  : ParticleSystem.cpp
+// PURPOSE: ParticleSystem - Implementation
 //
-// PURPOSE : ParticleSystem - Implementation
-//
-// CREATED : 10/23/97
-//
+// CREATED: 10/23/97
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -16,7 +14,7 @@
 #include "ObjectMsgs.h"
 
 BEGIN_CLASS(ParticleSystem)
-    ADD_BOOLPROP(StartOn, LTTRUE)
+	ADD_BOOLPROP(StartOn, LTTRUE)
 	ADD_LONGINTPROP(ParticleFlags, 0)
 	ADD_VECTORPROP_VAL_FLAG(Dims, 50.0f, 50.0f, 50.0f, PF_DIMS)
 	ADD_VECTORPROP_VAL(MinVelocity, 0.0f, 0.0f, 0.0f)
@@ -37,11 +35,9 @@ END_CLASS_DEFAULT_FLAGS(ParticleSystem, CClientSFX, NULL, NULL, CF_ALWAYSLOAD)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ParticleSystem::ParticleSystem
 //
-//	ROUTINE:	ParticleSystem::ParticleSystem
-//
-//	PURPOSE:	Initialize
-//
+//	PURPOSE: Initialize
 // ----------------------------------------------------------------------- //
 
 ParticleSystem::ParticleSystem() : CClientSFX()
@@ -56,8 +52,8 @@ ParticleSystem::ParticleSystem() : CClientSFX()
 	m_fGravity				= -500.0f;
 	m_fViewDist				= 5000.0f;
 	m_fRotationVelocity		= 0.0f;
-    m_hstrTextureName       = LTNULL;
-    m_bOn                   = LTTRUE;
+	m_hstrTextureName	   = LTNULL;
+	m_bOn				   = LTTRUE;
 
 	VEC_INIT(m_vColor1);
 	VEC_INIT(m_vColor2);
@@ -67,28 +63,24 @@ ParticleSystem::ParticleSystem() : CClientSFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ParticleSystem::ParticleSystem
 //
-//	ROUTINE:	ParticleSystem::ParticleSystem
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 ParticleSystem::~ParticleSystem()
 {
 	if (m_hstrTextureName)
 	{
-        g_pLTServer->FreeString(m_hstrTextureName);
+		g_pLTServer->FreeString(m_hstrTextureName);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ParticleSystem::EngineMessageFn
 //
-//	ROUTINE:	ParticleSystem::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 ParticleSystem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -117,13 +109,13 @@ uint32 ParticleSystem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fD
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -135,16 +127,14 @@ uint32 ParticleSystem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fD
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: ParticleSystem::ObjectMessageFn()
 //
-//	ROUTINE:	ParticleSystem::ObjectMessageFn()
-//
-//	PURPOSE:	Handler for server object messages.
-//
+//	PURPOSE: Handler for server object messages.
 // --------------------------------------------------------------------------- //
 
 uint32 ParticleSystem::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
 {
-    ILTServer* pLTServer = GetServerDE();
+	ILTServer* pLTServer = GetServerDE();
 	switch (messageID)
 	{
 		case MID_TRIGGER:
@@ -162,204 +152,192 @@ uint32 ParticleSystem::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSA
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ParticleSystem::ReadProp
 //
-//	ROUTINE:	ParticleSystem::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL ParticleSystem::ReadProp(ObjectCreateStruct *)
 {
-    ILTServer* pLTServer = GetServerDE();
-    if (!pLTServer) return LTFALSE;
+	ILTServer* pLTServer = GetServerDE();
+	if (!pLTServer) return LTFALSE;
 
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("StartOn", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("StartOn", &genProp) == LT_OK)
 		m_bOn = genProp.m_Bool;
 
-    if (g_pLTServer->GetPropGeneric("ParticleFlags", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ParticleFlags", &genProp) == LT_OK)
 		m_dwFlags = genProp.m_Long;
 
-    if (g_pLTServer->GetPropGeneric("BurstWait", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("BurstWait", &genProp) == LT_OK)
 		m_fBurstWait = genProp.m_Float;
 
-    if (g_pLTServer->GetPropGeneric("BurstWaitMin", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("BurstWaitMin", &genProp) == LT_OK)
 		m_fBurstWaitMin = genProp.m_Float;
 
-    if (g_pLTServer->GetPropGeneric("BurstWaitMax", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("BurstWaitMax", &genProp) == LT_OK)
 		m_fBurstWaitMax = genProp.m_Float;
 
-    if (g_pLTServer->GetPropGeneric("ParticlesPerSecond", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ParticlesPerSecond", &genProp) == LT_OK)
 		m_fParticlesPerSecond = genProp.m_Float;
 
-    if (g_pLTServer->GetPropGeneric("Dims", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Dims", &genProp) == LT_OK)
 		m_vDims = genProp.m_Vec;
 
-    if (g_pLTServer->GetPropGeneric("MinVelocity", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("MinVelocity", &genProp) == LT_OK)
 		m_vMinVel = genProp.m_Vec;
 
-    if (g_pLTServer->GetPropGeneric("MaxVelocity", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("MaxVelocity", &genProp) == LT_OK)
 		m_vMaxVel = genProp.m_Vec;
 
-    if (g_pLTServer->GetPropGeneric("ParticleLifetime", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ParticleLifetime", &genProp) == LT_OK)
 		m_fParticleLifetime = genProp.m_Float;
 
-    if (g_pLTServer->GetPropGeneric("Color1", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Color1", &genProp) == LT_OK)
 		VEC_COPY(m_vColor1, genProp.m_Color);
 
-    if (g_pLTServer->GetPropGeneric("Color2", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Color2", &genProp) == LT_OK)
 		VEC_COPY(m_vColor2, genProp.m_Color);
 
-    if (g_pLTServer->GetPropGeneric("ParticleRadius", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ParticleRadius", &genProp) == LT_OK)
 		m_fRadius = genProp.m_Float;
 
-    if (g_pLTServer->GetPropGeneric("ParticleGravity", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ParticleGravity", &genProp) == LT_OK)
 		m_fGravity = genProp.m_Float;
 
-    if (g_pLTServer->GetPropGeneric("RotationVelocity", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("RotationVelocity", &genProp) == LT_OK)
 		m_fRotationVelocity = genProp.m_Float;
 
-    if (g_pLTServer->GetPropGeneric("TextureName", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("TextureName", &genProp) == LT_OK)
 	{
-        if (genProp.m_String[0]) m_hstrTextureName = pLTServer->CreateString(genProp.m_String);
+		if (genProp.m_String[0]) m_hstrTextureName = pLTServer->CreateString(genProp.m_String);
 	}
 
-    g_pLTServer->GetPropReal("MaxViewDistance", &m_fViewDist);
+	g_pLTServer->GetPropReal("MaxViewDistance", &m_fViewDist);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ParticleSystem::InitialUpdate
 //
-//	ROUTINE:	ParticleSystem::InitialUpdate
-//
-//	PURPOSE:	Handle initial Update
-//
+//	PURPOSE: Handle initial Update
 // ----------------------------------------------------------------------- //
 
 void ParticleSystem::InitialUpdate(int nInfo)
 {
-    ILTServer* pLTServer = GetServerDE();
-    if (!pLTServer) return;
+	ILTServer* pLTServer = GetServerDE();
+	if (!pLTServer) return;
 
 	if (nInfo == INITIALUPDATE_SAVEGAME) return;
 
 
-    LTVector vPos;
-    pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	pLTServer->GetObjectPos(m_hObject, &vPos);
 
-    uint32 dwUserFlags = m_bOn ? USRFLG_VISIBLE : 0;
-    pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags);
+	uint32 dwUserFlags = m_bOn ? USRFLG_VISIBLE : 0;
+	pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags);
 
 	// Tell the clients about the ParticleSystem, and remove thyself...
 
-    HMESSAGEWRITE hMessage = pLTServer->StartSpecialEffectMessage(this);
-    pLTServer->WriteToMessageByte(hMessage, SFX_PARTICLESYSTEM_ID);
-    pLTServer->WriteToMessageVector(hMessage, &m_vColor1);
-    pLTServer->WriteToMessageVector(hMessage, &m_vColor2);
-    pLTServer->WriteToMessageVector(hMessage, &m_vDims);
-    pLTServer->WriteToMessageVector(hMessage, &m_vMinVel);
-    pLTServer->WriteToMessageVector(hMessage, &m_vMaxVel);
-    pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)m_dwFlags);
-    pLTServer->WriteToMessageFloat(hMessage, m_fBurstWait);
-    pLTServer->WriteToMessageFloat(hMessage, m_fBurstWaitMin);
-    pLTServer->WriteToMessageFloat(hMessage, m_fBurstWaitMax);
-    pLTServer->WriteToMessageFloat(hMessage, m_fParticlesPerSecond);
-    pLTServer->WriteToMessageFloat(hMessage, m_fParticleLifetime);
-    pLTServer->WriteToMessageFloat(hMessage, m_fRadius);
-    pLTServer->WriteToMessageFloat(hMessage, m_fGravity);
-    pLTServer->WriteToMessageFloat(hMessage, m_fRotationVelocity);
-    pLTServer->WriteToMessageFloat(hMessage, m_fViewDist);
-    pLTServer->WriteToMessageHString(hMessage, m_hstrTextureName);
-    pLTServer->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = pLTServer->StartSpecialEffectMessage(this);
+	pLTServer->WriteToMessageByte(hMessage, SFX_PARTICLESYSTEM_ID);
+	pLTServer->WriteToMessageVector(hMessage, &m_vColor1);
+	pLTServer->WriteToMessageVector(hMessage, &m_vColor2);
+	pLTServer->WriteToMessageVector(hMessage, &m_vDims);
+	pLTServer->WriteToMessageVector(hMessage, &m_vMinVel);
+	pLTServer->WriteToMessageVector(hMessage, &m_vMaxVel);
+	pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)m_dwFlags);
+	pLTServer->WriteToMessageFloat(hMessage, m_fBurstWait);
+	pLTServer->WriteToMessageFloat(hMessage, m_fBurstWaitMin);
+	pLTServer->WriteToMessageFloat(hMessage, m_fBurstWaitMax);
+	pLTServer->WriteToMessageFloat(hMessage, m_fParticlesPerSecond);
+	pLTServer->WriteToMessageFloat(hMessage, m_fParticleLifetime);
+	pLTServer->WriteToMessageFloat(hMessage, m_fRadius);
+	pLTServer->WriteToMessageFloat(hMessage, m_fGravity);
+	pLTServer->WriteToMessageFloat(hMessage, m_fRotationVelocity);
+	pLTServer->WriteToMessageFloat(hMessage, m_fViewDist);
+	pLTServer->WriteToMessageHString(hMessage, m_hstrTextureName);
+	pLTServer->EndMessage(hMessage);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: ParticleSystem::HandleMsg()
 //
-//	ROUTINE:	ParticleSystem::HandleMsg()
-//
-//	PURPOSE:	Handle trigger messages
-//
+//	PURPOSE: Handle trigger messages
 // --------------------------------------------------------------------------- //
 
 void ParticleSystem::HandleMsg(HOBJECT hSender, const char* szMsg)
 {
 	if (_stricmp(szMsg, "ON") == 0 && !m_bOn)
 	{
-        uint32 dwUserFlags = USRFLG_VISIBLE;
-        g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags);
-        m_bOn = LTTRUE;
+		uint32 dwUserFlags = USRFLG_VISIBLE;
+		g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags);
+		m_bOn = LTTRUE;
 	}
 	else if (_stricmp(szMsg, "OFF") == 0 && m_bOn)
 	{
-        uint32 dwUserFlags = 0;
-        g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags);
-        m_bOn = LTFALSE;
+		uint32 dwUserFlags = 0;
+		g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags);
+		m_bOn = LTFALSE;
 	}
 	else if (_stricmp(szMsg, "REMOVE") == 0)
 	{
-        g_pLTServer->RemoveObject(m_hObject);
+		g_pLTServer->RemoveObject(m_hObject);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ParticleSystem::Save
 //
-//	ROUTINE:	ParticleSystem::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void ParticleSystem::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
-    ILTServer* pLTServer = GetServerDE();
-    if (!pLTServer || !hWrite) return;
+	ILTServer* pLTServer = GetServerDE();
+	if (!pLTServer || !hWrite) return;
 
-    pLTServer->WriteToMessageByte(hWrite, m_bOn);
+	pLTServer->WriteToMessageByte(hWrite, m_bOn);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ParticleSystem::Load
 //
-//	ROUTINE:	ParticleSystem::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void ParticleSystem::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
-    ILTServer* pLTServer = GetServerDE();
-    if (!pLTServer || !hRead) return;
+	ILTServer* pLTServer = GetServerDE();
+	if (!pLTServer || !hRead) return;
 
-    m_bOn   = (LTBOOL) pLTServer->ReadFromMessageByte(hRead);
+	m_bOn   = (LTBOOL) pLTServer->ReadFromMessageByte(hRead);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ParticleSystem::CacheFiles
 //
-//	ROUTINE:	ParticleSystem::CacheFiles
-//
-//	PURPOSE:	Cache resources used by this object
-//
+//	PURPOSE: Cache resources used by this object
 // ----------------------------------------------------------------------- //
 
 void ParticleSystem::CacheFiles()
 {
-    ILTServer* pLTServer = GetServerDE();
-    if (!pLTServer) return;
+	ILTServer* pLTServer = GetServerDE();
+	if (!pLTServer) return;
 
 	if (m_hstrTextureName)
 	{
-        char* pFile = pLTServer->GetStringData(m_hstrTextureName);
+		char* pFile = pLTServer->GetStringData(m_hstrTextureName);
 		if (pFile && pFile[0])
 		{
-            pLTServer->CacheFile(FT_TEXTURE, pFile);
+			pLTServer->CacheFile(FT_TEXTURE, pFile);
 		}
 	}
 }

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Projectile.cpp
 //
-// MODULE  : Projectile.cpp
+// PURPOSE: Projectile class - implementation
 //
-// PURPOSE : Projectile class - implementation
-//
-// CREATED : 9/25/97
+// CREATED: 9/25/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -53,40 +51,38 @@ static CVarTrack g_vtInvisibleMaxThickness;
 CVarTrack g_vtNetFriendlyFire;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::CProjectile
 //
-//	ROUTINE:	CProjectile::CProjectile
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CProjectile::CProjectile() : GameBase(OT_MODEL)
 {
 	AddAggregate(&m_damage);
 
-    m_hObject               = LTNULL;
+	m_hObject			   = LTNULL;
 	m_fVelocity				= 0.0f;
 	m_fInstDamage			= 0.0f;
 	m_fProgDamage			= 0.0f;
 	m_fMass					= INFINITE_MASS; //0.0f;
 	m_fLifeTime				= 5.0f;
 	m_fRange				= 10000.0f;
-    m_bSilenced             = LTFALSE;
+	m_bSilenced			 = LTFALSE;
 
 	m_vDims.Init(1.0f, 1.0f, 1.0f);
 	m_vFirePos.Init();
 	m_vFlashPos.Init();
 
-    m_hFiredFrom            = LTNULL;
+	m_hFiredFrom			= LTNULL;
 	m_eInstDamageType		= DT_BULLET;
 	m_eProgDamageType		= DT_UNSPECIFIED;
 	m_nWeaponId				= 0;
 	m_nAmmoId				= 0;
 
 	m_fStartTime			= 0.0f;
-    m_bObjectRemoved        = LTFALSE;
+	m_bObjectRemoved		= LTFALSE;
 
-    m_bDetonated            = LTFALSE;
+	m_bDetonated			= LTFALSE;
 
 	m_dwFlags = FLAG_FORCECLIENTUPDATE | FLAG_POINTCOLLIDE | FLAG_NOSLIDING |
 		FLAG_TOUCH_NOTIFY | FLAG_NOLIGHT | FLAG_RAYHIT;
@@ -97,8 +93,8 @@ CProjectile::CProjectile() : GameBase(OT_MODEL)
 		DamageTypeToFlag(DT_BURN) | DamageTypeToFlag(DT_FREEZE) | DamageTypeToFlag(DT_ELECTROCUTE) |
 		DamageTypeToFlag(DT_POISON) | DamageTypeToFlag(DT_ENDLESS_FALL));
 
-    m_pAmmoData         = LTNULL;
-    m_pWeaponData       = LTNULL;
+	m_pAmmoData		 = LTNULL;
+	m_pWeaponData	   = LTNULL;
 
 	m_bProcessInvImpact = LTFALSE;
 	m_vInvisVel.Init();
@@ -109,11 +105,9 @@ CProjectile::CProjectile() : GameBase(OT_MODEL)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::EngineMessageFn
 //
-//	ROUTINE:	CProjectile::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 CProjectile::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -160,7 +154,7 @@ uint32 CProjectile::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData
 			{
 				if (hLink == m_hFiredFrom)
 				{
-                    m_hFiredFrom = LTNULL;
+					m_hFiredFrom = LTNULL;
 				}
 			}
 		}
@@ -168,13 +162,13 @@ uint32 CProjectile::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -186,16 +180,14 @@ uint32 CProjectile::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::ObjectMessageFn
 //
-//	ROUTINE:	CProjectile::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 CProjectile::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
 {
-    uint32 dwRet = GameBase::ObjectMessageFn(hSender, messageID, hRead);
+	uint32 dwRet = GameBase::ObjectMessageFn(hSender, messageID, hRead);
 
 	switch(messageID)
 	{
@@ -203,7 +195,7 @@ uint32 CProjectile::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGER
 		{
 			if (m_damage.IsDead())
 			{
-                Detonate(LTNULL);
+				Detonate(LTNULL);
 			}
 		}
 		break;
@@ -216,11 +208,9 @@ uint32 CProjectile::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGER
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::Setup
 //
-//	ROUTINE:	CProjectile::Setup
-//
-//	PURPOSE:	Set up a projectile with the information needed
-//
+//	PURPOSE: Set up a projectile with the information needed
 // ----------------------------------------------------------------------- //
 
 void CProjectile::Setup(CWeapon* pWeapon, WFireInfo & info)
@@ -229,11 +219,11 @@ void CProjectile::Setup(CWeapon* pWeapon, WFireInfo & info)
 
 	if (!g_vtInvisibleMaxThickness.IsInitted())
 	{
-        g_vtInvisibleMaxThickness.Init(g_pLTServer, "InvisibleMaxThickness", LTNULL, 33.0f);
+		g_vtInvisibleMaxThickness.Init(g_pLTServer, "InvisibleMaxThickness", LTNULL, 33.0f);
 	}
 	if (!g_vtNetFriendlyFire.IsInitted())
 	{
-        g_vtNetFriendlyFire.Init(g_pLTServer, "NetFriendlyFire", LTNULL, 0.0f);
+		g_vtNetFriendlyFire.Init(g_pLTServer, "NetFriendlyFire", LTNULL, 0.0f);
 	}
 
 	m_vDir				= info.vPath;
@@ -261,14 +251,14 @@ void CProjectile::Setup(CWeapon* pWeapon, WFireInfo & info)
 	}
 	else if (info.bAltFire)
 	{
-        m_fVelocity = (LTFLOAT) (m_pAmmoData->pProjectileFX ? m_pAmmoData->pProjectileFX->nAltVelocity : 0);
+		m_fVelocity = (LTFLOAT) (m_pAmmoData->pProjectileFX ? m_pAmmoData->pProjectileFX->nAltVelocity : 0);
 	}
 	else
 	{
-        m_fVelocity = (LTFLOAT) (m_pAmmoData->pProjectileFX ? m_pAmmoData->pProjectileFX->nVelocity : 0);
+		m_fVelocity = (LTFLOAT) (m_pAmmoData->pProjectileFX ? m_pAmmoData->pProjectileFX->nVelocity : 0);
 	}
 
-    m_fRange            = (LTFLOAT) m_pWeaponData->nRange;
+	m_fRange			= (LTFLOAT) m_pWeaponData->nRange;
 	m_bSilenced			= !!(pWeapon->GetSilencer());
 
 	AmmoType eAmmoType  = m_pAmmoData->eType;
@@ -298,16 +288,14 @@ void CProjectile::Setup(CWeapon* pWeapon, WFireInfo & info)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::TestInsideObject
 //
-//	ROUTINE:	CProjectile::TestInsideObject
-//
-//	PURPOSE:	Test to see if the projectile is inside the test object
-//
+//	PURPOSE: Test to see if the projectile is inside the test object
 // ----------------------------------------------------------------------- //
 
 LTBOOL CProjectile::TestInsideObject(HOBJECT hTestObj, AmmoType eAmmoType)
 {
-    if (!hTestObj) return LTFALSE;
+	if (!hTestObj) return LTFALSE;
 
 	// TO DO???
 	// NOTE:  This code may need to be updated to use test the dims
@@ -316,9 +304,9 @@ LTBOOL CProjectile::TestInsideObject(HOBJECT hTestObj, AmmoType eAmmoType)
 
 	// See if we are inside the test object...
 
-    LTVector vTestPos, vTestDims;
-    g_pLTServer->GetObjectPos(hTestObj, &vTestPos);
-    g_pLTServer->GetObjectDims(hTestObj, &vTestDims);
+	LTVector vTestPos, vTestDims;
+	g_pLTServer->GetObjectPos(hTestObj, &vTestPos);
+	g_pLTServer->GetObjectDims(hTestObj, &vTestDims);
 
 	if (m_vFirePos.x < vTestPos.x - vTestDims.x ||
 		m_vFirePos.x > vTestPos.x + vTestDims.x ||
@@ -327,7 +315,7 @@ LTBOOL CProjectile::TestInsideObject(HOBJECT hTestObj, AmmoType eAmmoType)
 		m_vFirePos.z < vTestPos.z - vTestDims.z ||
 		m_vFirePos.z > vTestPos.z + vTestDims.z)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 
@@ -343,8 +331,8 @@ LTBOOL CProjectile::TestInsideObject(HOBJECT hTestObj, AmmoType eAmmoType)
 		{
 			if (IsCharacter(hTestObj))
 			{
-                CCharacter *pChar = (CCharacter*) g_pLTServer->HandleToObject(hTestObj);
-                if (!pChar) return LTFALSE;
+				CCharacter *pChar = (CCharacter*) g_pLTServer->HandleToObject(hTestObj);
+				if (!pChar) return LTFALSE;
 
 				ModelNode eModelNode = g_pModelButeMgr->GetSkeletonDefaultHitNode(pChar->GetModelSkeleton());
 
@@ -356,32 +344,30 @@ LTBOOL CProjectile::TestInsideObject(HOBJECT hTestObj, AmmoType eAmmoType)
 			ImpactDamageObject(m_hFiredFrom, hTestObj);
 		}
 
-        LTVector vNormal(0, 1, 0);
+		LTVector vNormal(0, 1, 0);
 		AddImpact(hTestObj, m_vFlashPos, vTestPos, vNormal, GetSurfaceType(hTestObj));
 	}
 
 	RemoveObject();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::InitialUpdate()
 //
-//	ROUTINE:	CProjectile::InitialUpdate()
-//
-//	PURPOSE:	Do first update
-//
+//	PURPOSE: Do first update
 // ----------------------------------------------------------------------- //
 
 void CProjectile::InitialUpdate(int nInfo)
 {
-    g_pLTServer->SetNetFlags(m_hObject, NETFLAG_POSUNGUARANTEED);
+	g_pLTServer->SetNetFlags(m_hObject, NETFLAG_POSUNGUARANTEED);
 
 	if (nInfo == INITIALUPDATE_SAVEGAME) return;
 
-    uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags | USRFLG_MOVEABLE);
+	uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags | USRFLG_MOVEABLE);
 
 	m_damage.Init(m_hObject);
 	m_damage.SetMass(m_fMass);
@@ -389,24 +375,22 @@ void CProjectile::InitialUpdate(int nInfo)
 	m_damage.SetMaxHitPoints(1.0f);
 	m_damage.SetArmorPoints(0.0f);
 	m_damage.SetMaxArmorPoints(0.0f);
-    m_damage.SetCanHeal(LTFALSE);
-    m_damage.SetCanRepair(LTFALSE);
-    m_damage.SetApplyDamagePhysics(LTFALSE);
+	m_damage.SetCanHeal(LTFALSE);
+	m_damage.SetCanRepair(LTFALSE);
+	m_damage.SetApplyDamagePhysics(LTFALSE);
 
 	int32 nDamageTypes = m_damage.GetCantDamageTypes();
 	m_damage.SetCantDamageTypes(nDamageTypes | m_dwCantDamageTypes);
 
-    g_pLTServer->SetNextUpdate(m_hObject, UPDATE_DELTA);
-    g_pLTServer->SetObjectDims(m_hObject, &m_vDims);
+	g_pLTServer->SetNextUpdate(m_hObject, UPDATE_DELTA);
+	g_pLTServer->SetObjectDims(m_hObject, &m_vDims);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::Update()
 //
-//	ROUTINE:	CProjectile::Update()
-//
-//	PURPOSE:	Do update
-//
+//	PURPOSE: Do update
 // ----------------------------------------------------------------------- //
 
 void CProjectile::Update()
@@ -418,27 +402,25 @@ void CProjectile::Update()
 	if (m_bProcessInvImpact)
 	{
 		m_bProcessInvImpact = LTFALSE;
-	    g_pLTServer->SetVelocity(m_hObject, &m_vInvisVel);
+		g_pLTServer->SetVelocity(m_hObject, &m_vInvisVel);
 		g_pLTServer->SetObjectPos(m_hObject, &m_vInvisNewPos);
 	}
 
-    g_pLTServer->SetNextUpdate(m_hObject, UPDATE_DELTA);
+	g_pLTServer->SetNextUpdate(m_hObject, UPDATE_DELTA);
 
 	// If we didn't hit anything, blow up...
 
-    if (g_pLTServer->GetTime() >= (m_fStartTime + m_fLifeTime))
+	if (g_pLTServer->GetTime() >= (m_fStartTime + m_fLifeTime))
 	{
-        Detonate(LTNULL);
+		Detonate(LTNULL);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::HandleTouch()
 //
-//	ROUTINE:	CProjectile::HandleTouch()
-//
-//	PURPOSE:	Handle touch notify message
-//
+//	PURPOSE: Handle touch notify message
 // ----------------------------------------------------------------------- //
 
 void CProjectile::HandleTouch(HOBJECT hObj)
@@ -459,7 +441,7 @@ void CProjectile::HandleTouch(HOBJECT hObj)
 
 	if (IsCharacter(hObj))
 	{
-       CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hObj);
+	   CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hObj);
 		if (pChar)
 		{
 			hObj = pChar->GetHitBox();
@@ -467,7 +449,7 @@ void CProjectile::HandleTouch(HOBJECT hObj)
 	}
 	else if (IsBody(hObj))
 	{
-	    Body* pBody = (Body*)g_pLTServer->HandleToObject(hObj);
+		Body* pBody = (Body*)g_pLTServer->HandleToObject(hObj);
 		if (pBody)
 		{
 			hObj = pBody->GetHitBox();
@@ -477,7 +459,7 @@ void CProjectile::HandleTouch(HOBJECT hObj)
 
 	if (IsCharacterHitBox(hObj))
 	{
-        pHitBox = (CCharacterHitBox*)g_pLTServer->HandleToObject(hObj);
+		pHitBox = (CCharacterHitBox*)g_pLTServer->HandleToObject(hObj);
 		if (!pHitBox) return;
 
 		if (pHitBox->GetModelObject() == m_hFiredFrom) return;
@@ -489,7 +471,7 @@ void CProjectile::HandleTouch(HOBJECT hObj)
 
 	if (IsKindOf(hObj, m_hObject))
 	{
-        CProjectile* pObj = (CProjectile*)g_pLTServer->HandleToObject(hObj);
+		CProjectile* pObj = (CProjectile*)g_pLTServer->HandleToObject(hObj);
 		if (pObj)
 		{
 			if (pObj->GetFiredFrom() == m_hFiredFrom)
@@ -503,16 +485,16 @@ void CProjectile::HandleTouch(HOBJECT hObj)
 
 	// See if we want to impact on this object...
 
-    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(hObj);
+	uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(hObj);
 	if (dwUsrFlags & USRFLG_IGNORE_PROJECTILES) return;
 
-    LTBOOL bIsWorld = IsMainWorld(hObj);
+	LTBOOL bIsWorld = IsMainWorld(hObj);
 
 
 	// Don't impact on non-solid objects...unless it is a CharacterHitBox
 	// object...
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(hObj);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(hObj);
 	if (!bIsWorld && !(dwFlags & FLAG_SOLID))
 	{
 		if (pHitBox)
@@ -545,7 +527,7 @@ void CProjectile::HandleTouch(HOBJECT hObj)
 	if (bIsWorld || (OT_WORLDMODEL == g_pLTServer->GetObjectType(hObj)))
 	{
 		CollisionInfo info;
-        g_pLTServer->GetLastCollision(&info);
+		g_pLTServer->GetLastCollision(&info);
 
 		SurfaceType eType = GetSurfaceType(info);
 
@@ -583,12 +565,10 @@ void CProjectile::HandleTouch(HOBJECT hObj)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::HandleImpact()
 //
-//	ROUTINE:	CProjectile::HandleImpact()
-//
-//	PURPOSE:	Allow sub-classes to handle impacts...Default is to
+//	PURPOSE: Allow sub-classes to handle impacts...Default is to
 //				go boom.
-//
 // ----------------------------------------------------------------------- //
 
 void CProjectile::HandleImpact(HOBJECT hObj)
@@ -598,11 +578,9 @@ void CProjectile::HandleImpact(HOBJECT hObj)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::Detonate()
 //
-//	ROUTINE:	CProjectile::Detonate()
-//
-//	PURPOSE:	Handle blowing up the projectile
-//
+//	PURPOSE: Handle blowing up the projectile
 // ----------------------------------------------------------------------- //
 
 void CProjectile::Detonate(HOBJECT hObj)
@@ -619,23 +597,23 @@ void CProjectile::Detonate(HOBJECT hObj)
 	}
 
 
-    m_bDetonated = LTTRUE;
+	m_bDetonated = LTTRUE;
 
 	SurfaceType eType = ST_UNKNOWN;
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	// Determine the normal of the surface we are impacting on...
 
-    LTVector vNormal(0.0f, 1.0f, 0.0f);
+	LTVector vNormal(0.0f, 1.0f, 0.0f);
 
 	if (hObj)
 	{
-        if (IsMainWorld(hObj) || g_pLTServer->GetObjectType(hObj) == OT_WORLDMODEL)
+		if (IsMainWorld(hObj) || g_pLTServer->GetObjectType(hObj) == OT_WORLDMODEL)
 		{
 			CollisionInfo info;
-            g_pLTServer->GetLastCollision(&info);
+			g_pLTServer->GetLastCollision(&info);
 
 			if (info.m_hPoly)
 			{
@@ -647,13 +625,13 @@ void CProjectile::Detonate(HOBJECT hObj)
 
 			// Calculate where we really hit the plane...
 
-            LTVector vVel, vP0, vP1, vDir;
-            g_pLTServer->GetVelocity(m_hObject, &vVel);
+			LTVector vVel, vP0, vP1, vDir;
+			g_pLTServer->GetVelocity(m_hObject, &vVel);
 			vDir = vVel;
 			vDir.Norm();
 
 			vP1 = vPos;
-            vVel *= g_pLTServer->GetFrameTime();
+			vVel *= g_pLTServer->GetFrameTime();
 			vP0 = vP1 - vVel;
 			vP1 += vVel;
 
@@ -671,7 +649,7 @@ void CProjectile::Detonate(HOBJECT hObj)
 
 			if (g_pLTServer->IntersectSegment(&qInfo, &iInfo))
 			{
-				vPos    = iInfo.m_Point - vDir;
+				vPos	= iInfo.m_Point - vDir;
 				eType   = GetSurfaceType(iInfo);
 				vNormal = iInfo.m_Plane.m_Normal;
 			}
@@ -698,9 +676,9 @@ void CProjectile::Detonate(HOBJECT hObj)
 				}
 			}
 
-            LTRotation rRot;
-            g_pLTServer->AlignRotation(&rRot, &vNormal, LTNULL);
-            g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+			LTRotation rRot;
+			g_pLTServer->AlignRotation(&rRot, &vNormal, LTNULL);
+			g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 
 			// g_pLTServer->CPrint("Pos = %.2f, %.2f, %.2f", VEC_EXPAND(vPos));
 		}
@@ -732,8 +710,8 @@ void CProjectile::Detonate(HOBJECT hObj)
 	}
 
 
-    //g_pLTServer->CPrint("Server end pos (%.2f, %.2f, %.2f)", vPos.x, vPos.y, vPos.z);
-    //g_pLTServer->CPrint("Server fly time %.2f", g_pLTServer->GetTime() - m_fStartTime);
+	//g_pLTServer->CPrint("Server end pos (%.2f, %.2f, %.2f)", vPos.x, vPos.y, vPos.z);
+	//g_pLTServer->CPrint("Server fly time %.2f", g_pLTServer->GetTime() - m_fStartTime);
 
 	// Remove projectile from world...
 
@@ -742,15 +720,13 @@ void CProjectile::Detonate(HOBJECT hObj)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::AddImpact()
 //
-//	ROUTINE:	CProjectile::AddImpact()
-//
-//	PURPOSE:	Add an impact object.
-//
+//	PURPOSE: Add an impact object.
 // ----------------------------------------------------------------------- //
 
 void CProjectile::AddImpact(HOBJECT hObj, LTVector vFirePos, LTVector vImpactPos,
-                            LTVector vSurfaceNormal, SurfaceType eType)
+							LTVector vSurfaceNormal, SurfaceType eType)
 {
 	// Create the client side weapon fx...
 
@@ -797,10 +773,10 @@ void CProjectile::AddImpact(HOBJECT hObj, LTVector vFirePos, LTVector vImpactPos
 
 	if (IsPlayer(m_hFiredFrom))
 	{
-        CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(m_hFiredFrom);
+		CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(m_hFiredFrom);
 		if (pPlayer)
 		{
-            fxStruct.nShooterId = (uint8) g_pLTServer->GetClientID(pPlayer->GetClient());
+			fxStruct.nShooterId = (uint8) g_pLTServer->GetClientID(pPlayer->GetClient());
 		}
 	}
 
@@ -819,7 +795,7 @@ void CProjectile::AddImpact(HOBJECT hObj, LTVector vFirePos, LTVector vImpactPos
 
 	if (m_hFiredFrom && IsCharacter(m_hFiredFrom) && CanSetLastFireInfo())
 	{
-        CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hFiredFrom);
+		CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hFiredFrom);
 		if (pChar)
 		{
 			CharFireInfo info;
@@ -828,7 +804,7 @@ void CProjectile::AddImpact(HOBJECT hObj, LTVector vFirePos, LTVector vImpactPos
 			info.vImpactPos = vImpactPos;
 			info.nWeaponId  = m_pWeaponData->nId;
 			info.nAmmoId	= m_pAmmoData->nId;
-            info.fTime      = g_pLTServer->GetTime();
+			info.fTime	  = g_pLTServer->GetTime();
 			info.bSilenced  = m_bSilenced;
 			info.eSurface	= eType;
 
@@ -841,27 +817,25 @@ void CProjectile::AddImpact(HOBJECT hObj, LTVector vFirePos, LTVector vImpactPos
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::AddExplosion()
 //
-//	ROUTINE:	CProjectile::AddExplosion()
-//
-//	PURPOSE:	Add an explosion
-//
+//	PURPOSE: Add an explosion
 // ----------------------------------------------------------------------- //
 
 void CProjectile::AddExplosion(LTVector vPos, LTVector vNormal)
 {
-    HCLASS hClass = g_pLTServer->GetClass("Explosion");
+	HCLASS hClass = g_pLTServer->GetClass("Explosion");
 	if (!hClass) return;
 
 	ObjectCreateStruct theStruct;
 	INIT_OBJECTCREATESTRUCT(theStruct);
 	theStruct.m_Pos = vPos;
 
-    LTRotation rRot;
-    g_pLTServer->AlignRotation(&rRot, &vNormal, &vNormal);
-    theStruct.m_Rotation = rRot;
+	LTRotation rRot;
+	g_pLTServer->AlignRotation(&rRot, &vNormal, &vNormal);
+	theStruct.m_Rotation = rRot;
 
-    Explosion* pExplosion = (Explosion*)g_pLTServer->CreateObject(hClass, &theStruct);
+	Explosion* pExplosion = (Explosion*)g_pLTServer->CreateObject(hClass, &theStruct);
 	if (pExplosion)
 	{
 		pExplosion->Setup(m_hFiredFrom, m_nAmmoId);
@@ -870,11 +844,9 @@ void CProjectile::AddExplosion(LTVector vPos, LTVector vNormal)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::AddSpecialFX()
 //
-//	ROUTINE:	CProjectile::AddSpecialFX()
-//
-//	PURPOSE:	Add client-side special fx
-//
+//	PURPOSE: Add client-side special fx
 // ----------------------------------------------------------------------- //
 
 void CProjectile::AddSpecialFX()
@@ -883,57 +855,53 @@ void CProjectile::AddSpecialFX()
 
 	// If this is a player object, get the client id...
 
-    uint8 nShooterId = -1;
+	uint8 nShooterId = -1;
 	if (IsPlayer(m_hFiredFrom))
 	{
-        CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(m_hFiredFrom);
+		CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(m_hFiredFrom);
 		if (pPlayer)
 		{
-            nShooterId = (uint8) g_pLTServer->GetClientID(pPlayer->GetClient());
+			nShooterId = (uint8) g_pLTServer->GetClientID(pPlayer->GetClient());
 		}
 	}
 
 
 	// Create a special fx...
 
-    HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
-    g_pLTServer->WriteToMessageByte(hMessage, SFX_PROJECTILE_ID);
-    g_pLTServer->WriteToMessageByte(hMessage, m_pWeaponData->nId);
-    g_pLTServer->WriteToMessageByte(hMessage, m_pAmmoData->nId);
-    g_pLTServer->WriteToMessageByte(hMessage, nShooterId);
-    g_pLTServer->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
+	g_pLTServer->WriteToMessageByte(hMessage, SFX_PROJECTILE_ID);
+	g_pLTServer->WriteToMessageByte(hMessage, m_pWeaponData->nId);
+	g_pLTServer->WriteToMessageByte(hMessage, m_pAmmoData->nId);
+	g_pLTServer->WriteToMessageByte(hMessage, nShooterId);
+	g_pLTServer->EndMessage(hMessage);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::RemoveObject()
 //
-//	ROUTINE:	CProjectile::RemoveObject()
-//
-//	PURPOSE:	Remove the object, and do clean up (isle 4)
-//
+//	PURPOSE: Remove the object, and do clean up (isle 4)
 // ----------------------------------------------------------------------- //
 
 void CProjectile::RemoveObject()
 {
 	if (m_bObjectRemoved) return;
 
-    g_pLTServer->RemoveObject(m_hObject);
+	g_pLTServer->RemoveObject(m_hObject);
 
-    m_bObjectRemoved = LTTRUE;
+	m_bObjectRemoved = LTTRUE;
 }
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DoVectorPolyFilterFn()
 //
-//	ROUTINE:	DoVectorPolyFilterFn()
-//
-//	PURPOSE:	Handle filtering out unwanted polies
-//
+//	PURPOSE: Handle filtering out unwanted polies
 // ----------------------------------------------------------------------- //
 
 LTBOOL DoVectorPolyFilterFn(HPOLY hPoly, void *pUserData)
 {
 	// Don't filter for now...
 
-    return LTTRUE;
+	return LTTRUE;
 
 	// Make sure we hit a surface type we care about...
 
@@ -941,21 +909,19 @@ LTBOOL DoVectorPolyFilterFn(HPOLY hPoly, void *pUserData)
 
 	if (eSurfType == ST_INVISIBLE)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DoVectorFilterFn()
 //
-//	ROUTINE:	DoVectorFilterFn()
-//
-//	PURPOSE:	Filter the attacker out of IntersectSegment
+//	PURPOSE: Filter the attacker out of IntersectSegment
 //				calls (so you don't shot yourself).  Also handle
 //				AIs of the same alignment not shooting eachother
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL DoVectorFilterFn(HOBJECT hObj, void *pUserData)
@@ -969,14 +935,14 @@ LTBOOL DoVectorFilterFn(HOBJECT hObj, void *pUserData)
 
 		if (IsCharacter(hObj) || IsBody(hObj) || IsKindOf(hObj, "Intelligence"))
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		// Check special character hit box cases...
 
 		if (IsCharacterHitBox(hObj))
 		{
-            CCharacterHitBox *pCharHitBox = (CCharacterHitBox*) g_pLTServer->HandleToObject(hObj);
+			CCharacterHitBox *pCharHitBox = (CCharacterHitBox*) g_pLTServer->HandleToObject(hObj);
 			if (pCharHitBox)
 			{
 				// Make sure we don't hit ourself...
@@ -984,24 +950,24 @@ LTBOOL DoVectorFilterFn(HOBJECT hObj, void *pUserData)
 				HOBJECT hUs = (HOBJECT)pUserData;
 
 				HOBJECT hTestObj = pCharHitBox->GetModelObject();
-                if (!hTestObj) return LTFALSE;
+				if (!hTestObj) return LTFALSE;
 
 				if (hTestObj == hUs)
 				{
-                    return LTFALSE;
+					return LTFALSE;
 				}
 
 
 				// Do special AI hitting AI case...
 				if (IsAI(hUs) && IsAI(hTestObj))
 				{
-                    CAI *pAI = (CAI*) g_pLTServer->HandleToObject(hUs);
-                    if (!pAI) return LTFALSE;
+					CAI *pAI = (CAI*) g_pLTServer->HandleToObject(hUs);
+					if (!pAI) return LTFALSE;
 
 					// We can't hit guys we like, unless they're NEUTRAL
 
-                    CCharacter* pB = (CCharacter*)g_pLTServer->HandleToObject(hTestObj);
-                    if (!pB) return LTFALSE;
+					CCharacter* pB = (CCharacter*)g_pLTServer->HandleToObject(hTestObj);
+					if (!pB) return LTFALSE;
 
 					CharacterClass cc = pB->GetCharacterClass();
 					if (cc != NEUTRAL)
@@ -1016,34 +982,32 @@ LTBOOL DoVectorFilterFn(HOBJECT hObj, void *pUserData)
 					// We can't hit guys on our team unless friendly fire is turned on
 					if (IsPlayer(hUs) && IsPlayer(hTestObj))
 					{
-                        CPlayerObj* pUs = (CPlayerObj*) g_pLTServer->HandleToObject(hUs);
-                        if (!pUs) return LTFALSE;
+						CPlayerObj* pUs = (CPlayerObj*) g_pLTServer->HandleToObject(hUs);
+						if (!pUs) return LTFALSE;
 
 
-                        CPlayerObj* pThem = (CPlayerObj*) g_pLTServer->HandleToObject(hTestObj);
-                        if (!pThem) return LTFALSE;
+						CPlayerObj* pThem = (CPlayerObj*) g_pLTServer->HandleToObject(hTestObj);
+						if (!pThem) return LTFALSE;
 
 						if (pUs->GetTeamID() == pThem->GetTeamID())
-                            return LTFALSE;
+							return LTFALSE;
 					}
 
 				}
 			}
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::DoProjectile
 //
-//	ROUTINE:	CProjectile::DoProjectile
-//
-//	PURPOSE:	Do projectile stuff...
-//
+//	PURPOSE: Do projectile stuff...
 // ----------------------------------------------------------------------- //
 
 void CProjectile::DoProjectile()
@@ -1058,16 +1022,16 @@ void CProjectile::DoProjectile()
 	SAFE_STRCPY(createStruct.m_Filename, m_pAmmoData->pProjectileFX->szModel);
 	SAFE_STRCPY(createStruct.m_SkinNames[0], m_pAmmoData->pProjectileFX->szSkin);
 
-    g_pLTServer->Common()->SetObjectFilenames(m_hObject, &createStruct);
-    g_pLTServer->ScaleObject(m_hObject, &(m_pAmmoData->pProjectileFX->vModelScale));
+	g_pLTServer->Common()->SetObjectFilenames(m_hObject, &createStruct);
+	g_pLTServer->ScaleObject(m_hObject, &(m_pAmmoData->pProjectileFX->vModelScale));
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
-    g_pLTServer->SetObjectFlags(m_hObject, dwFlags | FLAG_VISIBLE);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	g_pLTServer->SetObjectFlags(m_hObject, dwFlags | FLAG_VISIBLE);
 
 
 	// Start your engines...
 
-    m_fStartTime = g_pLTServer->GetTime();
+	m_fStartTime = g_pLTServer->GetTime();
 
 
 	// Make the flash position the same as the fire position...
@@ -1079,7 +1043,7 @@ void CProjectile::DoProjectile()
 
 	if (m_hFiredFrom)
 	{
-        g_pLTServer->CreateInterObjectLink(m_hObject, m_hFiredFrom);
+		g_pLTServer->CreateInterObjectLink(m_hObject, m_hFiredFrom);
 	}
 
 
@@ -1087,35 +1051,35 @@ void CProjectile::DoProjectile()
 
 	g_pLTServer->SetBlockingPriority(m_hObject, 0);
 	g_pLTServer->SetForceIgnoreLimit(m_hObject, 0.0f);
-    g_pLTServer->SetObjectMass(m_hObject, m_fMass);
+	g_pLTServer->SetObjectMass(m_hObject, m_fMass);
 
 
 	// Make sure we are pointing in the direction we are traveling...
 
-    LTRotation rRot;
-    g_pLTServer->AlignRotation(&rRot, &m_vDir, LTNULL);
-    g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+	LTRotation rRot;
+	g_pLTServer->AlignRotation(&rRot, &m_vDir, LTNULL);
+	g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 
 
 	// Make sure we have the correct flags set...
 
-    dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 	dwFlags |= m_pAmmoData->pProjectileFX->dwObjectFlags;
-    g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
+	g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
 
 
 	// And away we go...
 
-    LTVector vVel;
+	LTVector vVel;
 	vVel = m_vDir * m_fVelocity;
-    g_pLTServer->SetVelocity(m_hObject, &vVel);
+	g_pLTServer->SetVelocity(m_hObject, &vVel);
 
 
 	// Special case of 0 life time...
 
 	if (m_fLifeTime <= 0.0f)
 	{
-        Detonate(LTNULL);
+		Detonate(LTNULL);
 	}
 	else
 	{
@@ -1125,11 +1089,9 @@ void CProjectile::DoProjectile()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::DoVector
 //
-//	ROUTINE:	CProjectile::DoVector
-//
-//	PURPOSE:	Do vector stuff
-//
+//	PURPOSE: Do vector stuff
 // ----------------------------------------------------------------------- //
 
 void CProjectile::DoVector()
@@ -1137,14 +1099,14 @@ void CProjectile::DoVector()
 	IntersectInfo iInfo;
 	IntersectQuery qInfo;
 
-    LTVector vTo, vFrom, vOriginalFrom;
+	LTVector vTo, vFrom, vOriginalFrom;
 	vFrom = m_vFirePos;
 	vTo	= vFrom + (m_vDir * m_fRange);
 
 	qInfo.m_Flags = INTERSECT_OBJECTS | IGNORE_NONSOLID | INTERSECT_HPOLY;
 
-    LTBOOL bHitSomething = LTFALSE;
-    LTBOOL bDone         = LTFALSE;
+	LTBOOL bHitSomething = LTFALSE;
+	LTBOOL bDone		 = LTFALSE;
 
 	int nLoopCount = 0; // No infinite loops thanks.
 
@@ -1159,9 +1121,9 @@ void CProjectile::DoVector()
 		qInfo.m_From = vFrom;
 		qInfo.m_To   = vTo;
 
-        if (g_pLTServer->IntersectSegment(&qInfo, &iInfo))
+		if (g_pLTServer->IntersectSegment(&qInfo, &iInfo))
 		{
-            HCLASS hClass = g_pLTServer->GetObjectClass(iInfo.m_hObject);
+			HCLASS hClass = g_pLTServer->GetObjectClass(iInfo.m_hObject);
 
 			if ( iInfo.m_hObject == hLastHitbox )
 			{
@@ -1193,7 +1155,7 @@ void CProjectile::DoVector()
 		}
 		else // Didn't hit anything...
 		{
-            bDone = LTTRUE;
+			bDone = LTTRUE;
 		}
 
 
@@ -1209,16 +1171,16 @@ void CProjectile::DoVector()
 
 		if (++nLoopCount > MAX_VECTOR_LOOP)
 		{
-            g_pLTServer->CPrint("ERROR in CProjectile::DoVector() - Infinite loop encountered!!!");
-            bDone = LTTRUE;
+			g_pLTServer->CPrint("ERROR in CProjectile::DoVector() - Infinite loop encountered!!!");
+			bDone = LTTRUE;
 		}
 	}
 
 
 	// Didn't hit anything so just impact at the end pos...
 
-    LTVector vUp(0.0f, 1.0f, 0.0f);
-    AddImpact(LTNULL, m_vFlashPos, vTo, vUp, ST_SKY);
+	LTVector vUp(0.0f, 1.0f, 0.0f);
+	AddImpact(LTNULL, m_vFlashPos, vTo, vUp, ST_SKY);
 
 
 	// Okay, we're all done now...bye, bye...
@@ -1227,15 +1189,13 @@ void CProjectile::DoVector()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::HandleVectorImpact
 //
-//	ROUTINE:	CProjectile::HandleVectorImpact
-//
-//	PURPOSE:	Handle a vector hitting something
-//
+//	PURPOSE: Handle a vector hitting something
 // ----------------------------------------------------------------------- //
 
 LTBOOL CProjectile::HandleVectorImpact(IntersectInfo & iInfo, LTVector & vFrom,
-                                     LTVector & vTo)
+									 LTVector & vTo)
 {
 	// Get the surface type...
 
@@ -1249,7 +1209,7 @@ LTBOOL CProjectile::HandleVectorImpact(IntersectInfo & iInfo, LTVector & vFrom,
 		if (!CalcInvisibleImpact(iInfo, eSurfType))
 		{
 			SURFACE* pSurf = g_pSurfaceMgr->GetSurface(eSurfType);
-            if (!pSurf) return LTTRUE;
+			if (!pSurf) return LTTRUE;
 
 			return UpdateDoVectorValues(*pSurf, 0, iInfo.m_Point, vFrom, vTo);
 		}
@@ -1258,7 +1218,7 @@ LTBOOL CProjectile::HandleVectorImpact(IntersectInfo & iInfo, LTVector & vFrom,
 
 	// See if we hit an object that should be damaged...
 
-    LTBOOL bHitWorld = IsMainWorld(iInfo.m_hObject);
+	LTBOOL bHitWorld = IsMainWorld(iInfo.m_hObject);
 
 	if (!bHitWorld && eSurfType != ST_LIQUID)
 	{
@@ -1269,7 +1229,7 @@ LTBOOL CProjectile::HandleVectorImpact(IntersectInfo & iInfo, LTVector & vFrom,
 	// If the fire position is the initial fire position, use the flash
 	// position when building the impact special fx...
 
-    LTVector vFirePos = (vFrom.Equals(m_vFirePos) ? m_vFlashPos : vFrom);
+	LTVector vFirePos = (vFrom.Equals(m_vFirePos) ? m_vFlashPos : vFrom);
 
 	AddImpact(iInfo.m_hObject, vFirePos, iInfo.m_Point, iInfo.m_Plane.m_Normal, eSurfType);
 
@@ -1277,7 +1237,7 @@ LTBOOL CProjectile::HandleVectorImpact(IntersectInfo & iInfo, LTVector & vFrom,
 	// See if we can shoot through the surface...
 
 	SURFACE* pSurf = g_pSurfaceMgr->GetSurface(eSurfType);
-    if (!pSurf) return LTTRUE;  // Done.
+	if (!pSurf) return LTTRUE;  // Done.
 
 	if (pSurf->bCanShootThrough)
 	{
@@ -1300,14 +1260,14 @@ LTBOOL CProjectile::HandleVectorImpact(IntersectInfo & iInfo, LTVector & vFrom,
 		{
 			// Test to see if we can shoot through the object...
 
-            LTVector vDims;
-            g_pLTServer->GetObjectDims(iInfo.m_hObject, &vDims);
+			LTVector vDims;
+			g_pLTServer->GetObjectDims(iInfo.m_hObject, &vDims);
 
 			if (vDims.x*2.0f >= nMaxThickness &&  vDims.y*2.0f >= nMaxThickness &&
 				vDims.z*2.0f >= nMaxThickness)
 			{
 				// Can't shoot through this object...
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 
@@ -1316,7 +1276,7 @@ LTBOOL CProjectile::HandleVectorImpact(IntersectInfo & iInfo, LTVector & vFrom,
 		IntersectInfo iTestInfo;
 		IntersectQuery qTestInfo;
 
-        qTestInfo.m_From = iInfo.m_Point + (m_vDir * (LTFLOAT)(nMaxThickness + 1));
+		qTestInfo.m_From = iInfo.m_Point + (m_vDir * (LTFLOAT)(nMaxThickness + 1));
 		qTestInfo.m_To   = iInfo.m_Point - m_vDir;
 
 		qTestInfo.m_Flags = INTERSECT_OBJECTS | IGNORE_NONSOLID | INTERSECT_HPOLY;
@@ -1324,34 +1284,32 @@ LTBOOL CProjectile::HandleVectorImpact(IntersectInfo & iInfo, LTVector & vFrom,
 		qTestInfo.m_FilterFn  = DoVectorFilterFn;
 		qTestInfo.m_pUserData = m_hFiredFrom;
 
-        if (g_pLTServer->IntersectSegment(&qTestInfo, &iTestInfo))
+		if (g_pLTServer->IntersectSegment(&qTestInfo, &iTestInfo))
 		{
 			// Calculate new values for next DoVector iteration...
 
-            LTVector vThickness = iTestInfo.m_Point - iInfo.m_Point;
+			LTVector vThickness = iTestInfo.m_Point - iInfo.m_Point;
 			return UpdateDoVectorValues(*pSurf, vThickness.Mag(), iTestInfo.m_Point, vFrom, vTo);
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::UpdateVectorValues
 //
-//	ROUTINE:	CProjectile::UpdateVectorValues
-//
-//	PURPOSE:	Update our DoVector values
-//
+//	PURPOSE: Update our DoVector values
 // ----------------------------------------------------------------------- //
 
 LTBOOL CProjectile::UpdateDoVectorValues(SURFACE & surf, LTFLOAT fThickness,
-                                        LTVector vImpactPos, LTVector & vFrom, LTVector & vTo)
+										LTVector vImpactPos, LTVector & vFrom, LTVector & vTo)
 {
 	// See if we've traveled the distance...
 
-    LTVector vDistTraveled = vImpactPos - m_vFirePos;
-    LTFLOAT fDist = m_fRange - vDistTraveled.Mag();
-    if (fDist < 1.0f) return LTTRUE;
+	LTVector vDistTraveled = vImpactPos - m_vFirePos;
+	LTFLOAT fDist = m_fRange - vDistTraveled.Mag();
+	if (fDist < 1.0f) return LTTRUE;
 
 	// Just dampen based on the bute file values, don't worry about the
 	// surface thinkness...
@@ -1363,14 +1321,14 @@ LTBOOL CProjectile::UpdateDoVectorValues(SURFACE & surf, LTFLOAT fThickness,
 
 	if (nPerturb)
 	{
-        LTRotation rRot;
-        g_pLTServer->AlignRotation(&rRot, &m_vDir, LTNULL);
+		LTRotation rRot;
+		g_pLTServer->AlignRotation(&rRot, &m_vDir, LTNULL);
 
-        LTVector vU, vR, vF;
-        g_pLTServer->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		LTVector vU, vR, vF;
+		g_pLTServer->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-        LTFLOAT fRPerturb = ((LTFLOAT)GetRandom(-nPerturb, nPerturb))/1000.0f;
-        LTFLOAT fUPerturb = ((LTFLOAT)GetRandom(-nPerturb, nPerturb))/1000.0f;
+		LTFLOAT fRPerturb = ((LTFLOAT)GetRandom(-nPerturb, nPerturb))/1000.0f;
+		LTFLOAT fUPerturb = ((LTFLOAT)GetRandom(-nPerturb, nPerturb))/1000.0f;
 
 		m_vDir += (vR * fRPerturb);
 		m_vDir += (vU * fUPerturb);
@@ -1391,16 +1349,14 @@ LTBOOL CProjectile::UpdateDoVectorValues(SURFACE & surf, LTFLOAT fThickness,
 
 	vTo = vFrom + (m_vDir * fDist);
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::CalcInvisibleImpact
 //
-//	ROUTINE:	CProjectile::CalcInvisibleImpact
-//
-//	PURPOSE:	Update the impact value so it ignores invisible surfaces
-//
+//	PURPOSE: Update the impact value so it ignores invisible surfaces
 // ----------------------------------------------------------------------- //
 
 LTBOOL CProjectile::CalcInvisibleImpact(IntersectInfo & iInfo, SurfaceType & eSurfType)
@@ -1420,7 +1376,7 @@ LTBOOL CProjectile::CalcInvisibleImpact(IntersectInfo & iInfo, SurfaceType & eSu
 	qTestInfo.m_FilterFn  = DoVectorFilterFn;
 	qTestInfo.m_pUserData = m_hFiredFrom;
 
-    if (g_pLTServer->IntersectSegment(&qTestInfo, &iTestInfo))
+	if (g_pLTServer->IntersectSegment(&qTestInfo, &iTestInfo))
 	{
 		eSurfType = GetSurfaceType(iTestInfo);
 
@@ -1429,11 +1385,11 @@ LTBOOL CProjectile::CalcInvisibleImpact(IntersectInfo & iInfo, SurfaceType & eSu
 		if (eSurfType != ST_INVISIBLE)
 		{
 			iInfo = iTestInfo;
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
@@ -1441,29 +1397,25 @@ LTBOOL CProjectile::CalcInvisibleImpact(IntersectInfo & iInfo, SurfaceType & eSu
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::HandlePotentialHitBoxImpact
 //
-//	ROUTINE:	CProjectile::HandlePotentialHitBoxImpact
-//
-//	PURPOSE:	Handle a vector hitting a Character's hit box
-//
+//	PURPOSE: Handle a vector hitting a Character's hit box
 // ----------------------------------------------------------------------- //
 
 LTBOOL CProjectile::HandlePotentialHitBoxImpact(IntersectInfo & iInfo,
-                                               LTVector & vFrom)
+											   LTVector & vFrom)
 {
-    CCharacterHitBox *pCharHitBox = (CCharacterHitBox*) g_pLTServer->HandleToObject(iInfo.m_hObject);
-    if (!pCharHitBox) return LTFALSE;
+	CCharacterHitBox *pCharHitBox = (CCharacterHitBox*) g_pLTServer->HandleToObject(iInfo.m_hObject);
+	if (!pCharHitBox) return LTFALSE;
 
 	return pCharHitBox->HandleImpact(this, iInfo, m_vDir, vFrom);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::ImpactDamageObject
 //
-//	ROUTINE:	CProjectile::ImpactDamageObject
-//
-//	PURPOSE:	Handle impact damage to an object
-//
+//	PURPOSE: Handle impact damage to an object
 // ----------------------------------------------------------------------- //
 
 void CProjectile::ImpactDamageObject(HOBJECT hDamager, HOBJECT hObj)
@@ -1502,8 +1454,8 @@ void CProjectile::ImpactDamageObject(HOBJECT hDamager, HOBJECT hObj)
 	CPlayerObj* pPlayer;
 	if (IsPlayer(hDamager) && IsCharacter(hObj) && IsAccuracyType(m_eInstDamageType))
 	{
-        CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(hObj);
-        pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(hDamager);
+		CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(hObj);
+		pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(hDamager);
 		if (pPlayer)
 		{
 			ModelNode eModelNode = pChar->GetModelNodeLastHit();
@@ -1522,7 +1474,7 @@ void CProjectile::ImpactDamageObject(HOBJECT hDamager, HOBJECT hObj)
 
 	if (IsPlayer(hObj))
 	{
-        pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(hObj);
+		pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(hObj);
 		if (pPlayer)
 		{
 			pPlayer->GetPlayerSummaryMgr()->IncNumTimesHit();
@@ -1532,80 +1484,76 @@ void CProjectile::ImpactDamageObject(HOBJECT hDamager, HOBJECT hObj)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::Save
 //
-//	ROUTINE:	CProjectile::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void CProjectile::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hFiredFrom);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hFiredFrom);
 
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vFlashPos);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vFirePos);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vDir);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bSilenced);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bRemoveFromWorld);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bObjectRemoved);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bDetonated);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nWeaponId);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nAmmoId);
-    g_pLTServer->WriteToMessageByte(hWrite, m_eInstDamageType);
-    g_pLTServer->WriteToMessageByte(hWrite, m_eProgDamageType);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fInstDamage);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fProgDamage);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fStartTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fLifeTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fVelocity);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fRange);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vFlashPos);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vFirePos);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vDir);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bSilenced);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bRemoveFromWorld);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bObjectRemoved);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bDetonated);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nWeaponId);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nAmmoId);
+	g_pLTServer->WriteToMessageByte(hWrite, m_eInstDamageType);
+	g_pLTServer->WriteToMessageByte(hWrite, m_eProgDamageType);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fInstDamage);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fProgDamage);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fStartTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fLifeTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fVelocity);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fRange);
 
-    g_pLTServer->WriteToMessageByte(hWrite, m_bProcessInvImpact);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vInvisVel);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vInvisNewPos);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bProcessInvImpact);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vInvisVel);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vInvisNewPos);
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::Load
 //
-//	ROUTINE:	CProjectile::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void CProjectile::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hFiredFrom);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hFiredFrom);
 
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vFlashPos);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vFirePos);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vDir);
-    m_bSilenced         = g_pLTServer->ReadFromMessageByte(hRead);
-    m_bRemoveFromWorld  = g_pLTServer->ReadFromMessageByte(hRead);
-    m_bObjectRemoved    = g_pLTServer->ReadFromMessageByte(hRead);
-    m_bDetonated        = g_pLTServer->ReadFromMessageByte(hRead);
-    m_nWeaponId         = g_pLTServer->ReadFromMessageByte(hRead);
-    m_nAmmoId           = g_pLTServer->ReadFromMessageByte(hRead);
-    m_eInstDamageType   = (DamageType) g_pLTServer->ReadFromMessageByte(hRead);
-    m_eProgDamageType   = (DamageType) g_pLTServer->ReadFromMessageByte(hRead);
-    m_fInstDamage       = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fProgDamage       = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fStartTime        = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fLifeTime         = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fVelocity         = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fRange            = g_pLTServer->ReadFromMessageFloat(hRead);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vFlashPos);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vFirePos);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vDir);
+	m_bSilenced		 = g_pLTServer->ReadFromMessageByte(hRead);
+	m_bRemoveFromWorld  = g_pLTServer->ReadFromMessageByte(hRead);
+	m_bObjectRemoved	= g_pLTServer->ReadFromMessageByte(hRead);
+	m_bDetonated		= g_pLTServer->ReadFromMessageByte(hRead);
+	m_nWeaponId		 = g_pLTServer->ReadFromMessageByte(hRead);
+	m_nAmmoId		   = g_pLTServer->ReadFromMessageByte(hRead);
+	m_eInstDamageType   = (DamageType) g_pLTServer->ReadFromMessageByte(hRead);
+	m_eProgDamageType   = (DamageType) g_pLTServer->ReadFromMessageByte(hRead);
+	m_fInstDamage	   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fProgDamage	   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fStartTime		= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fLifeTime		 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fVelocity		 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fRange			= g_pLTServer->ReadFromMessageFloat(hRead);
 
 	m_pWeaponData = g_pWeaponMgr->GetWeapon(m_nWeaponId);
 	m_pAmmoData	  = g_pWeaponMgr->GetAmmo(m_nAmmoId);
 
-    m_bProcessInvImpact = g_pLTServer->ReadFromMessageByte(hRead);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vInvisVel);
+	m_bProcessInvImpact = g_pLTServer->ReadFromMessageByte(hRead);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vInvisVel);
 	g_pLTServer->ReadFromMessageVector(hRead, &m_vInvisNewPos);
 }

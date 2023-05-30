@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: PropType.h
 //
-// MODULE  : PropType.h
+// PURPOSE: Model PropType - Definition
 //
-// PURPOSE : Model PropType - Definition
-//
-// CREATED : 4/26/2000
+// CREATED: 4/26/2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __PROP_TYPE_H__
@@ -22,7 +20,7 @@ class PropType : public Prop
 
 	protected :
 
-        uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+		uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
 
 	private :
 
@@ -33,13 +31,13 @@ class CPropTypePlugin : public CPropPlugin
 {
   public:
 
-    virtual LTRESULT PreHook_EditStringList(
+	virtual LTRESULT PreHook_EditStringList(
 		const char* szRezPath,
 		const char* szPropName,
 		char** aszStrings,
-        uint32* pcStrings,
-        const uint32 cMaxStrings,
-        const uint32 cMaxStringLength);
+		uint32* pcStrings,
+		const uint32 cMaxStrings,
+		const uint32 cMaxStringLength);
 
 	virtual LTRESULT PreHook_Dims(
 			const char* szRezPath,

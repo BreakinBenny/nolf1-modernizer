@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Prop.cpp
 //
-// MODULE  : Prop.cpp
+// PURPOSE: Model Prop - Definition
 //
-// PURPOSE : Model Prop - Definition
-//
-// CREATED : 10/9/97
+// CREATED: 10/9/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -28,15 +26,15 @@ BEGIN_CLASS(Prop)
 	ADD_SOLID_FLAG(0, 0)
 	ADD_GRAVITY_FLAG(0, 0)
 	ADD_SHADOW_FLAG(0, 0)
-    ADD_BOOLPROP(MoveToFloor, LTTRUE)
-    ADD_BOOLPROP(DetailTexture, LTFALSE)
-    ADD_BOOLPROP(Chrome, LTFALSE)
+	ADD_BOOLPROP(MoveToFloor, LTTRUE)
+	ADD_BOOLPROP(DetailTexture, LTFALSE)
+	ADD_BOOLPROP(Chrome, LTFALSE)
 	ADD_REALPROP(Alpha, 1.0f)
 	ADD_COLORPROP(ObjectColor, 255.0f, 255.0f, 255.0f)
-    ADD_CHROMAKEY_FLAG(LTFALSE, 0)
-    ADD_BOOLPROP(Additive, LTFALSE)
-    ADD_BOOLPROP(Multiply, LTFALSE)
-    ADD_BOOLPROP(RayHit, LTTRUE)
+	ADD_CHROMAKEY_FLAG(LTFALSE, 0)
+	ADD_BOOLPROP(Additive, LTFALSE)
+	ADD_BOOLPROP(Multiply, LTFALSE)
+	ADD_BOOLPROP(RayHit, LTTRUE)
 	ADD_STRINGPROP_FLAG(TouchSound, "", PF_FILENAME)
 	ADD_REALPROP_FLAG(TouchSoundRadius, 500.0, PF_RADIUS)
 	ADD_STRINGPROP_FLAG(DetailLevel, "Low", PF_STATICLIST)
@@ -46,9 +44,9 @@ LTRESULT CPropPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 	if (m_DestructibleModelPlugin.PreHook_EditStringList(szRezPath,
 		szPropName, aszStrings, pcStrings, cMaxStrings, cMaxStringLength) == LT_OK)
@@ -71,16 +69,14 @@ static char *s_pTokens[PARSE_MAXTOKENS];
 static char *s_pCommandPos;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Prop::Prop()
 //
-//	ROUTINE:	Prop::Prop()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 Prop::Prop() : GameBase(OT_MODEL)
 {
-    m_bMoveToFloor  = LTTRUE;
+	m_bMoveToFloor  = LTTRUE;
 	m_bFirstUpdate	= LTTRUE;
 
 	m_vScale.Init(1.0f, 1.0f, 1.0f);
@@ -91,8 +87,8 @@ Prop::Prop() : GameBase(OT_MODEL)
 	m_dwFlags	= FLAG_DONTFOLLOWSTANDING;
 	m_dwFlags2	= 0;
 
-    m_hstrTouchSound    = LTNULL;
-    m_hTouchSnd         = LTNULL;
+	m_hstrTouchSound	= LTNULL;
+	m_hTouchSnd		 = LTNULL;
 	m_fTouchSoundRadius	= 500.0f;
 
 	m_pDebrisOverride	= LTNULL;
@@ -102,11 +98,9 @@ Prop::Prop() : GameBase(OT_MODEL)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Prop::~Prop()
 //
-//	ROUTINE:	Prop::~Prop()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 Prop::~Prop()
@@ -115,17 +109,15 @@ Prop::~Prop()
 
 	if (m_hTouchSnd)
 	{
-        g_pLTServer->KillSound(m_hTouchSnd);
-        m_hTouchSnd = LTNULL;
+		g_pLTServer->KillSound(m_hTouchSnd);
+		m_hTouchSnd = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Prop::EngineMessageFn
 //
-//	ROUTINE:	Prop::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 Prop::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -166,7 +158,7 @@ uint32 Prop::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 				}
 			}
 
-            uint32 dwRet = GameBase::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = GameBase::EngineMessageFn(messageID, pData, fData);
 
 			PostPropRead((ObjectCreateStruct*)pData);
 
@@ -187,13 +179,13 @@ uint32 Prop::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -205,11 +197,9 @@ uint32 Prop::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Prop::ObjectMessageFn
 //
-//	ROUTINE:	Prop::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 Prop::ObjectMessageFn( HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead )
@@ -230,11 +220,9 @@ uint32 Prop::ObjectMessageFn( HOBJECT hSender, uint32 messageID, HMESSAGEREAD hR
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Prop::PropRead()
 //
-//	ROUTINE:	Prop::PropRead()
-//
-//	PURPOSE:	Update properties
-//
+//	PURPOSE: Update properties
 // ----------------------------------------------------------------------- //
 
 void Prop::ReadProp(ObjectCreateStruct *pData)
@@ -243,32 +231,32 @@ void Prop::ReadProp(ObjectCreateStruct *pData)
 
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("Alpha", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Alpha", &genProp) == LT_OK)
 	{
 		m_fAlpha = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("ObjectColor", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ObjectColor", &genProp) == LT_OK)
 	{
 		m_vObjectColor = genProp.m_Vec;
 	}
 
-    if (g_pLTServer->GetPropGeneric("MoveToFloor", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("MoveToFloor", &genProp) == LT_OK)
 	{
 		 m_bMoveToFloor = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Scale", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Scale", &genProp) == LT_OK)
 	{
 		 m_vScale = genProp.m_Vec;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Chrome", &genProp ) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Chrome", &genProp ) == LT_OK)
 	{
 		m_dwFlags |= (genProp.m_Bool ? FLAG_ENVIRONMENTMAP : 0);
 	}
 
-    if (g_pLTServer->GetPropGeneric("DetailTexture", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DetailTexture", &genProp) == LT_OK)
 	{
 		if (genProp.m_Bool)
 		{
@@ -276,7 +264,7 @@ void Prop::ReadProp(ObjectCreateStruct *pData)
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("Additive", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Additive", &genProp) == LT_OK)
 	{
 		if (genProp.m_Bool)
 		{
@@ -285,7 +273,7 @@ void Prop::ReadProp(ObjectCreateStruct *pData)
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("Multiply", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Multiply", &genProp) == LT_OK)
 	{
 		if (genProp.m_Bool)
 		{
@@ -294,7 +282,7 @@ void Prop::ReadProp(ObjectCreateStruct *pData)
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("RayHit", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("RayHit", &genProp) == LT_OK)
 	{
 		if (genProp.m_Bool)
 		{
@@ -305,7 +293,7 @@ void Prop::ReadProp(ObjectCreateStruct *pData)
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("DetailLevel", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DetailLevel", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
@@ -313,16 +301,16 @@ void Prop::ReadProp(ObjectCreateStruct *pData)
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("TouchSound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("TouchSound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrTouchSound = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrTouchSound = g_pLTServer->CreateString(genProp.m_String);
 			m_dwFlags |= FLAG_TOUCH_NOTIFY;
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("TouchSoundRadius", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("TouchSoundRadius", &genProp) == LT_OK)
 	{
 		m_fTouchSoundRadius = genProp.m_Float;
 	}
@@ -330,11 +318,9 @@ void Prop::ReadProp(ObjectCreateStruct *pData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Prop::PostPropRead()
 //
-//	ROUTINE:	Prop::PostPropRead()
-//
-//	PURPOSE:	Update properties
-//
+//	PURPOSE: Update properties
 // ----------------------------------------------------------------------- //
 
 void Prop::PostPropRead(ObjectCreateStruct *pStruct)
@@ -356,31 +342,29 @@ void Prop::PostPropRead(ObjectCreateStruct *pStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Prop::InitialUpdate()
 //
-//	ROUTINE:	Prop::InitialUpdate()
-//
-//	PURPOSE:	Handle initial update
-//
+//	PURPOSE: Handle initial update
 // ----------------------------------------------------------------------- //
 
 void Prop::InitialUpdate()
 {
 	// Set flags...
 
-    uint32 dwFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwFlags | m_dwUsrFlgs);
+	uint32 dwFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwFlags | m_dwUsrFlgs);
 
-    dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
-    g_pLTServer->SetObjectFlags(m_hObject, dwFlags | m_dwFlags);
+	dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	g_pLTServer->SetObjectFlags(m_hObject, dwFlags | m_dwFlags);
 
-    g_pLTServer->Common()->GetObjectFlags(m_hObject, OFT_Flags2, dwFlags);
-    g_pLTServer->Common()->SetObjectFlags(m_hObject, OFT_Flags2, dwFlags | m_dwFlags2);
+	g_pLTServer->Common()->GetObjectFlags(m_hObject, OFT_Flags2, dwFlags);
+	g_pLTServer->Common()->SetObjectFlags(m_hObject, OFT_Flags2, dwFlags | m_dwFlags2);
 
 
 	// Set object translucency...
 
 	VEC_DIVSCALAR(m_vObjectColor, m_vObjectColor, 255.0f);
-    g_pLTServer->SetObjectColor(m_hObject, m_vObjectColor.x, m_vObjectColor.y,
+	g_pLTServer->SetObjectColor(m_hObject, m_vObjectColor.x, m_vObjectColor.y,
 								m_vObjectColor.z, m_fAlpha);
 
 
@@ -394,18 +378,18 @@ void Prop::InitialUpdate()
 
 	// Set the dims based on the current animation...
 
-    LTVector vDims;
-    g_pLTServer->GetModelAnimUserDims(m_hObject, &vDims, g_pLTServer->GetModelAnimation(m_hObject));
+	LTVector vDims;
+	g_pLTServer->GetModelAnimUserDims(m_hObject, &vDims, g_pLTServer->GetModelAnimation(m_hObject));
 
 	// Set object dims based on scale value...
 
-    LTVector vNewDims;
+	LTVector vNewDims;
 	vNewDims.x = m_vScale.x * vDims.x;
 	vNewDims.y = m_vScale.y * vDims.y;
 	vNewDims.z = m_vScale.z * vDims.z;
 
-    g_pLTServer->ScaleObject(m_hObject, &m_vScale);
-    g_pLTServer->SetObjectDims(m_hObject, &vNewDims);
+	g_pLTServer->ScaleObject(m_hObject, &m_vScale);
+	g_pLTServer->SetObjectDims(m_hObject, &vNewDims);
 
 
 	// Only need to update if we're moving the object to the floor...
@@ -430,11 +414,9 @@ void Prop::InitialUpdate()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Prop::TriggerMsg()
 //
-//	ROUTINE:	Prop::TriggerMsg()
-//
-//	PURPOSE:	Handler for prop trigger messages.
-//
+//	PURPOSE: Handler for prop trigger messages.
 // --------------------------------------------------------------------------- //
 
 void Prop::TriggerMsg(HOBJECT hSender, const char* szMsg)
@@ -442,21 +424,21 @@ void Prop::TriggerMsg(HOBJECT hSender, const char* szMsg)
 	// ILTServer::Parse does not destroy pCommand, so this is safe
 	char* pCommand = (char*)szMsg;
 
-    LTBOOL bMore = LTTRUE;
+	LTBOOL bMore = LTTRUE;
 	while (bMore)
 	{
 		int nArgs;
-        bMore = g_pLTServer->Parse(pCommand, &s_pCommandPos, s_tokenSpace, s_pTokens, &nArgs);
+		bMore = g_pLTServer->Parse(pCommand, &s_pCommandPos, s_tokenSpace, s_pTokens, &nArgs);
 
 		if ( !_stricmp(s_pTokens[0], "ANIM") )
 		{
-            g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
-            g_pLTServer->SetModelAnimation(m_hObject, g_pLTServer->GetAnimIndex(m_hObject, s_pTokens[1]));
+			g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
+			g_pLTServer->SetModelAnimation(m_hObject, g_pLTServer->GetAnimIndex(m_hObject, s_pTokens[1]));
 		}
 		else if ( !_stricmp(s_pTokens[0], "ANIMLOOP") )
 		{
-            g_pLTServer->SetModelLooping(m_hObject, LTTRUE);
-            g_pLTServer->SetModelAnimation(m_hObject, g_pLTServer->GetAnimIndex(m_hObject, s_pTokens[1]));
+			g_pLTServer->SetModelLooping(m_hObject, LTTRUE);
+			g_pLTServer->SetModelAnimation(m_hObject, g_pLTServer->GetAnimIndex(m_hObject, s_pTokens[1]));
 		}
 
 		pCommand = s_pCommandPos;
@@ -464,11 +446,9 @@ void Prop::TriggerMsg(HOBJECT hSender, const char* szMsg)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Prop::HandleTouch
 //
-//	ROUTINE:	Prop::HandleTouch
-//
-//	PURPOSE:	Handle touch notifies
-//
+//	PURPOSE: Handle touch notifies
 // ----------------------------------------------------------------------- //
 
 void Prop::HandleTouch(HOBJECT hObj)
@@ -479,11 +459,11 @@ void Prop::HandleTouch(HOBJECT hObj)
 
 	if (m_hTouchSnd)
 	{
-        LTBOOL bIsDone;
-        if (g_pLTServer->IsSoundDone(m_hTouchSnd, &bIsDone) != LT_OK || bIsDone)
+		LTBOOL bIsDone;
+		if (g_pLTServer->IsSoundDone(m_hTouchSnd, &bIsDone) != LT_OK || bIsDone)
 		{
-            g_pLTServer->KillSound(m_hTouchSnd);
-            m_hTouchSnd = LTNULL;
+			g_pLTServer->KillSound(m_hTouchSnd);
+			m_hTouchSnd = LTNULL;
 		}
 	}
 
@@ -491,14 +471,14 @@ void Prop::HandleTouch(HOBJECT hObj)
 
 	if (m_hstrTouchSound && !m_hTouchSnd)
 	{
-        char* pSound = g_pLTServer->GetStringData(m_hstrTouchSound);
+		char* pSound = g_pLTServer->GetStringData(m_hstrTouchSound);
 
 		if (pSound)
 		{
-            uint32 dwFlags = PLAYSOUND_GETHANDLE | PLAYSOUND_TIME;
+			uint32 dwFlags = PLAYSOUND_GETHANDLE | PLAYSOUND_TIME;
 
-            LTVector vPos;
-            g_pLTServer->GetObjectPos(m_hObject, &vPos);
+			LTVector vPos;
+			g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 			m_hTouchSnd = g_pServerSoundMgr->PlaySoundFromPos(vPos, pSound,
 				m_fTouchSoundRadius, SOUNDPRIORITY_MISC_LOW, dwFlags);
@@ -507,63 +487,57 @@ void Prop::HandleTouch(HOBJECT hObj)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Prop::CacheFiles
 //
-//	ROUTINE:	Prop::CacheFiles
-//
-//	PURPOSE:	Cache resources used by this object
-//
+//	PURPOSE: Cache resources used by this object
 // ----------------------------------------------------------------------- //
 
 void Prop::CacheFiles()
 {
 	if (m_hstrTouchSound)
 	{
-        char* pStr = g_pLTServer->GetStringData(m_hstrTouchSound);
+		char* pStr = g_pLTServer->GetStringData(m_hstrTouchSound);
 		if (pStr && pStr[0])
 		{
-            g_pLTServer->CacheFile(FT_SOUND, pStr);
+			g_pLTServer->CacheFile(FT_SOUND, pStr);
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Prop::Save
 //
-//	ROUTINE:	Prop::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void Prop::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fAlpha);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bMoveToFloor);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bFirstUpdate);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrTouchSound);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vScale);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vObjectColor);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fAlpha);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bMoveToFloor);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bFirstUpdate);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrTouchSound);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vScale);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vObjectColor);
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Prop::Load
 //
-//	ROUTINE:	Prop::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void Prop::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    m_fAlpha        = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_bMoveToFloor  = g_pLTServer->ReadFromMessageByte(hRead);
-    m_bFirstUpdate	= g_pLTServer->ReadFromMessageByte(hRead);
-    m_hstrTouchSound = g_pLTServer->ReadFromMessageHString(hRead);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vScale);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vObjectColor);
+	m_fAlpha		= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_bMoveToFloor  = g_pLTServer->ReadFromMessageByte(hRead);
+	m_bFirstUpdate	= g_pLTServer->ReadFromMessageByte(hRead);
+	m_hstrTouchSound = g_pLTServer->ReadFromMessageHString(hRead);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vScale);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vObjectColor);
 }

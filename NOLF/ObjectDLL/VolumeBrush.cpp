@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: VolumeBrush.cpp
 //
-// MODULE  : VolumeBrush.cpp
+// PURPOSE: VolumeBrush implementation
 //
-// PURPOSE : VolumeBrush implementation
-//
-// CREATED : 1/29/98
+// CREATED: 1/29/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -29,18 +27,18 @@ static CVarTrack vtRemoveFilters;
 
 BEGIN_CLASS(VolumeBrush)
 	ADD_VISIBLE_FLAG(0, 0)
-    ADD_BOOLPROP(Hidden, LTFALSE)
+	ADD_BOOLPROP(Hidden, LTFALSE)
 	ADD_REALPROP(Viscosity, 0.0f)
 	ADD_REALPROP(Friction, 1.0f)
 	ADD_VECTORPROP_VAL(Current, 0.0f, 0.0f, 0.0f)
 	ADD_REALPROP(Damage, 0.0f)
  	ADD_STRINGPROP_FLAG(DamageType, "CHOKE", PF_STATICLIST)
 	ADD_COLORPROP_FLAG(TintColor, 255.0f, 255.0f, 255.0f, 0)
-    ADD_COLORPROP_FLAG(LightAdd, 0.0f, 0.0f, 0.0f, 0)
+	ADD_COLORPROP_FLAG(LightAdd, 0.0f, 0.0f, 0.0f, 0)
  	ADD_STRINGPROP_FLAG(SoundFilter, "Dynamic", PF_STATICLIST)
-    ADD_BOOLPROP(CanPlayMovementSounds, LTTRUE)
+	ADD_BOOLPROP(CanPlayMovementSounds, LTTRUE)
 	PROP_DEFINEGROUP(SurfaceStuff, PF_GROUP1)
-        ADD_BOOLPROP_FLAG(ShowSurface, LTTRUE, PF_GROUP1)
+		ADD_BOOLPROP_FLAG(ShowSurface, LTTRUE, PF_GROUP1)
 		ADD_STRINGPROP_FLAG(SpriteSurfaceName, "", PF_GROUP1|PF_FILENAME)
 		ADD_REALPROP_FLAG(XScaleMin, 15.0f, PF_GROUP1)
 		ADD_REALPROP_FLAG(XScaleMax, 25.0f, PF_GROUP1)
@@ -52,22 +50,20 @@ BEGIN_CLASS(VolumeBrush)
 		ADD_COLORPROP_FLAG(SurfaceColor1, 255.0f, 255.0f, 255.0f, PF_GROUP1)
 		ADD_COLORPROP_FLAG(SurfaceColor2, 255.0f, 255.0f, 255.0f, PF_GROUP1)
 		ADD_REALPROP_FLAG(SurfaceAlpha, 0.7f, PF_GROUP1)
-        ADD_BOOLPROP_FLAG(Additive, LTFALSE, PF_GROUP1)
-        ADD_BOOLPROP_FLAG(Multiply, LTFALSE, PF_GROUP1)
+		ADD_BOOLPROP_FLAG(Additive, LTFALSE, PF_GROUP1)
+		ADD_BOOLPROP_FLAG(Multiply, LTFALSE, PF_GROUP1)
 		ADD_LONGINTPROP_FLAG(NumSurfacePolies, 160, PF_GROUP1)
 	PROP_DEFINEGROUP(FogStuff, PF_GROUP2)
-        ADD_BOOLPROP_FLAG(FogEnable, LTFALSE, PF_GROUP2)
+		ADD_BOOLPROP_FLAG(FogEnable, LTFALSE, PF_GROUP2)
 		ADD_REALPROP_FLAG(FogFarZ, 300.0f, PF_GROUP2)
 		ADD_REALPROP_FLAG(FogNearZ, -100.0f, PF_GROUP2)
 		ADD_COLORPROP_FLAG(FogColor, 0.0f, 0.0f, 0.0f, PF_GROUP2)
 END_CLASS_DEFAULT_FLAGS_PLUGIN(VolumeBrush, GameBase, NULL, NULL, 0, CVolumePlugin)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::VolumeBrush()
 //
-//	ROUTINE:	VolumeBrush::VolumeBrush()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 VolumeBrush::VolumeBrush() : GameBase(OT_CONTAINER)
@@ -77,12 +73,12 @@ VolumeBrush::VolumeBrush() : GameBase(OT_CONTAINER)
 	m_eContainerCode	= CC_VOLUME;
 	m_fDamage			= 0.0f;
 	m_eDamageType		= DT_UNSPECIFIED;
-    m_bShowSurface      = LTTRUE;
+	m_bShowSurface	  = LTTRUE;
 	m_fSurfaceHeight	= 5.0f;
 	m_fViscosity		= 0.0f;
 	m_fFriction			= 1.0f;
-    m_hSurfaceObj       = LTNULL;
-    m_bHidden           = LTFALSE;
+	m_hSurfaceObj	   = LTNULL;
+	m_bHidden		   = LTFALSE;
 	m_fGravity			= LIQUID_GRAVITY;
 	m_nSoundFilterId	= 0;
 	m_bCanPlayMoveSnds	= LTTRUE;
@@ -92,7 +88,7 @@ VolumeBrush::VolumeBrush() : GameBase(OT_CONTAINER)
 	VEC_SET(m_vTintColor, 255.0f, 255.0f, 255.0f);
 	VEC_INIT(m_vLightAdd);
 
-    m_bFogEnable    = LTFALSE;
+	m_bFogEnable	= LTFALSE;
 	m_fFogFarZ		= 300.0f;
 	m_fFogNearZ		= -100.0f;
 	VEC_INIT(m_vFogColor);
@@ -105,11 +101,11 @@ VolumeBrush::VolumeBrush() : GameBase(OT_CONTAINER)
 	m_fYScaleMax = 25.0f;
 	m_fXScaleDuration = 10.0f;
 	m_fYScaleDuration = 10.0f;
-    m_hstrSurfaceSprite = LTNULL;
+	m_hstrSurfaceSprite = LTNULL;
 	m_dwNumSurfPolies = 160;
 	m_fSurfAlpha = 0.7f;
-    m_bAdditive = LTFALSE;
-    m_bMultiply = LTFALSE;
+	m_bAdditive = LTFALSE;
+	m_bMultiply = LTFALSE;
 
 	VEC_SET(m_vSurfaceColor1, 255.0f, 255.0f, 255.0f);
 	VEC_SET(m_vSurfaceColor2, 255.0f, 255.0f, 255.0f);
@@ -119,33 +115,29 @@ VolumeBrush::VolumeBrush() : GameBase(OT_CONTAINER)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::~VolumeBrush
 //
-//	ROUTINE:	VolumeBrush::~VolumeBrush
-//
-//	PURPOSE:	Deallocate
-//
+//	PURPOSE: Deallocate
 // ----------------------------------------------------------------------- //
 
 VolumeBrush::~VolumeBrush()
 {
 	if (m_hstrSurfaceSprite)
 	{
-        g_pLTServer->FreeString(m_hstrSurfaceSprite);
+		g_pLTServer->FreeString(m_hstrSurfaceSprite);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::EngineMessageFn
 //
-//	ROUTINE:	VolumeBrush::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 VolumeBrush::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 {
-    uint32 dwRet;
+	uint32 dwRet;
 
 	switch(messageID)
 	{
@@ -187,13 +179,13 @@ uint32 VolumeBrush::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -205,11 +197,9 @@ uint32 VolumeBrush::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::ObjectMessageFn()
 //
-//	ROUTINE:	VolumeBrush::ObjectMessageFn()
-//
-//	PURPOSE:	Handler for server object messages.
-//
+//	PURPOSE: Handler for server object messages.
 // --------------------------------------------------------------------------- //
 
 uint32 VolumeBrush::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -218,7 +208,7 @@ uint32 VolumeBrush::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGER
 	{
 		case MID_TRIGGER:
 		{
-            const char* szMsg = (const char*)g_pLTServer->ReadFromMessageDWord(hRead);
+			const char* szMsg = (const char*)g_pLTServer->ReadFromMessageDWord(hRead);
 			HandleTrigger(hSender, szMsg);
 		}
 		break;
@@ -229,53 +219,49 @@ uint32 VolumeBrush::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGER
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::TriggerMsg()
 //
-//	ROUTINE:	VolumeBrush::TriggerMsg()
-//
-//	PURPOSE:	Handler for volume brush trigger messages.
-//
+//	PURPOSE: Handler for volume brush trigger messages.
 // --------------------------------------------------------------------------- //
 
 void VolumeBrush::HandleTrigger(HOBJECT hSender, const char* szMsg)
 {
 	if (m_bHidden && (stricmp(szMsg, TRIGGER_MSG_ON) == 0))
 	{
-        uint32 dwFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-        g_pLTServer->SetObjectUserFlags(m_hObject, dwFlags | USRFLG_VISIBLE);
-        g_pLTServer->SetObjectFlags(m_hObject, m_dwSaveFlags);
+		uint32 dwFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+		g_pLTServer->SetObjectUserFlags(m_hObject, dwFlags | USRFLG_VISIBLE);
+		g_pLTServer->SetObjectFlags(m_hObject, m_dwSaveFlags);
 
 		if (m_hSurfaceObj)
 		{
-            dwFlags = g_pLTServer->GetObjectUserFlags(m_hSurfaceObj);
-            g_pLTServer->SetObjectUserFlags(m_hSurfaceObj, dwFlags | USRFLG_VISIBLE);
+			dwFlags = g_pLTServer->GetObjectUserFlags(m_hSurfaceObj);
+			g_pLTServer->SetObjectUserFlags(m_hSurfaceObj, dwFlags | USRFLG_VISIBLE);
 		}
 
-        m_bHidden = LTFALSE;
+		m_bHidden = LTFALSE;
 	}
 	else if (!m_bHidden && (stricmp(szMsg, TRIGGER_MSG_OFF) == 0))
 	{
-        m_dwSaveFlags  = g_pLTServer->GetObjectFlags(m_hObject);
-        uint32 dwFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-        g_pLTServer->SetObjectUserFlags(m_hObject, dwFlags & ~USRFLG_VISIBLE);
-        g_pLTServer->SetObjectFlags(m_hObject, 0);
+		m_dwSaveFlags  = g_pLTServer->GetObjectFlags(m_hObject);
+		uint32 dwFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+		g_pLTServer->SetObjectUserFlags(m_hObject, dwFlags & ~USRFLG_VISIBLE);
+		g_pLTServer->SetObjectFlags(m_hObject, 0);
 
 		if (m_hSurfaceObj)
 		{
-            dwFlags = g_pLTServer->GetObjectUserFlags(m_hSurfaceObj);
-            g_pLTServer->SetObjectUserFlags(m_hSurfaceObj, dwFlags & ~USRFLG_VISIBLE);
+			dwFlags = g_pLTServer->GetObjectUserFlags(m_hSurfaceObj);
+			g_pLTServer->SetObjectUserFlags(m_hSurfaceObj, dwFlags & ~USRFLG_VISIBLE);
 		}
 
-        m_bHidden = LTTRUE;
+		m_bHidden = LTTRUE;
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::ReadProp
 //
-//	ROUTINE:	VolumeBrush::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::ReadProp(ObjectCreateStruct *pStruct)
@@ -284,19 +270,19 @@ void VolumeBrush::ReadProp(ObjectCreateStruct *pStruct)
 
 	char szData[MAX_CS_FILENAME_LEN+1];
 
-    g_pLTServer->GetPropBool("Hidden", &m_bHidden);
-    g_pLTServer->GetPropBool("ShowSurface", &m_bShowSurface);
+	g_pLTServer->GetPropBool("Hidden", &m_bHidden);
+	g_pLTServer->GetPropBool("ShowSurface", &m_bShowSurface);
 
-    g_pLTServer->GetPropVector("TintColor", &m_vTintColor);
-    g_pLTServer->GetPropVector("LightAdd", &m_vLightAdd);
+	g_pLTServer->GetPropVector("TintColor", &m_vTintColor);
+	g_pLTServer->GetPropVector("LightAdd", &m_vLightAdd);
 
-    g_pLTServer->GetPropBool("FogEnable", &m_bFogEnable);
-    g_pLTServer->GetPropReal("FogFarZ", &m_fFogFarZ);
-    g_pLTServer->GetPropReal("FogNearZ", &m_fFogNearZ);
-    g_pLTServer->GetPropVector("FogColor", &m_vFogColor);
+	g_pLTServer->GetPropBool("FogEnable", &m_bFogEnable);
+	g_pLTServer->GetPropReal("FogFarZ", &m_fFogFarZ);
+	g_pLTServer->GetPropReal("FogNearZ", &m_fFogNearZ);
+	g_pLTServer->GetPropVector("FogColor", &m_vFogColor);
 
   	GenericProp genProp;
-    if (g_pLTServer->GetPropGeneric("DamageType", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DamageType", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
@@ -306,36 +292,36 @@ void VolumeBrush::ReadProp(ObjectCreateStruct *pStruct)
 
 	// Polygrid stuff...
 
-    if (g_pLTServer->GetPropString("SpriteSurfaceName", szData, MAX_CS_FILENAME_LEN) == LT_OK)
+	if (g_pLTServer->GetPropString("SpriteSurfaceName", szData, MAX_CS_FILENAME_LEN) == LT_OK)
 	{
-        m_hstrSurfaceSprite = g_pLTServer->CreateString( szData );
+		m_hstrSurfaceSprite = g_pLTServer->CreateString( szData );
 	}
 
-    g_pLTServer->GetPropReal("XScaleMin", &m_fXScaleMin);
-    g_pLTServer->GetPropReal("XScaleMax", &m_fXScaleMax);
-    g_pLTServer->GetPropReal("YScaleMin", &m_fYScaleMin);
-    g_pLTServer->GetPropReal("YScaleMax", &m_fYScaleMax);
-    g_pLTServer->GetPropReal("XScaleDuration", &m_fXScaleDuration);
-    g_pLTServer->GetPropReal("YScaleDuration", &m_fYScaleDuration);
-    g_pLTServer->GetPropReal("SurfaceHeight", &m_fSurfaceHeight);
-    g_pLTServer->GetPropColor("SurfaceColor1", &m_vSurfaceColor1);
-    g_pLTServer->GetPropColor("SurfaceColor2", &m_vSurfaceColor2);
-    g_pLTServer->GetPropReal("Viscosity", &m_fViscosity);
-    g_pLTServer->GetPropReal("Friction", &m_fFriction);
-    g_pLTServer->GetPropVector("Current", &m_vCurrent);
-    g_pLTServer->GetPropReal("Damage", &m_fDamage);
-    g_pLTServer->GetPropReal("SurfaceAlpha", &m_fSurfAlpha);
-    g_pLTServer->GetPropBool("Additive", &m_bAdditive);
-    g_pLTServer->GetPropBool("Multiply", &m_bMultiply);
-    g_pLTServer->GetPropBool("CanPlayMovementSounds", &m_bCanPlayMoveSnds);
+	g_pLTServer->GetPropReal("XScaleMin", &m_fXScaleMin);
+	g_pLTServer->GetPropReal("XScaleMax", &m_fXScaleMax);
+	g_pLTServer->GetPropReal("YScaleMin", &m_fYScaleMin);
+	g_pLTServer->GetPropReal("YScaleMax", &m_fYScaleMax);
+	g_pLTServer->GetPropReal("XScaleDuration", &m_fXScaleDuration);
+	g_pLTServer->GetPropReal("YScaleDuration", &m_fYScaleDuration);
+	g_pLTServer->GetPropReal("SurfaceHeight", &m_fSurfaceHeight);
+	g_pLTServer->GetPropColor("SurfaceColor1", &m_vSurfaceColor1);
+	g_pLTServer->GetPropColor("SurfaceColor2", &m_vSurfaceColor2);
+	g_pLTServer->GetPropReal("Viscosity", &m_fViscosity);
+	g_pLTServer->GetPropReal("Friction", &m_fFriction);
+	g_pLTServer->GetPropVector("Current", &m_vCurrent);
+	g_pLTServer->GetPropReal("Damage", &m_fDamage);
+	g_pLTServer->GetPropReal("SurfaceAlpha", &m_fSurfAlpha);
+	g_pLTServer->GetPropBool("Additive", &m_bAdditive);
+	g_pLTServer->GetPropBool("Multiply", &m_bMultiply);
+	g_pLTServer->GetPropBool("CanPlayMovementSounds", &m_bCanPlayMoveSnds);
 
 	long nLongVal;
-    if (g_pLTServer->GetPropLongInt("NumSurfacePolies", &nLongVal) == LT_OK)
+	if (g_pLTServer->GetPropLongInt("NumSurfacePolies", &nLongVal) == LT_OK)
 	{
-        m_dwNumSurfPolies = (uint32)nLongVal;
+		m_dwNumSurfPolies = (uint32)nLongVal;
 	}
 
-    if (g_pLTServer->GetPropGeneric("SoundFilter", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("SoundFilter", &genProp) == LT_OK)
 	{
 		SOUNDFILTER* pFilter = g_pSoundFilterMgr->GetFilter(genProp.m_String);
 		if (pFilter)
@@ -346,11 +332,9 @@ void VolumeBrush::ReadProp(ObjectCreateStruct *pStruct)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::PostPropRead
 //
-//	ROUTINE:	VolumeBrush::PostPropRead
-//
-//	PURPOSE:	Set some final values.
-//
+//	PURPOSE: Set some final values.
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::PostPropRead(ObjectCreateStruct *pStruct)
@@ -361,15 +345,13 @@ void VolumeBrush::PostPropRead(ObjectCreateStruct *pStruct)
 	pStruct->m_ObjectType = OT_CONTAINER;
 	SAFE_STRCPY(pStruct->m_Filename, pStruct->m_Name);
 	pStruct->m_SkinName[0] = '\0';
-    pStruct->m_ContainerCode = (uint16)m_eContainerCode;
+	pStruct->m_ContainerCode = (uint16)m_eContainerCode;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::InitialUpdate()
 //
-//	ROUTINE:	VolumeBrush::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::InitialUpdate()
@@ -395,14 +377,14 @@ void VolumeBrush::InitialUpdate()
 
 	// Save volume brush's initial flags...
 
-    m_dwSaveFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	m_dwSaveFlags = g_pLTServer->GetObjectFlags(m_hObject);
 
 
-    uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
 	dwUserFlags |= USRFLG_IGNORE_PROJECTILES;
 	if (!m_bHidden) dwUserFlags |= USRFLG_VISIBLE;
 
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags);
 
 
 	// Create the surface if necessary.  We only need to do updates if we have
@@ -412,7 +394,7 @@ void VolumeBrush::InitialUpdate()
 	if (m_bShowSurface)
 	{
 		CreateSurface();
-        SetNextUpdate(UPDATE_DELTA);
+		SetNextUpdate(UPDATE_DELTA);
 	}
 
 
@@ -430,51 +412,45 @@ void VolumeBrush::InitialUpdate()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::CreateSpecialFXMsg()
 //
-//	ROUTINE:	VolumeBrush::CreateSpecialFXMsg()
-//
-//	PURPOSE:	Create the special fx message
-//
+//	PURPOSE: Create the special fx message
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::CreateSpecialFXMsg()
 {
-    HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
 	WriteSFXMsg(hMessage);
-    g_pLTServer->EndMessage(hMessage);
+	g_pLTServer->EndMessage(hMessage);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::WriteSFXMsg()
 //
-//	ROUTINE:	VolumeBrush::WriteSFXMsg()
-//
-//	PURPOSE:	Write the volume brush specific sfx
-//
+//	PURPOSE: Write the volume brush specific sfx
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::WriteSFXMsg(HMESSAGEWRITE hMessage)
 {
 	if (!hMessage) return;
 
-    g_pLTServer->WriteToMessageByte(hMessage, m_nSfxMsgId);
+	g_pLTServer->WriteToMessageByte(hMessage, m_nSfxMsgId);
 
-    g_pLTServer->WriteToMessageByte(hMessage, (uint8)m_bFogEnable);
-    g_pLTServer->WriteToMessageFloat(hMessage, m_fFogFarZ);
-    g_pLTServer->WriteToMessageFloat(hMessage, m_fFogNearZ);
-    g_pLTServer->WriteToMessageVector(hMessage, &m_vFogColor);
-    g_pLTServer->WriteToMessageVector(hMessage, &m_vTintColor);
-    g_pLTServer->WriteToMessageVector(hMessage, &m_vLightAdd);
-    g_pLTServer->WriteToMessageByte(hMessage, m_nSoundFilterId);
-    g_pLTServer->WriteToMessageByte(hMessage, m_bCanPlayMoveSnds);
+	g_pLTServer->WriteToMessageByte(hMessage, (uint8)m_bFogEnable);
+	g_pLTServer->WriteToMessageFloat(hMessage, m_fFogFarZ);
+	g_pLTServer->WriteToMessageFloat(hMessage, m_fFogNearZ);
+	g_pLTServer->WriteToMessageVector(hMessage, &m_vFogColor);
+	g_pLTServer->WriteToMessageVector(hMessage, &m_vTintColor);
+	g_pLTServer->WriteToMessageVector(hMessage, &m_vLightAdd);
+	g_pLTServer->WriteToMessageByte(hMessage, m_nSoundFilterId);
+	g_pLTServer->WriteToMessageByte(hMessage, m_bCanPlayMoveSnds);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::Update()
 //
-//	ROUTINE:	VolumeBrush::Update()
-//
-//	PURPOSE:	Update the brush
-//
+//	PURPOSE: Update the brush
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::Update()
@@ -485,18 +461,18 @@ void VolumeBrush::Update()
 
 	if (m_hSurfaceObj)
 	{
-        SetNextUpdate(UPDATE_DELTA);
+		SetNextUpdate(UPDATE_DELTA);
 	}
 	else
 	{
-        SetNextUpdate(0.0f);
+		SetNextUpdate(0.0f);
 	}
 
 
 	// See if we have moved...
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	if (!Equal(m_vLastPos, vPos))
 	{
@@ -504,22 +480,20 @@ void VolumeBrush::Update()
 
 		// Set the surface to its new position...
 
-        LTVector vDims;
-        g_pLTServer->GetObjectDims(m_hObject, &vDims);
+		LTVector vDims;
+		g_pLTServer->GetObjectDims(m_hObject, &vDims);
 
 		vPos.y += vDims.y - (m_fSurfaceHeight/2.0f);
 
-        g_pLTServer->SetObjectPos(m_hSurfaceObj, &vPos);
+		g_pLTServer->SetObjectPos(m_hSurfaceObj, &vPos);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::CreateSurface()
 //
-//	ROUTINE:	VolumeBrush::CreateSurface()
-//
-//	PURPOSE:	Create the poly grid surface
-//
+//	PURPOSE: Create the poly grid surface
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::CreateSurface()
@@ -527,28 +501,28 @@ void VolumeBrush::CreateSurface()
 	ObjectCreateStruct theStruct;
 	INIT_OBJECTCREATESTRUCT(theStruct);
 
-    LTVector vPos, vDims, vScale;
+	LTVector vPos, vDims, vScale;
 	VEC_INIT(vScale);
 
-    g_pLTServer->GetObjectDims(m_hObject, &vDims);
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	g_pLTServer->GetObjectDims(m_hObject, &vDims);
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
-    LTRotation rRot;
-    g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+	LTRotation rRot;
+	g_pLTServer->GetObjectRotation(m_hObject, &rRot);
 
 	VEC_COPY(m_vLastPos, vPos);
 
 	vPos.y += vDims.y - (m_fSurfaceHeight/2.0f);
 	VEC_COPY(theStruct.m_Pos, vPos);
-    theStruct.m_Rotation = rRot;
+	theStruct.m_Rotation = rRot;
 
-    HCLASS hClass = g_pLTServer->GetClass("PolyGrid");
+	HCLASS hClass = g_pLTServer->GetClass("PolyGrid");
 
-    PolyGrid* pSurface = LTNULL;
+	PolyGrid* pSurface = LTNULL;
 
 	if (hClass)
 	{
-        pSurface = (PolyGrid *)g_pLTServer->CreateObject(hClass, &theStruct);
+		pSurface = (PolyGrid *)g_pLTServer->CreateObject(hClass, &theStruct);
 	}
 
 	if (pSurface)
@@ -556,12 +530,12 @@ void VolumeBrush::CreateSurface()
 		m_hSurfaceObj = pSurface->m_hObject;
 		vDims.y		  = m_fSurfaceHeight;
 
-        LTFLOAT fXPan = 1.0f + (m_vCurrent.x * 0.01f);
-        LTFLOAT fYPan = 1.0f + (m_vCurrent.y * 0.01f);
+		LTFLOAT fXPan = 1.0f + (m_vCurrent.x * 0.01f);
+		LTFLOAT fYPan = 1.0f + (m_vCurrent.y * 0.01f);
 
 		if (!m_bHidden)
 		{
-            g_pLTServer->SetObjectUserFlags(m_hSurfaceObj, USRFLG_VISIBLE);
+			g_pLTServer->SetObjectUserFlags(m_hSurfaceObj, USRFLG_VISIBLE);
 		}
 
 		pSurface->Setup(&vDims, &m_vSurfaceColor1, &m_vSurfaceColor2,
@@ -574,25 +548,23 @@ void VolumeBrush::CreateSurface()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::UpdatePhysics()
 //
-//	ROUTINE:	VolumeBrush::UpdatePhysics()
-//
-//	PURPOSE:	Update the physics of the passed in object
-//
+//	PURPOSE: Update the physics of the passed in object
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::UpdatePhysics(ContainerPhysics* pCPStruct)
 {
 	if (m_bHidden || !pCPStruct || !pCPStruct->m_hObject) return;
 
-    LTFLOAT fUpdateDelta = g_pLTServer->GetFrameTime();
+	LTFLOAT fUpdateDelta = g_pLTServer->GetFrameTime();
 
 
 	// Let the character know if they are in liquid...
 
 	if (IsLiquid(m_eContainerCode) && IsCharacter(pCPStruct->m_hObject))
 	{
-        CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(pCPStruct->m_hObject);
+		CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(pCPStruct->m_hObject);
 		if (pCharacter)
 		{
 			pCharacter->UpdateInLiquid(this, pCPStruct);
@@ -606,16 +578,16 @@ void VolumeBrush::UpdatePhysics(ContainerPhysics* pCPStruct)
 	{
 		// Dampen velocity based on the viscosity of the container...
 
-        LTVector vVel, vCurVel;
+		LTVector vVel, vCurVel;
 		vVel = vCurVel = pCPStruct->m_Velocity;
 
 		if (m_fViscosity > 0.0f && VEC_MAG(vCurVel) > 1.0f)
 		{
-            LTVector vDir;
+			LTVector vDir;
 			VEC_COPY(vDir, vCurVel);
 			VEC_NORM(vDir);
 
-            LTFLOAT fAdjust = MAX_CONTAINER_VISCOSITY * m_fViscosity * fUpdateDelta;
+			LTFLOAT fAdjust = MAX_CONTAINER_VISCOSITY * m_fViscosity * fUpdateDelta;
 
 			vVel = (vDir * fAdjust);
 
@@ -647,7 +619,7 @@ void VolumeBrush::UpdatePhysics(ContainerPhysics* pCPStruct)
 
 	// Make damage relative to update delta...
 
-    LTFLOAT fDamage = 0.0f;
+	LTFLOAT fDamage = 0.0f;
 	if (m_fDamage > 0.0f)
 	{
 		fDamage = m_fDamage * fUpdateDelta;
@@ -674,12 +646,10 @@ void VolumeBrush::UpdatePhysics(ContainerPhysics* pCPStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::UpdateLiquidPhysics()
 //
-//	ROUTINE:	VolumeBrush::UpdateLiquidPhysics()
-//
-//	PURPOSE:	Update liquid specific physics of the passed in object
+//	PURPOSE: Update liquid specific physics of the passed in object
 //				(really, under liquid physics)
-//
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::UpdateLiquidPhysics(ContainerPhysics* pCPStruct)
@@ -697,140 +667,132 @@ void VolumeBrush::UpdateLiquidPhysics(ContainerPhysics* pCPStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::Save
 //
-//	ROUTINE:	VolumeBrush::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hSurfaceObj);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vCurrent);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vSurfaceColor1);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vSurfaceColor2);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vLastPos);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vFogColor);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hSurfaceObj);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vCurrent);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vSurfaceColor1);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vSurfaceColor2);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vLastPos);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vFogColor);
 
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrSurfaceSprite);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrSurfaceSprite);
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fViscosity);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fFriction);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fDamage);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fSurfaceHeight);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fGravity);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fXScaleMin);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fXScaleMax);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYScaleMin);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYScaleMax);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fXScaleDuration);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYScaleDuration);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fFogFarZ);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fFogNearZ);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fSurfAlpha);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fViscosity);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fFriction);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fDamage);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fSurfaceHeight);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fGravity);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fXScaleMin);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fXScaleMax);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYScaleMin);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYScaleMax);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fXScaleDuration);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYScaleDuration);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fFogFarZ);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fFogNearZ);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fSurfAlpha);
 
-    g_pLTServer->WriteToMessageDWord(hWrite, m_dwNumSurfPolies);
-    g_pLTServer->WriteToMessageDWord(hWrite, m_dwFlags);
-    g_pLTServer->WriteToMessageDWord(hWrite, m_dwSaveFlags);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_dwNumSurfPolies);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_dwFlags);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_dwSaveFlags);
 
-    g_pLTServer->WriteToMessageByte(hWrite, m_eDamageType);
-    g_pLTServer->WriteToMessageByte(hWrite, m_eContainerCode);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bShowSurface);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bFogEnable);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bHidden);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nSoundFilterId);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bCanPlayMoveSnds);
+	g_pLTServer->WriteToMessageByte(hWrite, m_eDamageType);
+	g_pLTServer->WriteToMessageByte(hWrite, m_eContainerCode);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bShowSurface);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bFogEnable);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bHidden);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nSoundFilterId);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bCanPlayMoveSnds);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::Load
 //
-//	ROUTINE:	VolumeBrush::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hSurfaceObj);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vCurrent);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vSurfaceColor1);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vSurfaceColor2);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vLastPos);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vFogColor);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hSurfaceObj);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vCurrent);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vSurfaceColor1);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vSurfaceColor2);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vLastPos);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vFogColor);
 
-    m_hstrSurfaceSprite = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrSurfaceSprite = g_pLTServer->ReadFromMessageHString(hRead);
 
-    m_fViscosity        = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fFriction         = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fDamage           = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fSurfaceHeight    = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fGravity          = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fXScaleMin        = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fXScaleMax        = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fYScaleMin        = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fYScaleMax        = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fXScaleDuration   = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fYScaleDuration   = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fFogFarZ          = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fFogNearZ         = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fSurfAlpha        = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fViscosity		= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fFriction		 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fDamage		   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fSurfaceHeight	= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fGravity		  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fXScaleMin		= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fXScaleMax		= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYScaleMin		= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYScaleMax		= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fXScaleDuration   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYScaleDuration   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fFogFarZ		  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fFogNearZ		 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fSurfAlpha		= g_pLTServer->ReadFromMessageFloat(hRead);
 
-    m_dwNumSurfPolies   = g_pLTServer->ReadFromMessageDWord(hRead);
-    m_dwFlags           = g_pLTServer->ReadFromMessageDWord(hRead);
-    m_dwSaveFlags       = g_pLTServer->ReadFromMessageDWord(hRead);
+	m_dwNumSurfPolies   = g_pLTServer->ReadFromMessageDWord(hRead);
+	m_dwFlags		   = g_pLTServer->ReadFromMessageDWord(hRead);
+	m_dwSaveFlags	   = g_pLTServer->ReadFromMessageDWord(hRead);
 
-    m_eDamageType       = (DamageType) g_pLTServer->ReadFromMessageByte(hRead);
-    m_eContainerCode    = (ContainerCode) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bShowSurface      = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bFogEnable        = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bHidden           = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_nSoundFilterId    = g_pLTServer->ReadFromMessageByte(hRead);
+	m_eDamageType	   = (DamageType) g_pLTServer->ReadFromMessageByte(hRead);
+	m_eContainerCode	= (ContainerCode) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bShowSurface	  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bFogEnable		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bHidden		   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_nSoundFilterId	= g_pLTServer->ReadFromMessageByte(hRead);
 	m_bCanPlayMoveSnds  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: VolumeBrush::CacheFiles
 //
-//	ROUTINE:	VolumeBrush::CacheFiles
-//
-//	PURPOSE:	Cache resources used by this the object
-//
+//	PURPOSE: Cache resources used by this the object
 // ----------------------------------------------------------------------- //
 
 void VolumeBrush::CacheFiles()
 {
-    char* pFile = LTNULL;
+	char* pFile = LTNULL;
 	if (m_hstrSurfaceSprite)
 	{
-        pFile = g_pLTServer->GetStringData(m_hstrSurfaceSprite);
+		pFile = g_pLTServer->GetStringData(m_hstrSurfaceSprite);
 		if (pFile)
 		{
-            g_pLTServer->CacheFile(FT_SPRITE, pFile);
+			g_pLTServer->CacheFile(FT_SPRITE, pFile);
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CVolumePlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CVolumePlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Requests a state change
-//
+//	PURPOSE: Requests a state change
 // ----------------------------------------------------------------------- //
 LTRESULT CVolumePlugin::PreHook_EditStringList(const char* szRezPath,
 											   const char* szPropName,
 											   char** aszStrings,
-                                               uint32* pcStrings,
-                                               const uint32 cMaxStrings,
-                                               const uint32 cMaxStringLength)
+											   uint32* pcStrings,
+											   const uint32 cMaxStrings,
+											   const uint32 cMaxStringLength)
 {
 	// See if we can handle the property...
 

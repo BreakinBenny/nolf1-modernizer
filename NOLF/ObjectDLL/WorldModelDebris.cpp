@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: WorldModelDebris.cpp
 //
-// MODULE  : WorldModelDebris.cpp
+// PURPOSE: A WorldModelDebris object
 //
-// PURPOSE : A WorldModelDebris object
-//
-// CREATED : 2/27/98
-//
+// CREATED: 2/27/98
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -18,41 +16,37 @@ END_CLASS_DEFAULT(WorldModelDebris, Door, NULL, NULL)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WorldModelDebris::WorldModelDebris()
 //
-//	ROUTINE:	WorldModelDebris::WorldModelDebris()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 WorldModelDebris::WorldModelDebris() : Door()
 {
-    m_bRotate   = LTTRUE;
+	m_bRotate   = LTTRUE;
 	m_fXRotVel	= 0.0f;
 	m_fYRotVel	= 0.0f;
 	m_fZRotVel	= 0.0f;
 	m_fLastTime = 0.0f;
-	m_fPitch    = 0.0f;
-	m_fYaw      = 0.0f;
+	m_fPitch	= 0.0f;
+	m_fYaw	  = 0.0f;
 	m_fRoll		= 0.0f;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WorldModelDebris::Setup
 //
-//	ROUTINE:	WorldModelDebris::Setup
-//
-//	PURPOSE:	Set up a WorldModelDebris with the information needed
-//
+//	PURPOSE: Set up a WorldModelDebris with the information needed
 // ----------------------------------------------------------------------- //
 
 void WorldModelDebris::Start(LTVector *pvRotationPeriods, LTVector* pvVel)
 {
 	if (!pvRotationPeriods || !pvVel) return;
 
-    LTFLOAT fMag = VEC_MAGSQR(*pvRotationPeriods);
+	LTFLOAT fMag = VEC_MAGSQR(*pvRotationPeriods);
 	if (fMag > 0.001f)
 	{
-        m_bRotate = LTTRUE;
+		m_bRotate = LTTRUE;
 
 		if (pvRotationPeriods->x < -0.001 || 0.001f < pvRotationPeriods->x)
 		{
@@ -68,24 +62,22 @@ void WorldModelDebris::Start(LTVector *pvRotationPeriods, LTVector* pvVel)
 		}
 	}
 
-    uint32 dwFlags = FLAG_VISIBLE | FLAG_GRAVITY | FLAG_RAYHIT;
-    g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
-    g_pLTServer->SetNextUpdate(m_hObject, 0.01f);
-    g_pLTServer->SetVelocity(m_hObject, pvVel);
-    g_pLTServer->SetBlockingPriority(m_hObject, 100);
-    g_pLTServer->SetForceIgnoreLimit(m_hObject, 0.0f);
-    g_pLTServer->SetFrictionCoefficient(m_hObject, GetRandom(10.0f, 20.0f));
+	uint32 dwFlags = FLAG_VISIBLE | FLAG_GRAVITY | FLAG_RAYHIT;
+	g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.01f);
+	g_pLTServer->SetVelocity(m_hObject, pvVel);
+	g_pLTServer->SetBlockingPriority(m_hObject, 100);
+	g_pLTServer->SetForceIgnoreLimit(m_hObject, 0.0f);
+	g_pLTServer->SetFrictionCoefficient(m_hObject, GetRandom(10.0f, 20.0f));
 
-    m_fLastTime = g_pLTServer->GetTime();
+	m_fLastTime = g_pLTServer->GetTime();
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: WorldModelDebris::EngineMessageFn()
 //
-//	ROUTINE:	WorldModelDebris::EngineMessageFn()
-//
-//	PURPOSE:	Handler for engine messages
-//
+//	PURPOSE: Handler for engine messages
 // --------------------------------------------------------------------------- //
 
 uint32 WorldModelDebris::EngineMessageFn(uint32 messageID, void *pData, float fData)
@@ -109,13 +101,13 @@ uint32 WorldModelDebris::EngineMessageFn(uint32 messageID, void *pData, float fD
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -126,18 +118,16 @@ uint32 WorldModelDebris::EngineMessageFn(uint32 messageID, void *pData, float fD
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: WorldModelDebris::ReadProp()
 //
-//	ROUTINE:	WorldModelDebris::ReadProp()
-//
-//	PURPOSE:	Reads WorldModelDebris properties
-//
+//	PURPOSE: Reads WorldModelDebris properties
 // --------------------------------------------------------------------------- //
 
 void WorldModelDebris::ReadProp(ObjectCreateStruct *pStruct)
 {
-    LTVector vAngles;
+	LTVector vAngles;
 
-    if (g_pLTServer->GetPropRotationEuler("Rotation", &vAngles) == LT_OK)
+	if (g_pLTServer->GetPropRotationEuler("Rotation", &vAngles) == LT_OK)
 	{
 		// Set initial pitch, yaw, roll...
 
@@ -148,11 +138,9 @@ void WorldModelDebris::ReadProp(ObjectCreateStruct *pStruct)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WorldModelDebris::Update
 //
-//	ROUTINE:	WorldModelDebris::Update
-//
-//	PURPOSE:	Update the WorldModelDebris
-//
+//	PURPOSE: Update the WorldModelDebris
 // ----------------------------------------------------------------------- //
 
 void WorldModelDebris::Update()
@@ -161,12 +149,12 @@ void WorldModelDebris::Update()
 
 	if (m_bRotate)
 	{
-        g_pLTServer->SetNextUpdate(m_hObject, 0.01f);
-        g_pLTServer->GetStandingOn(m_hObject, &standingInfo);
+		g_pLTServer->SetNextUpdate(m_hObject, 0.01f);
+		g_pLTServer->GetStandingOn(m_hObject, &standingInfo);
 
 		if (standingInfo.m_hObject)
 		{
-            m_bRotate = LTFALSE;
+			m_bRotate = LTFALSE;
 		}
 		else
 		{
@@ -175,26 +163,24 @@ void WorldModelDebris::Update()
 	}
 	else
 	{
-        g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
+		g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WorldModelDebris::UpdateRotation
 //
-//	ROUTINE:	WorldModelDebris::UpdateRotation
-//
-//	PURPOSE:	Update Rotation
-//
+//	PURPOSE: Update Rotation
 // ----------------------------------------------------------------------- //
 
 void WorldModelDebris::UpdateRotation()
 {
-    LTFLOAT fTime      = g_pLTServer->GetTime();
-    LTFLOAT fDeltaTime = fTime - m_fLastTime;
+	LTFLOAT fTime	  = g_pLTServer->GetTime();
+	LTFLOAT fDeltaTime = fTime - m_fLastTime;
 
-    LTRotation rRot;
-    g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+	LTRotation rRot;
+	g_pLTServer->GetObjectRotation(m_hObject, &rRot);
 
 	if (m_fXRotVel < 0.0f || 0.0f < m_fXRotVel)
 	{
@@ -209,24 +195,22 @@ void WorldModelDebris::UpdateRotation()
 		m_fRoll += m_fZRotVel * fDeltaTime;
 	}
 
-    g_pLTServer->SetupEuler(&rRot, m_fPitch, m_fYaw, m_fRoll);
-    g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+	g_pLTServer->SetupEuler(&rRot, m_fPitch, m_fYaw, m_fRoll);
+	g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 
 	m_fLastTime = fTime;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WorldModelDebris::Save
 //
-//	ROUTINE:	WorldModelDebris::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void WorldModelDebris::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hWrite) return;
 
 	pServerDE->WriteToMessageByte(hWrite, m_bRotate);
@@ -241,16 +225,14 @@ void WorldModelDebris::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WorldModelDebris::Load
 //
-//	ROUTINE:	WorldModelDebris::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void WorldModelDebris::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hRead) return;
 
 	m_bRotate	= pServerDE->ReadFromMessageByte(hRead);

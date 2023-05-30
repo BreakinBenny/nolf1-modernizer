@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ProjectileTypes.cpp
 //
-// MODULE  : ProjectileTypes.cpp
+// PURPOSE: Projectile classs - implementation
 //
-// PURPOSE : Projectile classs - implementation
-//
-// CREATED : 10/3/97
+// CREATED: 10/3/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -59,11 +57,9 @@ BEGIN_CLASS(CCoin)
 END_CLASS_DEFAULT_FLAGS(CCoin, CGrenade, NULL, NULL, CF_HIDDEN)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGrenade::CGrenade
 //
-//	ROUTINE:	CGrenade::CGrenade
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CGrenade::CGrenade() : CProjectile()
@@ -76,8 +72,8 @@ CGrenade::CGrenade() : CProjectile()
 
 	m_vDims.Init(5.0f, 5.0f, 5.0f);
 
-    m_bSpinGrenade  = !IsMultiplayerGame();
-    m_bUpdating     = LTTRUE;
+	m_bSpinGrenade  = !IsMultiplayerGame();
+	m_bUpdating	 = LTTRUE;
 
 	m_fPitch	= 0.0f;
 	m_fYaw		= 0.0f;
@@ -88,7 +84,7 @@ CGrenade::CGrenade() : CProjectile()
 
 	m_cBounces = 0;
 
-    m_hBounceSnd = LTNULL;
+	m_hBounceSnd = LTNULL;
 	m_eContainerCode = CC_NO_CONTAINER;
 	m_eLastHitSurface = ST_UNKNOWN;
 
@@ -98,11 +94,9 @@ CGrenade::CGrenade() : CProjectile()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGrenade::~CGrenade
 //
-//	ROUTINE:	CGrenade::~CGrenade
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CGrenade::~CGrenade()
@@ -112,16 +106,14 @@ CGrenade::~CGrenade()
 
 	if (m_hBounceSnd)
 	{
-        g_pLTServer->KillSound(m_hBounceSnd);
-        m_hBounceSnd = LTNULL;
+		g_pLTServer->KillSound(m_hBounceSnd);
+		m_hBounceSnd = LTNULL;
 	}
 }
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGrenade::Detonate
 //
-//	ROUTINE:	CGrenade::Detonate
-//
-//	PURPOSE:	Go boom
-//
+//	PURPOSE: Go boom
 // ----------------------------------------------------------------------- //
 
 void CGrenade::Detonate(HOBJECT hObj)
@@ -133,45 +125,43 @@ void CGrenade::Detonate(HOBJECT hObj)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGrenade::HandleImpact
 //
-//	ROUTINE:	CGrenade::HandleImpact
-//
-//	PURPOSE:	Handle bouncing off of things
-//
+//	PURPOSE: Handle bouncing off of things
 // ----------------------------------------------------------------------- //
 
 void CGrenade::HandleImpact(HOBJECT hObj)
 {
 	if (!g_vtGrenadeDampenPercent.IsInitted())
 	{
-        g_vtGrenadeDampenPercent.Init(g_pLTServer, "GrenadeDampenPercent", LTNULL, DEFAULT_GRENADE_DAMPEN_PERCENT);
+		g_vtGrenadeDampenPercent.Init(g_pLTServer, "GrenadeDampenPercent", LTNULL, DEFAULT_GRENADE_DAMPEN_PERCENT);
 	}
 
 	if (!g_vtGrenadeMinVelMag.IsInitted())
 	{
-        g_vtGrenadeMinVelMag.Init(g_pLTServer, "GrenadeMinVelMag", LTNULL, DEFAULT_GRENADE_MIN_VELOCITY);
+		g_vtGrenadeMinVelMag.Init(g_pLTServer, "GrenadeMinVelMag", LTNULL, DEFAULT_GRENADE_MIN_VELOCITY);
 	}
 
 
-    LTVector vVel;
-    g_pLTServer->GetVelocity(m_hObject, &vVel);
+	LTVector vVel;
+	g_pLTServer->GetVelocity(m_hObject, &vVel);
 
 
 	// See if we are impacting on liquid...
 
-    LTBOOL bEnteringLiquid = LTFALSE;
-    uint16 code;
-    if (g_pLTServer->GetContainerCode(hObj, &code))
+	LTBOOL bEnteringLiquid = LTFALSE;
+	uint16 code;
+	if (g_pLTServer->GetContainerCode(hObj, &code))
 	{
 		if (IsLiquid((ContainerCode)code))
 		{
-            bEnteringLiquid = LTTRUE;
+			bEnteringLiquid = LTTRUE;
 		}
 	}
 
 
 	CollisionInfo info;
-    g_pLTServer->GetLastCollision(&info);
+	g_pLTServer->GetLastCollision(&info);
 
 
 	// Do the bounce, if the object we hit isn't liquid...
@@ -184,7 +174,7 @@ void CGrenade::HandleImpact(HOBJECT hObj)
 
 	// Dampen the grenade's new velocity based on the surface type...
 
-    LTFLOAT fDampenPercent = g_vtGrenadeDampenPercent.GetFloat();
+	LTFLOAT fDampenPercent = g_vtGrenadeDampenPercent.GetFloat();
 
 	m_eLastHitSurface = GetSurfaceType(info);
 	SURFACE* pSurf = g_pSurfaceMgr->GetSurface(m_eLastHitSurface);
@@ -199,16 +189,16 @@ void CGrenade::HandleImpact(HOBJECT hObj)
 
 			if (m_hBounceSnd)
 			{
-                g_pLTServer->KillSound(m_hBounceSnd);
-                m_hBounceSnd = LTNULL;
+				g_pLTServer->KillSound(m_hBounceSnd);
+				m_hBounceSnd = LTNULL;
 			}
 
-            uint32 dwFlags = PLAYSOUND_GETHANDLE | PLAYSOUND_TIME;
+			uint32 dwFlags = PLAYSOUND_GETHANDLE | PLAYSOUND_TIME;
 
 			int nVolume	= IsLiquid(m_eContainerCode) ? 50 : 100;
 
-            LTVector vPos;
-            g_pLTServer->GetObjectPos(m_hObject, &vPos);
+			LTVector vPos;
+			g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 			m_hBounceSnd = g_pServerSoundMgr->PlaySoundFromPos(vPos, (char*)GetBounceSound(pSurf),
 				pSurf->fGrenadeSndRadius, SOUNDPRIORITY_MISC_MEDIUM, dwFlags, nVolume);
@@ -224,7 +214,7 @@ void CGrenade::HandleImpact(HOBJECT hObj)
 
 	// See if we should come to a rest...
 
-    LTVector vTest = vVel;
+	LTVector vTest = vVel;
 	vTest.y = 0.0f;
 
 	if (vTest.Mag() < g_vtGrenadeMinVelMag.GetFloat())
@@ -232,7 +222,7 @@ void CGrenade::HandleImpact(HOBJECT hObj)
 		// If we're on the ground (or an object), stop movement...
 
 		CollisionInfo standingInfo;
-        g_pLTServer->GetStandingOn(m_hObject, &standingInfo);
+		g_pLTServer->GetStandingOn(m_hObject, &standingInfo);
 
 		CollisionInfo* pInfo = standingInfo.m_hObject ? &standingInfo : &info;
 
@@ -246,10 +236,10 @@ void CGrenade::HandleImpact(HOBJECT hObj)
 
 				// Turn off gravity, solid, and touch notify....
 
-                uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+				uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 				dwFlags &= ~(FLAG_GRAVITY | FLAG_TOUCH_NOTIFY | FLAG_SOLID);
 
-                g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
+				g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
 
 				// Rotate to rest...
 
@@ -270,7 +260,7 @@ void CGrenade::HandleImpact(HOBJECT hObj)
 	vVel -= info.m_vStopVel;
 
 
-    g_pLTServer->SetVelocity(m_hObject, &vVel);
+	g_pLTServer->SetVelocity(m_hObject, &vVel);
 
 	m_cBounces++;
 }
@@ -290,20 +280,18 @@ const char* CGrenade::GetBounceSound(SURFACE* pSurface)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGrenade::UpdateGrenade()
 //
-//	ROUTINE:	CGrenade::UpdateGrenade()
-//
-//	PURPOSE:	Update the grenade...
-//
+//	PURPOSE: Update the grenade...
 // ----------------------------------------------------------------------- //
 
 void CGrenade::UpdateGrenade()
 {
 	// Update my container code...
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
-    m_eContainerCode = GetContainerCode(g_pLTServer, vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	m_eContainerCode = GetContainerCode(g_pLTServer, vPos);
 
 
 	// Update grenade spin...
@@ -312,15 +300,15 @@ void CGrenade::UpdateGrenade()
 	{
 		if (m_fPitchVel != 0 || m_fYawVel != 0 || m_fRollVel != 0)
 		{
-            LTFLOAT fDeltaTime = g_pLTServer->GetFrameTime();
+			LTFLOAT fDeltaTime = g_pLTServer->GetFrameTime();
 
 			m_fPitch += m_fPitchVel * fDeltaTime;
 			m_fYaw   += m_fYawVel * fDeltaTime;
 			m_fRoll  += m_fRollVel * fDeltaTime;
 
-            LTRotation rRot;
-            g_pLTServer->SetupEuler(&rRot, m_fPitch, m_fYaw, m_fRoll);
-            g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+			LTRotation rRot;
+			g_pLTServer->SetupEuler(&rRot, m_fPitch, m_fYaw, m_fRoll);
+			g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 		}
 	}
 
@@ -329,21 +317,19 @@ void CGrenade::UpdateGrenade()
 
 	if (m_hBounceSnd)
 	{
-        LTBOOL bIsDone;
-        if (g_pLTServer->IsSoundDone(m_hBounceSnd, &bIsDone) != LT_OK || bIsDone)
+		LTBOOL bIsDone;
+		if (g_pLTServer->IsSoundDone(m_hBounceSnd, &bIsDone) != LT_OK || bIsDone)
 		{
-            g_pLTServer->KillSound(m_hBounceSnd);
-            m_hBounceSnd = LTNULL;
+			g_pLTServer->KillSound(m_hBounceSnd);
+			m_hBounceSnd = LTNULL;
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGrenade::RotateToRest()
 //
-//	ROUTINE:	CGrenade::RotateToRest()
-//
-//	PURPOSE:	Rotate the grenade to its rest position...
-//
+//	PURPOSE: Rotate the grenade to its rest position...
 // ----------------------------------------------------------------------- //
 
 void CGrenade::RotateToRest()
@@ -359,7 +345,7 @@ void CGrenade::RotateToRest()
 
 	m_bRotatedToRest = LTTRUE;
 
-    m_bUpdating = LTFALSE;
+	m_bUpdating = LTFALSE;
 	
 	// Spin it if necessary
 
@@ -373,11 +359,9 @@ void CGrenade::RotateToRest()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGrenade::ResetRotationVel()
 //
-//	ROUTINE:	CGrenade::ResetRotationVel()
-//
-//	PURPOSE:	Update the grenade...
-//
+//	PURPOSE: Update the grenade...
 // ----------------------------------------------------------------------- //
 
 void CGrenade::ResetRotationVel(LTVector* pvNewVel, SURFACE* pSurf)
@@ -386,8 +370,8 @@ void CGrenade::ResetRotationVel(LTVector* pvNewVel, SURFACE* pSurf)
 
 	// (TO DO: base this on new velocity and surface hardness?)
 
-    LTFLOAT fVal  = MATH_CIRCLE/2.0f;
-    LTFLOAT fVal2 = MATH_CIRCLE;
+	LTFLOAT fVal  = MATH_CIRCLE/2.0f;
+	LTFLOAT fVal2 = MATH_CIRCLE;
 	m_fPitchVel	 = GetRandom(-fVal, fVal);
 	m_fYawVel	 = GetRandom(-fVal2, fVal2);
 	m_fRollVel   = GetRandom(-fVal2, fVal2);
@@ -395,11 +379,9 @@ void CGrenade::ResetRotationVel(LTVector* pvNewVel, SURFACE* pSurf)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGrenade::EngineMessageFn
 //
-//	ROUTINE:	CGrenade::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 CGrenade::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -420,11 +402,9 @@ uint32 CGrenade::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGrenade::Save
 //
-//	ROUTINE:	CGrenade::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void CGrenade::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -433,17 +413,17 @@ void CGrenade::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 	CProjectile::Save(hWrite, dwSaveFlags);
 
-    g_pLTServer->WriteToMessageByte(hWrite, m_bSpinGrenade);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bUpdating);
-    g_pLTServer->WriteToMessageByte(hWrite, m_eContainerCode);
-    g_pLTServer->WriteToMessageByte(hWrite, m_eLastHitSurface);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bSpinGrenade);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bUpdating);
+	g_pLTServer->WriteToMessageByte(hWrite, m_eContainerCode);
+	g_pLTServer->WriteToMessageByte(hWrite, m_eLastHitSurface);
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fPitch);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fRoll);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fPitchVel);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fYawVel);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fRollVel);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fPitch);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYaw);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fRoll);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fPitchVel);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fYawVel);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fRollVel);
 	SAVE_BOOL(m_bRotatedToRest);
 	SAVE_INT(m_cBounces);
 }
@@ -451,11 +431,9 @@ void CGrenade::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGrenade::Load
 //
-//	ROUTINE:	CGrenade::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void CGrenade::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -464,17 +442,17 @@ void CGrenade::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	CProjectile::Load(hRead, dwLoadFlags);
 
-    m_bSpinGrenade      = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bUpdating         = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_eContainerCode    = (ContainerCode) g_pLTServer->ReadFromMessageByte(hRead);
-    m_eLastHitSurface   = (SurfaceType) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bSpinGrenade	  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bUpdating		 = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_eContainerCode	= (ContainerCode) g_pLTServer->ReadFromMessageByte(hRead);
+	m_eLastHitSurface   = (SurfaceType) g_pLTServer->ReadFromMessageByte(hRead);
 
-    m_fPitch    = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fYaw      = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fRoll     = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fPitchVel = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fYawVel   = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fRollVel  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fPitch	= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYaw	  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fRoll	 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fPitchVel = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fYawVel   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fRollVel  = g_pLTServer->ReadFromMessageFloat(hRead);
 	LOAD_BOOL(m_bRotatedToRest);
 	LOAD_INT(m_cBounces);
 
@@ -486,11 +464,9 @@ void CGrenade::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLipstickProx::Setup()
 //
-//	ROUTINE:	CLipstickProx::Setup()
-//
-//	PURPOSE:	Setup the grenade...
-//
+//	PURPOSE: Setup the grenade...
 // ----------------------------------------------------------------------- //
 
 void CLipstickProx::Setup(CWeapon *pWeapon, WFireInfo & info)
@@ -504,11 +480,9 @@ void CLipstickProx::Setup(CWeapon *pWeapon, WFireInfo & info)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLipstickProx::UpdateGrenade()
 //
-//	ROUTINE:	CLipstickProx::UpdateGrenade()
-//
-//	PURPOSE:	Update the grenade...
-//
+//	PURPOSE: Update the grenade...
 // ----------------------------------------------------------------------- //
 
 void CLipstickProx::UpdateGrenade()
@@ -531,7 +505,7 @@ void CLipstickProx::UpdateGrenade()
 
 	if (m_bActivated && m_DetonateTime.Stopped())
 	{
-        Detonate(LTNULL);
+		Detonate(LTNULL);
 		return;
 	}
 
@@ -540,7 +514,7 @@ void CLipstickProx::UpdateGrenade()
 
 	if (!m_bArmed && m_ArmTime.Stopped())
 	{
-        m_bArmed = LTTRUE;
+		m_bArmed = LTTRUE;
 
 		// Play armed sound...
 
@@ -548,11 +522,11 @@ void CLipstickProx::UpdateGrenade()
 		{
 			int nVolume = IsLiquid(m_eContainerCode) ? 50 : 100;
 
-            LTVector vPos;
-            g_pLTServer->GetObjectPos(m_hObject, &vPos);
+			LTVector vPos;
+			g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 			g_pServerSoundMgr->PlaySoundFromPos(vPos, m_pClassData->szArmSound,
-                (LTFLOAT)m_pClassData->nArmSndRadius, SOUNDPRIORITY_MISC_MEDIUM,
+				(LTFLOAT)m_pClassData->nArmSndRadius, SOUNDPRIORITY_MISC_MEDIUM,
 				0, nVolume);
 		}
 	}
@@ -564,13 +538,13 @@ void CLipstickProx::UpdateGrenade()
 	{
 		if (!m_pAmmoData) return;
 
-        LTFLOAT fRadius = (LTFLOAT) m_pClassData->nActivateRadius;
+		LTFLOAT fRadius = (LTFLOAT) m_pClassData->nActivateRadius;
 
 		// NEED TO FIGURE OUT A BETTER WAY TO DO THIS!!!
 
-        LTVector vPos;
-        g_pLTServer->GetObjectPos(m_hObject, &vPos);
-        ObjectList* pList = g_pLTServer->FindObjectsTouchingSphere(&vPos, fRadius);
+		LTVector vPos;
+		g_pLTServer->GetObjectPos(m_hObject, &vPos);
+		ObjectList* pList = g_pLTServer->FindObjectsTouchingSphere(&vPos, fRadius);
 		if (!pList) return;
 
 		ObjectLink* pLink = pList->m_pFirstLink;
@@ -589,9 +563,9 @@ void CLipstickProx::UpdateGrenade()
 			}
 			if (IsCharacter(pLink->m_hObject))
 			{
-                m_bActivated = LTTRUE;
+				m_bActivated = LTTRUE;
 
-                LTFLOAT fDelay = g_vtProxGrenadeDetonateDelay.GetFloat() < 0.0f ?
+				LTFLOAT fDelay = g_vtProxGrenadeDetonateDelay.GetFloat() < 0.0f ?
 					m_pClassData->fActivateDelay : g_vtProxGrenadeDetonateDelay.GetFloat();
 
 				m_DetonateTime.Start(fDelay);
@@ -602,11 +576,11 @@ void CLipstickProx::UpdateGrenade()
 				{
 					int nVolume = IsLiquid(m_eContainerCode) ? 50 : 100;
 
-                    LTVector vPos;
-                    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+					LTVector vPos;
+					g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 					g_pServerSoundMgr->PlaySoundFromPos(vPos, m_pClassData->szActivateSound,
-                        (LTFLOAT) m_pClassData->nActivateSndRadius,
+						(LTFLOAT) m_pClassData->nActivateSndRadius,
 						SOUNDPRIORITY_MISC_MEDIUM, 0, nVolume);
 				}
 
@@ -615,17 +589,15 @@ void CLipstickProx::UpdateGrenade()
 
 			pLink = pLink->m_pNext;
 		}
-        g_pLTServer->RelinquishList(pList);
+		g_pLTServer->RelinquishList(pList);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLipstickProx::HandleImpact
 //
-//	ROUTINE:	CLipstickProx::HandleImpact
-//
-//	PURPOSE:	Handle bouncing off of things
-//
+//	PURPOSE: Handle bouncing off of things
 // ----------------------------------------------------------------------- //
 
 void CLipstickProx::HandleImpact(HOBJECT hObj)
@@ -634,12 +606,12 @@ void CLipstickProx::HandleImpact(HOBJECT hObj)
 
 	if (!g_vtProxGrenadeArmDelay.IsInitted())
 	{
-        g_vtProxGrenadeArmDelay.Init(g_pLTServer, "ProxArmDelay", LTNULL, -1.0f);
+		g_vtProxGrenadeArmDelay.Init(g_pLTServer, "ProxArmDelay", LTNULL, -1.0f);
 	}
 
 	if (!g_vtProxGrenadeDetonateDelay.IsInitted())
 	{
-        g_vtProxGrenadeDetonateDelay.Init(g_pLTServer, "ProxDetonateDelay", LTNULL, -1.0f);
+		g_vtProxGrenadeDetonateDelay.Init(g_pLTServer, "ProxDetonateDelay", LTNULL, -1.0f);
 	}
 
 	// See if we should stick to the object we just hit...
@@ -655,7 +627,7 @@ void CLipstickProx::HandleImpact(HOBJECT hObj)
 			// being added back in...
 
 			CollisionInfo info;
-            g_pLTServer->GetLastCollision(&info);
+			g_pLTServer->GetLastCollision(&info);
 
 			LTVector vVel(0, 0, 0);
 			vVel -= info.m_vStopVel;
@@ -668,10 +640,10 @@ void CLipstickProx::HandleImpact(HOBJECT hObj)
 			// Turn off gravity, solid, and touch notify....
 			// And turn on go-thru-world so it doesn't reflect from the ending position
 
-            uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+			uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 			dwFlags &= ~(FLAG_GRAVITY | FLAG_TOUCH_NOTIFY | FLAG_SOLID);
 			dwFlags |= FLAG_GOTHRUWORLD;
-            g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
+			g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
 
 
 			// Rotate to rest...
@@ -682,28 +654,26 @@ void CLipstickProx::HandleImpact(HOBJECT hObj)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLipstickProx::RotateToRest()
 //
-//	ROUTINE:	CLipstickProx::RotateToRest()
-//
-//	PURPOSE:	Rotate the grenade to its rest position...
-//
+//	PURPOSE: Rotate the grenade to its rest position...
 // ----------------------------------------------------------------------- //
 
 void CLipstickProx::RotateToRest()
 {
 	CGrenade::RotateToRest();
 /* Update 1.002
-    LTRotation rRot;
-    g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+	LTRotation rRot;
+	g_pLTServer->GetObjectRotation(m_hObject, &rRot);
 
 	// Okay, rotated based on the surface normal we're on...
 
-    g_pLTServer->AlignRotation(&rRot, &m_vSurfaceNormal, LTNULL);
-    g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+	g_pLTServer->AlignRotation(&rRot, &m_vSurfaceNormal, LTNULL);
+	g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 */
 	// Arm the grenade after a few...
 
-    LTFLOAT fDelay = g_vtProxGrenadeArmDelay.GetFloat() < 0.0f ?
+	LTFLOAT fDelay = g_vtProxGrenadeArmDelay.GetFloat() < 0.0f ?
 			m_pClassData->fArmDelay : g_vtProxGrenadeArmDelay.GetFloat();
 
 	m_ArmTime.Start(fDelay);
@@ -711,11 +681,9 @@ void CLipstickProx::RotateToRest()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLipstickProx::Save
 //
-//	ROUTINE:	CLipstickProx::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void CLipstickProx::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -727,19 +695,17 @@ void CLipstickProx::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 	m_DetonateTime.Save(hWrite);
 	m_ArmTime.Save(hWrite);
 
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vSurfaceNormal);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bArmed);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bActivated);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vSurfaceNormal);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bArmed);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bActivated);
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLipstickProx::Load
 //
-//	ROUTINE:	CLipstickProx::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void CLipstickProx::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -751,12 +717,12 @@ void CLipstickProx::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 	m_DetonateTime.Load(hRead);
 	m_ArmTime.Load(hRead);
 
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vSurfaceNormal);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vSurfaceNormal);
 
-    m_bArmed        = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bActivated    = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bArmed		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bActivated	= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
 
-    m_pClassData = LTNULL;
+	m_pClassData = LTNULL;
 	if (m_pAmmoData && m_pAmmoData->pProjectileFX)
 	{
 		m_pClassData = (PROXCLASSDATA*)m_pAmmoData->pProjectileFX->pClassData;
@@ -766,11 +732,9 @@ void CLipstickProx::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSpear::CSpear
 //
-//	ROUTINE:	CSpear::CSpear
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CSpear::CSpear() : CProjectile()
@@ -778,11 +742,9 @@ CSpear::CSpear() : CProjectile()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSpear::~CSpear
 //
-//	ROUTINE:	CSpear::~CSpear
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CSpear::~CSpear()
@@ -790,18 +752,16 @@ CSpear::~CSpear()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSpear::HandleImpact
 //
-//	ROUTINE:	CSpear::HandleImpact
-//
-//	PURPOSE:	Handle bouncing off of things
-//
+//	PURPOSE: Handle bouncing off of things
 // ----------------------------------------------------------------------- //
 
 void CSpear::HandleImpact(HOBJECT hObj)
 {
 	if (!g_vtSpearStickPercentage.IsInitted())
 	{
-        g_vtSpearStickPercentage.Init(g_pLTServer, "SpearStickPercent", LTNULL, 0.9f);
+		g_vtSpearStickPercentage.Init(g_pLTServer, "SpearStickPercent", LTNULL, 0.9f);
 	}
 
 	if (!m_pAmmoData || !m_pAmmoData->pProjectileFX)
@@ -812,13 +772,13 @@ void CSpear::HandleImpact(HOBJECT hObj)
 
 
 	CollisionInfo info;
-    g_pLTServer->GetLastCollision(&info);
+	g_pLTServer->GetLastCollision(&info);
 
-    LTVector vPos, vVel, vCurVel, vP0, vP1;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos, vVel, vCurVel, vP0, vP1;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
-    LTRotation rRot;
-    g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+	LTRotation rRot;
+	g_pLTServer->GetObjectRotation(m_hObject, &rRot);
 
 
 	// Should we break the spear?
@@ -847,12 +807,12 @@ void CSpear::HandleImpact(HOBJECT hObj)
 		g_pLTServer->GetVelocity(m_hObject, &vVel);
 
 		vP1 = vPos;
-        vCurVel = vVel * g_pLTServer->GetFrameTime();
+		vCurVel = vVel * g_pLTServer->GetFrameTime();
 		vP0 = vP1 - vCurVel;
 		vP1 += vCurVel;
 
-        LTFLOAT fDot1 = VEC_DOT(info.m_Plane.m_Normal, vP0) - info.m_Plane.m_Dist;
-        LTFLOAT fDot2 = VEC_DOT(info.m_Plane.m_Normal, vP1) - info.m_Plane.m_Dist;
+		LTFLOAT fDot1 = VEC_DOT(info.m_Plane.m_Normal, vP0) - info.m_Plane.m_Dist;
+		LTFLOAT fDot2 = VEC_DOT(info.m_Plane.m_Normal, vP1) - info.m_Plane.m_Dist;
 
 		if (fDot1 < 0.0f && fDot2 < 0.0f || fDot1 > 0.0f && fDot2 > 0.0f)
 		{
@@ -860,13 +820,13 @@ void CSpear::HandleImpact(HOBJECT hObj)
 		}
 		else
 		{
-            LTFLOAT fPercent = -fDot1 / (fDot2 - fDot1);
+			LTFLOAT fPercent = -fDot1 / (fDot2 - fDot1);
 			VEC_LERP(vPos, vP0, vP1, fPercent);
 		}
 
 		// Set our new "real" pos...
 
-        g_pLTServer->SetObjectPos(m_hObject, &vPos);
+		g_pLTServer->SetObjectPos(m_hObject, &vPos);
 
 		eSpearAction = eSpearActionStickWorld;
 	}
@@ -893,7 +853,7 @@ void CSpear::HandleImpact(HOBJECT hObj)
 			// non-character objects (like doors), but it is much easier
 			// to just break it ;)...
 
-            eSpearAction = eSpearActionBreak;
+			eSpearAction = eSpearActionBreak;
 		}
 	}
 
@@ -910,8 +870,8 @@ void CSpear::HandleImpact(HOBJECT hObj)
 		if (pDebris)
 		{
 			vVel.Norm();
-            LTVector vNegVel = -vVel;
-            CreatePropDebris(vPos, vNegVel, pDebris->nId);
+			LTVector vNegVel = -vVel;
+			CreatePropDebris(vPos, vNegVel, pDebris->nId);
 		}
 
 		CProjectile::HandleImpact(hObj);
@@ -1008,11 +968,9 @@ const char* CCoin::GetBounceSound(SURFACE* pSurface)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCoin::RotateToRest()
 //
-//	ROUTINE:	CCoin::RotateToRest()
-//
-//	PURPOSE:	Rotate the grenade to its rest position...
-//
+//	PURPOSE: Rotate the grenade to its rest position...
 // ----------------------------------------------------------------------- //
 
 void CCoin::RotateToRest()
@@ -1045,12 +1003,12 @@ void CCoin::RotateToRest()
 	if ( IsCharacter(m_hFiredFrom) )
 	{
 		LTVector vPosition;
-        g_pLTServer->GetObjectPos(m_hObject, &vPosition);
+		g_pLTServer->GetObjectPos(m_hObject, &vPosition);
 
-        CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(m_hFiredFrom);
+		CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(m_hFiredFrom);
 
 		CharCoinInfo cinfo;
-        cinfo.fTime = g_pLTServer->GetTime();
+		cinfo.fTime = g_pLTServer->GetTime();
 		cinfo.eSurfaceType = m_eLastHitSurface;
 		cinfo.vPosition = vPosition;
 

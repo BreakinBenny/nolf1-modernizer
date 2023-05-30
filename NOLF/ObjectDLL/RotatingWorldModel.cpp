@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: RotatingWorldModel.cpp
 //
-// MODULE  : RotatingWorldModel.cpp
+// PURPOSE: RotatingWorldModel implementation
 //
-// PURPOSE : RotatingWorldModel implementation
-//
-// CREATED : 10/27/97
-//
+// CREATED: 10/27/97
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -24,9 +22,9 @@ BEGIN_CLASS(RotatingWorldModel)
 	ADD_VISIBLE_FLAG(1, 0)
 	ADD_SOLID_FLAG(1, 0)
 	ADD_GRAVITY_FLAG(0, 0)
-    ADD_BOOLPROP(BlockLight, LTFALSE) // Used by pre-processor
-    ADD_BOOLPROP(BoxPhysics, LTTRUE)
-    ADD_BOOLPROP(StartOn, LTTRUE)
+	ADD_BOOLPROP(BlockLight, LTFALSE) // Used by pre-processor
+	ADD_BOOLPROP(BoxPhysics, LTTRUE)
+	ADD_BOOLPROP(StartOn, LTTRUE)
 	ADD_STRINGPROP(SpinUpSound, "")
 	ADD_STRINGPROP(BusySound, "")
 	ADD_STRINGPROP(SpinDownSound, "")
@@ -34,19 +32,19 @@ BEGIN_CLASS(RotatingWorldModel)
 	ADD_REALPROP(XAxisRevTime, 0.0f)
 	ADD_REALPROP(XAxisSpinUpTime,   0.0f)
 	ADD_REALPROP(XAxisSpinDownTime, 0.0f)
-    ADD_BOOLPROP(XRotateForward, LTTRUE)
+	ADD_BOOLPROP(XRotateForward, LTTRUE)
 	ADD_REALPROP(YAxisRevTime, 0.0f)
 	ADD_REALPROP(YAxisSpinUpTime,   0.0f)
 	ADD_REALPROP(YAxisSpinDownTime, 0.0f)
-    ADD_BOOLPROP(YRotateForward, LTTRUE)
+	ADD_BOOLPROP(YRotateForward, LTTRUE)
 	ADD_REALPROP(ZAxisRevTime, 0.0f)
 	ADD_REALPROP(ZAxisSpinUpTime,   0.0f)
 	ADD_REALPROP(ZAxisSpinDownTime, 0.0f)
-    ADD_BOOLPROP(ZRotateForward, LTTRUE)
+	ADD_BOOLPROP(ZRotateForward, LTTRUE)
 	ADD_STRINGPROP(ShadowLights, "")
 	ADD_LONGINTPROP(LightFrames, 1)
 	ADD_VECTORPROP_VAL(ShadowAxis, 0.0f, 1.0f, 0.0f)
-    ADD_CHROMAKEY_FLAG(LTFALSE, 0)
+	ADD_CHROMAKEY_FLAG(LTFALSE, 0)
 END_CLASS_DEFAULT_FLAGS_PLUGIN(RotatingWorldModel, GameBase, NULL, NULL, 0, CRotatingWorldModelPlugin)
 
 #define RWM_UPDATE_DELTA	0.01f
@@ -60,7 +58,7 @@ void SetupRWMLightAnimName(char *pOutName, const char *pDoorName, uint32 iDoorLi
 }
 
 LTRESULT CRotatingWorldModelPlugin::PreHook_Light(
-    ILTPreLight *pInterface,
+	ILTPreLight *pInterface,
 	HPREOBJECT hObject)
 {
 	GenericProp gProp;
@@ -74,14 +72,14 @@ LTRESULT CRotatingWorldModelPlugin::PreHook_Light(
 	DWORD iStep;
 	float fPercent;
 	int iAxis;
-    uint32 iRwmLight;
+	uint32 iRwmLight;
 	PreLightAnimFrameInfo *pFrame;
 	PreLightInfo *pLightInfo;
 	PreWorldModelInfo *pWorldModelInfo;
 	PreLightAnimFrameInfo frames[MAX_RWM_LIGHT_STEPS+1];
 	PreLightInfo lightInfos[MAX_RWM_LIGHT_STEPS+1];
 	PreWorldModelInfo worldModelInfos[MAX_RWM_LIGHT_STEPS+1];
-    uint32 uLightFrames;
+	uint32 uLightFrames;
 
 	iAxis = 0;
 	iRwmLight = 0;
@@ -146,7 +144,7 @@ LTRESULT CRotatingWorldModelPlugin::PreHook_Light(
 		if((uLightFrames & 1) == 0)
 			++uLightFrames;
 
-        uLightFrames = LTCLAMP(uLightFrames, 2, MAX_RWM_LIGHT_STEPS);
+		uLightFrames = LTCLAMP(uLightFrames, 2, MAX_RWM_LIGHT_STEPS);
 		for(iStep=0; iStep < (uLightFrames+1); iStep++)
 		{
 			pFrame = &frames[iStep];
@@ -154,7 +152,7 @@ LTRESULT CRotatingWorldModelPlugin::PreHook_Light(
 			pWorldModelInfo = &worldModelInfos[iStep];
 			fPercent = (float)iStep / (uLightFrames - 1);
 
-            pFrame->m_bSunLight = LTFALSE;
+			pFrame->m_bSunLight = LTFALSE;
 
 			pFrame->m_Lights = pLightInfo;
 			pFrame->m_nLights = 1;
@@ -175,7 +173,7 @@ LTRESULT CRotatingWorldModelPlugin::PreHook_Light(
 			if(iStep == uLightFrames)
 			{
 				// The last frame is without the world model for when it's destroyed.
-                pWorldModelInfo->m_bInvisible = LTTRUE;
+				pWorldModelInfo->m_bInvisible = LTTRUE;
 			}
 			else
 			{
@@ -217,9 +215,9 @@ LTRESULT CRotatingWorldModelPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 	if (m_DestructibleModelPlugin.PreHook_EditStringList(szRezPath,
 		szPropName, aszStrings, pcStrings, cMaxStrings, cMaxStringLength) == LT_OK)
@@ -231,23 +229,21 @@ LTRESULT CRotatingWorldModelPlugin::PreHook_EditStringList(
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::RotatingWorldModel()
 //
-//	ROUTINE:	RotatingWorldModel::RotatingWorldModel()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 RotatingWorldModel::RotatingWorldModel() : GameBase(OT_WORLDMODEL)
 {
 	AddAggregate(&m_damage);
 
-    m_hstrSpinUpSound   = LTNULL;
-    m_hstrBusySound     = LTNULL;
-    m_hstrSpinDownSound = LTNULL;
+	m_hstrSpinUpSound   = LTNULL;
+	m_hstrBusySound	 = LTNULL;
+	m_hstrSpinDownSound = LTNULL;
 	m_fSoundRadius		= 1000.0f;
-    m_sndLastSound      = LTNULL;
-    m_bBoxPhysics       = LTTRUE;
+	m_sndLastSound	  = LTNULL;
+	m_bBoxPhysics	   = LTTRUE;
 
 	VEC_INIT(m_vVelocity);
 	VEC_INIT(m_vSaveVelocity);
@@ -268,17 +264,15 @@ RotatingWorldModel::RotatingWorldModel() : GameBase(OT_WORLDMODEL)
 	m_hShadowLightsString = NULL;
 	m_nLightAnims = 0;
 	m_nShadowAxis = 0;
-    m_bFirstUpdate = LTTRUE;
+	m_bFirstUpdate = LTTRUE;
 
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::~RotatingWorldModel()
 //
-//	ROUTINE:	RotatingWorldModel::~RotatingWorldModel()
-//
-//	PURPOSE:	Destroy object
-//
+//	PURPOSE: Destroy object
 // ----------------------------------------------------------------------- //
 
 RotatingWorldModel::~RotatingWorldModel()
@@ -310,11 +304,9 @@ RotatingWorldModel::~RotatingWorldModel()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::EngineMessageFn
 //
-//	ROUTINE:	RotatingWorldModel::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 RotatingWorldModel::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -329,7 +321,7 @@ uint32 RotatingWorldModel::EngineMessageFn(uint32 messageID, void *pData, LTFLOA
 
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = GameBase::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = GameBase::EngineMessageFn(messageID, pData, fData);
 
 			ObjectCreateStruct* pStruct = (ObjectCreateStruct*)pData;
 
@@ -365,19 +357,19 @@ uint32 RotatingWorldModel::EngineMessageFn(uint32 messageID, void *pData, LTFLOA
 			}
 
 			CacheFiles();
-            m_bFirstUpdate = LTTRUE;
+			m_bFirstUpdate = LTTRUE;
 			break;
 		}
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -390,11 +382,9 @@ uint32 RotatingWorldModel::EngineMessageFn(uint32 messageID, void *pData, LTFLOA
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::ObjectMessageFn()
 //
-//	ROUTINE:	RotatingWorldModel::ObjectMessageFn()
-//
-//	PURPOSE:	Handler for server object messages.
-//
+//	PURPOSE: Handler for server object messages.
 // --------------------------------------------------------------------------- //
 
 uint32 RotatingWorldModel::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -414,22 +404,20 @@ uint32 RotatingWorldModel::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HM
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::ReadProp
 //
-//	ROUTINE:	RotatingWorldModel::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL RotatingWorldModel::ReadProp(ObjectCreateStruct *)
 {
  	GenericProp gProp;
 
-    if (!g_pLTServer) return LTFALSE;
+	if (!g_pLTServer) return LTFALSE;
 
 	g_pLTServer->GetPropBool("BoxPhysics", &m_bBoxPhysics);
 
-    LTFLOAT fRealVal;
+	LTFLOAT fRealVal;
 	g_pLTServer->GetPropReal("XAxisRevTime", &fRealVal);
 	if (fRealVal > 0.0f) m_vVelocity.x = MATH_CIRCLE / fRealVal;
 
@@ -439,19 +427,19 @@ LTBOOL RotatingWorldModel::ReadProp(ObjectCreateStruct *)
 	g_pLTServer->GetPropReal("ZAxisRevTime", &fRealVal);
 	if (fRealVal > 0.0f) m_vVelocity.z = MATH_CIRCLE / fRealVal;
 
-    LTBOOL bVal = LTFALSE;
+	LTBOOL bVal = LTFALSE;
 	g_pLTServer->GetPropBool("XRotateForward", &bVal);
-    m_vSign.x = (bVal == LTTRUE) ? 1.0f : -1.0f;
+	m_vSign.x = (bVal == LTTRUE) ? 1.0f : -1.0f;
 
-    bVal = LTFALSE;
+	bVal = LTFALSE;
 	g_pLTServer->GetPropBool("YRotateForward", &bVal);
-    m_vSign.y = (bVal == LTTRUE) ? 1.0f : -1.0f;
+	m_vSign.y = (bVal == LTTRUE) ? 1.0f : -1.0f;
 
-    bVal = LTFALSE;
+	bVal = LTFALSE;
 	g_pLTServer->GetPropBool("ZRotateForward", &bVal);
-    m_vSign.z = (bVal == LTTRUE) ? 1.0f : -1.0f;
+	m_vSign.z = (bVal == LTTRUE) ? 1.0f : -1.0f;
 
-    bVal = LTFALSE;
+	bVal = LTFALSE;
 	g_pLTServer->GetPropBool("StartOn", &bVal);
 	if (!bVal) m_eState = RWM_OFF;
 
@@ -476,29 +464,29 @@ LTBOOL RotatingWorldModel::ReadProp(ObjectCreateStruct *)
 	m_vSpinDownTime.z = fRealVal;
 
 	char buf[MAX_CS_FILENAME_LEN];
-    if (g_pLTServer->GetPropString("SpinUpSound", buf, MAX_CS_FILENAME_LEN) == LT_OK)
+	if (g_pLTServer->GetPropString("SpinUpSound", buf, MAX_CS_FILENAME_LEN) == LT_OK)
 	{
 		m_hstrSpinUpSound = g_pLTServer->CreateString(buf);
 	}
 
-    if (g_pLTServer->GetPropString("BusySound", buf, MAX_CS_FILENAME_LEN) == LT_OK)
+	if (g_pLTServer->GetPropString("BusySound", buf, MAX_CS_FILENAME_LEN) == LT_OK)
 	{
 		m_hstrBusySound = g_pLTServer->CreateString(buf);
 	}
 
-    if (g_pLTServer->GetPropString("SpinDownSound", buf, MAX_CS_FILENAME_LEN) == LT_OK)
+	if (g_pLTServer->GetPropString("SpinDownSound", buf, MAX_CS_FILENAME_LEN) == LT_OK)
 	{
 		m_hstrSpinDownSound = g_pLTServer->CreateString(buf);
 	}
 
-    if (g_pLTServer->GetPropGeneric("LightFrames", &gProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("LightFrames", &gProp) == LT_OK)
 		m_nLightFrames = gProp.m_Long;
 	else
 		m_nLightFrames = 1;
 
-    if (g_pLTServer->GetPropString("ShadowLights", buf, MAX_CS_FILENAME_LEN) == LT_OK)
+	if (g_pLTServer->GetPropString("ShadowLights", buf, MAX_CS_FILENAME_LEN) == LT_OK)
 	{
-        m_hShadowLightsString = g_pLTServer->CreateString(buf);
+		m_hShadowLightsString = g_pLTServer->CreateString(buf);
 	}
 
 	if (g_pLTServer->GetPropGeneric("ShadowAxis",&gProp) == LT_OK)
@@ -510,21 +498,19 @@ LTBOOL RotatingWorldModel::ReadProp(ObjectCreateStruct *)
 	else
 		m_nShadowAxis = 1;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::InitialUpdate()
 //
-//	ROUTINE:	RotatingWorldModel::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::InitialUpdate()
 {
-    uint32 dwUsrFlgs = g_pLTServer->GetObjectUserFlags(m_hObject);
+	uint32 dwUsrFlgs = g_pLTServer->GetObjectUserFlags(m_hObject);
 	g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlgs | USRFLG_MOVEABLE);
 
 	if (m_eState != RWM_OFF)
@@ -542,7 +528,7 @@ void RotatingWorldModel::FirstUpdate()
 	LAInfo info;
 
 	if (!m_bFirstUpdate) return;
-	    m_bFirstUpdate = LTFALSE;
+		m_bFirstUpdate = LTFALSE;
 
 	// Init our light animations.
 	if(m_hShadowLightsString)
@@ -558,12 +544,12 @@ void RotatingWorldModel::FirstUpdate()
 		ConParse cParse;
 
 		cParse.Init(pShadowLights);
-        while(g_pLTServer->Common()->Parse(&cParse) == LT_OK)
+		while(g_pLTServer->Common()->Parse(&cParse) == LT_OK)
 		{
 			SetupRWMLightAnimName(animName, pObjectName, m_nLightAnims);
 
 			m_hLightAnims[m_nLightAnims] = INVALID_LIGHT_ANIM;
-            g_pLTServer->GetLightAnimLT()->FindLightAnim(animName, m_hLightAnims[m_nLightAnims]);
+			g_pLTServer->GetLightAnimLT()->FindLightAnim(animName, m_hLightAnims[m_nLightAnims]);
 			m_nLightAnims++;
 
 			if(m_nLightAnims >= MAX_RWM_LIGHT_ANIMS)
@@ -573,11 +559,9 @@ void RotatingWorldModel::FirstUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::SetNormalRotation()
 //
-//	ROUTINE:	RotatingWorldModel::SetNormalRotation()
-//
-//	PURPOSE:	Set the model to normal rotation state
-//
+//	PURPOSE: Set the model to normal rotation state
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::SetNormalRotation()
@@ -586,16 +570,14 @@ void RotatingWorldModel::SetNormalRotation()
 
 	m_fLastTime = g_pLTServer->GetTime();
 
-    StartSound(m_hstrBusySound, LTTRUE);
+	StartSound(m_hstrBusySound, LTTRUE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::SetOff()
 //
-//	ROUTINE:	RotatingWorldModel::SetOff()
-//
-//	PURPOSE:	Set the model to off state
-//
+//	PURPOSE: Set the model to off state
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::SetOff()
@@ -605,17 +587,15 @@ void RotatingWorldModel::SetOff()
 	if (m_sndLastSound)
 	{
 		g_pLTServer->KillSound(m_sndLastSound);
-        m_sndLastSound = LTNULL;
+		m_sndLastSound = LTNULL;
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::SetSpinUp()
 //
-//	ROUTINE:	RotatingWorldModel::SetSpinUp()
-//
-//	PURPOSE:	Set the model to the spin up state
-//
+//	PURPOSE: Set the model to the spin up state
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::SetSpinUp()
@@ -626,16 +606,14 @@ void RotatingWorldModel::SetSpinUp()
 
 	VEC_COPY(m_vSpinTimeLeft, m_vSpinUpTime);
 
-    StartSound(m_hstrSpinUpSound, LTFALSE);
+	StartSound(m_hstrSpinUpSound, LTFALSE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::SetSpinDown()
 //
-//	ROUTINE:	RotatingWorldModel::SetSpinDown()
-//
-//	PURPOSE:	Set the model to the spin up state
-//
+//	PURPOSE: Set the model to the spin up state
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::SetSpinDown()
@@ -646,16 +624,14 @@ void RotatingWorldModel::SetSpinDown()
 
 	VEC_COPY(m_vSpinTimeLeft, m_vSpinDownTime);
 
-    StartSound(m_hstrSpinDownSound, LTFALSE);
+	StartSound(m_hstrSpinDownSound, LTFALSE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::Update()
 //
-//	ROUTINE:	RotatingWorldModel::Update()
-//
-//	PURPOSE:	Update the model
-//
+//	PURPOSE: Update the model
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::Update()
@@ -664,7 +640,7 @@ void RotatingWorldModel::Update()
 	if (m_bFirstUpdate)
 		FirstUpdate();
 
-    LTFLOAT fUpdateDelta = RWM_UPDATE_DELTA;
+	LTFLOAT fUpdateDelta = RWM_UPDATE_DELTA;
 
 	switch (m_eState)
 	{
@@ -691,20 +667,18 @@ void RotatingWorldModel::Update()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::UpdateNormalRotation()
 //
-//	ROUTINE:	RotatingWorldModel::UpdateNormalRotation()
-//
-//	PURPOSE:	Update normal rotation
-//
+//	PURPOSE: Update normal rotation
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::UpdateNormalRotation()
 {
-    LTRotation rRot;
+	LTRotation rRot;
 	g_pLTServer->GetObjectRotation(m_hObject, &rRot);
 
-    LTFLOAT fTime = g_pLTServer->GetTime();
-    LTFLOAT fDeltaTime = fTime - m_fLastTime;
+	LTFLOAT fTime = g_pLTServer->GetTime();
+	LTFLOAT fDeltaTime = fTime - m_fLastTime;
 
 	if (m_vVelocity.x > 0.0f)
 	{
@@ -726,8 +700,8 @@ void RotatingWorldModel::UpdateNormalRotation()
 
 	if (m_nLightAnims)
 	{
-        LTFLOAT fPercent, fTemp, fTemp2;
-        uint32 nTemp;
+		LTFLOAT fPercent, fTemp, fTemp2;
+		uint32 nTemp;
 
 		fTemp = 0.0f;
 
@@ -755,7 +729,7 @@ void RotatingWorldModel::UpdateNormalRotation()
 		{
 			/* Black magic to discover what percent off of 'true' we're at! */
 			fTemp2 = fTemp / MATH_CIRCLE;
-            nTemp = (uint32)fTemp2;
+			nTemp = (uint32)fTemp2;
 			if (nTemp)
 				fTemp2 = fTemp - (MATH_CIRCLE * (float)nTemp);
 			else
@@ -793,12 +767,12 @@ void RotatingWorldModel::SetupLoopedLightAnimPosition(LAInfo &info, uint32 nTota
 
 void RotatingWorldModel::SetLightAnimPercent(float percent)
 {
-    uint32 iAnim, nFrames;
+	uint32 iAnim, nFrames;
 	HLIGHTANIM hAnim;
-    ILTLightAnim *pLightAnimLT;
+	ILTLightAnim *pLightAnimLT;
 	LAInfo info;
 
-    pLightAnimLT = g_pLTServer->GetLightAnimLT();
+	pLightAnimLT = g_pLTServer->GetLightAnimLT();
 	for(iAnim=0; iAnim < m_nLightAnims; iAnim++)
 	{
 		hAnim = m_hLightAnims[iAnim];
@@ -818,13 +792,13 @@ void RotatingWorldModel::SetLightAnimPercent(float percent)
 
 void RotatingWorldModel::SetLightAnimRemoved()
 {
-    uint32 iAnim, nFrames;
+	uint32 iAnim, nFrames;
 	HLIGHTANIM hAnim;
-    ILTLightAnim *pLightAnimLT;
+	ILTLightAnim *pLightAnimLT;
 	LAInfo info;
 
 
-    pLightAnimLT = g_pLTServer->GetLightAnimLT();
+	pLightAnimLT = g_pLTServer->GetLightAnimLT();
 	for(iAnim=0; iAnim < m_nLightAnims; iAnim++)
 	{
 		hAnim = m_hLightAnims[iAnim];
@@ -846,17 +820,15 @@ void RotatingWorldModel::SetLightAnimRemoved()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::UpdateSpinUp()
 //
-//	ROUTINE:	RotatingWorldModel::UpdateSpinUp()
-//
-//	PURPOSE:	Update spin up
-//
+//	PURPOSE: Update spin up
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::UpdateSpinUp()
 {
-    LTBOOL bXDone = LTFALSE, bYDone = LTFALSE, bZDone = LTFALSE;
-    LTFLOAT fDeltaTime = g_pLTServer->GetFrameTime();
+	LTBOOL bXDone = LTFALSE, bYDone = LTFALSE, bZDone = LTFALSE;
+	LTFLOAT fDeltaTime = g_pLTServer->GetFrameTime();
 
 	// Calculate current velocity...
 
@@ -868,7 +840,7 @@ void RotatingWorldModel::UpdateSpinUp()
 	else
 	{
 		m_vVelocity.x = m_vSaveVelocity.x;
-        bXDone = LTTRUE;
+		bXDone = LTTRUE;
 	}
 
 	m_vSpinTimeLeft.y -= fDeltaTime;
@@ -879,7 +851,7 @@ void RotatingWorldModel::UpdateSpinUp()
 	else
 	{
 		m_vVelocity.y = m_vSaveVelocity.y;
-        bYDone = LTTRUE;
+		bYDone = LTTRUE;
 	}
 
 	m_vSpinTimeLeft.z -= fDeltaTime;
@@ -890,7 +862,7 @@ void RotatingWorldModel::UpdateSpinUp()
 	else
 	{
 		m_vVelocity.z = m_vSaveVelocity.z;
-        bZDone = LTTRUE;
+		bZDone = LTTRUE;
 	}
 
 	// Call normal update to do the work...
@@ -905,17 +877,15 @@ void RotatingWorldModel::UpdateSpinUp()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::UpdateSpinDown()
 //
-//	ROUTINE:	RotatingWorldModel::UpdateSpinDown()
-//
-//	PURPOSE:	Update spin down
-//
+//	PURPOSE: Update spin down
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::UpdateSpinDown()
 {
-    LTBOOL bXDone = LTFALSE, bYDone = LTFALSE, bZDone = LTFALSE;
-    LTFLOAT fDeltaTime = g_pLTServer->GetFrameTime();
+	LTBOOL bXDone = LTFALSE, bYDone = LTFALSE, bZDone = LTFALSE;
+	LTFLOAT fDeltaTime = g_pLTServer->GetFrameTime();
 
 	// Calculate current velocity...
 
@@ -927,7 +897,7 @@ void RotatingWorldModel::UpdateSpinDown()
 	else
 	{
 		m_vVelocity.x = 0.0f;
-        bXDone = LTTRUE;
+		bXDone = LTTRUE;
 	}
 
 	m_vSpinTimeLeft.y -= fDeltaTime;
@@ -938,7 +908,7 @@ void RotatingWorldModel::UpdateSpinDown()
 	else
 	{
 		m_vVelocity.y = 0.0f;
-        bYDone = LTTRUE;
+		bYDone = LTTRUE;
 	}
 
 	m_vSpinTimeLeft.z -= fDeltaTime;
@@ -949,7 +919,7 @@ void RotatingWorldModel::UpdateSpinDown()
 	else
 	{
 		m_vVelocity.z = 0.0f;
-        bZDone = LTTRUE;
+		bZDone = LTTRUE;
 	}
 
 	// Call normal update to do the work...
@@ -964,11 +934,9 @@ void RotatingWorldModel::UpdateSpinDown()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::TriggerMsg()
 //
-//	ROUTINE:	RotatingWorldModel::TriggerMsg()
-//
-//	PURPOSE:	Handler trigger messages
-//
+//	PURPOSE: Handler trigger messages
 // --------------------------------------------------------------------------- //
 
 void RotatingWorldModel::HandleTrigger(HOBJECT hSender, const char* szMsg)
@@ -986,11 +954,9 @@ void RotatingWorldModel::HandleTrigger(HOBJECT hSender, const char* szMsg)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::StartSound()
 //
-//	ROUTINE:	RotatingWorldModel::StartSound()
-//
-//	PURPOSE:	Start the specified sound
-//
+//	PURPOSE: Start the specified sound
 // --------------------------------------------------------------------------- //
 
 void RotatingWorldModel::StartSound(HSTRING hstrSoundName, LTBOOL bLoop)
@@ -1000,7 +966,7 @@ void RotatingWorldModel::StartSound(HSTRING hstrSoundName, LTBOOL bLoop)
 	if (m_sndLastSound)
 	{
 		g_pLTServer->KillSound(m_sndLastSound);
-        m_sndLastSound = LTNULL;
+		m_sndLastSound = LTNULL;
 	}
 
 	if (!hstrSoundName) return;
@@ -1009,12 +975,12 @@ void RotatingWorldModel::StartSound(HSTRING hstrSoundName, LTBOOL bLoop)
 	if (!pSoundName) return;
 
 
-    uint32 dwFlags = bLoop ? PLAYSOUND_LOOP | PLAYSOUND_GETHANDLE : 0;
+	uint32 dwFlags = bLoop ? PLAYSOUND_LOOP | PLAYSOUND_GETHANDLE : 0;
 
 	// Save the handle of the sound (if bLoop)...
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	m_sndLastSound = g_pServerSoundMgr->PlaySoundFromPos(vPos, pSoundName,
 		m_fSoundRadius, SOUNDPRIORITY_MISC_MEDIUM, dwFlags);
@@ -1023,11 +989,9 @@ void RotatingWorldModel::StartSound(HSTRING hstrSoundName, LTBOOL bLoop)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::Save
 //
-//	ROUTINE:	RotatingWorldModel::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -1057,11 +1021,9 @@ void RotatingWorldModel::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::Load
 //
-//	ROUTINE:	RotatingWorldModel::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -1081,7 +1043,7 @@ void RotatingWorldModel::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 	m_fRoll				= g_pLTServer->ReadFromMessageFloat(hRead);
 	m_fSoundRadius		= g_pLTServer->ReadFromMessageFloat(hRead);
 	m_eState			= (RWMState) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bBoxPhysics       = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bBoxPhysics	   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
 	m_hstrBusySound		= g_pLTServer->ReadFromMessageHString(hRead);
 	m_hstrSpinUpSound	= g_pLTServer->ReadFromMessageHString(hRead);
 	m_hstrSpinDownSound = g_pLTServer->ReadFromMessageHString(hRead);
@@ -1091,22 +1053,20 @@ void RotatingWorldModel::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	if (m_eState == RWM_NORMAL)
 	{
-        StartSound(m_hstrBusySound, LTTRUE);
+		StartSound(m_hstrBusySound, LTTRUE);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RotatingWorldModel::CacheFiles
 //
-//	ROUTINE:	RotatingWorldModel::CacheFiles
-//
-//	PURPOSE:	Cache resources associated with this object
-//
+//	PURPOSE: Cache resources associated with this object
 // ----------------------------------------------------------------------- //
 
 void RotatingWorldModel::CacheFiles()
 {
-     char* pFile = LTNULL;
+	 char* pFile = LTNULL;
 	if (m_hstrBusySound)
 	{
 		pFile = g_pLTServer->GetStringData(m_hstrBusySound);

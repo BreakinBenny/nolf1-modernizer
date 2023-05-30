@@ -14,7 +14,7 @@
 						Sprinkles();
 		virtual			~Sprinkles();
 
-        virtual uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+		virtual uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
 
 		void			OnPreCreate(ObjectCreateStruct *pStruct);
 		void			OnInitialUpdate();

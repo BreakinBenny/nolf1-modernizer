@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CServerMark.cpp
 //
-// MODULE  : CServerMark.cpp
+// PURPOSE: CServerMark implementation
 //
-// PURPOSE : CServerMark implementation
-//
-// CREATED : 1/15/99
-//
+// CREATED: 1/15/99
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -17,11 +15,9 @@ BEGIN_CLASS(CServerMark)
 END_CLASS_DEFAULT_FLAGS(CServerMark, BaseClass, NULL, NULL, CF_HIDDEN)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerMark::CServerMark()
 //
-//	ROUTINE:	CServerMark::CServerMark()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 CServerMark::CServerMark() : BaseClass(OT_SPRITE)
@@ -29,11 +25,9 @@ CServerMark::CServerMark() : BaseClass(OT_SPRITE)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerMark::~CServerMark()
 //
-//	ROUTINE:	CServerMark::~CServerMark()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CServerMark::~CServerMark()
@@ -41,25 +35,23 @@ CServerMark::~CServerMark()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerMark::Setup()
 //
-//	ROUTINE:	CServerMark::Setup()
-//
-//	PURPOSE:	Attach the mark to its parent
-//
+//	PURPOSE: Attach the mark to its parent
 // ----------------------------------------------------------------------- //
 
 void CServerMark::Setup(CLIENTWEAPONFX & theStruct)
 {
 	LTransform globalTransform, parentTransform, localTransform;
-    ILTTransform *pTransformLT;
-    LTVector vParentPos, vOffset;
-    LTRotation rParentRot, rRot;
-    LTRotation rOffset;
+	ILTTransform *pTransformLT;
+	LTVector vParentPos, vOffset;
+	LTRotation rParentRot, rRot;
+	LTRotation rOffset;
 
 	if (!g_pWeaponMgr ||
-        !g_pLTServer ||
+		!g_pLTServer ||
 		!theStruct.hObj ||
-        !(pTransformLT = g_pLTServer->GetTransformLT()))
+		!(pTransformLT = g_pLTServer->GetTransformLT()))
 	{
 		return;
 	}
@@ -67,8 +59,8 @@ void CServerMark::Setup(CLIENTWEAPONFX & theStruct)
 	// Attach the mark to the parent object...
 
 	// Figure out what the rotation we want is.
-    rOffset.Init();
-    g_pLTServer->AlignRotation(&rRot, &(theStruct.vSurfaceNormal), LTNULL);
+	rOffset.Init();
+	g_pLTServer->AlignRotation(&rRot, &(theStruct.vSurfaceNormal), LTNULL);
 
 
 	// MD
@@ -79,8 +71,8 @@ void CServerMark::Setup(CLIENTWEAPONFX & theStruct)
 	pTransformLT->Set(globalTransform, theStruct.vPos, rRot);
 
 	// Get the object's transform.
-    g_pLTServer->GetObjectPos(theStruct.hObj, &vParentPos);
-    g_pLTServer->GetObjectRotation(theStruct.hObj, &rParentRot);
+	g_pLTServer->GetObjectPos(theStruct.hObj, &vParentPos);
+	g_pLTServer->GetObjectRotation(theStruct.hObj, &rParentRot);
 	pTransformLT->Set(parentTransform, vParentPos, rParentRot);
 
 	// Get the offset.
@@ -89,20 +81,18 @@ void CServerMark::Setup(CLIENTWEAPONFX & theStruct)
 
 
 	HATTACHMENT hAttachment;
-    LTRESULT dRes = g_pLTServer->CreateAttachment(theStruct.hObj, m_hObject, LTNULL,
-											     &vOffset, &rOffset, &hAttachment);
-    if (dRes != LT_OK)
+	LTRESULT dRes = g_pLTServer->CreateAttachment(theStruct.hObj, m_hObject, LTNULL,
+												 &vOffset, &rOffset, &hAttachment);
+	if (dRes != LT_OK)
 	{
-        g_pLTServer->RemoveObject(m_hObject);
+		g_pLTServer->RemoveObject(m_hObject);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerMark::EngineMessageFn
 //
-//	ROUTINE:	CServerMark::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 CServerMark::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -111,7 +101,7 @@ uint32 CServerMark::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData
 	{
 		case MID_PARENTATTACHMENTREMOVED :
 		{
-            g_pLTServer->RemoveObject(m_hObject);
+			g_pLTServer->RemoveObject(m_hObject);
 		}
 		break;
 

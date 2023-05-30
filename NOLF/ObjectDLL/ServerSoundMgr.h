@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ServerSoundMgr.h
 //
-// MODULE  : ServerSoundMgr.h
+// PURPOSE: ServerSoundMgr definition - Controls sound on the server
 //
-// PURPOSE : ServerSoundMgr definition - Controls sound on the server
-//
-// CREATED : 7/10/00
+// CREATED: 7/10/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __SERVER_SOUND_MGR_H__
@@ -27,7 +25,7 @@ class CServerSoundMgr : public CGameSoundMgr
 		CServerSoundMgr();
 		~CServerSoundMgr();
 
-        LTBOOL      Init(ILTCSBase *pInterface, const char* szAttributeFile=SSNDMGR_DEFAULT_FILE);
+		LTBOOL	  Init(ILTCSBase *pInterface, const char* szAttributeFile=SSNDMGR_DEFAULT_FILE);
 		void		Term();
 
 		void		CacheSounds(const char* pTag, const char* pAttributeBase);

@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ServerUtilities.h
 //
-// MODULE  : ServerUtilities.h
+// PURPOSE: Server-side Utility functions
 //
-// PURPOSE : Server-side Utility functions
-//
-// CREATED : 9/25/97
-//
+// CREATED: 9/25/97
 // ----------------------------------------------------------------------- //
 
 #ifndef __SERVER_UTILITIES_H__
@@ -55,7 +53,7 @@ inline LTRESULT FindNamedObject(const char* szName, HOBJECT& hObject, LTBOOL bMu
 	if ( !szName || !*szName ) return LT_NOTFOUND;
 
 	ObjArray<HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
-    g_pLTServer->FindNamedObjects((char*)szName,objArray);
+	g_pLTServer->FindNamedObjects((char*)szName,objArray);
 
 	switch ( objArray.NumObjects() )
 	{
@@ -77,7 +75,7 @@ inline LTRESULT FindNamedObject(const char* szName, HOBJECT& hObject, LTBOOL bMu
 			}
 			else
 			{
-                g_pLTServer->CPrint("Error, %d objects named \"%s\" present in level", objArray.NumObjects(), szName);
+				g_pLTServer->CPrint("Error, %d objects named \"%s\" present in level", objArray.NumObjects(), szName);
 				return LT_ERROR;
 			}
 		}
@@ -86,7 +84,7 @@ inline LTRESULT FindNamedObject(const char* szName, HOBJECT& hObject, LTBOOL bMu
 
 inline LTRESULT FindNamedObject(HSTRING hstrName, HOBJECT& hObject, LTBOOL bMultipleOkay = LTFALSE)
 {
-    return FindNamedObject(g_pLTServer->GetStringData(hstrName), hObject, bMultipleOkay);
+	return FindNamedObject(g_pLTServer->GetStringData(hstrName), hObject, bMultipleOkay);
 }
 
 #define DEG2RAD(x)		(((x)*MATH_PI)/180.0f)
@@ -128,7 +126,7 @@ inline void SetNextUpdate(HOBJECT hObj, LTFLOAT fDelta)
 	if (!hObj) return;
 
 	fDelta = fDelta <= 0.0f ? 0.0f : fDelta;
-    g_pLTServer->SetNextUpdate(hObj, fDelta);
+	g_pLTServer->SetNextUpdate(hObj, fDelta);
 
 	if (fDelta == 0.0f)
 	{
@@ -143,24 +141,24 @@ inline void SetNextUpdate(HOBJECT hObj, LTFLOAT fDelta)
 
 inline LTBOOL Equal(const LTVector & v1, const LTVector & v2)
 {
-    LTBOOL bRet = LTTRUE;
+	LTBOOL bRet = LTTRUE;
 
-    const LTFLOAT c_fError = 0.001f;
+	const LTFLOAT c_fError = 0.001f;
 
-    LTVector vTemp;
+	LTVector vTemp;
 	VEC_SUB(vTemp, v1, v2);
 
 	if (vTemp.x < -c_fError || vTemp.x > c_fError)
 	{
-        bRet = LTFALSE;
+		bRet = LTFALSE;
 	}
 	else if (vTemp.y < -c_fError || vTemp.y > c_fError)
 	{
-        bRet = LTFALSE;
+		bRet = LTFALSE;
 	}
 	else if (vTemp.z < -c_fError || vTemp.z > c_fError)
 	{
-        bRet = LTFALSE;
+		bRet = LTFALSE;
 	}
 
 	return bRet;

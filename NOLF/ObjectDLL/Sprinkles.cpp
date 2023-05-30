@@ -31,8 +31,7 @@ END_CLASS_DEFAULT(Sprinkles, BaseClass, NULL, NULL)
 
 
 
-// --------------------------------------------------------------------------------- //
-// Sprinkles
+// --------------------------------------------------------------------------------- // Sprinkles
 // --------------------------------------------------------------------------------- //
 
 Sprinkles::Sprinkles() : BaseClass(OT_NORMAL)
@@ -42,21 +41,21 @@ Sprinkles::Sprinkles() : BaseClass(OT_NORMAL)
 
 Sprinkles::~Sprinkles()
 {
-    if(g_pLTServer)
-    {
-        for(uint32 i = 0; i < MAX_SPRINKLE_TYPES; i++)
-        {
-            if (m_SprinkleStruct.m_Types[i].m_hFilename)
-            {
-                g_pLTServer->FreeString(m_SprinkleStruct.m_Types[i].m_hFilename);
-            }
+	if(g_pLTServer)
+	{
+		for(uint32 i = 0; i < MAX_SPRINKLE_TYPES; i++)
+		{
+			if (m_SprinkleStruct.m_Types[i].m_hFilename)
+			{
+				g_pLTServer->FreeString(m_SprinkleStruct.m_Types[i].m_hFilename);
+			}
 
-            if (m_SprinkleStruct.m_Types[i].m_hSkinName)
-            {
-                g_pLTServer->FreeString(m_SprinkleStruct.m_Types[i].m_hSkinName);
-            }
-        }
-    }
+			if (m_SprinkleStruct.m_Types[i].m_hSkinName)
+			{
+				g_pLTServer->FreeString(m_SprinkleStruct.m_Types[i].m_hSkinName);
+			}
+		}
+	}
 }
 
 
@@ -92,7 +91,7 @@ void Sprinkles::OnPreCreate(ObjectCreateStruct *pStruct)
 	char propName[64];
 	GenericProp gProp;
 	SPRINKLETYPECREATESTRUCT *pType;
-    uint32 i;
+	uint32 i;
 
 	pStruct->m_Flags = FLAG_FORCECLIENTUPDATE;
 
@@ -103,73 +102,73 @@ void Sprinkles::OnPreCreate(ObjectCreateStruct *pStruct)
 
 		// FilenameX
 		sprintf(propName, "Filename%d", i);
-        if(g_pLTServer->GetPropGeneric(propName, &gProp) != LT_OK)
+		if(g_pLTServer->GetPropGeneric(propName, &gProp) != LT_OK)
 			break;
 
 		if(gProp.m_String[0] == 0)
 			break;
 
-        pType->m_hFilename = g_pLTServer->CreateString(gProp.m_String);
+		pType->m_hFilename = g_pLTServer->CreateString(gProp.m_String);
 		if(!pType->m_hFilename)
 			break;
 
 		// SkinNameX
 		sprintf(propName, "SkinName%d", i);
-        if(g_pLTServer->GetPropGeneric(propName, &gProp) != LT_OK)
+		if(g_pLTServer->GetPropGeneric(propName, &gProp) != LT_OK)
 			break;
 
-        pType->m_hSkinName = g_pLTServer->CreateString(gProp.m_String);
+		pType->m_hSkinName = g_pLTServer->CreateString(gProp.m_String);
 
 		// CountX
 		sprintf(propName, "Count%d", i);
-        if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
+		if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
 		{
-            pType->m_Count = (uint32)gProp.m_Long;
+			pType->m_Count = (uint32)gProp.m_Long;
 			if(pType->m_Count > 255)
 			{
-                g_pLTServer->CPrint("Warning: SprinklesFX count > 255, clamping");
+				g_pLTServer->CPrint("Warning: SprinklesFX count > 255, clamping");
 				pType->m_Count = 255;
 			}
 		}
 
 		// SpeedX
 		sprintf(propName, "Speed%d", i);
-        if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
+		if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
 		{
 			pType->m_Speed = gProp.m_Float;
 		}
 
 		// SizeX
 		sprintf(propName, "Size%d", i);
-        if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
+		if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
 		{
 			pType->m_Size = gProp.m_Float;
 		}
 
 		// SpawnRadiusX
 		sprintf(propName, "SpawnRadius%d", i);
-        if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
+		if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
 		{
 			pType->m_SpawnRadius = gProp.m_Float;
 		}
 
 		// AnglesVelX
 		sprintf(propName, "AnglesVel%d", i);
-        if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
+		if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
 		{
 			pType->m_AnglesVel = gProp.m_Vec;
 		}
 
 		// ColorMinX
 		sprintf(propName, "ColorMin%d", i);
-        if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
+		if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
 		{
 			pType->m_ColorMin = gProp.m_Color;
 		}
 
 		// ColorMaxX
 		sprintf(propName, "ColorMax%d", i);
-        if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
+		if(g_pLTServer->GetPropGeneric(propName, &gProp) == LT_OK)
 		{
 			pType->m_ColorMax = gProp.m_Color;
 		}
@@ -181,15 +180,15 @@ void Sprinkles::OnPreCreate(ObjectCreateStruct *pStruct)
 
 void Sprinkles::OnInitialUpdate()
 {
-    ILTMessage *pMsg;
+	ILTMessage *pMsg;
 
-    if(g_pLTServer->Common()->CreateMessage(pMsg) == LT_OK)
+	if(g_pLTServer->Common()->CreateMessage(pMsg) == LT_OK)
 	{
 		pMsg->WriteByte(SFX_SPRINKLES_ID);
 
-        m_SprinkleStruct.Write(g_pLTServer, pMsg);
+		m_SprinkleStruct.Write(g_pLTServer, pMsg);
 
-        g_pLTServer->SetObjectSFXMessage(m_hObject, *pMsg);
+		g_pLTServer->SetObjectSFXMessage(m_hObject, *pMsg);
 		pMsg->Release();
 	}
 

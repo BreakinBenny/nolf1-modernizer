@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ScreenShake.cpp
 //
-// MODULE  : ScreenShake.cpp
+// PURPOSE: ScreenShake class - implementation
 //
-// PURPOSE : ScreenShake class - implementation
-//
-// CREATED : 1/25/99
-//
+// CREATED: 1/25/99
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -30,11 +28,9 @@ BEGIN_CLASS(ScreenShake)
 END_CLASS_DEFAULT(ScreenShake, BaseClass, NULL, NULL)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ScreenShake::ScreenShake
 //
-//	ROUTINE:	ScreenShake::ScreenShake
-//
-//	PURPOSE:	Initialize
-//
+//	PURPOSE: Initialize
 // ----------------------------------------------------------------------- //
 
 ScreenShake::ScreenShake() : BaseClass(OT_NORMAL)
@@ -43,34 +39,30 @@ ScreenShake::ScreenShake() : BaseClass(OT_NORMAL)
 	m_nNumShakes	= c_nINFINITE_SHAKES;
 	m_fAreaOfEffect = c_fENTIRE_LEVEL;
 	m_fFrequency	= 1.0f;
-    m_hstrSound     = LTNULL;
+	m_hstrSound	 = LTNULL;
 	m_fSoundRadius	= 500.0f;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ScreenShake::~ScreenShake
 //
-//	ROUTINE:	ScreenShake::~ScreenShake
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 ScreenShake::~ScreenShake()
 {
 	if (m_hstrSound)
 	{
-        g_pLTServer->FreeString(m_hstrSound);
+		g_pLTServer->FreeString(m_hstrSound);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ScreenShake::EngineMessageFn
 //
-//	ROUTINE:	ScreenShake::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 ScreenShake::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -104,13 +96,13 @@ uint32 ScreenShake::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -123,35 +115,33 @@ uint32 ScreenShake::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ScreenShake::Update
 //
-//	ROUTINE:	ScreenShake::Update
-//
-//	PURPOSE:	Do updating
-//
+//	PURPOSE: Do updating
 // ----------------------------------------------------------------------- //
 
 void ScreenShake::Update()
 {
 	if (--m_nNumShakes > 0)
 	{
-        SetNextUpdate(m_hObject, m_fFrequency);
+		SetNextUpdate(m_hObject, m_fFrequency);
 	}
 
-    LTVector vMyPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vMyPos);
+	LTVector vMyPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vMyPos);
 
 	// Play sound...
 
 	if (m_hstrSound)
 	{
-        char* pSound = g_pLTServer->GetStringData(m_hstrSound);
+		char* pSound = g_pLTServer->GetStringData(m_hstrSound);
 		g_pServerSoundMgr->PlaySoundFromPos(vMyPos, pSound, m_fSoundRadius, SOUNDPRIORITY_MISC_LOW);
 	}
 
 	// Time to shake.  Get all the players in the area of effect...
 
 	ObjArray <HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
-    g_pLTServer->FindNamedObjects(DEFAULT_PLAYERNAME, objArray);
+	g_pLTServer->FindNamedObjects(DEFAULT_PLAYERNAME, objArray);
 	int numObjects = objArray.NumObjects();
 
 	if (!numObjects) return;
@@ -164,21 +154,21 @@ void ScreenShake::Update()
 		{
 			// Make sure object is in area of effect...
 
-            LTVector vPlayerPos;
-            g_pLTServer->GetObjectPos(hObject, &vPlayerPos);
+			LTVector vPlayerPos;
+			g_pLTServer->GetObjectPos(hObject, &vPlayerPos);
 
 			if (m_fAreaOfEffect == c_fENTIRE_LEVEL ||
 				VEC_DIST(vPlayerPos, vMyPos) <= m_fAreaOfEffect)
 			{
-                CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hObject);
+				CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hObject);
 				if (pPlayer)
 				{
 					HCLIENT hClient = pPlayer->GetClient();
 					if (hClient)
 					{
-                        HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_SHAKE_SCREEN);
-                        g_pLTServer->WriteToMessageVector(hMessage, &m_vAmount);
-                        g_pLTServer->EndMessage(hMessage);
+						HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_SHAKE_SCREEN);
+						g_pLTServer->WriteToMessageVector(hMessage, &m_vAmount);
+						g_pLTServer->EndMessage(hMessage);
 					}
 				}
 			}
@@ -188,75 +178,69 @@ void ScreenShake::Update()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ScreenShake::InitialUpdate
 //
-//	ROUTINE:	ScreenShake::InitialUpdate
-//
-//	PURPOSE:	Do initial updating
-//
+//	PURPOSE: Do initial updating
 // ----------------------------------------------------------------------- //
 
 LTBOOL ScreenShake::InitialUpdate()
 {
-    SetNextUpdate(m_hObject, 0.0f);
+	SetNextUpdate(m_hObject, 0.0f);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ScreenShake::ReadProp
 //
-//	ROUTINE:	ScreenShake::ReadProp
-//
-//	PURPOSE:	Reads properties from level info
-//
+//	PURPOSE: Reads properties from level info
 // ----------------------------------------------------------------------- //
 
 LTBOOL ScreenShake::ReadProp(ObjectCreateStruct *pStruct)
 {
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("ShakeSound", &genProp ) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ShakeSound", &genProp ) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrSound = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrSound = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("Amount", &genProp ) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Amount", &genProp ) == LT_OK)
 	{
 		m_vAmount = genProp.m_Vec;
 	}
 
-    if (g_pLTServer->GetPropGeneric("NumShakes", &genProp ) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("NumShakes", &genProp ) == LT_OK)
 	{
 		m_nNumShakes = genProp.m_Long;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Frequency", &genProp ) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Frequency", &genProp ) == LT_OK)
 	{
 		m_fFrequency = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("AreaOfEffect", &genProp ) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("AreaOfEffect", &genProp ) == LT_OK)
 	{
 		m_fAreaOfEffect = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("SoundRadius", &genProp ) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("SoundRadius", &genProp ) == LT_OK)
 	{
 		m_fSoundRadius = genProp.m_Float;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ScreenShake::ObjectMessageFn
 //
-//	ROUTINE:	ScreenShake::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 ScreenShake::ObjectMessageFn( HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead )
@@ -269,11 +253,11 @@ uint32 ScreenShake::ObjectMessageFn( HOBJECT hSender, uint32 messageID, HMESSAGE
 
 			if (_stricmp(szMsg, "ON") == 0)
 			{
-                SetNextUpdate(m_hObject, 0.001f);
+				SetNextUpdate(m_hObject, 0.001f);
 			}
 			else if (_stricmp(szMsg, "OFF") == 0)
 			{
-                SetNextUpdate(m_hObject, 0.0f);
+				SetNextUpdate(m_hObject, 0.0f);
 			}
 		}
 		break;
@@ -286,20 +270,18 @@ uint32 ScreenShake::ObjectMessageFn( HOBJECT hSender, uint32 messageID, HMESSAGE
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ScreenShake::Save
 //
-//	ROUTINE:	ScreenShake::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void ScreenShake::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hWrite) return;
 
 	pServerDE->WriteToMessageVector(hWrite, &m_vAmount);
-    pServerDE->WriteToMessageFloat(hWrite, (LTFLOAT) m_nNumShakes);
+	pServerDE->WriteToMessageFloat(hWrite, (LTFLOAT) m_nNumShakes);
 	pServerDE->WriteToMessageFloat(hWrite, m_fAreaOfEffect);
 	pServerDE->WriteToMessageFloat(hWrite, m_fFrequency);
 	pServerDE->WriteToMessageFloat(hWrite, m_fSoundRadius);
@@ -308,16 +290,14 @@ void ScreenShake::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ScreenShake::Load
 //
-//	ROUTINE:	ScreenShake::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void ScreenShake::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hRead) return;
 
 	pServerDE->ReadFromMessageVector(hRead, &m_vAmount);
@@ -330,19 +310,17 @@ void ScreenShake::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ScreenShake::CacheFiles
 //
-//	ROUTINE:	ScreenShake::CacheFiles
-//
-//	PURPOSE:	Cache resources associated with this object
-//
+//	PURPOSE: Cache resources associated with this object
 // ----------------------------------------------------------------------- //
 
 void ScreenShake::CacheFiles()
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE) return;
 
-    char* pFile = LTNULL;
+	char* pFile = LTNULL;
 	if (m_hstrSound)
 	{
 		pFile = pServerDE->GetStringData(m_hstrSound);

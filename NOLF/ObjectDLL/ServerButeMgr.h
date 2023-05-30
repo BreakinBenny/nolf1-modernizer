@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ServerButeMgr.h
 //
-// MODULE  : ServerButeMgr.h
+// PURPOSE: ServerButeMgr definition - Server-side attributes
 //
-// PURPOSE : ServerButeMgr definition - Server-side attributes
-//
-// CREATED : 2/02/99
-//
+// CREATED: 2/02/99
 // ----------------------------------------------------------------------- //
 
 #ifndef __SERVER_BUTE_MGR_H__
@@ -25,11 +23,11 @@ class CServerButeMgr : public CGameButeMgr
 		CServerButeMgr();
 		~CServerButeMgr();
 
-        LTBOOL       Init(ILTCSBase *pInterface, const char* szAttributeFile="Attributes\\ServerButes.txt");
+		LTBOOL	   Init(ILTCSBase *pInterface, const char* szAttributeFile="Attributes\\ServerButes.txt");
 		void		Term();
 
-        LTBOOL       WriteFile() { return m_buteMgr.Save(); }
-		void		Reload()    { m_buteMgr.Parse(m_strAttributeFile); }
+		LTBOOL	   WriteFile() { return m_buteMgr.Save(); }
+		void		Reload()	{ m_buteMgr.Parse(m_strAttributeFile); }
 
 		int			GetPlayerAttributeInt(char* pAttribute);
 		float		GetPlayerAttributeFloat(char* pAttribute);
@@ -41,7 +39,7 @@ class CServerButeMgr : public CGameButeMgr
 
 		int			GetNumWONServers()			{return m_nNumWONServers;}
 		void		GetWONAddress(int nServer, char* pBuf, int nBufLen);
-        uint32      GetWONPort(int nServer);
+		uint32	  GetWONPort(int nServer);
 
 		LTFLOAT		GetBodyStairsFallSpeed();
 		LTFLOAT		GetBodyStairsFallStopSpeed();

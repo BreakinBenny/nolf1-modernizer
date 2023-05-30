@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: PlayerButes.h
 //
-// MODULE  : PlayerButes.h
+// PURPOSE: PlayerButes attributes
 //
-// PURPOSE : PlayerButes attributes
-//
-// CREATED : 2/02/99
-//
+// CREATED: 2/02/99
 // ----------------------------------------------------------------------- //
 
 #ifndef __PLAYER_BUTES_H__

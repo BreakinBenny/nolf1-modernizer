@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ServerSoundMgr.cpp
 //
-// MODULE  : ServerSoundMgr.cpp
+// PURPOSE: ServerSoundMgr implementation - Controls sound on the server
 //
-// PURPOSE : ServerSoundMgr implementation - Controls sound on the server
-//
-// CREATED : 7/10/00
+// CREATED: 7/10/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -19,11 +17,9 @@
 CServerSoundMgr*  g_pServerSoundMgr = LTNULL;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerSoundMgr::CServerSoundMgr
 //
-//	ROUTINE:	CServerSoundMgr::CServerSoundMgr
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CServerSoundMgr::CServerSoundMgr()
@@ -31,11 +27,9 @@ CServerSoundMgr::CServerSoundMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerSoundMgr::~CServerSoundMgr
 //
-//	ROUTINE:	CServerSoundMgr::~CServerSoundMgr
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CServerSoundMgr::~CServerSoundMgr()
@@ -44,39 +38,33 @@ CServerSoundMgr::~CServerSoundMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerSoundMgr::Init()
 //
-//	ROUTINE:	CServerSoundMgr::Init()
-//
-//	PURPOSE:	Init mgr
-//
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CServerSoundMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 {
 	g_pServerSoundMgr = this;
 
-    return CGameSoundMgr::Init(pInterface, szAttributeFile);
+	return CGameSoundMgr::Init(pInterface, szAttributeFile);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerSoundMgr::Term()
 //
-//	ROUTINE:	CServerSoundMgr::Term()
-//
-//	PURPOSE:	Clean up.
-//
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CServerSoundMgr::Term()
 {
-    g_pServerSoundMgr = LTNULL;
+	g_pServerSoundMgr = LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerSoundMgr::CacheSounds()
 //
-//	ROUTINE:	CServerSoundMgr::CacheSounds()
-//
-//	PURPOSE:	Cache the appropriate sounds...
-//
+//	PURPOSE: Cache the appropriate sounds...
 // ----------------------------------------------------------------------- //
 
 void CServerSoundMgr::CacheSounds(const char* pTag, const char* pAttributeBase)
@@ -97,7 +85,7 @@ void CServerSoundMgr::CacheSounds(const char* pTag, const char* pAttributeBase)
 
 		if (strRet.GetLength() > 0)
 		{
-            g_pLTServer->CacheFile(FT_SOUND, strRet.GetBuffer(0));
+			g_pLTServer->CacheFile(FT_SOUND, strRet.GetBuffer(0));
 		}
 
 		nCurSound++;
@@ -107,13 +95,11 @@ void CServerSoundMgr::CacheSounds(const char* pTag, const char* pAttributeBase)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerSoundMgr::PlaySoundDirect()
 //
-//	ROUTINE:	CServerSoundMgr::PlaySoundDirect()
-//
-//	PURPOSE:	Allows the game to *basically* bypass the sound mgr and
+//	PURPOSE: Allows the game to *basically* bypass the sound mgr and
 //				call directly into the engine sound code.  This is mainly
 //				for backwards compatibility.
-//
 // ----------------------------------------------------------------------- //
 
 HLTSOUND CServerSoundMgr::PlaySoundDirect(PlaySoundInfo & psi)
@@ -122,11 +108,9 @@ HLTSOUND CServerSoundMgr::PlaySoundDirect(PlaySoundInfo & psi)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerSoundMgr::PlaySound()
 //
-//	ROUTINE:	CServerSoundMgr::PlaySound()
-//
-//	PURPOSE:	Play the sound associated with the sound info...
-//
+//	PURPOSE: Play the sound associated with the sound info...
 // ----------------------------------------------------------------------- //
 
 HLTSOUND CServerSoundMgr::PlaySound(PlaySoundInfo & psi)

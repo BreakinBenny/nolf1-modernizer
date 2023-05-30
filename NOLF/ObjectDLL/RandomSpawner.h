@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: RandomSpawner.h
 //
-// MODULE  : RandomSpawner.h
+// PURPOSE: RandomSpawner - Definition
 //
-// PURPOSE : RandomSpawner - Definition
-//
-// CREATED : 04.23.1999
-//
+// CREATED: 04.23.1999
 // ----------------------------------------------------------------------- //
 
 #ifndef __RANDOM_SPAWNER_H__
@@ -25,19 +23,19 @@ class RandomSpawner : public BaseClass
 		RandomSpawner();
 		~RandomSpawner();
 
-        uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
-        uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 	protected :
 
 		void	TriggerMsg(HOBJECT hSender, const char* szMsg);
 
-        LTBOOL   ReadProp(ObjectCreateStruct *pData);
-        LTBOOL   Setup(ObjectCreateStruct *pData);
+		LTBOOL   ReadProp(ObjectCreateStruct *pData);
+		LTBOOL   Setup(ObjectCreateStruct *pData);
 		void	PostPropRead(ObjectCreateStruct* pData);
 
-        LTBOOL   InitialUpdate();
-        LTBOOL   Update();
+		LTBOOL   InitialUpdate();
+		LTBOOL   Update();
 
 		void	Setup();
 		void	Spawn();
@@ -47,7 +45,7 @@ class RandomSpawner : public BaseClass
 
 	public : // Public member variables
 
-        LTBOOL       m_bFirstUpdate;
+		LTBOOL	   m_bFirstUpdate;
 		HSTRING		m_hstrSpawner;
 		int			m_cSpawn;
 		HOBJECT*	m_ahSpawners;

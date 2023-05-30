@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ObjectMsgs.h
 //
-// MODULE  : ObjectMsgs.h
+// PURPOSE: Object to object messages (replaces generic_msg_de.h)
 //
-// PURPOSE : Object to object messages (replaces generic_msg_de.h)
-//
-// CREATED : 4/22/99
+// CREATED: 4/22/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __OBJECT_MSGS_H__

@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: RandomSpawner.h
 //
-// MODULE  : RandomSpawner.h
+// PURPOSE: RandomSpawner - Implementation
 //
-// PURPOSE : RandomSpawner - Implementation
-//
-// CREATED : 04.23.1999
-//
+// CREATED: 04.23.1999
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -25,34 +23,30 @@ END_CLASS_DEFAULT(RandomSpawner, BaseClass, NULL, NULL)
 const char s_szSpawnTrigger[] = "DEFAULT";
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::RandomSpawner()
 //
-//	ROUTINE:	RandomSpawner::RandomSpawner()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 RandomSpawner::RandomSpawner() : BaseClass()
 {
-    m_bFirstUpdate = LTTRUE;
+	m_bFirstUpdate = LTTRUE;
 
-    m_hstrSpawner = LTNULL;
+	m_hstrSpawner = LTNULL;
 	m_cSpawn = 0;
 
 	m_ahSpawners = debug_newa(HOBJECT, kMaxSpawners);
 
 	for ( int iSpawner = 0 ; iSpawner < kMaxSpawners ; iSpawner++ )
 	{
-        m_ahSpawners[iSpawner] = LTNULL;
+		m_ahSpawners[iSpawner] = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::~RandomSpawner()
 //
-//	ROUTINE:	RandomSpawner::~RandomSpawner()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 RandomSpawner::~RandomSpawner()
@@ -63,7 +57,7 @@ RandomSpawner::~RandomSpawner()
 	{
 		if ( m_ahSpawners[iSpawner] )
 		{
-            g_pLTServer->BreakInterObjectLink(m_hObject, m_ahSpawners[iSpawner]);
+			g_pLTServer->BreakInterObjectLink(m_hObject, m_ahSpawners[iSpawner]);
 		}
 	}
 
@@ -71,11 +65,9 @@ RandomSpawner::~RandomSpawner()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::EngineMessageFn
 //
-//	ROUTINE:	RandomSpawner::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 RandomSpawner::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -117,7 +109,7 @@ uint32 RandomSpawner::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDa
 			{
 				if ( hObject == m_ahSpawners[iSpawner] )
 				{
-                    m_ahSpawners[iSpawner] = LTNULL;
+					m_ahSpawners[iSpawner] = LTNULL;
 				}
 			}
 
@@ -143,16 +135,14 @@ uint32 RandomSpawner::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDa
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::ObjectMessageFn
 //
-//	ROUTINE:	RandomSpawner::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 RandomSpawner::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
 {
-    if (!g_pLTServer) return 0;
+	if (!g_pLTServer) return 0;
 
 	switch(messageID)
 	{
@@ -168,11 +158,9 @@ uint32 RandomSpawner::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAG
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::TriggerMsg()
 //
-//	ROUTINE:	RandomSpawner::TriggerMsg()
-//
-//	PURPOSE:	Handler for RandomSpawner trigger messages.
-//
+//	PURPOSE: Handler for RandomSpawner trigger messages.
 // --------------------------------------------------------------------------- //
 
 void RandomSpawner::TriggerMsg(HOBJECT hSender, const char* szMsg)
@@ -180,35 +168,31 @@ void RandomSpawner::TriggerMsg(HOBJECT hSender, const char* szMsg)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::ReadProp
 //
-//	ROUTINE:	RandomSpawner::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL RandomSpawner::ReadProp(ObjectCreateStruct *pInfo)
 {
-    if (!pInfo) return LTFALSE;
+	if (!pInfo) return LTFALSE;
 
 	GenericProp genProp;
 
-    if ( g_pLTServer->GetPropGeneric( "Spawner", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Spawner", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrSpawner = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrSpawner = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "Number", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Number", &genProp ) == LT_OK )
 		m_cSpawn = genProp.m_Long;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::PostPropRead()
 //
-//	ROUTINE:	RandomSpawner::PostPropRead()
-//
-//	PURPOSE:	Update Properties
-//
+//	PURPOSE: Update Properties
 // ----------------------------------------------------------------------- //
 
 void RandomSpawner::PostPropRead(ObjectCreateStruct *pStruct)
@@ -217,26 +201,22 @@ void RandomSpawner::PostPropRead(ObjectCreateStruct *pStruct)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::InitialUpdate()
 //
-//	ROUTINE:	RandomSpawner::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 LTBOOL RandomSpawner::InitialUpdate()
 {
-    g_pLTServer->SetNextUpdate(m_hObject, 0.01f);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.01f);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::Update()
 //
-//	ROUTINE:	RandomSpawner::Update()
-//
-//	PURPOSE:	Update
-//
+//	PURPOSE: Update
 // ----------------------------------------------------------------------- //
 
 LTBOOL RandomSpawner::Update()
@@ -246,75 +226,69 @@ LTBOOL RandomSpawner::Update()
 		Setup();
 		Spawn();
 
-        m_bFirstUpdate = LTFALSE;
+		m_bFirstUpdate = LTFALSE;
 
-        g_pLTServer->SetNextUpdate(m_hObject, 0.00f);
+		g_pLTServer->SetNextUpdate(m_hObject, 0.00f);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::Save
 //
-//	ROUTINE:	RandomSpawner::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void RandomSpawner::Save(HMESSAGEWRITE hWrite)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hWrite) return;
 
-    g_pLTServer->WriteToMessageDWord(hWrite, m_bFirstUpdate);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrSpawner);
-    g_pLTServer->WriteToMessageDWord(hWrite, m_cSpawn);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_bFirstUpdate);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrSpawner);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_cSpawn);
 
 	for ( int iSpawner = 0 ; iSpawner < kMaxSpawners ; iSpawner++ )
 	{
-        g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_ahSpawners[iSpawner]);
+		g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_ahSpawners[iSpawner]);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::Load
 //
-//	ROUTINE:	RandomSpawner::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void RandomSpawner::Load(HMESSAGEREAD hRead)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hRead) return;
 
-    m_bFirstUpdate = (LTBOOL)g_pLTServer->ReadFromMessageDWord(hRead);
-    m_hstrSpawner = g_pLTServer->ReadFromMessageHString(hRead);
-    m_cSpawn = g_pLTServer->ReadFromMessageDWord(hRead);
+	m_bFirstUpdate = (LTBOOL)g_pLTServer->ReadFromMessageDWord(hRead);
+	m_hstrSpawner = g_pLTServer->ReadFromMessageHString(hRead);
+	m_cSpawn = g_pLTServer->ReadFromMessageDWord(hRead);
 
 	for ( int iSpawner = 0 ; iSpawner < kMaxSpawners ; iSpawner++ )
 	{
-        g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_ahSpawners[iSpawner]);
+		g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_ahSpawners[iSpawner]);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::Setup()
 //
-//	ROUTINE:	RandomSpawner::Setup()
-//
-//	PURPOSE:	Setup
-//
+//	PURPOSE: Setup
 // ----------------------------------------------------------------------- //
 
 void RandomSpawner::Setup()
 {
-    HCLASS  hSpawner = g_pLTServer->GetClass("Spawner");
+	HCLASS  hSpawner = g_pLTServer->GetClass("Spawner");
 	_ASSERT(hSpawner);
 	if  ( !hSpawner ) return;
 
-    const char* szSpawnerBase = g_pLTServer->GetStringData(m_hstrSpawner);
+	const char* szSpawnerBase = g_pLTServer->GetStringData(m_hstrSpawner);
 	_ASSERT(szSpawnerBase);
 	if ( !szSpawnerBase ) return;
 
@@ -326,7 +300,7 @@ void RandomSpawner::Setup()
 		sprintf(szSpawner, "%s%2.2d", szSpawnerBase, cSpawners);
 
 		ObjArray <HOBJECT, 1> objArray;
-        g_pLTServer->FindNamedObjects(szSpawner,objArray);
+		g_pLTServer->FindNamedObjects(szSpawner,objArray);
 		if(!objArray.NumObjects()) break;
 
 		HOBJECT hObject = objArray.GetObject(0);
@@ -334,7 +308,7 @@ void RandomSpawner::Setup()
 		if ( hObject )
 		{
 			m_ahSpawners[cSpawners++] = hObject;
-            g_pLTServer->CreateInterObjectLink(m_hObject, hObject);
+			g_pLTServer->CreateInterObjectLink(m_hObject, hObject);
 		}
 		else
 		{
@@ -344,17 +318,15 @@ void RandomSpawner::Setup()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: RandomSpawner::Spawn()
 //
-//	ROUTINE:	RandomSpawner::Spawn()
-//
-//	PURPOSE:	Spawn
-//
+//	PURPOSE: Spawn
 // ----------------------------------------------------------------------- //
 
 void RandomSpawner::Spawn()
 {
-    LTBOOL abSpawned[kMaxSpawners];
-    memset(abSpawned, LTFALSE, sizeof(abSpawned));
+	LTBOOL abSpawned[kMaxSpawners];
+	memset(abSpawned, LTFALSE, sizeof(abSpawned));
 
 	for ( int iSpawn = 0 ; iSpawn < m_cSpawn ; iSpawn++ )
 	{
@@ -367,10 +339,10 @@ void RandomSpawner::Spawn()
 			iSpawner = GetRandom(0, kMaxSpawners-1);
 		}
 
-        abSpawned[iSpawner] = LTTRUE;
+		abSpawned[iSpawner] = LTTRUE;
 
 		// Trigger the spawner to spawn the default object
 
-        SendTriggerMsgToObject(this, m_ahSpawners[iSpawner], LTFALSE, (char*)s_szSpawnTrigger);
+		SendTriggerMsgToObject(this, m_ahSpawners[iSpawner], LTFALSE, (char*)s_szSpawnTrigger);
 	}
 }

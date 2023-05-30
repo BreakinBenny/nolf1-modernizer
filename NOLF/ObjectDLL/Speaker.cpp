@@ -17,11 +17,9 @@ BEGIN_CLASS(Speaker)
 END_CLASS_DEFAULT_FLAGS(Speaker, CCharacter, NULL, NULL, 0)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Speaker::EngineMessageFn
 //
-//	ROUTINE:	Speaker::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 Speaker::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -32,13 +30,13 @@ uint32 Speaker::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 		{
 			UpdateSounds();
 
-		    SetNextUpdate(0.1f);
+			SetNextUpdate(0.1f);
 		}
 		break;
 
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = CCharacter::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = CCharacter::EngineMessageFn(messageID, pData, fData);
 
 			int nInfo = (int)fData;
 			if (nInfo == PRECREATE_WORLDFILE || nInfo == PRECREATE_STRINGPROP)
@@ -51,9 +49,9 @@ uint32 Speaker::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_INITIALUPDATE:
 		{
-            if (!g_pLTServer) return 0;
+			if (!g_pLTServer) return 0;
 
-            SetNextUpdate(0.1f);
+			SetNextUpdate(0.1f);
 
 			int nInfo = (int)fData;
 			if (nInfo != INITIALUPDATE_SAVEGAME)
@@ -80,13 +78,13 @@ uint32 Speaker::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -100,19 +98,17 @@ uint32 Speaker::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Speaker::ReadProp
 //
-//	ROUTINE:	Speaker::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL Speaker::ReadProp(ObjectCreateStruct *pStruct)
 {
 	GenericProp genProp;
-    if (!pStruct) return LTFALSE;
+	if (!pStruct) return LTFALSE;
 
-    if ( g_pLTServer->GetPropGeneric( "SoundRadius", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "SoundRadius", &genProp ) == LT_OK )
 	{
 		m_fSoundRadius = genProp.m_Float;
 	}
@@ -121,16 +117,14 @@ LTBOOL Speaker::ReadProp(ObjectCreateStruct *pStruct)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Speaker::InitialUpdate()
 //
-//	ROUTINE:	Speaker::InitialUpdate()
-//
-//	PURPOSE:	Initialize ourselves
-//
+//	PURPOSE: Initialize ourselves
 // ----------------------------------------------------------------------- //
 
 void Speaker::InitialUpdate()
 {
-    if (!g_pLTServer || !m_hObject) return;
+	if (!g_pLTServer || !m_hObject) return;
 
 	ObjectCreateStruct createstruct;
 	createstruct.Clear();
@@ -138,15 +132,13 @@ void Speaker::InitialUpdate()
 	SAFE_STRCPY(createstruct.m_Filename, "Models\\1x1_square.abc");
 	SAFE_STRCPY(createstruct.m_SkinNames[0], "Models\\1x1_square.dtx");
 
-    g_pLTServer->Common()->SetObjectFilenames(m_hObject, &createstruct);
+	g_pLTServer->Common()->SetObjectFilenames(m_hObject, &createstruct);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Speaker::Save
 //
-//	ROUTINE:	Speaker::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void Speaker::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -155,11 +147,9 @@ void Speaker::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Speaker::Load
 //
-//	ROUTINE:	Speaker::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void Speaker::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)

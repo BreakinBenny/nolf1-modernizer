@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ServerUtilities.cpp
 //
-// MODULE  : ServerUtilities.cpp
+// PURPOSE: Utility functions
 //
-// PURPOSE : Utility functions
-//
-// CREATED : 9/25/97
-//
+// CREATED: 9/25/97
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -37,20 +35,20 @@
 extern CVarTrack	g_ShowTimingTrack;
 extern CVarTrack	g_ShowTriggersTrack;
 extern CVarTrack	g_ShowTriggersFilter;
-static LTCounter     s_counter;
+static LTCounter	 s_counter;
 
 void StartTimingCounter()
 {
-    if (!g_pLTServer || g_ShowTimingTrack.GetFloat() < 1.0f) return;
+	if (!g_pLTServer || g_ShowTimingTrack.GetFloat() < 1.0f) return;
 
-    g_pLTServer->StartCounter(&s_counter);
+	g_pLTServer->StartCounter(&s_counter);
 }
 
 void EndTimingCounter(char *msg, ...)
 {
-    if (!g_pLTServer || g_ShowTimingTrack.GetFloat() < 1.0f) return;
+	if (!g_pLTServer || g_ShowTimingTrack.GetFloat() < 1.0f) return;
 
-    uint32 dwTicks = g_pLTServer->EndCounter(&s_counter);
+	uint32 dwTicks = g_pLTServer->EndCounter(&s_counter);
 
 	// parse the message
 
@@ -62,7 +60,7 @@ void EndTimingCounter(char *msg, ...)
 
 	if (nSuccess < 0) return;
 
-    g_pLTServer->CPrint("%s : %d ticks", pMsg, dwTicks);
+	g_pLTServer->CPrint("%s : %d ticks", pMsg, dwTicks);
 }
 
 static void ParseTriggerMsg(const char* szMsg, char* aszMsgs[256], uint32* pcMsgs)
@@ -86,7 +84,7 @@ LTBOOL SendMixedTriggerMsgToObjects(LPBASECLASS pSender, HSTRING hName, HSTRING 
 	ParseTriggerMsg(g_pLTServer->GetStringData(hMsg), aszMsgs, &cMsgs);
 
 	LTBOOL bReturn = LTTRUE;
-    for ( uint32 iMsg = 0 ; iMsg < cMsgs ; iMsg++ )
+	for ( uint32 iMsg = 0 ; iMsg < cMsgs ; iMsg++ )
 	{
 		bReturn &= SendTriggerMsgToObjects(pSender, g_pLTServer->GetStringData(hName), aszMsgs[iMsg]);
 	}
@@ -102,7 +100,7 @@ LTBOOL SendMixedTriggerMsgToObjects(LPBASECLASS pSender, const char* pName, cons
 	ParseTriggerMsg(pMsg, aszMsgs, &cMsgs);
 
 	LTBOOL bReturn = LTTRUE;
-    for ( uint32 iMsg = 0 ; iMsg < cMsgs ; iMsg++ )
+	for ( uint32 iMsg = 0 ; iMsg < cMsgs ; iMsg++ )
 	{
 		bReturn &= SendTriggerMsgToObjects(pSender, pName, aszMsgs[iMsg]);
 	}
@@ -118,7 +116,7 @@ void SendMixedTriggerMsgToObject(LPBASECLASS pSender, HOBJECT hObj, HSTRING hMsg
 	ParseTriggerMsg(g_pLTServer->GetStringData(hMsg), aszMsgs, &cMsgs);
 
 	LTBOOL bReturn = LTTRUE;
-    for ( uint32 iMsg = 0 ; iMsg < cMsgs ; iMsg++ )
+	for ( uint32 iMsg = 0 ; iMsg < cMsgs ; iMsg++ )
 	{
 		SendTriggerMsgToObject(pSender, hObj, LTFALSE, aszMsgs[iMsg]);
 	}
@@ -132,7 +130,7 @@ void SendMixedTriggerMsgToObject(LPBASECLASS pSender, HOBJECT hObj, LTBOOL bBogu
 	ParseTriggerMsg(pStr, aszMsgs, &cMsgs);
 
 	LTBOOL bReturn = LTTRUE;
-    for ( uint32 iMsg = 0 ; iMsg < cMsgs ; iMsg++ )
+	for ( uint32 iMsg = 0 ; iMsg < cMsgs ; iMsg++ )
 	{
 		SendTriggerMsgToObject(pSender, hObj, LTFALSE, aszMsgs[iMsg]);
 	}
@@ -142,9 +140,9 @@ void SendMixedTriggerMsgToObject(LPBASECLASS pSender, HOBJECT hObj, LTBOOL bBogu
 
 LTBOOL SendTriggerMsgToObjects(LPBASECLASS pSender, HSTRING hName, HSTRING hMsg)
 {
-    if (!hMsg) return LTFALSE;
+	if (!hMsg) return LTFALSE;
 
-    char* pMsg = g_pLTServer->GetStringData(hMsg);
+	char* pMsg = g_pLTServer->GetStringData(hMsg);
 
 	// Process the message as a command if it is a valid command...
 
@@ -153,9 +151,9 @@ LTBOOL SendTriggerMsgToObjects(LPBASECLASS pSender, HSTRING hName, HSTRING hMsg)
 		return g_pCmdMgr->Process(pMsg);
 	}
 
-    if (!hName) return LTFALSE;
+	if (!hName) return LTFALSE;
 
-    char* pName = g_pLTServer->GetStringData(hName);
+	char* pName = g_pLTServer->GetStringData(hName);
 
 	return SendTriggerMsgToObjects(pSender, pName, pMsg);
 }
@@ -164,7 +162,7 @@ LTBOOL SendTriggerMsgToObjects(LPBASECLASS pSender, HSTRING hName, HSTRING hMsg)
 
 LTBOOL SendTriggerMsgToObjects(LPBASECLASS pSender, const char* pName, const char* pMsg)
 {
-    if (!pMsg) return LTFALSE;
+	if (!pMsg) return LTFALSE;
 
 	// Process the message as a command if it is a valid command...
 
@@ -173,21 +171,21 @@ LTBOOL SendTriggerMsgToObjects(LPBASECLASS pSender, const char* pName, const cha
 		return g_pCmdMgr->Process(pMsg);
 	}
 
-    if (!pName || pName[0] == '\0') return LTFALSE;
+	if (!pName || pName[0] == '\0') return LTFALSE;
 
 	ObjArray <HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
 	// ILTServer::FindNameObjects does not destroy pName so this is safe
-    g_pLTServer->FindNamedObjects((char*)pName, objArray);
+	g_pLTServer->FindNamedObjects((char*)pName, objArray);
 
 	int numObjects = objArray.NumObjects();
-    if (!numObjects) return LTFALSE;
+	if (!numObjects) return LTFALSE;
 
 	for (int i = 0; i < numObjects; i++)
 	{
 		SendTriggerMsgToObject(pSender, objArray.GetObject(i), 0, pMsg);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 void SendTriggerMsgToObject(LPBASECLASS pSender, HOBJECT hObj, HSTRING hMsg)
@@ -195,7 +193,7 @@ void SendTriggerMsgToObject(LPBASECLASS pSender, HOBJECT hObj, HSTRING hMsg)
 	HMESSAGEWRITE hMessage;
 	char *pSendName, *pRecvName, *pFilter;
 
-    char* szMessage = g_pLTServer->GetStringData(hMsg);
+	char* szMessage = g_pLTServer->GetStringData(hMsg);
 
 
 	// Process the message as a command if it is a valid command...
@@ -207,34 +205,34 @@ void SendTriggerMsgToObject(LPBASECLASS pSender, HOBJECT hObj, HSTRING hMsg)
 	}
 
 
-    hMessage = g_pLTServer->StartMessageToObject(pSender, hObj, MID_TRIGGER);
+	hMessage = g_pLTServer->StartMessageToObject(pSender, hObj, MID_TRIGGER);
 	if (hMessage)
 	{
 		if (g_ShowTriggersTrack.GetFloat() != 0.0f)
 		{
-            if (pSender) pSendName = g_pLTServer->GetObjectName(pSender->m_hObject);
+			if (pSender) pSendName = g_pLTServer->GetObjectName(pSender->m_hObject);
 			else pSendName = "Command Manager";
 
-            pRecvName   = g_pLTServer->GetObjectName(hObj);
+			pRecvName   = g_pLTServer->GetObjectName(hObj);
 			pFilter		= g_ShowTriggersFilter.GetStr();
 
 			// Filter out displaying any unwanted messages...
 
-            LTBOOL bPrintMsg = (!pFilter || !pFilter[0]);
+			LTBOOL bPrintMsg = (!pFilter || !pFilter[0]);
 			if (!bPrintMsg)
 			{
-                bPrintMsg = (szMessage ? !strstr(pFilter, szMessage) : LTTRUE);
+				bPrintMsg = (szMessage ? !strstr(pFilter, szMessage) : LTTRUE);
 			}
 
 			if (bPrintMsg)
 			{
-                g_pLTServer->CPrint("Message: %s", szMessage ? szMessage : "NULL");
+				g_pLTServer->CPrint("Message: %s", szMessage ? szMessage : "NULL");
 				g_pLTServer->CPrint("  Sent from '%s', to '%s'", pSendName, pRecvName);
 			}
 		}
 
-        g_pLTServer->WriteToMessageDWord(hMessage, (uint32)g_pLTServer->GetStringData(hMsg));
-        g_pLTServer->EndMessage(hMessage);
+		g_pLTServer->WriteToMessageDWord(hMessage, (uint32)g_pLTServer->GetStringData(hMsg));
+		g_pLTServer->EndMessage(hMessage);
 	}
 }
 
@@ -254,34 +252,34 @@ void SendTriggerMsgToObject(LPBASECLASS pSender, HOBJECT hObj, LTBOOL, const cha
 	}
 
 
-    hMessage = g_pLTServer->StartMessageToObject(pSender, hObj, MID_TRIGGER);
+	hMessage = g_pLTServer->StartMessageToObject(pSender, hObj, MID_TRIGGER);
 	if (hMessage)
 	{
 		if (g_ShowTriggersTrack.GetFloat() != 0.0f)
 		{
-            if (pSender) pSendName = g_pLTServer->GetObjectName(pSender->m_hObject);
+			if (pSender) pSendName = g_pLTServer->GetObjectName(pSender->m_hObject);
 			else pSendName = "Command Manager";
 
-            pRecvName   = g_pLTServer->GetObjectName(hObj);
+			pRecvName   = g_pLTServer->GetObjectName(hObj);
 			pFilter		= g_ShowTriggersFilter.GetStr();
 
 			// Filter out displaying any unwanted messages...
 
-            LTBOOL bPrintMsg = (!pFilter || !pFilter[0]);
+			LTBOOL bPrintMsg = (!pFilter || !pFilter[0]);
 			if (!bPrintMsg)
 			{
-                bPrintMsg = (szMessage ? !strstr(pFilter, szMessage) : LTTRUE);
+				bPrintMsg = (szMessage ? !strstr(pFilter, szMessage) : LTTRUE);
 			}
 
 			if (bPrintMsg)
 			{
-                g_pLTServer->CPrint("Message: %s", szMessage ? szMessage : "NULL");
+				g_pLTServer->CPrint("Message: %s", szMessage ? szMessage : "NULL");
 				g_pLTServer->CPrint("  Sent from '%s', to '%s'", pSendName, pRecvName);
 			}
 		}
 
-        g_pLTServer->WriteToMessageDWord(hMessage, (uint32)szMessage);
-        g_pLTServer->EndMessage(hMessage);
+		g_pLTServer->WriteToMessageDWord(hMessage, (uint32)szMessage);
+		g_pLTServer->EndMessage(hMessage);
 	}
 }
 
@@ -292,14 +290,14 @@ void SendTriggerMsgToObject(LPBASECLASS pSender, HOBJECT hObj, LTBOOL, const cha
 // Arguments:
 //		hObject - handle to object to test
 // Return:
-//      LTBOOL
+//	  LTBOOL
 //-------------------------------------------------------------------------------------------
 
 LTBOOL IsPlayer( HOBJECT hObject )
 {
-    static HCLASS hPlayerTest = g_pLTServer->GetClass( "CPlayerObj" );
-    HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
-    return ( g_pLTServer->IsKindOf( hClass, hPlayerTest ));
+	static HCLASS hPlayerTest = g_pLTServer->GetClass( "CPlayerObj" );
+	HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
+	return ( g_pLTServer->IsKindOf( hClass, hPlayerTest ));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -309,14 +307,14 @@ LTBOOL IsPlayer( HOBJECT hObject )
 // Arguments:
 //		hObject - handle to object to test
 // Return:
-//      LTBOOL
+//	  LTBOOL
 //-------------------------------------------------------------------------------------------
 
 LTBOOL IsAI( HOBJECT hObject )
 {
-    static HCLASS hTest  = g_pLTServer->GetClass( "CAI" );
-    HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
-    return ( g_pLTServer->IsKindOf( hClass, hTest ));
+	static HCLASS hTest  = g_pLTServer->GetClass( "CAI" );
+	HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
+	return ( g_pLTServer->IsKindOf( hClass, hTest ));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -326,14 +324,14 @@ LTBOOL IsAI( HOBJECT hObject )
 // Arguments:
 //		hObject - handle to object to test
 // Return:
-//      LTBOOL
+//	  LTBOOL
 //-------------------------------------------------------------------------------------------
 
 LTBOOL IsDog ( HOBJECT hObject )
 {
-    static HCLASS hTest  = g_pLTServer->GetClass( "AI_Dog" );
-    HCLASS hClass = g_pLTServer->GetObjectClass(hObject);
-    return g_pLTServer->IsKindOf(hClass, hTest);
+	static HCLASS hTest  = g_pLTServer->GetClass( "AI_Dog" );
+	HCLASS hClass = g_pLTServer->GetObjectClass(hObject);
+	return g_pLTServer->IsKindOf(hClass, hTest);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -343,14 +341,14 @@ LTBOOL IsDog ( HOBJECT hObject )
 // Arguments:
 //		hObject - handle to object to test
 // Return:
-//      LTBOOL
+//	  LTBOOL
 //-------------------------------------------------------------------------------------------
 
 LTBOOL IsVehicle( HOBJECT hObject )
 {
-    static HCLASS hTest  = g_pLTServer->GetClass( "Vehicle" );
-    HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
-    return ( g_pLTServer->IsKindOf( hClass, hTest ));
+	static HCLASS hTest  = g_pLTServer->GetClass( "Vehicle" );
+	HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
+	return ( g_pLTServer->IsKindOf( hClass, hTest ));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -360,14 +358,14 @@ LTBOOL IsVehicle( HOBJECT hObject )
 // Arguments:
 //		hObject - handle to object to test
 // Return:
-//      LTBOOL
+//	  LTBOOL
 //-------------------------------------------------------------------------------------------
 
 LTBOOL IsCharacter( HOBJECT hObject )
 {
-    static HCLASS hCharacterTest = g_pLTServer->GetClass( "CCharacter" );
-    HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
-    return ( g_pLTServer->IsKindOf( hClass, hCharacterTest ));
+	static HCLASS hCharacterTest = g_pLTServer->GetClass( "CCharacter" );
+	HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
+	return ( g_pLTServer->IsKindOf( hClass, hCharacterTest ));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -377,14 +375,14 @@ LTBOOL IsCharacter( HOBJECT hObject )
 // Arguments:
 //		hObject - handle to object to test
 // Return:
-//      LTBOOL
+//	  LTBOOL
 //-------------------------------------------------------------------------------------------
 
 LTBOOL IsCharacterHitBox( HOBJECT hObject )
 {
-    static HCLASS hTest  = g_pLTServer->GetClass( "CCharacterHitBox" );
-    HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
-    return ( g_pLTServer->IsKindOf( hClass, hTest ));
+	static HCLASS hTest  = g_pLTServer->GetClass( "CCharacterHitBox" );
+	HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
+	return ( g_pLTServer->IsKindOf( hClass, hTest ));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -394,14 +392,14 @@ LTBOOL IsCharacterHitBox( HOBJECT hObject )
 // Arguments:
 //		hObject - handle to object to test
 // Return:
-//      LTBOOL
+//	  LTBOOL
 //-------------------------------------------------------------------------------------------
 
 LTBOOL IsBody( HOBJECT hObject )
 {
-    static HCLASS hTest  = g_pLTServer->GetClass( "Body" );
-    HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
-    return ( g_pLTServer->IsKindOf( hClass, hTest ));
+	static HCLASS hTest  = g_pLTServer->GetClass( "Body" );
+	HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
+	return ( g_pLTServer->IsKindOf( hClass, hTest ));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -411,14 +409,14 @@ LTBOOL IsBody( HOBJECT hObject )
 // Arguments:
 //		hObject - handle to object to test
 // Return:
-//      LTBOOL
+//	  LTBOOL
 //-------------------------------------------------------------------------------------------
 
 LTBOOL IsGameBase( HOBJECT hObject )
 {
-    static HCLASS hTest = g_pLTServer->GetClass( "GameBase" );
-    HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
-    return ( g_pLTServer->IsKindOf( hClass, hTest ));
+	static HCLASS hTest = g_pLTServer->GetClass( "GameBase" );
+	HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
+	return ( g_pLTServer->IsKindOf( hClass, hTest ));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -429,14 +427,14 @@ LTBOOL IsGameBase( HOBJECT hObject )
 //		hObject - handle to object to test
 //		szClass - the class
 // Return:
-//      LTBOOL
+//	  LTBOOL
 //-------------------------------------------------------------------------------------------
 
 LTBOOL IsKindOf( HOBJECT hObject, const char* szClass )
 {
-    HCLASS hClassTest = g_pLTServer->GetClass( (char*)szClass );
-    HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
-    return ( g_pLTServer->IsKindOf( hClass, hClassTest ));
+	HCLASS hClassTest = g_pLTServer->GetClass( (char*)szClass );
+	HCLASS hClass = g_pLTServer->GetObjectClass( hObject );
+	return ( g_pLTServer->IsKindOf( hClass, hClassTest ));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -447,14 +445,14 @@ LTBOOL IsKindOf( HOBJECT hObject, const char* szClass )
 //		hObject  - handle to object to test
 //		hObject2 - handle to test agains
 // Return:
-//      LTBOOL
+//	  LTBOOL
 //-------------------------------------------------------------------------------------------
 
 LTBOOL IsKindOf( HOBJECT hObject, HOBJECT hObject2 )
 {
-    HCLASS hClassTest = g_pLTServer->GetObjectClass( hObject2 );
-    HCLASS hClass     = g_pLTServer->GetObjectClass( hObject );
-    return ( g_pLTServer->IsKindOf( hClass, hClassTest ));
+	HCLASS hClassTest = g_pLTServer->GetObjectClass( hObject2 );
+	HCLASS hClass	 = g_pLTServer->GetObjectClass( hObject );
+	return ( g_pLTServer->IsKindOf( hClass, hClassTest ));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -469,13 +467,13 @@ LTBOOL IsKindOf( HOBJECT hObject, HOBJECT hObject2 )
 
 LTBOOL MoveObjectToFloor(HOBJECT hObj)
 {
-    if (!hObj) return LTFALSE;
+	if (!hObj) return LTFALSE;
 
 	// Intersect with the world to find the poly we're standing on...
 
-    LTVector vPos, vDims;
-    g_pLTServer->GetObjectPos(hObj, &vPos);
-    g_pLTServer->GetObjectDims(hObj, &vDims);
+	LTVector vPos, vDims;
+	g_pLTServer->GetObjectPos(hObj, &vPos);
+	g_pLTServer->GetObjectDims(hObj, &vDims);
 
 	LTVector vDir(0.0f, -10000.0f, 0.0f);
 
@@ -489,18 +487,18 @@ LTBOOL MoveObjectToFloor(HOBJECT hObj)
 	IQuery.m_FilterFn  = NULL;
 	IQuery.m_pUserData = NULL;
 
-    if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
+	if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
 	{
-        LTFLOAT fDist = vPos.y - IInfo.m_Point.y;
+		LTFLOAT fDist = vPos.y - IInfo.m_Point.y;
 		if (fDist > vDims.y)
 		{
 			vPos.y -= (fDist - (vDims.y + 0.1f));
-            g_pLTServer->SetObjectPos(hObj, &vPos);
-            return LTTRUE;
+			g_pLTServer->SetObjectPos(hObj, &vPos);
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
@@ -528,7 +526,7 @@ LTBOOL MoveObjectToFloor(HOBJECT hObj)
 				pIntersectPlane->m_Normal.z = 0.0f;\
 				pIntersectPlane->m_Dist = MinBox.x * normalDirection;\
 			} \
-            return LTTRUE;\
+			return LTTRUE;\
 		}\
 	}
 
@@ -541,14 +539,14 @@ LTBOOL DoesSegmentIntersectAABB(const LTVector& Point1, const LTVector& Point2, 
 	if(Point1.x < MinBox.x)
 	{
 		if(Point2.x < MinBox.x)
-            return LTFALSE;
+			return LTFALSE;
 
 		DO_PLANE_TEST(MinBox, MaxBox, MinBox.x, x, y, z, -1.0f);
 	}
 	else if(Point1.x > MaxBox.x)
 	{
 		if(Point2.x > MaxBox.x)
-            return LTFALSE;
+			return LTFALSE;
 
 		DO_PLANE_TEST(MinBox, MaxBox, MaxBox.x, x, y, z, 1.0f);
 	}
@@ -557,14 +555,14 @@ LTBOOL DoesSegmentIntersectAABB(const LTVector& Point1, const LTVector& Point2, 
 	if(Point1.y < MinBox.y)
 	{
 		if(Point2.y < MinBox.y)
-            return LTFALSE;
+			return LTFALSE;
 
 		DO_PLANE_TEST(MinBox, MaxBox, MinBox.y, y, x, z, -1.0f);
 	}
 	else if(Point1.y > MaxBox.y)
 	{
 		if(Point2.y > MaxBox.y)
-            return LTFALSE;
+			return LTFALSE;
 
 		DO_PLANE_TEST(MinBox, MaxBox, MaxBox.y, y, x, z, 1.0f);
 	}
@@ -573,19 +571,19 @@ LTBOOL DoesSegmentIntersectAABB(const LTVector& Point1, const LTVector& Point2, 
 	if(Point1.z < MinBox.z)
 	{
 		if(Point2.z < MinBox.z)
-            return LTFALSE;
+			return LTFALSE;
 
 		DO_PLANE_TEST(MinBox, MaxBox, MinBox.z, z, x, y, -1.0f);
 	}
 	else if(Point1.z > MaxBox.z)
 	{
 		if(Point2.z > MaxBox.z)
-            return LTFALSE;
+			return LTFALSE;
 
 		DO_PLANE_TEST(MinBox, MaxBox, MaxBox.z, z, x, y, 1.0f);
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL IsVector(const char* szString)
@@ -606,12 +604,12 @@ LTBOOL IsVector(const char* szString)
 
 void GetConsoleString(char* sKey, char* sDest, char* sDefault)
 {
-    if (g_pLTServer)
+	if (g_pLTServer)
 	{
-        HCONVAR hVar = g_pLTServer->GetGameConVar(sKey);
+		HCONVAR hVar = g_pLTServer->GetGameConVar(sKey);
 		if (hVar)
 		{
-            char* sValue = g_pLTServer->GetVarValueString(hVar);
+			char* sValue = g_pLTServer->GetVarValueString(hVar);
 			if (sValue)
 			{
 				strcpy(sDest, sValue);
@@ -625,12 +623,12 @@ void GetConsoleString(char* sKey, char* sDest, char* sDefault)
 
 int GetConsoleInt(char* sKey, int nDefault)
 {
-    if (g_pLTServer)
+	if (g_pLTServer)
 	{
-        HCONVAR hVar = g_pLTServer->GetGameConVar(sKey);
+		HCONVAR hVar = g_pLTServer->GetGameConVar(sKey);
 		if (hVar)
 		{
-            float fValue = g_pLTServer->GetVarValueFloat(hVar);
+			float fValue = g_pLTServer->GetVarValueFloat(hVar);
 			return((int)fValue);
 		}
 	}
@@ -640,12 +638,12 @@ int GetConsoleInt(char* sKey, int nDefault)
 
 LTFLOAT GetConsoleFloat(char* sKey, LTFLOAT fDefault)
 {
-    if (g_pLTServer)
+	if (g_pLTServer)
 	{
-        HCONVAR hVar = g_pLTServer->GetGameConVar(sKey);
+		HCONVAR hVar = g_pLTServer->GetGameConVar(sKey);
 		if (hVar)
 		{
-            float fValue = g_pLTServer->GetVarValueFloat(hVar);
+			float fValue = g_pLTServer->GetVarValueFloat(hVar);
 			return(fValue);
 		}
 	}
@@ -655,31 +653,31 @@ LTFLOAT GetConsoleFloat(char* sKey, LTFLOAT fDefault)
 
 void WriteConsoleString(char* sKey, char* sValue)
 {
-    if (g_pLTServer)
+	if (g_pLTServer)
 	{
 		char sTemp[256];
-        wsprintf(sTemp, "+%s \"%s\"", sKey, sValue);
-        g_pLTServer->RunGameConString(sTemp);
+		wsprintf(sTemp, "+%s \"%s\"", sKey, sValue);
+		g_pLTServer->RunGameConString(sTemp);
 	}
 }
 
 void WriteConsoleInt(char* sKey, int nValue)
 {
-    if (g_pLTServer)
+	if (g_pLTServer)
 	{
 		char sTemp[256];
 		wsprintf(sTemp, "+%s %i", sKey, nValue);
-        g_pLTServer->RunGameConString(sTemp);
+		g_pLTServer->RunGameConString(sTemp);
 	}
 }
 
 void WriteConsoleFloat(char* sKey, LTFLOAT fValue)
 {
-    if (g_pLTServer)
+	if (g_pLTServer)
 	{
 		char sTemp[256];
 		sprintf(sTemp, "+%s %f", sKey, fValue);
-        g_pLTServer->RunGameConString(sTemp);
+		g_pLTServer->RunGameConString(sTemp);
 	}
 }
 

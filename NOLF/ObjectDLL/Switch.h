@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Switch.h
 //
-// MODULE  : Switch.h
+// PURPOSE: A Switch object
 //
-// PURPOSE : A Switch object
-//
-// CREATED : 12/3/97
-//
+// CREATED: 12/3/97
 // ----------------------------------------------------------------------- //
 
 #ifndef __SWITCH_H__
@@ -22,7 +20,7 @@ class Switch : public Door
 
 	protected:
 
-        uint32  EngineMessageFn(uint32 messageID, void *pData, float fData);
+		uint32  EngineMessageFn(uint32 messageID, void *pData, float fData);
 
 		virtual void SetOpening();
 		virtual void SetClosing();
@@ -34,10 +32,10 @@ class Switch : public Door
 
 	private :
 
-        LTBOOL   ReadProp(ObjectCreateStruct *pData);
+		LTBOOL   ReadProp(ObjectCreateStruct *pData);
 		void	InitialUpdate();
-        void    Save(HMESSAGEWRITE hWrite, uint8 nType);
-        void    Load(HMESSAGEREAD hRead, uint8 nType);
+		void	Save(HMESSAGEWRITE hWrite, uint8 nType);
+		void	Load(HMESSAGEREAD hRead, uint8 nType);
 };
 
 

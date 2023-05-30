@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: PolyGrid.cpp
 //
-// MODULE  : PolyGrid.cpp
+// PURPOSE: PolyGrid - Implementation
 //
-// PURPOSE : PolyGrid - Implementation
-//
-// CREATED : 10/20/97
+// CREATED: 10/20/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -19,20 +17,20 @@
 
 BEGIN_CLASS(PolyGrid)
 	ADD_VECTORPROP_FLAG(Dims, PF_DIMS | PF_LOCALDIMS)
-    ADD_COLORPROP(Color1, 255.0f, 255.0f, 255.0f)
-    ADD_COLORPROP(Color2, 255.0f, 255.0f, 255.0f)
-    ADD_STRINGPROP_FLAG(SpriteSurfaceName, "Tex\\Water\\Wa01\\Wa0001.dtx", PF_FILENAME)
-    ADD_REALPROP(XScaleMin, 15.0f)
-    ADD_REALPROP(XScaleMax, 15.0f)
-    ADD_REALPROP(YScaleMin, 15.0f)
-    ADD_REALPROP(YScaleMax, 15.0f)
-    ADD_REALPROP(XScaleDuration, 10.0f)
-    ADD_REALPROP(YScaleDuration, 10.0f)
-    ADD_REALPROP(XPan, 10.0f)
-    ADD_REALPROP(YPan, 10.0f)
+	ADD_COLORPROP(Color1, 255.0f, 255.0f, 255.0f)
+	ADD_COLORPROP(Color2, 255.0f, 255.0f, 255.0f)
+	ADD_STRINGPROP_FLAG(SpriteSurfaceName, "Tex\\Water\\Wa01\\Wa0001.dtx", PF_FILENAME)
+	ADD_REALPROP(XScaleMin, 15.0f)
+	ADD_REALPROP(XScaleMax, 15.0f)
+	ADD_REALPROP(YScaleMin, 15.0f)
+	ADD_REALPROP(YScaleMax, 15.0f)
+	ADD_REALPROP(XScaleDuration, 10.0f)
+	ADD_REALPROP(YScaleDuration, 10.0f)
+	ADD_REALPROP(XPan, 10.0f)
+	ADD_REALPROP(YPan, 10.0f)
 	ADD_REALPROP(Alpha, 0.7f)
-    ADD_BOOLPROP(Additive, LTFALSE)
-    ADD_BOOLPROP(Multiply, LTFALSE)
+	ADD_BOOLPROP(Additive, LTFALSE)
+	ADD_BOOLPROP(Multiply, LTFALSE)
 	ADD_LONGINTPROP(NumPolies, 160)
 	PROP_DEFINEGROUP(PlasmaInfo, PF_GROUP1)
 		ADD_LONGINTPROP_FLAG(PlasmaType, 1, PF_GROUP1)
@@ -45,11 +43,9 @@ END_CLASS_DEFAULT(PolyGrid, CClientSFX, NULL, NULL)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PolyGrid::PolyGrid
 //
-//	ROUTINE:	PolyGrid::PolyGrid
-//
-//	PURPOSE:	Initialize
-//
+//	PURPOSE: Initialize
 // ----------------------------------------------------------------------- //
 
 PolyGrid::PolyGrid() : CClientSFX()
@@ -66,14 +62,14 @@ PolyGrid::PolyGrid() : CClientSFX()
 	m_fYScaleDuration = 10.0f;
 	m_fXPan = 10.0f;
 	m_fYPan = 10.0f;
-    m_hstrSurfaceSprite = LTNULL;
+	m_hstrSurfaceSprite = LTNULL;
 	m_fAlpha = 0.7f;
-    m_bAdditive = LTFALSE;
-    m_bMultiply = LTFALSE;
+	m_bAdditive = LTFALSE;
+	m_bMultiply = LTFALSE;
 
 	m_nPlasmaType = 1;
 
-    m_bSetup = LTFALSE;
+	m_bSetup = LTFALSE;
 
 	m_dwNumPolies = 160;
 
@@ -85,16 +81,14 @@ PolyGrid::PolyGrid() : CClientSFX()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PolyGrid::~PolyGrid
 //
-//	ROUTINE:	PolyGrid::~PolyGrid
-//
-//	PURPOSE:	Deallocate
-//
+//	PURPOSE: Deallocate
 // ----------------------------------------------------------------------- //
 
 PolyGrid::~PolyGrid()
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE) return;
 
 	if (m_hstrSurfaceSprite)
@@ -105,23 +99,21 @@ PolyGrid::~PolyGrid()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PolyGrid::Setup
 //
-//	ROUTINE:	PolyGrid::Setup
-//
-//	PURPOSE:	Initialize
-//
+//	PURPOSE: Initialize
 // ----------------------------------------------------------------------- //
 
 void PolyGrid:: Setup(LTVector* pvDims, LTVector* pvColor1, LTVector* pvColor2,
-                      HSTRING hstrSurfaceSprite, LTFLOAT fXScaleMin, LTFLOAT fXScaleMax,
-                      LTFLOAT fYScaleMin, LTFLOAT fYScaleMax, LTFLOAT fXScaleDuration,
-                      LTFLOAT fYScaleDuration, LTFLOAT fXPan, LTFLOAT fYPan,
-                      LTFLOAT fAlpha, uint32 dwNumPolies, LTBOOL bAdditive,
-                      LTBOOL bMultiply)
+					  HSTRING hstrSurfaceSprite, LTFLOAT fXScaleMin, LTFLOAT fXScaleMax,
+					  LTFLOAT fYScaleMin, LTFLOAT fYScaleMax, LTFLOAT fXScaleDuration,
+					  LTFLOAT fYScaleDuration, LTFLOAT fXPan, LTFLOAT fYPan,
+					  LTFLOAT fAlpha, uint32 dwNumPolies, LTBOOL bAdditive,
+					  LTBOOL bMultiply)
 {
-    uint16 wColor1, wColor2;
+	uint16 wColor1, wColor2;
 
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !pvDims || !pvColor1 || !pvColor2 || dwNumPolies < 4) return;
 
 	VEC_COPY(m_vDims, *pvDims);
@@ -154,7 +146,7 @@ void PolyGrid:: Setup(LTVector* pvDims, LTVector* pvColor1, LTVector* pvColor2,
 	pServerDE->WriteToMessageFloat(hMessage, fYPan);
 	pServerDE->WriteToMessageFloat(hMessage, fAlpha);
 	pServerDE->WriteToMessageHString(hMessage, hstrSprite);
-    pServerDE->WriteToMessageWord(hMessage, (uint16)dwNumPolies);
+	pServerDE->WriteToMessageWord(hMessage, (uint16)dwNumPolies);
 	pServerDE->WriteToMessageByte(hMessage, bAdditive);
 	pServerDE->WriteToMessageByte(hMessage, bMultiply);
 	pServerDE->WriteToMessageByte(hMessage, m_nPlasmaType);
@@ -172,16 +164,14 @@ void PolyGrid:: Setup(LTVector* pvDims, LTVector* pvColor1, LTVector* pvColor2,
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PolyGrid::EngineMessageFn
 //
-//	ROUTINE:	PolyGrid::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 PolyGrid::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE) return 0;
 
 	switch(messageID)
@@ -224,16 +214,14 @@ uint32 PolyGrid::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PolyGrid::ReadProp
 //
-//	ROUTINE:	PolyGrid::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 void PolyGrid::ReadProp(ObjectCreateStruct * pStruct)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE) return;
 
 	pStruct->m_Flags = FLAG_VISIBLE;
@@ -244,9 +232,9 @@ void PolyGrid::ReadProp(ObjectCreateStruct * pStruct)
 	pServerDE->GetPropString("SpriteSurfaceName", buf, MAX_CS_FILENAME_LEN);
 	if (buf[0]) m_hstrSurfaceSprite = pServerDE->CreateString(buf);
 
-    if (pServerDE->GetPropVector("Dims", &m_vDims) == LT_OK)
+	if (pServerDE->GetPropVector("Dims", &m_vDims) == LT_OK)
 	{
-        m_bSetup = LTTRUE;
+		m_bSetup = LTTRUE;
 	}
 
 	pServerDE->GetPropVector("Color1", &m_vColor1);
@@ -264,39 +252,37 @@ void PolyGrid::ReadProp(ObjectCreateStruct * pStruct)
 	pServerDE->GetPropBool("Multiply", &m_bMultiply);
 
 	long nLongVal;
-    if (pServerDE->GetPropLongInt("NumPolies", &nLongVal) == LT_OK)
+	if (pServerDE->GetPropLongInt("NumPolies", &nLongVal) == LT_OK)
 	{
-        m_dwNumPolies = (uint32)nLongVal;
+		m_dwNumPolies = (uint32)nLongVal;
 	}
 
 	pServerDE->GetPropLongInt("PlasmaType", &nLongVal);
-    m_nPlasmaType = (uint8)nLongVal;
+	m_nPlasmaType = (uint8)nLongVal;
 
 	pServerDE->GetPropLongInt("Ring1Rate", &nLongVal);
-    m_nRingRate[0] = (uint8)nLongVal;
+	m_nRingRate[0] = (uint8)nLongVal;
 
 	pServerDE->GetPropLongInt("Ring2Rate", &nLongVal);
-    m_nRingRate[1] = (uint8)nLongVal;
+	m_nRingRate[1] = (uint8)nLongVal;
 
 	pServerDE->GetPropLongInt("Ring3Rate", &nLongVal);
-    m_nRingRate[2] = (uint8)nLongVal;
+	m_nRingRate[2] = (uint8)nLongVal;
 
 	pServerDE->GetPropLongInt("Ring4Rate", &nLongVal);
-    m_nRingRate[3] = (uint8)nLongVal;
+	m_nRingRate[3] = (uint8)nLongVal;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PolyGrid::CacheFiles
 //
-//	ROUTINE:	PolyGrid::CacheFiles
-//
-//	PURPOSE:	Cache the resources associated with this object...
-//
+//	PURPOSE: Cache the resources associated with this object...
 // ----------------------------------------------------------------------- //
 
 void PolyGrid::CacheFiles()
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE) return;
 
 	if (m_hstrSurfaceSprite)

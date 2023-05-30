@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: TeleportPoint.h
 //
-// MODULE  : TeleportPoint.h
+// PURPOSE: TeleportPoint - Definition
 //
-// PURPOSE : TeleportPoint - Definition
-//
-// CREATED : 4/21/99
+// CREATED: 4/21/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __TELEPORT_POINT_H__
@@ -19,21 +17,21 @@ class TeleportPoint : public BaseClass
 {
 	public :
 
-        LTVector GetPitchYawRoll() const { return m_vPitchYawRoll; }
+		LTVector GetPitchYawRoll() const { return m_vPitchYawRoll; }
 
 		LTBOOL IsMoveToFloor() const { return m_bMoveToFloor; }
 
 	protected :
 
-        uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
 
 	private :
 
-        LTVector	m_vPitchYawRoll;        // Pitch, yaw, and roll of point
+		LTVector	m_vPitchYawRoll;		// Pitch, yaw, and roll of point
 		LTBOOL		m_bMoveToFloor;			// Move to floor when teleporting here?
 
-        void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 };
 
 #endif // __TELEPORT_POINT_H__

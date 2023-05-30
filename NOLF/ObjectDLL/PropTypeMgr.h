@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: PropTypeMgr.h
 //
-// MODULE  : PropTypeMgr.h
+// PURPOSE: Definition of prop type mgr
 //
-// PURPOSE : Definition of prop type mgr
-//
-// CREATED : 4/27/2000
+// CREATED: 4/27/2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __PROP_TYPE_MGR_H__
@@ -29,10 +27,10 @@ struct PROPTYPE
 {
 	PROPTYPE();
 
-    LTBOOL      Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL	  Init(CButeMgr & buteMgr, char* aTagName);
 	void		Cache(CPropTypeMgr* pPropTypeMgr);
 
-    uint32      nId;
+	uint32	  nId;
 
 	char		szType[PROPTYPE_MAX_NAME_LENGTH];
 	char		szFilename[PROPTYPE_MAX_FILE_PATH];
@@ -40,20 +38,20 @@ struct PROPTYPE
 	char		szTouchSound[PROPTYPE_MAX_FILE_PATH];
 	char		szDebrisType[PROPTYPE_MAX_NAME_LENGTH];
 
-    LTVector    vScale;
-    LTVector    vObjectColor;
-    LTFLOAT     fAlpha;
-    LTBOOL      bVisible;
-    LTBOOL      bSolid;
-    LTBOOL      bShadow;
+	LTVector	vScale;
+	LTVector	vObjectColor;
+	LTFLOAT	 fAlpha;
+	LTBOOL	  bVisible;
+	LTBOOL	  bSolid;
+	LTBOOL	  bShadow;
 	LTBOOL		bGravity;
-    LTBOOL      bMoveToFloor;
-    LTBOOL      bDetailTexture;
-    LTBOOL      bChrome;
-    LTBOOL      bChromaKey;
-    LTBOOL      bAdditive;
-    LTBOOL      bMultiply;
-    LTBOOL      bRayHit;
+	LTBOOL	  bMoveToFloor;
+	LTBOOL	  bDetailTexture;
+	LTBOOL	  bChrome;
+	LTBOOL	  bChromaKey;
+	LTBOOL	  bAdditive;
+	LTBOOL	  bMultiply;
+	LTBOOL	  bRayHit;
 
 	int			nTouchSoundRadius;
 	int			nHitPoints;
@@ -70,12 +68,12 @@ class CPropTypeMgr : public CGameButeMgr
 		~CPropTypeMgr();
 
 		void			CacheAll();
-        void            Reload(ILTCSBase *pInterface) { Term(); m_buteMgr.Term(); Init(pInterface); }
+		void			Reload(ILTCSBase *pInterface) { Term(); m_buteMgr.Term(); Init(pInterface); }
 
-        LTBOOL           Init(ILTCSBase *pInterface, const char* szAttributeFile=PTMGR_DEFAULT_FILE);
+		LTBOOL		   Init(ILTCSBase *pInterface, const char* szAttributeFile=PTMGR_DEFAULT_FILE);
 		void			Term();
 
-        PROPTYPE*       GetPropType(uint32 nId);
+		PROPTYPE*	   GetPropType(uint32 nId);
 		PROPTYPE*		GetPropType(char* pType);
 
 		int				GetNumPropTypes() const { return m_PropTypeList.GetLength(); }
@@ -102,9 +100,9 @@ class CPropTypeMgrPlugin : public IObjectPlugin
 			const char* szRezPath,
 			const char* szPropName,
 			char** aszStrings,
-            uint32* pcStrings,
-            const uint32 cMaxStrings,
-            const uint32 cMaxStringLength);
+			uint32* pcStrings,
+			const uint32 cMaxStrings,
+			const uint32 cMaxStringLength);
 
 		virtual LTRESULT PreHook_Dims(
 			const char* szRezPath,
@@ -113,8 +111,8 @@ class CPropTypeMgrPlugin : public IObjectPlugin
 			int	  nModelFilenameBufLen,
 			LTVector & vDims);
 
-        LTBOOL PopulateStringList(char** aszStrings, uint32* pcStrings,
-            const uint32 cMaxStrings, const uint32 cMaxStringLength);
+		LTBOOL PopulateStringList(char** aszStrings, uint32* pcStrings,
+			const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
 	protected :
 

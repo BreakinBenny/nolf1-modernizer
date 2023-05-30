@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CServerMark.h
 //
-// MODULE  : CServerMark.h
+// PURPOSE: CServerMark definition - Server-side mark fx
 //
-// PURPOSE : CServerMark definition - Server-side mark fx
-//
-// CREATED : 1/15/99
-//
+// CREATED: 1/15/99
 // ----------------------------------------------------------------------- //
 
 #ifndef __SERVER_MARK_H__
@@ -25,7 +23,7 @@ class CServerMark : public BaseClass
 
 	protected :
 
-        uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+		uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
 };
 
 #endif // __SERVER_MARK_H__

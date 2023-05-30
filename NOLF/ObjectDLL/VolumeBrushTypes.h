@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: VolumeBrushTypes.h
 //
-// MODULE  : VolumeBrushTypes.h
+// PURPOSE: VolumeBrushTypes definition
 //
-// PURPOSE : VolumeBrushTypes definition
-//
-// CREATED : 2/16/98
-//
+// CREATED: 2/16/98
 // ----------------------------------------------------------------------- //
 
 #ifndef __VOLUME_BRUSH_TYPES_H__
@@ -163,8 +161,8 @@ class Weather : public VolumeBrush
 
 	private:
 
-        uint32  m_dwWeatherFlags;
-        LTFLOAT  m_fViewDist;
+		uint32  m_dwWeatherFlags;
+		LTFLOAT  m_fViewDist;
 };
 
 

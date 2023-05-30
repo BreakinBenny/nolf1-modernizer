@@ -27,7 +27,7 @@ class Speaker : public CCharacter
 			cs.nDimsTracker = 0;
 		}
 
-        LTBOOL CanLipSync() { return LTFALSE; }
+		LTBOOL CanLipSync() { return LTFALSE; }
 		LTBOOL DoDialogueSubtitles() { return LTTRUE; }
 };
 

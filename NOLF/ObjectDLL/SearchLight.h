@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: SearchLight.h
 //
-// MODULE  : SearchLight.h
+// PURPOSE: An object which scans for the player and then sends a message
 //
-// PURPOSE : An object which scans for the player and then sends a message
-//
-// CREATED : 3/29/99
-//
+// CREATED: 3/29/99
 // ----------------------------------------------------------------------- //
 
 #ifndef __SEARCH_LIGHT_H__
@@ -39,18 +37,18 @@ class SearchLight : public CScanner
 			eStateDestroyed
 		};
 
-        virtual uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
-        virtual uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		virtual uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		virtual uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 	protected :
 
-        LTBOOL  ReadProp(ObjectCreateStruct *pData);
+		LTBOOL  ReadProp(ObjectCreateStruct *pData);
 		void	PostPropRead(ObjectCreateStruct* pData);
-        LTBOOL  InitialUpdate();
+		LTBOOL  InitialUpdate();
 
 		virtual void	HandleBrokenLink(HOBJECT hObject);
 
-        LTBOOL  Update();
+		LTBOOL  Update();
 		void	UpdateRotation();
 
 		void	StopSearching();
@@ -59,38 +57,38 @@ class SearchLight : public CScanner
 
 		void	SetState(State eNewState);
 
-        virtual void SetRotation(LTRotation& rRot) { g_pLTServer->SetObjectRotation(m_hObject, &rRot); }
-        virtual LTRotation GetRotation() { LTRotation rRot; g_pLTServer->GetObjectRotation(m_hObject, &rRot); return rRot; }
+		virtual void SetRotation(LTRotation& rRot) { g_pLTServer->SetObjectRotation(m_hObject, &rRot); }
+		virtual LTRotation GetRotation() { LTRotation rRot; g_pLTServer->GetObjectRotation(m_hObject, &rRot); return rRot; }
 
-        virtual void SetPosition(LTVector& vPos) { g_pLTServer->SetObjectPos(m_hObject, &vPos); }
-        virtual LTVector GetPosition() { LTVector vPos; g_pLTServer->GetObjectPos(m_hObject, &vPos); return vPos; }
+		virtual void SetPosition(LTVector& vPos) { g_pLTServer->SetObjectPos(m_hObject, &vPos); }
+		virtual LTVector GetPosition() { LTVector vPos; g_pLTServer->GetObjectPos(m_hObject, &vPos); return vPos; }
 
 		virtual void Save(HMESSAGEWRITE hWrite);
 		virtual void Load(HMESSAGEREAD hRead);
 
 		void	FirstUpdate();
 
-        LTVector     GetScanPosition() { return GetPosition(); }
-        LTRotation   GetScanRotation() { return GetRotation(); }
+		LTVector	 GetScanPosition() { return GetPosition(); }
+		LTRotation   GetScanRotation() { return GetRotation(); }
 
-        void Link(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->CreateInterObjectLink(m_hObject, hObject); }
-        void Unlink(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->BreakInterObjectLink(m_hObject, hObject); }
+		void Link(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->CreateInterObjectLink(m_hObject, hObject); }
+		void Unlink(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->BreakInterObjectLink(m_hObject, hObject); }
 
 	protected :
 
 		State	m_eState;
 		State	m_ePreviousState;
 
-        LTFLOAT  m_fYaw;
-        LTFLOAT  m_fYaw1;
-        LTFLOAT  m_fYaw2;
-        LTFLOAT  m_fYawSpeed;
-        LTFLOAT  m_fYaw1PauseTime;
-        LTFLOAT  m_fYaw2PauseTime;
-        LTFLOAT  m_fYawPauseTimer;
+		LTFLOAT  m_fYaw;
+		LTFLOAT  m_fYaw1;
+		LTFLOAT  m_fYaw2;
+		LTFLOAT  m_fYawSpeed;
+		LTFLOAT  m_fYaw1PauseTime;
+		LTFLOAT  m_fYaw2PauseTime;
+		LTFLOAT  m_fYawPauseTimer;
 
-        LTBOOL   m_bFirstUpdate;
-        LTBOOL   m_bOn;
+		LTBOOL   m_bFirstUpdate;
+		LTBOOL   m_bOn;
 
 		HSTRING	m_hstrTargetName;
 		HOBJECT	m_hTargetObject;
@@ -101,13 +99,13 @@ class SearchLight : public CScanner
 
 		// These are all saved by the engine in the special fx message...
 
-        LTFLOAT  m_fBeamLength;
-        LTFLOAT  m_fBeamRadius;
-        LTFLOAT  m_fBeamAlpha;
-        LTFLOAT  m_fBeamRotTime;
-        LTFLOAT  m_fLightRadius;
-        LTBOOL   m_bBeamAdditive;
-        LTVector m_vLightColor;
+		LTFLOAT  m_fBeamLength;
+		LTFLOAT  m_fBeamRadius;
+		LTFLOAT  m_fBeamAlpha;
+		LTFLOAT  m_fBeamRotTime;
+		LTFLOAT  m_fLightRadius;
+		LTBOOL   m_bBeamAdditive;
+		LTVector m_vLightColor;
 
 		LENSFLARE	m_LensInfo;		// Lens flare info
 };
@@ -126,17 +124,17 @@ class ControlledSearchLight : public SearchLight
 
 		void HandleBrokenLink(HOBJECT hObject);
 
-        void SetRotation(LTRotation& rRot);
-        LTRotation GetRotation();
+		void SetRotation(LTRotation& rRot);
+		LTRotation GetRotation();
 
-        void SetPosition(LTVector& vPos);
-        LTVector GetPosition();
+		void SetPosition(LTVector& vPos);
+		LTVector GetPosition();
 
 		void Save(HMESSAGEWRITE hWrite);
 		void Load(HMESSAGEREAD hRead);
 
-        void Link(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->CreateInterObjectLink(m_hObject, hObject); }
-        void Unlink(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->BreakInterObjectLink(m_hObject, hObject); }
+		void Link(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->CreateInterObjectLink(m_hObject, hObject); }
+		void Unlink(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->BreakInterObjectLink(m_hObject, hObject); }
 
 	protected :
 

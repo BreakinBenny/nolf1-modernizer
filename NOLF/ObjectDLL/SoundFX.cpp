@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: SoundFX.cpp
 //
-// MODULE  : SoundFX.cpp
+// PURPOSE: A start/stoppable ambient sound object.
 //
-// PURPOSE : A start/stoppable ambient sound object.
-//
-// CREATED : 09/11/98
+// CREATED: 09/11/98
 //
 // (c) 1998-1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -17,7 +15,7 @@
 #include "ObjectMsgs.h"
 
 BEGIN_CLASS(SoundFX)
-    ADD_BOOLPROP(StartOn, LTTRUE)
+	ADD_BOOLPROP(StartOn, LTTRUE)
 	ADD_STRINGPROP_FLAG(Sound, "", PF_FILENAME)
 	ADD_LONGINTPROP(Priority, 0.0f)
 	ADD_REALPROP_FLAG(OuterRadius, 500.0f, PF_RADIUS)
@@ -34,9 +32,9 @@ LTRESULT CSoundFXPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 	if (_strcmpi("Filter", szPropName) == 0)
 	{
@@ -54,58 +52,52 @@ LTRESULT CSoundFXPlugin::PreHook_EditStringList(
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SoundFX::SoundFX()
 //
-//	ROUTINE:	SoundFX::SoundFX()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 SoundFX::SoundFX() : BaseClass(OT_NORMAL)
 {
-    m_bStartOn              = LTTRUE;
+	m_bStartOn			  = LTTRUE;
 
-    m_hstrSound             = LTNULL;
-    m_hsndSound             = LTNULL;
+	m_hstrSound			 = LTNULL;
+	m_hsndSound			 = LTNULL;
 	m_nFilterId				= 0;
 
 	m_fOuterRadius			= 0.0f;
 	m_fInnerRadius			= 0.0f;
 	m_nVolume				= 0;
 	m_fPitchShift			= 1.0f;
-    m_bAmbient              = LTFALSE;
-    m_bLooping              = LTTRUE;
-    m_bAttached             = LTFALSE;
+	m_bAmbient			  = LTFALSE;
+	m_bLooping			  = LTTRUE;
+	m_bAttached			 = LTFALSE;
 	m_nPriority				= SOUNDPRIORITY_MISC_LOW;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SoundFX::~SoundFX()
 //
-//	ROUTINE:	SoundFX::~SoundFX()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 SoundFX::~SoundFX()
 {
 	if (m_hstrSound)
 	{
-        g_pLTServer->FreeString(m_hstrSound);
+		g_pLTServer->FreeString(m_hstrSound);
 	}
 
 	if (m_hsndSound)
 	{
-        g_pLTServer->KillSound(m_hsndSound);
+		g_pLTServer->KillSound(m_hsndSound);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: EngineMessageFn
 //
-//	ROUTINE:	EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 SoundFX::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -114,7 +106,7 @@ uint32 SoundFX::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 	{
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE || fData == PRECREATE_STRINGPROP)
 			{
@@ -142,7 +134,7 @@ uint32 SoundFX::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 		{
 			if (m_hsndSound)
 			{
-                g_pLTServer->KillSound(m_hsndSound);
+				g_pLTServer->KillSound(m_hsndSound);
 				m_hsndSound = NULL;
 			}
 		}
@@ -150,13 +142,13 @@ uint32 SoundFX::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -169,11 +161,9 @@ uint32 SoundFX::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SoundFX::ObjectMessageFn
 //
-//	ROUTINE:	SoundFX::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 SoundFX::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -195,11 +185,9 @@ uint32 SoundFX::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SoundFX:HandleTrigger()
 //
-//	ROUTINE:	SoundFX:HandleTrigger()
-//
-//	PURPOSE:	Called when triggered.
-//
+//	PURPOSE: Called when triggered.
 // ----------------------------------------------------------------------- //
 
 void SoundFX::HandleTrigger(HOBJECT hSender, const char* szMsg)
@@ -209,17 +197,17 @@ void SoundFX::HandleTrigger(HOBJECT hSender, const char* szMsg)
 		return;
 	}
 
-    if (stricmp(szMsg, "TOGGLE") == 0)
-    {
+	if (stricmp(szMsg, "TOGGLE") == 0)
+	{
 		if (m_hsndSound)
 		{
 			if (m_bLooping)
 			{
-                g_pLTServer->KillSoundLoop(m_hsndSound);
+				g_pLTServer->KillSoundLoop(m_hsndSound);
 			}
 			else
 			{
-                g_pLTServer->KillSound(m_hsndSound);
+				g_pLTServer->KillSound(m_hsndSound);
 			}
 
 			m_hsndSound = NULL;
@@ -228,104 +216,102 @@ void SoundFX::HandleTrigger(HOBJECT hSender, const char* szMsg)
 		{
 			PlaySound( );
 		}
-    }
-    else if (stricmp(szMsg, "ON") == 0 || stricmp(szMsg, "TRIGGER") == 0)
-    {
+	}
+	else if (stricmp(szMsg, "ON") == 0 || stricmp(szMsg, "TRIGGER") == 0)
+	{
 		PlaySound();
-    }
-    else if (stricmp(szMsg, "OFF") == 0)
-    {
+	}
+	else if (stricmp(szMsg, "OFF") == 0)
+	{
 		if (m_hsndSound)
 		{
 			if (m_bLooping)
 			{
-                g_pLTServer->KillSoundLoop(m_hsndSound);
+				g_pLTServer->KillSoundLoop(m_hsndSound);
 			}
 			else
 			{
-                g_pLTServer->KillSound(m_hsndSound);
+				g_pLTServer->KillSound(m_hsndSound);
 			}
 
 			m_hsndSound = NULL;
 		}
-    }
-    else if (stricmp(szMsg, "KILL") == 0)
-    {
+	}
+	else if (stricmp(szMsg, "KILL") == 0)
+	{
 		if (m_hsndSound)
 		{
-            g_pLTServer->KillSound(m_hsndSound);
+			g_pLTServer->KillSound(m_hsndSound);
 			m_hsndSound = NULL;
 		}
-    }
+	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SoundFX:ReadProp
 //
-//	ROUTINE:	SoundFX:ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL SoundFX::ReadProp(ObjectCreateStruct *)
 {
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("StartOn", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("StartOn", &genProp) == LT_OK)
 	{
 		m_bStartOn = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Sound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Sound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-             m_hstrSound = g_pLTServer->CreateString(genProp.m_String);
+			 m_hstrSound = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("Priority", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Priority", &genProp) == LT_OK)
 	{
 		m_nPriority = (unsigned char) genProp.m_Long;
 	}
 
-    if (g_pLTServer->GetPropGeneric("OuterRadius", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("OuterRadius", &genProp) == LT_OK)
 	{
 		m_fOuterRadius = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("InnerRadius", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("InnerRadius", &genProp) == LT_OK)
 	{
 		m_fInnerRadius = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Volume", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Volume", &genProp) == LT_OK)
 	{
-        m_nVolume = (uint8) genProp.m_Long;
+		m_nVolume = (uint8) genProp.m_Long;
 	}
 
-    if (g_pLTServer->GetPropGeneric("PitchShift", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("PitchShift", &genProp) == LT_OK)
 	{
 		m_fPitchShift = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Ambient", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Ambient", &genProp) == LT_OK)
 	{
 		m_bAmbient = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Loop", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Loop", &genProp) == LT_OK)
 	{
 		m_bLooping = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("PlayAttached", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("PlayAttached", &genProp) == LT_OK)
 	{
 		m_bAttached = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Filter", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Filter", &genProp) == LT_OK)
 	{
 		SOUNDFILTER* pFilter = g_pSoundFilterMgr->GetFilter(genProp.m_String);
 		if (pFilter)
@@ -333,34 +319,30 @@ LTBOOL SoundFX::ReadProp(ObjectCreateStruct *)
 			m_nFilterId = pFilter->nId;
 		}
 	}
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SoundFX:PostPropRead()
 //
-//	ROUTINE:	SoundFX:PostPropRead()
-//
-//	PURPOSE:	Update properties
-//
+//	PURPOSE: Update properties
 // ----------------------------------------------------------------------- //
 
 void SoundFX::PostPropRead(ObjectCreateStruct *pStruct)
 {
 	if (!pStruct) return;
 
-    // Set the Update!
+	// Set the Update!
 
 	pStruct->m_NextUpdate = 0.0f;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SoundFX:InitialUpdate()
 //
-//	ROUTINE:	SoundFX:InitialUpdate()
-//
-//	PURPOSE:	Handle initial update
-//
+//	PURPOSE: Handle initial update
 // ----------------------------------------------------------------------- //
 
 LTBOOL SoundFX::InitialUpdate()
@@ -370,18 +352,16 @@ LTBOOL SoundFX::InitialUpdate()
 		PlaySound();
 	}
 
-    SetNextUpdate(m_hObject, 0.0f);
+	SetNextUpdate(m_hObject, 0.0f);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SoundFX::PlaySound
 //
-//	ROUTINE:	SoundFX::PlaySound
-//
-//	PURPOSE:	Plays the requested sound file.
-//
+//	PURPOSE: Plays the requested sound file.
 // ----------------------------------------------------------------------- //
 
 void SoundFX::PlaySound()
@@ -390,11 +370,11 @@ void SoundFX::PlaySound()
 
 	if (m_hsndSound)
 	{
-        g_pLTServer->KillSound(m_hsndSound);
-        m_hsndSound = LTNULL;
+		g_pLTServer->KillSound(m_hsndSound);
+		m_hsndSound = LTNULL;
 	}
 
-    char *pSoundFile = g_pLTServer->GetStringData(m_hstrSound);
+	char *pSoundFile = g_pLTServer->GetStringData(m_hstrSound);
 
 	// Play the sound...
 
@@ -432,7 +412,7 @@ void SoundFX::PlaySound()
 			playSoundInfo.m_fPitchShift = m_fPitchShift;
 		}
 
-        g_pLTServer->GetObjectPos(m_hObject, &playSoundInfo.m_vPosition);
+		g_pLTServer->GetObjectPos(m_hObject, &playSoundInfo.m_vPosition);
 		if (m_bAmbient)
 		{
 			playSoundInfo.m_dwFlags |= PLAYSOUND_AMBIENT;
@@ -444,71 +424,67 @@ void SoundFX::PlaySound()
 
 		playSoundInfo.m_UserData = m_nFilterId;
 
-        m_hsndSound = g_pServerSoundMgr->PlaySoundDirect(playSoundInfo);
+		m_hsndSound = g_pServerSoundMgr->PlaySoundDirect(playSoundInfo);
 
 		if (!m_bLooping && m_hsndSound)
 		{
-            LTFLOAT fDuration;
-            g_pLTServer->GetSoundDuration(m_hsndSound, &fDuration);
-            SetNextUpdate(m_hObject, fDuration);
+			LTFLOAT fDuration;
+			g_pLTServer->GetSoundDuration(m_hsndSound, &fDuration);
+			SetNextUpdate(m_hObject, fDuration);
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SoundFX::Save
 //
-//	ROUTINE:	SoundFX::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void SoundFX::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrSound);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrSound);
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fOuterRadius);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fInnerRadius);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nVolume);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nFilterId);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fPitchShift);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bAmbient);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bLooping);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bAttached);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nPriority);
-    g_pLTServer->WriteToMessageByte(hWrite, (m_hsndSound) ? 1 : 0);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fOuterRadius);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fInnerRadius);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nVolume);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nFilterId);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fPitchShift);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bAmbient);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bLooping);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bAttached);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nPriority);
+	g_pLTServer->WriteToMessageByte(hWrite, (m_hsndSound) ? 1 : 0);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SoundFX::Load
 //
-//	ROUTINE:	SoundFX::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void SoundFX::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    m_hsndSound         = LTNULL;
-    m_hstrSound         = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hsndSound		 = LTNULL;
+	m_hstrSound		 = g_pLTServer->ReadFromMessageHString(hRead);
 
-    m_fOuterRadius      = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fInnerRadius      = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_nVolume           = g_pLTServer->ReadFromMessageByte(hRead);
-    m_nFilterId         = g_pLTServer->ReadFromMessageByte(hRead);
-    m_fPitchShift       = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_bAmbient          = g_pLTServer->ReadFromMessageByte(hRead);
-    m_bLooping          = g_pLTServer->ReadFromMessageByte(hRead);
-    m_bAttached         = g_pLTServer->ReadFromMessageByte(hRead);
-    m_nPriority         = g_pLTServer->ReadFromMessageByte(hRead);
+	m_fOuterRadius	  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fInnerRadius	  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_nVolume		   = g_pLTServer->ReadFromMessageByte(hRead);
+	m_nFilterId		 = g_pLTServer->ReadFromMessageByte(hRead);
+	m_fPitchShift	   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_bAmbient		  = g_pLTServer->ReadFromMessageByte(hRead);
+	m_bLooping		  = g_pLTServer->ReadFromMessageByte(hRead);
+	m_bAttached		 = g_pLTServer->ReadFromMessageByte(hRead);
+	m_nPriority		 = g_pLTServer->ReadFromMessageByte(hRead);
 
-    if (g_pLTServer->ReadFromMessageByte(hRead))
+	if (g_pLTServer->ReadFromMessageByte(hRead))
 	{
 		PlaySound();
 	}
@@ -516,24 +492,22 @@ void SoundFX::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SoundFX::CacheFiles
 //
-//	ROUTINE:	SoundFX::CacheFiles
-//
-//	PURPOSE:	Cache resources used by the object
-//
+//	PURPOSE: Cache resources used by the object
 // ----------------------------------------------------------------------- //
 
 void SoundFX::CacheFiles()
 {
-    char* pFile = LTNULL;
+	char* pFile = LTNULL;
 
 	if (m_hstrSound)
 	{
-        pFile = g_pLTServer->GetStringData(m_hstrSound);
+		pFile = g_pLTServer->GetStringData(m_hstrSound);
 
 		if (pFile)
 		{
-             g_pLTServer->CacheFile(FT_SOUND ,pFile);
+			 g_pLTServer->CacheFile(FT_SOUND ,pFile);
 		}
 	}
 }

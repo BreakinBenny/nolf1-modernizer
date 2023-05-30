@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Switch.CPP
 //
-// MODULE  : Switch.CPP
+// PURPOSE: A Switch object
 //
-// PURPOSE : A Switch object
-//
-// CREATED : 12/3/97
-//
+// CREATED: 12/3/97
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -15,7 +13,7 @@
 BEGIN_CLASS(Switch)
 	ADD_VECTORPROP_VAL_FLAG(SoundPos, 0.0f, 0.0f, 0.0f, PF_HIDDEN)
 	ADD_STRINGPROP_FLAG(PortalName, "", PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(LoopSounds, LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(LoopSounds, LTFALSE, PF_HIDDEN)
 	ADD_STRINGPROP_FLAG(OpenSound, "", PF_HIDDEN)
 	ADD_STRINGPROP_FLAG(CloseSound, "", PF_HIDDEN)
 	ADD_REALPROP_FLAG(OpenWaitTime, 4.0f, PF_HIDDEN)
@@ -24,11 +22,11 @@ BEGIN_CLASS(Switch)
 	ADD_BOOLPROP(AITriggerable, 1)
 	ADD_REALPROP_FLAG(Speed, 200.0f, PF_HIDDEN)
 	PROP_DEFINEGROUP(StateFlags, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(ActivateTrigger, LTTRUE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(StartOpen, LTFALSE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(TriggerClose, LTTRUE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(RemainsOpen, LTTRUE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(ForceMove, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(ActivateTrigger, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(StartOpen, LTFALSE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(TriggerClose, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(RemainsOpen, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(ForceMove, LTTRUE, PF_GROUP4)
 	ADD_REALPROP(MoveDelay, 0.0f)
 	ADD_REALPROP(MoveDist, 4.0f)
 	ADD_VECTORPROP_VAL(MoveDir, 0.0f, 0.0f, 0.0f)
@@ -46,33 +44,29 @@ END_CLASS_DEFAULT(Switch, Door, NULL, NULL)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Switch::Switch()
 //
-//	ROUTINE:	Switch::Switch()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 Switch::Switch() : Door()
 {
-    m_hstrOnTriggerTarget   = LTNULL;
-    m_hstrOnTriggerMessage  = LTNULL;
-    m_hstrOffTriggerTarget  = LTNULL;
-    m_hstrOffTriggerMessage = LTNULL;
+	m_hstrOnTriggerTarget   = LTNULL;
+	m_hstrOnTriggerMessage  = LTNULL;
+	m_hstrOffTriggerTarget  = LTNULL;
+	m_hstrOffTriggerMessage = LTNULL;
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Switch::~Switch()
 //
-//	ROUTINE:	Switch::~Switch()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 Switch::~Switch()
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 
 	if (m_hstrOnTriggerTarget)
 	{
@@ -97,11 +91,9 @@ Switch::~Switch()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Switch::EngineMessageFn()
 //
-//	ROUTINE:	Switch::EngineMessageFn()
-//
-//	PURPOSE:	Handler for engine messages
-//
+//	PURPOSE: Handler for engine messages
 // --------------------------------------------------------------------------- //
 
 uint32 Switch::EngineMessageFn(uint32 messageID, void *pData, float fData)
@@ -113,7 +105,7 @@ uint32 Switch::EngineMessageFn(uint32 messageID, void *pData, float fData)
 			// Need to call base class to have the object name read in before
 			// we call ReadProp()
 
-            uint32 dwRet = Door::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = Door::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE)
 			{
@@ -131,7 +123,7 @@ uint32 Switch::EngineMessageFn(uint32 messageID, void *pData, float fData)
 		{
 			if (fData != INITIALUPDATE_SAVEGAME)
 			{
-                uint32 dwRet = Door::EngineMessageFn(messageID, pData, fData);
+				uint32 dwRet = Door::EngineMessageFn(messageID, pData, fData);
 				InitialUpdate();
 				return dwRet;
 			}
@@ -140,13 +132,13 @@ uint32 Switch::EngineMessageFn(uint32 messageID, void *pData, float fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint8)fData);
+			Save((HMESSAGEWRITE)pData, (uint8)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint8)fData);
+			Load((HMESSAGEREAD)pData, (uint8)fData);
 		}
 		break;
 
@@ -158,68 +150,66 @@ uint32 Switch::EngineMessageFn(uint32 messageID, void *pData, float fData)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Switch::ReadProp()
 //
-//	ROUTINE:	Switch::ReadProp()
-//
-//	PURPOSE:	Reads Switch properties
-//
+//	PURPOSE: Reads Switch properties
 // --------------------------------------------------------------------------- //
 
 LTBOOL Switch::ReadProp(ObjectCreateStruct *)
 {
-    ILTServer* pServerDE = GetServerDE();
-    if (!pServerDE) return LTFALSE;
+	ILTServer* pServerDE = GetServerDE();
+	if (!pServerDE) return LTFALSE;
 
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("OnTriggerTarget", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("OnTriggerTarget", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrOnTriggerTarget = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrOnTriggerTarget = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("OnTriggerMessage", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("OnTriggerMessage", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrOnTriggerMessage = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrOnTriggerMessage = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("OffTriggerTarget", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("OffTriggerTarget", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrOffTriggerTarget = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrOffTriggerTarget = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("OffTriggerMessage", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("OffTriggerMessage", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrOffTriggerMessage = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrOffTriggerMessage = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
 
 	// Just new names for door data members...
 
-    if (g_pLTServer->GetPropGeneric("OnSound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("OnSound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrOpenSound = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrOpenSound = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("OffSound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("OffSound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrCloseSound = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrCloseSound = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
@@ -230,16 +220,14 @@ LTBOOL Switch::ReadProp(ObjectCreateStruct *)
 
 	m_fClosingSpeed = m_fClosingSpeed ? m_fClosingSpeed : m_fSpeed;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Switch::SetOpening()
 //
-//	ROUTINE:	Switch::SetOpening()
-//
-//	PURPOSE:	Sets the switch opening state
-//
+//	PURPOSE: Sets the switch opening state
 // --------------------------------------------------------------------------- //
 
 void Switch::SetOpening()
@@ -254,11 +242,9 @@ void Switch::SetOpening()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Switch::SetClosing()
 //
-//	ROUTINE:	Switch::SetClosing()
-//
-//	PURPOSE:	Sets the switch closing state
-//
+//	PURPOSE: Sets the switch closing state
 // --------------------------------------------------------------------------- //
 
 void Switch::SetClosing()
@@ -273,34 +259,30 @@ void Switch::SetClosing()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Switch::InitialUpdate()
 //
-//	ROUTINE:	Switch::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 void Switch::InitialUpdate()
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE) return;
 
-    uint32 dwUsrFlgs = g_pLTServer->GetObjectUserFlags(m_hObject);
+	uint32 dwUsrFlgs = g_pLTServer->GetObjectUserFlags(m_hObject);
 	g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlgs | USRFLG_CAN_ACTIVATE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Switch::Save
 //
-//	ROUTINE:	Switch::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void Switch::Save(HMESSAGEWRITE hWrite, uint8 nType)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hWrite) return;
 
 	pServerDE->WriteToMessageHString(hWrite, m_hstrOnTriggerTarget);
@@ -311,16 +293,14 @@ void Switch::Save(HMESSAGEWRITE hWrite, uint8 nType)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Switch::Load
 //
-//	ROUTINE:	Switch::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void Switch::Load(HMESSAGEREAD hRead, uint8 nType)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hRead) return;
 
 	m_hstrOnTriggerTarget	= pServerDE->ReadFromMessageHString(hRead);

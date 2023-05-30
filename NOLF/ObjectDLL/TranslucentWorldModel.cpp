@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: TranslucentWorldModel.cpp
 //
-// MODULE  : TranslucentWorldModel.cpp
+// PURPOSE: TranslucentWorldModel implementation
 //
-// PURPOSE : TranslucentWorldModel implementation
-//
-// CREATED : 4/12/99
+// CREATED: 4/12/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -19,21 +17,21 @@
 
 BEGIN_CLASS(TranslucentWorldModel)
 	ADD_DESTRUCTIBLE_MODEL_AGGREGATE(PF_GROUP1, 0)
-    // Override destructible's default...
+	// Override destructible's default...
 	ADD_BOOLPROP_FLAG(NeverDestroy, LTTRUE, PF_GROUP1)
 
 	ADD_LENSFLARE_WORLDMODEL_PROPERTIES(PF_GROUP4)
-    ADD_VISIBLE_FLAG(LTTRUE, 0)
-    ADD_SOLID_FLAG(LTTRUE, 0)
-    ADD_RAYHIT_FLAG(LTTRUE, 0)
-    ADD_GRAVITY_FLAG(LTFALSE, 0)
-    ADD_CHROMAKEY_FLAG(LTFALSE, 0)
-    ADD_BOOLPROP(BlockLight, LTFALSE) // Used by pre-processor
-    ADD_BOOLPROP(BoxPhysics, LTTRUE)
+	ADD_VISIBLE_FLAG(LTTRUE, 0)
+	ADD_SOLID_FLAG(LTTRUE, 0)
+	ADD_RAYHIT_FLAG(LTTRUE, 0)
+	ADD_GRAVITY_FLAG(LTFALSE, 0)
+	ADD_CHROMAKEY_FLAG(LTFALSE, 0)
+	ADD_BOOLPROP(BlockLight, LTFALSE) // Used by pre-processor
+	ADD_BOOLPROP(BoxPhysics, LTTRUE)
 	ADD_BOOLPROP(FogDisable, FALSE)
 	ADD_REALPROP(Alpha, 1.0f)
-    ADD_BOOLPROP(LensFlare, LTFALSE)
-    ADD_BOOLPROP(IsKeyframed, LTFALSE)
+	ADD_BOOLPROP(LensFlare, LTFALSE)
+	ADD_BOOLPROP(IsKeyframed, LTFALSE)
 
 END_CLASS_DEFAULT_FLAGS_PLUGIN(TranslucentWorldModel, GameBase, NULL, NULL, 0, CTranslucentWorldModelPlugin)
 
@@ -42,9 +40,9 @@ LTRESULT CTranslucentWorldModelPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 	if (m_DestructibleModelPlugin.PreHook_EditStringList(szRezPath,
 		szPropName, aszStrings, pcStrings, cMaxStrings, cMaxStringLength) == LT_OK)
@@ -56,32 +54,28 @@ LTRESULT CTranslucentWorldModelPlugin::PreHook_EditStringList(
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: TranslucentWorldModel::TranslucentWorldModel()
 //
-//	ROUTINE:	TranslucentWorldModel::TranslucentWorldModel()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 TranslucentWorldModel::TranslucentWorldModel() : GameBase(OT_WORLDMODEL)
 {
 	AddAggregate(&m_damage);
 
-    m_bLensFlare    = LTFALSE;
+	m_bLensFlare	= LTFALSE;
 	m_fInitialAlpha = 1.0f;
 	m_fFinalAlpha	= 1.0f;
 	m_fChangeTime	= 0.0f;
 	m_fStartTime	= 0.0f;
-    m_bIsKeyframed  = LTFALSE;
+	m_bIsKeyframed  = LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: TranslucentWorldModel::~TranslucentWorldModel()
 //
-//	ROUTINE:	TranslucentWorldModel::~TranslucentWorldModel()
-//
-//	PURPOSE:	Destroy object
-//
+//	PURPOSE: Destroy object
 // ----------------------------------------------------------------------- //
 
 TranslucentWorldModel::~TranslucentWorldModel()
@@ -90,11 +84,9 @@ TranslucentWorldModel::~TranslucentWorldModel()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: TranslucentWorldModel::EngineMessageFn
 //
-//	ROUTINE:	TranslucentWorldModel::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 TranslucentWorldModel::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -109,7 +101,7 @@ uint32 TranslucentWorldModel::EngineMessageFn(uint32 messageID, void *pData, LTF
 
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = GameBase::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = GameBase::EngineMessageFn(messageID, pData, fData);
 
 			ObjectCreateStruct* pStruct = (ObjectCreateStruct*)pData;
 
@@ -148,13 +140,13 @@ uint32 TranslucentWorldModel::EngineMessageFn(uint32 messageID, void *pData, LTF
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -167,11 +159,9 @@ uint32 TranslucentWorldModel::EngineMessageFn(uint32 messageID, void *pData, LTF
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: TranslucentWorldModel::ObjectMessageFn()
 //
-//	ROUTINE:	TranslucentWorldModel::ObjectMessageFn()
-//
-//	PURPOSE:	Handler for server object messages.
-//
+//	PURPOSE: Handler for server object messages.
 // --------------------------------------------------------------------------- //
 
 uint32 TranslucentWorldModel::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -191,20 +181,18 @@ uint32 TranslucentWorldModel::ObjectMessageFn(HOBJECT hSender, uint32 messageID,
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: TranslucentWorldModel::ReadProp
 //
-//	ROUTINE:	TranslucentWorldModel::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL TranslucentWorldModel::ReadProp(ObjectCreateStruct *pStruct)
 {
 	GenericProp gProp;
 
-    if (!pStruct) return LTFALSE;
+	if (!pStruct) return LTFALSE;
 
-    if (g_pLTServer->GetPropGeneric("LensFlare", &gProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("LensFlare", &gProp) == LT_OK)
 	{
 		m_bLensFlare = gProp.m_Bool;
 	}
@@ -214,60 +202,58 @@ LTBOOL TranslucentWorldModel::ReadProp(ObjectCreateStruct *pStruct)
 		::GetLensFlareProperties(m_LensInfo);
 	}
 
-    if (g_pLTServer->GetPropGeneric("Alpha", &gProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Alpha", &gProp) == LT_OK)
 	{
 		m_fInitialAlpha = gProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("BoxPhysics", &gProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("BoxPhysics", &gProp) == LT_OK)
 	{
 		pStruct->m_Flags |= (gProp.m_Bool ? FLAG_BOXPHYSICS : 0);
 	}
 
-    if (g_pLTServer->GetPropGeneric("FogDisable", &gProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("FogDisable", &gProp) == LT_OK)
 	{
 		pStruct->m_Flags |= (gProp.m_Bool ? FLAG_FOGDISABLE : 0);
 	}
 
-    if (g_pLTServer->GetPropGeneric("IsKeyframed", &gProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("IsKeyframed", &gProp) == LT_OK)
 	{
 		m_bIsKeyframed = gProp.m_Bool;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: TranslucentWorldModel::InitialUpdate()
 //
-//	ROUTINE:	TranslucentWorldModel::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 void TranslucentWorldModel::InitialUpdate()
 {
 	// Set object translucency...
 
-    LTFLOAT r, g, b, a;
-    g_pLTServer->GetObjectColor(m_hObject, &r, &g, &b, &a);
-    g_pLTServer->SetObjectColor(m_hObject, r, g, b, m_fInitialAlpha);
+	LTFLOAT r, g, b, a;
+	g_pLTServer->GetObjectColor(m_hObject, &r, &g, &b, &a);
+	g_pLTServer->SetObjectColor(m_hObject, r, g, b, m_fInitialAlpha);
 
-    SetNextUpdate(0.0f);
+	SetNextUpdate(0.0f);
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
-    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
 
 	// Set moveable flag if we can be distroyed...
 
 	if (!m_damage.GetCanDamage() || m_damage.GetNeverDestroy() && !m_bIsKeyframed)
 	{
-        dwUsrFlags &= ~USRFLG_MOVEABLE;
+		dwUsrFlags &= ~USRFLG_MOVEABLE;
 	}
 	else
 	{
-       dwUsrFlags |= USRFLG_MOVEABLE;
+	   dwUsrFlags |= USRFLG_MOVEABLE;
 	}
 
 
@@ -280,7 +266,7 @@ void TranslucentWorldModel::InitialUpdate()
 		dwUsrFlags &= ~USRFLG_VISIBLE;
 	}
 
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags);
 
 	if (m_bLensFlare)
 	{
@@ -290,49 +276,45 @@ void TranslucentWorldModel::InitialUpdate()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: TranslucentWorldModel::Update()
 //
-//	ROUTINE:	TranslucentWorldModel::Update()
-//
-//	PURPOSE:	Update the model
-//
+//	PURPOSE: Update the model
 // ----------------------------------------------------------------------- //
 
 void TranslucentWorldModel::Update()
 {
-    LTFLOAT fAlpha;
-    LTVector vColor;
-    g_pLTServer->GetObjectColor(m_hObject, &vColor.x, &vColor.y, &vColor.z, &fAlpha);
+	LTFLOAT fAlpha;
+	LTVector vColor;
+	g_pLTServer->GetObjectColor(m_hObject, &vColor.x, &vColor.y, &vColor.z, &fAlpha);
 
 	// See if we are at the target alpha...
 
 	if (fabs(fAlpha - m_fFinalAlpha) < 0.01f)
 	{
-        g_pLTServer->SetObjectColor(m_hObject, vColor.x, vColor.y, vColor.z, m_fFinalAlpha);
-        SetNextUpdate(0.0f);
+		g_pLTServer->SetObjectColor(m_hObject, vColor.x, vColor.y, vColor.z, m_fFinalAlpha);
+		SetNextUpdate(0.0f);
 		return;
 	}
 
-    LTFLOAT fTimeDelta = g_pLTServer->GetTime() - m_fStartTime;
+	LTFLOAT fTimeDelta = g_pLTServer->GetTime() - m_fStartTime;
 
 	fAlpha = m_fInitialAlpha + (fTimeDelta * (m_fFinalAlpha - m_fInitialAlpha) / m_fChangeTime);
 	fAlpha = fAlpha > 0.999f ? 1.0f : (fAlpha < 0.001f ? 0.0f : fAlpha);
 
-    g_pLTServer->SetObjectColor(m_hObject, vColor.x, vColor.y, vColor.z, fAlpha);
-    SetNextUpdate(0.001f);
+	g_pLTServer->SetObjectColor(m_hObject, vColor.x, vColor.y, vColor.z, fAlpha);
+	SetNextUpdate(0.001f);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: TranslucentWorldModel::TriggerMsg()
 //
-//	ROUTINE:	TranslucentWorldModel::TriggerMsg()
-//
-//	PURPOSE:	Handler trigger messages
-//
+//	PURPOSE: Handler trigger messages
 // --------------------------------------------------------------------------- //
 
 void TranslucentWorldModel::HandleTrigger(HOBJECT hSender, const char* szMsg)
 {
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return;
 
 	// ConParse does not destroy szMsg, so this is safe
@@ -347,36 +329,36 @@ void TranslucentWorldModel::HandleTrigger(HOBJECT hSender, const char* szMsg)
 			{
 				if (parse.m_nArgs > 2 && parse.m_Args[1] && parse.m_Args[2])
 				{
-                    m_fFinalAlpha   = (LTFLOAT) atof(parse.m_Args[1]);
-                    m_fChangeTime   = (LTFLOAT) atof(parse.m_Args[2]);
+					m_fFinalAlpha   = (LTFLOAT) atof(parse.m_Args[1]);
+					m_fChangeTime   = (LTFLOAT) atof(parse.m_Args[2]);
 
-                    LTFLOAT r, g, b;
-                    g_pLTServer->GetObjectColor(m_hObject, &r, &g, &b, &m_fInitialAlpha);
+					LTFLOAT r, g, b;
+					g_pLTServer->GetObjectColor(m_hObject, &r, &g, &b, &m_fInitialAlpha);
 
 					// See if we need to change the alpha...
 
 					if (fabs(m_fInitialAlpha - m_fFinalAlpha) > 0.01f)
 					{
-                        m_fStartTime = g_pLTServer->GetTime();
-					    SetNextUpdate(0.001f);
+						m_fStartTime = g_pLTServer->GetTime();
+						SetNextUpdate(0.001f);
 					}
 				}
 			}
 			else if (_stricmp(parse.m_Args[0], "ON") == 0)
 			{
-                uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-                g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags | USRFLG_VISIBLE);
+				uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+				g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags | USRFLG_VISIBLE);
 
-                //uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
-                //g_pLTServer->SetObjectFlags(m_hObject, dwFlags | FLAG_VISIBLE);
+				//uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+				//g_pLTServer->SetObjectFlags(m_hObject, dwFlags | FLAG_VISIBLE);
 			}
 			else if (_stricmp(parse.m_Args[0], "OFF") == 0)
 			{
-                uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-                g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags & ~USRFLG_VISIBLE);
+				uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+				g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags & ~USRFLG_VISIBLE);
 
-                //uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
-                //g_pLTServer->SetObjectFlags(m_hObject, dwFlags & ~FLAG_VISIBLE);
+				//uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+				//g_pLTServer->SetObjectFlags(m_hObject, dwFlags & ~FLAG_VISIBLE);
 			}
 		}
 	}
@@ -384,40 +366,36 @@ void TranslucentWorldModel::HandleTrigger(HOBJECT hSender, const char* szMsg)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: TranslucentWorldModel::Save
 //
-//	ROUTINE:	TranslucentWorldModel::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void TranslucentWorldModel::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fInitialAlpha);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fFinalAlpha);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fChangeTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fStartTime);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bIsKeyframed);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fInitialAlpha);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fFinalAlpha);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fChangeTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fStartTime);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bIsKeyframed);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: TranslucentWorldModel::Load
 //
-//	ROUTINE:	TranslucentWorldModel::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void TranslucentWorldModel::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    m_fInitialAlpha = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fFinalAlpha   = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fChangeTime   = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fStartTime    = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_bIsKeyframed	= g_pLTServer->ReadFromMessageByte(hRead);
+	m_fInitialAlpha = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fFinalAlpha   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fChangeTime   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fStartTime	= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_bIsKeyframed	= g_pLTServer->ReadFromMessageByte(hRead);
 }

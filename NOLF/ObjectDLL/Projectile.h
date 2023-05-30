@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Projectile.h
 //
-// MODULE  : Projectile.h
+// PURPOSE: Projectile class - definition
 //
-// PURPOSE : Projectile class - definition
-//
-// CREATED : 9/25/97
+// CREATED: 9/25/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __PROJECTILE_H__
@@ -30,10 +28,10 @@ class CProjectile : public GameBase
 		CProjectile();
 
 		virtual void	Setup(CWeapon* pWeapon, WFireInfo & info);
-        void			SetLifeTime(LTFLOAT fTime) { m_fLifeTime = fTime; }
+		void			SetLifeTime(LTFLOAT fTime) { m_fLifeTime = fTime; }
 
-        void			AdjustDamage(LTFLOAT fModifier) { m_fInstDamage *= fModifier; }
-        LTFLOAT			GetInstDamage() { return m_fInstDamage; }
+		void			AdjustDamage(LTFLOAT fModifier) { m_fInstDamage *= fModifier; }
+		LTFLOAT			GetInstDamage() { return m_fInstDamage; }
 
 		HOBJECT			GetFiredFrom() const { return m_hFiredFrom; }
 		const LTVector&	GetFirePos() const { return m_vFirePos; }
@@ -43,13 +41,13 @@ class CProjectile : public GameBase
 
 	protected :
 
-        uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
-        uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 		virtual void HandleTouch(HOBJECT hObj);
 
-        virtual void AddImpact(HOBJECT hObj, LTVector vFirePos, LTVector vImpactPos, LTVector vNormal, SurfaceType eSurfaceType=ST_UNKNOWN);
-        virtual void AddExplosion(LTVector vPos, LTVector vNormal);
+		virtual void AddImpact(HOBJECT hObj, LTVector vFirePos, LTVector vImpactPos, LTVector vNormal, SurfaceType eSurfaceType=ST_UNKNOWN);
+		virtual void AddExplosion(LTVector vPos, LTVector vNormal);
 
 		virtual void AddSpecialFX();
 		virtual void RemoveObject();
@@ -57,20 +55,20 @@ class CProjectile : public GameBase
 		virtual void HandleImpact(HOBJECT hObj);
 		virtual void ImpactDamageObject(HOBJECT hDamager, HOBJECT hObj);
 
-        virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 
 		virtual LTBOOL CanSetLastFireInfo() { return LTTRUE; }
 		virtual void Detonate(HOBJECT hObj);
 
-        LTVector         m_vFlashPos;            // Where the fired from special fx should be created
-        LTVector         m_vFirePos;             // Where were we fired from
-        LTVector         m_vDir;                 // What direction our we moving
+		LTVector		 m_vFlashPos;			// Where the fired from special fx should be created
+		LTVector		 m_vFirePos;			 // Where were we fired from
+		LTVector		 m_vDir;				 // What direction our we moving
 
-        LTBOOL           m_bSilenced;            // This weapon silenced?
-        LTBOOL           m_bRemoveFromWorld;     // Should we be removed?
-        LTBOOL           m_bObjectRemoved;       // Have we been removed?
-        LTBOOL           m_bDetonated;           // Have we detonated yet?
+		LTBOOL		   m_bSilenced;			// This weapon silenced?
+		LTBOOL		   m_bRemoveFromWorld;	 // Should we be removed?
+		LTBOOL		   m_bObjectRemoved;	   // Have we been removed?
+		LTBOOL		   m_bDetonated;		   // Have we detonated yet?
 
 		int				m_nWeaponId;			// Type of weapon
 		int				m_nAmmoId;				// Type of ammo
@@ -78,15 +76,15 @@ class CProjectile : public GameBase
 		DamageType		m_eInstDamageType;		// Instant damage type - DT_XXX
 		DamageType		m_eProgDamageType;		// Progressive damage type - DT_XXX
 
-        LTFLOAT			m_fRadius;              // What is our damage radius
-        LTFLOAT         m_fStartTime;           // When did we start
-        LTFLOAT         m_fInstDamage;          // How much instant damage do we do
-        LTFLOAT         m_fProgDamage;          // How much progressive damage do we do
-        LTFLOAT         m_fLifeTime;            // How long do we stay around
-        LTFLOAT         m_fExplosionDuration;   // How long explosion lasts
-        LTFLOAT         m_fVelocity;            // What is our velocity
-        LTFLOAT         m_fMass;                // What is our mass
-        LTFLOAT         m_fRange;               // Vector weapon range
+		LTFLOAT			m_fRadius;			  // What is our damage radius
+		LTFLOAT		 m_fStartTime;		   // When did we start
+		LTFLOAT		 m_fInstDamage;		  // How much instant damage do we do
+		LTFLOAT		 m_fProgDamage;		  // How much progressive damage do we do
+		LTFLOAT		 m_fLifeTime;			// How long do we stay around
+		LTFLOAT		 m_fExplosionDuration;   // How long explosion lasts
+		LTFLOAT		 m_fVelocity;			// What is our velocity
+		LTFLOAT		 m_fMass;				// What is our mass
+		LTFLOAT		 m_fRange;			   // Vector weapon range
 
 		HOBJECT			m_hFiredFrom;			// Who fired us
 
@@ -107,10 +105,10 @@ class CProjectile : public GameBase
 
 		CDestructible	m_damage;				// Handle damage
 
-        LTVector         m_vDims;                // Model dimensions
+		LTVector		 m_vDims;				// Model dimensions
 
-        uint32          m_dwFlags;              // Model flags
-        uint32          m_dwCantDamageTypes;    // What type of damage can't damage us...
+		uint32		  m_dwFlags;			  // Model flags
+		uint32		  m_dwCantDamageTypes;	// What type of damage can't damage us...
 
 		WEAPON*			m_pWeaponData;
 		AMMO*			m_pAmmoData;
@@ -123,17 +121,17 @@ class CProjectile : public GameBase
 		void DoProjectile();
 		void DoVector();
 
-        LTBOOL TestInsideObject(HOBJECT hTestObj, AmmoType eAmmoType);
+		LTBOOL TestInsideObject(HOBJECT hTestObj, AmmoType eAmmoType);
 
-        LTBOOL HandleVectorImpact(IntersectInfo & iInfo, LTVector & vFrom, LTVector & vTo);
-        LTBOOL HandlePotentialHitBoxImpact(IntersectInfo & iInfo, LTVector & vFrom);
-        LTBOOL DoLocationBasedImpact(IntersectInfo & iInfo, LTVector & vFrom,
+		LTBOOL HandleVectorImpact(IntersectInfo & iInfo, LTVector & vFrom, LTVector & vTo);
+		LTBOOL HandlePotentialHitBoxImpact(IntersectInfo & iInfo, LTVector & vFrom);
+		LTBOOL DoLocationBasedImpact(IntersectInfo & iInfo, LTVector & vFrom,
 									ModelSkeleton eModelSkeleton, ModelNode& eModelNode);
 
-        LTBOOL UpdateDoVectorValues(SURFACE & surf, LTFLOAT fThickness, LTVector vImpactPos,
-                                   LTVector & vFrom, LTVector & vTo);
+		LTBOOL UpdateDoVectorValues(SURFACE & surf, LTFLOAT fThickness, LTVector vImpactPos,
+								   LTVector & vFrom, LTVector & vTo);
 
-        LTBOOL CalcInvisibleImpact(IntersectInfo & iInfo, SurfaceType & eSurfType);
+		LTBOOL CalcInvisibleImpact(IntersectInfo & iInfo, SurfaceType & eSurfType);
 };
 
 

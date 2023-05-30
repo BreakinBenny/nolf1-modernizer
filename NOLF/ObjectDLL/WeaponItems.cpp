@@ -1,15 +1,13 @@
 // ----------------------------------------------------------------------- //
+// MODULE: WeaponItems.cpp
 //
-// MODULE  : WeaponItems.cpp
+// PURPOSE: Weapon items - Implementation
 //
-// PURPOSE : Weapon items - Implementation
-//
-// CREATED : 10/7/97
+// CREATED: 10/7/97
 //
 // REVISED : 10/22/99 - jrg
 //
 // (c) 1997-2001 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -40,11 +38,9 @@ extern CVarTrack g_WeaponsStay;
 extern CVarTrack g_RespawnScaleTrack;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WeaponItem::WeaponItem
 //
-//	ROUTINE:	WeaponItem::WeaponItem
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 WeaponItem::WeaponItem() : PickupItem()
@@ -53,7 +49,7 @@ WeaponItem::WeaponItem() : PickupItem()
 	m_nWeaponId = WMGR_INVALID_ID;
 	m_nAmmoId	= WMGR_INVALID_ID;
 
-    m_bBounce = LTFALSE;
+	m_bBounce = LTFALSE;
 
 	m_dwFlags |= FLAG_NOSLIDING;
 
@@ -61,11 +57,9 @@ WeaponItem::WeaponItem() : PickupItem()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WeaponItem::EngineMessageFn
 //
-//	ROUTINE:	WeaponItem::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 WeaponItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -74,15 +68,15 @@ uint32 WeaponItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 	{
 		case MID_UPDATE:
 		{
-            uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
-            g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
+			uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
+			g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
 			return dwRet;
 		}
 		break;
 
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE || fData == PRECREATE_STRINGPROP)
 			{
@@ -100,7 +94,7 @@ uint32 WeaponItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_INITIALUPDATE:
 		{
-            uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
 
 			if (fData != INITIALUPDATE_SAVEGAME)
 			{
@@ -112,13 +106,13 @@ uint32 WeaponItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -129,11 +123,9 @@ uint32 WeaponItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WeaponItem::ReadProp
 //
-//	ROUTINE:	WeaponItem::ReadProp
-//
-//	PURPOSE:	Read object properties
-//
+//	PURPOSE: Read object properties
 // ----------------------------------------------------------------------- //
 
 void WeaponItem::ReadProp(ObjectCreateStruct *pStruct)
@@ -177,7 +169,7 @@ void WeaponItem::ReadProp(ObjectCreateStruct *pStruct)
 	// This allows ammo type to be specified without appending it
 	// to the WeaponType attribute (e.g., a spawned weapon)...
 
-    if (g_pLTServer->GetPropGeneric("AmmoType", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("AmmoType", &genProp) == LT_OK)
 	{
 		AMMO* pAmmo = g_pWeaponMgr->GetAmmo(genProp.m_String);
 		if (pAmmo)
@@ -186,7 +178,7 @@ void WeaponItem::ReadProp(ObjectCreateStruct *pStruct)
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("IsLevelPowerup", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("IsLevelPowerup", &genProp) == LT_OK)
 	{
 		m_bIsLevelPowerup = genProp.m_Bool;
 	}
@@ -194,11 +186,9 @@ void WeaponItem::ReadProp(ObjectCreateStruct *pStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WeaponItem::PostPropRead
 //
-//	ROUTINE:	WeaponItem::PostPropRead
-//
-//	PURPOSE:	Handle post property read engine messages
-//
+//	PURPOSE: Handle post property read engine messages
 // ----------------------------------------------------------------------- //
 
 void WeaponItem::PostPropRead(ObjectCreateStruct *pStruct)
@@ -214,19 +204,17 @@ void WeaponItem::PostPropRead(ObjectCreateStruct *pStruct)
 		// Set up the appropriate pick up sound...
 
 		FREE_HSTRING(m_hstrSoundFile);
-        m_hstrSoundFile = g_pLTServer->CreateString("Powerups\\Snd\\pu_weapon.wav");
+		m_hstrSoundFile = g_pLTServer->CreateString("Powerups\\Snd\\pu_weapon.wav");
 
-        m_bBounce = LTFALSE;
-        m_bRotate = LTFALSE;
+		m_bBounce = LTFALSE;
+		m_bRotate = LTFALSE;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WeaponItem::InitialUpdate
 //
-//	ROUTINE:	WeaponItem::InitialUpdate
-//
-//	PURPOSE:	Handle inital update engine messages
-//
+//	PURPOSE: Handle inital update engine messages
 // ----------------------------------------------------------------------- //
 
 void WeaponItem::InitialUpdate()
@@ -237,11 +225,11 @@ void WeaponItem::InitialUpdate()
 	AMMO* pAmmo = g_pWeaponMgr->GetAmmo(m_nAmmoId);
 	if (!pAmmo) return;
 
-    LTVector vDims, vScale, vNewDims;
-    g_pLTServer->GetModelAnimUserDims(m_hObject, &vDims, g_pLTServer->GetModelAnimation(m_hObject));
+	LTVector vDims, vScale, vNewDims;
+	g_pLTServer->GetModelAnimUserDims(m_hObject, &vDims, g_pLTServer->GetModelAnimation(m_hObject));
 
 	vScale = pWeapon->vHHScale;
-    g_pLTServer->ScaleObject(m_hObject, &vScale);
+	g_pLTServer->ScaleObject(m_hObject, &vScale);
 
 	// Set object dims based on scale value...
 
@@ -249,8 +237,8 @@ void WeaponItem::InitialUpdate()
 	vNewDims.y = vScale.y * vDims.y;
 	vNewDims.z = vScale.z * vDims.z;
 
-    g_pLTServer->SetObjectDims(m_hObject, &vNewDims);
-    g_pLTServer->SetNextUpdate(m_hObject, UPDATE_DELTA);
+	g_pLTServer->SetObjectDims(m_hObject, &vNewDims);
+	g_pLTServer->SetNextUpdate(m_hObject, UPDATE_DELTA);
 
 	// Set our default ammo if necessary...
 
@@ -266,11 +254,9 @@ void WeaponItem::InitialUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WeaponItem::ObjectTouch
 //
-//	ROUTINE:	WeaponItem::ObjectTouch
-//
-//	PURPOSE:	Add weapon powerup to object
-//
+//	PURPOSE: Add weapon powerup to object
 // ----------------------------------------------------------------------- //
 
 void WeaponItem::ObjectTouch(HOBJECT hObject)
@@ -281,72 +267,66 @@ void WeaponItem::ObjectTouch(HOBJECT hObject)
 
 	if (IsPlayer(hObject))
 	{
-        CCharacter* pCharObj = (CCharacter*)g_pLTServer->HandleToObject(hObject);
+		CCharacter* pCharObj = (CCharacter*)g_pLTServer->HandleToObject(hObject);
 
 		if (pCharObj && !pCharObj->IsDead())
 		{
-            HMESSAGEWRITE hMessage = g_pLTServer->StartMessageToObject(this, hObject, MID_ADDWEAPON);
-            g_pLTServer->WriteToMessageByte(hMessage, m_nWeaponId);
-            g_pLTServer->WriteToMessageByte(hMessage, m_nAmmoId);
-            g_pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)m_nAmmo);
+			HMESSAGEWRITE hMessage = g_pLTServer->StartMessageToObject(this, hObject, MID_ADDWEAPON);
+			g_pLTServer->WriteToMessageByte(hMessage, m_nWeaponId);
+			g_pLTServer->WriteToMessageByte(hMessage, m_nAmmoId);
+			g_pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)m_nAmmo);
 			g_pLTServer->WriteToMessageByte(hMessage, m_bIsLevelPowerup);
-            g_pLTServer->EndMessage(hMessage);
+			g_pLTServer->EndMessage(hMessage);
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WeaponItem::Save
 //
-//	ROUTINE:	WeaponItem::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void WeaponItem::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageByte(hWrite, m_nWeaponId);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nAmmoId);
-    g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)m_nAmmo);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nWeaponId);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nAmmoId);
+	g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)m_nAmmo);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WeaponItem::Load
 //
-//	ROUTINE:	WeaponItem::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void WeaponItem::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    m_nWeaponId = g_pLTServer->ReadFromMessageByte(hRead);
-    m_nAmmoId   = g_pLTServer->ReadFromMessageByte(hRead);
-    m_nAmmo     = (int) g_pLTServer->ReadFromMessageFloat(hRead);
+	m_nWeaponId = g_pLTServer->ReadFromMessageByte(hRead);
+	m_nAmmoId   = g_pLTServer->ReadFromMessageByte(hRead);
+	m_nAmmo	 = (int) g_pLTServer->ReadFromMessageFloat(hRead);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: WeaponItem::PickedUp()
 //
-//	ROUTINE:	WeaponItem::PickedUp()
-//
-//	PURPOSE:	Called when an object tells this weapon that the object
+//	PURPOSE: Called when an object tells this weapon that the object
 //				picked it up.
-//
 // ----------------------------------------------------------------------- //
 
 void WeaponItem::PickedUp(HMESSAGEREAD hRead)
 {
 	// make the item invisible for the correct amount of time
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
-    g_pLTServer->SetObjectFlags(m_hObject, dwFlags & ~FLAG_VISIBLE & ~FLAG_TOUCH_NOTIFY);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	g_pLTServer->SetObjectFlags(m_hObject, dwFlags & ~FLAG_VISIBLE & ~FLAG_TOUCH_NOTIFY);
 
 	// Let the world know what happened...
 
@@ -355,7 +335,7 @@ void WeaponItem::PickedUp(HMESSAGEREAD hRead)
 
 	// Clear our player obj, we no longer need this link...
 
-    SetPlayerObj(LTNULL);
+	SetPlayerObj(LTNULL);
 
 
 	// if we're supposed to trigger something, trigger it here
@@ -368,7 +348,7 @@ void WeaponItem::PickedUp(HMESSAGEREAD hRead)
 
 	// get the override respawn time - if it's -1.0, use the default
 
-    LTFLOAT fRespawn = g_pLTServer->ReadFromMessageFloat (hRead);
+	LTFLOAT fRespawn = g_pLTServer->ReadFromMessageFloat (hRead);
 	if (fRespawn == -1.0f) 
 	{
 		fRespawn = m_fRespawnDelay;
@@ -377,27 +357,25 @@ void WeaponItem::PickedUp(HMESSAGEREAD hRead)
 	fRespawn /= g_RespawnScaleTrack.GetFloat(1.0f);
 
 	if (g_pGameServerShell->GetGameType() != SINGLE && g_WeaponsStay.GetFloat() > 0.0f && m_fRespawnDelay > 0.0f)
-    {
+	{
 		fRespawn = 0.1f;
 	}
 
 	if (fRespawn <= 0.0f || g_pGameServerShell->GetGameType() == SINGLE)
 	{
-        g_pLTServer->RemoveObject(m_hObject);
+		g_pLTServer->RemoveObject(m_hObject);
 	}
 	else
 	{
-        g_pLTServer->SetNextUpdate(m_hObject, fRespawn);
+		g_pLTServer->SetNextUpdate(m_hObject, fRespawn);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponItemPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CWeaponItemPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Requests a state change
-//
+//	PURPOSE: Requests a state change
 // ----------------------------------------------------------------------- //
 LTRESULT CWeaponItemPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {

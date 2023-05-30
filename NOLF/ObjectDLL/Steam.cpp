@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Steam.cpp
 //
-// MODULE  : Steam.cpp
+// PURPOSE: Steam implementation
 //
-// PURPOSE : Steam implementation
-//
-// CREATED : 10/19/99
+// CREATED: 10/19/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -18,33 +16,29 @@
 
 BEGIN_CLASS(Steam)
 	ADD_REALPROP_FLAG(Lifetime, -1.0f, 0)
-    ADD_BOOLPROP_FLAG(StartActive, LTFALSE, 0)
+	ADD_BOOLPROP_FLAG(StartActive, LTFALSE, 0)
 	ADD_REALPROP_FLAG(Damage, 0.0f, 0)
 	ADD_STEAM_PROPS()
 END_CLASS_DEFAULT(Steam, GameBase, NULL, NULL)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Steam::Steam()
 //
-//	ROUTINE:	Steam::Steam()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 Steam::Steam() : GameBase(OT_NORMAL)
 {
 	m_fDamage		= 0.0f;
 	m_fLifetime		= -1.0f;
-    m_bStartActive  = LTFALSE;
-    m_bOn           = LTFALSE;
+	m_bStartActive  = LTFALSE;
+	m_bOn		   = LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Steam::~Steam()
 //
-//	ROUTINE:	Steam::~Steam()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 Steam::~Steam()
@@ -52,11 +46,9 @@ Steam::~Steam()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Steam::EngineMessageFn()
 //
-//	ROUTINE:	Steam::EngineMessageFn()
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 Steam::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -112,11 +104,9 @@ uint32 Steam::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Steam::ObjectMessageFn()
 //
-//	ROUTINE:	Steam::ObjectMessageFn()
-//
-//	PURPOSE:	Handler for server object messages.
-//
+//	PURPOSE: Handler for server object messages.
 // --------------------------------------------------------------------------- //
 
 uint32 Steam::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -135,27 +125,25 @@ uint32 Steam::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hR
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Steam::ReadProp
 //
-//	ROUTINE:	Steam::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 void Steam::ReadProps()
 {
 	GenericProp genProp;
-    if (g_pLTServer->GetPropGeneric("Damage", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Damage", &genProp) == LT_OK)
 	{
 		m_fDamage = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Lifetime", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Lifetime", &genProp) == LT_OK)
 	{
 		m_fLifetime = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("StartActive", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("StartActive", &genProp) == LT_OK)
 	{
 		m_bStartActive = genProp.m_Bool;
 	}
@@ -165,11 +153,9 @@ void Steam::ReadProps()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Steam::InitialUpdate
 //
-//	ROUTINE:	Steam::InitialUpdate
-//
-//	PURPOSE:	Initialize the object
-//
+//	PURPOSE: Initialize the object
 // ----------------------------------------------------------------------- //
 
 void Steam::InitialUpdate()
@@ -189,11 +175,9 @@ void Steam::InitialUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Steam::Setup
 //
-//	ROUTINE:	Steam::Setup
-//
-//	PURPOSE:	Initialize the object
-//
+//	PURPOSE: Initialize the object
 // ----------------------------------------------------------------------- //
 
 void Steam::Setup(STEAMCREATESTRUCT* pSC, LTFLOAT fLifetime, LTBOOL bStartActive)
@@ -211,11 +195,9 @@ void Steam::Setup(STEAMCREATESTRUCT* pSC, LTFLOAT fLifetime, LTBOOL bStartActive
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Steam::Update
 //
-//	ROUTINE:	Steam::Update
-//
-//	PURPOSE:	Update the damage
-//
+//	PURPOSE: Update the damage
 // ----------------------------------------------------------------------- //
 
 void Steam::Update()
@@ -223,7 +205,7 @@ void Steam::Update()
 	if (m_fDamage > 0.0f)
 	{
 		// Do damage...
-        DoDamage(m_fDamage * g_pLTServer->GetFrameTime());
+		DoDamage(m_fDamage * g_pLTServer->GetFrameTime());
 	}
 
 	// See if we are timed...
@@ -237,29 +219,27 @@ void Steam::Update()
 		}
 	}
 
-    SetNextUpdate(0.001f);
+	SetNextUpdate(0.001f);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Steam::DoDamage
 //
-//	ROUTINE:	Steam::DoDamage
-//
-//	PURPOSE:	Damage objects (if necessary)
-//
+//	PURPOSE: Damage objects (if necessary)
 // ----------------------------------------------------------------------- //
 
 void Steam::DoDamage(LTFLOAT fDamageAmount)
 {
 	if (fDamageAmount <= 0.0f || m_SteamStruct.fRange <= 0.0f) return;
 
-    LTRotation rRot;
-    g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+	LTRotation rRot;
+	g_pLTServer->GetObjectRotation(m_hObject, &rRot);
 
-    LTVector vU, vR, vF;
-    g_pLTServer->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTVector vU, vR, vF;
+	g_pLTServer->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	// See if there is an object to damage...
 
@@ -270,7 +250,7 @@ void Steam::DoDamage(LTFLOAT fDamageAmount)
 	IQuery.m_To		= vPos + (vF * m_SteamStruct.fRange);
 	IQuery.m_Flags	= INTERSECT_OBJECTS | IGNORE_NONSOLID;
 
-    if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
+	if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
 	{
 		if (IInfo.m_hObject)
 		{
@@ -288,28 +268,24 @@ void Steam::DoDamage(LTFLOAT fDamageAmount)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Steam::CreateSFXMsg
 //
-//	ROUTINE:	Steam::CreateSFXMsg
-//
-//	PURPOSE:	Create our special fx message
-//
+//	PURPOSE: Create our special fx message
 // ----------------------------------------------------------------------- //
 
 void Steam::CreateSFXMsg()
 {
-    HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
-    g_pLTServer->WriteToMessageByte(hMessage, SFX_STEAM_ID);
-    m_SteamStruct.Write(g_pLTServer, hMessage);
-    g_pLTServer->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
+	g_pLTServer->WriteToMessageByte(hMessage, SFX_STEAM_ID);
+	m_SteamStruct.Write(g_pLTServer, hMessage);
+	g_pLTServer->EndMessage(hMessage);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Steam::TriggerMsg()
 //
-//	ROUTINE:	Steam::TriggerMsg()
-//
-//	PURPOSE:	Trigger function to turn Steam on/off
-//
+//	PURPOSE: Trigger function to turn Steam on/off
 // --------------------------------------------------------------------------- //
 
 void Steam::TriggerMsg(HOBJECT hSender, const char* szMsg)
@@ -326,40 +302,36 @@ void Steam::TriggerMsg(HOBJECT hSender, const char* szMsg)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Steam::TurnOff()
 //
-//	ROUTINE:	Steam::TurnOff()
-//
-//	PURPOSE:	Turn Steam off
-//
+//	PURPOSE: Turn Steam off
 // --------------------------------------------------------------------------- //
 
 void Steam::TurnOff()
 {
 	if (!m_bOn) return;
 
-    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags & ~USRFLG_VISIBLE);
-    SetNextUpdate(0.0f);
+	uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags & ~USRFLG_VISIBLE);
+	SetNextUpdate(0.0f);
 
-    m_bOn = LTFALSE;
+	m_bOn = LTFALSE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Steam::TurnOn()
 //
-//	ROUTINE:	Steam::TurnOn()
-//
-//	PURPOSE:	Turn Steam on
-//
+//	PURPOSE: Turn Steam on
 // --------------------------------------------------------------------------- //
 
 void Steam::TurnOn()
 {
 	if (m_bOn) return;
 
-    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
 	dwUsrFlags |= USRFLG_VISIBLE;
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags);
 
 	// If we do damage, make sure we do updates...
 
@@ -370,29 +342,27 @@ void Steam::TurnOn()
 			m_Timer.Start(m_fLifetime);
 		}
 
-        SetNextUpdate(0.001f);
+		SetNextUpdate(0.001f);
 	}
 
-    m_bOn = LTTRUE;
+	m_bOn = LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Steam::Save
 //
-//	ROUTINE:	Steam::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void Steam::Save(HMESSAGEWRITE hWrite)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fDamage);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fLifetime);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bStartActive);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bOn);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fDamage);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fLifetime);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bStartActive);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bOn);
 
 	m_Timer.Save(hWrite);
 	m_SteamStruct.Save(hWrite);
@@ -400,21 +370,19 @@ void Steam::Save(HMESSAGEWRITE hWrite)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Steam::Load
 //
-//	ROUTINE:	Steam::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void Steam::Load(HMESSAGEREAD hRead)
 {
 	if (!hRead) return;
 
-    m_fDamage       = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fLifetime     = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_bStartActive  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bOn           = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_fDamage	   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fLifetime	 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_bStartActive  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bOn		   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
 
 	m_Timer.Load(hRead);
 	m_SteamStruct.Load(hRead);

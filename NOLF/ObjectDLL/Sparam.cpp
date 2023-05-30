@@ -2,7 +2,7 @@
 ;
 ;	 MODULE:		SPARAM (.CPP)
 ;
-;	PURPOSE:		String Parameter funcions
+;	PURPOSE: 	String Parameter funcions
 ;
 ;	HISTORY:		10/13/96 [blg] This file was created
 ;
@@ -20,11 +20,9 @@
 // Functions...
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Sparam_Get
 //
-//	ROUTINE:	Sparam_Get
-//
-//	PURPOSE:	Gets the parameter with the given ID
-//
+//	PURPOSE: Gets the parameter with the given ID
 // ----------------------------------------------------------------------- //
 
 bool Sparam_Get(char* sDest, const char* sSource, const char* sId)
@@ -78,14 +76,12 @@ bool Sparam_Get(char* sDest, const char* sSource, const char* sId)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Sparam_Add
 //
-//	ROUTINE:	Sparam_Add
-//
-//	PURPOSE:	Addss the given parameter with the given ID
+//	PURPOSE: Addss the given parameter with the given ID
 //
 //	WARNING:	The source string must contain enough extra memory for
 //				the new param and id!
-//
 // ----------------------------------------------------------------------- //
 
 bool Sparam_Add(char* sSource, const char* sId, const char* sParam)

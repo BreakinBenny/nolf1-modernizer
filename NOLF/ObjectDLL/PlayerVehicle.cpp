@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: PlayerVehicle.cpp
 //
-// MODULE  : PlayerVehicle.cpp
+// PURPOSE: Implementation of the PlayerVehicle
 //
-// PURPOSE : Implementation of the PlayerVehicle
-//
-// CREATED : 8/31/99
+// CREATED: 8/31/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -24,11 +22,9 @@
 static char *s_szActivate = "ACTIVATE";
 
 // ----------------------------------------------------------------------- //
-//
 //	CLASS:		PlayerVehicle
 //
-//	PURPOSE:	An PlayerVehicle object
-//
+//	PURPOSE: An PlayerVehicle object
 // ----------------------------------------------------------------------- //
 BEGIN_CLASS(PlayerVehicle)
 	ADD_STRINGPROP_FLAG(Filename, "Props\\Models\\Motorcycle.abc", PF_HIDDEN | PF_DIMS | PF_LOCALDIMS | PF_FILENAME)
@@ -38,17 +34,15 @@ BEGIN_CLASS(PlayerVehicle)
 	ADD_SOLID_FLAG(0, PF_HIDDEN)
 	ADD_GRAVITY_FLAG(0, PF_HIDDEN)
 	ADD_SHADOW_FLAG(1, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(MoveToFloor, LTTRUE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(MoveToFloor, LTTRUE, PF_HIDDEN)
 	ADD_STRINGPROP_FLAG(VehicleType, "", PF_STATICLIST)
 	ADD_REALPROP(RespawnTime, -1.0f)
 END_CLASS_DEFAULT_FLAGS_PLUGIN(PlayerVehicle, Prop, NULL, NULL, 0, CPlayerVehiclePlugin)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::PlayerVehicle()
 //
-//	ROUTINE:	PlayerVehicle::PlayerVehicle()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 PlayerVehicle::PlayerVehicle() : Prop ()
@@ -57,17 +51,15 @@ PlayerVehicle::PlayerVehicle() : Prop ()
 
 	m_vOriginalPos.Init();
 	m_vOriginalDims.Init(10, 10, 10);
-    m_rOriginalRot.Init();
+	m_rOriginalRot.Init();
 
 	m_pDebrisOverride = "Metal small";
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::~PlayerVehicle()
 //
-//	ROUTINE:	PlayerVehicle::~PlayerVehicle()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 PlayerVehicle::~PlayerVehicle()
@@ -75,11 +67,9 @@ PlayerVehicle::~PlayerVehicle()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::EngineMessageFn
 //
-//	ROUTINE:	PlayerVehicle::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 PlayerVehicle::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -94,7 +84,7 @@ uint32 PlayerVehicle::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDa
 
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = Prop::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = Prop::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE || fData == PRECREATE_STRINGPROP)
 			{
@@ -108,7 +98,7 @@ uint32 PlayerVehicle::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDa
 
 		case MID_INITIALUPDATE:
 		{
-            uint32 dwRet =  Prop::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet =  Prop::EngineMessageFn(messageID, pData, fData);
 
 			if (fData != INITIALUPDATE_SAVEGAME)
 			{
@@ -139,11 +129,9 @@ uint32 PlayerVehicle::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDa
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::ReadProp
 //
-//	ROUTINE:	PlayerVehicle::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 void PlayerVehicle::ReadProp(ObjectCreateStruct *pInfo)
@@ -152,12 +140,12 @@ void PlayerVehicle::ReadProp(ObjectCreateStruct *pInfo)
 
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("VehicleType", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("VehicleType", &genProp) == LT_OK)
 	{
 		m_ePPhysicsModel = GetPlayerPhysicsModelFromPropertyName(genProp.m_String);
 	}
 
-    if (g_pLTServer->GetPropGeneric("RespawnTime", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("RespawnTime", &genProp) == LT_OK)
 	{
 		m_fRespawnTime = genProp.m_Float;
 	}
@@ -167,11 +155,9 @@ void PlayerVehicle::ReadProp(ObjectCreateStruct *pInfo)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::PostPropRead()
 //
-//	ROUTINE:	PlayerVehicle::PostPropRead()
-//
-//	PURPOSE:	Update Properties
-//
+//	PURPOSE: Update Properties
 // ----------------------------------------------------------------------- //
 
 void PlayerVehicle::PostPropRead(ObjectCreateStruct *pStruct)
@@ -183,9 +169,9 @@ void PlayerVehicle::PostPropRead(ObjectCreateStruct *pStruct)
 	pStruct->m_Flags |= (FLAG_RAYHIT | FLAG_CLIENTNONSOLID);
 	pStruct->m_Flags &= ~FLAG_SOLID;
 
-    char* pModelAttribute = LTNULL;
-    char* pSkin1Attribute = LTNULL;
-    char* pSkin2Attribute = LTNULL;
+	char* pModelAttribute = LTNULL;
+	char* pSkin1Attribute = LTNULL;
+	char* pSkin2Attribute = LTNULL;
 	switch (m_ePPhysicsModel)
 	{
 		case PPM_MOTORCYCLE :
@@ -235,16 +221,14 @@ void PlayerVehicle::PostPropRead(ObjectCreateStruct *pStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::ObjectMessageFn
 //
-//	ROUTINE:	PlayerVehicle::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 PlayerVehicle::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
 {
-    if (!g_pLTServer) return 0;
+	if (!g_pLTServer) return 0;
 
 	switch(messageID)
 	{
@@ -267,50 +251,46 @@ uint32 PlayerVehicle::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAG
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::InitialUpdate()
 //
-//	ROUTINE:	PlayerVehicle::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 void PlayerVehicle::InitialUpdate()
 {
 	uint32 dwFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwFlags | USRFLG_CAN_ACTIVATE);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwFlags | USRFLG_CAN_ACTIVATE);
 
 	// Can't damage player vehicles...
 
-    m_damage.SetCanDamage(LTFALSE);
+	m_damage.SetCanDamage(LTFALSE);
 	m_damage.SetMass(10000.0f);
 
-    g_pLTServer->GetObjectPos(m_hObject, &m_vOriginalPos);
-    g_pLTServer->GetObjectRotation(m_hObject, &m_rOriginalRot);
-    g_pLTServer->GetObjectDims(m_hObject, &m_vOriginalDims);
+	g_pLTServer->GetObjectPos(m_hObject, &m_vOriginalPos);
+	g_pLTServer->GetObjectRotation(m_hObject, &m_rOriginalRot);
+	g_pLTServer->GetObjectDims(m_hObject, &m_vOriginalDims);
 
 	CreateSFXMsg();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::Respawn()
 //
-//	ROUTINE:	PlayerVehicle::Respawn()
-//
-//	PURPOSE:	Start the respawn process...
-//
+//	PURPOSE: Start the respawn process...
 // ----------------------------------------------------------------------- //
 
 void PlayerVehicle::Respawn()
 {
-    LTFLOAT fRespawnTime = m_fRespawnTime;
+	LTFLOAT fRespawnTime = m_fRespawnTime;
 
 	if (fRespawnTime >= 0.0f)
 	{
-        g_pLTServer->SetObjectPos(m_hObject, &m_vOriginalPos);
-        g_pLTServer->SetObjectRotation(m_hObject, &m_rOriginalRot);
+		g_pLTServer->SetObjectPos(m_hObject, &m_vOriginalPos);
+		g_pLTServer->SetObjectRotation(m_hObject, &m_rOriginalRot);
 
-        LTVector vZero(0, 0, 0);
-        g_pLTServer->SetVelocity(m_hObject, &vZero);
-        g_pLTServer->SetAcceleration(m_hObject, &vZero);
+		LTVector vZero(0, 0, 0);
+		g_pLTServer->SetVelocity(m_hObject, &vZero);
+		g_pLTServer->SetAcceleration(m_hObject, &vZero);
 	}
 	else
 	{
@@ -321,9 +301,9 @@ void PlayerVehicle::Respawn()
 	// Try to set our dims (make sure we fit where we were placed)...
 
 	LTVector vDims = m_vOriginalDims;
-    if (g_pLTServer->SetObjectDims2(m_hObject, &vDims) == LT_ERROR)
+	if (g_pLTServer->SetObjectDims2(m_hObject, &vDims) == LT_ERROR)
 	{
-        g_pLTServer->SetObjectDims2(m_hObject, &vDims);
+		g_pLTServer->SetObjectDims2(m_hObject, &vDims);
 	}
 
  	LTVector vVec(0, 0, 0);
@@ -333,55 +313,51 @@ void PlayerVehicle::Respawn()
 	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 	dwFlags &= ~FLAG_VISIBLE;
 	dwFlags &= ~FLAG_GRAVITY;
-    g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
+	g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
 
 	m_RespawnTimer.Start(fRespawnTime);
-    SetNextUpdate(0.001f);
+	SetNextUpdate(0.001f);
 
 	MoveObjectToFloor(m_hObject);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::Update()
 //
-//	ROUTINE:	PlayerVehicle::Update()
-//
-//	PURPOSE:	Process updates if necessary...
-//
+//	PURPOSE: Process updates if necessary...
 // ----------------------------------------------------------------------- //
 
 void PlayerVehicle::Update()
 {
 	if (m_RespawnTimer.Stopped())
 	{
-        uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
-        g_pLTServer->SetObjectFlags(m_hObject, dwFlags | FLAG_VISIBLE);
-        SetNextUpdate(0.0);
+		uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+		g_pLTServer->SetObjectFlags(m_hObject, dwFlags | FLAG_VISIBLE);
+		SetNextUpdate(0.0);
 	}
 	else
 	{
-        SetNextUpdate(0.001f);
+		SetNextUpdate(0.001f);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::DoActivate()
 //
-//	ROUTINE:	PlayerVehicle::DoActivate()
-//
-//	PURPOSE:	Handle Activate...
-//
+//	PURPOSE: Handle Activate...
 // ----------------------------------------------------------------------- //
 
 void PlayerVehicle::DoActivate(HOBJECT hSender)
 {
 	// Make sure we're visible (i.e., spawned in)...
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 	if ( !(dwFlags & FLAG_VISIBLE) || !hSender || !IsPlayer(hSender)) return;
 
 
 	// Tell the player to hop aboard...
 
-    CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hSender);
+	CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hSender);
 	if (pPlayer)
 	{
 		pPlayer->RideVehicle(this);
@@ -389,16 +365,14 @@ void PlayerVehicle::DoActivate(HOBJECT hSender)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::Save
 //
-//	ROUTINE:	PlayerVehicle::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void PlayerVehicle::Save(HMESSAGEWRITE hWrite)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hWrite) return;
 
 	SAVE_VECTOR(m_vOriginalPos);
@@ -412,16 +386,14 @@ void PlayerVehicle::Save(HMESSAGEWRITE hWrite)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::Load
 //
-//	ROUTINE:	PlayerVehicle::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void PlayerVehicle::Load(HMESSAGEREAD hRead)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hRead) return;
 
 	LOAD_VECTOR(m_vOriginalPos);
@@ -429,7 +401,7 @@ void PlayerVehicle::Load(HMESSAGEREAD hRead)
 	LOAD_ROTATION(m_rOriginalRot);
  	LOAD_FLOAT(m_fRespawnTime);
 
-    uint8 nModel;
+	uint8 nModel;
 	LOAD_BYTE(nModel);
 	m_ePPhysicsModel = (PlayerPhysicsModel)nModel;
 
@@ -438,19 +410,17 @@ void PlayerVehicle::Load(HMESSAGEREAD hRead)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: PlayerVehicle::CreateSFXMsg
 //
-//	ROUTINE:	PlayerVehicle::CreateSFXMsg
-//
-//	PURPOSE:	Create our special fx message
-//
+//	PURPOSE: Create our special fx message
 // ----------------------------------------------------------------------- //
 
 void PlayerVehicle::CreateSFXMsg()
 {
-    HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
-    g_pLTServer->WriteToMessageByte(hMessage, SFX_PLAYERVEHICLE_ID);
-    m_PlayerVehicleStruct.Write(g_pLTServer, hMessage);
-    g_pLTServer->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
+	g_pLTServer->WriteToMessageByte(hMessage, SFX_PLAYERVEHICLE_ID);
+	m_PlayerVehicleStruct.Write(g_pLTServer, hMessage);
+	g_pLTServer->EndMessage(hMessage);
 }
 
 
@@ -458,9 +428,9 @@ LTRESULT CPlayerVehiclePlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 
 	// Handle vehicle type...
