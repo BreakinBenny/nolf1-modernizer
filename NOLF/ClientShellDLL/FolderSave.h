@@ -17,8 +17,8 @@ public:
 	CFolderSave();
 	virtual ~CFolderSave();
 
-    LTBOOL Build();
-    void OnFocus(LTBOOL bFocus);
+	LTBOOL Build();
+	void OnFocus(LTBOOL bFocus);
 	void Escape();
 
 	LTBOOL HandleKeyDown(int key, int rep);
@@ -28,13 +28,13 @@ public:
 	LTBOOL SaveGame(uint32 slot);
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 	void	BuildSavedLevelList();
 	void	ClearSavedLevelList();
 
 	void	NameSaveGame(uint32 slot, int index);
 
-	CLTGUIEditCtrl		*m_pEdit;
+	CLTGUIEditCtrl	*m_pEdit;
 	char				m_szSaveName[40];
 
 

@@ -14,7 +14,7 @@ extern CGameClientShell* g_pGameClientShell;
 
 
 
-extern VarTrack	g_vtNetGameType;
+extern VarTrack g_vtNetGameType;
 
 
 namespace
@@ -27,9 +27,9 @@ namespace
 		CMD_REMOVE_ALL,
 		CMD_FILTER,
 	};
-    LTRect rcAvailRect;
-    LTRect rcSelRect;
-    LTRect rcCommandRect;
+	LTRect rcAvailRect;
+	LTRect rcSelRect;
+	LTRect rcCommandRect;
 
 	int nBarHeight;
 	int nArrowWidth;
@@ -46,26 +46,23 @@ namespace
 
 CFolderHostLevels::CFolderHostLevels()
 {
-	m_nGameType		= DEATHMATCH;
-    m_pAvailLevels	= LTNULL;
-    m_pSelLevels    = LTNULL;
-    m_pAddLevel     = LTNULL;
-    m_pRemoveLevel  = LTNULL;
-    m_pAddAll       = LTNULL;
-    m_pRemoveAll    = LTNULL;
+	m_nGameType	= DEATHMATCH;
+	m_pAvailLevels = LTNULL;
+	m_pSelLevels	= LTNULL;
+	m_pAddLevel	= LTNULL;
+	m_pRemoveLevel  = LTNULL;
+	m_pAddAll	= LTNULL;
+	m_pRemoveAll	= LTNULL;
 }
 
-CFolderHostLevels::~CFolderHostLevels()
-{
-
-}
+CFolderHostLevels::~CFolderHostLevels(){}
 
 // Build the folder
 LTBOOL CFolderHostLevels::Build()
 {
 	if (!g_vtNetGameType.IsInitted())
 	{
-        g_vtNetGameType.Init(g_pLTClient,"NetGameType",LTNULL,(float)m_nGameType);
+		g_vtNetGameType.Init(g_pLTClient,"NetGameType",LTNULL,(float)m_nGameType);
 	}
 
 	rcAvailRect = g_pLayoutMgr->GetFolderCustomRect((eFolderID)m_nFolderID,"AvailLevelsRect");
@@ -77,13 +74,13 @@ LTBOOL CFolderHostLevels::Build()
 	CreateTitle(IDS_TITLE_HOST_LEVELS);
 
 	//Add Avail Levels List
-    LTIntPt pos(rcAvailRect.left + nIndent,rcAvailRect.top);
+	LTIntPt pos(rcAvailRect.left + nIndent,rcAvailRect.top);
 	CLTGUIFont *pFont = GetLargeFont();
 	nBarHeight = pFont->GetHeight();
 
-    CStaticTextCtrl *pCtrl = CreateStaticTextItem(IDS_HOST_AVAIL_LEVELS, LTNULL, LTNULL,0,0, LTTRUE, pFont);
-    AddFixedControl(pCtrl,pos,LTFALSE);
-    pCtrl->Enable(LTFALSE);
+	CStaticTextCtrl *pCtrl = CreateStaticTextItem(IDS_HOST_AVAIL_LEVELS, LTNULL, LTNULL,0,0, LTTRUE, pFont);
+	AddFixedControl(pCtrl,pos,LTFALSE);
+	pCtrl->Enable(LTFALSE);
 
 	pFont = GetSmallFont();
 	pos.x = rcAvailRect.left + nIndent;
@@ -92,20 +89,20 @@ LTBOOL CFolderHostLevels::Build()
 	int nListWidth = (rcAvailRect.right - rcAvailRect.left) - nArrowWidth;
 
 	m_pAvailLevels = debug_new(CListCtrl);
-    m_pAvailLevels->Create(nListHeight, LTTRUE, nListWidth);
+	m_pAvailLevels->Create(nListHeight, LTTRUE, nListWidth);
 	m_pAvailLevels->SetParam1(nListWidth);
 	m_pAvailLevels->SetItemSpacing(0);
-    m_pAvailLevels->EnableMouseMoveSelect(LTTRUE);
+	m_pAvailLevels->EnableMouseMoveSelect(LTTRUE);
 	m_pAvailLevels->SetHelpID(IDS_HELP_AVAIL_LEVELS);
-    AddFixedControl(m_pAvailLevels,pos,LTTRUE);
+	AddFixedControl(m_pAvailLevels,pos,LTTRUE);
 
 	//Add Selected Levels List
-    pos = LTIntPt(rcSelRect.left + nIndent,rcSelRect.top);
+	pos = LTIntPt(rcSelRect.left + nIndent,rcSelRect.top);
 	pFont = GetLargeFont();
 
-    pCtrl = CreateStaticTextItem(IDS_HOST_SELECTED_LEVELS, LTNULL, LTNULL,0,0,LTTRUE, pFont);
-    AddFixedControl(pCtrl,pos,LTFALSE);
-    pCtrl->Enable(LTFALSE);
+	pCtrl = CreateStaticTextItem(IDS_HOST_SELECTED_LEVELS, LTNULL, LTNULL,0,0,LTTRUE, pFont);
+	AddFixedControl(pCtrl,pos,LTFALSE);
+	pCtrl->Enable(LTFALSE);
 
 	pFont = GetSmallFont();
 	pos.x = rcSelRect.left + nIndent;
@@ -114,33 +111,33 @@ LTBOOL CFolderHostLevels::Build()
 	nListWidth = (rcSelRect.right - rcSelRect.left) - nArrowWidth;
 
 	m_pSelLevels = debug_new(CListCtrl);
-    m_pSelLevels->Create(nListHeight, LTTRUE, nListWidth);
+	m_pSelLevels->Create(nListHeight, LTTRUE, nListWidth);
 	m_pSelLevels->SetParam1(nListWidth);
 	m_pSelLevels->SetItemSpacing(0);
-    m_pSelLevels->EnableMouseMoveSelect(LTTRUE);
+	m_pSelLevels->EnableMouseMoveSelect(LTTRUE);
 	m_pSelLevels->SetHelpID(IDS_HELP_SEL_LEVELS);
-    AddFixedControl(m_pSelLevels,pos,LTTRUE);
+	AddFixedControl(m_pSelLevels,pos,LTTRUE);
 
 	//Add Commands
-    pos = LTIntPt(rcCommandRect.left + nIndent,rcCommandRect.top);
+	pos = LTIntPt(rcCommandRect.left + nIndent,rcCommandRect.top);
 	nListWidth = rcCommandRect.right - rcCommandRect.left;
 	pFont = GetLargeFont();
 
 
 	m_pAddAll = CreateStaticTextItem(IDS_HOST_ADD_ALL, CMD_ADD_ALL, IDS_HELP_ADD_ALL, nListWidth);
-    AddFixedControl(m_pAddAll,pos,LTTRUE);
+	AddFixedControl(m_pAddAll,pos,LTTRUE);
 	pos.y += (m_nItemSpacing + pFont->GetHeight());
 
 	m_pAddLevel = CreateStaticTextItem(IDS_HOST_ADD_LEVEL, CMD_ADD_LEVEL, IDS_HELP_ADD_LEVEL, nListWidth);
-    AddFixedControl(m_pAddLevel,pos,LTTRUE);
+	AddFixedControl(m_pAddLevel,pos,LTTRUE);
 	pos.y += (m_nItemSpacing + pFont->GetHeight());
 
 	m_pRemoveLevel = CreateStaticTextItem(IDS_HOST_REMOVE_LEVEL, CMD_REMOVE_LEVEL, IDS_HELP_REM_LEVEL, nListWidth);
-    AddFixedControl(m_pRemoveLevel,pos,LTTRUE);
+	AddFixedControl(m_pRemoveLevel,pos,LTTRUE);
 	pos.y += (m_nItemSpacing + pFont->GetHeight());
 
 	m_pRemoveAll = CreateStaticTextItem(IDS_HOST_REMOVE_ALL, CMD_REMOVE_ALL, IDS_HELP_REM_ALL, nListWidth);
-    AddFixedControl(m_pRemoveAll,pos,LTTRUE);
+	AddFixedControl(m_pRemoveAll,pos,LTTRUE);
 	pos.y += (m_nItemSpacing + pFont->GetHeight());
 
 
@@ -158,7 +155,7 @@ uint32 CFolderHostLevels::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dw
 {
 	switch(dwCommand)
 	{
-	case CMD_FILTER:
+		case CMD_FILTER:
 		{
 			UpdateData();
 			m_pAvailLevels->RemoveAllControls();
@@ -166,7 +163,7 @@ uint32 CFolderHostLevels::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dw
 			UpdateButtons();
 		} break;
 
-	case CMD_ADD_LEVEL:
+		case CMD_ADD_LEVEL:
 		{
 			char sLevel[256] = "";
 			if (m_pAvailLevels->IsItemSelected() && (m_pSelLevels->GetNum() < MAX_GAME_LEVELS))
@@ -175,9 +172,8 @@ uint32 CFolderHostLevels::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dw
 				if (pCtrl)
 				{
 					HSTRING hText = pCtrl->GetString();
-                    char *pTemp = g_pLTClient->GetStringData(hText);
+					char *pTemp = g_pLTClient->GetStringData(hText);
 					sprintf(sLevel,"%s\\%s",szPath,pTemp);
-
 				}
 			}
 
@@ -189,7 +185,7 @@ uint32 CFolderHostLevels::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dw
 			UpdateButtons();
 
 		} break;
-	case CMD_ADD_ALL:
+		case CMD_ADD_ALL:
 		{
 			if (m_pAvailLevels->IsItemSelected())
 			{
@@ -200,26 +196,20 @@ uint32 CFolderHostLevels::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dw
 					if (pCtrl)
 					{
 						HSTRING hText = pCtrl->GetString();
-                        char *pTemp = g_pLTClient->GetStringData(hText);
+						char *pTemp = g_pLTClient->GetStringData(hText);
 						sprintf(sLevel,"%s\\%s",szPath,pTemp);
-
 					}
 					if (strlen(sLevel))
 					{
 						AddLevelToList(m_pSelLevels,sLevel);
 						m_pSelLevels->ClearSelection();
 					}
-
-					
-
-
-
 				}
 			}
 			UpdateButtons();
 
 		} break;
-	case CMD_REMOVE_LEVEL:
+		case CMD_REMOVE_LEVEL:
 		{
 			if (m_pSelLevels->IsItemSelected())
 			{
@@ -247,7 +237,7 @@ uint32 CFolderHostLevels::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dw
 
 
 // Change in focus
-void    CFolderHostLevels::OnFocus(LTBOOL bFocus)
+void	CFolderHostLevels::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
 	{
@@ -267,7 +257,7 @@ void    CFolderHostLevels::OnFocus(LTBOOL bFocus)
 		LoadLevelList(m_pSelLevels);
 
 		UpdateButtons();
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 
 	}
 	else
@@ -278,7 +268,7 @@ void    CFolderHostLevels::OnFocus(LTBOOL bFocus)
 		m_pAvailLevels->RemoveAllControls();
 		m_pSelLevels->RemoveAllControls();
 
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 
 	}
 	CBaseFolder::OnFocus(bFocus);
@@ -288,10 +278,10 @@ LTBOOL CFolderHostLevels::FillLevelList(CListCtrl *pList, char* sDir)
 {
 	// Sanity checks...
 
-    if (!pList) return(LTFALSE);
-    if (!sDir) return(LTFALSE);
+	if (!pList) return(LTFALSE);
+	if (!sDir) return(LTFALSE);
 
-    FileEntry* pFiles = g_pLTClient->GetFileList(sDir);
+	FileEntry* pFiles = g_pLTClient->GetFileList(sDir);
 	if (!pFiles) return(FALSE);
 
 	FileEntry* ptr = pFiles;
@@ -299,7 +289,6 @@ LTBOOL CFolderHostLevels::FillLevelList(CListCtrl *pList, char* sDir)
 	// Array of controls to add to the list
 	CMoArray<CString *>	m_levels;
 	m_levels.SetSize(0);
-
 
 
 	while (ptr)
@@ -317,14 +306,13 @@ LTBOOL CFolderHostLevels::FillLevelList(CListCtrl *pList, char* sDir)
 
 
 				m_levels.Add(pStr);
-
 			}
 		}
 
 		ptr = ptr->m_pNext;
 	}
 
-    g_pLTClient->FreeFileList(pFiles);
+	g_pLTClient->FreeFileList(pFiles);
 
 	while (m_levels.GetSize())
 	{
@@ -349,18 +337,16 @@ LTBOOL CFolderHostLevels::FillLevelList(CListCtrl *pList, char* sDir)
 	}
 
 
-    return (LTTRUE);
+	return (LTTRUE);
 }
 
 void CFolderHostLevels::LoadLevelList(CListCtrl *pList)
 {
 	// Sanity checks...
-
 	if (!pList) return;
 
 
 	// Get the level count...
-
 	int cLevels = 0;
 	if (m_nGameType == COOPERATIVE_ASSAULT)
 	{
@@ -374,7 +360,6 @@ void CFolderHostLevels::LoadLevelList(CListCtrl *pList)
 
 
 	// Get each level...
-
 	for (int i = 0; i < cLevels; i++)
 	{
 		char sLevel[256] = { "" };
@@ -400,7 +385,6 @@ void CFolderHostLevels::LoadLevelList(CListCtrl *pList)
 void CFolderHostLevels::SaveLevelList(CListCtrl *pList)
 {
 	// Sanity checks...
-
 	if (!pList) return;
 
 
@@ -418,7 +402,6 @@ void CFolderHostLevels::SaveLevelList(CListCtrl *pList)
 
 
 	// Write out each level...
-
 	for (int i = 0; i < cLevels; i++)
 	{
 		char sLabel[32];
@@ -432,7 +415,7 @@ void CFolderHostLevels::SaveLevelList(CListCtrl *pList)
 		}
 		CStaticTextCtrl *pCtrl = (CStaticTextCtrl *)pList->GetControl(i);
 		HSTRING hText = pCtrl->GetString();
-        char *pTemp = g_pLTClient->GetStringData(hText);
+		char *pTemp = g_pLTClient->GetStringData(hText);
 		char sLevel[256] = "";
 		sprintf(sLevel,"%s\\%s",szPath,pTemp);
 
@@ -443,12 +426,12 @@ void CFolderHostLevels::SaveLevelList(CListCtrl *pList)
 
 LTBOOL CFolderHostLevels::OnLButtonDown(int x, int y)
 {
-    LTBOOL bHandled = CBaseFolder::OnLButtonDown(x,y);
+	LTBOOL bHandled = CBaseFolder::OnLButtonDown(x,y);
 	return bHandled;
 }
 LTBOOL CFolderHostLevels::OnRButtonDown(int x, int y)
 {
-    LTBOOL bHandled = CBaseFolder::OnRButtonDown(x,y);
+	LTBOOL bHandled = CBaseFolder::OnRButtonDown(x,y);
 	return bHandled;
 }
 
@@ -459,13 +442,13 @@ void CFolderHostLevels::UpdateButtons()
 		  ( m_pAvailLevels->IsItemSelected() )
 		)
 	{
-        m_pAddLevel->Enable(LTTRUE);
-        m_pAddAll->Enable(LTTRUE);
+		m_pAddLevel->Enable(LTTRUE);
+		m_pAddAll->Enable(LTTRUE);
 	}
 	else
 	{
-        m_pAddLevel->Enable(LTFALSE);
-        m_pAddAll->Enable(LTFALSE);
+		m_pAddLevel->Enable(LTFALSE);
+		m_pAddAll->Enable(LTFALSE);
 	}
 
 	m_pRemoveLevel->Enable(m_pSelLevels->IsItemSelected());
@@ -485,22 +468,22 @@ void CFolderHostLevels::DrawFrame(HSURFACE hDestSurf, LTRect *rect, LTBOOL bSel)
 	int xo = g_pInterfaceResMgr->GetXOffset();
 	int yo = g_pInterfaceResMgr->GetYOffset();
 
-    HLTCOLOR hColor = (bSel ? m_hSelectedColor : m_hNonSelectedColor);
+	HLTCOLOR hColor = (bSel ? m_hSelectedColor : m_hNonSelectedColor);
 
 
-    LTRect tmpRect(xo+rect->left, yo+rect->top+nBarHeight, xo+rect->right, yo+rect->top+nBarHeight+2);
-    g_pOptimizedRenderer->FillRect(hDestSurf,&tmpRect,hColor);
+	LTRect tmpRect(xo+rect->left, yo+rect->top+nBarHeight, xo+rect->right, yo+rect->top+nBarHeight+2);
+	g_pOptimizedRenderer->FillRect(hDestSurf,&tmpRect,hColor);
 
 	tmpRect.bottom = yo+rect->bottom;
 	tmpRect.top = tmpRect.bottom - 2;
-    g_pOptimizedRenderer->FillRect(hDestSurf,&tmpRect,hColor);
+	g_pOptimizedRenderer->FillRect(hDestSurf,&tmpRect,hColor);
 
-    tmpRect = LTRect(xo+rect->left, yo+rect->top+nBarHeight+2, xo+rect->left+2, yo+rect->bottom-2);
-    g_pOptimizedRenderer->FillRect(hDestSurf,&tmpRect,hColor);
+	tmpRect = LTRect(xo+rect->left, yo+rect->top+nBarHeight+2, xo+rect->left+2, yo+rect->bottom-2);
+	g_pOptimizedRenderer->FillRect(hDestSurf,&tmpRect,hColor);
 
 	tmpRect.right = xo+rect->right;
 	tmpRect.left = tmpRect.right - 2;
-    g_pOptimizedRenderer->FillRect(hDestSurf,&tmpRect,hColor);
+	g_pOptimizedRenderer->FillRect(hDestSurf,&tmpRect,hColor);
 
 }
 
@@ -508,7 +491,6 @@ void CFolderHostLevels::DrawFrame(HSURFACE hDestSurf, LTRect *rect, LTBOOL bSel)
 void CFolderHostLevels::AddLevelToList(CListCtrl *pList, char* sGameLevel)
 {
 	// Sanity checks...
-
 	if (!pList) return;
 	if (!sGameLevel) return;
 	if (sGameLevel[0] == '\0') return;
@@ -540,7 +522,7 @@ void CFolderHostLevels::AddLevelToList(CListCtrl *pList, char* sGameLevel)
 
 	// Add the level to the list...
 
-    CStaticTextCtrl *pCtrl = CreateStaticTextItem(sLevel,LTNULL,LTNULL,(int)pList->GetParam1(),GetSmallFont()->GetHeight(),LTFALSE,GetSmallFont());
+	CStaticTextCtrl *pCtrl = CreateStaticTextItem(sLevel,LTNULL,LTNULL,(int)pList->GetParam1(),GetSmallFont()->GetHeight(),LTFALSE,GetSmallFont());
 	pList->AddControl(pCtrl);
 
 }

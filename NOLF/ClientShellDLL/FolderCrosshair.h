@@ -18,14 +18,14 @@ public:
 	virtual ~CFolderCrosshair();
 
 	// Build the folder
-    LTBOOL   Build();
-    void    OnFocus(LTBOOL bFocus);
-    LTBOOL   Render(HSURFACE hDestSurf);
+	LTBOOL Build();
+	void	OnFocus(LTBOOL bFocus);
+	LTBOOL Render(HSURFACE hDestSurf);
 
-    LTBOOL   OnLeft();
-    LTBOOL   OnRight();
-    LTBOOL   OnLButtonUp(int x, int y);
-    LTBOOL   OnRButtonUp(int x, int y);
+	LTBOOL OnLeft();
+	LTBOOL OnRight();
+	LTBOOL OnLButtonUp(int x, int y);
+	LTBOOL OnRButtonUp(int x, int y);
 
 protected:
 	void	GetConsoleVariables();
@@ -34,15 +34,15 @@ protected:
 
 protected:
 
-	CCycleCtrl		*m_pStyle;
+	CCycleCtrl *m_pStyle;
 
-    LTBOOL           m_bCrosshair;
-	int				m_nAlpha;
-	int				m_nColorR;
-	int				m_nColorG;
-	int				m_nColorB;
-	int				m_nStyle;
-    LTBOOL           m_bDynamic;
+	LTBOOL	m_bCrosshair;
+	int		m_nAlpha;
+	int		m_nColorR;
+	int		m_nColorG;
+	int		m_nColorB;
+	int		m_nStyle;
+	LTBOOL	m_bDynamic;
 
 };
 

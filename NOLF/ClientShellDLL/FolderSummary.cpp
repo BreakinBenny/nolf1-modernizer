@@ -18,40 +18,31 @@ extern CGameClientShell* g_pGameClientShell;
 
 namespace
 {
-    LTIntPt  nullPt(0,0);
+	LTIntPt  nullPt(0,0);
 	int nContinueId = FOLDER_ID_NONE;
 	int nContinueHelpId = 0;
-
-
 }
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CFolderSummary::CFolderSummary()
-{
-}
+CFolderSummary::CFolderSummary(){}
 
 
-CFolderSummary::~CFolderSummary()
-{
-}
+CFolderSummary::~CFolderSummary(){}
 
 LTBOOL CFolderSummary::Build()
 {
 	CreateTitle(IDS_TITLE_SUMMARY);
 
-    LTBOOL bSuccess = CBaseFolder::Build();
-    UseMain(LTTRUE);
-    UseBack(LTFALSE);
+	LTBOOL bSuccess = CBaseFolder::Build();
+	UseMain(LTTRUE);
+	UseBack(LTFALSE);
 	return bSuccess;
 }
 
-void CFolderSummary::Term()
-{
-
-}
+void CFolderSummary::Term(){}
 
 
 uint32 CFolderSummary::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2)
@@ -91,8 +82,8 @@ void CFolderSummary::OnFocus(LTBOOL bFocus)
 			// frame or two to happen in a single-player game...in
 			// multiplayer games the values are updated constantly...
 
-            HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_SUMMARY);
-            g_pLTClient->EndMessage(hMessage);
+			HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_SUMMARY);
+			g_pLTClient->EndMessage(hMessage);
 		}
 
 		// We'll always just call this, 
@@ -132,7 +123,7 @@ void CFolderSummary::UpdateData()
 
 	RemoveFree();
 
-    CLTGUITextItemCtrl* pCtrl = LTNULL;
+	CLTGUITextItemCtrl* pCtrl = LTNULL;
 
 	CLTGUIColumnTextCtrl *pRanks=AddColumnText(LTNULL, LTNULL, LTTRUE, GetLargeFont());
 
@@ -142,12 +133,12 @@ void CFolderSummary::UpdateData()
 	{
 		pRanks->AddColumn(IDS_SUMMARY_BEST, 200, LTF_JUSTIFY_LEFT);
 	}
-    pRanks->Enable(LTFALSE);
+	pRanks->Enable(LTFALSE);
 
 	pRanks=AddColumnText(LTNULL, LTNULL, LTTRUE, GetSmallFont());
 
 	//rank
-    LTFLOAT fRank = 0.0f;
+	LTFLOAT fRank = 0.0f;
 	int nRankId = 0;
 	if (m_nFolderID == FOLDER_ID_FAILURE)
 	{
@@ -168,22 +159,22 @@ void CFolderSummary::UpdateData()
 		nRankId = g_pMissionMgr->GetMissionRating()->GetRankId(fRank);
 		pRanks->AddColumn(nRankId, 200, LTF_JUSTIFY_LEFT);
 	}
-    pRanks->Enable(LTFALSE);
+	pRanks->Enable(LTFALSE);
 
 
 	//time in mission
 	char str[128];
-    LTFLOAT fSec = pMSummary->fTotalMissionTime;
-    uint32 nMin = (uint32)fSec / 60;
-    fSec -= (60.0f * (LTFLOAT)nMin);
-    uint32 nHour = nMin / 60;
+	LTFLOAT fSec = pMSummary->fTotalMissionTime;
+	uint32 nMin = (uint32)fSec / 60;
+	fSec -= (60.0f * (LTFLOAT)nMin);
+	uint32 nHour = nMin / 60;
 	nMin -= 60 * nHour;
 	sprintf(str,"%02d:%02d:%.1f",nHour,nMin,fSec);
 
-    HSTRING hTxt=g_pLTClient->FormatString(IDS_STAT_TIME,str);
-    pCtrl= AddTextItem(hTxt,LTNULL,0,LTTRUE, GetLargeFont());
-    pCtrl->Enable(LTFALSE);
-    g_pLTClient->FreeString(hTxt);
+	HSTRING hTxt=g_pLTClient->FormatString(IDS_STAT_TIME,str);
+	pCtrl= AddTextItem(hTxt,LTNULL,0,LTTRUE, GetLargeFont());
+	pCtrl->Enable(LTFALSE);
+	g_pLTClient->FreeString(hTxt);
 
 
 	//accuracy
@@ -250,14 +241,14 @@ void CFolderSummary::UpdateData()
 
 
 	//inteligence
-    pCtrl = AddTextItem(IDS_STAT_INTEL,LTNULL,0, LTTRUE, GetLargeFont());
-    pCtrl->Enable(LTFALSE);
+	pCtrl = AddTextItem(IDS_STAT_INTEL,LTNULL,0, LTTRUE, GetLargeFont());
+	pCtrl->Enable(LTFALSE);
 
 	int cur = pMSummary->m_nMissionCurNumIntel;
 	int total = pMSummary->m_nMissionTotalIntel;
-    hTxt=g_pLTClient->FormatString(IDS_SUMMARY_FOUND,cur,total);
-    pCtrl= AddTextItem(hTxt,LTNULL,0, LTTRUE, GetSmallFont());
-    pCtrl->Enable(LTFALSE);
+	hTxt=g_pLTClient->FormatString(IDS_SUMMARY_FOUND,cur,total);
+	pCtrl= AddTextItem(hTxt,LTNULL,0, LTTRUE, GetSmallFont());
+	pCtrl->Enable(LTFALSE);
 
 
 
@@ -287,7 +278,6 @@ void CFolderSummary::UpdateData()
 	CalculateLastDrawn();
 	CheckArrows();
 	SetSelection(GetIndex(m_pContinue));
-
 }
 
 
@@ -296,8 +286,7 @@ LTBOOL CFolderSummary::HandleKeyDown(int key, int rep)
 	if (key == VK_F9)
 	{
 		g_pGameClientShell->QuickLoad();
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return CBaseFolder::HandleKeyDown(key,rep);
-
+	return CBaseFolder::HandleKeyDown(key,rep);
 }

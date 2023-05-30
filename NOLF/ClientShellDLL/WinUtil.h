@@ -2,9 +2,9 @@
 #define __WINUTIL_H
 
 #ifndef BOOL
-	typedef int		    BOOL;
-	#define FALSE		    0
-	#define TRUE		    1
+	typedef int	BOOL;
+	#define FALSE	0
+	#define TRUE	1
 #endif
 
 #ifndef DWORD

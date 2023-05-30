@@ -18,23 +18,23 @@ public:
 	virtual ~CFolderKeyboard();
 
 	// Build the folder
-    LTBOOL   Build();
-    void OnFocus(LTBOOL bFocus);
+	LTBOOL Build();
+	void OnFocus(LTBOOL bFocus);
 
 protected:
 	void	ClearBindings();
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32 OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
-	CToggleCtrl		*m_pLookCtrl;
+	CToggleCtrl *m_pLookCtrl;
 
-    LTBOOL          m_bLookspring;
-	int				m_nNormalTurn;
-	int	  			m_nFastTurn;
-	int	  			m_nVehicleTurn;
-	int				m_nLookUp;
+	LTBOOL m_bLookspring;
+	int	m_nNormalTurn;
+	int	m_nFastTurn;
+	int	m_nVehicleTurn;
+	int	m_nLookUp;
 
 
-    LTBOOL   m_bMouseLook;
+	LTBOOL m_bMouseLook;
 
 };
 

@@ -8,8 +8,8 @@ public:
 	virtual ~CFolderHUD();
 
 	// Build the folder
-	LTBOOL   Build();
-	void    OnFocus(LTBOOL bFocus);
+	LTBOOL Build();
+	void OnFocus(LTBOOL bFocus);
 
 
 protected:
@@ -18,12 +18,12 @@ protected:
 
 protected:
 	// 1.0 based - For the actual command
-	float							m_fUIScale;
+	float m_fUIScale;
 	// 100 based - For the silly UI slider
-	int								m_nUIScale;
-	LTBOOL							m_bUseGOTYMenu;
-	LTBOOL							m_bLockFramerate;
-	LTBOOL							m_bShowFramerate;
-	LTBOOL							m_bRestrictAspectRatio;
+	int m_nUIScale;
+	LTBOOL	m_bUseGOTYMenu;
+	LTBOOL	m_bLockFramerate;
+	LTBOOL	m_bShowFramerate;
+	LTBOOL	m_bRestrictAspectRatio;
 };
 

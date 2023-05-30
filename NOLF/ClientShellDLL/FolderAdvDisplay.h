@@ -18,10 +18,10 @@ public:
 	virtual ~CFolderAdvDisplay();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL   Build();
 	void	Term();
 
-    void    OnFocus(LTBOOL bFocus);
+	void	OnFocus(LTBOOL bFocus);
 
 	void	ConfirmSetting(LTBOOL bConfirm);
 
@@ -31,7 +31,7 @@ public:
 	LTBOOL	OnRButtonUp(int x, int y);
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
 	LTBOOL	m_bLightMap;
 	LTBOOL	m_bMirrors;
@@ -46,8 +46,8 @@ protected:
 
 	uint32	m_nSettingToConfirm;
 
-	CCycleCtrl*		m_pTextureFiltering;
-	CCycleCtrl*		m_pShadows;
+	CCycleCtrl*	m_pTextureFiltering;
+	CCycleCtrl*	m_pShadows;
 //	CToggleCtrl*	m_pOverdraw;
 	CToggleCtrl*	m_pLightMap;
 	CToggleCtrl*	m_pMirrors;

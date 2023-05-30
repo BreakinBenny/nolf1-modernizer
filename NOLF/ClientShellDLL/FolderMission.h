@@ -18,14 +18,14 @@ public:
 	virtual ~CFolderMission();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL   Build();
 	void	Term();
 	void	Escape();
 
-    void    OnFocus(LTBOOL bFocus);
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	void	OnFocus(LTBOOL bFocus);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
-    virtual LTBOOL   HandleKeyDown(int key, int rep);
+	virtual LTBOOL   HandleKeyDown(int key, int rep);
 
 
 protected:

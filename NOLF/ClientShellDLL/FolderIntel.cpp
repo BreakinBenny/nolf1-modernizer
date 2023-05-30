@@ -75,16 +75,13 @@ LTBOOL CFolderIntel::Build()
 	CLTGUITextItemCtrl *pCtrl = CreateTextItem(IDS_INTEL_ITEMS,0,0,LTTRUE,GetMediumFont());
 	AddFixedControl(pCtrl,header,LTFALSE);
 
-    UseArrows(LTTRUE);
+	UseArrows(LTTRUE);
 	UseBack(LTTRUE,LTFALSE,LTTRUE);
 
 	return CBaseSelectionFolder::Build();
 }
 
-void CFolderIntel::Term()
-{
-
-}
+void CFolderIntel::Term(){}
 
 
 uint32 CFolderIntel::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2)
@@ -113,8 +110,6 @@ void CFolderIntel::OnFocus(LTBOOL bFocus)
 		SetSelection(GetIndex(m_pBack));
 	}
 }
-
-
 
 
 void CFolderIntel::BuildIntelList()
@@ -187,10 +182,6 @@ void CFolderIntel::ClearIntelList()
 }
 
 
-
-		
-
-
 LTBOOL CFolderIntel::UpdateSelection()
 {
 	LTBOOL bChanged = CBaseSelectionFolder::UpdateSelection();
@@ -206,7 +197,7 @@ LTBOOL CFolderIntel::UpdateSelection()
 		IntelItem *pItem = m_intelArray[nIndex-1];
 		HSTRING hStr = g_pLTClient->FormatString(pItem->nID);
 		m_pDescription->SetString(hStr);
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 
 		CScaleFX* pScaleFX = g_pFXButeMgr->GetScaleFX(pItem->nType);
 		SAFE_STRCPY(m_szModel, pScaleFX->szFile);
@@ -238,18 +229,18 @@ void CFolderIntel::CreateModelSFX()
 
 	BSCREATESTRUCT bcs;
 
-    LTVector vPos, vU, vR, vF, vTemp;
-    LTRotation rRot;
+	LTVector vPos, vU, vR, vF, vTemp;
+	LTRotation rRot;
 
-    g_pLTClient->GetObjectPos(hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetObjectPos(hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-    g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
-    g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
+	g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
+	g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
 
 	
-    LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
+	LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
 	VEC_ADD(vModPos,vModPos,m_vOffset);
 
 	VEC_MULSCALAR(vTemp, vF, vModPos.z);
@@ -264,12 +255,12 @@ void CFolderIntel::CreateModelSFX()
 
 
 	VEC_COPY(bcs.vPos, vPos);
-    bcs.rRot = rRot;
+	bcs.rRot = rRot;
 	VEC_COPY(bcs.vInitialScale, m_vScale);
 	VEC_COPY(bcs.vFinalScale, m_vScale);
 	VEC_SET(bcs.vInitialColor, 1.0f, 1.0f, 1.0f);
 	VEC_SET(bcs.vFinalColor, 1.0f, 1.0f, 1.0f);
-    bcs.bUseUserColors = LTTRUE;
+	bcs.bUseUserColors = LTTRUE;
 
 	bcs.pFilename = m_szModel;
 	bcs.pSkin = m_szSkin;
@@ -282,7 +273,7 @@ void CFolderIntel::CreateModelSFX()
 
 	if (m_ModelSFX.Init(&bcs))
 	{
-        m_ModelSFX.CreateObject(g_pLTClient);
+		m_ModelSFX.CreateObject(g_pLTClient);
 		g_pInterfaceMgr->AddInterfaceSFX(&m_ModelSFX, IFX_NORMAL);
 		m_fSFXRot = g_pLayoutMgr->GetFolderCustomFloat((eFolderID)m_nFolderID,"ModelRotSpeed");
 	}
@@ -304,13 +295,12 @@ void CFolderIntel::UpdateInterfaceSFX()
 	CBaseSelectionFolder::UpdateInterfaceSFX();
 	if (m_ModelSFX.GetObject())
 	{
-        LTFLOAT spin = g_pGameClientShell->GetFrameTime() * m_fSFXRot;
-        LTVector vU, vR, vF;
-        LTRotation rRot;
-        g_pLTClient->GetObjectRotation(m_ModelSFX.GetObject(), &rRot);
-        g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
-        g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
-        g_pLTClient->SetObjectRotation(m_ModelSFX.GetObject(),&rRot);
+		LTFLOAT spin = g_pGameClientShell->GetFrameTime() * m_fSFXRot;
+		LTVector vU, vR, vF;
+		LTRotation rRot;
+		g_pLTClient->GetObjectRotation(m_ModelSFX.GetObject(), &rRot);
+		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
+		g_pLTClient->SetObjectRotation(m_ModelSFX.GetObject(),&rRot);
 	}
 }
-

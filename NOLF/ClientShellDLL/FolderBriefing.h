@@ -18,22 +18,22 @@ public:
 	virtual ~CFolderBriefing();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL   Build();
 	void	Escape();
 
-    void    OnFocus(LTBOOL bFocus);
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	void	OnFocus(LTBOOL bFocus);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
 	void	SetPostMission(LTBOOL bPost) {m_bPostMission = bPost;}
 
 
 protected:
-	CLTGUITextItemCtrl	*m_pMissionCtrl;
+	CLTGUITextItemCtrl *m_pMissionCtrl;
 	CStaticTextCtrl		*m_pBriefTextCtrl;
 
-	LTBOOL				m_bPostMission;
+	LTBOOL		m_bPostMission;
 	
-	HLTSOUND			m_hSnd;
+	HLTSOUND	m_hSnd;
 
 };
 

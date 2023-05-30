@@ -13,9 +13,7 @@
 extern CGameClientShell* g_pGameClientShell;
 
 
-namespace
-{
-}
+namespace{}
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -24,34 +22,26 @@ CFolderGear::CFolderGear()
 	m_fSFXRot = 0.0f;
 }
 
-CFolderGear::~CFolderGear()
-{
-}
+CFolderGear::~CFolderGear(){}
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGear::Build
 //
-//	ROUTINE:	CFolderGear::Build
-//
-//	PURPOSE:	Build the folder
-//
+//	PURPOSE: Build the folder
 // ----------------------------------------------------------------------- //
-
 LTBOOL CFolderGear::Build()
 {
 	CreateTitle(IDS_TITLE_GEAR);
-    LTBOOL success = CBaseSelectionFolder::Build();
+	LTBOOL success = CBaseSelectionFolder::Build();
 	return success;
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGear::IsAvailable
 //
-//	ROUTINE:	CFolderGear::IsAvailable
-//
-//	PURPOSE:	Check to see if there any selections to be made here
-//
+//	PURPOSE: Check to see if there any selections to be made here
 // ----------------------------------------------------------------------- //
-
 LTBOOL CFolderGear::IsAvailable()
 {
 	int missionNum = g_pInterfaceMgr->GetMissionData()->GetMissionNum();
@@ -86,13 +76,10 @@ LTBOOL CFolderGear::IsAvailable()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGear::OnFocus
 //
-//	ROUTINE:	CFolderGear::OnFocus
-//
-//	PURPOSE:	Handle gaining or losing focus
-//
+//	PURPOSE: Handle gaining or losing focus
 // ----------------------------------------------------------------------- //
-
 void CFolderGear::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
@@ -115,13 +102,10 @@ void CFolderGear::OnFocus(LTBOOL bFocus)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGear::BuildGearList
 //
-//	ROUTINE:	CFolderGear::BuildGearList
-//
-//	PURPOSE:	Create the list of Gear
-//
+//	PURPOSE: Create the list of Gear
 // ----------------------------------------------------------------------- //
-
 void	CFolderGear::BuildGearList()
 {
 	//get info from MissionMgr
@@ -140,7 +124,7 @@ void	CFolderGear::BuildGearList()
 	if (m_nNumSlots <= 0) return;
 
 	int nGID = WMGR_INVALID_ID;
-    GEAR* pGear = LTNULL;
+	GEAR* pGear = LTNULL;
 	int i=0;
 
 	for (i=0; i< pMission->nNumRequiredGear; i++)
@@ -232,13 +216,10 @@ void	CFolderGear::BuildGearList()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGear::UpdateSelection
 //
-//	ROUTINE:	CFolderGear::UpdateSelection
-//
-//	PURPOSE:	Show info based on current selection
-//
+//	PURPOSE: Show info based on current selection
 // ----------------------------------------------------------------------- //
-
 LTBOOL CFolderGear::UpdateSelection()
 {
 	LTBOOL bChanged = CBaseSelectionFolder::UpdateSelection();
@@ -267,13 +248,10 @@ LTBOOL CFolderGear::UpdateSelection()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGear::ClearGearList
 //
-//	ROUTINE:	CFolderGear::ClearGearList
-//
-//	PURPOSE:	Remove all of the controls
-//
+//	PURPOSE: Remove all of the controls
 // ----------------------------------------------------------------------- //
-
 void CFolderGear::ClearGearList()
 {
 	// Terminate the ctrls
@@ -285,13 +263,10 @@ void CFolderGear::ClearGearList()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGear::SaveGearData
 //
-//	ROUTINE:	CFolderGear::SaveGearData
-//
-//	PURPOSE:	Save the players selections
-//
+//	PURPOSE: Save the players selections
 // ----------------------------------------------------------------------- //
-
 void CFolderGear::SaveGearData()
 {
 	CMissionData *pData = g_pInterfaceMgr->GetMissionData();
@@ -306,17 +281,13 @@ void CFolderGear::SaveGearData()
 				pData->AddGear(pCtrl->GetParam1());
 		}
 	}
-
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGear::OnCommand
 //
-//	ROUTINE:	CFolderGear::OnCommand
-//
-//	PURPOSE:	Handle activation of items
-//
+//	PURPOSE: Handle activation of items
 // ----------------------------------------------------------------------- //
-
 uint32 CFolderGear::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2)
 {
 	switch (dwCommand)
@@ -360,7 +331,7 @@ uint32 CFolderGear::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 
 HSTRING CFolderGear::GetHelpString(uint32 dwHelpId, int nControlIndex)
 {
-    GEAR* pGear = LTNULL;
+	GEAR* pGear = LTNULL;
 	char pStr[512] = "";
 
 	//slots are fixed controls so count  negatively ( 0 > first > last )
@@ -376,8 +347,8 @@ HSTRING CFolderGear::GetHelpString(uint32 dwHelpId, int nControlIndex)
 
 		int nameId = pGear->nNameId;
 
-        HSTRING hTemp = g_pLTClient->FormatString(nameId);
-        char *pName = g_pLTClient->GetStringData(hTemp);
+		HSTRING hTemp = g_pLTClient->FormatString(nameId);
+		char *pName = g_pLTClient->GetStringData(hTemp);
 
 
 
@@ -398,9 +369,9 @@ HSTRING CFolderGear::GetHelpString(uint32 dwHelpId, int nControlIndex)
 			sprintf(pStr,"%s %s",m_sSelectStr,pName);
 		}
 
-        g_pLTClient->FreeString(hTemp);
+		g_pLTClient->FreeString(hTemp);
 		
-        HSTRING hStr = g_pLTClient->CreateString(pStr);
+		HSTRING hStr = g_pLTClient->CreateString(pStr);
 		return hStr;
 	}
 	else
@@ -410,7 +381,7 @@ HSTRING CFolderGear::GetHelpString(uint32 dwHelpId, int nControlIndex)
 
 void CFolderGear::SetContinue()
 {
-    int nHelp = LTNULL;
+	int nHelp = LTNULL;
 	eFolderID eNext = GetNextSelectionFolder(FOLDER_ID_GEAR,&nHelp);
 
 	if (eNext != FOLDER_ID_NONE)
@@ -436,19 +407,19 @@ void CFolderGear::CreateModelSFX()
 
 	BSCREATESTRUCT bcs;
 
-    LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
-    LTRotation rRot;
+	LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
+	LTRotation rRot;
 
-    g_pLTClient->GetObjectPos(hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetObjectPos(hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-    g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
-    g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
+	g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
+	g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
 
 	VEC_MULSCALAR(vScale, vScale, m_fScale);
 
-    LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
+	LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
 	VEC_ADD(vModPos,vModPos,m_vOffset);
 
 	VEC_MULSCALAR(vTemp, vF, vModPos.z);
@@ -463,12 +434,12 @@ void CFolderGear::CreateModelSFX()
 
 
 	VEC_COPY(bcs.vPos, vPos);
-    bcs.rRot = rRot;
+	bcs.rRot = rRot;
 	VEC_COPY(bcs.vInitialScale, vScale);
 	VEC_COPY(bcs.vFinalScale, vScale);
 	VEC_SET(bcs.vInitialColor, 1.0f, 1.0f, 1.0f);
 	VEC_SET(bcs.vFinalColor, 1.0f, 1.0f, 1.0f);
-    bcs.bUseUserColors = LTTRUE;
+	bcs.bUseUserColors = LTTRUE;
 
 	bcs.pFilename = m_szModel;
 	bcs.pSkin = m_szSkin;
@@ -480,7 +451,7 @@ void CFolderGear::CreateModelSFX()
 
 	if (m_ModelSFX.Init(&bcs))
 	{
-        m_ModelSFX.CreateObject(g_pLTClient);
+		m_ModelSFX.CreateObject(g_pLTClient);
 		g_pInterfaceMgr->AddInterfaceSFX(&m_ModelSFX, IFX_NORMAL);
 		m_fSFXRot = g_pLayoutMgr->GetFolderCustomFloat((eFolderID)m_nFolderID,"ModelRotSpeed");
 	}
@@ -501,13 +472,13 @@ void CFolderGear::UpdateInterfaceSFX()
 	CBaseSelectionFolder::UpdateInterfaceSFX();
 	if (m_ModelSFX.GetObject())
 	{
-        LTFLOAT spin = g_pLTClient->GetFrameTime() * m_fSFXRot;
-        LTVector vU, vR, vF;
-        LTRotation rRot;
-        g_pLTClient->GetObjectRotation(m_ModelSFX.GetObject(), &rRot);
-        g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
-        g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
-        g_pLTClient->SetObjectRotation(m_ModelSFX.GetObject(),&rRot);
+		LTFLOAT spin = g_pLTClient->GetFrameTime() * m_fSFXRot;
+		LTVector vU, vR, vF;
+		LTRotation rRot;
+		g_pLTClient->GetObjectRotation(m_ModelSFX.GetObject(), &rRot);
+		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
+		g_pLTClient->SetObjectRotation(m_ModelSFX.GetObject(),&rRot);
 	}
 }
 
@@ -519,7 +490,7 @@ void CFolderGear::SkipOutfitting()
 	MISSION* pMission = g_pMissionMgr->GetMission(missionNum);
 	pData->ClearGear();
 	int nGID = WMGR_INVALID_ID;
-    GEAR* pGear = LTNULL;
+	GEAR* pGear = LTNULL;
 
 	int nSlotsUsed = 0;
 
@@ -548,7 +519,4 @@ void CFolderGear::SkipOutfitting()
 		pData->AddGear(nGID);
 		nSlotsUsed++;
 	}
-
 }
-
-

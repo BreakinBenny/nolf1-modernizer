@@ -75,7 +75,7 @@ BOOL CWinUtil::DirExist (char* strPath)
 BOOL CWinUtil::CreateDir (char* strPath)
 {
 	if (DirExist (strPath)) return TRUE;
-	if (strPath[strlen(strPath) - 1] == ':') return FALSE;		// special case
+	if (strPath[strlen(strPath) - 1] == ':') return FALSE;	// special case
 
 	char strPartialPath[MAX_PATH];
 	strPartialPath[0] = '\0';

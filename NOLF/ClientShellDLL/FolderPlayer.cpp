@@ -42,14 +42,14 @@ namespace
 
 CFolderPlayer::CFolderPlayer()
 {
-    m_pEdit = LTNULL;
-    m_pNameGroup = LTNULL;
-    m_pLabel = LTNULL;
-    m_szPlayerName[0] = LTNULL;
-    m_szPlayerModel[0] = LTNULL;
-    m_pModelCtrl = LTNULL;
-    m_pHeadCtrl = LTNULL;
-    m_pSkinCtrl = LTNULL;
+	m_pEdit = LTNULL;
+	m_pNameGroup = LTNULL;
+	m_pLabel = LTNULL;
+	m_szPlayerName[0] = LTNULL;
+	m_szPlayerModel[0] = LTNULL;
+	m_pModelCtrl = LTNULL;
+	m_pHeadCtrl = LTNULL;
+	m_pSkinCtrl = LTNULL;
 	m_nModNum = 0;
 	m_nSkinNum = 0;
 	m_nHeadNum = 0;
@@ -71,26 +71,26 @@ LTBOOL CFolderPlayer::Build()
 
 	CreateTitle(IDS_TITLE_PLAYER_SETUP);
 
-    g_vtPlayerModel.Init(g_pLTClient, "NetPlayerModel", "Hero,action", 0.0f);
-    g_vtPlayerTeam.Init(g_pLTClient, "NetPlayerTeam", LTNULL, 0.0f);
-    g_vtTargetNameTransparency.Init(g_pLTClient, "TargetNameTransparency", LTNULL, 1.0f);
-    g_vtTargetNameSize.Init(g_pLTClient, "TargetNameSize", LTNULL, 0.0f);
+	g_vtPlayerModel.Init(g_pLTClient, "NetPlayerModel", "Hero,action", 0.0f);
+	g_vtPlayerTeam.Init(g_pLTClient, "NetPlayerTeam", LTNULL, 0.0f);
+	g_vtTargetNameTransparency.Init(g_pLTClient, "TargetNameTransparency", LTNULL, 1.0f);
+	g_vtTargetNameSize.Init(g_pLTClient, "TargetNameSize", LTNULL, 0.0f);
 
 	LTFLOAT yr = g_pInterfaceResMgr->GetYRatio();
 
 	m_pLabel = CreateTextItem(IDS_PLAYER_NAME, CMD_EDIT_NAME, IDS_HELP_PLAYER_NAME);
 
-    m_pEdit = CreateEditCtrl(" ", CMD_EDIT_NAME, LTNULL, m_szPlayerName, sizeof(m_szPlayerName), 25, LTTRUE, GetMediumFont());
+	m_pEdit = CreateEditCtrl(" ", CMD_EDIT_NAME, LTNULL, m_szPlayerName, sizeof(m_szPlayerName), 25, LTTRUE, GetMediumFont());
 	m_pEdit->EnableCursor();
-    m_pEdit->Enable(LTFALSE);
+	m_pEdit->Enable(LTFALSE);
 	m_pEdit->SetAlignment(LTF_JUSTIFY_CENTER);
 
 	m_pNameGroup = AddGroup(640,m_pLabel->GetHeight(),IDS_HELP_PLAYER_NAME);
 
-    LTIntPt offset(0,0);
-    m_pNameGroup->AddControl(m_pLabel,offset,LTTRUE);
+	LTIntPt offset(0,0);
+	m_pNameGroup->AddControl(m_pLabel,offset,LTTRUE);
 	offset.x = 200 * yr;
-    m_pNameGroup->AddControl(m_pEdit,offset,LTFALSE);
+	m_pNameGroup->AddControl(m_pEdit,offset,LTFALSE);
 
 	AddBlankLine();
 
@@ -155,10 +155,10 @@ uint32 CFolderPlayer::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPara
 	case CMD_EDIT_NAME:
 		if (GetCapture())
 		{
-            SetCapture(LTNULL);
+			SetCapture(LTNULL);
 			m_pEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-            m_pEdit->Select(LTFALSE);
-            m_pLabel->Select(LTTRUE);
+			m_pEdit->Select(LTFALSE);
+			m_pLabel->Select(LTTRUE);
 			ForceMouseUpdate();
 		}
 		else
@@ -166,8 +166,8 @@ uint32 CFolderPlayer::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPara
 			strcpy(szOldPlayerName,m_szPlayerName);
 			SetCapture(m_pEdit);
 			m_pEdit->SetColor(m_hSelectedColor,m_hSelectedColor,m_hSelectedColor);
-            m_pEdit->Select(LTTRUE);
-            m_pLabel->Select(LTFALSE);
+			m_pEdit->Select(LTTRUE);
+			m_pLabel->Select(LTFALSE);
 		}
 
 		break;
@@ -175,7 +175,7 @@ uint32 CFolderPlayer::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPara
 		{
 			UpdateData();
 			HSTRING hStr = m_pModelCtrl->GetString(m_nModNum);
-            strcpy(m_szPlayerModel,g_pLTClient->GetStringData(hStr));
+			strcpy(m_szPlayerModel,g_pLTClient->GetStringData(hStr));
 			m_nSkinNum = 0;
 			m_nHeadNum = 0;
 			CreatePlayerModel();
@@ -186,7 +186,7 @@ uint32 CFolderPlayer::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPara
 	case CMD_SKIN_CHANGE:
 		{
 			UpdateData();
-            sprintf(m_szPlayerSkin, "%s,%s", g_pLTClient->GetStringData(m_pSkinCtrl->GetString(m_nSkinNum)), m_aszSkins[m_nSkinNum]);
+			sprintf(m_szPlayerSkin, "%s,%s", g_pLTClient->GetStringData(m_pSkinCtrl->GetString(m_nSkinNum)), m_aszSkins[m_nSkinNum]);
 			CreatePlayerModel(LTFALSE);
 
 
@@ -195,7 +195,7 @@ uint32 CFolderPlayer::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPara
 	case CMD_HEAD_CHANGE:
 		{
 			UpdateData();
-            sprintf(m_szPlayerHead, "%s,%s", g_pLTClient->GetStringData(m_pHeadCtrl->GetString(m_nHeadNum)), m_aszHeads[m_nHeadNum]);
+			sprintf(m_szPlayerHead, "%s,%s", g_pLTClient->GetStringData(m_pHeadCtrl->GetString(m_nHeadNum)), m_aszHeads[m_nHeadNum]);
 			CreatePlayerModel(LTFALSE);
 
 
@@ -213,12 +213,12 @@ void	CFolderPlayer::Escape()
 {
 	if (GetCapture())
 	{
-        SetCapture(LTNULL);
+		SetCapture(LTNULL);
 		strcpy(m_szPlayerName,szOldPlayerName);
-        m_pEdit->UpdateData(LTFALSE);
+		m_pEdit->UpdateData(LTFALSE);
 		m_pEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-        m_pEdit->Select(LTFALSE);
-        m_pLabel->Select(LTTRUE);
+		m_pEdit->Select(LTFALSE);
+		m_pLabel->Select(LTTRUE);
 		ForceMouseUpdate();
 	}
 	else
@@ -230,7 +230,7 @@ void	CFolderPlayer::Escape()
 
 
 // Change in focus
-void    CFolderPlayer::OnFocus(LTBOOL bFocus)
+void	CFolderPlayer::OnFocus(LTBOOL bFocus)
 {
 
 	if (bFocus)
@@ -275,7 +275,7 @@ void    CFolderPlayer::OnFocus(LTBOOL bFocus)
 		{
 			m_nModNum = 0;
 			HSTRING hStr = m_pModelCtrl->GetString(0);
-            strcpy(m_szPlayerModel,g_pLTClient->GetStringData(hStr));
+			strcpy(m_szPlayerModel,g_pLTClient->GetStringData(hStr));
 
 		}
 
@@ -286,7 +286,7 @@ void    CFolderPlayer::OnFocus(LTBOOL bFocus)
 		m_bAutoSwitchAmmo =  (LTBOOL)GetConsoleInt("AutoAmmoSwitch",1);
 		m_bIgnoreTaunts =  (LTBOOL)GetConsoleInt("IgnoreTaunts",0);
 	
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 	}
 	else
 	{
@@ -333,34 +333,34 @@ void    CFolderPlayer::OnFocus(LTBOOL bFocus)
 		g_vtPlayerModel.SetStr(m_szPlayerModel);
 		WriteConsoleString("NetPlayerHead",m_szPlayerHead);
 		WriteConsoleString("NetPlayerSkin",m_szPlayerSkin);
-        g_vtPlayerTeam.WriteFloat((LTFLOAT)m_nTeam);
-        g_vtTargetNameSize.WriteFloat((LTFLOAT)m_nTargetNameSize);
-        g_vtTargetNameTransparency.WriteFloat((LTFLOAT)m_nTargetNameTransparency/100.0f);
+		g_vtPlayerTeam.WriteFloat((LTFLOAT)m_nTeam);
+		g_vtTargetNameSize.WriteFloat((LTFLOAT)m_nTargetNameSize);
+		g_vtTargetNameTransparency.WriteFloat((LTFLOAT)m_nTargetNameTransparency/100.0f);
 		WriteConsoleInt("AutoWeaponSwitch",(int)m_bAutoSwitchWeapons);
 		WriteConsoleInt("AutoAmmoSwitch",(int)m_bAutoSwitchAmmo);
 		WriteConsoleInt("IgnoreTaunts",(int)m_bIgnoreTaunts);
 
-        HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+		HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 		if (bChanged && g_pGameClientShell->IsInWorld() && hPlayerObj && g_pGameClientShell->IsMultiplayerGame())
 		{
-            HSTRING hstrName = g_pLTClient->CreateString(m_szPlayerName);
+			HSTRING hstrName = g_pLTClient->CreateString(m_szPlayerName);
 			if (!hstrName) return;
-            HSTRING hstrModel = g_pLTClient->CreateString(m_szPlayerModel);
+			HSTRING hstrModel = g_pLTClient->CreateString(m_szPlayerModel);
 			if (!hstrModel) return;
-            HSTRING hstrSkin = g_pLTClient->CreateString(strchr(m_szPlayerSkin, ',')+1);
+			HSTRING hstrSkin = g_pLTClient->CreateString(strchr(m_szPlayerSkin, ',')+1);
 			if (!hstrSkin) return;
-            HSTRING hstrHead = g_pLTClient->CreateString(strchr(m_szPlayerHead, ',')+1);
+			HSTRING hstrHead = g_pLTClient->CreateString(strchr(m_szPlayerHead, ',')+1);
 			if (!hstrHead) return;
 
 			// Init multiplayer info on server...
 
-            HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_PLAYER_MULTIPLAYER_CHANGE);
-            g_pLTClient->WriteToMessageHString(hWrite, hstrName);
-            g_pLTClient->WriteToMessageHString(hWrite, hstrModel);
-            g_pLTClient->WriteToMessageHString(hWrite, hstrSkin);
-            g_pLTClient->WriteToMessageHString(hWrite, hstrHead);
-            g_pLTClient->WriteToMessageByte(hWrite, (uint8)m_nTeam);
-            g_pLTClient->EndMessage(hWrite);
+			HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_PLAYER_MULTIPLAYER_CHANGE);
+			g_pLTClient->WriteToMessageHString(hWrite, hstrName);
+			g_pLTClient->WriteToMessageHString(hWrite, hstrModel);
+			g_pLTClient->WriteToMessageHString(hWrite, hstrSkin);
+			g_pLTClient->WriteToMessageHString(hWrite, hstrHead);
+			g_pLTClient->WriteToMessageByte(hWrite, (uint8)m_nTeam);
+			g_pLTClient->EndMessage(hWrite);
 
 			g_pLTClient->FreeString(hstrName);
 			g_pLTClient->FreeString(hstrModel);
@@ -372,20 +372,17 @@ void    CFolderPlayer::OnFocus(LTBOOL bFocus)
 
 		g_pLTClient->FreeUnusedModels();
 
-        auto result = g_pLTClient->WriteConfigFile("autoexec.cfg");
+		auto result = g_pLTClient->WriteConfigFile("autoexec.cfg");
 	}
 	CBaseFolder::OnFocus(bFocus);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderPlayer::CreateInterfaceSFX
 //
-//	ROUTINE:	CFolderPlayer::CreateInterfaceSFX
-//
-//	PURPOSE:	Create a BaseScaleFX to render behind the folder
-//
+//	PURPOSE: Create a BaseScaleFX to render behind the folder
 // ----------------------------------------------------------------------- //
-
 void	CFolderPlayer::CreateInterfaceSFX()
 {
 	HOBJECT hCamera = g_pGameClientShell->GetInterfaceCamera();
@@ -407,7 +404,7 @@ void CFolderPlayer::UpdateInterfaceSFX()
 LTBOOL   CFolderPlayer::CreatePlayerModel(LTBOOL bNewSkin /* = LTTRUE */)
 {
 	HOBJECT hCamera = g_pGameClientShell->GetInterfaceCamera();
-    if (!hCamera) return LTFALSE;
+	if (!hCamera) return LTFALSE;
 
 	if (!strlen(m_szPlayerModel)) return LTFALSE;
 	char temp[128];
@@ -500,8 +497,8 @@ LTBOOL   CFolderPlayer::CreatePlayerModel(LTBOOL bNewSkin /* = LTTRUE */)
 	m_bRestoreSkinHead = LTFALSE;
 
 	BSCREATESTRUCT bcs;
-    LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
-    LTRotation rRot;
+	LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
+	LTRotation rRot;
 
 	char modName[128];
 	char animName[128];
@@ -525,17 +522,17 @@ LTBOOL   CFolderPlayer::CreatePlayerModel(LTBOOL bNewSkin /* = LTTRUE */)
 	const char* pSkin2 = strchr(m_szPlayerHead, ',')+1;
 	SAFE_STRCPY(skin2Name, pSkin2);
 
-    g_pLTClient->GetObjectPos(hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetObjectPos(hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	VEC_SET(vScale,1.0f,1.0f,1.0f);
 	VEC_MULSCALAR(vScale, vScale, g_pLayoutMgr->GetFolderCustomFloat((eFolderID)m_nFolderID,"CharScale"));
 
-    LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"CharPos");
-    LTFLOAT fRot = g_pLayoutMgr->GetFolderCustomFloat((eFolderID)m_nFolderID,"CharRotation");
+	LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"CharPos");
+	LTFLOAT fRot = g_pLayoutMgr->GetFolderCustomFloat((eFolderID)m_nFolderID,"CharRotation");
 	fRot  = MATH_PI + DEG2RAD(fRot);
-    g_pLTClient->RotateAroundAxis(&rRot, &vU, fRot);
+	g_pLTClient->RotateAroundAxis(&rRot, &vU, fRot);
 
 	VEC_MULSCALAR(vTemp, vF, vModPos.z);
 	VEC_MULSCALAR(vTemp, vTemp, 1); // g_pInterfaceResMgr->GetXRatio()
@@ -548,12 +545,12 @@ LTBOOL   CFolderPlayer::CreatePlayerModel(LTBOOL bNewSkin /* = LTTRUE */)
 	VEC_ADD(vPos, vPos, vTemp);
 
 	VEC_COPY(bcs.vPos, vPos);
-    bcs.rRot = rRot;
+	bcs.rRot = rRot;
 	VEC_COPY(bcs.vInitialScale, vScale);
 	VEC_COPY(bcs.vFinalScale, vScale);
 	VEC_SET(bcs.vInitialColor, 1.0f, 1.0f, 1.0f);
 	VEC_SET(bcs.vFinalColor, 1.0f, 1.0f, 1.0f);
-    bcs.bUseUserColors = LTTRUE;
+	bcs.bUseUserColors = LTTRUE;
 
 	bcs.pFilename = modName;
 	bcs.pSkin = skinName;
@@ -564,18 +561,18 @@ LTBOOL   CFolderPlayer::CreatePlayerModel(LTBOOL bNewSkin /* = LTTRUE */)
 	bcs.fInitialAlpha = 1.0f;
 	bcs.fFinalAlpha = 1.0f;
 	bcs.fLifeTime = 1000000.0f;
-    bcs.bLoop = LTTRUE;
+	bcs.bLoop = LTTRUE;
 
 
 	if (m_CharSFX.Init(&bcs))
 	{
-        m_CharSFX.CreateObject(g_pLTClient);
+		m_CharSFX.CreateObject(g_pLTClient);
 		g_pInterfaceMgr->AddInterfaceSFX(&m_CharSFX, IFX_WORLD);
 		if (m_CharSFX.GetObject())
 		{
-            HMODELANIM  hAnim = g_pLTClient->GetAnimIndex(m_CharSFX.GetObject(),animName);
+			HMODELANIM  hAnim = g_pLTClient->GetAnimIndex(m_CharSFX.GetObject(),animName);
 			if (hAnim != -1)
-                g_pLTClient->SetModelAnimation(m_CharSFX.GetObject(),hAnim);
+				g_pLTClient->SetModelAnimation(m_CharSFX.GetObject(),hAnim);
 
 			ClearAttachFX();
 
@@ -613,11 +610,11 @@ LTBOOL   CFolderPlayer::CreatePlayerModel(LTBOOL bNewSkin /* = LTTRUE */)
 
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 
 }
 
@@ -629,7 +626,7 @@ void CFolderPlayer::RemoveInterfaceSFX()
 
 void CFolderPlayer::BuildModelList()
 {
-    FileEntry* pFiles = g_pLTClient->GetFileList("chars\\models\\multi");
+	FileEntry* pFiles = g_pLTClient->GetFileList("chars\\models\\multi");
 	if (!pFiles) return;
 
 	FileEntry* ptr = pFiles;
@@ -681,11 +678,11 @@ void CFolderPlayer::BuildModelList()
 			nTest++;
 		}
 
-        HSTRING hStr = g_pLTClient->CreateString((char *)(LPCSTR)stringList[nLowest]);
+		HSTRING hStr = g_pLTClient->CreateString((char *)(LPCSTR)stringList[nLowest]);
 		if (stricmp(m_szPlayerModel,stringList[nLowest]) == 0)
 			m_nModNum = num;
 		m_pModelCtrl->AddString(hStr);
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 		num++;
 
 		stringList.Remove(nLowest);
@@ -697,7 +694,7 @@ void CFolderPlayer::BuildModelList()
 	m_pHeadCtrl->AddString(hstrDefault);
 	g_pLTClient->FreeString(hstrDefault);
 
-    g_pLTClient->FreeFileList(pFiles);
+	g_pLTClient->FreeFileList(pFiles);
 
 
 

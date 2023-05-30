@@ -18,8 +18,8 @@ namespace
 }
 
 extern VarTrack	g_vtSubtitles;
-extern VarTrack g_vtHUDLayout;
-extern VarTrack g_vtQuickSwitch;
+extern VarTrack	g_vtHUDLayout;
+extern VarTrack	g_vtQuickSwitch;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -27,22 +27,19 @@ extern VarTrack g_vtQuickSwitch;
 
 CFolderGame::CFolderGame()
 {
-	m_nDifficulty = 2;
-    m_nSubtitles  = 0;
-    m_bGore = LTFALSE;
+	m_nDifficulty	= 2;
+	m_nSubtitles	= 0;
+	m_bGore		= LTFALSE;
 	m_bFadeBodies = LTFALSE;
 	m_bAlwaysRun = LTTRUE;
-	m_nLayout = 0;
-	m_nHeadBob = 0;
+	m_nLayout	= 0;
+	m_nHeadBob	= 0;
 	m_nWeaponSway = 0;
 	m_nPickupMsgDur = 0;
 	m_bObjMessages = LTTRUE;
 }
 
-CFolderGame::~CFolderGame()
-{
-
-}
+CFolderGame::~CFolderGame(){}
 
 // Build the folder
 LTBOOL CFolderGame::Build()
@@ -161,7 +158,7 @@ void CFolderGame::OnFocus(LTBOOL bFocus)
 
 		m_bQuickSwitch = g_vtQuickSwitch.GetFloat();
 
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 	}
 	else
 	{
@@ -187,5 +184,3 @@ void CFolderGame::OnFocus(LTBOOL bFocus)
 	}
 	CBaseFolder::OnFocus(bFocus);
 }
-
-

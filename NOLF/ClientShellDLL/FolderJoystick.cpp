@@ -30,7 +30,7 @@ CFolderJoystick::CFolderJoystick()
 	m_pAxisStrafe=LTNULL;
 	m_pAxisMove=LTNULL;
 
-    m_bUseJoystick=LTFALSE;
+	m_bUseJoystick=LTFALSE;
 
 }
 
@@ -39,22 +39,22 @@ CFolderJoystick::~CFolderJoystick()
 	if (m_pAxisTurn)
 	{
 		debug_delete(m_pAxisTurn);
-        m_pAxisTurn=LTNULL;
+		m_pAxisTurn=LTNULL;
 	}
 	if (m_pAxisLook)
 	{
 		debug_delete(m_pAxisLook);
-        m_pAxisLook=LTNULL;
+		m_pAxisLook=LTNULL;
 	}
 	if (m_pAxisStrafe)
 	{
 		debug_delete(m_pAxisStrafe);
-        m_pAxisStrafe=LTNULL;
+		m_pAxisStrafe=LTNULL;
 	}
 	if (m_pAxisMove)
 	{
 		debug_delete(m_pAxisMove);
-        m_pAxisMove=LTNULL;
+		m_pAxisMove=LTNULL;
 	}
 
 }
@@ -94,7 +94,7 @@ uint32 CFolderJoystick::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPa
 void CFolderJoystick::BuildAxisFolders()
 {
 
-    CStaticTextCtrl *pTitleCtrl=LTNULL;
+	CStaticTextCtrl *pTitleCtrl=LTNULL;
 	int nAxis = 0;
 
 	// put the enabledevice command out to the console
@@ -107,9 +107,9 @@ void CFolderJoystick::BuildAxisFolders()
 	pTitleCtrl= AddStaticTextItem(IDS_JOYSTICK_TURNLEFTRIGHTAXIS,LTNULL,IDS_HELP_JOYSTICK_LEFTRIGHT,200,0,LTTRUE,GetMediumFont());
 	if (pTitleCtrl)
 	{
-        pTitleCtrl->Enable(LTFALSE);
+		pTitleCtrl->Enable(LTFALSE);
 	}
-    m_pAxisTurn->Build(g_pLTClient, this);
+	m_pAxisTurn->Build(g_pLTClient, this);
 	pAxes[nAxis] = m_pAxisTurn->GetAxisCtrl();
 	pAxes[nAxis]->SetHelpID(IDS_HELP_JOYSTICK_LEFTRIGHT);
 	nAxis++;
@@ -120,9 +120,9 @@ void CFolderJoystick::BuildAxisFolders()
 	pTitleCtrl= AddStaticTextItem(IDS_JOYSTICK_LOOKUPDOWNAXIS,LTNULL,IDS_HELP_JOYSTICK_UPDOWN,200,0,LTTRUE,GetMediumFont());
 	if (pTitleCtrl)
 	{
-        pTitleCtrl->Enable(LTFALSE);
+		pTitleCtrl->Enable(LTFALSE);
 	}
-    m_pAxisLook->Build(g_pLTClient, this);
+	m_pAxisLook->Build(g_pLTClient, this);
 	pAxes[nAxis] = m_pAxisLook->GetAxisCtrl();
 	pAxes[nAxis]->SetHelpID(IDS_HELP_JOYSTICK_UPDOWN);
 	nAxis++;
@@ -132,9 +132,9 @@ void CFolderJoystick::BuildAxisFolders()
 	pTitleCtrl= AddStaticTextItem(IDS_JOYSTICK_MOVEFORWARDBACKWARDAXIS,LTNULL,IDS_HELP_JOYSTICK_MOVE,200,0,LTTRUE,GetMediumFont());
 	if (pTitleCtrl)
 	{
-        pTitleCtrl->Enable(LTFALSE);
+		pTitleCtrl->Enable(LTFALSE);
 	}
-    m_pAxisMove->Build(g_pLTClient, this);
+	m_pAxisMove->Build(g_pLTClient, this);
 	pAxes[nAxis] = m_pAxisMove->GetAxisCtrl();
 	pAxes[nAxis]->SetHelpID(IDS_HELP_JOYSTICK_MOVE);
 	nAxis++;
@@ -144,9 +144,9 @@ void CFolderJoystick::BuildAxisFolders()
 	pTitleCtrl= AddStaticTextItem(IDS_JOYSTICK_STRAFELEFTRIGHTAXIS,LTNULL,IDS_HELP_JOYSTICK_STRAFE,200,0,LTTRUE,GetMediumFont());
 	if (pTitleCtrl)
 	{
-        pTitleCtrl->Enable(LTFALSE);
+		pTitleCtrl->Enable(LTFALSE);
 	}
-    m_pAxisStrafe->Build(g_pLTClient, this);
+	m_pAxisStrafe->Build(g_pLTClient, this);
 	pAxes[nAxis] = m_pAxisStrafe->GetAxisCtrl();
 	pAxes[nAxis]->SetHelpID(IDS_HELP_JOYSTICK_STRAFE);
 	nAxis++;
@@ -169,7 +169,7 @@ void CFolderJoystick::UpdateEnable()
 // The left key was pressed
 LTBOOL CFolderJoystick::OnLeft()
 {
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 	// Call the base class
 	handled = CBaseFolder::OnLeft();
 	if (handled)
@@ -186,7 +186,7 @@ LTBOOL CFolderJoystick::OnLeft()
 // The right key was pressed
 LTBOOL CFolderJoystick::OnRight()
 {
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 	// Call the base class
 	handled = CBaseFolder::OnRight();
 
@@ -204,7 +204,7 @@ LTBOOL CFolderJoystick::OnRight()
 // The enter key was pressed
 LTBOOL CFolderJoystick::OnEnter()
 {
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 	// Call the base class
 	handled = CBaseFolder::OnEnter();
 
@@ -223,7 +223,7 @@ LTBOOL CFolderJoystick::OnEnter()
 LTBOOL CFolderJoystick::OnLButtonUp(int x, int y)
 {
 
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 	// Call the base class
 	handled = CBaseFolder::OnLButtonUp(x,y);
 
@@ -240,7 +240,7 @@ LTBOOL CFolderJoystick::OnLButtonUp(int x, int y)
 
 LTBOOL CFolderJoystick::OnRButtonUp(int x, int y)
 {
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 	// Call the base class
 	handled = CBaseFolder::OnRButtonUp(x,y);
 
@@ -267,13 +267,13 @@ void CFolderJoystick::OnFocus(LTBOOL bFocus)
 		CGameSettings *pSettings = g_pInterfaceMgr->GetSettings();
 		m_bUseJoystick=pSettings->UseJoystick();
 
-        m_pAxisTurn->LoadFromConsole(g_pLTClient);
-        m_pAxisMove->LoadFromConsole(g_pLTClient);
-        m_pAxisLook->LoadFromConsole(g_pLTClient);
-        m_pAxisStrafe->LoadFromConsole(g_pLTClient);
+		m_pAxisTurn->LoadFromConsole(g_pLTClient);
+		m_pAxisMove->LoadFromConsole(g_pLTClient);
+		m_pAxisLook->LoadFromConsole(g_pLTClient);
+		m_pAxisStrafe->LoadFromConsole(g_pLTClient);
 
 
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 
 		// Update the enable/disable status of the controls
 		UpdateEnable();
@@ -284,12 +284,12 @@ void CFolderJoystick::OnFocus(LTBOOL bFocus)
 		UpdateData();
 
 		// Save the folder options to the console
-        m_pAxisTurn->SaveToConsole(g_pLTClient);
-        m_pAxisMove->SaveToConsole(g_pLTClient);
-        m_pAxisLook->SaveToConsole(g_pLTClient);
-        m_pAxisStrafe->SaveToConsole(g_pLTClient);
+		m_pAxisTurn->SaveToConsole(g_pLTClient);
+		m_pAxisMove->SaveToConsole(g_pLTClient);
+		m_pAxisLook->SaveToConsole(g_pLTClient);
+		m_pAxisStrafe->SaveToConsole(g_pLTClient);
 
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 
 
 	}

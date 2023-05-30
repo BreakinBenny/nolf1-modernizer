@@ -22,15 +22,12 @@ namespace
 
 CFolderSingle::CFolderSingle()
 {
-    m_pSaveCtrl = LTNULL;
-    m_pLoadCtrl = LTNULL;
+	m_pSaveCtrl = LTNULL;
+	m_pLoadCtrl = LTNULL;
 
 }
 
-CFolderSingle::~CFolderSingle()
-{
-
-}
+CFolderSingle::~CFolderSingle(){}
 
 // Build the folder
 LTBOOL CFolderSingle::Build()
@@ -58,7 +55,7 @@ LTBOOL CFolderSingle::Build()
 
 	if ( buteMgr.Parse("NOLF\\Attributes\\FavoriteLevels.txt") )
 	{
-		CLTGUITextItemCtrl *pCtrl = AddTextItem(IDS_FAVORITES,		FOLDER_CMD_FAVORITE_LEVEL, IDS_HELP_FAVORITES);
+		CLTGUITextItemCtrl *pCtrl = AddTextItem(IDS_FAVORITES, FOLDER_CMD_FAVORITE_LEVEL, IDS_HELP_FAVORITES);
 	}
 #endif
 #endif

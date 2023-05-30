@@ -27,15 +27,9 @@ namespace
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CFolderLoad::CFolderLoad()
-{
+CFolderLoad::CFolderLoad(){}
 
-}
-
-CFolderLoad::~CFolderLoad()
-{
-
-}
+CFolderLoad::~CFolderLoad(){}
 
 LTBOOL CFolderLoad::Build()
 {
@@ -79,7 +73,7 @@ uint32 CFolderLoad::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 		}
 		else
 		{
-            uint32 slot = (dwCommand - FOLDER_CMD_CUSTOM) - 1;
+			uint32 slot = (dwCommand - FOLDER_CMD_CUSTOM) - 1;
 			sprintf (strKey, "SaveGame%02d", slot);
 			sprintf (strFilename, "Save\\Slot%02d.sav", slot);
 		}
@@ -96,8 +90,8 @@ uint32 CFolderLoad::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 		}
 		else
 		{
-            HSTRING hString = g_pLTClient->FormatString(IDS_LOADGAMEFAILED);
-	        g_pInterfaceMgr->ShowMessageBox(hString,LTMB_OK,LTNULL,LTNULL);
+			HSTRING hString = g_pLTClient->FormatString(IDS_LOADGAMEFAILED);
+			g_pInterfaceMgr->ShowMessageBox(hString,LTMB_OK,LTNULL,LTNULL);
 			g_pLTClient->FreeString(hString);
 			return 0;
 		}
@@ -126,7 +120,7 @@ void CFolderLoad::BuildSavedLevelList()
 			pCtrl->Enable(LTFALSE);
 
 			char szStr[256];
-			sprintf(szStr,"    %s",sQuickSave.szUserName);
+			sprintf(szStr,"	%s",sQuickSave.szUserName);
 			HSTRING hLoad=g_pLTClient->CreateString(szStr);
 			CLTGUIColumnTextCtrl* pColCtrl = AddColumnText(FOLDER_CMD_CUSTOM, IDS_HELP_QUICKLOAD, LTFALSE, GetSmallFont());
 
@@ -156,7 +150,7 @@ void CFolderLoad::BuildSavedLevelList()
 			pCtrl->Enable(LTFALSE);
 
 			char szStr[256];
-			sprintf(szStr,"    %s",sAutoSave.szUserName);
+			sprintf(szStr,"	%s",sAutoSave.szUserName);
 			HSTRING hLoad=g_pLTClient->CreateString(szStr);
 			CLTGUIColumnTextCtrl* pColCtrl = AddColumnText(FOLDER_CMD_CUSTOM+1, IDS_HELP_RELOAD, LTFALSE, GetSmallFont());
 
@@ -192,7 +186,7 @@ void CFolderLoad::BuildSavedLevelList()
 			if (strlen(sSave.szUserName) > 0)
 			{
 				char szStr[256];
-				sprintf(szStr,"    %s",sSave.szUserName);
+				sprintf(szStr,"	%s",sSave.szUserName);
 				HSTRING hLoad=g_pLTClient->CreateString(szStr);
 
 				CLTGUIColumnTextCtrl* pCtrl = AddColumnText(FOLDER_CMD_CUSTOM+2+i, IDS_HELP_LOADGAME, LTFALSE, GetSmallFont());
@@ -237,7 +231,7 @@ void CFolderLoad::ParseSaveString(char* pszSaveStr, SaveGameData *pSG, LTBOOL bU
 	if (!pszSaveStr || strlen (pszSaveStr) == 0) return;
 
 	char* pWorldName = strtok(pszSaveStr,"|");
-    char* pName = strtok(LTNULL,"|");
+	char* pName = strtok(LTNULL,"|");
 	char* pTimeStr = strtok(LTNULL,"|");
 
 	char* pMissionNum = LTNULL;
@@ -307,8 +301,6 @@ void CFolderLoad::ParseSaveString(char* pszSaveStr, SaveGameData *pSG, LTBOOL bU
 			strncpy(pSG->szUserName,pWorldName,128);
 		}
 	}
-
-
 };
 
 
@@ -318,8 +310,8 @@ LTBOOL CFolderLoad::HandleKeyDown(int key, int rep)
 	if (key == VK_F9)
 	{
 		SendCommand(FOLDER_CMD_CUSTOM,0,0);
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return CBaseFolder::HandleKeyDown(key,rep);
+	return CBaseFolder::HandleKeyDown(key,rep);
 
 }

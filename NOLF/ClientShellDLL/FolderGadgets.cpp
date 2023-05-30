@@ -16,38 +16,28 @@ extern CGameClientShell* g_pGameClientShell;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-CFolderGadgets::CFolderGadgets()
-{
-}
+CFolderGadgets::CFolderGadgets(){}
 
-CFolderGadgets::~CFolderGadgets()
-{
-}
+CFolderGadgets::~CFolderGadgets(){}
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGadgets::Build
 //
-//	ROUTINE:	CFolderGadgets::Build
-//
-//	PURPOSE:	Build the folder
-//
+//	PURPOSE: Build the folder
 // ----------------------------------------------------------------------- //
-
 LTBOOL CFolderGadgets::Build()
 {
 	CreateTitle(IDS_TITLE_GADGETS);
-    LTBOOL success = CBaseSelectionFolder::Build();
+	LTBOOL success = CBaseSelectionFolder::Build();
 	return success;
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGadgets::IsAvailable
 //
-//	ROUTINE:	CFolderGadgets::IsAvailable
-//
-//	PURPOSE:	Check to see if there any selections to be made here
-//
+//	PURPOSE: Check to see if there any selections to be made here
 // ----------------------------------------------------------------------- //
-
 LTBOOL CFolderGadgets::IsAvailable()
 {
 	int missionNum = g_pInterfaceMgr->GetMissionData()->GetMissionNum();
@@ -75,13 +65,10 @@ LTBOOL CFolderGadgets::IsAvailable()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGadgets::OnFocus
 //
-//	ROUTINE:	CFolderGadgets::OnFocus
-//
-//	PURPOSE:	Handle gaining or losing focus
-//
+//	PURPOSE: Handle gaining or losing focus
 // ----------------------------------------------------------------------- //
-
 void CFolderGadgets::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
@@ -104,13 +91,10 @@ void CFolderGadgets::OnFocus(LTBOOL bFocus)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGadgets::BuildGadgetsList
 //
-//	ROUTINE:	CFolderGadgets::BuildGadgetsList
-//
-//	PURPOSE:	Create the list of weapons
-//
+//	PURPOSE: Create the list of weapons
 // ----------------------------------------------------------------------- //
-
 void	CFolderGadgets::BuildGadgetsList()
 {
 	//get info from MissionMgr
@@ -129,7 +113,7 @@ void	CFolderGadgets::BuildGadgetsList()
 	if (m_nNumSlots <= 0) return;
 
 	int nWID = WMGR_INVALID_ID;
-    WEAPON* pGadget = LTNULL;
+	WEAPON* pGadget = LTNULL;
 	for (int i=0; i< pMission->nNumRequiredGadgets; i++)
 	{
 		nWID = pMission->aRequiredGadgets[i];
@@ -227,13 +211,10 @@ void	CFolderGadgets::BuildGadgetsList()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGadgets::UpdateSelection
 //
-//	ROUTINE:	CFolderGadgets::UpdateSelection
-//
-//	PURPOSE:	Show info based on current selection
-//
+//	PURPOSE: Show info based on current selection
 // ----------------------------------------------------------------------- //
-
 LTBOOL CFolderGadgets::UpdateSelection()
 {
 	LTBOOL bChanged = CBaseSelectionFolder::UpdateSelection();
@@ -262,13 +243,10 @@ LTBOOL CFolderGadgets::UpdateSelection()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGadgets::ClearGadgetsList
 //
-//	ROUTINE:	CFolderGadgets::ClearGadgetsList
-//
-//	PURPOSE:	Remove all of the controls
-//
+//	PURPOSE: Remove all of the controls
 // ----------------------------------------------------------------------- //
-
 void CFolderGadgets::ClearGadgetsList()
 {
 	// Terminate the ctrls
@@ -280,13 +258,10 @@ void CFolderGadgets::ClearGadgetsList()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGadgets::SaveGadgetData
 //
-//	ROUTINE:	CFolderGadgets::SaveGadgetData
-//
-//	PURPOSE:	Save the players selections
-//
+//	PURPOSE: Save the players selections
 // ----------------------------------------------------------------------- //
-
 void CFolderGadgets::SaveGadgetData()
 {
 	CMissionData *pData = g_pInterfaceMgr->GetMissionData();
@@ -305,13 +280,10 @@ void CFolderGadgets::SaveGadgetData()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderGadgets::OnCommand
 //
-//	ROUTINE:	CFolderGadgets::OnCommand
-//
-//	PURPOSE:	Handle activation of items
-//
+//	PURPOSE: Handle activation of items
 // ----------------------------------------------------------------------- //
-
 uint32 CFolderGadgets::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2)
 {
 	switch (dwCommand)
@@ -355,7 +327,7 @@ uint32 CFolderGadgets::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPar
 
 HSTRING CFolderGadgets::GetHelpString(uint32 dwHelpId, int nControlIndex)
 {
-    WEAPON* pGadget = LTNULL;
+	WEAPON* pGadget = LTNULL;
 	char pStr[512] = "";
 
 	//slots are fixed controls so count  negatively ( 0 > first > last )
@@ -371,8 +343,8 @@ HSTRING CFolderGadgets::GetHelpString(uint32 dwHelpId, int nControlIndex)
 
 		int nameId = pGadget->nNameId;
 
-        HSTRING hTemp = g_pLTClient->FormatString(nameId);
-        char *pName = g_pLTClient->GetStringData(hTemp);
+		HSTRING hTemp = g_pLTClient->FormatString(nameId);
+		char *pName = g_pLTClient->GetStringData(hTemp);
 
 
 
@@ -393,9 +365,9 @@ HSTRING CFolderGadgets::GetHelpString(uint32 dwHelpId, int nControlIndex)
 			sprintf(pStr,"%s %s",m_sSelectStr,pName);
 		}
 
-        g_pLTClient->FreeString(hTemp);
+		g_pLTClient->FreeString(hTemp);
 		
-        HSTRING hStr = g_pLTClient->CreateString(pStr);
+		HSTRING hStr = g_pLTClient->CreateString(pStr);
 		return hStr;
 	}
 	else
@@ -405,7 +377,7 @@ HSTRING CFolderGadgets::GetHelpString(uint32 dwHelpId, int nControlIndex)
 
 void CFolderGadgets::SetContinue()
 {
-    int nHelp = LTNULL;
+	int nHelp = LTNULL;
 	eFolderID eNext = GetNextSelectionFolder(FOLDER_ID_GADGETS,&nHelp);
 
 	if (eNext != FOLDER_ID_NONE)
@@ -430,19 +402,19 @@ void CFolderGadgets::CreateModelSFX()
 
 	BSCREATESTRUCT bcs;
 
-    LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
-    LTRotation rRot;
+	LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
+	LTRotation rRot;
 
-    g_pLTClient->GetObjectPos(hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetObjectPos(hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-    g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
-    g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
+	g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
+	g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
 
 	VEC_MULSCALAR(vScale, vScale, m_fScale);
 
-    LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
+	LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
 	VEC_ADD(vModPos,vModPos,m_vOffset);
 
 	VEC_MULSCALAR(vTemp, vF, vModPos.z);
@@ -457,12 +429,12 @@ void CFolderGadgets::CreateModelSFX()
 
 
 	VEC_COPY(bcs.vPos, vPos);
-    bcs.rRot = rRot;
+	bcs.rRot = rRot;
 	VEC_COPY(bcs.vInitialScale, vScale);
 	VEC_COPY(bcs.vFinalScale, vScale);
 	VEC_SET(bcs.vInitialColor, 1.0f, 1.0f, 1.0f);
 	VEC_SET(bcs.vFinalColor, 1.0f, 1.0f, 1.0f);
-    bcs.bUseUserColors = LTTRUE;
+	bcs.bUseUserColors = LTTRUE;
 
 	bcs.pFilename = m_szModel;
 	bcs.pSkin = m_szSkin;
@@ -474,7 +446,7 @@ void CFolderGadgets::CreateModelSFX()
 
 	if (m_ModelSFX.Init(&bcs))
 	{
-        m_ModelSFX.CreateObject(g_pLTClient);
+		m_ModelSFX.CreateObject(g_pLTClient);
 		g_pInterfaceMgr->AddInterfaceSFX(&m_ModelSFX, IFX_NORMAL);
 		m_fSFXRot = g_pLayoutMgr->GetFolderCustomFloat((eFolderID)m_nFolderID,"ModelRotSpeed");
 	}
@@ -496,13 +468,13 @@ void CFolderGadgets::UpdateInterfaceSFX()
 	CBaseSelectionFolder::UpdateInterfaceSFX();
 	if (m_ModelSFX.GetObject())
 	{
-        LTFLOAT spin = g_pGameClientShell->GetFrameTime() * m_fSFXRot;
-        LTVector vU, vR, vF;
-        LTRotation rRot;
-        g_pLTClient->GetObjectRotation(m_ModelSFX.GetObject(), &rRot);
-        g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
-        g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
-        g_pLTClient->SetObjectRotation(m_ModelSFX.GetObject(),&rRot);
+		LTFLOAT spin = g_pGameClientShell->GetFrameTime() * m_fSFXRot;
+		LTVector vU, vR, vF;
+		LTRotation rRot;
+		g_pLTClient->GetObjectRotation(m_ModelSFX.GetObject(), &rRot);
+		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
+		g_pLTClient->SetObjectRotation(m_ModelSFX.GetObject(),&rRot);
 	}
 }
 
@@ -514,7 +486,7 @@ void CFolderGadgets::SkipOutfitting()
 	MISSION* pMission = g_pMissionMgr->GetMission(missionNum);
 	pData->ClearGadgets();
 	int nWID = WMGR_INVALID_ID;
-    WEAPON* pGadget = LTNULL;
+	WEAPON* pGadget = LTNULL;
 	for (int i=0; i< pMission->nNumRequiredGadgets; i++)
 	{
 		nWID = pMission->aRequiredGadgets[i];
@@ -535,5 +507,3 @@ void CFolderGadgets::SkipOutfitting()
 		pData->AddWeapon(nWID);
 	}
 }
-
-

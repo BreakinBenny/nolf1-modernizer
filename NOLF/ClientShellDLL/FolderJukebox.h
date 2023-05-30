@@ -8,10 +8,10 @@ public:
 	virtual ~CFolderJukebox();
 
 	// Build the folder
-	LTBOOL   Build();
-	uint32 OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
-	void    OnFocus(LTBOOL bFocus);
-	virtual void	UpdateHelpText();
+	LTBOOL	Build();
+	uint32	OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	void		OnFocus(LTBOOL bFocus);
+	virtual void UpdateHelpText();
 
 protected:
 
@@ -31,4 +31,3 @@ protected:
 private:
 
 };
-

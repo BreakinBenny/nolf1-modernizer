@@ -17,10 +17,10 @@ namespace
 	{
 		CMD_TEXTURES = FOLDER_CMD_CUSTOM+1,
 	};
-	int kHeaderWidth = 300;
-	int kSliderWidth = 200;
-	int kSpacerWidth = 25;
-	int kTotalWidth  = kHeaderWidth + kSpacerWidth;
+	int kHeaderWidth	= 300;
+	int kSliderWidth		= 200;
+	int kSpacerWidth	= 25;
+	int kTotalWidth		= kHeaderWidth + kSpacerWidth;
 
 	void AreYouSureCallBack(LTBOOL bReturn, void *pData)
 	{
@@ -41,22 +41,22 @@ namespace
 
 CFolderAdvDisplay::CFolderAdvDisplay()
 {
-	m_bLightMap = LTFALSE;
-	m_bMirrors = LTFALSE;
-	m_nShadows = 0;
-	m_bDetailTextures = LTFALSE;
-	m_bEnvMapWorld = LTFALSE;
-	m_bEnvMapEnable = LTFALSE;
-	m_bTripleBuffer = LTFALSE;
-	m_bFixSparkleys = LTFALSE;
-	m_bTrilinear = LTFALSE;
+	m_bLightMap	= LTFALSE;
+	m_bMirrors	= LTFALSE;
+	m_nShadows	= 0;
+	m_bDetailTextures	= LTFALSE;
+	m_bEnvMapWorld	= LTFALSE;
+	m_bEnvMapEnable	= LTFALSE;
+	m_bTripleBuffer	= LTFALSE;
+	m_bFixSparkleys	= LTFALSE;
+	m_bTrilinear	= LTFALSE;
 	m_nTextureFiltering = 0;
 
-	m_pTextureFiltering = LTNULL;
-	m_pShadows = LTNULL;
-//	m_pOverdraw = LTNULL;
-	m_pLightMap = LTNULL;
-	m_pMirrors = LTNULL;
+	m_pTextureFiltering	= LTNULL;
+	m_pShadows	= LTNULL;
+//	m_pOverdraw	= LTNULL;
+	m_pLightMap	= LTNULL;
+	m_pMirrors	= LTNULL;
 }
 
 CFolderAdvDisplay::~CFolderAdvDisplay()
@@ -127,7 +127,7 @@ LTBOOL CFolderAdvDisplay::Build()
 
 	pToggle = AddToggle(IDS_TRIPLE_BUFF, IDS_HELP_TRIPLE_BUFF, kTotalWidth, &m_bTripleBuffer );
 	pToggle->SetOnString(IDS_ON);
-	pToggle->SetOffString(IDS_OFF);    
+	pToggle->SetOffString(IDS_OFF);	
 	
 	uint32 dwAdvancedOptions = g_pInterfaceMgr->GetAdvancedOptions();
 	pToggle->Enable( (dwAdvancedOptions & AO_TRIPLEBUFFER) );
@@ -176,17 +176,17 @@ void CFolderAdvDisplay::OnFocus(LTBOOL bFocus)
 
 		m_pMirrors->Enable(bAllowMirrors);
 
-        m_bLightMap = (GetConsoleInt("LightMap",0) > 0);
+		m_bLightMap = (GetConsoleInt("LightMap",0) > 0);
 		if (bAllowMirrors)
-	        m_bMirrors = (GetConsoleInt("DrawPortals",0) > 0);
+			m_bMirrors = (GetConsoleInt("DrawPortals",0) > 0);
 		else
 			m_bMirrors = LTFALSE;
-        m_bDetailTextures = (GetConsoleInt("DetailTextures",0) > 0);
-        m_bEnvMapWorld = (GetConsoleInt("EnvMapWorld",0) > 0);
-        m_bEnvMapEnable = (GetConsoleInt("EnvMapEnable",0) > 0);
-        m_bTripleBuffer = (GetConsoleInt("TripleBuffer",0) > 0) && (dwAdvancedOptions & AO_TRIPLEBUFFER);
-        m_bFixSparkleys = (GetConsoleInt("FixSparkleys",0) > 0);
-        m_bTrilinear = (GetConsoleInt("Trilinear",0) > 0);
+		m_bDetailTextures = (GetConsoleInt("DetailTextures",0) > 0);
+		m_bEnvMapWorld = (GetConsoleInt("EnvMapWorld",0) > 0);
+		m_bEnvMapEnable = (GetConsoleInt("EnvMapEnable",0) > 0);
+		m_bTripleBuffer = (GetConsoleInt("TripleBuffer",0) > 0) && (dwAdvancedOptions & AO_TRIPLEBUFFER);
+		m_bFixSparkleys = (GetConsoleInt("FixSparkleys",0) > 0);
+		m_bTrilinear = (GetConsoleInt("Trilinear",0) > 0);
 		
 		if (m_bTrilinear == 1) {
 			m_nTextureFiltering = 1;
@@ -216,13 +216,13 @@ void CFolderAdvDisplay::OnFocus(LTBOOL bFocus)
 			if (GetConsoleInt("ModelShadowProj",0) > 0) m_nShadows++;
 		}
 
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 		g_bFocus = LTTRUE;
 
 	}
 	else
 	{
-        UpdateData(LTTRUE);
+		UpdateData(LTTRUE);
 
 		int af = 0;
 		int bilinear = 0;
@@ -289,7 +289,7 @@ void CFolderAdvDisplay::OnFocus(LTBOOL bFocus)
 
 		}
 
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 
 	}
 	CBaseFolder::OnFocus(bFocus);

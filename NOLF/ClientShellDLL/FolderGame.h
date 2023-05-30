@@ -18,30 +18,30 @@ public:
 	virtual ~CFolderGame();
 
 	// Build the folder
-    LTBOOL   Build();
-    void    OnFocus(LTBOOL bFocus);
+	LTBOOL   Build();
+	void	OnFocus(LTBOOL bFocus);
 
 
 protected:
 
 
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
 protected:
-    int		            m_nSubtitles;
-    LTBOOL				m_bGore;
-    LTBOOL				m_bFadeBodies;
-	int					m_nDifficulty;
-	LTBOOL				m_bAlwaysRun;
-	int					m_nLayout;
-	int					m_nHeadBob;
-	int					m_nWeaponSway;
-	int					m_nPickupMsgDur;
-	LTBOOL				m_bObjMessages;
-	LTBOOL				m_bQuickSwitch;
+	int		m_nSubtitles;
+	LTBOOL	m_bGore;
+	LTBOOL	m_bFadeBodies;
+	int		m_nDifficulty;
+	LTBOOL	m_bAlwaysRun;
+	int		m_nLayout;
+	int		m_nHeadBob;
+	int		m_nWeaponSway;
+	int		m_nPickupMsgDur;
+	LTBOOL	m_bObjMessages;
+	LTBOOL	m_bQuickSwitch;
 
 
-	CLTGUICycleCtrl		*m_pDifficultyCtrl;			// The difficulty control
+	CLTGUICycleCtrl	*m_pDifficultyCtrl;	// The difficulty control
 
 };
 

@@ -18,14 +18,14 @@ public:
 	virtual ~CFolderAwards();
 
 	// Build the folder
-    LTBOOL  Build();
+	LTBOOL  Build();
 	void	Term();
 
-    void    OnFocus(LTBOOL bFocus);
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	void	OnFocus(LTBOOL bFocus);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
 	void	UpdateData();
-    LTBOOL	HasAwards() {return m_controlArray.GetSize() > 1;}
+	LTBOOL	HasAwards() {return m_controlArray.GetSize() > 1;}
 
 
 };

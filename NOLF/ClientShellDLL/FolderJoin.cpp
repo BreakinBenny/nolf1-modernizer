@@ -24,7 +24,7 @@ extern VarTrack g_vtPlayerName;
 #define FREQ_SEL_PING		30000
 #define FREQ_SEL_ALLDATA	60000
 
-#define GAMESPY_GAME_NAME	"nolf"		// "ut"		
+#define GAMESPY_GAME_NAME "nolf"	// "ut"		
 #define GAMESPY_SECRET_KEY	"Jn3Ab4"	// "HA6zkS"
 
 #define FSS_SORT_PING		0
@@ -66,11 +66,11 @@ namespace
 		CMD_EDIT_PASS,
 
 	};
-    LTRect rcServerRect;
-    LTRect rcPlayerRect;
-    LTRect rcOptionRect;
-    LTRect rcStatusRect;
-    LTRect rcCommandRect;
+	LTRect rcServerRect;
+	LTRect rcPlayerRect;
+	LTRect rcOptionRect;
+	LTRect rcStatusRect;
+	LTRect rcCommandRect;
 
 	int nBarHeight;
 	int nGap;
@@ -108,16 +108,16 @@ namespace
 		IDS_FILTER_NOT_BOTH
 	};
 
-    CLTGUICtrl *pServerNameCtrl = LTNULL;
-    CLTGUICtrl *pServerPlayersCtrl = LTNULL;
-    CLTGUICtrl *pServerPingCtrl = LTNULL;
-    CLTGUICtrl *pServerGameCtrl = LTNULL;
-    CLTGUICtrl *pServerMapCtrl = LTNULL;
-    CLTGUICtrl *pPlayerNameCtrl = LTNULL;
-    CLTGUICtrl *pPlayerFragCtrl = LTNULL;
-    CLTGUICtrl *pPlayerPingCtrl = LTNULL;
+	CLTGUICtrl *pServerNameCtrl = LTNULL;
+	CLTGUICtrl *pServerPlayersCtrl = LTNULL;
+	CLTGUICtrl *pServerPingCtrl = LTNULL;
+	CLTGUICtrl *pServerGameCtrl = LTNULL;
+	CLTGUICtrl *pServerMapCtrl = LTNULL;
+	CLTGUICtrl *pPlayerNameCtrl = LTNULL;
+	CLTGUICtrl *pPlayerFragCtrl = LTNULL;
+	CLTGUICtrl *pPlayerPingCtrl = LTNULL;
 
-    LTBOOL bFrameDelay = LTTRUE;
+	LTBOOL bFrameDelay = LTTRUE;
 	uint32 nConnectError = 0;
 }
 //////////////////////////////////////////////////////////////////////
@@ -126,37 +126,37 @@ namespace
 
 CFolderJoin::CFolderJoin()
 {
-	m_nState             = FSS_IDLE;
-    m_bForceNextUpdate   = LTFALSE;
-    m_bNeedServerSorting = LTFALSE;
+	m_nState				= FSS_IDLE;
+	m_bForceNextUpdate	= LTFALSE;
+	m_bNeedServerSorting	= LTFALSE;
 
-	m_nNumServers       = 0;
+	m_nNumServers	= 0;
 	m_nNumServersListed = 0;
-	m_nPopFilter        = POP_FILTER_ALL;
-	m_nGameFilter       = NGT_FILTER_ALL;
+	m_nPopFilter		= POP_FILTER_ALL;
+	m_nGameFilter	= NGT_FILTER_ALL;
 
 
 	m_nServerSort = FSS_SORT_PING;
 	m_nPlayerSort = FSS_SORT_FRAGS;
 
-    m_pServerList = LTNULL;
-    m_pPlayerList = LTNULL;
-    m_pOptionList = LTNULL;
+	m_pServerList = LTNULL;
+	m_pPlayerList = LTNULL;
+	m_pOptionList = LTNULL;
 
-    m_pRefresh = LTNULL;
-    m_pRePing = LTNULL;
-    m_pVersionFilter = LTNULL;
-    m_pGameFilter = LTNULL;
-    m_pPopFilter = LTNULL;
-    m_pResort = LTNULL;
-    m_pJoin = LTNULL;
+	m_pRefresh = LTNULL;
+	m_pRePing = LTNULL;
+	m_pVersionFilter = LTNULL;
+	m_pGameFilter = LTNULL;
+	m_pPopFilter = LTNULL;
+	m_pResort = LTNULL;
+	m_pJoin = LTNULL;
 
 	// Default to current version to avoid confusion!
-    g_vtNetVersionFilter.Init(g_pLTClient,"NetVersionFilter",LTNULL,1.0f);
-    g_vtNetGameFilter.Init(g_pLTClient,"NetGameFilter",LTNULL,(float)m_nGameFilter);
-    g_vtNetPopFilter.Init(g_pLTClient,"NetPopFilter",LTNULL,(float)m_nPopFilter);
-    g_vtNetServerSortKey.Init(g_pLTClient,"NetServerSortKey",LTNULL,(float)m_nServerSort);
-    g_vtNetPlayerSortKey.Init(g_pLTClient,"NetPlayerSortKey",LTNULL,(float)m_nPlayerSort);
+	g_vtNetVersionFilter.Init(g_pLTClient,"NetVersionFilter",LTNULL,1.0f);
+	g_vtNetGameFilter.Init(g_pLTClient,"NetGameFilter",LTNULL,(float)m_nGameFilter);
+	g_vtNetPopFilter.Init(g_pLTClient,"NetPopFilter",LTNULL,(float)m_nPopFilter);
+	g_vtNetServerSortKey.Init(g_pLTClient,"NetServerSortKey",LTNULL,(float)m_nServerSort);
+	g_vtNetPlayerSortKey.Init(g_pLTClient,"NetPlayerSortKey",LTNULL,(float)m_nPlayerSort);
 
 	m_bAskingForPassword = LTFALSE;
 	m_szPassword[0] = LTNULL;
@@ -173,8 +173,8 @@ CFolderJoin::CFolderJoin()
 CFolderJoin::~CFolderJoin()
 {
 	GetGameSpyClientMgr()->Term();
-    m_pCurServerHandle = LTNULL;
-	m_nState           = FSS_IDLE;
+	m_pCurServerHandle = LTNULL;
+	m_nState	= FSS_IDLE;
 }
 
 void CFolderJoin::Term()
@@ -195,9 +195,6 @@ void CFolderJoin::Term()
 	{
 		g_pLTClient->FreeString(m_hStatus);
 	}
-
-
-
 }
 
 // Build the folder
@@ -226,35 +223,35 @@ LTBOOL CFolderJoin::Build()
 	CreateTitle(IDS_TITLE_JOIN);
 
 	//Add Server Header
-    LTIntPt pos(rcServerRect.left + nIndent,rcServerRect.top);
+	LTIntPt pos(rcServerRect.left + nIndent,rcServerRect.top);
 	CLTGUIFont *pFont = GetMediumFont();
 	nBarHeight = pFont->GetHeight();
 
 
 	CStaticTextCtrl *pCtrl = CreateStaticTextItem(IDS_SERVER_NAME,CMD_SORT_SERV_NAME,IDS_HELP_SERVER_NAME,nGameWidth,pFont->GetHeight(),LTFALSE,pFont);
-    AddFixedControl(pCtrl,pos,LTTRUE);
+	AddFixedControl(pCtrl,pos,LTTRUE);
 	pServerNameCtrl = pCtrl;
 	pos.x += nGameWidth+nGap;
 
 	pCtrl = CreateStaticTextItem(IDS_SERVER_PLAYERS,CMD_SORT_SERV_PLAYERS,IDS_HELP_SERVER_PLAYERS,nPlayerWidth,pFont->GetHeight(),LTFALSE,pFont);
-    AddFixedControl(pCtrl,pos,LTTRUE);
+	AddFixedControl(pCtrl,pos,LTTRUE);
 	pServerPlayersCtrl = pCtrl;
 	pos.x += nPlayerWidth+nGap;
 
 	pCtrl = CreateStaticTextItem(IDS_SERVER_PING,CMD_SORT_SERV_PING,IDS_HELP_SERVER_PING,nPingWidth,pFont->GetHeight(),LTFALSE,pFont);
-    AddFixedControl(pCtrl,pos,LTTRUE);
+	AddFixedControl(pCtrl,pos,LTTRUE);
 	pServerPingCtrl = pCtrl;
 	pos.x += nPingWidth+nGap;
 
 	pFont = GetMediumFont();
-    pCtrl = CreateStaticTextItem(IDS_SERVER_GAME,CMD_SORT_SERV_GAME,LTNULL,nTypeWidth,pFont->GetHeight(),LTFALSE,pFont);
-    AddFixedControl(pCtrl,pos,LTFALSE);
+	pCtrl = CreateStaticTextItem(IDS_SERVER_GAME,CMD_SORT_SERV_GAME,LTNULL,nTypeWidth,pFont->GetHeight(),LTFALSE,pFont);
+	AddFixedControl(pCtrl,pos,LTFALSE);
 	pServerGameCtrl = pCtrl;
 	pos.x += nTypeWidth+nGap;
 
-    pCtrl = CreateStaticTextItem(IDS_SERVER_MAP,CMD_SORT_SERV_MAP,LTNULL,nMapWidth,pFont->GetHeight(),LTFALSE,pFont);
+	pCtrl = CreateStaticTextItem(IDS_SERVER_MAP,CMD_SORT_SERV_MAP,LTNULL,nMapWidth,pFont->GetHeight(),LTFALSE,pFont);
 	pServerMapCtrl = pCtrl;
-    AddFixedControl(pCtrl,pos,LTFALSE);
+	AddFixedControl(pCtrl,pos,LTFALSE);
 
 	//Add Server List
 	pos.x = rcServerRect.left + nIndent;
@@ -264,28 +261,28 @@ LTBOOL CFolderJoin::Build()
 
 	nServerGroupWidth = (rcServerRect.right - rcServerRect.left) - nArrowWidth;
 	m_pServerList = debug_new(CListCtrl);
-    m_pServerList->Create(nListHeight, LTTRUE, nServerGroupWidth);
+	m_pServerList->Create(nListHeight, LTTRUE, nServerGroupWidth);
 	m_pServerList->SetItemSpacing(0);
-    m_pServerList->EnableMouseClickSelect(LTTRUE);
-    AddFixedControl(m_pServerList,pos,LTTRUE);
+	m_pServerList->EnableMouseClickSelect(LTTRUE);
+	AddFixedControl(m_pServerList,pos,LTTRUE);
 
 	//Add Player Header
 	pFont = GetMediumFont();
-    pos = LTIntPt(rcPlayerRect.left + nIndent,rcPlayerRect.top);
+	pos = LTIntPt(rcPlayerRect.left + nIndent,rcPlayerRect.top);
 
 	pCtrl = CreateStaticTextItem(IDS_JOIN_PLAYER_NAME,CMD_SORT_PLYR_NAME,IDS_HELP_SORT_PLYR_NAME,nNameWidth,pFont->GetHeight(),LTFALSE,pFont);
-    AddFixedControl(pCtrl,pos,LTTRUE);
+	AddFixedControl(pCtrl,pos,LTTRUE);
 	pPlayerNameCtrl = pCtrl;
 	pos.x += nNameWidth+nGap;
 
 	pCtrl = CreateStaticTextItem(IDS_JOIN_PLAYER_SCORE,CMD_SORT_PLYR_SCORE,IDS_HELP_SORT_PLYR_SCORE,nScoreWidth,pFont->GetHeight(),LTFALSE,pFont);
-    AddFixedControl(pCtrl,pos,LTTRUE);
+	AddFixedControl(pCtrl,pos,LTTRUE);
 	pPlayerFragCtrl = pCtrl;
 	pos.x += nScoreWidth+nGap;
 
 	pCtrl = CreateStaticTextItem(IDS_SERVER_PING,CMD_SORT_PLYR_PING,IDS_HELP_SORT_PLYR_PING,nPingWidth,pFont->GetHeight(),LTFALSE,pFont);
 	pPlayerPingCtrl = pCtrl;
-    AddFixedControl(pCtrl,pos,LTTRUE);
+	AddFixedControl(pCtrl,pos,LTTRUE);
 
 	//Add PlayerList Here
 	pos.x = rcPlayerRect.left + nIndent;
@@ -294,10 +291,10 @@ LTBOOL CFolderJoin::Build()
 	nListHeight += 24;	// [blg] tweak
 	nPlayerGroupWidth = (rcPlayerRect.right - rcPlayerRect.left) - nArrowWidth;
 	m_pPlayerList = debug_new(CListCtrl);
-    m_pPlayerList->Create(nListHeight, LTTRUE, nPlayerGroupWidth);
+	m_pPlayerList->Create(nListHeight, LTTRUE, nPlayerGroupWidth);
 	m_pPlayerList->SetItemSpacing(0);
-//    m_pPlayerList->Enable(LTFALSE);
-    AddFixedControl(m_pPlayerList,pos,LTTRUE);
+//	m_pPlayerList->Enable(LTFALSE);
+	AddFixedControl(m_pPlayerList,pos,LTTRUE);
 
 
 	//Add Commands
@@ -305,50 +302,50 @@ LTBOOL CFolderJoin::Build()
 	pos.x = rcCommandRect.left;
 	pos.y = rcCommandRect.top;
 	m_pRefresh = CreateTextItem(IDS_SERVER_REFRESH,CMD_REFRESH_SERVERS,IDS_HELP_REFRESH,LTFALSE,pFont);
-    AddFixedControl(m_pRefresh,pos,LTTRUE);
+	AddFixedControl(m_pRefresh,pos,LTTRUE);
 	pos.y += pFont->GetHeight();
 
 	// [blg] re-ping is not support in the GameSpy SDK
 	//m_pRePing = CreateTextItem(IDS_SERVER_REPING,CMD_REPING_SERVERS,IDS_HELP_REPING,LTFALSE,pFont);
-    //AddFixedControl(m_pRePing,pos,LTTRUE);
+	//AddFixedControl(m_pRePing,pos,LTTRUE);
 	//pos.y += pFont->GetHeight();
 
 	m_pVersionFilter = CreateTextItem(IDS_ALL_VERSIONS,CMD_VERSION_FILTER,IDS_HELP_VERSION_FILTER,LTFALSE,pFont,&m_nVersionFilter);
 	m_pVersionFilter->AddString(IDS_CURRENT_VERSION);
-    AddFixedControl(m_pVersionFilter,pos,LTTRUE);
+	AddFixedControl(m_pVersionFilter,pos,LTTRUE);
 	pos.y += pFont->GetHeight();
 
 	m_pGameFilter = CreateTextItem(anGameFilterID[0],CMD_GAME_FILTER,IDS_HELP_GAME_FILTER,LTFALSE,pFont,&m_nGameFilter);
 	m_pGameFilter->AddString(anGameFilterID[1]);
 	m_pGameFilter->AddString(anGameFilterID[2]);
-    AddFixedControl(m_pGameFilter,pos,LTTRUE);
+	AddFixedControl(m_pGameFilter,pos,LTTRUE);
 	pos.y += pFont->GetHeight();
 
 	m_pPopFilter = CreateTextItem(anPopFilterID[0],CMD_POP_FILTER,IDS_HELP_POP_FILTER,LTFALSE,pFont,&m_nPopFilter);
 	m_pPopFilter->AddString(anPopFilterID[1]);
 	m_pPopFilter->AddString(anPopFilterID[2]);
 	m_pPopFilter->AddString(anPopFilterID[3]);
-    AddFixedControl(m_pPopFilter,pos,LTTRUE);
+	AddFixedControl(m_pPopFilter,pos,LTTRUE);
 	pos.y += pFont->GetHeight();
 
 	m_pJoin = CreateTextItem(IDS_JOIN_GAME,CMD_JOIN,IDS_HELP_JOIN_GAME,LTFALSE,pFont);
-    m_pJoin->Enable(LTFALSE);
-    AddFixedControl(m_pJoin,pos,LTFALSE);
+	m_pJoin->Enable(LTFALSE);
+	AddFixedControl(m_pJoin,pos,LTFALSE);
 	pos.y += pFont->GetHeight();
 
 
 	//Add Option Header
 	pFont = GetMediumFont();
-    pos = LTIntPt(rcOptionRect.left + nIndent,rcOptionRect.top);
+	pos = LTIntPt(rcOptionRect.left + nIndent,rcOptionRect.top);
 
-    pCtrl = CreateStaticTextItem(IDS_OPTION_NAME,LTNULL,LTNULL,nNameWidth,pFont->GetHeight(),LTTRUE,pFont);
-    pCtrl->Enable(LTFALSE);
-    AddFixedControl(pCtrl,pos,LTFALSE);
+	pCtrl = CreateStaticTextItem(IDS_OPTION_NAME,LTNULL,LTNULL,nNameWidth,pFont->GetHeight(),LTTRUE,pFont);
+	pCtrl->Enable(LTFALSE);
+	AddFixedControl(pCtrl,pos,LTFALSE);
 	pos.x += nOptionWidth+nGap;
 
-    pCtrl = CreateStaticTextItem(IDS_OPTION_VALUE,LTNULL,LTNULL,nScoreWidth,pFont->GetHeight(),LTTRUE,pFont);
-    pCtrl->Enable(LTFALSE);
-    AddFixedControl(pCtrl,pos,LTFALSE);
+	pCtrl = CreateStaticTextItem(IDS_OPTION_VALUE,LTNULL,LTNULL,nScoreWidth,pFont->GetHeight(),LTTRUE,pFont);
+	pCtrl->Enable(LTFALSE);
+	AddFixedControl(pCtrl,pos,LTFALSE);
 
 	//Add OptionList Here
 	pos.x = rcOptionRect.left + nIndent;
@@ -356,14 +353,14 @@ LTBOOL CFolderJoin::Build()
 	nListHeight = (rcOptionRect.bottom - rcOptionRect.top) - nBarHeight;
 	nOptionGroupWidth = (rcOptionRect.right - rcOptionRect.left) - nArrowWidth;
 	m_pOptionList = debug_new(CListCtrl);
-    m_pOptionList->Create(nListHeight, LTTRUE, nOptionGroupWidth);
+	m_pOptionList->Create(nListHeight, LTTRUE, nOptionGroupWidth);
 	m_pOptionList->SetItemSpacing(0);
-//    m_pOptionList->Enable(LTFALSE);
-    AddFixedControl(m_pOptionList,pos,LTFALSE);
+//	m_pOptionList->Enable(LTFALSE);
+	AddFixedControl(m_pOptionList,pos,LTFALSE);
 
 	rcStatusRect.top = rcStatusRect.bottom - nBarHeight;
 
-    bFrameDelay = LTTRUE;
+	bFrameDelay = LTTRUE;
 
 	// Make sure to call the base class
 	return CBaseFolder::Build();
@@ -373,7 +370,6 @@ LTBOOL CFolderJoin::Build()
 LTBOOL CFolderJoin::Render(HSURFACE hDestSurf)
 {
 	// There's no update pump, so we'll have to do it here...
-
 	if (GetGameSpyClientMgr()->IsInitialized())
 	{
 		Update(hDestSurf);
@@ -417,7 +413,7 @@ LTBOOL CFolderJoin::Render(HSURFACE hDestSurf)
 		GetSmallFont()->Draw(m_hServersShown, hDestSurf, yr*((xo/2)+rcTempServerRect.right-nIndent), yo+ rcTempServerRect.top+nIndent, LTF_JUSTIFY_RIGHT, m_hNonSelectedColor);
 	}
 
-    CLTGUICtrl *pSortCtrl = LTNULL;
+	CLTGUICtrl *pSortCtrl = LTNULL;
 	switch (m_nServerSort)
 	{
 	case FSS_SORT_NAME:
@@ -438,18 +434,18 @@ LTBOOL CFolderJoin::Render(HSURFACE hDestSurf)
 	}
 	if (pSortCtrl)
 	{
-        LTIntPt pos = pSortCtrl->GetPos();
+		LTIntPt pos = pSortCtrl->GetPos();
 		//pos.x += xo;
 		pos.y += yo;
-        LTRect rect(pos.x, (pos.y + pSortCtrl->GetHeight()) - 5, pos.x + pSortCtrl->GetWidth(), (pos.y + pSortCtrl->GetHeight()) - 3);
-        g_pOptimizedRenderer->FillRect(hDestSurf,&rect,m_hSelectedColor);
+		LTRect rect(pos.x, (pos.y + pSortCtrl->GetHeight()) - 5, pos.x + pSortCtrl->GetWidth(), (pos.y + pSortCtrl->GetHeight()) - 3);
+		g_pOptimizedRenderer->FillRect(hDestSurf,&rect,m_hSelectedColor);
 
 	}
 
 	//Draw player bar
 	DrawBar(hDestSurf,&rcTempPlayerRect);
 
-    pSortCtrl = LTNULL;
+	pSortCtrl = LTNULL;
 	switch (m_nPlayerSort)
 	{
 	case FSS_SORT_NAME:
@@ -464,11 +460,11 @@ LTBOOL CFolderJoin::Render(HSURFACE hDestSurf)
 	}
 	if (pSortCtrl)
 	{
-        LTIntPt pos = pSortCtrl->GetPos();
+		LTIntPt pos = pSortCtrl->GetPos();
 		//pos.x += xo;
 		pos.y += yo;
-        LTRect rect(pos.x, (pos.y + pSortCtrl->GetHeight()) - 5, pos.x + pSortCtrl->GetWidth(), (pos.y + pSortCtrl->GetHeight()) - 3);
-        g_pOptimizedRenderer->FillRect(hDestSurf,&rect,m_hSelectedColor);
+		LTRect rect(pos.x, (pos.y + pSortCtrl->GetHeight()) - 5, pos.x + pSortCtrl->GetWidth(), (pos.y + pSortCtrl->GetHeight()) - 3);
+		g_pOptimizedRenderer->FillRect(hDestSurf,&rect,m_hSelectedColor);
 
 	}
 
@@ -487,7 +483,7 @@ LTBOOL CFolderJoin::Render(HSURFACE hDestSurf)
 			GetSmallFont()->Draw(m_hStatus, hDestSurf, xo +nIndent, yo+ rcTempStatusRect.top+nIndent, LTF_JUSTIFY_LEFT, m_hSelectedColor);
 	}
 
-    LTBOOL bOK = CBaseFolder::Render(hDestSurf);
+	LTBOOL bOK = CBaseFolder::Render(hDestSurf);
 
 	if (GetGameSpyClientMgr()->IsInitialized())
 	{
@@ -498,7 +494,7 @@ LTBOOL CFolderJoin::Render(HSURFACE hDestSurf)
 	{
 		if (bFrameDelay)
 		{
-            bFrameDelay = LTFALSE;
+			bFrameDelay = LTFALSE;
 		}
 		else
 		{
@@ -506,7 +502,7 @@ LTBOOL CFolderJoin::Render(HSURFACE hDestSurf)
 			BOOL bRet = GetGameSpyClientMgr()->Init(GAMESPY_GAME_NAME, GAMESPY_SECRET_KEY);
 			if (!bRet)
 			{
-                return LTFALSE;
+				return LTFALSE;
 			}
 		}
 	}
@@ -519,12 +515,10 @@ void CFolderJoin::Update(HSURFACE hDestSurf)
 {
 
 	// Let the GameSpy client manager update...
-
 	GetGameSpyClientMgr()->Update();
 
 
 	// Update based on our current state...
-
 	switch (m_nState)
 	{
 		case FSS_IDLE:
@@ -566,42 +560,34 @@ void CFolderJoin::Update(HSURFACE hDestSurf)
 
 
 	// Update our sub menus...
-
 	UpdateLists();
 
 
 	// Check for required sorting...
-
 	if (m_bNeedServerSorting)
 	{
-        m_bNeedServerSorting = LTFALSE;
+		m_bNeedServerSorting = LTFALSE;
 		SortServers();
 	}
 
 
 	// Enable or disable the join control as necessary...
-
-    m_pJoin->Enable((GetCurGameServerHandle() != LTNULL));
+	m_pJoin->Enable((GetCurGameServerHandle() != LTNULL));
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::UpdateDummyStatus
 //
-//	ROUTINE:	CFolderJoin::UpdateDummyStatus
-//
-//	PURPOSE:	Updates the FSS_DUMMYSTATUS state
-//
+//	PURPOSE: Updates the FSS_DUMMYSTATUS state
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::UpdateDummyStatus(HSURFACE hDestSurf)
 {
 	// Set our dummy status text...
-
 	SetStatusText(m_hDummyStatus);
 
 
 	// Check for ending...
-
 	if (GetTickCount() >= m_timeDummyEnd)
 	{
 		SetState(m_nNextDummyState);
@@ -611,13 +597,10 @@ void CFolderJoin::UpdateDummyStatus(HSURFACE hDestSurf)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::UpdateGetServices
 //
-//	ROUTINE:	CFolderJoin::UpdateGetServices
-//
-//	PURPOSE:	Updates the FSS_GETSERVICES state
-//
+//	PURPOSE: Updates the FSS_GETSERVICES state
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::UpdateGetServices(HSURFACE hDestSurf)
 {
 	int nState = GetGameSpyClientMgr()->GetState();
@@ -625,7 +608,7 @@ void CFolderJoin::UpdateGetServices(HSURFACE hDestSurf)
 
 	switch (nState)
 	{
-		case sl_idle:		// done updating
+		case sl_idle:	// done updating
 		{
 			SortServers();
 			m_bNeedServerSorting = FALSE;
@@ -661,15 +644,11 @@ void CFolderJoin::UpdateGetServices(HSURFACE hDestSurf)
 	}
 }
 
-
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::UpdateGetPings
 //
-//	ROUTINE:	CFolderJoin::UpdateGetPings
-//
-//	PURPOSE:	Updates the FSS_GETPINGS state
-//
+//	PURPOSE: Updates the FSS_GETPINGS state
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::UpdateGetPings(HSURFACE hDestSurf)
 {
 	HSTRING hStr = g_pLTClient->FormatString(IDS_STATUS_PINGDONE, m_nNumServersListed);
@@ -679,37 +658,28 @@ void CFolderJoin::UpdateGetPings(HSURFACE hDestSurf)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::UpdateGetAllData
 //
-//	ROUTINE:	CFolderJoin::UpdateGetAllData
-//
-//	PURPOSE:	Updates the FSS_GETALLDATA state
-//
+//	PURPOSE: Updates the FSS_GETALLDATA state
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::UpdateGetAllData(HSURFACE hDestSurf)
 {
 	// Update the ping stuff...
-
 	SortPlayers();
 	HSTRING hStr = g_pLTClient->FormatString(IDS_STATUS_GETEXTRA, m_nNumServers, m_nNumServersListed);
 	SetDummyStatusState(hStr, 1000);
 	g_pLTClient->FreeString(hStr);
-
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::UpdateIdle
 //
-//	ROUTINE:	CFolderJoin::UpdateIdle
-//
-//	PURPOSE:	Updates the FSS_IDLE state
-//
+//	PURPOSE: Updates the FSS_IDLE state
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::UpdateIdle(HSURFACE hDestSurf)
 {
 	// If we're still getting the server list, go back to the proper state...
-
 	if (GetGameSpyClientMgr()->GetState() != sl_idle)
 	{
 		UpdateGetServices(hDestSurf);
@@ -718,7 +688,6 @@ void CFolderJoin::UpdateIdle(HSURFACE hDestSurf)
 
 
 	// Draw the status info...
-
 	HSTRING hStr= LTNULL;
 
 	if (m_nNumServers == 0)
@@ -736,13 +705,10 @@ void CFolderJoin::UpdateIdle(HSURFACE hDestSurf)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::UpdateGetSelPing
 //
-//	ROUTINE:	CFolderJoin::UpdateGetSelPing
-//
-//	PURPOSE:	Updates the FSS_GETSELPING state
-//
+//	PURPOSE: Updates the FSS_GETSELPING state
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::UpdateGetSelPing(HSURFACE hDestSurf)
 {
 	HSTRING hStr= g_pLTClient->FormatString(IDS_STATUS_PINGSEL);
@@ -752,31 +718,27 @@ void CFolderJoin::UpdateGetSelPing(HSURFACE hDestSurf)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::SetState
 //
-//	ROUTINE:	CFolderJoin::SetState
-//
-//	PURPOSE:	Sets the server finding state
-//
+//	PURPOSE: Sets the server finding state
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::SetState(int nNewState)
 {
 	// Set the new state accordingly...
-
 	switch (nNewState)
 	{
 		case FSS_GETSERVICES:
 		{
-            SetCurGameServerHandle(LTNULL);
+			SetCurGameServerHandle(LTNULL);
 			GetGameSpyClientMgr()->RefreshServers();
-            m_bNeedServerSorting = LTTRUE;
-            UpdateLists(LTTRUE);
+			m_bNeedServerSorting = LTTRUE;
+			UpdateLists(LTTRUE);
 			break;
 		}
 
 		case FSS_GETPINGS:
 		{
-            UpdateLists(LTTRUE);
+			UpdateLists(LTTRUE);
 			break;
 		}
 
@@ -807,9 +769,8 @@ void CFolderJoin::SetState(int nNewState)
 	}
 
 	// Set the new state value...
-
 	m_timeStateStart = GetTickCount();
-	m_nState         = nNewState;
+	m_nState		= nNewState;
 }
 
 void CFolderJoin::SetStatusText(HSTRING hStr)
@@ -825,20 +786,16 @@ void CFolderJoin::SetStatusText(HSTRING hStr)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::SetDummyStatusState
 //
-//	ROUTINE:	CFolderJoin::SetDummyStatusState
-//
-//	PURPOSE:	Sets the dummy status state for just displing status
-//				text for a short amount of time.  Otherwise, some status
-//				messages go by too quickly to read!
-//
+//	PURPOSE: Sets the dummy status state for just displing status
+//			text for a short amount of time.  Otherwise, some status
+//			messages go by too quickly to read!
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::SetDummyStatusState(HSTRING hStr, uint32 dwWaitTime, int nNextState)
 {
 	// Set dummy status values...
-
-	m_timeDummyEnd    = GetTickCount() + dwWaitTime;
+	m_timeDummyEnd	= GetTickCount() + dwWaitTime;
 	m_nNextDummyState = nNextState;
 
 	if (m_hDummyStatus)
@@ -848,29 +805,24 @@ void CFolderJoin::SetDummyStatusState(HSTRING hStr, uint32 dwWaitTime, int nNext
 	m_hDummyStatus = g_pLTClient->CopyString(hStr);
 
 	// Set the state...
-
 	SetState(FSS_DUMMYSTATUS);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::JoinGame
 //
-//	ROUTINE:	CFolderJoin::JoinGame
-//
-//	PURPOSE:	Joins the given game service
-//
+//	PURPOSE: Joins the given game service
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::JoinCurGame(LTBOOL bPasswordSet)
 {
 	// Get the currently selected game server...
-
 	CGameSpyServer* pGame = GetGameSpyClientMgr()->GetServerFromHandle(m_pCurServerHandle);
-    if (!pGame) return;
+	if (!pGame) return;
 
 	if (IsCurrentGame(pGame))
 	{
-        HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+		HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 		if (g_pGameClientShell->IsInWorld() && hPlayerObj)
 		{
 			g_pInterfaceMgr->ChangeState(GS_PLAYING);
@@ -880,7 +832,7 @@ void CFolderJoin::JoinCurGame(LTBOOL bPasswordSet)
 
 	if (pGame->GetNumPlayers() >= pGame->GetMaxPlayers())
 	{
-        HSTRING hString = g_pLTClient->FormatString(IDS_SERVERFULL);
+		HSTRING hString = g_pLTClient->FormatString(IDS_SERVERFULL);
 		g_pInterfaceMgr->ShowMessageBox(hString,LTMB_OK,LTNULL,LTNULL);
 		g_pLTClient->FreeString(hString);
 		return;
@@ -891,7 +843,7 @@ void CFolderJoin::JoinCurGame(LTBOOL bPasswordSet)
 	char* sGameVer = pGame->GetStringValue("gamever");
 	if (sGameVer && stricmp(sVer,sGameVer)!=0)
 	{
-        HSTRING hString = g_pLTClient->FormatString(IDS_SERVER_WRONGVERSION);
+		HSTRING hString = g_pLTClient->FormatString(IDS_SERVER_WRONGVERSION);
 		g_pInterfaceMgr->ShowMessageBox(hString,LTMB_OK,LTNULL,LTNULL,g_pInterfaceResMgr->IsEnglish());
 		g_pLTClient->FreeString(hString);
 		return;
@@ -899,7 +851,6 @@ void CFolderJoin::JoinCurGame(LTBOOL bPasswordSet)
 
 
 	// Check for password protection...
-
 	char* sPassword = pGame->GetStringValue("Password");
 	if (sPassword && sPassword[0] != '\0')
 	{
@@ -907,8 +858,8 @@ void CFolderJoin::JoinCurGame(LTBOOL bPasswordSet)
 		{
 			if (stricmp(m_szPassword, sPassword) != 0)
 			{
-                HSTRING hString = g_pLTClient->FormatString(IDS_ACCESSDENIED);
-			    g_pInterfaceMgr->ShowMessageBox(hString,LTMB_OK,LTNULL,LTNULL);
+				HSTRING hString = g_pLTClient->FormatString(IDS_ACCESSDENIED);
+				g_pInterfaceMgr->ShowMessageBox(hString,LTMB_OK,LTNULL,LTNULL);
 				g_pLTClient->FreeString(hString);
 				return;
 			}
@@ -931,7 +882,6 @@ void CFolderJoin::JoinCurGame(LTBOOL bPasswordSet)
 LTBOOL CFolderJoin::DoJoinGame(CGameSpyServer* pGame)
 {
 	// Sanity checks...
-
 	if (!pGame) return(LTFALSE);
 
 	if (g_pGameClientShell->IsInWorld() && g_pGameClientShell->GetGameType() != SINGLE)
@@ -939,7 +889,6 @@ LTBOOL CFolderJoin::DoJoinGame(CGameSpyServer* pGame)
 
 
 	// Get the ip address...
-
 	char sIp[MAX_SGR_STRINGLEN] = { "" };
 
 	char* sTemp = pGame->GetAddress();
@@ -949,7 +898,6 @@ LTBOOL CFolderJoin::DoJoinGame(CGameSpyServer* pGame)
 
 
 	// Start the game...
-
 	StartGameRequest req;
 	NetClientData clientData;
 
@@ -957,7 +905,6 @@ LTBOOL CFolderJoin::DoJoinGame(CGameSpyServer* pGame)
 
 
 	// Setup our client...
-
 	clientData.m_dwTeam = (uint32)GetConsoleInt("NetPlayerTeam",0);
 	SAFE_STRCPY(clientData.m_sName,g_vtPlayerName.GetStr());
 
@@ -970,7 +917,6 @@ LTBOOL CFolderJoin::DoJoinGame(CGameSpyServer* pGame)
 
 
 	// Try to join a game...
-
 	int nType = DEATHMATCH;
 	if (stricmp(pGame->GetGameType(), "H.A.R.M. vs. UNITY") == 0) nType = COOPERATIVE_ASSAULT;
 
@@ -994,13 +940,13 @@ LTBOOL CFolderJoin::DoJoinGame(CGameSpyServer* pGame)
 
 	g_pInterfaceMgr->SetLoadLevelPhoto(szPhoto);
 
-    LTRESULT dr = g_pLTClient->InitNetworking(NULL, 0);
+	LTRESULT dr = g_pLTClient->InitNetworking(NULL, 0);
 	if (dr != LT_OK)
 	{
 //		s_nErrorString = IDS_NETERR_INIT;
 //		NetStart_DisplayError(hInst);
 		g_pLTClient->CPrint("InitNetworking() : error %d", dr);
-        return(LTFALSE);
+		return(LTFALSE);
 	}
 
 	int nRetries = GetConsoleInt("NetJoinRetry", 0);
@@ -1008,9 +954,9 @@ LTBOOL CFolderJoin::DoJoinGame(CGameSpyServer* pGame)
 	{
 		// If successful, then we're done.
 		nConnectError = g_pLTClient->StartGame( &req );
-        if(nConnectError == LT_OK )
+		if(nConnectError == LT_OK )
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 
 		// Wait a sec and try again.
@@ -1019,7 +965,7 @@ LTBOOL CFolderJoin::DoJoinGame(CGameSpyServer* pGame)
 	}
 
 	// All done...
-    return(LTFALSE);
+	return(LTFALSE);
 }
 
 
@@ -1027,10 +973,10 @@ uint32 CFolderJoin::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 {
 	switch(dwCommand)
 	{
-	case CMD_SELECT_SERVER:
+		case CMD_SELECT_SERVER:
 		{
 			int nIndex = m_pServerList->GetSelectedItem();
-            void* pGame = LTNULL;
+			void* pGame = LTNULL;
 			if (nIndex != CListCtrl::kNoSelection)
 			{
 				pGame = (void*)m_pServerList->GetControl(nIndex)->GetParam1();
@@ -1046,86 +992,86 @@ uint32 CFolderJoin::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 
 
 		} break;
-	case CMD_REFRESH_SERVERS:
+		case CMD_REFRESH_SERVERS:
 		{
 			SetState(FSS_GETSERVICES);
 			break;
 		}
 
-	case CMD_REPING_SERVERS:
+		case CMD_REPING_SERVERS:
 		{
 			//SetState(FSS_GETPINGS);
 			break;
 		}
 
-	case CMD_VERSION_FILTER:
+		case CMD_VERSION_FILTER:
 		{
 			m_nVersionFilter = !m_nVersionFilter;
-            m_pVersionFilter->UpdateData(LTFALSE);
+			m_pVersionFilter->UpdateData(LTFALSE);
 			ForceNextUpdate();
 
 		} break;
 
-	case CMD_GAME_FILTER:
+		case CMD_GAME_FILTER:
 		{
 			m_nGameFilter++;
 			if (m_nGameFilter > NGT_FILTER_LAST)
 				m_nGameFilter = 0;
-            m_pGameFilter->UpdateData(LTFALSE);
+			m_pGameFilter->UpdateData(LTFALSE);
 			ForceNextUpdate();
 
 		} break;
-	case CMD_POP_FILTER:
+		case CMD_POP_FILTER:
 		{
 			m_nPopFilter++;
 			if (m_nPopFilter > POP_FILTER_LAST)
 				m_nPopFilter = 0;
-            m_pPopFilter->UpdateData(LTFALSE);
+			m_pPopFilter->UpdateData(LTFALSE);
 			ForceNextUpdate();
 
 		} break;
-	case CMD_SORT_SERV_NAME:
+		case CMD_SORT_SERV_NAME:
 		{
 			SetServerSort(FSS_SORT_NAME);
 			SortServers();
 		} break;
 
-	case CMD_SORT_SERV_PLAYERS:
+		case CMD_SORT_SERV_PLAYERS:
 		{
 			SetServerSort(FSS_SORT_PLAYERS);
 			SortServers();
 		} break;
-	case CMD_SORT_SERV_PING:
+		case CMD_SORT_SERV_PING:
 		{
 			SetServerSort(FSS_SORT_PING);
 			SortServers();
 		} break;
-	case CMD_SORT_SERV_GAME:
+		case CMD_SORT_SERV_GAME:
 		{
 			SetServerSort(FSS_SORT_GAME);
 			SortServers();
 		} break;
-	case CMD_SORT_SERV_MAP:
+		case CMD_SORT_SERV_MAP:
 		{
 			SetServerSort(FSS_SORT_MAP);
 			SortServers();
 		} break;
-	case CMD_SORT_PLYR_NAME:
+		case CMD_SORT_PLYR_NAME:
 		{
 			SetPlayerSort(FSS_SORT_NAME);
 			SortPlayers();
 		} break;
-	case CMD_SORT_PLYR_SCORE:
+		case CMD_SORT_PLYR_SCORE:
 		{
 			SetPlayerSort(FSS_SORT_FRAGS);
 			SortPlayers();
 		} break;
-	case CMD_SORT_PLYR_PING:
+		case CMD_SORT_PLYR_PING:
 		{
 			SetPlayerSort(FSS_SORT_PING);
 			SortPlayers();
 		} break;
-	case CMD_EDIT_PASS:
+		case CMD_EDIT_PASS:
 		{
 			SetCapture(LTNULL);
 			m_pPassEdit->UpdateData();
@@ -1136,11 +1082,11 @@ uint32 CFolderJoin::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 			ForceMouseUpdate();
 			JoinCurGame(LTTRUE);
 		} break;
-	case CMD_JOIN:
+		case CMD_JOIN:
 		{
 			CGameSpyServer* pGame = GetGameSpyClientMgr()->GetServerFromHandle(m_pCurServerHandle);
-		    if (g_pGameClientShell->IsInWorld() && pGame)
-		    {
+			if (g_pGameClientShell->IsInWorld() && pGame)
+			{
 
 				if (IsCurrentGame(pGame))
 				{
@@ -1156,16 +1102,16 @@ uint32 CFolderJoin::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 					g_pInterfaceMgr->ShowMessageBox(hString,LTMB_YESNO,JoinCallBack,this);
 					g_pLTClient->FreeString(hString);
 				}
-		    }
-		    else
-		    {
+			}
+			else
+			{
 				JoinCurGame();
-		    }
+			}
 
 
 		} break;
 
-	default:
+		default:
 		return CBaseFolder::OnCommand(dwCommand,dwParam1,dwParam2);
 	}
 	return 1;
@@ -1173,14 +1119,14 @@ uint32 CFolderJoin::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 
 
 // Change in focus
-void    CFolderJoin::OnFocus(LTBOOL bFocus)
+void	CFolderJoin::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
 	{
 		// Reset other values...
 		bDblClick = LTFALSE;
 
-		m_nNumServers       = 0;
+		m_nNumServers	= 0;
 		m_nNumServersListed = 0;
 		m_nVersionFilter = (int)g_vtNetVersionFilter.GetFloat();
 		m_nGameFilter = (int)g_vtNetGameFilter.GetFloat();
@@ -1188,7 +1134,7 @@ void    CFolderJoin::OnFocus(LTBOOL bFocus)
 		m_nServerSort = (int)g_vtNetServerSortKey.GetFloat();
 		m_nPlayerSort = (int)g_vtNetPlayerSortKey.GetFloat();
 
-        bFrameDelay = LTTRUE;
+		bFrameDelay = LTTRUE;
 		m_szPassword[0] = LTNULL;
 
 		nOldIndex = -1;
@@ -1198,7 +1144,7 @@ void    CFolderJoin::OnFocus(LTBOOL bFocus)
 		g_pLTClient->FreeString(hStr);
 		
 
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 	}
 	else
 	{
@@ -1212,11 +1158,11 @@ void    CFolderJoin::OnFocus(LTBOOL bFocus)
 
 		SetState(FSS_IDLE);
 		GetGameSpyClientMgr()->Term();
-        bFrameDelay = LTTRUE;
+		bFrameDelay = LTTRUE;
 		m_pServerList->RemoveAllControls();
 		m_pPlayerList->RemoveAllControls();
 		m_pOptionList->RemoveAllControls();
-        SetCurGameServerHandle(LTNULL);
+		SetCurGameServerHandle(LTNULL);
 
 	}
 	CBaseFolder::OnFocus(bFocus);
@@ -1224,17 +1170,13 @@ void    CFolderJoin::OnFocus(LTBOOL bFocus)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::SortServers
 //
-//	ROUTINE:	CFolderJoin::SortServers
-//
-//	PURPOSE:	Sorts the servers
-//
+//	PURPOSE: Sorts the servers
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::SortServers()
 {
 	// Set our sort dir based on the sort type...
-
 	switch (m_nServerSort)
 	{
 		case FSS_SORT_NAME:
@@ -1275,13 +1217,10 @@ void CFolderJoin::SortServers()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::SetCurGameServerHandle
 //
-//	ROUTINE:	CFolderJoin::SetCurGameServerHandle
-//
-//	PURPOSE:	Sets the current game server handle
-//
+//	PURPOSE: Sets the current game server handle
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::SetCurGameServerHandle(void* pHandle)
 {
 	// Set the current game server handle...
@@ -1295,36 +1234,36 @@ int CFolderJoin::AddServerCtrl(CGameSpyServer* pGame)
 	auto yr = g_pInterfaceResMgr->GetYRatio();
 
 	CLTGUIFont *pFont = GetSmallFont();
-    CGroupCtrl *pGroup = CreateGroup(nServerGroupWidth,pFont->GetHeight(),LTNULL);
-    LTIntPt pos(0,0);
-    pGroup->SetParam1((uint32)pGame->GetHandle());
+	CGroupCtrl *pGroup = CreateGroup(nServerGroupWidth,pFont->GetHeight(),LTNULL);
+	LTIntPt pos(0,0);
+	pGroup->SetParam1((uint32)pGame->GetHandle());
 
 	// Host name seems to filter itself, but let's do it just for safesies
 	std::string sHostName = FilterString(pGame->GetName());
-    CStaticTextCtrl *pCtrl = CreateStaticTextItem((char*)sHostName.c_str(),CMD_SELECT_SERVER,LTNULL,nGameWidth,pFont->GetHeight(),LTFALSE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	CStaticTextCtrl *pCtrl = CreateStaticTextItem((char*)sHostName.c_str(),CMD_SELECT_SERVER,LTNULL,nGameWidth,pFont->GetHeight(),LTFALSE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 	pos.x += (nGameWidth+nGap) * yr;
 
 	char sTemp[128] = "";
 	sprintf(sTemp,"%d/%d",pGame->GetNumPlayers(), pGame->GetMaxPlayers());
-    pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nPlayerWidth,pFont->GetHeight(),LTFALSE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nPlayerWidth,pFont->GetHeight(),LTFALSE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 	pos.x += (nPlayerWidth+nGap) * yr;
 
 	if (pGame->GetPing() >= 9999) strcpy(sTemp, "???");
 	else sprintf(sTemp,"%d",pGame->GetPing());
-    pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nPingWidth,pFont->GetHeight(),LTFALSE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nPingWidth,pFont->GetHeight(),LTFALSE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 	pos.x += (nPingWidth+nGap) * yr;
 
 	sprintf(sTemp,"%s",pGame->GetGameType());
-    pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nTypeWidth,pFont->GetHeight(),LTFALSE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nTypeWidth,pFont->GetHeight(),LTFALSE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 	pos.x += (nTypeWidth+nGap) * yr;
 
 	sprintf(sTemp,"%s",pGame->GetMap());
-    pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nMapWidth,pFont->GetHeight(),LTFALSE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nMapWidth,pFont->GetHeight(),LTFALSE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 
 	return m_pServerList->AddControl(pGroup);
 }
@@ -1333,25 +1272,25 @@ int CFolderJoin::AddServerCtrl(CGameSpyServer* pGame)
 int CFolderJoin::AddPlayerCtrl(CGameSpyPlayer* pPlr)
 {
 	CLTGUIFont *pFont = GetSmallFont();
-    CGroupCtrl *pGroup = CreateGroup(nPlayerGroupWidth,pFont->GetHeight(),LTNULL);
-    LTIntPt pos(0,0);
-    pGroup->SetParam1((uint32)pPlr);
+	CGroupCtrl *pGroup = CreateGroup(nPlayerGroupWidth,pFont->GetHeight(),LTNULL);
+	LTIntPt pos(0,0);
+	pGroup->SetParam1((uint32)pPlr);
 
 	char sTemp[128] = "";
 	strcpy(sTemp, pPlr->GetName());
-    CStaticTextCtrl *pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nNameWidth,pFont->GetHeight(),LTTRUE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	CStaticTextCtrl *pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nNameWidth,pFont->GetHeight(),LTTRUE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 	pos.x += nNameWidth+nGap;
 
 	sprintf(sTemp, "%i", pPlr->GetFrags());
-    pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nScoreWidth,pFont->GetHeight(),LTTRUE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nScoreWidth,pFont->GetHeight(),LTTRUE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 	pos.x += nScoreWidth+nGap;
 
 	if (pPlr->GetPing() >= 9999) strcpy(sTemp, "???");
 	else sprintf(sTemp,"%d",pPlr->GetPing());
-    pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nPingWidth,pFont->GetHeight(),LTTRUE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	pCtrl = CreateStaticTextItem(sTemp,LTNULL,LTNULL,nPingWidth,pFont->GetHeight(),LTTRUE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 
 	pGroup->Enable(LTFALSE);
 	return m_pPlayerList->AddControl(pGroup);
@@ -1361,15 +1300,15 @@ int CFolderJoin::AddPlayerCtrl(CGameSpyPlayer* pPlr)
 int CFolderJoin::AddOptionCtrl(int nID, int nStringID)
 {
 	CLTGUIFont *pFont = GetSmallFont();
-    CGroupCtrl *pGroup = CreateGroup(nOptionGroupWidth,pFont->GetHeight(),LTNULL);
-    LTIntPt pos(0,0);
+	CGroupCtrl *pGroup = CreateGroup(nOptionGroupWidth,pFont->GetHeight(),LTNULL);
+	LTIntPt pos(0,0);
 
-    CStaticTextCtrl *pCtrl = CreateStaticTextItem(nID,LTNULL,LTNULL,nOptionWidth,pFont->GetHeight(),LTTRUE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	CStaticTextCtrl *pCtrl = CreateStaticTextItem(nID,LTNULL,LTNULL,nOptionWidth,pFont->GetHeight(),LTTRUE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 	pos.x += nOptionWidth+nGap;
 
-    pCtrl = CreateStaticTextItem(nStringID,LTNULL,LTNULL,(nOptionGroupWidth-pos.x),pFont->GetHeight(),LTTRUE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	pCtrl = CreateStaticTextItem(nStringID,LTNULL,LTNULL,(nOptionGroupWidth-pos.x),pFont->GetHeight(),LTTRUE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 
 	pGroup->Enable(LTFALSE);
 	return m_pOptionList->AddControl(pGroup);
@@ -1379,15 +1318,15 @@ int CFolderJoin::AddOptionCtrl(int nID, int nStringID)
 int CFolderJoin::AddOptionCtrl(int nID, char *pszValue)
 {
 	CLTGUIFont *pFont = GetSmallFont();
-    CGroupCtrl *pGroup = CreateGroup(nOptionGroupWidth,pFont->GetHeight(),LTNULL);
-    LTIntPt pos(0,0);
+	CGroupCtrl *pGroup = CreateGroup(nOptionGroupWidth,pFont->GetHeight(),LTNULL);
+	LTIntPt pos(0,0);
 
-    CStaticTextCtrl *pCtrl = CreateStaticTextItem(nID,LTNULL,LTNULL,nOptionWidth,pFont->GetHeight(),LTTRUE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	CStaticTextCtrl *pCtrl = CreateStaticTextItem(nID,LTNULL,LTNULL,nOptionWidth,pFont->GetHeight(),LTTRUE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 	pos.x += nOptionWidth+nGap;
 
-    pCtrl = CreateStaticTextItem(pszValue,LTNULL,LTNULL,(nOptionGroupWidth-pos.x),pFont->GetHeight(),LTTRUE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	pCtrl = CreateStaticTextItem(pszValue,LTNULL,LTNULL,(nOptionGroupWidth-pos.x),pFont->GetHeight(),LTTRUE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 
 	return m_pOptionList->AddControl(pGroup);
 }
@@ -1395,15 +1334,15 @@ int CFolderJoin::AddOptionCtrl(int nID, char *pszValue)
 int CFolderJoin::AddOptionCtrl(char *pszOption, char *pszValue)
 {
 	CLTGUIFont *pFont = GetSmallFont();
-    CGroupCtrl *pGroup = CreateGroup(nOptionGroupWidth,pFont->GetHeight(),LTNULL);
-    LTIntPt pos(0,0);
+	CGroupCtrl *pGroup = CreateGroup(nOptionGroupWidth,pFont->GetHeight(),LTNULL);
+	LTIntPt pos(0,0);
 
-    CStaticTextCtrl *pCtrl = CreateStaticTextItem(pszOption,LTNULL,LTNULL,nOptionWidth,pFont->GetHeight(),LTFALSE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	CStaticTextCtrl *pCtrl = CreateStaticTextItem(pszOption,LTNULL,LTNULL,nOptionWidth,pFont->GetHeight(),LTFALSE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 	pos.x += nOptionWidth+nGap;
 
-    pCtrl = CreateStaticTextItem(pszValue,LTNULL,LTNULL,(nOptionGroupWidth-pos.x),pFont->GetHeight(),LTFALSE,pFont);
-    pGroup->AddControl(pCtrl,pos,LTTRUE);
+	pCtrl = CreateStaticTextItem(pszValue,LTNULL,LTNULL,(nOptionGroupWidth-pos.x),pFont->GetHeight(),LTFALSE,pFont);
+	pGroup->AddControl(pCtrl,pos,LTTRUE);
 
 	return m_pOptionList->AddControl(pGroup);
 }
@@ -1417,15 +1356,15 @@ void CFolderJoin::DrawBar(HSURFACE hDestSurf,LTRect *rect)
 	float yr = g_pInterfaceResMgr->GetYRatio();
 
 	//Draw server bar
-    LTRect barRect(xo+rect->left, rect->top, xo + (rect->right * yr), rect->top+nBarHeight);
+	LTRect barRect(xo+rect->left, rect->top, xo + (rect->right * yr), rect->top+nBarHeight);
 
-    g_pOptimizedRenderer->FillRect(hDestSurf,&barRect,m_hBarColor);
+	g_pOptimizedRenderer->FillRect(hDestSurf,&barRect,m_hBarColor);
 
 	barRect.left += 2;
 	barRect.right -= 2;
 	barRect.top += 2;
 	barRect.bottom -= 2;
-    g_pOptimizedRenderer->FillRect(hDestSurf,&barRect,m_hShadeColor);
+	g_pOptimizedRenderer->FillRect(hDestSurf,&barRect,m_hShadeColor);
 
 }
 void CFolderJoin::DrawFrame(HSURFACE hDestSurf,LTRect *rect)
@@ -1434,21 +1373,18 @@ void CFolderJoin::DrawFrame(HSURFACE hDestSurf,LTRect *rect)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::UpdateLists
 //
-//	ROUTINE:	CFolderJoin::UpdateLists
-//
-//	PURPOSE:	Updates the lists
-//
+//	PURPOSE: Updates the lists
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::UpdateLists(LTBOOL bForce)
 {
 	// Check for a forced update...
 
 	if (m_bForceNextUpdate)
 	{
-        bForce             = LTTRUE;
-        m_bForceNextUpdate = LTFALSE;
+		bForce			 = LTTRUE;
+		m_bForceNextUpdate = LTFALSE;
 	}
 
 
@@ -1492,7 +1428,7 @@ void CFolderJoin::UpdateLists(LTBOOL bForce)
 	if (bForce)
 	{
 		timeLastFullUpdate = GetTickCount();
-		bDelayNewServer    = LTFALSE;
+		bDelayNewServer	= LTFALSE;
 	}
 
 
@@ -1505,23 +1441,18 @@ void CFolderJoin::UpdateLists(LTBOOL bForce)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::UpdateServers
 //
-//	ROUTINE:	CFolderJoin::UpdateServers
-//
-//	PURPOSE:	Updates the servers
-//
+//	PURPOSE: Updates the servers
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::UpdateServers(LTBOOL bForce)
 {
 	// Determine if our selection has changed...
-
 	int nOldSel   = m_pServerList->GetSelectedItem();
 	int nOldStart = m_pServerList->GetStartIndex();
 
 
 	// Determine if any data changed...
-
 	if (!bForce)
 	{
 		return;
@@ -1529,7 +1460,6 @@ void CFolderJoin::UpdateServers(LTBOOL bForce)
 
 
 	// Get our filters...
-
 	int nGameFilter = GetGameFilter();
 	int nPopFilter  = GetPopFilter();
 
@@ -1538,23 +1468,20 @@ void CFolderJoin::UpdateServers(LTBOOL bForce)
 
 
 	// Get the previous selected item...
-
-	void*  pCurHandle = GetCurGameServerHandle();
-    LTBOOL bSelSet    = LTFALSE;
+	void* pCurHandle	= GetCurGameServerHandle();
+	LTBOOL bSelSet	= LTFALSE;
 
 
 	// Rebuild the entire list...
-
 	m_pServerList->RemoveAllControls();
 
-    CGameSpyServer* pGame = GetGameSpyClientMgr()->GetFirstServer();
+	CGameSpyServer* pGame = GetGameSpyClientMgr()->GetFirstServer();
 	int nIndex = -1;
 
 	while (pGame && pGame->IsInitialized())
 	{
 		// Check our filters...
-
-        LTBOOL bPass = LTTRUE;
+		LTBOOL bPass = LTTRUE;
 
 		if (0 == pGame->GetMaxPlayers())
 			bPass = LTFALSE;
@@ -1573,7 +1500,7 @@ void CFolderJoin::UpdateServers(LTBOOL bForce)
 
 			if (stricmp(sType, "deathmatch") == 0) nType = DEATHMATCH;
 			if (stricmp(sType, "H.A.R.M. vs. UNITY") == 0) nType = COOPERATIVE_ASSAULT;
-            if (nType != nGameFilter) bPass = LTFALSE;
+			if (nType != nGameFilter) bPass = LTFALSE;
 		}
 
 		if (nPopFilter != POP_FILTER_ALL)
@@ -1583,40 +1510,36 @@ void CFolderJoin::UpdateServers(LTBOOL bForce)
 
 			switch (nPopFilter)
 			{
-                case POP_FILTER_NOTEMPTY: if (nPlrs == 0) bPass = LTFALSE; break;
-                case POP_FILTER_NOTFULL:  if (nPlrs >= nMax) bPass = LTFALSE; break;
-                case POP_FILTER_NOTBOTH:  if (nPlrs == 0 || nPlrs >= nMax) bPass = LTFALSE; break;
+				case POP_FILTER_NOTEMPTY: if (nPlrs == 0) bPass = LTFALSE; break;
+				case POP_FILTER_NOTFULL:  if (nPlrs >= nMax) bPass = LTFALSE; break;
+				case POP_FILTER_NOTBOTH:  if (nPlrs == 0 || nPlrs >= nMax) bPass = LTFALSE; break;
 			}
 		}
 
 
 		if (!bPass)
 		{
-            pGame = GetGameSpyClientMgr()->GetNextServer();
+			pGame = GetGameSpyClientMgr()->GetNextServer();
 			continue;
 		}
 
 
 		// Add a new control for this game service...
-
 		nIndex = AddServerCtrl(pGame);
 
 		// Update the current selection...
-
 		if (pGame->GetHandle() == pCurHandle)
 		{
 			m_pServerList->SelectItem(nIndex);
-            bSelSet = LTTRUE;
+			bSelSet = LTTRUE;
 		}
 
 		// Get the next game service...
-
-        pGame = GetGameSpyClientMgr()->GetNextServer();
+		pGame = GetGameSpyClientMgr()->GetNextServer();
 	}
 
 
 	// Update our current game service if necessary...
-
 	if (bSelSet)
 	{
 		int nOldOffset = nOldSel - nOldStart;
@@ -1633,29 +1556,23 @@ void CFolderJoin::UpdateServers(LTBOOL bForce)
 	else
 	{
 		m_pServerList->SelectItem(CListCtrl::kNoSelection);
-        SetCurGameServerHandle(LTNULL);
+		SetCurGameServerHandle(LTNULL);
 	}
 
-
 	// Update our server counts...
-
-    uint32 dwNumServers = GetGameSpyClientMgr()->GetNumServers();
+	uint32 dwNumServers = GetGameSpyClientMgr()->GetNumServers();
 	SetServerCounts(dwNumServers, nIndex+1);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::UpdatePlayers
 //
-//	ROUTINE:	CFolderJoin::UpdatePlayers
-//
-//	PURPOSE:	Updates the sub menu
-//
+//	PURPOSE: Updates the sub menu
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::UpdatePlayers(LTBOOL bForce)
 {
 	// Determine if any data changed...
-
 	if (!bForce)
 	{
 		return;
@@ -1663,12 +1580,10 @@ void CFolderJoin::UpdatePlayers(LTBOOL bForce)
 
 
 	// Remove all options...
-
 	m_pPlayerList->RemoveAllControls();
 
 
 	// Get the current game service...
-
 	void* pHandle = GetCurGameServerHandle();
 	if (!pHandle) return;
 
@@ -1680,7 +1595,6 @@ void CFolderJoin::UpdatePlayers(LTBOOL bForce)
 
 
 	// Set our sort dir based on the sort type...
-
 	switch (m_nPlayerSort)
 	{
 		case FSS_SORT_NAME:
@@ -1705,7 +1619,6 @@ void CFolderJoin::UpdatePlayers(LTBOOL bForce)
 
 
 	// Add each player...
-
 	CGameSpyPlayer* pPlr  = pGame->GetFirstPlayer();
 	int nIndex = 0;
 
@@ -1721,19 +1634,15 @@ void CFolderJoin::UpdatePlayers(LTBOOL bForce)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::UpdateOptions
 //
-//	ROUTINE:	CFolderJoin::UpdateOptions
-//
-//	PURPOSE:	Updates the sub menu
-//
+//	PURPOSE: Updates the sub menu
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::UpdateOptions(LTBOOL bForce)
 {
 	// Update our sort light...
 
 	// Determine if any data changed...
-
 	if (!bForce)
 	{
 		return;
@@ -1741,12 +1650,10 @@ void CFolderJoin::UpdateOptions(LTBOOL bForce)
 
 
 	// Remove all options...
-
 	m_pOptionList->RemoveAllControls();
 
 
 	// Get the current game service...
-
 	void* pHandle = GetCurGameServerHandle();
 	if (!pHandle) return;
 
@@ -1771,7 +1678,7 @@ void CFolderJoin::UpdateOptions(LTBOOL bForce)
 #ifdef _DEMO
 		char sVer[16];
 		sprintf(sVer,"%d.%.3d",GAME_HANDSHAKE_VER_MAJOR,(GAME_HANDSHAKE_VER_MINOR-1));
-    	HSTRING hDemoBuildVersion = g_pLTClient->FormatString(IDS_DEMOVERSION);
+		HSTRING hDemoBuildVersion = g_pLTClient->FormatString(IDS_DEMOVERSION);
 
 		if ((stricmp(sVer,sGameVer) == 0) && hDemoBuildVersion)
 		{
@@ -1800,7 +1707,6 @@ void CFolderJoin::UpdateOptions(LTBOOL bForce)
 
 
 	// Check for password protection...
-
 	char* sPassword = pGame->GetStringValue("Password");
 	if (sPassword && sPassword[0] != '\0')
 	{
@@ -1861,22 +1767,17 @@ void CFolderJoin::UpdateOptions(LTBOOL bForce)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoin::SortPlayers
 //
-//	ROUTINE:	CFolderJoin::SortPlayers
-//
-//	PURPOSE:	Sorts the players
-//
+//	PURPOSE: Sorts the players
 // ----------------------------------------------------------------------- //
-
 void CFolderJoin::SortPlayers()
 {
 	// Sanity checks...
-
 	if (!m_pCurServerHandle) return;
 
 
 	// Get the server from the handle...
-
 	CGameSpyServer* pGame = GetGameSpyClientMgr()->GetServerFromHandle(GetCurGameServerHandle());
 	if (!pGame) return;
 
@@ -1884,7 +1785,6 @@ void CFolderJoin::SortPlayers()
 
 
 	// Set our sort dir based on the sort type...
-
 	switch (m_nPlayerSort)
 	{
 		case FSS_SORT_NAME:
@@ -1909,7 +1809,6 @@ void CFolderJoin::SortPlayers()
 
 
 	// Force the next update...
-
 	ForceNextUpdate();
 }
 
@@ -1920,7 +1819,7 @@ void JoinCallBack(LTBOOL bReturn, void *pData)
 	if (bReturn && pThisFolder)
 	{
 		pThisFolder->JoinCurGame();
-    }
+	}
 }
 
 
@@ -1956,7 +1855,7 @@ void CFolderJoin::Escape()
 {
 	if (m_pPassEdit && GetCapture() == m_pPassEdit)
 	{
-        SetCapture(LTNULL);
+		SetCapture(LTNULL);
 		m_szPassword[0] = LTNULL;
 		RemoveFixedControl(m_pPassEdit);
 		RemoveFixedControl(m_pPassLabel);
@@ -1979,7 +1878,7 @@ void CFolderJoin::AskForPassword()
 
 	m_pPassEdit = CreateEditCtrl(" ", CMD_EDIT_PASS, IDS_HELP_ENTER_PASSWORD, m_szPassword, sizeof(m_szPassword), 25, LTTRUE);
 	m_pPassEdit->EnableCursor();
-    m_pPassEdit->Enable(LTFALSE);
+	m_pPassEdit->Enable(LTFALSE);
 	m_pPassEdit->SetAlignment(LTF_JUSTIFY_CENTER);
 	m_pPassEdit->SetParam2(FC_DONT_REPOS);
 
@@ -1987,7 +1886,7 @@ void CFolderJoin::AskForPassword()
 	g_pLayoutMgr->GetMessageBoxBackground(szBack,sizeof(szBack));
 
 	m_pPassBack = debug_new(CBitmapCtrl);
-    m_pPassBack->Create(g_pLTClient,szBack);
+	m_pPassBack->Create(g_pLTClient,szBack);
 	m_pPassBack->SetParam2(FC_DONT_REPOS);
 
 	uint32 nWidth, nHeight;
@@ -2016,8 +1915,8 @@ void CFolderJoin::AskForPassword()
 
 	SetCapture(m_pPassEdit);
 	m_pPassEdit->SetColor(m_hSelectedColor,m_hSelectedColor,m_hSelectedColor);
-    m_pPassEdit->Select(LTTRUE);
-    m_pPassLabel->Select(LTFALSE);
+	m_pPassEdit->Select(LTTRUE);
+	m_pPassLabel->Select(LTFALSE);
 
 
 }
@@ -2069,7 +1968,7 @@ LTBOOL CFolderJoin::OnLButtonDblClick(int x, int y)
 	CLTGUICtrl* pCtrl = GetSelectedControl();
 	if (pCtrl==m_pServerList && !m_pServerList->OnLButtonDblClick( x, y))
 		return OnEnter();
-    
+	
 	return CBaseFolder::OnLButtonDblClick( x, y);
 }
 
@@ -2079,7 +1978,7 @@ LTBOOL CFolderJoin::HandleKeyDown(int key, int rep)
 	if (key == VK_F5)
 	{
 		SetState(FSS_GETSERVICES);
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return CBaseFolder::HandleKeyDown(key,rep);
+	return CBaseFolder::HandleKeyDown(key,rep);
 }

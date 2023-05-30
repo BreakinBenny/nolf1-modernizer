@@ -26,17 +26,16 @@ public:
 	CFolderLoad();
 	virtual ~CFolderLoad();
 
-    LTBOOL Build();
-    void OnFocus(LTBOOL bFocus);
+	LTBOOL Build();
+	void OnFocus(LTBOOL bFocus);
 
 	LTBOOL HandleKeyDown(int key, int rep);
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 	void	BuildSavedLevelList();
 	void	ClearSavedLevelList();
 	void	ParseSaveString(char* pszSaveStr, SaveGameData *pSG, LTBOOL bUserName = LTTRUE);
-
 
 };
 

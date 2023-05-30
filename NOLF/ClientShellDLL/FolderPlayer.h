@@ -18,11 +18,11 @@ public:
 	virtual ~CFolderPlayer();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL   Build();
 	void	Term();
 
 	virtual void	Escape();
-    virtual void    OnFocus(LTBOOL bFocus);
+	virtual void	OnFocus(LTBOOL bFocus);
 	virtual void	CreateInterfaceSFX();
 	virtual void	UpdateInterfaceSFX();
 	virtual void	RemoveInterfaceSFX();
@@ -32,8 +32,8 @@ public:
 	virtual LTBOOL	OnRButtonUp(int x, int y);
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
-    LTBOOL   CreatePlayerModel(LTBOOL bNewSkin = LTTRUE);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	LTBOOL   CreatePlayerModel(LTBOOL bNewSkin = LTTRUE);
 	void	BuildModelList();
 	void	ClearModelList();
 
@@ -52,14 +52,14 @@ protected:
 	char	m_szPlayerHead[128];
 	char	m_szModName[128];
 	char	m_szStyleName[128];
-	int		m_nTargetNameTransparency;
-	int		m_nTargetNameSize;
-	int		m_nModNum;
-	int		m_nSkinNum;
-	int		m_nHeadNum;
+	int	m_nTargetNameTransparency;
+	int	m_nTargetNameSize;
+	int	m_nModNum;
+	int	m_nSkinNum;
+	int	m_nHeadNum;
 	LTBOOL	m_bRestoreSkinHead;
-	int		m_nTeam;
-	int		m_nConnect;
+	int	m_nTeam;
+	int	m_nConnect;
 	LTBOOL	m_bAutoSwitchWeapons;
 	LTBOOL	m_bAutoSwitchAmmo;
 	LTBOOL	m_bIgnoreTaunts;

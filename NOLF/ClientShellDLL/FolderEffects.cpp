@@ -26,12 +26,12 @@ namespace
 
 CFolderEffects::CFolderEffects()
 {
-	m_bTracers = LTFALSE;
+	m_bTracers	= LTFALSE;
 	m_bShellCasings = LTFALSE;
 	m_bMuzzleLight = LTFALSE;
-	m_bWeather = LTFALSE;
-	m_nImpact = 2;
-	m_nDebris = 2;
+	m_bWeather	= LTFALSE;
+	m_nImpact	= 2;
+	m_nDebris	= 2;
 }
 
 CFolderEffects::~CFolderEffects()
@@ -122,7 +122,7 @@ void CFolderEffects::OnFocus(LTBOOL bFocus)
 	}
 	else
 	{
-        UpdateData(LTTRUE);
+		UpdateData(LTTRUE);
 		WriteConsoleInt("Tracers",(int)m_bTracers);
 		WriteConsoleInt("ShellCasings",(int)m_bShellCasings);
 		WriteConsoleInt("MuzzleLight",(int)m_bMuzzleLight);
@@ -133,5 +133,3 @@ void CFolderEffects::OnFocus(LTBOOL bFocus)
 	}
 	CBaseFolder::OnFocus(bFocus);
 }
-
-

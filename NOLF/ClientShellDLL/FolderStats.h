@@ -18,19 +18,19 @@ public:
 	virtual ~CFolderStats();
 
 	// Build the folder
-    LTBOOL   Build();
-	void	Term();
-	void	Escape();
+	LTBOOL Build();
+	void Term();
+	void Escape();
 
-    void    OnFocus(LTBOOL bFocus);
-    uint32 OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	void	OnFocus(LTBOOL bFocus);
+	uint32 OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
-    virtual LTBOOL	HandleKeyDown(int key, int rep);
-    virtual LTBOOL	HandleKeyUp(int key);
-	virtual LTBOOL	OnUp() {return OnPageUp();}
-	virtual LTBOOL	OnDown() {return OnPageDown();}
+	virtual LTBOOL HandleKeyDown(int key, int rep);
+	virtual LTBOOL HandleKeyUp(int key);
+	virtual LTBOOL OnUp() {return OnPageUp();}
+	virtual LTBOOL OnDown() {return OnPageDown();}
 
-    virtual LTBOOL HandleForceUpdate() { UpdateData(); return LTTRUE; }
+	virtual LTBOOL HandleForceUpdate() { UpdateData(); return LTTRUE; }
 
 private:
 

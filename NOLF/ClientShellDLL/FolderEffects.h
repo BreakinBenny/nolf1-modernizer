@@ -18,13 +18,13 @@ public:
 	virtual ~CFolderEffects();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL   Build();
 	void	Term();
 
-    void    OnFocus(LTBOOL bFocus);
+	void	OnFocus(LTBOOL bFocus);
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
 	LTBOOL	m_bTracers;
 	LTBOOL	m_bMuzzleLight;
@@ -32,7 +32,6 @@ protected:
 	LTBOOL	m_bWeather;
 	int		m_nImpact;
 	int		m_nDebris;
-
 
 };
 

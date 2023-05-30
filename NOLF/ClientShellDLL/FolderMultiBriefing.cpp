@@ -19,15 +19,9 @@ extern CGameClientShell* g_pGameClientShell;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CFolderMultiBriefing::CFolderMultiBriefing()
-{
+CFolderMultiBriefing::CFolderMultiBriefing(){}
 
-}
-
-CFolderMultiBriefing::~CFolderMultiBriefing()
-{
-
-}
+CFolderMultiBriefing::~CFolderMultiBriefing(){}
 
 
 LTBOOL CFolderMultiBriefing::Build()
@@ -40,7 +34,7 @@ LTBOOL CFolderMultiBriefing::Build()
 	UseMain(LTFALSE);
 	UseContinue(LTFALSE);
 
-	return 	CBaseFolder::Build();
+	return CBaseFolder::Build();
 ;
 }
 
@@ -95,6 +89,4 @@ void CFolderMultiBriefing::OnFocus(LTBOOL bFocus)
 		RemoveFree();
 	}
 	CBaseFolder::OnFocus(bFocus);
-
 }
-

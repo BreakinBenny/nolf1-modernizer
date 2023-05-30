@@ -18,22 +18,22 @@ public:
 	virtual ~CFolderMultiSummary();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL   Build();
 	void	Escape();
 
 	LTBOOL	OnEnter() {Escape(); return LTTRUE;}
 	LTBOOL	OnLButtonUp(int x, int y) {Escape(); return LTTRUE;}
 
-    void    OnFocus(LTBOOL bFocus);
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	void	OnFocus(LTBOOL bFocus);
+	uint32 OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
-	virtual LTBOOL	Render(HSURFACE hDestSurf);
+	virtual LTBOOL Render(HSURFACE hDestSurf);
 
 
 protected:
 //	void	BuildObjectivesList();
 
-	LTBOOL 	m_bEscaped;
+	LTBOOL m_bEscaped;
 
 
 };

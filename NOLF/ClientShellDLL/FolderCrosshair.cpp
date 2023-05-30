@@ -32,13 +32,13 @@ namespace
 
 CFolderCrosshair::CFolderCrosshair()
 {
-    m_bCrosshair = LTFALSE;
+	m_bCrosshair = LTFALSE;
 	m_nAlpha = 0;
 	m_nColorR = 0;
 	m_nColorG = 0;
 	m_nColorB = 0;
 	m_nStyle = 0;
-    m_bDynamic = LTFALSE;
+	m_bDynamic = LTFALSE;
 
 }
 
@@ -107,7 +107,7 @@ LTBOOL CFolderCrosshair::Build()
 
 LTBOOL CFolderCrosshair::OnLeft()
 {
-    LTBOOL bHandled = CBaseFolder::OnLeft();
+	LTBOOL bHandled = CBaseFolder::OnLeft();
 	if (bHandled)
 	{
 		UpdateData();
@@ -118,7 +118,7 @@ LTBOOL CFolderCrosshair::OnLeft()
 
 LTBOOL CFolderCrosshair::OnRight()
 {
-    LTBOOL bHandled = CBaseFolder::OnRight();
+	LTBOOL bHandled = CBaseFolder::OnRight();
 	if (bHandled)
 	{
 		UpdateData();
@@ -129,7 +129,7 @@ LTBOOL CFolderCrosshair::OnRight()
 
 LTBOOL CFolderCrosshair::OnLButtonUp(int x, int y)
 {
-    LTBOOL bHandled = CBaseFolder::OnLButtonUp(x,y);
+	LTBOOL bHandled = CBaseFolder::OnLButtonUp(x,y);
 	if (bHandled)
 	{
 		UpdateData();
@@ -140,7 +140,7 @@ LTBOOL CFolderCrosshair::OnLButtonUp(int x, int y)
 
 LTBOOL CFolderCrosshair::OnRButtonUp(int x, int y)
 {
-    LTBOOL bHandled = CBaseFolder::OnRButtonUp(x,y);
+	LTBOOL bHandled = CBaseFolder::OnRButtonUp(x,y);
 	if (bHandled)
 	{
 		UpdateData();
@@ -156,7 +156,7 @@ void CFolderCrosshair::OnFocus(LTBOOL bFocus)
 	{
 		m_bCrosshair = g_pInterfaceMgr->IsCrosshairEnabled();
 		GetConsoleVariables();
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 		g_pInterfaceMgr->GetPlayerStats()->UpdateCrosshairColors();
 	}
 	else
@@ -172,15 +172,15 @@ void CFolderCrosshair::GetConsoleVariables()
 {
 	if (!g_vtCrosshairGapMax.IsInitted())
 	{
-        g_vtCrosshairGapMax.Init(g_pLTClient, "CrosshairGapMax", NULL, 0.0f);
-        g_vtCrosshairBarMax.Init(g_pLTClient, "CrosshairBarMax", NULL, 0.0f);
+		g_vtCrosshairGapMax.Init(g_pLTClient, "CrosshairGapMax", NULL, 0.0f);
+		g_vtCrosshairBarMax.Init(g_pLTClient, "CrosshairBarMax", NULL, 0.0f);
 
-        g_vtCrosshairStyle.Init(g_pLTClient, "CrosshairStyle", NULL, 0.0f);
-        g_vtCrosshairColorR.Init(g_pLTClient, "CrosshairColorR", NULL, 1.0f);
-        g_vtCrosshairColorG.Init(g_pLTClient, "CrosshairColorG", NULL, 1.0f);
-        g_vtCrosshairColorB.Init(g_pLTClient, "CrosshairColorB", NULL, 1.0f);
-        g_vtCrosshairAlpha.Init(g_pLTClient, "CrosshairAlpha", NULL, 1.0f);
-        g_vtCrosshairDynamic.Init(g_pLTClient, "CrosshairDynamic", NULL, 1.0f);
+		g_vtCrosshairStyle.Init(g_pLTClient, "CrosshairStyle", NULL, 0.0f);
+		g_vtCrosshairColorR.Init(g_pLTClient, "CrosshairColorR", NULL, 1.0f);
+		g_vtCrosshairColorG.Init(g_pLTClient, "CrosshairColorG", NULL, 1.0f);
+		g_vtCrosshairColorB.Init(g_pLTClient, "CrosshairColorB", NULL, 1.0f);
+		g_vtCrosshairAlpha.Init(g_pLTClient, "CrosshairAlpha", NULL, 1.0f);
+		g_vtCrosshairDynamic.Init(g_pLTClient, "CrosshairDynamic", NULL, 1.0f);
 
 	}
 
@@ -195,11 +195,11 @@ void CFolderCrosshair::GetConsoleVariables()
 
 void CFolderCrosshair::SetConsoleVariables()
 {
-    g_vtCrosshairAlpha.SetFloat( (LTFLOAT)m_nAlpha / 10.0f );
-    g_vtCrosshairColorR.SetFloat( (LTFLOAT)m_nColorR / 255.0f);
-    g_vtCrosshairColorG.SetFloat( (LTFLOAT)m_nColorG / 255.0f);
-    g_vtCrosshairColorB.SetFloat( (LTFLOAT)m_nColorB / 255.0f);
-    g_vtCrosshairStyle.SetFloat( (LTFLOAT)m_nStyle);
+	g_vtCrosshairAlpha.SetFloat( (LTFLOAT)m_nAlpha / 10.0f );
+	g_vtCrosshairColorR.SetFloat( (LTFLOAT)m_nColorR / 255.0f);
+	g_vtCrosshairColorG.SetFloat( (LTFLOAT)m_nColorG / 255.0f);
+	g_vtCrosshairColorB.SetFloat( (LTFLOAT)m_nColorB / 255.0f);
+	g_vtCrosshairStyle.SetFloat( (LTFLOAT)m_nStyle);
 	g_vtCrosshairDynamic.SetFloat(  (m_bDynamic ? 1.0f : 0.0f) );
 	g_pInterfaceMgr->GetPlayerStats()->UpdateCrosshairColors();
 
@@ -207,11 +207,11 @@ void CFolderCrosshair::SetConsoleVariables()
 }
 void CFolderCrosshair::WriteConsoleVariables()
 {
-    g_vtCrosshairAlpha.WriteFloat( (LTFLOAT)m_nAlpha / 10.0f );
-    g_vtCrosshairColorR.WriteFloat( (LTFLOAT)m_nColorR / 255.0f);
-    g_vtCrosshairColorG.WriteFloat( (LTFLOAT)m_nColorG / 255.0f);
-    g_vtCrosshairColorB.WriteFloat( (LTFLOAT)m_nColorB / 255.0f);
-    g_vtCrosshairStyle.WriteFloat( (LTFLOAT)m_nStyle);
+	g_vtCrosshairAlpha.WriteFloat( (LTFLOAT)m_nAlpha / 10.0f );
+	g_vtCrosshairColorR.WriteFloat( (LTFLOAT)m_nColorR / 255.0f);
+	g_vtCrosshairColorG.WriteFloat( (LTFLOAT)m_nColorG / 255.0f);
+	g_vtCrosshairColorB.WriteFloat( (LTFLOAT)m_nColorB / 255.0f);
+	g_vtCrosshairStyle.WriteFloat( (LTFLOAT)m_nStyle);
 	g_vtCrosshairDynamic.WriteFloat(  (m_bDynamic ? 1.0f : 0.0f) );
 	g_pInterfaceMgr->GetPlayerStats()->UpdateCrosshairColors();
 
@@ -220,18 +220,18 @@ void CFolderCrosshair::WriteConsoleVariables()
 
 LTBOOL CFolderCrosshair::Render ( HSURFACE hDestSurf )
 {
-    LTBOOL bRendered = CBaseFolder::Render(hDestSurf);
+	LTBOOL bRendered = CBaseFolder::Render(hDestSurf);
 	if (bRendered)
 	{
-        LTIntPt pos = m_pStyle->GetPos();
+		LTIntPt pos = m_pStyle->GetPos();
 		pos.x += m_nItemSpacing + g_pInterfaceResMgr->GetXOffset();
 		pos.y += m_nItemSpacing + m_pStyle->GetHeight() + g_pInterfaceResMgr->GetYOffset();
 		int nSize = (int)(g_vtCrosshairGapMax.GetFloat() + g_vtCrosshairBarMax.GetFloat());
-        LTRect rect(pos.x,pos.y,pos.x+nSize,pos.y+nSize);
+		LTRect rect(pos.x,pos.y,pos.x+nSize,pos.y+nSize);
 
-        g_pOptimizedRenderer->FillRect(hDestSurf,&rect,LTNULL);
+		g_pOptimizedRenderer->FillRect(hDestSurf,&rect,LTNULL);
 
-        g_pInterfaceMgr->GetPlayerStats()->DrawCrosshair(hDestSurf,pos.x+nSize/2,pos.y+nSize/2,LTTRUE);
+		g_pInterfaceMgr->GetPlayerStats()->DrawCrosshair(hDestSurf,pos.x+nSize/2,pos.y+nSize/2,LTTRUE);
 	}
 	return bRendered;
 }

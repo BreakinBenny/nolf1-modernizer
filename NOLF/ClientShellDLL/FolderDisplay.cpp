@@ -74,24 +74,21 @@ int FolderDisplayCompare( const void *arg1, const void *arg2 )
 CFolderDisplay::CFolderDisplay()
 {
 
-    m_bTexture32		=   LTFALSE;
-	m_bEscape			=	LTFALSE;
-	m_bWindowedMode		=   LTFALSE;
+	m_bTexture32		=   LTFALSE;
+	m_bEscape		=	LTFALSE;
+	m_bWindowedMode	=   LTFALSE;
 	m_bBlackScreenFix	=	LTFALSE;
 
-    m_pRendererLabel		= LTNULL;
-    m_pResolutionLabel		= LTNULL;
-    m_pRendererCtrl			= LTNULL;
-    m_pResolutionCtrl		= LTNULL;
-	m_pHardwareCursor		= LTNULL;
-	m_pWindowedMode			= LTNULL;
+	m_pRendererLabel	= LTNULL;
+	m_pResolutionLabel	= LTNULL;
+	m_pRendererCtrl		= LTNULL;
+	m_pResolutionCtrl		= LTNULL;
+	m_pHardwareCursor	= LTNULL;
+	m_pWindowedMode		= LTNULL;
 	m_pBlackScreenFixCtrl	= LTNULL;
 }
 
-CFolderDisplay::~CFolderDisplay()
-{
-
-}
+CFolderDisplay::~CFolderDisplay(){}
 
 // Build the folder
 LTBOOL CFolderDisplay::Build()
@@ -102,22 +99,22 @@ LTBOOL CFolderDisplay::Build()
 //	m_pRendererLabel = AddTextItem(IDS_DISPLAY_RENDERER,	FOLDER_CMD_DISPLAY, IDS_HELP_RENDERER, LTTRUE);
 //	if (m_pRendererLabel)
 //	{
-//        m_pRendererLabel->Enable(LTFALSE);
+//		m_pRendererLabel->Enable(LTFALSE);
 //	}
 
 	// Build the array of renderers
 	BuildRendererArray();
 
 	// Add the "renderer" option
-    m_pRendererCtrl = AddCycleItem(IDS_DISPLAY_RENDERER,IDS_HELP_RENDERER,100,25,LTNULL);
+	m_pRendererCtrl = AddCycleItem(IDS_DISPLAY_RENDERER,IDS_HELP_RENDERER,100,25,LTNULL);
 
 	unsigned int i;
 	for (i=0; i < m_rendererArray.GetSize(); i++)
 	{
 		// Load the renderer formating text.  This is "Renderer: [%s - %s]" in English
-        HSTRING hRendererFormat=g_pLTClient->FormatString(IDS_DMODE_RENDERER, m_rendererArray[i].m_renderDll, m_rendererArray[i].m_description);
+		HSTRING hRendererFormat=g_pLTClient->FormatString(IDS_DMODE_RENDERER, m_rendererArray[i].m_renderDll, m_rendererArray[i].m_description);
 		m_pRendererCtrl->AddString(hRendererFormat);
-        g_pLTClient->FreeString(hRendererFormat);
+		g_pLTClient->FreeString(hRendererFormat);
 	}
 
 //	m_pResolutionLabel = AddTextItem(IDS_DISPLAY_RESOLUTION,	FOLDER_CMD_RESOLUTION, IDS_HELP_RESOLUTION, LTTRUE);
@@ -127,7 +124,7 @@ LTBOOL CFolderDisplay::Build()
 //	}
 
 	// Add the "resolution" control
-    m_pResolutionCtrl = AddCycleItem(IDS_DISPLAY_RESOLUTION,IDS_HELP_RESOLUTION,200,25,LTNULL, LTFALSE);
+	m_pResolutionCtrl = AddCycleItem(IDS_DISPLAY_RESOLUTION,IDS_HELP_RESOLUTION,200,25,LTNULL, LTFALSE);
 
 	m_pWindowedMode = AddToggle(IDS_WINDOWED_MODE, IDS_HELP_WINDOWED_MODE, 225, &m_bWindowedMode);
 	m_pWindowedMode->SetOnString(IDS_ON);
@@ -186,12 +183,12 @@ void CFolderDisplay::SetupResolutionCtrl()
 
 	// Clear the current resolutions
 	m_pResolutionCtrl->RemoveAll();
-    uint32 dwOldWidth=0;
-    uint32 dwOldHeight=0;
-    uint32 dwOldBitDepth=0;
-    uint32 dwCurWidth = 0;
-    uint32 dwCurHeight = 0;
-    uint32 dwCurBitDepth = 0;
+	uint32 dwOldWidth=0;
+	uint32 dwOldHeight=0;
+	uint32 dwOldBitDepth=0;
+	uint32 dwCurWidth = 0;
+	uint32 dwCurHeight = 0;
+	uint32 dwCurBitDepth = 0;
 	int	 nNewRes = 0;
 
 	// Get the number of resolutions
@@ -214,13 +211,13 @@ void CFolderDisplay::SetupResolutionCtrl()
 	unsigned int i;
 	for (i=0; i < nResolutions; i++)
 	{
-        uint32 dwWidth=m_rendererArray[nRendererIndex].m_resolutionArray[i].m_dwWidth;
-        uint32 dwHeight=m_rendererArray[nRendererIndex].m_resolutionArray[i].m_dwHeight;
-        uint32 dwBitDepth=m_rendererArray[nRendererIndex].m_resolutionArray[i].m_dwBitDepth;
+		uint32 dwWidth=m_rendererArray[nRendererIndex].m_resolutionArray[i].m_dwWidth;
+		uint32 dwHeight=m_rendererArray[nRendererIndex].m_resolutionArray[i].m_dwHeight;
+		uint32 dwBitDepth=m_rendererArray[nRendererIndex].m_resolutionArray[i].m_dwBitDepth;
 
-        if (    LTDIFF(dwWidth,dwOldWidth) <= LTDIFF(dwCurWidth,dwOldWidth) &&
-                LTDIFF(dwHeight,dwOldHeight) <= LTDIFF(dwCurHeight,dwOldHeight) &&
-                LTDIFF(dwBitDepth,dwOldBitDepth) < LTDIFF(dwCurBitDepth,dwOldBitDepth)
+		if (	LTDIFF(dwWidth,dwOldWidth) <= LTDIFF(dwCurWidth,dwOldWidth) &&
+				LTDIFF(dwHeight,dwOldHeight) <= LTDIFF(dwCurHeight,dwOldHeight) &&
+				LTDIFF(dwBitDepth,dwOldBitDepth) < LTDIFF(dwCurBitDepth,dwOldBitDepth)
 				)
 		{
 			nNewRes = i;
@@ -229,9 +226,9 @@ void CFolderDisplay::SetupResolutionCtrl()
 			dwCurBitDepth = dwBitDepth;
 		}
 		// Load the resolution format string.  This is "Resolution: [%dx%dx%d]" in English
-        HSTRING hResolutionFormat=g_pLTClient->FormatString(IDS_DMODE_RESOLUTION, dwWidth, dwHeight, dwBitDepth);
+		HSTRING hResolutionFormat=g_pLTClient->FormatString(IDS_DMODE_RESOLUTION, dwWidth, dwHeight, dwBitDepth);
 		m_pResolutionCtrl->AddString(hResolutionFormat);
-        g_pLTClient->FreeString(hResolutionFormat);
+		g_pLTClient->FreeString(hResolutionFormat);
 	}
 
 	m_pResolutionCtrl->SetSelIndex(nNewRes);
@@ -250,11 +247,11 @@ void CFolderDisplay::BuildRendererArray()
 	m_rendererArray.SetSize(0);
 
 	// Build the list of render modes
-    RMode *pRenderModes=g_pLTClient->GetRenderModes();
+	RMode *pRenderModes=g_pLTClient->GetRenderModes();
 
 	// Iterate through the list of render modes adding each one to the array
 	RMode *pCurrentMode=pRenderModes;
-    while (pCurrentMode != LTNULL)
+	while (pCurrentMode != LTNULL)
 	{
 		if (pCurrentMode->m_Width >= 640 && pCurrentMode->m_Height >= 480)
 		{
@@ -297,7 +294,7 @@ void CFolderDisplay::BuildRendererArray()
 	}
 
 	// Free the linked list of render modes
-    g_pLTClient->RelinquishRenderModes(pRenderModes);
+	g_pLTClient->RelinquishRenderModes(pRenderModes);
 
 	// Sort the render resolution based on screen width and height
 	for (i=0; i < m_rendererArray.GetSize(); i++)
@@ -374,36 +371,36 @@ LTBOOL CFolderDisplay::SetRenderer(int nRendererIndex, int nResolutionIndex, boo
 
 	// If the current renderer is the same as the one we are changing to, then don't set the renderer!
 	RMode currentMode;
-    if (g_pLTClient->GetRenderMode(&currentMode) == LT_OK)
+	if (g_pLTClient->GetRenderMode(&currentMode) == LT_OK)
 	{
 		// Only do this if windowed mode didn't change
 		if (IsRendererEqual(&newMode, &currentMode) && !bWindowedModeChanged)
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 	}
 
 	// Set the renderer mode
-    g_pInterfaceMgr->SetSwitchingRenderModes(LTTRUE);
-    g_pLTClient->SetRenderMode(&newMode);
-    g_pInterfaceMgr->SetSwitchingRenderModes(LTFALSE);
+	g_pInterfaceMgr->SetSwitchingRenderModes(LTTRUE);
+	g_pLTClient->SetRenderMode(&newMode);
+	g_pInterfaceMgr->SetSwitchingRenderModes(LTFALSE);
 
 	// Write the renderer information to the autoexec.cfg file
 	char szTemp[256];
 	sprintf(szTemp, "+RenderDll %s\0", newMode.m_RenderDLL);
-    g_pLTClient->RunConsoleString(szTemp);
+	g_pLTClient->RunConsoleString(szTemp);
 
 	sprintf(szTemp, "+CardDesc %s\0", newMode.m_InternalName);
-    g_pLTClient->RunConsoleString(szTemp);
+	g_pLTClient->RunConsoleString(szTemp);
 
 	sprintf(szTemp, "+screenwidth %d\0", newMode.m_Width);
-    g_pLTClient->RunConsoleString(szTemp);
+	g_pLTClient->RunConsoleString(szTemp);
 
 	sprintf(szTemp, "+screenheight %d\0", newMode.m_Height);
-    g_pLTClient->RunConsoleString(szTemp);
+	g_pLTClient->RunConsoleString(szTemp);
 
 	sprintf(szTemp, "+bitdepth %d\0", newMode.m_BitDepth);
-    g_pLTClient->RunConsoleString(szTemp);
+	g_pLTClient->RunConsoleString(szTemp);
 
 	// Swap window size and re-centre.
 	// I'm not sure I broke this, or if windowed mode was always iffy.
@@ -416,7 +413,7 @@ LTBOOL CFolderDisplay::SetRenderer(int nRendererIndex, int nResolutionIndex, boo
 	g_pInterfaceMgr->InitCursor();
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // Gets a RMode structure based on a renderer index and a resolution index
@@ -435,7 +432,7 @@ RMode CFolderDisplay::GetRendererModeStruct(int nRendererIndex, int nResolutionI
 	mode.m_Height=resolution.m_dwHeight;
 	mode.m_BitDepth=resolution.m_dwBitDepth;
 
-    mode.m_pNext=LTNULL;
+	mode.m_pNext=LTNULL;
 
 	return mode;
 }
@@ -448,35 +445,35 @@ LTBOOL CFolderDisplay::IsRendererEqual(RMode *pRenderer1, RMode *pRenderer2)
 
 	if (_mbsicmp((const unsigned char*)pRenderer1->m_RenderDLL, (const unsigned char*)pRenderer2->m_RenderDLL) != 0)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if (_mbsicmp((const unsigned char*)pRenderer1->m_InternalName, (const unsigned char*)pRenderer2->m_InternalName) != 0)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if (_mbsicmp((const unsigned char*)pRenderer1->m_Description, (const unsigned char*)pRenderer2->m_Description) != 0)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if (pRenderer1->m_Width != pRenderer2->m_Width)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if (pRenderer1->m_Height != pRenderer2->m_Height)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if (pRenderer1->m_BitDepth != pRenderer2->m_BitDepth)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // Called when the folder gains or focus
@@ -525,7 +522,7 @@ void CFolderDisplay::OnFocus(LTBOOL bFocus)
 		m_bTexture32 = pSettings->GetBoolVar("32BitTextures");
 
 
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 		SetSelection(1);
 
 	}
@@ -578,14 +575,14 @@ void CFolderDisplay::OnFocus(LTBOOL bFocus)
 			if (bRebind)
 			{
 
-                g_pLTClient->Start3D();
-                g_pLTClient->StartOptimized2D();
+				g_pLTClient->Start3D();
+				g_pLTClient->StartOptimized2D();
 
 				g_pInterfaceResMgr->DrawMessage(GetSmallFont(),IDS_REBINDING_TEXTURES);
 
-                g_pLTClient->EndOptimized2D();
-                g_pLTClient->End3D();
-                g_pLTClient->FlipScreen(0);
+				g_pLTClient->EndOptimized2D();
+				g_pLTClient->End3D();
+				g_pLTClient->FlipScreen(0);
 				g_pLTClient->RunConsoleString("RebindTextures");
 
 			}
@@ -597,7 +594,7 @@ void CFolderDisplay::OnFocus(LTBOOL bFocus)
 		else if ((GetConsoleInt("BitDepth",16) == 32) && (GetConsoleInt("PerformanceLevel",1) == 2))
 			WriteConsoleInt("DrawPortals",1);
 
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 
 	}
 	CBaseFolder::OnFocus(bFocus);
@@ -669,7 +666,7 @@ LTBOOL CFolderDisplay::OnLButtonUp(int x, int y)
 	{
 		CLTGUICtrl* pCtrl = GetControl(nControlIndex);
 		if (m_pCaptureCtrl && pCtrl != m_pCaptureCtrl)
-            return LTFALSE;
+			return LTFALSE;
 		// If the mouse is over the same control now as it was when the down message was called
 		// then send the "enter" message to the control.
 		if (nControlIndex == m_nLMouseDownItemSel)
@@ -680,7 +677,7 @@ LTBOOL CFolderDisplay::OnLButtonUp(int x, int y)
 				{
 					// Get the current resolution
 					FolderDisplayResolution currentResolution=GetCurrentSelectedResolution();
-                    LTBOOL handled = pCtrl->OnLButtonUp(x, y);
+					LTBOOL handled = pCtrl->OnLButtonUp(x, y);
 					if (handled)
 					{
 						SetupResolutionCtrl();
@@ -707,7 +704,7 @@ LTBOOL CFolderDisplay::OnLButtonUp(int x, int y)
 	{
 		m_nLMouseDownItemSel= kNoSelection;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
@@ -720,7 +717,7 @@ LTBOOL CFolderDisplay::OnRButtonUp(int x, int y)
 	{
 		CLTGUICtrl* pCtrl = GetControl(nControlIndex);
 		if (m_pCaptureCtrl && pCtrl != m_pCaptureCtrl)
-            return LTFALSE;
+			return LTFALSE;
 
 		// If the mouse is over the same control now as it was when the down message was called
 		// then send the "left" message to the control.
@@ -733,7 +730,7 @@ LTBOOL CFolderDisplay::OnRButtonUp(int x, int y)
 
 					// Get the current resolution
 					FolderDisplayResolution currentResolution=GetCurrentSelectedResolution();
-                    LTBOOL handled = pCtrl->OnRButtonUp(x,y);
+					LTBOOL handled = pCtrl->OnRButtonUp(x,y);
 					if (handled)
 					{
 						SetupResolutionCtrl();
@@ -758,7 +755,7 @@ LTBOOL CFolderDisplay::OnRButtonUp(int x, int y)
 	{
 		m_nRMouseDownItemSel= kNoSelection;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
@@ -816,4 +813,3 @@ void CFolderDisplay::ConfirmHardwareCursor(LTBOOL bReturn)
 	WriteConsoleInt("HardwareCursor",(int)m_bHardwareCursor);
 	UpdateData(LTFALSE);
 }
-

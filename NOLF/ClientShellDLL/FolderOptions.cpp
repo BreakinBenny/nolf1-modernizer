@@ -15,14 +15,9 @@ extern CGameClientShell* g_pGameClientShell;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CFolderOptions::CFolderOptions()
-{
-}
+CFolderOptions::CFolderOptions(){}
 
-CFolderOptions::~CFolderOptions()
-{
-
-}
+CFolderOptions::~CFolderOptions(){}
 
 // Build the folder
 LTBOOL CFolderOptions::Build()
@@ -33,9 +28,9 @@ LTBOOL CFolderOptions::Build()
 	AddTextItem(IDS_SCREEN,			FOLDER_CMD_DISPLAY,		IDS_HELP_DISPLAY);
 	AddTextItem(IDS_SOUND,			FOLDER_CMD_AUDIO,		IDS_HELP_SOUND);
 	AddTextItem(IDS_CONTROLS,		FOLDER_CMD_CONTROLS,	IDS_HELP_CONTROLS);
-	AddTextItem(IDS_GAME_OPTIONS,	FOLDER_CMD_GAME,		IDS_HELP_GAME_OPTIONS);
-	AddTextItem(IDS_PERFORMANCE,	FOLDER_CMD_PERFORMANCE,	IDS_HELP_PERFORMANCE);
-	AddTextItem(IDS_HUD,			FOLDER_CMD_HUD,			IDS_HELP_HUD);
+	AddTextItem(IDS_GAME_OPTIONS,	FOLDER_CMD_GAME,			IDS_HELP_GAME_OPTIONS);
+	AddTextItem(IDS_PERFORMANCE,	FOLDER_CMD_PERFORMANCE, IDS_HELP_PERFORMANCE);
+	AddTextItem(IDS_HUD,				FOLDER_CMD_HUD,			IDS_HELP_HUD);
 	AddTextItem(IDS_JUKEBOX,			FOLDER_CMD_JUKEBOX,		IDS_HELP_JUKEBOX);
 
 	// Make sure to call the base class
@@ -92,11 +87,11 @@ uint32 CFolderOptions::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPar
 
 
 // Change in focus
-void    CFolderOptions::OnFocus(LTBOOL bFocus)
+void	CFolderOptions::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
 	{
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 	}
 	else
 	{

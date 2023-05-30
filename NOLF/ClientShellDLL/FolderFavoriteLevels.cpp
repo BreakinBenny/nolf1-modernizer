@@ -15,18 +15,13 @@ extern CGameClientShell* g_pGameClientShell;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CFolderFavoriteLevels::CFolderFavoriteLevels()
-{
-}
+CFolderFavoriteLevels::CFolderFavoriteLevels(){}
 
-CFolderFavoriteLevels::~CFolderFavoriteLevels()
-{
-}
+CFolderFavoriteLevels::~CFolderFavoriteLevels(){}
 
 // Build the folder
 LTBOOL CFolderFavoriteLevels::Build()
 {
-
 
 	CreateTitle(IDS_TITLE_CUSTOMLEVELS);
 
@@ -59,7 +54,7 @@ uint32 CFolderFavoriteLevels::OnCommand(uint32 dwCommand, uint32 dwParam1, uint3
 {
 	if (dwCommand >= FOLDER_CMD_CUSTOM)
 	{
-        uint32 dwSelected = dwCommand-FOLDER_CMD_CUSTOM;
+		uint32 dwSelected = dwCommand-FOLDER_CMD_CUSTOM;
 
 		CButeMgr buteMgr;
 

@@ -18,21 +18,21 @@ public:
 	virtual ~CFolderCustomLevel();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL   Build();
 
-    void    OnFocus(LTBOOL bFocus);
+	void	OnFocus(LTBOOL bFocus);
 
-	int		CountDatFiles(FileEntry* pFiles);
+	int	CountDatFiles(FileEntry* pFiles);
 	void	AddFilesToFilenames(FileEntry* pFiles, char* pPath,  int & nIndex);
-	int		GetNumFiles()			{ return m_nFiles; }
+	int	GetNumFiles()	{ return m_nFiles; }
 
-    LTBOOL   HandleKeyDown(int key, int rep);
+	LTBOOL HandleKeyDown(int key, int rep);
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
-	int					m_nFiles;
-	char**				m_pFilenames;
+	int		m_nFiles;
+	char**	m_pFilenames;
 
 };
 

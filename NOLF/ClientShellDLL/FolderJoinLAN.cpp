@@ -64,14 +64,14 @@ LTBOOL CFolderJoinLAN::Build()
 
 	m_pPortEdit = CreateEditCtrl(" ", CMD_EDIT_PORT, IDS_HELP_ENTER_PORT, m_szPort, sizeof(m_szPort), 25, LTTRUE, GetMediumFont());
 	m_pPortEdit->EnableCursor();
-    m_pPortEdit->SetAlignment(LTF_JUSTIFY_LEFT);
+	m_pPortEdit->SetAlignment(LTF_JUSTIFY_LEFT);
 
 	m_pPortGroup = CreateGroup(640,m_pPortLabel->GetHeight(),IDS_HELP_ENTER_PORT);
 
-    LTIntPt offset = LTIntPt(0,0);
-    m_pPortGroup->AddControl(m_pPortLabel,offset,LTTRUE);
+	LTIntPt offset = LTIntPt(0,0);
+	m_pPortGroup->AddControl(m_pPortLabel,offset,LTTRUE);
 	offset.x = kColumnWidth-25;
-    m_pPortGroup->AddControl(m_pPortEdit,offset,LTFALSE);
+	m_pPortGroup->AddControl(m_pPortEdit,offset,LTFALSE);
 
 	pos = g_pLayoutMgr->GetFolderCustomPoint(FOLDER_ID_JOIN_LAN,"PortPos");
 	AddFixedControl(m_pPortGroup,pos);
@@ -86,16 +86,16 @@ uint32 CFolderJoinLAN::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPar
 {
 	switch(dwCommand)
 	{
-	case CMD_SEARCH:
+		case CMD_SEARCH:
 		{
 			FindServers();
 		}
 		break;
-	case CMD_EDIT_PORT:
+		case CMD_EDIT_PORT:
 		{
 			if (GetCapture())
 			{
-                SetCapture(LTNULL);
+				SetCapture(LTNULL);
 				m_pPortEdit->UpdateData();
 				uint16 nPort = (uint16)atoi(m_szPort);
 				if (nPort == 0 || !IsValidPort(nPort))
@@ -105,8 +105,8 @@ uint32 CFolderJoinLAN::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPar
 				}
 				
 				m_pPortEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-                m_pPortEdit->Select(LTFALSE);
-                m_pPortLabel->Select(LTTRUE);
+				m_pPortEdit->Select(LTFALSE);
+				m_pPortLabel->Select(LTTRUE);
 				ForceMouseUpdate();
 			}
 			else
@@ -114,17 +114,17 @@ uint32 CFolderJoinLAN::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPar
 				strcpy(szOldPort,m_szPort);
 				SetCapture(m_pPortEdit);
 				m_pPortEdit->SetColor(m_hSelectedColor,m_hSelectedColor,m_hSelectedColor);
-                m_pPortEdit->Select(LTTRUE);
-                m_pPortLabel->Select(LTFALSE);
+				m_pPortEdit->Select(LTTRUE);
+				m_pPortLabel->Select(LTFALSE);
 			}
 		} break;
 
-	case FOLDER_CMD_JOIN:
+		case FOLDER_CMD_JOIN:
 		{
 			if (dwParam1 >= m_lstSessions.GetSize()) return 0;
 
-		    if (g_pGameClientShell->IsInWorld())
-		    {
+			if (g_pGameClientShell->IsInWorld())
+			{
 
 				if (IsCurrentGame(m_lstSessions[dwParam1]))
 				{
@@ -140,11 +140,11 @@ uint32 CFolderJoinLAN::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPar
 					g_pInterfaceMgr->ShowMessageBox(hString,LTMB_YESNO,JoinLANCallBack,this);
 					g_pLTClient->FreeString(hString);
 				}
-		    }
-		    else
-		    {
+			}
+			else
+			{
 				JoinCurGame();
-		    }
+			}
 
 
 		} break;
@@ -157,13 +157,13 @@ uint32 CFolderJoinLAN::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPar
 
 
 // Change in focus
-void    CFolderJoinLAN::OnFocus(LTBOOL bFocus)
+void	CFolderJoinLAN::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
 	{
 		SetSelection(nFind);
 
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 	}
 	else
 	{
@@ -283,12 +283,12 @@ LTBOOL CFolderJoinLAN::SetService( )
 	NetService *pCur, *pListHead;
 	HNETSERVICE hNetService;
 
-	pCur      = NULL;
+	pCur	  = NULL;
 	pListHead = NULL;
 	hNetService = NULL;
 
-    if( g_pLTClient->GetServiceList( pListHead ) != LT_OK || !pListHead )
-        return LTFALSE;
+	if( g_pLTClient->GetServiceList( pListHead ) != LT_OK || !pListHead )
+		return LTFALSE;
 
 	// Find the service specified.
 	pCur = pListHead;
@@ -304,17 +304,17 @@ LTBOOL CFolderJoinLAN::SetService( )
 	}
 
 	// Free the service list.
-    g_pLTClient->FreeServiceList( pListHead );
+	g_pLTClient->FreeServiceList( pListHead );
 
 	// Check if tcp not found.
 	if( !hNetService )
-        return LTFALSE;
+		return LTFALSE;
 
 	// Select it.
-    if( g_pLTClient->SelectService( hNetService ) != LT_OK )
-        return LTFALSE;
+	if( g_pLTClient->SelectService( hNetService ) != LT_OK )
+		return LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
@@ -338,19 +338,16 @@ void JoinLANCallBack(LTBOOL bReturn, void *pData)
 	if (bReturn && pThisFolder)
 	{
 		pThisFolder->JoinCurGame();
-    }
+	}
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderJoinLAN::JoinGame
 //
-//	ROUTINE:	CFolderJoinLAN::JoinGame
-//
-//	PURPOSE:	Joins the given game service
-//
+//	PURPOSE: Joins the given game service
 // ----------------------------------------------------------------------- //
-
 void CFolderJoinLAN::JoinCurGame()
 {
 	// Get the currently selected game server...
@@ -363,7 +360,7 @@ void CFolderJoinLAN::JoinCurGame()
 
 	if (IsCurrentGame(m_lstSessions[nIndex]))
 	{
-        HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+		HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 		if (g_pGameClientShell->IsInWorld() && hPlayerObj)
 		{
 			g_pInterfaceMgr->ChangeState(GS_PLAYING);
@@ -415,13 +412,13 @@ LTBOOL CFolderJoinLAN::DoJoinGame(CString sAddress)
 	strncpy( req.m_TCPAddress, sIp, MAX_SGR_STRINGLEN);
 
 
-    LTRESULT dr = g_pLTClient->InitNetworking(NULL, 0);
+	LTRESULT dr = g_pLTClient->InitNetworking(NULL, 0);
 	if (dr != LT_OK)
 	{
 //		s_nErrorString = IDS_NETERR_INIT;
 //		NetStart_DisplayError(hInst);
 		g_pLTClient->CPrint("InitNetworking() : error %d", dr);
-        return(LTFALSE);
+		return(LTFALSE);
 	}
 	
 	
@@ -439,9 +436,9 @@ LTBOOL CFolderJoinLAN::DoJoinGame(CString sAddress)
 	while (nRetries >= 0)
 	{
 		// If successful, then we're done.
-        if( g_pLTClient->StartGame( &req ) == LT_OK )
+		if( g_pLTClient->StartGame( &req ) == LT_OK )
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 
 		// Wait a sec and try again.
@@ -450,7 +447,7 @@ LTBOOL CFolderJoinLAN::DoJoinGame(CString sAddress)
 	}
 
 	// All done...
-    return(LTFALSE);
+	return(LTFALSE);
 }
 
 
@@ -458,14 +455,14 @@ void CFolderJoinLAN::FindServers()
 {
 	if (!bIsInitting)
 	{
-        g_pLTClient->Start3D();
-        g_pLTClient->StartOptimized2D();
+		g_pLTClient->Start3D();
+		g_pLTClient->StartOptimized2D();
 
 		g_pInterfaceResMgr->DrawMessage(GetMediumFont(),IDS_LOOKING_FOR_SERVERS);
 
-        g_pLTClient->EndOptimized2D();
-        g_pLTClient->End3D();
-        g_pLTClient->FlipScreen(0);
+		g_pLTClient->EndOptimized2D();
+		g_pLTClient->End3D();
+		g_pLTClient->FlipScreen(0);
 
 		g_pLTClient->CPrint("init sessions");
 		bIsInitting = LTTRUE;
@@ -508,12 +505,12 @@ void CFolderJoinLAN::Escape()
 {
 	if (GetCapture() == m_pPortEdit)
 	{
-        SetCapture(LTNULL);
+		SetCapture(LTNULL);
 		strcpy(m_szPort,szOldPort);
-        m_pPortEdit->UpdateData(LTFALSE);
+		m_pPortEdit->UpdateData(LTFALSE);
 		m_pPortEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-        m_pPortEdit->Select(LTFALSE);
-        m_pPortLabel->Select(LTTRUE);
+		m_pPortEdit->Select(LTFALSE);
+		m_pPortLabel->Select(LTTRUE);
 		ForceMouseUpdate();
 	}
 	else
@@ -534,7 +531,7 @@ LTBOOL CFolderJoinLAN::HandleKeyDown(int key, int rep)
 	if (key == VK_F5)
 	{
 		FindServers();
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return CBaseFolder::HandleKeyDown(key,rep);
+	return CBaseFolder::HandleKeyDown(key,rep);
 }

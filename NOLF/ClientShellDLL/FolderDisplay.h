@@ -14,14 +14,14 @@
 
 typedef struct FolderDisplayResolution_t
 {
-    uint32 m_dwWidth;       // Screen width
-    uint32 m_dwHeight;      // Screen height
-    uint32 m_dwBitDepth;    // Screen bitdepth
+	uint32 m_dwWidth;	// Screen width
+	uint32 m_dwHeight;	// Screen height
+	uint32 m_dwBitDepth;	// Screen bitdepth
 } FolderDisplayResolution;
 
 typedef struct FolderDisplayRenderer_t
 {
-    LTBOOL   m_bHardware;
+	LTBOOL   m_bHardware;
 
 	char	m_renderDll[200];		// The DLL name for the renderer
 	char	m_internalName[200];	// This is what the DLLs use to identify a card
@@ -39,28 +39,28 @@ public:
 	virtual ~CFolderDisplay();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL	Build();
 
 	// Handle input
-    LTBOOL   OnLButtonUp(int x, int y);
-    LTBOOL   OnRButtonUp(int x, int y);
-    LTBOOL   OnLeft();
-    LTBOOL   OnRight();
-    LTBOOL   OnEnter();
+	LTBOOL	OnLButtonUp(int x, int y);
+	LTBOOL	OnRButtonUp(int x, int y);
+	LTBOOL	OnLeft();
+	LTBOOL	OnRight();
+	LTBOOL	OnEnter();
 
 	void	Escape();
-    void    OnFocus(LTBOOL bFocus);
+	void	OnFocus(LTBOOL bFocus);
 
 	void	ConfirmHardwareCursor(LTBOOL bReturn);
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 	// Build the array of renderers
 	void	BuildRendererArray();
 
 	// Returns an index into m_rendererArray for this renderer.
 	// -1 is returned if it cannot be found
-	int		GetRendererIndex(RMode *pMode);
+	int	GetRendererIndex(RMode *pMode);
 
 	// Setup the resolution control based on the currently selected resolution
 	void	SetupResolutionCtrl();
@@ -69,13 +69,13 @@ protected:
 	void	SortRenderModes(int nRendererIndex);
 
 	// Sets the renderer based on renderer index and resolution index
-    LTBOOL   SetRenderer(int nRendererIndex, int nResolutionIndex, bool bWindowedModeChanged);
+	LTBOOL   SetRenderer(int nRendererIndex, int nResolutionIndex, bool bWindowedModeChanged);
 
 	// Gets a RMode structure based on a renderer index and a resolution index
 	RMode	GetRendererModeStruct(int nRendererIndex, int nResolutionIndex);
 
 	// Returns TRUE if two renderers are the same
-    LTBOOL   IsRendererEqual(RMode *pRenderer1, RMode *pRenderer2);
+	LTBOOL   IsRendererEqual(RMode *pRenderer1, RMode *pRenderer2);
 
 	// Returns the currently selected resolution
 	FolderDisplayResolution	GetCurrentSelectedResolution();
@@ -86,23 +86,22 @@ protected:
 
 
 private:
-    LTBOOL                          m_bBitDepth32;
-    LTBOOL                          m_bTexture32;
-	LTBOOL							m_bEscape;
-	LTBOOL							m_bHardwareCursor;
-	LTBOOL							m_bWindowedMode;
-	LTBOOL							m_bBlackScreenFix;
+	LTBOOL				  m_bBitDepth32;
+	LTBOOL				  m_bTexture32;
+	LTBOOL				m_bEscape;
+	LTBOOL				m_bHardwareCursor;
+	LTBOOL				m_bWindowedMode;
+	LTBOOL				m_bBlackScreenFix;
 
-	CLTGUITextItemCtrl				*m_pRendererLabel;		// The renderer label control
-	CLTGUITextItemCtrl				*m_pResolutionLabel;	// The resolution label control
-	CCycleCtrl						*m_pRendererCtrl;		// The renderer control
-	CCycleCtrl						*m_pResolutionCtrl;		// The resolution control
-	CToggleCtrl						*m_pHardwareCursor;
-	CToggleCtrl						*m_pWindowedMode;		// The windowed mode control
-	CToggleCtrl						*m_pBlackScreenFixCtrl;		// The windowed mode control
+	CLTGUITextItemCtrl	*m_pRendererLabel;	// The renderer label control
+	CLTGUITextItemCtrl	*m_pResolutionLabel;	// The resolution label control
+	CCycleCtrl			*m_pRendererCtrl;		// The renderer control
+	CCycleCtrl			*m_pResolutionCtrl;		// The resolution control
+	CToggleCtrl			*m_pHardwareCursor;
+	CToggleCtrl			*m_pWindowedMode;	// The windowed mode control
+	CToggleCtrl			*m_pBlackScreenFixCtrl;	// The windowed mode control
 
-	CMoArray<FolderDisplayRenderer>	m_rendererArray;		// The array of renderers
-
+	CMoArray<FolderDisplayRenderer>	m_rendererArray;	// The array of renderers
 
 };
 

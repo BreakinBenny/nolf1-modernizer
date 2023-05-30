@@ -31,7 +31,7 @@ namespace {
 
 CFolderCustomLevel::CFolderCustomLevel()
 {
-    m_pFilenames = LTNULL;
+	m_pFilenames = LTNULL;
 	m_nFiles = 0;
 }
 
@@ -53,26 +53,25 @@ LTBOOL CFolderCustomLevel::Build()
 {
 	CreateTitle(IDS_TITLE_CUSTOMLEVELS);
 
-    LTBOOL bUseRetailLevels = LTFALSE;
+	LTBOOL bUseRetailLevels = LTFALSE;
 
 	// Get a list of world names and sort them alphabetically
-
-    FileEntry* pFiles = g_pLTClient->GetFileList("\\Worlds\\Extras");
+	FileEntry* pFiles = g_pLTClient->GetFileList("\\Worlds\\Extras");
 	m_nFiles = CountDatFiles(pFiles);
 
 #ifndef _DEMO
 #ifndef _FINAL
 
-    HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("EnableRetailLevels");
-    if (hVar && g_pLTClient->GetVarValueFloat(hVar) == 1.0f)
+	HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("EnableRetailLevels");
+	if (hVar && g_pLTClient->GetVarValueFloat(hVar) == 1.0f)
 	{
-        bUseRetailLevels = LTTRUE;
+		bUseRetailLevels = LTTRUE;
 	}
-    uint8 nNumPaths = g_pClientButeMgr->GetNumSingleWorldPaths();
+	uint8 nNumPaths = g_pClientButeMgr->GetNumSingleWorldPaths();
 
-    bUseRetailLevels = bUseRetailLevels ? !!(nNumPaths > 0) : LTFALSE;
+	bUseRetailLevels = bUseRetailLevels ? !!(nNumPaths > 0) : LTFALSE;
 
-    FileEntry** pFilesArray = LTNULL;
+	FileEntry** pFilesArray = LTNULL;
 
 	char pathBuf[128];
 
@@ -89,12 +88,12 @@ LTBOOL CFolderCustomLevel::Build()
 
 				if (pathBuf[0])
 				{
-                    pFilesArray[i] = g_pLTClient->GetFileList(pathBuf);
+					pFilesArray[i] = g_pLTClient->GetFileList(pathBuf);
 					m_nFiles += CountDatFiles(pFilesArray[i]);
 				}
 				else
 				{
-                    pFilesArray[i] = LTNULL;
+					pFilesArray[i] = LTNULL;
 				}
 			}
 		}
@@ -105,14 +104,14 @@ LTBOOL CFolderCustomLevel::Build()
 	m_pFilenames = debug_newa(char*, m_nFiles);
 	if (!m_pFilenames)
 	{
-        g_pLTClient->FreeFileList (pFiles);
-        return LTFALSE;
+		g_pLTClient->FreeFileList (pFiles);
+		return LTFALSE;
 	}
 	memset (m_pFilenames, 0, m_nFiles * sizeof(char*));
 
 	int nIndex = 0;
 	AddFilesToFilenames(pFiles, "", nIndex);
-    g_pLTClient->FreeFileList(pFiles);
+	g_pLTClient->FreeFileList(pFiles);
 
 #ifndef _DEMO
 #ifndef _FINAL
@@ -129,7 +128,7 @@ LTBOOL CFolderCustomLevel::Build()
 			{
 				sprintf(Buf, "%s\\", pathBuf);
 				AddFilesToFilenames(pFilesArray[i], Buf, nIndex);
-                g_pLTClient->FreeFileList(pFilesArray[i]);
+				g_pLTClient->FreeFileList(pFilesArray[i]);
 			}
 		}
 
@@ -139,7 +138,6 @@ LTBOOL CFolderCustomLevel::Build()
 #endif
 
 	// now sort the array (shellsort)
-
 	for (int i = nIndex / 2; i > 0; i = (i == 2) ? 1 : (int) (i / 2.2))
 	{
 		for (int j = i; j < nIndex; j++)
@@ -259,7 +257,6 @@ void CFolderCustomLevel::AddFilesToFilenames(FileEntry* pFiles, char* pPath, int
 				sprintf(szString, "%s%s", pPath, pBaseName);
 
 				// add this to the array
-
 				m_pFilenames[nIndex] = debug_newa(char, strlen(szString) + 1);
 				SAFE_STRCPY(m_pFilenames[nIndex], szString);
 				nIndex++;
@@ -275,7 +272,7 @@ void CFolderCustomLevel::AddFilesToFilenames(FileEntry* pFiles, char* pPath, int
 // Left, Up, Down, Right, and Enter are automatically passed through OnUp(), OnDown(), etc.
 LTBOOL CFolderCustomLevel::HandleKeyDown(int key, int rep)
 {
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 
 	switch (key)
 	{
@@ -321,7 +318,7 @@ LTBOOL CFolderCustomLevel::HandleKeyDown(int key, int rep)
 		}
 	default:
 		{
-            handled = LTFALSE;
+			handled = LTFALSE;
 			break;
 		}
 	}
@@ -329,4 +326,3 @@ LTBOOL CFolderCustomLevel::HandleKeyDown(int key, int rep)
 	// Handled the key
 	return handled;
 }
-

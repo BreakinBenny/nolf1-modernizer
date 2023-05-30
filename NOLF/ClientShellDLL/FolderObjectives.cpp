@@ -21,8 +21,8 @@ extern CGameClientShell* g_pGameClientShell;
 
 namespace
 {
-    uint32 dwNumStaticControls = 0;
-	int		nContinueIndex  = kNoSelection;
+	uint32 dwNumStaticControls = 0;
+	int	nContinueIndex  = kNoSelection;
 	uint32 CMD_SKIP = FOLDER_CMD_CUSTOM+1;
 	uint32 CMD_START = FOLDER_CMD_CUSTOM+2;
 	
@@ -34,11 +34,11 @@ namespace
 
 CFolderObjectives::CFolderObjectives()
 {
-    m_pMissionCtrl = LTNULL;
-    m_pSpacerCtrl = LTNULL;
+	m_pMissionCtrl	= LTNULL;
+	m_pSpacerCtrl	= LTNULL;
 	m_pSkipCtrl	= LTNULL;
-	m_pSelectCtrl = LTNULL;
-	m_eNextFolder = FOLDER_ID_NONE;
+	m_pSelectCtrl	= LTNULL;
+	m_eNextFolder	= FOLDER_ID_NONE;
 }
 
 CFolderObjectives::~CFolderObjectives()
@@ -53,19 +53,19 @@ LTBOOL CFolderObjectives::Build()
 	CreateTitle(IDS_TITLE_OBJECTIVES);
 
 
-    m_pMissionCtrl=AddTextItem(IDS_SPACER,LTNULL,0,LTTRUE, GetMediumFont());
+	m_pMissionCtrl=AddTextItem(IDS_SPACER,LTNULL,0,LTTRUE, GetMediumFont());
 	m_pMissionCtrl->SetFixedWidth(480);
-    m_pMissionCtrl->Enable(LTFALSE);
+	m_pMissionCtrl->Enable(LTFALSE);
 
 	AddBlankLine();
 
-    CLTGUITextItemCtrl* pCtrl=AddTextItem(IDS_OBJECTIVES,LTNULL,0,LTTRUE, GetMediumFont());
-    pCtrl->Enable(LTFALSE);
+	CLTGUITextItemCtrl* pCtrl=AddTextItem(IDS_OBJECTIVES,LTNULL,0,LTTRUE, GetMediumFont());
+	pCtrl->Enable(LTFALSE);
 
 	CLTGUIFont *pFont = GetMediumFont();
 
-    m_pSpacerCtrl = CreateTextItem(" ",LTNULL,LTNULL, LTTRUE, pFont);
-    m_pSpacerCtrl->Enable(LTFALSE);
+	m_pSpacerCtrl = CreateTextItem(" ",LTNULL,LTNULL, LTTRUE, pFont);
+	m_pSpacerCtrl->Enable(LTFALSE);
 
 	dwNumStaticControls = m_controlArray.GetSize();
 
@@ -78,7 +78,7 @@ void CFolderObjectives::Term()
 	if (m_controlArray.FindElement(m_pSpacerCtrl) >= m_controlArray.GetSize())
 	{
 		debug_delete(m_pSpacerCtrl);
-        m_pSpacerCtrl = LTNULL;
+		m_pSpacerCtrl = LTNULL;
 	}
 }
 
@@ -131,9 +131,9 @@ void CFolderObjectives::OnFocus(LTBOOL bFocus)
 
 		int missionId = pMission->nNameId;
 
-        HSTRING hTxt=g_pLTClient->FormatString(missionId);
+		HSTRING hTxt=g_pLTClient->FormatString(missionId);
 		m_pMissionCtrl->AddString(hTxt);
-        g_pLTClient->FreeString(hTxt);
+		g_pLTClient->FreeString(hTxt);
 
 		//add objectives
 		BuildObjectivesList();
@@ -143,7 +143,7 @@ void CFolderObjectives::OnFocus(LTBOOL bFocus)
 
 
 		UseBack(LTFALSE);
-	    int nHelp = LTNULL;
+		int nHelp = LTNULL;
 		m_eNextFolder = GetNextSelectionFolder(FOLDER_ID_OBJECTIVES,&nHelp);
 		UseContinue(FOLDER_ID_NONE);
 
@@ -218,17 +218,17 @@ void CFolderObjectives::BuildObjectivesList()
 
 	for (int i = 0; i < pMission->nNumObjectives ; i++)
 	{
-        uint32 objID = pMission->aObjectiveIds[i];
+		uint32 objID = pMission->aObjectiveIds[i];
 
 		CGroupCtrl *pGroup = debug_new(CGroupCtrl);
-        CLTGUITextItemCtrl *pCtrl = CreateTextItem((int)objID,LTNULL,LTNULL,LTTRUE,pFont);
+		CLTGUITextItemCtrl *pCtrl = CreateTextItem((int)objID,LTNULL,LTNULL,LTTRUE,pFont);
 		if (pCtrl)
 		{
-            pCtrl->Enable(LTFALSE);
+			pCtrl->Enable(LTFALSE);
 			pCtrl->SetFixedWidth(440);
 			int nIndex= 0;
 			CBitmapCtrl *pCheck = debug_new(CBitmapCtrl);
-            pCheck->Create(g_pLTClient,"interface\\check-off.pcx");
+			pCheck->Create(g_pLTClient,"interface\\check-off.pcx");
 
 			int strHeight = pCtrl->GetHeight();
 			int bmpHeight = pCheck->GetHeight();
@@ -237,17 +237,15 @@ void CFolderObjectives::BuildObjectivesList()
 
 			pGroup->Create(480,height);
 
-            LTIntPt offset(40, (height - strHeight) / 2 );
+			LTIntPt offset(40, (height - strHeight) / 2 );
 			pGroup->AddControl(pCtrl,offset);
 
 			offset.x = 0;
 			offset.y = (height - bmpHeight) / 2;
 			pGroup->AddControl(pCheck,offset);
-            pGroup->Enable(LTFALSE);
+			pGroup->Enable(LTFALSE);
 
 			AddFreeControl(pGroup);
 		}
-
-
 	}
 }

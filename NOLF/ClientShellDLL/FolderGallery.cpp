@@ -16,15 +16,9 @@ extern CGameClientShell* g_pGameClientShell;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CFolderGallery::CFolderGallery()
-{
+CFolderGallery::CFolderGallery(){}
 
-}
-
-CFolderGallery::~CFolderGallery()
-{
-
-}
+CFolderGallery::~CFolderGallery(){}
 
 // Build the folder
 LTBOOL CFolderGallery::Build()
@@ -75,7 +69,7 @@ void CFolderGallery::BuildMissionList()
 	for (int mis = 0; mis <= nextMission; ++mis)
 	{
 		MISSION* pMission = g_pMissionMgr->GetMission(mis);
-        uint32 cmd = (uint32)mis + FOLDER_CMD_CUSTOM;
+		uint32 cmd = (uint32)mis + FOLDER_CMD_CUSTOM;
 		if (!pMission) break;
 
 		int nameId = pMission->nNameId;
@@ -93,10 +87,7 @@ void CFolderGallery::BuildMissionList()
 		if (mis < nextMission || numItems)
 		{
 			CStaticTextCtrl *pCtrl = AddStaticTextItem(nameId,cmd,IDS_HELP_VIEW_GALLERY,0,0,LTFALSE,pFont);
-	        pCtrl->Enable((numItems > 0));
+			pCtrl->Enable((numItems > 0));
 		}
-		
 	}
-
 }
-

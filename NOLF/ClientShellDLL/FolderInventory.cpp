@@ -39,13 +39,10 @@ CFolderInventory::~CFolderInventory()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderInventory::Build
 //
-//	ROUTINE:	CFolderInventory::Build
-//
-//	PURPOSE:	Build the folder
-//
+//	PURPOSE: Build the folder
 // ----------------------------------------------------------------------- //
-
 LTBOOL CFolderInventory::Build()
 {
 	CreateTitle(IDS_TITLE_INVENTORY);
@@ -60,20 +57,17 @@ LTBOOL CFolderInventory::Build()
 	LTIntPt pos = g_pLayoutMgr->GetFolderCustomPoint(FOLDER_ID_INVENTORY,"StartPos");
 	AddFixedControl(m_pMissionCtrl,pos);
 
-    LTBOOL success = CBaseSelectionFolder::Build();
+	LTBOOL success = CBaseSelectionFolder::Build();
 	return success;
 
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderInventory::OnFocus
 //
-//	ROUTINE:	CFolderInventory::OnFocus
-//
-//	PURPOSE:	Handle gaining or losing focus
-//
+//	PURPOSE: Handle gaining or losing focus
 // ----------------------------------------------------------------------- //
-
 void CFolderInventory::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
@@ -104,13 +98,10 @@ void CFolderInventory::OnFocus(LTBOOL bFocus)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderInventory::BuildInventoryList
 //
-//	ROUTINE:	CFolderInventory::BuildInventoryList
-//
-//	PURPOSE:	Create the list of Inventory items
-//
+//	PURPOSE: Create the list of Inventory items
 // ----------------------------------------------------------------------- //
-
 void	CFolderInventory::BuildInventoryList()
 {
 	//get info from MissionMgr
@@ -122,7 +113,7 @@ void	CFolderInventory::BuildInventoryList()
 	m_nNumSlots	= 0;
 
 	int nID = WMGR_INVALID_ID;
-    WEAPON* pWeapon = LTNULL;
+	WEAPON* pWeapon = LTNULL;
 
 	CWeaponData* currWeapons[MAX_SELECTION_SLOTS*2];
 
@@ -131,8 +122,8 @@ void	CFolderInventory::BuildInventoryList()
 	int nNumAmmo = g_pWeaponMgr->GetNumAmmoTypes();
 	if (nNumAmmo > 0)
 	{
-        m_nAmmo = debug_newa(int, nNumAmmo);
-        memset(m_nAmmo, -1, sizeof(int) * nNumAmmo);
+		m_nAmmo = debug_newa(int, nNumAmmo);
+		memset(m_nAmmo, -1, sizeof(int) * nNumAmmo);
 	}
 	for (nID=0; nID < nNumAmmo; nID++)
 	{
@@ -195,20 +186,15 @@ void	CFolderInventory::BuildInventoryList()
 		AddGear(nID);
 	}
 
-
 	return;
-
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderInventory::UpdateSelection
 //
-//	ROUTINE:	CFolderInventory::UpdateSelection
-//
-//	PURPOSE:	Show info based on current selection
-//
+//	PURPOSE: Show info based on current selection
 // ----------------------------------------------------------------------- //
-
 LTBOOL CFolderInventory::UpdateSelection()
 {
 	LTBOOL bChanged = CBaseSelectionFolder::UpdateSelection();
@@ -221,7 +207,7 @@ LTBOOL CFolderInventory::UpdateSelection()
 		InvType eType = (InvType)nType;
 		switch (eType)
 		{
-		case INV_WEAPON:
+			case INV_WEAPON:
 			{
 				m_nLastWeapon = nWeaponId;
 				WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(nWeaponId);
@@ -241,7 +227,7 @@ LTBOOL CFolderInventory::UpdateSelection()
 					
 				}
 			} break;
-		case INV_MOD:
+			case INV_MOD:
 			{
 				WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(nWeaponId);
 				if (nWeaponId != m_nLastWeapon)
@@ -304,7 +290,7 @@ LTBOOL CFolderInventory::UpdateSelection()
 					}
 				}
 			} break;
-		case INV_AMMO:
+			case INV_AMMO:
 			{
 				if (nWeaponId != m_nLastWeapon)
 				{
@@ -332,7 +318,7 @@ LTBOOL CFolderInventory::UpdateSelection()
 				}
 			} break;
 
-		case INV_GEAR:
+			case INV_GEAR:
 			{
 				GEAR* pGear = g_pWeaponMgr->GetGear(nId);
 				if (pGear)
@@ -360,13 +346,10 @@ LTBOOL CFolderInventory::UpdateSelection()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderInventory::ClearInventoryList
 //
-//	ROUTINE:	CFolderInventory::ClearInventoryList
-//
-//	PURPOSE:	Remove all of the controls
-//
+//	PURPOSE: Remove all of the controls
 // ----------------------------------------------------------------------- //
-
 void CFolderInventory::ClearInventoryList()
 {
 	// Terminate the ctrls
@@ -383,16 +366,12 @@ void CFolderInventory::ClearInventoryList()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderInventory::SaveInventoryData
 //
-//	ROUTINE:	CFolderInventory::SaveInventoryData
-//
-//	PURPOSE:	Save the players selections
-//
+//	PURPOSE: Save the players selections
 // ----------------------------------------------------------------------- //
-
 void CFolderInventory::SaveInventoryData()
 {
-	
 	m_pData->ClearAmmo();
 
 	if (m_bSaveSelection)
@@ -405,17 +384,13 @@ void CFolderInventory::SaveInventoryData()
 				m_pData->AddAmmo(i,m_nAmmo[i]);
 		}
 	}
-
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderInventory::OnCommand
 //
-//	ROUTINE:	CFolderInventory::OnCommand
-//
-//	PURPOSE:	Handle activation of items
-//
+//	PURPOSE: Handle activation of items
 // ----------------------------------------------------------------------- //
-
 uint32 CFolderInventory::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2)
 {
 	switch (dwCommand)
@@ -448,8 +423,8 @@ HSTRING CFolderInventory::GetHelpString(uint32 dwHelpId, int nControlIndex)
 
 		int nameId = pInventory->nNameId;
 
-        HSTRING hTemp = g_pLTClient->FormatString(nameId);
-        char *pName = g_pLTClient->GetStringData(hTemp);
+		HSTRING hTemp = g_pLTClient->FormatString(nameId);
+		char *pName = g_pLTClient->GetStringData(hTemp);
 
 
 
@@ -470,9 +445,9 @@ HSTRING CFolderInventory::GetHelpString(uint32 dwHelpId, int nControlIndex)
 			sprintf(pStr,"%s %s",m_sSelectStr,pName);
 		}
 
-        g_pLTClient->FreeString(hTemp);
+		g_pLTClient->FreeString(hTemp);
 		
-        HSTRING hStr = g_pLTClient->CreateString(pStr);
+		HSTRING hStr = g_pLTClient->CreateString(pStr);
 		return hStr;
 	}
 	else
@@ -493,19 +468,19 @@ void CFolderInventory::CreateModelSFX()
 
 	BSCREATESTRUCT bcs;
 
-    LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
-    LTRotation rRot;
+	LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
+	LTRotation rRot;
 
-    g_pLTClient->GetObjectPos(hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetObjectPos(hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-    g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
-    g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
+	g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
+	g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
 
 	VEC_MULSCALAR(vScale, vScale, m_fScale);
 
-    LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
+	LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
 	VEC_ADD(vModPos,vModPos,m_vOffset);
 
 	VEC_MULSCALAR(vTemp, vF, vModPos.z);
@@ -520,12 +495,12 @@ void CFolderInventory::CreateModelSFX()
 
 
 	VEC_COPY(bcs.vPos, vPos);
-    bcs.rRot = rRot;
+	bcs.rRot = rRot;
 	VEC_COPY(bcs.vInitialScale, vScale);
 	VEC_COPY(bcs.vFinalScale, vScale);
 	VEC_SET(bcs.vInitialColor, 1.0f, 1.0f, 1.0f);
 	VEC_SET(bcs.vFinalColor, 1.0f, 1.0f, 1.0f);
-    bcs.bUseUserColors = LTTRUE;
+	bcs.bUseUserColors = LTTRUE;
 
 	bcs.pFilename = m_szModel;
 	bcs.pSkin = m_szSkin;
@@ -537,7 +512,7 @@ void CFolderInventory::CreateModelSFX()
 
 	if (m_Inventory.Init(&bcs))
 	{
-        m_Inventory.CreateObject(g_pLTClient);
+		m_Inventory.CreateObject(g_pLTClient);
 		g_pInterfaceMgr->AddInterfaceSFX(&m_Inventory, IFX_NORMAL);
 		m_fSFXRot = g_pLayoutMgr->GetFolderCustomFloat((eFolderID)m_nFolderID,"ModelRotSpeed");
 	}
@@ -559,13 +534,13 @@ void CFolderInventory::UpdateInterfaceSFX()
 
 	if (m_Inventory.GetObject())
 	{
-        LTFLOAT spin = g_pLTClient->GetFrameTime() * m_fSFXRot;
-        LTVector vU, vR, vF;
-        LTRotation rRot;
-        g_pLTClient->GetObjectRotation(m_Inventory.GetObject(), &rRot);
-        g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
-        g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
-        g_pLTClient->SetObjectRotation(m_Inventory.GetObject(),&rRot);
+		LTFLOAT spin = g_pLTClient->GetFrameTime() * m_fSFXRot;
+		LTVector vU, vR, vF;
+		LTRotation rRot;
+		g_pLTClient->GetObjectRotation(m_Inventory.GetObject(), &rRot);
+		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
+		g_pLTClient->SetObjectRotation(m_Inventory.GetObject(),&rRot);
 	}
 }
 
@@ -692,7 +667,6 @@ void CFolderInventory::AddAmmo(int nWeaponID, int nID, LTBOOL bInfinite)
 
 	}
 
-
 	offset.y = (nHeight - pCtrl->GetHeight()) / 2;
 	pGroup->AddControl(pCtrl,offset,LTTRUE);
 
@@ -700,7 +674,6 @@ void CFolderInventory::AddAmmo(int nWeaponID, int nID, LTBOOL bInfinite)
 	pGroup->SetParam2(1000*INV_AMMO+nWeaponID);
 
 	AddFreeControl(pGroup);
-
 }
 
 
@@ -714,5 +687,4 @@ void CFolderInventory::AddGear(int nID)
 
 	pCtrl->SetParam1(nID);
 	pCtrl->SetParam2(1000*INV_GEAR+nID);
-
 }

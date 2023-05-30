@@ -1,13 +1,11 @@
 /****************************************************************************
+;	 MODULE: NetInfo (.CPP)
 ;
-;	 MODULE:		NetInfo (.CPP)
+;	PURPOSE: Network game info
 ;
-;	PURPOSE:		Network game info
+;	HISTORY: 07/05/98 [blg] This file was created
 ;
-;	HISTORY:		07/05/98 [blg] This file was created
-;
-;	COMMENT:		Copyright (c) 1998, Monolith Productions Inc.
-;
+;	COMMENT: Copyright (c) 1998, Monolith Productions Inc.
 ****************************************************************************/
 
 
@@ -26,16 +24,13 @@ char s_sNameWithPing[256];
 // Functions...
 
 /* *********************************************************************** */
-/* CNinfoMgr                                                               */
+/* CNinfoMgr															*/
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoMgr::Init
 //
-//	ROUTINE:	CNinfoMgr::Init
-//
-//	PURPOSE:	Initialization
-//
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
-
 BOOL CNinfoMgr::Init()
 {
 	// All done...
@@ -45,13 +40,10 @@ BOOL CNinfoMgr::Init()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoMgr::Term
 //
-//	ROUTINE:	CNinfoMgr::Term
-//
-//	PURPOSE:	Termination
-//
+//	PURPOSE: Termination
 // ----------------------------------------------------------------------- //
-
 void CNinfoMgr::Term()
 {
 	RemoveGames();
@@ -60,13 +52,10 @@ void CNinfoMgr::Term()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoMgr::GetGame
 //
-//	ROUTINE:	CNinfoMgr::GetGame
-//
-//	PURPOSE:	Gets the game object has the given net session handle
-//
+//	PURPOSE: Gets the game object has the given net session handle
 // ----------------------------------------------------------------------- //
-
 CNinfoGame* CNinfoMgr::GetGame(NetSession* pNetSession)
 {
 	// Sanity checks...
@@ -97,7 +86,6 @@ CNinfoGame* CNinfoMgr::GetGame(NetSession* pNetSession)
 CNinfoGame* CNinfoMgr::GetGame(DWORD dwCRC)
 {
 	// Look for a game object with this CRC...
-
 	CNinfoGame* pGame = GetFirstGame();
 
 	while (pGame)
@@ -112,30 +100,23 @@ CNinfoGame* CNinfoMgr::GetGame(DWORD dwCRC)
 
 
 	// If we get here, we didn't find a match...
-
 	return(NULL);
 }
 
 
-
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoMgr::AddGame
 //
-//	ROUTINE:	CNinfoMgr::AddGame
-//
-//	PURPOSE:	Adds a new game object
-//
+//	PURPOSE: Adds a new game object
 // ----------------------------------------------------------------------- //
-
 CNinfoGame* CNinfoMgr::AddGame(const char* sInfo, NetSession* pNetSession, DWORD dwNumDPlayPlayers)
 {
 	// Sanity checks...
-
 	if (!sInfo) return(NULL);
 	if (!pNetSession) return(NULL);
 
 
 	// Get the name of this game session...
-
 	char sName[NML_NAME];
 
 	if (!Sparam_Get(sName, sInfo, NST_GAMENAME))
@@ -145,7 +126,6 @@ CNinfoGame* CNinfoMgr::AddGame(const char* sInfo, NetSession* pNetSession, DWORD
 
 
 	// Get the host of this game session...
-
 	char sHost[NML_HOST];
 
 	if (!Sparam_Get(sHost, sInfo, NST_GAMEHOST))
@@ -155,7 +135,6 @@ CNinfoGame* CNinfoMgr::AddGame(const char* sInfo, NetSession* pNetSession, DWORD
 
 
 	// Get the level of this game...
-
 	char sLevel[NML_LEVEL];
 	char sBuf[NML_LEVEL];
 
@@ -172,7 +151,7 @@ CNinfoGame* CNinfoMgr::AddGame(const char* sInfo, NetSession* pNetSession, DWORD
 		if (sBuf[i] == '\\' || sBuf[i] == '/')
 		{
 			nIndex = i+1;
-			i      = 0;
+			i	  = 0;
 		}
 	}
 
@@ -183,7 +162,6 @@ CNinfoGame* CNinfoMgr::AddGame(const char* sInfo, NetSession* pNetSession, DWORD
 
 
 	// Get the type of this game...
-
 	char sTemp[NML_NAME];
 	int  nType;
 
@@ -196,7 +174,6 @@ CNinfoGame* CNinfoMgr::AddGame(const char* sInfo, NetSession* pNetSession, DWORD
 
 
 	// Create a new game object...
-
 	CNinfoGame* pGame = debug_new(CNinfoGame);
 	if (!pGame) return(NULL);
 
@@ -211,7 +188,6 @@ CNinfoGame* CNinfoMgr::AddGame(const char* sInfo, NetSession* pNetSession, DWORD
 
 
 	// Add each player in this game...
-
 	int count = 0;
 
 	if (Sparam_Get(sTemp, sInfo, NST_PLRCOUNT))
@@ -237,7 +213,6 @@ CNinfoGame* CNinfoMgr::AddGame(const char* sInfo, NetSession* pNetSession, DWORD
 
 
 	// Add the game to our internal collection...
-
 	if (!AddGame(pGame))
 	{
 		debug_delete(pGame);
@@ -246,84 +221,67 @@ CNinfoGame* CNinfoMgr::AddGame(const char* sInfo, NetSession* pNetSession, DWORD
 
 
 	// All done...
-
 	return(pGame);
 }
 
 BOOL CNinfoMgr::AddGame(CNinfoGame* pGame)
 {
 	// Sanity checks...
-
 	if (!pGame) return(FALSE);
 	if (m_cGames >= NML_GAMES) return(FALSE);
 
 
 	// Add the game to our internal collection...
-
 	m_aGames[m_cGames] = pGame;
 	m_cGames++;
 
 
 	// All done...
-
 	return(TRUE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoMgr::GetFirstGame
 //
-//	ROUTINE:	CNinfoMgr::GetFirstGame
-//
-//	PURPOSE:	Gets the first game in our internal collection
-//
+//	PURPOSE: Gets the first game in our internal collection
 // ----------------------------------------------------------------------- //
-
 CNinfoGame* CNinfoMgr::GetFirstGame()
 {
 	// Sanity checks...
-
 	if (m_cGames == 0) return(NULL);
 
 
 	// Get the first game and prepare for iterating...
-
 	m_iGame = 0;
 	return(m_aGames[m_iGame]);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoMgr::GetNextGame
 //
-//	ROUTINE:	CNinfoMgr::GetNextGame
-//
-//	PURPOSE:	Gets the next game in our internal collection
+//	PURPOSE: Gets the next game in our internal collection
 //
 //	WARNING:	You must call GetFirstGame() before calling this function
-//
 // ----------------------------------------------------------------------- //
-
 CNinfoGame* CNinfoMgr::GetNextGame()
 {
 	// Sanity checks...
-
 	if (m_iGame+1 >= m_cGames) return(NULL);
 
 
 	// Get the first game and prepare for iterating...
-
 	m_iGame++;
 	return(m_aGames[m_iGame]);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoMgr::RemoveGames
 //
-//	ROUTINE:	CNinfoMgr::RemoveGames
-//
-//	PURPOSE:	Removes all the games in our internal collection
-//
+//	PURPOSE: Removes all the games in our internal collection
 // ----------------------------------------------------------------------- //
-
 void CNinfoMgr::RemoveGames()
 {
 	// Remove each game in our internal collection...
@@ -338,20 +296,16 @@ void CNinfoMgr::RemoveGames()
 
 
 	// Reset our internal collection...
-
 	m_cGames = 0;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoMgr::CreateSessionString
 //
-//	ROUTINE:	CNinfoMgr::CreateSessionString
-//
-//	PURPOSE:	Static function to fill in a string with all the given
-//				game info.
-//
+//	PURPOSE: Static function to fill in a string with all the given
+//			game info.
 // ----------------------------------------------------------------------- //
-
 BOOL CNinfoMgr::CreateSessionString(char* sString, char* sName, char* sHost, char* sLevel, int nType)
 {
 	// Sanity checks...
@@ -370,22 +324,18 @@ BOOL CNinfoMgr::CreateSessionString(char* sString, char* sName, char* sHost, cha
 
 
 	// All done...
-
 	return(TRUE);
 }
 
 
 /* *********************************************************************** */
-/* CNinfoGame                                                              */
+/* CNinfoGame															  */
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoGame::Init
 //
-//	ROUTINE:	CNinfoGame::Init
-//
-//	PURPOSE:	Initialization
-//
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
-
 BOOL CNinfoGame::Init(char* sName, char* sHost, char* sLevel, int nType, NetSession* pNetSession, DWORD dwNumDPlayPlayers, char *pHostIP, DWORD hostPort)
 {
 	// Sanity checks...
@@ -405,39 +355,33 @@ BOOL CNinfoGame::Init(char* sName, char* sHost, char* sLevel, int nType, NetSess
 	SAFE_STRCPY(m_sHostIP, pHostIP);
 	m_dwHostPort = hostPort;
 
-	m_nType         = nType;
-	m_pNetSession   = pNetSession;
+	m_nType		= nType;
+	m_pNetSession	= pNetSession;
 	m_cDPlayPlayers = dwNumDPlayPlayers;
-	m_nPing         = pNetSession->m_Ping;
+	m_nPing		= pNetSession->m_Ping;
 
 	if (m_cDPlayPlayers > 0) m_cDPlayPlayers--;	// don't count the server player
 
 
 	// Set string helper members...
-
 	const char* pGameType = GameTypeToString((GameType)m_nType);
 	strcpy(m_sType, pGameType ? pGameType : "Unknown");
 
 
 	// Calculate a CRC value...
-
 	m_dwCRC = m_pNetSession->m_guidInst.a;
 
 
 	// All done...
-
 	return(TRUE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoGame::Term
 //
-//	ROUTINE:	CNinfoGame::Term
-//
-//	PURPOSE:	Termination
-//
+//	PURPOSE: Termination
 // ----------------------------------------------------------------------- //
-
 void CNinfoGame::Term()
 {
 	RemovePlayers();
@@ -446,28 +390,22 @@ void CNinfoGame::Term()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoGame::AddPlayer
 //
-//	ROUTINE:	CNinfoGame::AddPlayer
-//
-//	PURPOSE:	Adds a new player object
-//
+//	PURPOSE: Adds a new player object
 // ----------------------------------------------------------------------- //
-
 CNinfoPlayer* CNinfoGame::AddPlayer(char* sName, int nFrags)
 {
 	// Sanity checks...
-
 	if (!sName) return(NULL);
 
 
 	// Create a new player object...
-
 	CNinfoPlayer* pPlayer = debug_new(CNinfoPlayer);
 	if (!pPlayer) return(NULL);
 
 
 	// Init the new player object...
-
 	if (!pPlayer->Init(sName, nFrags))
 	{
 		debug_delete(pPlayer);
@@ -476,7 +414,6 @@ CNinfoPlayer* CNinfoGame::AddPlayer(char* sName, int nFrags)
 
 
 	// Add the game to our internal collection...
-
 	if (!AddPlayer(pPlayer))
 	{
 		debug_delete(pPlayer);
@@ -485,88 +422,70 @@ CNinfoPlayer* CNinfoGame::AddPlayer(char* sName, int nFrags)
 
 
 	// All done...
-
 	return(pPlayer);
 }
 
 BOOL CNinfoGame::AddPlayer(CNinfoPlayer* pPlayer)
 {
 	// Sanity checks...
-
 	if (!pPlayer) return(FALSE);
 	if (m_cPlayers >= NML_PLAYERS) return(FALSE);
 
 
 	// Add the Player to our internal collection...
-
 	m_aPlayers[m_cPlayers] = pPlayer;
 	m_cPlayers++;
 
 
 	// All done...
-
 	return(TRUE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoGame::GetFirstPlayer
 //
-//	ROUTINE:	CNinfoGame::GetFirstPlayer
-//
-//	PURPOSE:	Gets the first Player in our internal collection
-//
+//	PURPOSE: Gets the first Player in our internal collection
 // ----------------------------------------------------------------------- //
-
 CNinfoPlayer* CNinfoGame::GetFirstPlayer()
 {
 	// Sanity checks...
-
 	if (m_cPlayers == 0) return(NULL);
 
 
 	// Get the first Player and prepare for iterating...
-
 	m_iPlayer = 0;
 	return(m_aPlayers[m_iPlayer]);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoGame::GetNextPlayer
 //
-//	ROUTINE:	CNinfoGame::GetNextPlayer
-//
-//	PURPOSE:	Gets the next Player in our internal collection
+//	PURPOSE: Gets the next Player in our internal collection
 //
 //	WARNING:	You must call GetFirstPlayer() before calling this function
-//
 // ----------------------------------------------------------------------- //
-
 CNinfoPlayer* CNinfoGame::GetNextPlayer()
 {
 	// Sanity checks...
-
 	if (m_iPlayer+1 >= m_cPlayers) return(NULL);
 
 
 	// Get the first Player and prepare for iterating...
-
 	m_iPlayer++;
 	return(m_aPlayers[m_iPlayer]);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoGame::RemovePlayers
 //
-//	ROUTINE:	CNinfoGame::RemovePlayers
-//
-//	PURPOSE:	Removes all the Players in our internal collection
-//
+//	PURPOSE: Removes all the Players in our internal collection
 // ----------------------------------------------------------------------- //
-
 void CNinfoGame::RemovePlayers()
 {
 	// Remove each Player in our internal collection...
-
 	for (int i = 0; i < m_cPlayers; i++)
 	{
 		CNinfoPlayer* pPlayer = m_aPlayers[i];
@@ -577,19 +496,15 @@ void CNinfoGame::RemovePlayers()
 
 
 	// Reset our internal collection...
-
 	m_cPlayers = 0;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoGame::GetNameWithPing
 //
-//	ROUTINE:	CNinfoGame::GetNameWithPing
-//
-//	PURPOSE:	Gets the name and ping time if available
-//
+//	PURPOSE: Gets the name and ping time if available
 // ----------------------------------------------------------------------- //
-
 char* CNinfoGame::GetNameWithPing()
 {
 	// Build the string to use...
@@ -606,25 +521,20 @@ char* CNinfoGame::GetNameWithPing()
 
 
 /* *********************************************************************** */
-/* CNinfoPlayer                                                            */
+/* CNinfoPlayer															*/
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNinfoPlayer::Init
 //
-//	ROUTINE:	CNinfoPlayer::Init
-//
-//	PURPOSE:	Initialization
-//
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
-
 BOOL CNinfoPlayer::Init(char* sName, int nFrags)
 {
 	// Sanity checks...
-
 	if (!sName) return(FALSE);
 
 
 	// Set simple members...
-
 	Clear();
 
 	strcpy(m_sName, sName);
@@ -633,8 +543,5 @@ BOOL CNinfoPlayer::Init(char* sName, int nFrags)
 
 
 	// All done...
-
 	return(TRUE);
 }
-
-

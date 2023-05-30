@@ -19,37 +19,37 @@ public:
 	virtual ~CFolderHostLevels();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL   Build();
 
-    void    OnFocus(LTBOOL bFocus);
-    LTBOOL   Render(HSURFACE hDestSurf);
+	void	OnFocus(LTBOOL bFocus);
+	LTBOOL Render(HSURFACE hDestSurf);
 
-    LTBOOL   OnLButtonDown(int x, int y);
-    LTBOOL   OnRButtonDown(int x, int y);
-    LTBOOL   OnLButtonUp(int x, int y);
-    LTBOOL   OnRButtonUp(int x, int y);
-    LTBOOL   OnUp();
-    LTBOOL   OnDown();
-    LTBOOL   OnLeft();
-    LTBOOL   OnRight();
-    LTBOOL   OnEnter();
-	LTBOOL   OnLButtonDblClick(int x, int y);
-	LTBOOL   OnMouseMove(int x, int y);
+	LTBOOL OnLButtonDown(int x, int y);
+	LTBOOL OnRButtonDown(int x, int y);
+	LTBOOL OnLButtonUp(int x, int y);
+	LTBOOL OnRButtonUp(int x, int y);
+	LTBOOL OnUp();
+	LTBOOL OnDown();
+	LTBOOL OnLeft();
+	LTBOOL OnRight();
+	LTBOOL OnEnter();
+	LTBOOL OnLButtonDblClick(int x, int y);
+	LTBOOL OnMouseMove(int x, int y);
 
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
-    LTBOOL   FillLevelList(CListCtrl *pList, char* sDir);
+	uint32	OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	LTBOOL	FillLevelList(CListCtrl *pList, char* sDir);
 	void	LoadLevelList(CListCtrl *pList);
 	void	SaveLevelList(CListCtrl *pList);
 	void	AddLevelToList(CListCtrl *pList, char* sGameLevel);
 	void	UpdateButtons();
-    void    DrawFrame(HSURFACE hDestSurf, LTRect *rect, LTBOOL bSel = LTFALSE);
+	void	DrawFrame(HSURFACE hDestSurf, LTRect *rect, LTBOOL bSel = LTFALSE);
 
-	int					m_nGameType;
+	int	m_nGameType;
 
-	CListCtrl*			m_pAvailLevels;
-	CListCtrl*			m_pSelLevels;
+	CListCtrl*		m_pAvailLevels;
+	CListCtrl*		m_pSelLevels;
 	CStaticTextCtrl*	m_pAddLevel;
 	CStaticTextCtrl*	m_pRemoveLevel;
 	CStaticTextCtrl*	m_pAddAll;

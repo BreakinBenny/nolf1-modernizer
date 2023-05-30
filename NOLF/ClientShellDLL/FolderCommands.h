@@ -71,6 +71,4 @@ enum eFolderCmds
 	FOLDER_CMD_CUSTOM, //this needs to be the last cmd, so that custom commands may be defined after it
 };
 
-
-
 #endif

@@ -49,18 +49,15 @@ CFolderSave::CFolderSave()
 	m_pEdit = LTNULL;
 }
 
-CFolderSave::~CFolderSave()
-{
-
-}
+CFolderSave::~CFolderSave(){}
 
 LTBOOL CFolderSave::Build()
 {
 	CreateTitle(IDS_TITLE_SAVEGAME);
 
-    m_pEdit = CreateEditCtrl("", CMD_EDIT_NAME, LTNULL, m_szSaveName, sizeof(m_szSaveName), 0, LTTRUE, GetSmallFont());
+	m_pEdit = CreateEditCtrl("", CMD_EDIT_NAME, LTNULL, m_szSaveName, sizeof(m_szSaveName), 0, LTTRUE, GetSmallFont());
 	m_pEdit->EnableCursor();
-    m_pEdit->Enable(LTFALSE);
+	m_pEdit->Enable(LTFALSE);
 	m_pEdit->SetAlignment(LTF_JUSTIFY_LEFT);
 
 	return CBaseFolder::Build();
@@ -86,7 +83,7 @@ uint32 CFolderSave::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 {
 	if (dwCommand >= FOLDER_CMD_CUSTOM && dwCommand <= FOLDER_CMD_CUSTOM+kMaxSave)
 	{
-        uint32 slot = dwCommand - FOLDER_CMD_CUSTOM;
+		uint32 slot = dwCommand - FOLDER_CMD_CUSTOM;
 		char strSaveGameSetting[256];
 		char strKey[32];
 		sprintf (strKey, "SaveGame%02d", slot);
@@ -99,7 +96,7 @@ uint32 CFolderSave::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 		g_nSaveIndex = (int)dwParam1;
 		if (strlen (strSaveGameSetting) > 0 && CWinUtil::FileExist(strFilename))
 		{
-            HSTRING hString = g_pLTClient->FormatString(IDS_CONFIRMSAVE);
+			HSTRING hString = g_pLTClient->FormatString(IDS_CONFIRMSAVE);
 			g_pInterfaceMgr->ShowMessageBox(hString,LTMB_YESNO,OverwriteCallBack,this);
 			g_pLTClient->FreeString(hString);
 			return 1;
@@ -126,9 +123,9 @@ uint32 CFolderSave::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 	{
 		if (GetCapture())
 		{
-            m_pEdit->Select(LTFALSE);
+			m_pEdit->Select(LTFALSE);
 			UpdateData(LTTRUE);
-            SetCapture(LTNULL);
+			SetCapture(LTNULL);
 			RemoveFixedControl(m_pEdit);
 
 			ForceMouseUpdate();
@@ -153,7 +150,7 @@ void CFolderSave::BuildSavedLevelList()
 	AddTextItem(IDS_QUICKSAVE,FOLDER_CMD_CUSTOM,IDS_HELP_QUICKSAVE,LTFALSE,GetMediumFont());
 
 	// Create an empty string
-    HSTRING hEmpty=g_pLTClient->CreateString(" ");
+	HSTRING hEmpty=g_pLTClient->CreateString(" ");
 
 
 	int nFirstEmpty = -1;
@@ -203,8 +200,8 @@ void CFolderSave::BuildSavedLevelList()
 					}
 
 				}
-				sprintf(strWorldName,"    %s",pWorldName);
-				sprintf(strUserName,"    %s",pNameStr);
+				sprintf(strWorldName,"	%s",pWorldName);
+				sprintf(strUserName,"	%s",pNameStr);
 
 			}
 
@@ -274,7 +271,7 @@ void CFolderSave::BuildSavedLevelList()
 		pCtrl->AddColumn(hEmpty, 230, LTF_JUSTIFY_LEFT);
 	}
 
-    g_pLTClient->FreeString(hEmpty);
+	g_pLTClient->FreeString(hEmpty);
 
 
 }
@@ -339,9 +336,9 @@ LTBOOL CFolderSave::HandleKeyDown(int key, int rep)
 	if (key == VK_F6)
 	{
 		SendCommand(FOLDER_CMD_CUSTOM,0,0);
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return CBaseFolder::HandleKeyDown(key,rep);
+	return CBaseFolder::HandleKeyDown(key,rep);
 
 }
 
@@ -397,7 +394,7 @@ void CFolderSave::NameSaveGame(uint32 slot, int index)
 	m_pEdit->UpdateData(LTFALSE);
 	SetCapture(m_pEdit);
 	m_pEdit->SetColor(m_hSelectedColor,m_hSelectedColor,m_hSelectedColor);
-    m_pEdit->Select(LTTRUE);
+	m_pEdit->Select(LTTRUE);
 
 }
 
@@ -405,7 +402,7 @@ void CFolderSave::Escape()
 {
 	if (GetCapture())
 	{
-        m_pEdit->Select(LTFALSE);
+		m_pEdit->Select(LTFALSE);
 		g_pColCtrl->SetString(0, g_hOldName);
 		g_pColCtrl->SetString(2, g_hOldTime);
 		SetCapture(LTNULL);

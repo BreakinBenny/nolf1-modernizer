@@ -1,10 +1,10 @@
 //----------------------------------------------------------
 //
-//	MODULE	: FASTLIST.H
+//	MODULE:  FASTLIST.H
 //
-//	PUROSE	: CFastList definition file
+//	PUROSE:  CFastList definition file
 //
-//	CREATED	: 10 / 27 / 1996
+//	CREATED:  10 / 27 / 1996
 //
 //----------------------------------------------------------
 
@@ -17,18 +17,17 @@
 	{
 		public:
 
-				// Constructor
-										CFastListNode() { m_pPrev = NULL; m_pNext = NULL; }
-									
-				// Accessors		
-									
-				CFastListNode*			GetPrev() { return m_pPrev; }
-				CFastListNode*			GetNext() { return m_pNext; }
-				T						GetData() { return m_Data; }
-									
-				CFastListNode		   *m_pPrev;
-				CFastListNode		   *m_pNext;
-				T						m_Data;
+			// Constructor
+			CFastListNode() { m_pPrev = NULL; m_pNext = NULL; }
+			
+			// Accessors		
+			CFastListNode*	GetPrev() { return m_pPrev; }
+			CFastListNode*	GetNext() { return m_pNext; }
+			T				GetData() { return m_Data; }
+			
+			CFastListNode		*m_pPrev;
+			CFastListNode		*m_pNext;
+			T				m_Data;
 		};
 	
 	template <class T> class CFastList
@@ -36,89 +35,88 @@
 		public:
 
 			// Constructor
-								
-										CFastList();
-										CFastList(int nTotalElem);
+			
+			CFastList();
+			CFastList(int nTotalElem);
+			
+			// Destructor
+			
+			~CFastList() { Term(); }
 										
-			// Destructor				
-										
-										~CFastList() { Term(); }
-										
-			// Member Functions			
-										
-			void						Term(BOOL bDeAlloc = TRUE);
-										
-			BOOL						AddHead(T data);
-			BOOL						AddTail(T data);
-			BOOL						InsertAfter(CFastListNode<T> *pNode, T data);
-			BOOL						InsertBefore(CFastListNode<T> *pNode, T data);
-			T							RemoveHead();
-			T							RemoveTail();
-			void						Remove(CFastListNode<T> *pNode);
-			void						Remove(T data);
-			void						RemoveAll() { Term(); }
-			CFastListNode<T>*			Find(T data);
-			T							Get(DWORD dwIndex);
-			int							GetIndex(T data);
+			// Member Functions
+			
+			void	Term(BOOL bDeAlloc = TRUE);
+			
+			BOOL				AddHead(T data);
+			BOOL				AddTail(T data);
+			BOOL				InsertAfter(CFastListNode<T> *pNode, T data);
+			BOOL				InsertBefore(CFastListNode<T> *pNode, T data);
+			T					RemoveHead();
+			T					RemoveTail();
+			void					Remove(CFastListNode<T> *pNode);
+			void					Remove(T data);
+			void					RemoveAll() { Term(); }
+			CFastListNode<T>*		Find(T data);
+			T					Get(DWORD dwIndex);
+			int					GetIndex(T data);
 
-			// Accessors				
-										
-			CFastListNode<T>*			GetBlock() { return m_pBlock; }
-			CFastListNode<T>*			GetHead() { return m_pHead; }
-			CFastListNode<T>*			GetTail() { return m_pTail; }
-			DWORD						GetSize() { return m_nSize; }
+			// Accessors
+			
+			CFastListNode<T>*	GetBlock() { return m_pBlock; }
+			CFastListNode<T>*	GetHead() { return m_pHead; }
+			CFastListNode<T>*	GetTail() { return m_pTail; }
+			DWORD			GetSize() { return m_nSize; }
 
 		private:
 
 			// Member Functions
 
-			void						AllocMem(int nTotalElem);
+			void	AllocMem(int nTotalElem);
 
 			// Member Variables
 
-			CFastListNode<T>	       *m_pBlock;
-			CFastListNode<T>		   *m_pFreeList;
-			CFastListNode<T>		   *m_pHead;
-			CFastListNode<T>		   *m_pTail;
-			DWORD						m_nSize;
-			DWORD						m_nTotalElem;
-			BOOL						m_bAllocated;
+			CFastListNode<T>	*m_pBlock;
+			CFastListNode<T>	*m_pFreeList;
+			CFastListNode<T>	*m_pHead;
+			CFastListNode<T>	*m_pTail;
+			DWORD	m_nSize;
+			DWORD	m_nTotalElem;
+			BOOL	m_bAllocated;
 	};
 
 	//----------------------------------------------------------
 	//
-	// FUNCTION : CFastList()
+	// FUNCTION:  CFastList()
 	//
-	// PURPOSE	: Standard constructor
+	// PURPOSE:  Standard constructor
 	//
 	//----------------------------------------------------------
 
 	template <class T> inline CFastList<T>::CFastList()
 	{
-		m_pBlock	 = NULL;
-		m_pHead		 = NULL;
-		m_pTail		 = NULL;
-		m_nSize		 = 0;
+		m_pBlock	= NULL;
+		m_pHead	= NULL;
+		m_pTail	= NULL;
+		m_nSize	= 0;
 
 		// Allocate the memory
-
 		AllocMem(100);
 	}
 
 	//----------------------------------------------------------
 	//
-	// FUNCTION : CFastList()
+	// FUNCTION:  CFastList()
 	//
-	// PURPOSE	: Standard constructor
+	// PURPOSE:  Standard constructor
 	//
 	//----------------------------------------------------------
 
 	template <class T> inline CFastList<T>::CFastList(int nTotalElem)
 	{
-		m_pBlock	 = NULL;
-		m_pHead		 = NULL;
-		m_pTail		 = NULL;
-		m_nSize		 = 0;
+		m_pBlock	= NULL;
+		m_pHead	= NULL;
+		m_pTail	= NULL;
+		m_nSize	= 0;
 
 		// Allocate the memory
 
@@ -126,19 +124,17 @@
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::Term()
 	//
-	// FUNCTION : CFastList::Term()
-	//
-	// PURPOSE	: Terminates a CFastList
-	//
+	// PURPOSE:  Terminates a CFastList
 	//----------------------------------------------------------
 
 	template <class T> inline void CFastList<T>::Term(BOOL bDeAlloc)
 	{
 		if (m_pBlock) debug_deletea(m_pBlock);
-		m_pBlock = NULL;
-		m_pHead = NULL;
-		m_pTail = NULL;
+		m_pBlock	= NULL;
+		m_pHead	= NULL;
+		m_pTail	= NULL;
 		m_pFreeList = NULL;
 
 		m_nSize = 0;
@@ -147,11 +143,9 @@
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::AddHead()
 	//
-	// FUNCTION : CFastList::AddHead()
-	//
-	// PURPOSE	: Adds an element to the head of the array
-	//
+	// PURPOSE:  Adds an element to the head of the array
 	//----------------------------------------------------------
 
 	template <class T> inline BOOL CFastList<T>::AddHead(T data)
@@ -180,16 +174,13 @@
 		m_nSize ++;
 
 		// Success !!
-		
 		return TRUE;
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::AddTail()
 	//
-	// FUNCTION : CFastList::AddTail()
-	//
-	// PURPOSE	: Adds an element to the tail of the array
-	//
+	// PURPOSE:  Adds an element to the tail of the array
 	//----------------------------------------------------------
 
 	template <class T> inline BOOL CFastList<T>::AddTail(T data)
@@ -235,11 +226,9 @@
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::InsertAfter()
 	//
-	// FUNCTION : CFastList::InsertAfter()
-	//
-	// PURPOSE	: Inserts an element into the list
-	//
+	// PURPOSE:  Inserts an element into the list
 	//----------------------------------------------------------
 
 	template <class T> inline BOOL CFastList<T>::InsertAfter(CFastListNode<T> *pNode, T data)
@@ -254,7 +243,6 @@
 		pNewNode->m_pPrev = NULL;
 
 		// Copy in data
-
 		pNewNode->m_Data = data;
 
 		pNewNode->m_pPrev = pNode;
@@ -274,16 +262,13 @@
 		m_nSize ++;
 		
 		// Success !!
-		
 		return TRUE;
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::InsertBefore()
 	//
-	// FUNCTION : CFastList::InsertBefore()
-	//
-	// PURPOSE	: Inserts an element into the list
-	//
+	// PURPOSE:  Inserts an element into the list
 	//----------------------------------------------------------
 
 	template <class T> inline BOOL CFastList<T>::InsertBefore(CFastListNode<T> *pNode, T data)
@@ -310,16 +295,13 @@
 		m_nSize ++;
 		
 		// Success !!
-		
 		return TRUE;
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::RemoveHead()
 	//
-	// FUNCTION : CFastList::RemoveHead()
-	//
-	// PURPOSE	: Removes head element
-	//
+	// PURPOSE:  Removes head element
 	//----------------------------------------------------------
 
 	template <class T> inline T CFastList<T>::RemoveHead()
@@ -337,7 +319,6 @@
 			if (!m_pHead)
 			{
 				// List is empty..
-
 				m_pTail = NULL;
 			}
 			else
@@ -345,7 +326,6 @@
 				if (m_pHead->m_pNext)
 				{
 					// Correct link
-	
 					m_pHead->m_pNext->m_pPrev = m_pHead;
 				}
 			}
@@ -361,11 +341,9 @@
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::RemoveTail()
 	//
-	// FUNCTION : CFastList::RemoveTail()
-	//
-	// PURPOSE	: Removes head element
-	//
+	// PURPOSE:  Removes head element
 	//----------------------------------------------------------
 
 	template <class T> inline T CFastList<T>::RemoveTail()
@@ -385,7 +363,6 @@
 			else
 			{
 				// List is empty..
-
 				m_pHead = NULL;
 				m_pTail = NULL;
 			}
@@ -401,11 +378,9 @@
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::Remove()
 	//
-	// FUNCTION : CFastList::Remove()
-	//
-	// PURPOSE	: Removes an element from the list
-	//
+	// PURPOSE:  Removes an element from the list
 	//----------------------------------------------------------
 
 	template <class T> inline void CFastList<T>::Remove(CFastListNode<T> *pNode)
@@ -437,8 +412,7 @@
 			m_pHead = NULL;
 		}
 
-		// Delete link
-		
+		// Delete link		
 		pNode->m_pNext = m_pFreeList->m_pNext;
 		pNode->m_pPrev = m_pFreeList;
 		m_pFreeList->m_pNext = pNode;
@@ -447,11 +421,9 @@
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::Remove()
 	//
-	// FUNCTION : CFastList::Remove()
-	//
-	// PURPOSE	: Removes an element from the list (SLOW)
-	//
+	// PURPOSE:  Removes an element from the list (SLOW)
 	//----------------------------------------------------------
 
 	template <class T> inline void CFastList<T>::Remove(T data)
@@ -472,11 +444,9 @@
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::Find()
 	//
-	// FUNCTION : CFastList::Find()
-	//
-	// PURPOSE	: Finds a data element in the list
-	//
+	// PURPOSE:  Finds a data element in the list
 	//----------------------------------------------------------
 
 	template <class T> inline CFastListNode<T>* CFastList<T>::Find(T data)
@@ -499,11 +469,9 @@
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::Get()
 	//
-	// FUNCTION : CFastList::Get()
-	//
-	// PURPOSE	: Returns data for a given index
-	//
+	// PURPOSE:  Returns data for a given index
 	//----------------------------------------------------------
 
 	template <class T> inline T CFastList<T>::Get(DWORD dwIndex)
@@ -521,11 +489,9 @@
 	}
 
 	//----------------------------------------------------------
+	// FUNCTION:  CFastList::GetIndex()
 	//
-	// FUNCTION : CFastList::GetIndex()
-	//
-	// PURPOSE	: Returns an index for a given pointer
-	//
+	// PURPOSE:  Returns an index for a given pointer
 	//----------------------------------------------------------
 
 	template <class T> inline int CFastList<T>::GetIndex(T data)
@@ -550,11 +516,9 @@
 	}
 
 	//------------------------------------------------------------------
-	//
-	//   FUNCTION : Alloc()
+	//   FUNCTION:  Alloc()
 	//
 	//   PURPOSE  : Allocates memory block for list and links it
-	//
 	//------------------------------------------------------------------
 
 	template <class T> inline void CFastList<T>::AllocMem(int nTotalElem)
@@ -567,7 +531,6 @@
 		m_pFreeList  = m_pBlock;
 
 		// Link up all the nodes
-
 		CFastListNode<T> *pStart = m_pBlock;
 
 		pStart->m_pPrev = NULL;

@@ -18,20 +18,20 @@ public:
 	virtual ~CFolderNew();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL   Build();
 	void	Term();
 
 	// This is called when the folder gets or loses focus
-    virtual void    OnFocus(LTBOOL bFocus);
+	virtual void	OnFocus(LTBOOL bFocus);
 
 
 	//this function creates a string, the caller must free it
-    virtual HSTRING GetHelpString(uint32 dwHelpId, int nControlIndex);
+	virtual HSTRING GetHelpString(uint32 dwHelpId, int nControlIndex);
 
 	virtual	LTBOOL	UpdateSelection();
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 	void	BuildMissionList();
 	void	ClearMissionList();
 

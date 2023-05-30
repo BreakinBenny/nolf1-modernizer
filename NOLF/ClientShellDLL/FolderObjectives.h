@@ -18,19 +18,19 @@ public:
 	virtual ~CFolderObjectives();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL Build();
 	void	Term();
 	void	Escape();
 
-    void    OnFocus(LTBOOL bFocus);
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	void	OnFocus(LTBOOL bFocus);
+	uint32 OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
 
 protected:
-	CLTGUITextItemCtrl	*m_pMissionCtrl;
-	CLTGUITextItemCtrl	*m_pSpacerCtrl;
-	CLTGUITextItemCtrl	*m_pSkipCtrl;
-	CLTGUITextItemCtrl	*m_pSelectCtrl;
+	CLTGUITextItemCtrl *m_pMissionCtrl;
+	CLTGUITextItemCtrl *m_pSpacerCtrl;
+	CLTGUITextItemCtrl *m_pSkipCtrl;
+	CLTGUITextItemCtrl *m_pSelectCtrl;
 
 	void	BuildObjectivesList();
 

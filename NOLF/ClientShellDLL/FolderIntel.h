@@ -19,30 +19,30 @@ public:
 	virtual ~CFolderIntel();
 
 	// Build the folder
-    LTBOOL   Build();
-	void	Term();
+	LTBOOL Build();
+	void Term();
 
-    void    OnFocus(LTBOOL bFocus);
+	void OnFocus(LTBOOL bFocus);
 
-	virtual	LTBOOL	UpdateSelection();
+	virtual LTBOOL UpdateSelection();
 
-	void	SetMissionNum(int nNum) {m_nMissionNum = nNum;}
+	void SetMissionNum(int nNum) {m_nMissionNum = nNum;}
 
-	virtual void	UpdateInterfaceSFX();
+	virtual void UpdateInterfaceSFX();
 
 
 protected:
-    uint32 OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32 OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
 	void BuildIntelList();
 	void ClearIntelList();
 
-	virtual void	CreateModelSFX();
-	virtual void	RemoveInterfaceSFX();
+	virtual void CreateModelSFX();
+	virtual void RemoveInterfaceSFX();
 
 	void UpdateData();
 
-	int	 m_nMissionNum;
+	int m_nMissionNum;
 	CMoArray<IntelItem *> m_intelArray;
 
 	LTVector m_vScale;

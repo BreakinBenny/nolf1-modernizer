@@ -20,30 +20,30 @@ public:
 	virtual ~CFolderMain();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL   Build();
 
 	// This is called when the folder gets or loses focus
-    virtual void    OnFocus(LTBOOL bFocus);
+	virtual void	OnFocus(LTBOOL bFocus);
 
 	void	Escape();
-    LTBOOL   DoMultiplayer(LTBOOL bMinimize);
+	LTBOOL   DoMultiplayer(LTBOOL bMinimize);
 
 
-    LTBOOL   OnUp();
-    LTBOOL   OnDown();
+	LTBOOL   OnUp();
+	LTBOOL   OnDown();
 
-    void    MBCallBack(LTBOOL bReturn);
+	void	MBCallBack(LTBOOL bReturn);
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
-    LTBOOL   Render(HSURFACE hDestSurf);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	LTBOOL   Render(HSURFACE hDestSurf);
 
-    CLTGUITextItemCtrl* AddLink(int stringID, uint32 commandID, int helpID, int xpos, int ypos);
+	CLTGUITextItemCtrl* AddLink(int stringID, uint32 commandID, int helpID, int xpos, int ypos);
 
 	void	ContinueLastSaved();
 
 	HSTRING	m_BuildVersion;
-    LTIntPt  m_BuildPos;
+	LTIntPt  m_BuildPos;
 	CLTGUITextItemCtrl* m_pResume;
 
 };

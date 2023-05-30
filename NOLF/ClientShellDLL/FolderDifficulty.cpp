@@ -25,14 +25,9 @@ namespace
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CFolderDifficulty::CFolderDifficulty()
-{
-}
+CFolderDifficulty::CFolderDifficulty(){}
 
-CFolderDifficulty::~CFolderDifficulty()
-{
-
-}
+CFolderDifficulty::~CFolderDifficulty(){}
 
 // Build the folder
 LTBOOL CFolderDifficulty::Build()
@@ -43,7 +38,7 @@ LTBOOL CFolderDifficulty::Build()
 	AddTextItem(IDS_NEW_EASY,	CMD_EASY,	IDS_HELP_EASY);
 	AddTextItem(IDS_NEW_MEDIUM, CMD_MEDIUM, IDS_HELP_MEDIUM);
 	AddTextItem(IDS_NEW_HARD,	CMD_HARD,	IDS_HELP_HARD);
-	AddTextItem(IDS_NEW_INSANE, CMD_INSANE, IDS_HELP_INSANE);
+	AddTextItem(IDS_NEW_INSANE,	CMD_INSANE, IDS_HELP_INSANE);
 
 	LTIntPt textPos(360,360);
 	int nTextWidth = 180;

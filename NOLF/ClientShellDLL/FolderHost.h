@@ -19,13 +19,13 @@ public:
 	virtual ~CFolderHost();
 
 	// Build the folder
-    LTBOOL   Build();
-    LTBOOL   OnLeft();
-    LTBOOL   OnRight();
-    LTBOOL   OnLButtonUp(int x, int y);
-    LTBOOL   OnRButtonUp(int x, int y);
+	LTBOOL   Build();
+	LTBOOL   OnLeft();
+	LTBOOL   OnRight();
+	LTBOOL   OnLButtonUp(int x, int y);
+	LTBOOL   OnRButtonUp(int x, int y);
 
-    void    OnFocus(LTBOOL bFocus);
+	void	OnFocus(LTBOOL bFocus);
 	void	Escape();
 
 	virtual void UpdateInterfaceSFX();
@@ -33,8 +33,8 @@ public:
 
 protected:
 	void FillGameStruct(NetGame *pNG);
-    LTBOOL LaunchGame();
-    LTBOOL SetService( );
+	LTBOOL LaunchGame();
+	LTBOOL SetService( );
 	void RunServerOptions();
 	void	HandleLaunch();
 
@@ -45,7 +45,7 @@ protected:
 
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 	int	m_nGameType;
 	char m_szSessionName[MAX_SESSION_NAME];
 	char m_szPassword[MAX_PASSWORD];
@@ -72,10 +72,10 @@ protected:
 	CLTGUIEditCtrl*		m_pBandwidthEdit;
 	CLTGUITextItemCtrl*	m_pBandwidthLabel;
 
-	int					m_nBandwidth;
-	char				m_szBandwidth[64];
+	int	m_nBandwidth;
+	char	m_szBandwidth[64];
 
-	LTBOOL				m_bReadyToLaunch;
+	LTBOOL m_bReadyToLaunch;
 };
 
 

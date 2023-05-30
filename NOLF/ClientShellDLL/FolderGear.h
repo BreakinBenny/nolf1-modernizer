@@ -18,29 +18,29 @@ public:
 	virtual ~CFolderGear();
 
 	// Build the folder
-    LTBOOL	Build();
+	LTBOOL	Build();
 
 	// This is called when the folder gets or loses focus
-    virtual void    OnFocus(LTBOOL bFocus);
-	virtual void	UpdateInterfaceSFX();
+	virtual void OnFocus(LTBOOL bFocus);
+	virtual void UpdateInterfaceSFX();
 
-    virtual uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	virtual uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
-    HSTRING         GetHelpString(uint32 dwHelpId, int nControlIndex);
+	HSTRING GetHelpString(uint32 dwHelpId, int nControlIndex);
 
-	virtual	LTBOOL	UpdateSelection();
-    virtual LTBOOL	IsAvailable();
+	virtual LTBOOL UpdateSelection();
+	virtual LTBOOL IsAvailable();
 	void	SkipOutfitting();
 
 protected:
 
-    void			BuildGearList();
-	void			SaveGearData();
-	void			ClearGearList();
-	void			SetContinue();
+	void	BuildGearList();
+	void	SaveGearData();
+	void	ClearGearList();
+	void	SetContinue();
 
-	virtual void	CreateModelSFX();
-	virtual void	RemoveInterfaceSFX();
+	virtual void CreateModelSFX();
+	virtual void RemoveInterfaceSFX();
 
 
 };

@@ -31,9 +31,9 @@ LTBOOL CFolderAwards::Build()
 {
 	CreateTitle(IDS_TITLE_AWARDS);
 
-    LTBOOL bSuccess = CBaseFolder::Build();
-    UseMain(LTTRUE);
-    UseBack(LTFALSE);
+	LTBOOL bSuccess = CBaseFolder::Build();
+	UseMain(LTTRUE);
+	UseBack(LTFALSE);
 	UseContinue(FOLDER_ID_BRIEFING,IDS_HELP_NEXTMISSION);
 	return bSuccess;
 }
@@ -81,8 +81,8 @@ void CFolderAwards::OnFocus(LTBOOL bFocus)
 
 			// if we already have awards then the request and the processing have already been done
 
-            HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_SUMMARY);
-            g_pLTClient->EndMessage(hMessage);
+			HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_SUMMARY);
+			g_pLTClient->EndMessage(hMessage);
 		}
 		else
 		{
@@ -119,7 +119,7 @@ void CFolderAwards::UpdateData()
 
 	RemoveFree();
 
-    CLTGUITextItemCtrl* pCtrl = LTNULL;
+	CLTGUITextItemCtrl* pCtrl = LTNULL;
 
 
 	g_pLTClient->CPrint("best:%0.2f,old best:%0.2f",pMSummary->fBestRank, pMSummary->fOldBestRank);
@@ -183,22 +183,22 @@ void CFolderAwards::UpdateData()
 		MISSIONAWARDS *pAwards = g_pMissionMgr->GetMissionAwards();
 
 		int awardNum = 0;
-        pCtrl = AddTextItem(IDS_AWARDS,LTNULL,0, LTTRUE, GetLargeFont());
-        pCtrl->Enable(LTFALSE);
+		pCtrl = AddTextItem(IDS_AWARDS,LTNULL,0, LTTRUE, GetLargeFont());
+		pCtrl->Enable(LTFALSE);
 
-        if (pAwards->nNumHighAmmoAwards && pMission->nHighAmmo > -1 && pMSummary->dwNumShotsFired >= (uint32)pMission->nHighAmmo)
+		if (pAwards->nNumHighAmmoAwards && pMission->nHighAmmo > -1 && pMSummary->dwNumShotsFired >= (uint32)pMission->nHighAmmo)
 		{
 			awardNum = GetRandom(0,pAwards->nNumHighAmmoAwards-1);
-            pCtrl = AddTextItem(pAwards->aHighAmmoAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
-            pCtrl->Enable(LTFALSE);
+			pCtrl = AddTextItem(pAwards->aHighAmmoAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
+			pCtrl->Enable(LTFALSE);
 		}
-        if (pAwards->nNumLowAmmoAwards && pMission->nLowAmmo > -1 && pMSummary->dwNumShotsFired <= (uint32)pMission->nLowAmmo)
+		if (pAwards->nNumLowAmmoAwards && pMission->nLowAmmo > -1 && pMSummary->dwNumShotsFired <= (uint32)pMission->nLowAmmo)
 		{
 			awardNum = GetRandom(0,pAwards->nNumLowAmmoAwards-1);
-            pCtrl = AddTextItem(pAwards->aLowAmmoAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
-            pCtrl->Enable(LTFALSE);
+			pCtrl = AddTextItem(pAwards->aLowAmmoAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
+			pCtrl->Enable(LTFALSE);
 		}
-	    LTFLOAT fAccuracy = 0.0f;
+		LTFLOAT fAccuracy = 0.0f;
 		if (pMSummary->dwNumShotsFired)
 		{
 			fAccuracy = (LTFLOAT) pMSummary->dwNumHits / (LTFLOAT) pMSummary->dwNumShotsFired;
@@ -207,45 +207,41 @@ void CFolderAwards::UpdateData()
 		if (pAwards->nNumAccuracyAwards && fAccuracy > pAwards->fAccuracyPct)
 		{
 			awardNum = GetRandom(0,pAwards->nNumAccuracyAwards-1);
-            pCtrl = AddTextItem(pAwards->aAccuracyAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
-            pCtrl->Enable(LTFALSE);
+			pCtrl = AddTextItem(pAwards->aAccuracyAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
+			pCtrl->Enable(LTFALSE);
 		}
 		if (pAwards->nNumMarksmanAwards && pMSummary->dwNumShotsFired)
 		{
 
-            LTFLOAT fMarksman = (LTFLOAT) pMSummary->dwHitLocations[HL_HEAD] / (LTFLOAT) pMSummary->dwNumShotsFired;
+			LTFLOAT fMarksman = (LTFLOAT) pMSummary->dwHitLocations[HL_HEAD] / (LTFLOAT) pMSummary->dwNumShotsFired;
 			if (fMarksman > pAwards->fMarksmanPct)
 			{
 				awardNum = GetRandom(0,pAwards->nNumMarksmanAwards-1);
-                pCtrl = AddTextItem(pAwards->aMarksmanAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
-                pCtrl->Enable(LTFALSE);
+				pCtrl = AddTextItem(pAwards->aMarksmanAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
+				pCtrl->Enable(LTFALSE);
 			}
 		}
 		if (pAwards->nNumNonInjuryAwards && g_pInterfaceMgr->GetPlayerStats()->GetMissionDamage() == 0)
 		{
 
 			awardNum = GetRandom(0,pAwards->nNumNonInjuryAwards-1);
-            pCtrl = AddTextItem(pAwards->aNonInjuryAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
+			pCtrl = AddTextItem(pAwards->aNonInjuryAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
 
-            pCtrl->Enable(LTFALSE);
+			pCtrl->Enable(LTFALSE);
 		}
 		if (pAwards->nNumNotShotAwards && pMSummary->dwNumTimesHit == 0)
 		{
 
 			awardNum = GetRandom(0,pAwards->nNumNotShotAwards-1);
-            pCtrl = AddTextItem(pAwards->aNotShotAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
+			pCtrl = AddTextItem(pAwards->aNotShotAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
 
-            pCtrl->Enable(LTFALSE);
+			pCtrl->Enable(LTFALSE);
 		}
-        if (pAwards->nNumStealthAwards && pMission->nMaxDetect > -1 && (pMSummary->dwNumTimesDetected + pMSummary->dwNumBodies) <= (uint32)pMission->nMaxDetect)
+		if (pAwards->nNumStealthAwards && pMission->nMaxDetect > -1 && (pMSummary->dwNumTimesDetected + pMSummary->dwNumBodies) <= (uint32)pMission->nMaxDetect)
 		{
 			awardNum = GetRandom(0,pAwards->nNumStealthAwards-1);
-            pCtrl = AddTextItem(pAwards->aStealthAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
-            pCtrl->Enable(LTFALSE);
+			pCtrl = AddTextItem(pAwards->aStealthAwards[awardNum],LTNULL,0, LTTRUE, GetSmallFont());
+			pCtrl->Enable(LTFALSE);
 		}
-
 	}
 }
-
-
-

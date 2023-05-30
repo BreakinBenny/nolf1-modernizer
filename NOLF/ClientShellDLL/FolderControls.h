@@ -18,16 +18,16 @@ public:
 	virtual ~CFolderControls();
 
 	// Build the folder
-    LTBOOL   Build();
-    void OnFocus(LTBOOL bFocus);
+	LTBOOL   Build();
+	void OnFocus(LTBOOL bFocus);
 
 	void ConfirmSetting(LTBOOL bConfirm);
 
 protected:
 	void	ClearBindings();
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
-    LTBOOL				m_bUseJoystick;     // TRUE if the joystick should be used
+	LTBOOL				m_bUseJoystick;	// TRUE if the joystick should be used
 	CLTGUITextItemCtrl	*m_pJoystickCtrl;
 
 	int m_nConfirm;

@@ -86,60 +86,60 @@ class CFolderMgr
 public:
 	CFolderMgr();
 	virtual ~CFolderMgr();
-    LTBOOL               Init (ILTClient* pClientDE, CGameClientShell* pClientShell);
-	void				Term();
+	LTBOOL	Init (ILTClient* pClientDE, CGameClientShell* pClientShell);
+	void	Term();
 
-	void				HandleKeyDown (int vkey, int rep);
-	void				HandleKeyUp (int vkey);
-	void				HandleChar (char c);
+	void	HandleKeyDown (int vkey, int rep);
+	void	HandleKeyUp (int vkey);
+	void	HandleChar (char c);
 
 	// Mouse messages
-	void				OnLButtonDown(int x, int y);
-	void				OnLButtonUp(int x, int y);
-	void				OnLButtonDblClick(int x, int y);
-	void				OnRButtonDown(int x, int y);
-	void				OnRButtonUp(int x, int y);
-	void				OnRButtonDblClick(int x, int y);
-	void				OnMouseMove(int x, int y);
+	void	OnLButtonDown(int x, int y);
+	void	OnLButtonUp(int x, int y);
+	void	OnLButtonDblClick(int x, int y);
+	void	OnRButtonDown(int x, int y);
+	void	OnRButtonUp(int x, int y);
+	void	OnRButtonDblClick(int x, int y);
+	void	OnMouseMove(int x, int y);
 
-    LTBOOL               ForceFolderUpdate(eFolderID folderID);
+	LTBOOL ForceFolderUpdate(eFolderID folderID);
 
-	void				OnEnterWorld();
-	void				OnExitWorld();
+	void	OnEnterWorld();
+	void	OnExitWorld();
 
-	eFolderID			GetCurrentFolderID()		{return m_eCurrentFolderID;}
-	eFolderID			GetLastFolderID()			{return m_eLastFolderID;}
-    LTBOOL              SetCurrentFolder(eFolderID folderID);
-    LTBOOL              PreviousFolder();
-	void				EscapeCurrentFolder();
-	void				ExitFolders();
+	eFolderID	GetCurrentFolderID()	{return m_eCurrentFolderID;}
+	eFolderID	GetLastFolderID()		{return m_eLastFolderID;}
+	LTBOOL	SetCurrentFolder(eFolderID folderID);
+	LTBOOL	PreviousFolder();
+	void		EscapeCurrentFolder();
+	void		ExitFolders();
 
 	// Renders the folder to a surface
-    LTBOOL               Render(HSURFACE hDestSurf);
-	void				UpdateInterfaceSFX();
+	LTBOOL	Render(HSURFACE hDestSurf);
+	void		UpdateInterfaceSFX();
 
-	CBaseFolder*		GetFolderFromID(eFolderID folderID);
-	void				SkipOutfitting(void);
+	CBaseFolder*	GetFolderFromID(eFolderID folderID);
+	void			SkipOutfitting(void);
 
 private:
 
-	void				AddFolder(eFolderID folderID);
+	void	AddFolder(eFolderID folderID);
 
 private:
 	//important references
-    ILTClient*          m_pClientDE;
+	ILTClient*		m_pClientDE;
 	CGameClientShell*	m_pClientShell;
 
 
-	int				m_nHistoryLen;
+	int			m_nHistoryLen;
 	eFolderID		m_eFolderHistory[MAX_FOLDER_HISTORY];
 	eFolderID		m_eCurrentFolderID;
 	eFolderID		m_eLastFolderID;
-	CBaseFolder*	m_pCurrentFolder;		// The current folder
+	CBaseFolder*	m_pCurrentFolder;	// The current folder
 	void			SwitchToFolder(CBaseFolder *pNewFolder, LTBOOL bBack = LTFALSE);
 
 	//folders
-	CMoArray<CBaseFolder *>	m_folderArray;			// Pointer to each folder
+	CMoArray<CBaseFolder *> m_folderArray;	// Pointer to each folder
 };
 
 #endif // !defined(AFX_FOLDERMGR_H__88EE6E20_1515_11D3_B2DB_006097097C7B__INCLUDED_)

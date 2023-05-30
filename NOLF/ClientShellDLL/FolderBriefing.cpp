@@ -21,8 +21,8 @@ extern CGameClientShell* g_pGameClientShell;
 
 CFolderBriefing::CFolderBriefing()
 {
-    m_pMissionCtrl = LTNULL;
-    m_pBriefTextCtrl = LTNULL;
+	m_pMissionCtrl = LTNULL;
+	m_pBriefTextCtrl = LTNULL;
 	m_bPostMission = LTFALSE;
 	m_hSnd = LTNULL;
 
@@ -40,22 +40,22 @@ LTBOOL CFolderBriefing::Build()
 	CreateTitle(IDS_TITLE_BRIEFING);
 
 
-    m_pMissionCtrl=AddTextItem(IDS_SPACER,LTNULL,0,LTTRUE,GetMediumFont());
+	m_pMissionCtrl=AddTextItem(IDS_SPACER,LTNULL,0,LTTRUE,GetMediumFont());
 	m_pMissionCtrl->SetFixedWidth(480);
-    m_pMissionCtrl->Enable(LTFALSE);
+	m_pMissionCtrl->Enable(LTFALSE);
 
 	AddBlankLine();
 
-    CLTGUITextItemCtrl* pCtrl=AddTextItem(IDS_BRIEFING,LTNULL,0,LTTRUE,GetMediumFont());
-    pCtrl->Enable(LTFALSE);
+	CLTGUITextItemCtrl* pCtrl=AddTextItem(IDS_BRIEFING,LTNULL,0,LTTRUE,GetMediumFont());
+	pCtrl->Enable(LTFALSE);
 
-    m_pBriefTextCtrl = AddStaticTextItem(IDS_SPACER,LTNULL,LTNULL,480,0,LTTRUE,GetSmallFont());
+	m_pBriefTextCtrl = AddStaticTextItem(IDS_SPACER,LTNULL,LTNULL,480,0,LTTRUE,GetSmallFont());
 	if (m_pBriefTextCtrl)
 	{
-        m_pBriefTextCtrl->Enable(LTFALSE);
+		m_pBriefTextCtrl->Enable(LTFALSE);
 	}
 
-	return 	CBaseFolder::Build();
+	return	CBaseFolder::Build();
 ;
 }
 
@@ -92,9 +92,9 @@ void CFolderBriefing::OnFocus(LTBOOL bFocus)
 		int missionId = pMission->nNameId;
 		int briefId = pMission->nBriefingId;
 
-        HSTRING hTxt=g_pLTClient->FormatString(missionId);
+		HSTRING hTxt=g_pLTClient->FormatString(missionId);
 		m_pMissionCtrl->AddString(hTxt);
-        g_pLTClient->FreeString(hTxt);
+		g_pLTClient->FreeString(hTxt);
 
 		m_pBriefTextCtrl->SetString(briefId);
 
@@ -119,6 +119,4 @@ void CFolderBriefing::OnFocus(LTBOOL bFocus)
 		SetSelection(kNoSelection);
 	}
 	CBaseFolder::OnFocus(bFocus);
-
 }
-

@@ -35,10 +35,10 @@ LTBOOL CFolderMulti::Build()
 
 	CreateTitle(IDS_TITLE_MULTI);
 
-	AddTextItem(IDS_PLAYER_SETUP,	FOLDER_CMD_PLAYER,		IDS_HELP_PLAYER);
+	AddTextItem(IDS_PLAYER_SETUP, FOLDER_CMD_PLAYER,	IDS_HELP_PLAYER);
 	AddTextItem(IDS_JOIN,			FOLDER_CMD_JOIN,		IDS_HELP_JOIN);
-	AddTextItem(IDS_JOIN_LAN,		FOLDER_CMD_JOIN_LAN,	IDS_HELP_JOIN_LAN);
-	AddTextItem(IDS_HOST,			FOLDER_CMD_HOST,		IDS_HELP_HOST);
+	AddTextItem(IDS_JOIN_LAN,	FOLDER_CMD_JOIN_LAN,	IDS_HELP_JOIN_LAN);
+	AddTextItem(IDS_HOST,		FOLDER_CMD_HOST,		IDS_HELP_HOST);
 
  	// Make sure to call the base class
 	return CBaseFolder::Build();
@@ -76,11 +76,11 @@ uint32 CFolderMulti::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam
 
 
 // Change in focus
-void    CFolderMulti::OnFocus(LTBOOL bFocus)
+void	CFolderMulti::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
 	{
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 	}
 	else
 	{
@@ -88,4 +88,3 @@ void    CFolderMulti::OnFocus(LTBOOL bFocus)
 	}
 	CBaseFolder::OnFocus(bFocus);
 }
-

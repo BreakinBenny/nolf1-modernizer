@@ -16,7 +16,7 @@ extern CGameClientShell* g_pGameClientShell;
 namespace
 {
 	char	sSelectStr[32] = "";
-	int		nOldFirstDrawn;
+	int	nOldFirstDrawn;
 }
 
 
@@ -24,14 +24,9 @@ namespace
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CFolderNew::CFolderNew()
-{
-}
+CFolderNew::CFolderNew(){}
 
-CFolderNew::~CFolderNew()
-{
-
-}
+CFolderNew::~CFolderNew(){}
 
 
 
@@ -42,7 +37,6 @@ void CFolderNew::Term()
 }
 
 
-
 // Build the folder
 LTBOOL CFolderNew::Build()
 {
@@ -51,13 +45,13 @@ LTBOOL CFolderNew::Build()
 
 	if (strlen(sSelectStr) == 0)
 	{
-        HSTRING hTemp = g_pLTClient->FormatString(IDS_HELP_MISSION);
-        char *pTemp = g_pLTClient->GetStringData(hTemp);
+		HSTRING hTemp = g_pLTClient->FormatString(IDS_HELP_MISSION);
+		char *pTemp = g_pLTClient->GetStringData(hTemp);
 		strncpy(sSelectStr,pTemp,ARRAY_LEN(sSelectStr));
-        g_pLTClient->FreeString(hTemp);
+		g_pLTClient->FreeString(hTemp);
 	}
 
-    LTBOOL success = CBaseSelectionFolder::Build();
+	LTBOOL success = CBaseSelectionFolder::Build();
 	UseContinue(FOLDER_ID_NONE);
 
 	return success;
@@ -85,12 +79,12 @@ void CFolderNew::BuildMissionList()
 	for (int mis = 0; mis <= nextMission; ++mis)
 	{
 		MISSION* pMission = g_pMissionMgr->GetMission(mis);
-        uint32 cmd = (uint32)mis + FOLDER_CMD_CUSTOM;
+		uint32 cmd = (uint32)mis + FOLDER_CMD_CUSTOM;
 		if (!pMission) break;
 
 		int nameId = pMission->nNameId;
 		int nListWidth = m_ListRect.right - m_ListRect.left;
-        HSTRING hStr = g_pLTClient->FormatString(nameId);
+		HSTRING hStr = g_pLTClient->FormatString(nameId);
 
 		CLTGUIFont *pFont;
 		if (g_pLayoutMgr->GetListFontSize((eFolderID)m_nFolderID) == 0)
@@ -102,26 +96,26 @@ void CFolderNew::BuildMissionList()
 
 		CBitmapCtrl *pCheck = debug_new(CBitmapCtrl);
 		if (g_pLayoutMgr->GetListFontSize((eFolderID)m_nFolderID))
-            pCheck->Create(g_pLTClient,"interface\\check-off.pcx","interface\\check-on.pcx");
+			pCheck->Create(g_pLTClient,"interface\\check-off.pcx","interface\\check-on.pcx");
 		else
-            pCheck->Create(g_pLTClient,"interface\\small_check-off.pcx","interface\\small_check-on.pcx");
+			pCheck->Create(g_pLTClient,"interface\\small_check-off.pcx","interface\\small_check-on.pcx");
 		pCheck->Select((mis < nextMission));
 
 		int nWidth = pCheck->GetWidth();
-        CStaticTextCtrl *pCtrl = CreateStaticTextItem(hStr,cmd,LTNULL,(nListWidth - nWidth),0,LTFALSE,pFont);
-        pCtrl->Enable(LTTRUE);
+		CStaticTextCtrl *pCtrl = CreateStaticTextItem(hStr,cmd,LTNULL,(nListWidth - nWidth),0,LTFALSE,pFont);
+		pCtrl->Enable(LTTRUE);
 
 
 		int nHeight = Max(pCtrl->GetHeight(),pCheck->GetHeight());
 
 		CGroupCtrl *pGroup = AddGroup(nListWidth,nHeight,cmd);
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 
-        LTIntPt offset;
+		LTIntPt offset;
 
-        pGroup->AddControl(pCheck,offset,LTFALSE);
+		pGroup->AddControl(pCheck,offset,LTFALSE);
 		offset.x = nWidth;
-        pGroup->AddControl(pCtrl,offset,LTTRUE);
+		pGroup->AddControl(pCtrl,offset,LTTRUE);
 
 //		AddPhotoBitmap(g_pInterfaceResMgr->GetSharedSurface(pMission->szPhoto));
 
@@ -145,11 +139,11 @@ LTBOOL CFolderNew::UpdateSelection()
 		int briefingId = pMission->nDescriptionId;
 		HSTRING hStr;
 		if (briefingId)
-            hStr=g_pLTClient->FormatString(briefingId);
+			hStr=g_pLTClient->FormatString(briefingId);
 		else
-            hStr=g_pLTClient->CreateString("place mission briefing here");
+			hStr=g_pLTClient->CreateString("place mission briefing here");
 		m_pDescription->SetString(hStr);
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 
 		SetPhotoBitmap(pMission->szPhoto);
 		
@@ -186,7 +180,7 @@ void CFolderNew::ClearMissionList()
 
 uint32 CFolderNew::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2)
 {
-    if (dwCommand >= FOLDER_CMD_CUSTOM && dwCommand < FOLDER_CMD_CUSTOM + (uint32)g_pMissionMgr->GetNumMissions())
+	if (dwCommand >= FOLDER_CMD_CUSTOM && dwCommand < FOLDER_CMD_CUSTOM + (uint32)g_pMissionMgr->GetNumMissions())
 	{
 		int mis = (int)(dwCommand-FOLDER_CMD_CUSTOM);
 		g_pInterfaceMgr->GetMissionData()->NewMission(mis);
@@ -209,21 +203,21 @@ HSTRING CFolderNew::GetHelpString(uint32 dwHelpId, int nControlIndex)
 	if (nControlIndex >= 0 && nControlIndex < (int)m_controlArray.GetSize())
 	{
 		MISSION* pMission = g_pMissionMgr->GetMission(dwHelpId-FOLDER_CMD_CUSTOM);
-        HSTRING hStr = LTNULL;
+		HSTRING hStr = LTNULL;
 		if (pMission)
 		{
 
 			int nameId = pMission->nNameId;
 
-            HSTRING hTemp = g_pLTClient->FormatString(nameId);
-            char *pName = g_pLTClient->GetStringData(hTemp);
+			HSTRING hTemp = g_pLTClient->FormatString(nameId);
+			char *pName = g_pLTClient->GetStringData(hTemp);
 
 
 			sprintf(pStr,"%s: %s",m_sSelectStr,pName);
 
-            g_pLTClient->FreeString(hTemp);
+			g_pLTClient->FreeString(hTemp);
 
-            hStr = g_pLTClient->CreateString(pStr);
+			hStr = g_pLTClient->CreateString(pStr);
 
 		}
 

@@ -57,8 +57,8 @@ void LaunchCallBack(LTBOOL bReturn, void *pData);
 
 CFolderHost::CFolderHost()
 {
-	m_nGameType		= DEATHMATCH;
-    m_pTypeCtrl     = LTNULL;
+	m_nGameType	= DEATHMATCH;
+	m_pTypeCtrl	= LTNULL;
 
 	m_pBandwidthCycle	= LTNULL;
 	m_pBandwidthGroup	= LTNULL;
@@ -78,22 +78,20 @@ CFolderHost::CFolderHost()
 }
 
 
-CFolderHost::~CFolderHost()
-{
-}
+CFolderHost::~CFolderHost(){}
 
 // Build the folder
 LTBOOL CFolderHost::Build()
 {
 	if (!g_vtNetGameType.IsInitted())
 	{
-        g_vtNetGameType.Init(g_pLTClient,"NetGameType",LTNULL,(float)m_nGameType);
-        g_vtNetSessionName.Init(g_pLTClient,"NetSessionName",m_szSessionName,0.0f);
-        g_vtNetPassword.Init(g_pLTClient,"NetPassword",m_szPassword,0.0f);
-        g_vtNetUsePassword.Init(g_pLTClient,"NetUsePassword",LTNULL,0.0f);
-        g_vtNetPort.Init(g_pLTClient,"NetPort",LTNULL,(LTFLOAT)DEFAULT_PORT);
-        g_vtNetBandwidthSelection.Init(g_pLTClient,"NetBandwidthSelection",LTNULL,0);
-        g_vtNetBandwidthCustom.Init(g_pLTClient,"NetBandwidthCustom",LTNULL,2000);
+		g_vtNetGameType.Init(g_pLTClient,"NetGameType",LTNULL,(float)m_nGameType);
+		g_vtNetSessionName.Init(g_pLTClient,"NetSessionName",m_szSessionName,0.0f);
+		g_vtNetPassword.Init(g_pLTClient,"NetPassword",m_szPassword,0.0f);
+		g_vtNetUsePassword.Init(g_pLTClient,"NetUsePassword",LTNULL,0.0f);
+		g_vtNetPort.Init(g_pLTClient,"NetPort",LTNULL,(LTFLOAT)DEFAULT_PORT);
+		g_vtNetBandwidthSelection.Init(g_pLTClient,"NetBandwidthSelection",LTNULL,0);
+		g_vtNetBandwidthCustom.Init(g_pLTClient,"NetBandwidthCustom",LTNULL,2000);
 	}
 
 	LTFLOAT yr = g_pInterfaceResMgr->GetYRatio();
@@ -104,15 +102,15 @@ LTBOOL CFolderHost::Build()
 
 	m_pEdit = CreateEditCtrl(" ", CMD_EDIT_NAME, IDS_HELP_SESSION_NAME, m_szSessionName, sizeof(m_szSessionName), 25, LTTRUE);
 	m_pEdit->EnableCursor();
-    m_pEdit->Enable(LTFALSE);
+	m_pEdit->Enable(LTFALSE);
 	m_pEdit->SetAlignment(LTF_JUSTIFY_CENTER);
 
 	m_pNameGroup = AddGroup(640,m_pLabel->GetHeight(),IDS_HELP_SESSION_NAME);
 
-    LTIntPt offset(0,0);
-    m_pNameGroup->AddControl(m_pLabel,offset,LTTRUE);
+	LTIntPt offset(0,0);
+	m_pNameGroup->AddControl(m_pLabel,offset,LTTRUE);
 	offset.x = 200 * yr;
-    m_pNameGroup->AddControl(m_pEdit,offset,LTFALSE);
+	m_pNameGroup->AddControl(m_pEdit,offset,LTFALSE);
 
 
 	m_pTypeCtrl = AddCycleItem(IDS_GAME_TYPE,IDS_HELP_GAME_TYPE,200 * yr,25,&m_nGameType);
@@ -132,28 +130,28 @@ LTBOOL CFolderHost::Build()
 
 	m_pPassEdit = CreateEditCtrl(" ", CMD_EDIT_PASS, IDS_HELP_ENTER_PASSWORD, m_szPassword, sizeof(m_szPassword), 25, LTTRUE);
 	m_pPassEdit->EnableCursor();
-    m_pPassEdit->Enable(LTFALSE);
+	m_pPassEdit->Enable(LTFALSE);
 	m_pPassEdit->SetAlignment(LTF_JUSTIFY_CENTER);
 
 	m_pPassGroup = AddGroup(640,m_pPassLabel->GetHeight(),IDS_HELP_ENTER_PASSWORD);
 
-    offset = LTIntPt(0,0);
-    m_pPassGroup->AddControl(m_pPassLabel,offset,LTTRUE);
+	offset = LTIntPt(0,0);
+	m_pPassGroup->AddControl(m_pPassLabel,offset,LTTRUE);
 	offset.x = 200 * yr;
-    m_pPassGroup->AddControl(m_pPassEdit,offset,LTFALSE);
+	m_pPassGroup->AddControl(m_pPassEdit,offset,LTFALSE);
 
 	m_pPortLabel = CreateTextItem(IDS_PORT, CMD_EDIT_PORT, IDS_HELP_ENTER_PORT);
 
 	m_pPortEdit = CreateEditCtrl(" ", CMD_EDIT_PORT, IDS_HELP_ENTER_PORT, m_szPort, sizeof(m_szPort), 25, LTTRUE);
 	m_pPortEdit->EnableCursor();
-    m_pPortEdit->SetAlignment(LTF_JUSTIFY_CENTER);
+	m_pPortEdit->SetAlignment(LTF_JUSTIFY_CENTER);
 
 	m_pPortGroup = AddGroup(640,m_pPortLabel->GetHeight(),IDS_HELP_ENTER_PORT);
 
-    offset = LTIntPt(0,0);
-    m_pPortGroup->AddControl(m_pPortLabel,offset,LTTRUE);
+	offset = LTIntPt(0,0);
+	m_pPortGroup->AddControl(m_pPortLabel,offset,LTTRUE);
 	offset.x = 200 * yr;
-    m_pPortGroup->AddControl(m_pPortEdit,offset,LTFALSE);
+	m_pPortGroup->AddControl(m_pPortEdit,offset,LTFALSE);
 
 
 	
@@ -173,14 +171,14 @@ LTBOOL CFolderHost::Build()
 
 	m_pBandwidthEdit = CreateEditCtrl(" ", CMD_EDIT_BANDWIDTH, IDS_HELP_BANDWIDTH_EDIT, m_szBandwidth, sizeof(m_szBandwidth), 25, LTTRUE);
 	m_pBandwidthEdit->EnableCursor();
-    m_pBandwidthEdit->SetAlignment(LTF_JUSTIFY_CENTER);
+	m_pBandwidthEdit->SetAlignment(LTF_JUSTIFY_CENTER);
 
 	m_pBandwidthGroup = AddGroup(640,m_pBandwidthLabel->GetHeight(),IDS_HELP_BANDWIDTH_EDIT);
 
-    offset = LTIntPt(0,0);
-    m_pBandwidthGroup->AddControl(m_pBandwidthLabel,offset,LTTRUE);
+	offset = LTIntPt(0,0);
+	m_pBandwidthGroup->AddControl(m_pBandwidthLabel,offset,LTTRUE);
 	offset.x = 200 * yr;
-    m_pBandwidthGroup->AddControl(m_pBandwidthEdit,offset,LTFALSE);
+	m_pBandwidthGroup->AddControl(m_pBandwidthEdit,offset,LTFALSE);
 
 	UpdateBandwidth();
 
@@ -196,10 +194,10 @@ uint32 CFolderHost::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 		{
 			if (GetCapture())
 			{
-                SetCapture(LTNULL);
+				SetCapture(LTNULL);
 				m_pEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-                m_pEdit->Select(LTFALSE);
-                m_pLabel->Select(LTTRUE);
+				m_pEdit->Select(LTFALSE);
+				m_pLabel->Select(LTTRUE);
 				ForceMouseUpdate();
 			}
 			else
@@ -207,18 +205,18 @@ uint32 CFolderHost::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 				strcpy(szOldSessionName,m_szSessionName);
 				SetCapture(m_pEdit);
 				m_pEdit->SetColor(m_hSelectedColor,m_hSelectedColor,m_hSelectedColor);
-                m_pEdit->Select(LTTRUE);
-                m_pLabel->Select(LTFALSE);
+				m_pEdit->Select(LTTRUE);
+				m_pLabel->Select(LTFALSE);
 			}
 		} break;
 	case CMD_EDIT_PASS:
 		{
 			if (GetCapture())
 			{
-                SetCapture(LTNULL);
+				SetCapture(LTNULL);
 				m_pPassEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-                m_pPassEdit->Select(LTFALSE);
-                m_pPassLabel->Select(LTTRUE);
+				m_pPassEdit->Select(LTFALSE);
+				m_pPassLabel->Select(LTTRUE);
 				ForceMouseUpdate();
 			}
 			else
@@ -226,15 +224,15 @@ uint32 CFolderHost::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 				strcpy(szOldPassword,m_szPassword);
 				SetCapture(m_pPassEdit);
 				m_pPassEdit->SetColor(m_hSelectedColor,m_hSelectedColor,m_hSelectedColor);
-                m_pPassEdit->Select(LTTRUE);
-                m_pPassLabel->Select(LTFALSE);
+				m_pPassEdit->Select(LTTRUE);
+				m_pPassLabel->Select(LTFALSE);
 			}
 		} break;
 	case CMD_EDIT_PORT:
 		{
 			if (GetCapture())
 			{
-                SetCapture(LTNULL);
+				SetCapture(LTNULL);
 				m_pPortEdit->UpdateData();
 				uint16 nPort = (uint16)atoi(m_szPort);
 				if (nPort == 0 || !IsValidPort(nPort))
@@ -244,8 +242,8 @@ uint32 CFolderHost::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 				}
 				
 				m_pPortEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-                m_pPortEdit->Select(LTFALSE);
-                m_pPortLabel->Select(LTTRUE);
+				m_pPortEdit->Select(LTFALSE);
+				m_pPortLabel->Select(LTTRUE);
 				ForceMouseUpdate();
 			}
 			else
@@ -253,15 +251,15 @@ uint32 CFolderHost::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 				strcpy(szOldPort,m_szPort);
 				SetCapture(m_pPortEdit);
 				m_pPortEdit->SetColor(m_hSelectedColor,m_hSelectedColor,m_hSelectedColor);
-                m_pPortEdit->Select(LTTRUE);
-                m_pPortLabel->Select(LTFALSE);
+				m_pPortEdit->Select(LTTRUE);
+				m_pPortLabel->Select(LTFALSE);
 			}
 		} break;
 	case CMD_EDIT_BANDWIDTH:
 		{
 			if (GetCapture())
 			{
-                SetCapture(LTNULL);
+				SetCapture(LTNULL);
 				m_pBandwidthEdit->UpdateData();
 				uint32 nBandwidth = (uint32)atoi(m_szBandwidth);
 				if ( !IsValidBandwidth(nBandwidth) )
@@ -271,8 +269,8 @@ uint32 CFolderHost::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 				}
 				
 				m_pBandwidthEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-                m_pBandwidthEdit->Select(LTFALSE);
-                m_pBandwidthLabel->Select(LTTRUE);
+				m_pBandwidthEdit->Select(LTFALSE);
+				m_pBandwidthLabel->Select(LTTRUE);
 				g_vtNetBandwidthCustom.SetStr(m_szBandwidth);
 				UpdateBandwidth();
 				ForceMouseUpdate();
@@ -282,8 +280,8 @@ uint32 CFolderHost::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 				strcpy(szOldBandwidth,m_szBandwidth);
 				SetCapture(m_pBandwidthEdit);
 				m_pBandwidthEdit->SetColor(m_hSelectedColor,m_hSelectedColor,m_hSelectedColor);
-                m_pBandwidthEdit->Select(LTTRUE);
-                m_pBandwidthLabel->Select(LTFALSE);
+				m_pBandwidthEdit->Select(LTTRUE);
+				m_pBandwidthLabel->Select(LTFALSE);
 			}
 		} break;
 	case CMD_TOGGLE_PASS:
@@ -301,16 +299,16 @@ uint32 CFolderHost::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 		} break;
 	case CMD_LAUNCH:
 		{
-		    if (g_pGameClientShell->IsInWorld())
-		    {
-                HSTRING hString = g_pLTClient->FormatString(IDS_ENDCURRENTGAME);
-			    g_pInterfaceMgr->ShowMessageBox(hString,LTMB_YESNO,LaunchCallBack,this);
+			if (g_pGameClientShell->IsInWorld())
+			{
+				HSTRING hString = g_pLTClient->FormatString(IDS_ENDCURRENTGAME);
+				g_pInterfaceMgr->ShowMessageBox(hString,LTMB_YESNO,LaunchCallBack,this);
 				g_pLTClient->FreeString(hString);
-		    }
-		    else
-		    {
+			}
+			else
+			{
 				HandleLaunch();
-		    }
+			}
 
 		} break;
 	default:
@@ -323,42 +321,42 @@ void	CFolderHost::Escape()
 {
 	if (GetCapture() == m_pEdit)
 	{
-        SetCapture(LTNULL);
+		SetCapture(LTNULL);
 		strcpy(m_szSessionName,szOldSessionName);
-        m_pEdit->UpdateData(LTFALSE);
+		m_pEdit->UpdateData(LTFALSE);
 		m_pEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-        m_pEdit->Select(LTFALSE);
-        m_pLabel->Select(LTTRUE);
+		m_pEdit->Select(LTFALSE);
+		m_pLabel->Select(LTTRUE);
 		ForceMouseUpdate();
 	}
 	else if (GetCapture() == m_pPassEdit)
 	{
-        SetCapture(LTNULL);
+		SetCapture(LTNULL);
 		strcpy(m_szPassword,szOldPassword);
-        m_pPassEdit->UpdateData(LTFALSE);
+		m_pPassEdit->UpdateData(LTFALSE);
 		m_pPassEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-        m_pPassEdit->Select(LTFALSE);
-        m_pPassLabel->Select(LTTRUE);
+		m_pPassEdit->Select(LTFALSE);
+		m_pPassLabel->Select(LTTRUE);
 		ForceMouseUpdate();
 	}
 	else if (GetCapture() == m_pPortEdit)
 	{
-        SetCapture(LTNULL);
+		SetCapture(LTNULL);
 		strcpy(m_szPort,szOldPort);
-        m_pPortEdit->UpdateData(LTFALSE);
+		m_pPortEdit->UpdateData(LTFALSE);
 		m_pPortEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-        m_pPortEdit->Select(LTFALSE);
-        m_pPortLabel->Select(LTTRUE);
+		m_pPortEdit->Select(LTFALSE);
+		m_pPortLabel->Select(LTTRUE);
 		ForceMouseUpdate();
 	}
 	else if (GetCapture() == m_pBandwidthEdit)
 	{
-        SetCapture(LTNULL);
+		SetCapture(LTNULL);
 		strcpy(m_szBandwidth,szOldBandwidth);
-        m_pBandwidthEdit->UpdateData(LTFALSE);
+		m_pBandwidthEdit->UpdateData(LTFALSE);
 		m_pBandwidthEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-        m_pBandwidthEdit->Select(LTFALSE);
-        m_pBandwidthLabel->Select(LTTRUE);
+		m_pBandwidthEdit->Select(LTFALSE);
+		m_pBandwidthLabel->Select(LTTRUE);
 		ForceMouseUpdate();
 	}
 	else
@@ -368,7 +366,7 @@ void	CFolderHost::Escape()
 }
 
 // Change in focus
-void    CFolderHost::OnFocus(LTBOOL bFocus)
+void	CFolderHost::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
 	{
@@ -385,7 +383,7 @@ void    CFolderHost::OnFocus(LTBOOL bFocus)
 		m_pPassGroup->Enable(m_bUsePassword);
 
 		UpdateBandwidth();
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 	}
 	else
 	{
@@ -400,7 +398,7 @@ void    CFolderHost::OnFocus(LTBOOL bFocus)
 
 		g_vtNetBandwidthSelection.WriteFloat((LTFLOAT)m_nBandwidth);
 
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 
 		// Write the persistant host settings.
 		WriteNetHostSettings( );
@@ -418,7 +416,7 @@ LTBOOL CFolderHost::OnLeft()
 		if (nGameType < COOPERATIVE_ASSAULT)
 			nGameType = DEATHMATCH;
 		m_pTypeCtrl->SetSelIndex(nGameType);
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if (pCtrl == m_pBandwidthCycle)
 	{
@@ -428,7 +426,7 @@ LTBOOL CFolderHost::OnLeft()
 			m_nBandwidth = 5;
 		m_pBandwidthCycle->SetSelIndex(m_nBandwidth);
 		UpdateBandwidth();
-        return LTTRUE;
+		return LTTRUE;
 	}
 	return CBaseFolder::OnLeft();
 }
@@ -443,7 +441,7 @@ LTBOOL CFolderHost::OnRight()
 		if (nGameType > DEATHMATCH)
 			nGameType = COOPERATIVE_ASSAULT;
 		m_pTypeCtrl->SetSelIndex(nGameType);
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if (pCtrl == m_pBandwidthCycle)
 	{
@@ -453,7 +451,7 @@ LTBOOL CFolderHost::OnRight()
 			m_nBandwidth = 0;
 		m_pBandwidthCycle->SetSelIndex(m_nBandwidth);
 		UpdateBandwidth();
-        return LTTRUE;
+		return LTTRUE;
 	}
 	return CBaseFolder::OnRight();
 }
@@ -473,7 +471,7 @@ LTBOOL CFolderHost::OnLButtonUp(int x, int y)
 	{
 		CLTGUICtrl* pCtrl = GetControl(nControlIndex);
 		if (m_pCaptureCtrl && pCtrl != m_pCaptureCtrl)
-            return LTFALSE;
+			return LTFALSE;
 		// If the mouse is over the same control now as it was when the down message was called
 		// then send the "enter" message to the control.
 		if (nControlIndex == m_nLMouseDownItemSel)
@@ -487,7 +485,7 @@ LTBOOL CFolderHost::OnLButtonUp(int x, int y)
 					if (nGameType > DEATHMATCH)
 						nGameType = COOPERATIVE_ASSAULT;
 					m_pTypeCtrl->SetSelIndex(nGameType);
-                    return LTTRUE;
+					return LTTRUE;
 				}
 				else if (pCtrl == m_pBandwidthCycle)
 				{
@@ -497,7 +495,7 @@ LTBOOL CFolderHost::OnLButtonUp(int x, int y)
 						m_nBandwidth = 0;
 					m_pBandwidthCycle->SetSelIndex(m_nBandwidth);
 					UpdateBandwidth();
-                    return LTTRUE;
+					return LTTRUE;
 				}
 				else
 				{
@@ -512,7 +510,7 @@ LTBOOL CFolderHost::OnLButtonUp(int x, int y)
 	{
 		m_nLMouseDownItemSel= kNoSelection;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
@@ -531,7 +529,7 @@ LTBOOL CFolderHost::OnRButtonUp(int x, int y)
 	{
 		CLTGUICtrl* pCtrl = GetControl(nControlIndex);
 		if (m_pCaptureCtrl && pCtrl != m_pCaptureCtrl)
-            return LTFALSE;
+			return LTFALSE;
 
 		// If the mouse is over the same control now as it was when the down message was called
 		// then send the "left" message to the control.
@@ -546,7 +544,7 @@ LTBOOL CFolderHost::OnRButtonUp(int x, int y)
 					if (nGameType < COOPERATIVE_ASSAULT)
 						nGameType = DEATHMATCH;
 					m_pTypeCtrl->SetSelIndex(nGameType);
-                    return LTTRUE;
+					return LTTRUE;
 				}
 				else if (GetSelectedControl() == m_pBandwidthCycle)
 				{
@@ -556,7 +554,7 @@ LTBOOL CFolderHost::OnRButtonUp(int x, int y)
 						m_nBandwidth = 5;
 					m_pBandwidthCycle->SetSelIndex(m_nBandwidth);
 					UpdateBandwidth();
-                    return LTTRUE;
+					return LTTRUE;
 				}
 				else
 				{
@@ -570,30 +568,30 @@ LTBOOL CFolderHost::OnRButtonUp(int x, int y)
 	{
 		m_nRMouseDownItemSel= kNoSelection;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 void CFolderHost::FillGameStruct(NetGame *pNG)
 {
 	SAFE_STRCPY(pNG->m_sSession,m_szSessionName);	
 
-    pNG->m_byType = (uint8)m_nGameType;
+	pNG->m_byType = (uint8)m_nGameType;
 
 	pNG->m_byNumLevels = 0;
 	if (m_nGameType == COOPERATIVE_ASSAULT)
 	{
-        pNG->m_byNumLevels = (uint8)GetConsoleInt("NetCANumLevels", 0);
+		pNG->m_byNumLevels = (uint8)GetConsoleInt("NetCANumLevels", 0);
 	}
 	else
 	{
-        pNG->m_byNumLevels = (uint8)GetConsoleInt("NetNumLevels", 0);
+		pNG->m_byNumLevels = (uint8)GetConsoleInt("NetNumLevels", 0);
 	}
 	if (pNG->m_byNumLevels <= 0) return;
 
 
 	// Get each level...
 
-    for (uint8 i = 0; i < pNG->m_byNumLevels; i++)
+	for (uint8 i = 0; i < pNG->m_byNumLevels; i++)
 	{
 		char sLevel[256] = { "" };
 		char sLabel[32];
@@ -610,7 +608,7 @@ void CFolderHost::FillGameStruct(NetGame *pNG)
 		GetConsoleString(sLabel, pNG->m_sLevels[i], "");
 	}
 
-    pNG->m_byNumOptions = (uint8)g_pServerOptionMgr->GetNumOptions();
+	pNG->m_byNumOptions = (uint8)g_pServerOptionMgr->GetNumOptions();
 	if (pNG->m_byNumOptions > MAX_GAME_OPTIONS)
 		pNG->m_byNumOptions = MAX_GAME_OPTIONS;
 
@@ -654,8 +652,8 @@ void CFolderHost::HandleLaunch()
 	}
 	if (cLevels == 0)
 	{
-        HSTRING hString = g_pLTClient->FormatString(IDS_NOLEVELS);
-        g_pInterfaceMgr->ShowMessageBox(hString,LTMB_OK,LTNULL,LTNULL);
+		HSTRING hString = g_pLTClient->FormatString(IDS_NOLEVELS);
+		g_pInterfaceMgr->ShowMessageBox(hString,LTMB_OK,LTNULL,LTNULL);
 		g_pLTClient->FreeString(hString);
 	}
 	else
@@ -671,16 +669,16 @@ void CFolderHost::HandleLaunch()
 
 LTBOOL CFolderHost::LaunchGame()
 {
-    LTRESULT dr = g_pLTClient->InitNetworking(NULL, 0);
+	LTRESULT dr = g_pLTClient->InitNetworking(NULL, 0);
 	if (dr != LT_OK)
 	{
 //		s_nErrorString = IDS_NETERR_INIT;
 //		NetStart_DisplayError(hInst);
-        return(LTFALSE);
+		return(LTFALSE);
 	}
 
 	if (!SetService())
-        return LTFALSE;
+		return LTFALSE;
 
 	StartGameRequest req;
 	NetGame gameInfo;
@@ -705,7 +703,7 @@ LTBOOL CFolderHost::LaunchGame()
 	uint16 nPort = (uint16)atoi(m_szPort);
 
 	req.m_HostInfo.m_Port = nPort;
-    req.m_HostInfo.m_dwMaxPlayers = (uint32)GetConsoleInt("NetMaxPlayers",16)-1;
+	req.m_HostInfo.m_dwMaxPlayers = (uint32)GetConsoleInt("NetMaxPlayers",16)-1;
 
 	// Host name seems to filter itself, but let's do it just for safesies
 	std::string sHostName = FilterString(g_vtNetSessionName.GetStr());
@@ -728,10 +726,10 @@ LTBOOL CFolderHost::LaunchGame()
 	g_pInterfaceMgr->ChangeState(GS_LOADINGLEVEL);
 
 	// Host a new game.
-    if( g_pLTClient->StartGame( &req ) != LT_OK )
-        return LTFALSE;
+	if( g_pLTClient->StartGame( &req ) != LT_OK )
+		return LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
@@ -740,12 +738,12 @@ LTBOOL CFolderHost::SetService( )
 	NetService *pCur, *pListHead;
 	HNETSERVICE hNetService;
 
-	pCur      = NULL;
+	pCur	  = NULL;
 	pListHead = NULL;
 	hNetService = NULL;
 
-    if( g_pLTClient->GetServiceList( pListHead ) != LT_OK || !pListHead )
-        return LTFALSE;
+	if( g_pLTClient->GetServiceList( pListHead ) != LT_OK || !pListHead )
+		return LTFALSE;
 
 	// Find the service specified.
 	pCur = pListHead;
@@ -761,17 +759,17 @@ LTBOOL CFolderHost::SetService( )
 	}
 
 	// Free the service list.
-    g_pLTClient->FreeServiceList( pListHead );
+	g_pLTClient->FreeServiceList( pListHead );
 
 	// Check if tcp not found.
 	if( !hNetService )
-        return LTFALSE;
+		return LTFALSE;
 
 	// Select it.
-    if( g_pLTClient->SelectService( hNetService ) != LT_OK )
-        return LTFALSE;
+	if( g_pLTClient->SelectService( hNetService ) != LT_OK )
+		return LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
@@ -781,7 +779,7 @@ void LaunchCallBack(LTBOOL bReturn, void *pData)
 	if (bReturn && pThisFolder)
 	{
 		pThisFolder->ReadyLaunch(LTTRUE);
-    }
+	}
 }
 
 
@@ -805,12 +803,12 @@ void CFolderHost::UpdateBandwidth()
 	{
 		m_pBandwidthGroup->Enable(LTTRUE);
 		m_pBandwidthEdit->SetColor(m_hNonSelectedColor,m_hNonSelectedColor,m_hNonSelectedColor);
-        m_pBandwidthEdit->Select(LTFALSE);
+		m_pBandwidthEdit->Select(LTFALSE);
 
 		const char* szCustom = g_vtNetBandwidthCustom.GetStr();
 		char szBandwidth[128];
 		sprintf(szBandwidth, "%d", (int)atof(szCustom));
-        m_pBandwidthEdit->SetText(szBandwidth);
+		m_pBandwidthEdit->SetText(szBandwidth);
 
 		WriteConsoleString("SendBandwidth", szBandwidth);
 		strcpy(m_szBandwidth, szBandwidth);
@@ -819,11 +817,11 @@ void CFolderHost::UpdateBandwidth()
 	{
 		m_pBandwidthGroup->Enable(LTFALSE);
 		m_pBandwidthEdit->SetColor(m_hDisabledColor,m_hDisabledColor,m_hDisabledColor);
-        m_pBandwidthEdit->Select(LTFALSE);
+		m_pBandwidthEdit->Select(LTFALSE);
 
-	    static char* s_aszBandwidths[5] = { "4000", "16000", "32000", "1000000", "10000000" };
+		static char* s_aszBandwidths[5] = { "4000", "16000", "32000", "1000000", "10000000" };
 		WriteConsoleString("SendBandwidth", s_aszBandwidths[m_nBandwidth]);
-        m_pBandwidthEdit->SetText(s_aszBandwidths[m_nBandwidth]);
+		m_pBandwidthEdit->SetText(s_aszBandwidths[m_nBandwidth]);
 		strcpy(m_szBandwidth, s_aszBandwidths[m_nBandwidth]);
 	}
 }

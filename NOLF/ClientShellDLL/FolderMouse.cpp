@@ -28,22 +28,19 @@ namespace
 CFolderMouse::CFolderMouse()
 {
 
-    m_bInvertY = LTFALSE;
-    m_bMouseLook = LTFALSE;
+	m_bInvertY = LTFALSE;
+	m_bMouseLook = LTFALSE;
 	m_nInputRate = 0;
 	m_nSensitivity = 0;
 
-    m_pSensitivityCtrl = LTNULL;
-    m_pInputCtrl = LTNULL;
+	m_pSensitivityCtrl = LTNULL;
+	m_pInputCtrl = LTNULL;
 
-	m_nVehicleTurn	= 100;
-
-}
-
-CFolderMouse::~CFolderMouse()
-{
+	m_nVehicleTurn = 100;
 
 }
+
+CFolderMouse::~CFolderMouse(){}
 
 // Build the folder
 LTBOOL CFolderMouse::Build()
@@ -124,7 +121,7 @@ void CFolderMouse::OnFocus(LTBOOL bFocus)
 
 		m_bOldMouseLook = g_vtOldMouseLook.GetFloat();
 
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 	}
 	else
 	{
@@ -144,7 +141,7 @@ void CFolderMouse::OnFocus(LTBOOL bFocus)
 
 		// Just to be safe save the config incase anything changed...
 
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 	}
 	CBaseFolder::OnFocus(bFocus);
 }

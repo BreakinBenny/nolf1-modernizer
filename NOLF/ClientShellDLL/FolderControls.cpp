@@ -27,9 +27,7 @@ namespace
 	}
 
 	const int FOLDER_CMD_WEAPON_CONTROLS = (FOLDER_CMD_CUSTOM + 1);
-
 }
-
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -37,18 +35,13 @@ namespace
 
 CFolderControls::CFolderControls()
 {
-    m_pJoystickCtrl = LTNULL;
+	m_pJoystickCtrl = LTNULL;
 
-    m_bUseJoystick=LTFALSE;
+	m_bUseJoystick=LTFALSE;
 	m_nConfirm = 0;
-
-
 }
 
-CFolderControls::~CFolderControls()
-{
-
-}
+CFolderControls::~CFolderControls(){}
 
 // Build the folder
 LTBOOL CFolderControls::Build()
@@ -168,7 +161,7 @@ uint32 CFolderControls::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPa
 
 void CFolderControls::ClearBindings()
 {
-    if (!g_pLTClient) return;
+	if (!g_pLTClient) return;
 
 	g_pGameClientShell->ClearBindings();
 }
@@ -188,7 +181,7 @@ void CFolderControls::OnFocus(LTBOOL bFocus)
 
 		m_pJoystickCtrl->Enable(m_bUseJoystick);
 
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 	}
 	else
 	{
@@ -200,22 +193,21 @@ void CFolderControls::OnFocus(LTBOOL bFocus)
 		{
 			char strJoystick[128];
 			memset (strJoystick, 0, 128);
-            LTRESULT result = g_pLTClient->GetDeviceName (DEVICETYPE_JOYSTICK, strJoystick, 127);
+			LTRESULT result = g_pLTClient->GetDeviceName (DEVICETYPE_JOYSTICK, strJoystick, 127);
 			if (result == LT_OK)
 			{
 				char strConsole[256];
 				sprintf (strConsole, "EnableDevice \"%s\"", strJoystick);
-                g_pLTClient->RunConsoleString (strConsole);
+				g_pLTClient->RunConsoleString (strConsole);
 			}
 			else
 			{
-                pSettings->SetBoolVar("UseJoystick",LTFALSE);
+				pSettings->SetBoolVar("UseJoystick",LTFALSE);
 			}
 		}
 
 		// Just to be safe save the config incase anything changed...
-
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 	}
 	CBaseFolder::OnFocus(bFocus);
 }
@@ -251,7 +243,7 @@ void CFolderControls::ConfirmSetting(LTBOOL bConfirm)
 				ClearBindings();
 				g_pLTClient->ReadConfigFile ("defctrls.cfg");
 			}
-	        g_pLTClient->WriteConfigFile("autoexec.cfg");
+			g_pLTClient->WriteConfigFile("autoexec.cfg");
 
 		}
 		break;

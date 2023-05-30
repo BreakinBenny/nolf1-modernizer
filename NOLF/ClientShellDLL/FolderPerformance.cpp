@@ -66,8 +66,6 @@ sPerformSetting sPresets[kNumPresets] =
 	"GroupOffset4",1,1,0,
 	"GroupOffset5",2,1,0,
 	"GroupOffset6",2,1,0,
-
-
 };
 
 
@@ -118,8 +116,8 @@ LTBOOL CFolderPerformance::Build()
 	m_pPerformance->AddString(IDS_CUSTOMIZED);
 
 
-	AddTextItem(IDS_SCREEN,			FOLDER_CMD_DISPLAY,		IDS_HELP_ADVDISPLAY);
-	AddTextItem(IDS_SFX,			CMD_SFX,				IDS_HELP_SFX);
+	AddTextItem(IDS_SCREEN,	FOLDER_CMD_DISPLAY,	IDS_HELP_ADVDISPLAY);
+	AddTextItem(IDS_SFX,		CMD_SFX,				IDS_HELP_SFX);
 
 	m_pSoundFilters = AddToggle(IDS_SOUNDFILTERS, IDS_HELP_SOUNDFILTERS, kGap, &m_bSoundFilters );
 	m_pSoundFilters->SetOnString(IDS_ON);
@@ -155,7 +153,7 @@ uint32 CFolderPerformance::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 d
 
 
 // Change in focus
-void    CFolderPerformance::OnFocus(LTBOOL bFocus)
+void	CFolderPerformance::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
 	{
@@ -176,7 +174,7 @@ void    CFolderPerformance::OnFocus(LTBOOL bFocus)
 		}
 		nInitTB = GetConsoleInt("TripleBuffer",0);
 
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 		g_bSettingOverall = LTFALSE;
 	}
 	else
@@ -209,20 +207,20 @@ void    CFolderPerformance::OnFocus(LTBOOL bFocus)
 
 		if (bRebind)
 		{
-            g_pLTClient->Start3D();
-            g_pLTClient->StartOptimized2D();
+			g_pLTClient->Start3D();
+			g_pLTClient->StartOptimized2D();
 
 			g_pInterfaceResMgr->DrawMessage(GetSmallFont(),IDS_REBINDING_TEXTURES);
 
-            g_pLTClient->EndOptimized2D();
-            g_pLTClient->End3D();
-            g_pLTClient->FlipScreen(0);
+			g_pLTClient->EndOptimized2D();
+			g_pLTClient->End3D();
+			g_pLTClient->FlipScreen(0);
 
 			g_pLTClient->RunConsoleString("RebindTextures");
 		}
 
 
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 
 
 	}
@@ -321,7 +319,7 @@ LTBOOL CFolderPerformance::OnLeft()
 			SetOverall(m_nOverall);
 			UpdateData(LTFALSE);
 		}
-        return LTTRUE;
+		return LTTRUE;
 	}
 	LTBOOL bHandled = CBaseFolder::OnLeft();
 	if (bHandled)

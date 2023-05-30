@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: WeatherFX.h
 //
-// MODULE  : WeatherFX.h
+// PURPOSE: Weather special fx class - Definition
 //
-// PURPOSE : Weather special fx class - Definition
-//
-// CREATED : 3/23/99
-//
+// CREATED: 3/23/99
 // ----------------------------------------------------------------------- //
-
 #ifndef __WEATHER_FX_H__
 #define __WEATHER_FX_H__
 
@@ -17,22 +14,22 @@
 #include "SurfaceMgr.h"
 #include "BaseScaleFX.h"
 
-#define NUM_SPLASH_SPRITES		20
+#define NUM_SPLASH_SPRITES	20
 
 
 struct WFXCREATESTRUCT : public VBCREATESTRUCT
 {
-    WFXCREATESTRUCT();
+	WFXCREATESTRUCT();
 
 	void Read(HMESSAGEREAD hMessage);
 
-    uint32  dwFlags;
-    LTFLOAT  fViewDist;
+	uint32  dwFlags;
+	LTFLOAT  fViewDist;
 };
 
 inline WFXCREATESTRUCT::WFXCREATESTRUCT()
 {
-	dwFlags		= 0;
+	dwFlags	= 0;
 	fViewDist	= 0.0f;
 }
 
@@ -41,7 +38,7 @@ inline void WFXCREATESTRUCT::Read(HMESSAGEREAD hMessage)
 {
 	VBCREATESTRUCT::Read(hMessage);
 
-	dwFlags		= g_pLTClient->ReadFromMessageDWord(hMessage);
+	dwFlags	= g_pLTClient->ReadFromMessageDWord(hMessage);
 	fViewDist	= g_pLTClient->ReadFromMessageFloat(hMessage);
 }
 
@@ -51,7 +48,7 @@ class CWeatherFX : public CVolumeBrushFX
 
 		CWeatherFX() : CVolumeBrushFX()
 		{
-            m_bFirstUpdate  = LTTRUE;
+			m_bFirstUpdate	= LTTRUE;
 			m_fArea			= 1.0;
 			m_dwFlags		= 0;
 			m_fFloorY		= 0.0f;
@@ -65,9 +62,9 @@ class CWeatherFX : public CVolumeBrushFX
 			m_vDims.Init();
 		}
 
-        virtual LTBOOL Update();
-        virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
-        virtual LTBOOL CreateObject(ILTClient* pClientDE);
+		virtual LTBOOL Update();
+		virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
+		virtual LTBOOL CreateObject(ILTClient* pClientDE);
 
 		void	DoSplash(LSLineStruct* pLine);
 
@@ -75,27 +72,27 @@ class CWeatherFX : public CVolumeBrushFX
 
 	protected :
 
-        LTBOOL       m_bFirstUpdate;
-        uint32      m_dwFlags;
-        LTFLOAT      m_fFloorY;
-        LTFLOAT      m_fViewDist;
-		double		m_fArea;
+		LTBOOL	m_bFirstUpdate;
+		uint32	m_dwFlags;
+		LTFLOAT m_fFloorY;
+		LTFLOAT m_fViewDist;
+		double	m_fArea;
 
-		SurfaceType	m_eSurfaceType;
+		SurfaceType m_eSurfaceType;
 
-        LTVector     m_vRainVel;
-        LTVector     m_vSnowVel;
-        LTVector     m_vRainPos;
-        LTVector     m_vPos;
-        LTVector     m_vDims;
+		LTVector	m_vRainVel;
+		LTVector	m_vSnowVel;
+		LTVector	m_vRainPos;
+		LTVector	m_vPos;
+		LTVector	m_vDims;
 
-		CLineSystemFX		m_Rain;
+		CLineSystemFX	m_Rain;
 		CParticleSystemFX	m_Snow;
 
-		CBaseScaleFX	m_Splash[NUM_SPLASH_SPRITES];
+		CBaseScaleFX m_Splash[NUM_SPLASH_SPRITES];
 
-        LTBOOL   CreateSnow();
-        LTBOOL   CreateRain();
+		LTBOOL	CreateSnow();
+		LTBOOL	CreateRain();
 		void	CreateSplashSprites();
 };
 

@@ -14,15 +14,15 @@ extern CommandID g_CommandArray[];
 extern ConsoleMgr* g_pConsoleMgr;
 
 // The different columns
-#define FOLDER_COLUMN_ACTION		0
-#define FOLDER_COLUMN_BUFFER		1
-#define FOLDER_COLUMN_EQUALS		2
-#define FOLDER_COLUMN_KEY			3
+#define FOLDER_COLUMN_ACTION	0
+#define FOLDER_COLUMN_BUFFER	1
+#define FOLDER_COLUMN_EQUALS	2
+#define FOLDER_COLUMN_KEY		3
 
 namespace
 {
 
-    uint32 devices[FOLDER_CONTROLS_NUM_DEVICES] =
+	uint32 devices[FOLDER_CONTROLS_NUM_DEVICES] =
 	{
 		DEVICETYPE_KEYBOARD,
 		DEVICETYPE_MOUSE,
@@ -39,7 +39,7 @@ namespace
 		"","",""
 	};
 
-    LTBOOL   bEatMouseButtonUp = LTFALSE;
+	LTBOOL   bEatMouseButtonUp = LTFALSE;
 
 	char szWheelUp[32] = "";
 	char szWheelDown[32] = "";
@@ -53,8 +53,8 @@ namespace
 
 CFolderCustomControls::CFolderCustomControls()
 {
-    m_bControlChanged = LTFALSE;
-    m_bWaitingForKey = LTFALSE;
+	m_bControlChanged = LTFALSE;
+	m_bWaitingForKey = LTFALSE;
 	m_nEntries = 0;
 	m_fInputPauseTimeLeft = 0.0f;
 
@@ -73,13 +73,12 @@ void CFolderCustomControls::Escape()
 	}
 
 	// Make sure we save any config changes...
-
 	if (m_bControlChanged)
 	{
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 	}
 
-    m_bControlChanged = LTFALSE;
+	m_bControlChanged = LTFALSE;
 
 	CBaseFolder::Escape();
 }
@@ -157,7 +156,7 @@ LTBOOL CFolderCustomControls::InitControlList()
 
 	CalculateLastDrawn();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // Sets the key/mouse info for a control at a specific index
@@ -206,9 +205,9 @@ void CFolderCustomControls::SetControlText(int nIndex)
 	else
 	{
 		// Set the text in the control
-        HSTRING hString=g_pLTClient->CreateString(strControls);
+		HSTRING hString=g_pLTClient->CreateString(strControls);
 		pCtrl->SetString(FOLDER_COLUMN_KEY, hString);
-        g_pLTClient->FreeString(hString);
+		g_pLTClient->FreeString(hString);
 	}
 
 	if (m_pEntries[nIndex].nAction == COMMAND_ID_MOUSEAIMTOGGLE)
@@ -230,9 +229,9 @@ void CFolderCustomControls::SetControlText(int nIndex)
 void CFolderCustomControls::InitColumns(int nFilter,int nFirstEntry,int nEntries)
 {
 	// Create an empty string
-    HSTRING hEmpty=g_pLTClient->CreateString("");
+	HSTRING hEmpty=g_pLTClient->CreateString("");
 
-    CStaticTextCtrl *pCtrl=LTNULL;
+	CStaticTextCtrl *pCtrl=LTNULL;
 
 
 	switch (nFilter)
@@ -280,20 +279,20 @@ void CFolderCustomControls::InitColumns(int nFilter,int nFirstEntry,int nEntries
 
 	}
 
-    g_pLTClient->FreeString(hEmpty);
+	g_pLTClient->FreeString(hEmpty);
 }
 // Unbinds an action
 void CFolderCustomControls::UnBind(int commandIndex, uint32 deviceType)
 {
 
-    DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (deviceType);
+	DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (deviceType);
 	if (!pBindings)
 	{
 		return;
 	}
 
 	char szDevice[2048];
-    if (!g_pLTClient->GetDeviceName (deviceType, szDevice, sizeof(szDevice)) == LT_OK)
+	if (!g_pLTClient->GetDeviceName (deviceType, szDevice, sizeof(szDevice)) == LT_OK)
 	{
 		_ASSERT(0);
 		return;
@@ -309,7 +308,7 @@ void CFolderCustomControls::UnBind(int commandIndex, uint32 deviceType)
 		SAFE_STRCPY (m_pEntries[commandIndex].strControlName[dev], "");
 
 
-    LTBOOL bFound = LTFALSE;
+	LTBOOL bFound = LTFALSE;
 	DeviceBinding* ptr = pBindings;
 	GameAction* pUpAction = LTNULL;
 	GameAction* pDownAction = LTNULL;
@@ -337,7 +336,7 @@ void CFolderCustomControls::UnBind(int commandIndex, uint32 deviceType)
 			}
 			if (pAction->nActionCode == m_pEntries[commandIndex].nAction)
 			{
-                
+				
 				if (contType == CONTROLTYPE_KEY)
 				{
 					char tempStr[256];
@@ -347,11 +346,11 @@ void CFolderCustomControls::UnBind(int commandIndex, uint32 deviceType)
 						sprintf(tempStr, "rangebind \"%s\" \"##39\" 0 0 \"\"", szDevice);
 					else
 						sprintf(tempStr, "rangebind \"%s\" \"%s\" 0 0 \"\"", szDevice, ptr->strTriggerName);
-                    g_pLTClient->CPrint(tempStr);
-                    g_pLTClient->RunConsoleString(tempStr);
-                    m_bControlChanged = LTTRUE;
+					g_pLTClient->CPrint(tempStr);
+					g_pLTClient->RunConsoleString(tempStr);
+					m_bControlChanged = LTTRUE;
 
-                    bFound = LTTRUE;
+					bFound = LTTRUE;
 				}
 				else if (contType == CONTROLTYPE_BUTTON)
 				{
@@ -359,11 +358,11 @@ void CFolderCustomControls::UnBind(int commandIndex, uint32 deviceType)
 
 					// Set the binding
 					sprintf(tempStr, "rangebind \"%s\" \"%s\" 0 0 \"\"", szDevice, ptr->strTriggerName);
-                    g_pLTClient->CPrint(tempStr);
-                    g_pLTClient->RunConsoleString(tempStr);
-                    m_bControlChanged = LTTRUE;
+					g_pLTClient->CPrint(tempStr);
+					g_pLTClient->RunConsoleString(tempStr);
+					m_bControlChanged = LTTRUE;
 
-                    bFound = LTTRUE;
+					bFound = LTTRUE;
 				}
 				else if (deviceType == DEVICETYPE_MOUSE && contType == CONTROLTYPE_ZAXIS)
 				{
@@ -397,7 +396,7 @@ void CFolderCustomControls::UnBind(int commandIndex, uint32 deviceType)
 
 	}
 
-    g_pLTClient->FreeDeviceBindings (pBindings);
+	g_pLTClient->FreeDeviceBindings (pBindings);
 
 
 }
@@ -408,7 +407,7 @@ void CFolderCustomControls::Bind(int commandIndex, char *lpszControlName, uint32
 	_ASSERT(lpszControlName);
 
 	char szDevice[2048];
-    if (!g_pLTClient->GetDeviceName (deviceType, szDevice, sizeof(szDevice)) == LT_OK)
+	if (!g_pLTClient->GetDeviceName (deviceType, szDevice, sizeof(szDevice)) == LT_OK)
 	{
 		_ASSERT(0);
 		return;
@@ -422,7 +421,7 @@ void CFolderCustomControls::Bind(int commandIndex, char *lpszControlName, uint32
 
 
 	// Set the binding
-    uint32 contType = GetControlType(deviceType, lpszControlName);
+	uint32 contType = GetControlType(deviceType, lpszControlName);
 	if (contType == CONTROLTYPE_BUTTON || contType == CONTROLTYPE_KEY || !strlen(lpszControlName))
 	{
 		if (dev < FOLDER_CONTROLS_NUM_DEVICES)
@@ -450,7 +449,7 @@ void CFolderCustomControls::Bind(int commandIndex, char *lpszControlName, uint32
 LTBOOL CFolderCustomControls::HandleKeyDown(int key, int rep)
 {
 
-    LTBOOL handled = LTFALSE;
+	LTBOOL handled = LTFALSE;
 	switch (key)
 	{
 	case VK_DELETE:
@@ -502,23 +501,23 @@ uint32 CFolderCustomControls::OnCommand(uint32 dwCommand, uint32 dwParam1, uint3
 
 			CLTGUIColumnTextCtrl *pCtrl=GetControlFromEntryIndex(nIndex);
 
-            HSTRING hEquals=g_pLTClient->CreateString("=");
+			HSTRING hEquals=g_pLTClient->CreateString("=");
 			pCtrl->SetString(FOLDER_COLUMN_EQUALS, hEquals);
-            g_pLTClient->FreeString(hEquals);
+			g_pLTClient->FreeString(hEquals);
 
-            HSTRING hEmpty=g_pLTClient->CreateString("");
+			HSTRING hEmpty=g_pLTClient->CreateString("");
 			pCtrl->SetString(FOLDER_COLUMN_KEY, hEmpty);
-            g_pLTClient->FreeString(hEmpty);
+			g_pLTClient->FreeString(hEmpty);
 
 			// see if we can track the input devices
-            LTRESULT hResult = g_pLTClient->StartDeviceTrack (DEVICETYPE_KEYBOARD | DEVICETYPE_MOUSE | DEVICETYPE_JOYSTICK, TRACK_BUFFER_SIZE);
+			LTRESULT hResult = g_pLTClient->StartDeviceTrack (DEVICETYPE_KEYBOARD | DEVICETYPE_MOUSE | DEVICETYPE_JOYSTICK, TRACK_BUFFER_SIZE);
 			if (hResult != LT_OK)
 			{
-                g_pLTClient->EndDeviceTrack();
+				g_pLTClient->EndDeviceTrack();
 			}
 			else
 			{
-                m_bWaitingForKey = LTTRUE;
+				m_bWaitingForKey = LTTRUE;
 			}
 
 
@@ -537,28 +536,28 @@ LTBOOL CFolderCustomControls::Render(HSURFACE hDestSurf)
 	// see if we are pausing input
 	if (m_fInputPauseTimeLeft)
 	{
-        m_fInputPauseTimeLeft -= g_pGameClientShell->GetFrameTime();
+		m_fInputPauseTimeLeft -= g_pGameClientShell->GetFrameTime();
 		if (m_fInputPauseTimeLeft < 0.0f) m_fInputPauseTimeLeft = 0.0f;
 	}
 
 	// see if we are waiting for a keypress
 	if (m_bWaitingForKey)
 	{
-        uint32 nArraySize = TRACK_BUFFER_SIZE;
-        g_pLTClient->TrackDevice (m_pInputArray, &nArraySize);
+		uint32 nArraySize = TRACK_BUFFER_SIZE;
+		g_pLTClient->TrackDevice (m_pInputArray, &nArraySize);
 		if (nArraySize > 0)
 		{
 			// find the first key down event
-            for (uint32 i = 0; i < nArraySize; i++)
+			for (uint32 i = 0; i < nArraySize; i++)
 			{
 				if (m_pInputArray[i].m_InputValue)
 				{
 					if (SetCurrentSelection (&m_pInputArray[i]))
 					{
 						if (m_pInputArray[i].m_ControlType == CONTROLTYPE_BUTTON)
-                            bEatMouseButtonUp = LTTRUE;
-                        m_bWaitingForKey = LTFALSE;
-                        g_pLTClient->EndDeviceTrack();
+							bEatMouseButtonUp = LTTRUE;
+						m_bWaitingForKey = LTFALSE;
+						g_pLTClient->EndDeviceTrack();
 						m_fInputPauseTimeLeft = 0.2f;
 					}
 				}
@@ -576,7 +575,7 @@ LTBOOL CFolderCustomControls::Render(HSURFACE hDestSurf)
 
 LTBOOL CFolderCustomControls::SetCurrentSelection (DeviceInput* pInput)
 {
-    if (!g_pLTClient) return LTFALSE;
+	if (!g_pLTClient) return LTFALSE;
 
 	int nIndex=GetSelectedControl()->GetParam1()-1;
 	if (nIndex < 0 || nIndex >= m_nEntries)
@@ -589,7 +588,7 @@ LTBOOL CFolderCustomControls::SetCurrentSelection (DeviceInput* pInput)
 
 	if (pInput->m_ControlType != CONTROLTYPE_BUTTON &&
 		pInput->m_ControlType != CONTROLTYPE_KEY)
-        return LTFALSE;
+		return LTFALSE;
 
 	char sNewKey[256];
 	SAFE_STRCPY(sNewKey,pInput->m_ControlName);
@@ -645,28 +644,28 @@ LTBOOL CFolderCustomControls::SetCurrentSelection (DeviceInput* pInput)
 	};
 	SetControlText(nIndex);
 	CLTGUIColumnTextCtrl *pCtrl=GetControlFromEntryIndex(nIndex);
-    HSTRING hEmpty=g_pLTClient->CreateString("");
+	HSTRING hEmpty=g_pLTClient->CreateString("");
 	pCtrl->SetString(FOLDER_COLUMN_EQUALS, hEmpty);
-    g_pLTClient->FreeString(hEmpty);
+	g_pLTClient->FreeString(hEmpty);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 LTBOOL CFolderCustomControls::KeyRemappable (DeviceInput* pInput)
 {
-    if (!g_pLTClient) return LTFALSE;
+	if (!g_pLTClient) return LTFALSE;
 
 
 //*********************************************************************************
 	uint8 nDIK = (uint8)pInput->m_ControlName[63];
 	if (nDIK == DIK_ESCAPE)
-        return LTFALSE;
+		return LTFALSE;
 	if (nDIK == DIK_PAUSE)
-        return LTFALSE;
+		return LTFALSE;
 	if (nDIK >= DIK_F1 && nDIK <= DIK_F10)
-        return LTFALSE;
+		return LTFALSE;
 	if (nDIK >= DIK_F11 && nDIK <= DIK_F15)
-        return LTFALSE;
+		return LTFALSE;
 	char sNewKey[256];
 	ConvertKeyToCurrentKeyboard(sNewKey, pInput->m_ControlName, 256);
 	if (sNewKey[0] == ';')
@@ -674,8 +673,8 @@ LTBOOL CFolderCustomControls::KeyRemappable (DeviceInput* pInput)
 //*********************************************************************************
 
 
-    DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (DEVICETYPE_KEYBOARD);
-    if (!pBindings) return LTTRUE;
+	DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (DEVICETYPE_KEYBOARD);
+	if (!pBindings) return LTTRUE;
 
 	// see if this input object is already bound to something...
 
@@ -688,12 +687,12 @@ LTBOOL CFolderCustomControls::KeyRemappable (DeviceInput* pInput)
 			GameAction* pAction = ptr->pActionHead;
 			while (pAction)
 			{
-                LTBOOL bFoundFolderMatch = LTFALSE;
+				LTBOOL bFoundFolderMatch = LTFALSE;
 				for (int i = 0; i < m_nEntries; i++)
 				{
 					if (m_pEntries[i].nAction == pAction->nActionCode)
 					{
-                        bFoundFolderMatch = LTTRUE;
+						bFoundFolderMatch = LTTRUE;
 						break;
 					}
 				}
@@ -701,8 +700,8 @@ LTBOOL CFolderCustomControls::KeyRemappable (DeviceInput* pInput)
 				if (!bFoundFolderMatch)
 				{
 					// this key is already bound to something that doesn't exist in the folders...can't bind it.
-                    g_pLTClient->FreeDeviceBindings (pBindings);
-                    return LTFALSE;
+					g_pLTClient->FreeDeviceBindings (pBindings);
+					return LTFALSE;
 				}
 
 				pAction = pAction->pNext;
@@ -716,8 +715,8 @@ LTBOOL CFolderCustomControls::KeyRemappable (DeviceInput* pInput)
 
 	// either the binding exists in the folders or this key is not currently bound...therefore it's remappable
 
-    g_pLTClient->FreeDeviceBindings (pBindings);
-    return LTTRUE;
+	g_pLTClient->FreeDeviceBindings (pBindings);
+	return LTTRUE;
 }
 
 
@@ -726,7 +725,7 @@ LTBOOL CFolderCustomControls::OnUp()
 	if (!m_bWaitingForKey && !m_fInputPauseTimeLeft)
 		return CBaseFolder::OnUp();
 	else
-        return LTTRUE;
+		return LTTRUE;
 }
 
 LTBOOL CFolderCustomControls::OnDown()
@@ -734,7 +733,7 @@ LTBOOL CFolderCustomControls::OnDown()
 	if (!m_bWaitingForKey && !m_fInputPauseTimeLeft)
 		return CBaseFolder::OnDown();
 	else
-        return LTTRUE;
+		return LTTRUE;
 }
 
 LTBOOL CFolderCustomControls::OnLeft()
@@ -742,7 +741,7 @@ LTBOOL CFolderCustomControls::OnLeft()
 	if (!m_bWaitingForKey && !m_fInputPauseTimeLeft)
 		return CBaseFolder::OnLeft();
 	else
-        return LTTRUE;
+		return LTTRUE;
 }
 
 LTBOOL CFolderCustomControls::OnRight()
@@ -750,14 +749,14 @@ LTBOOL CFolderCustomControls::OnRight()
 	if (!m_bWaitingForKey && !m_fInputPauseTimeLeft)
 		return CBaseFolder::OnRight();
 	else
-        return LTTRUE;
+		return LTTRUE;
 }
 LTBOOL CFolderCustomControls::OnEnter()
 {
 	if (!m_bWaitingForKey && !m_fInputPauseTimeLeft)
 		return CBaseFolder::OnEnter();
 	else
-        return LTTRUE;
+		return LTTRUE;
 }
 
 LTBOOL CFolderCustomControls::OnLButtonDown(int x, int y)
@@ -765,15 +764,15 @@ LTBOOL CFolderCustomControls::OnLButtonDown(int x, int y)
 	if (!m_bWaitingForKey && !m_fInputPauseTimeLeft)
 		return CBaseFolder::OnLButtonDown(x,y);
 	else
-        return LTTRUE;
+		return LTTRUE;
 }
 
 LTBOOL CFolderCustomControls::OnLButtonUp(int x, int y)
 {
 	if (bEatMouseButtonUp)
 	{
-        bEatMouseButtonUp = LTFALSE;
-        return LTTRUE;
+		bEatMouseButtonUp = LTFALSE;
+		return LTTRUE;
 	}
 	else
 		return CBaseFolder::OnLButtonUp(x,y);
@@ -784,7 +783,7 @@ LTBOOL CFolderCustomControls::OnLButtonDblClick(int x, int y)
 	if (!m_bWaitingForKey && !m_fInputPauseTimeLeft)
 		return CBaseFolder::OnLButtonDblClick(x,y);
 	else
-        return LTTRUE;
+		return LTTRUE;
 }
 
 LTBOOL CFolderCustomControls::OnRButtonDown(int x, int y)
@@ -792,15 +791,15 @@ LTBOOL CFolderCustomControls::OnRButtonDown(int x, int y)
 	if (!m_bWaitingForKey && !m_fInputPauseTimeLeft)
 		return CBaseFolder::OnRButtonDown(x,y);
 	else
-        return LTTRUE;
+		return LTTRUE;
 }
 
 LTBOOL CFolderCustomControls::OnRButtonUp(int x, int y)
 {
 	if (bEatMouseButtonUp)
 	{
-        bEatMouseButtonUp = LTFALSE;
-        return LTTRUE;
+		bEatMouseButtonUp = LTFALSE;
+		return LTTRUE;
 	}
 	else
 		return CBaseFolder::OnRButtonUp(x,y);
@@ -811,7 +810,7 @@ LTBOOL CFolderCustomControls::OnRButtonDblClick(int x, int y)
 	if (!m_bWaitingForKey && !m_fInputPauseTimeLeft)
 		return CBaseFolder::OnRButtonDblClick(x,y);
 	else
-        return LTTRUE;
+		return LTTRUE;
 }
 
 
@@ -820,7 +819,7 @@ LTBOOL CFolderCustomControls::OnMouseMove(int x, int y)
 	if (!m_bWaitingForKey && !m_fInputPauseTimeLeft)
 		return CBaseFolder::OnMouseMove(x, y);
 	else
-        return LTTRUE;
+		return LTTRUE;
 }
 
 void CFolderCustomControls::OnFocus(LTBOOL bFocus)
@@ -844,8 +843,8 @@ void CFolderCustomControls::OnFocus(LTBOOL bFocus)
 
 uint32 CFolderCustomControls::GetControlType(uint32 deviceType, char *controlName)
 {
-    DeviceObject* pObj = g_pLTClient->GetDeviceObjects(deviceType);
-    uint32 type = CONTROLTYPE_UNKNOWN;
+	DeviceObject* pObj = g_pLTClient->GetDeviceObjects(deviceType);
+	uint32 type = CONTROLTYPE_UNKNOWN;
 	bool bFound = false;
 	while (pObj != NULL && !bFound)
 	{
@@ -867,7 +866,7 @@ void CFolderCustomControls::FillControlList()
 {
 	for (int dev = 0; dev < FOLDER_CONTROLS_NUM_DEVICES; ++dev)
 	{
-        if (!g_pLTClient->GetDeviceName (devices[dev],strDeviceName[dev], sizeof(strDeviceName[dev])) == LT_OK)
+		if (!g_pLTClient->GetDeviceName (devices[dev],strDeviceName[dev], sizeof(strDeviceName[dev])) == LT_OK)
 		{
 			continue;
 		}
@@ -875,8 +874,8 @@ void CFolderCustomControls::FillControlList()
 		{
 			SAFE_STRCPY (m_pEntries[i].strControlName[dev], "");
 		}
-        uint32 devType = devices[dev];
-        DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (devType);
+		uint32 devType = devices[dev];
+		DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (devType);
 		if (!pBindings)
 		{
 			continue;
@@ -885,7 +884,7 @@ void CFolderCustomControls::FillControlList()
 		{
 			// find the binding for this action
 
-            LTBOOL bFound = LTFALSE;
+			LTBOOL bFound = LTFALSE;
 			DeviceBinding* ptr = pBindings;
 			while (!bFound && ptr)
 			{
@@ -894,7 +893,7 @@ void CFolderCustomControls::FillControlList()
 				{
 					if (pAction->nActionCode == m_pEntries[i].nAction)
 					{
-                        uint32 contType = GetControlType(devType, ptr->strTriggerName);
+						uint32 contType = GetControlType(devType, ptr->strTriggerName);
 						if (contType == CONTROLTYPE_KEY)
 						{
 							char sNewKey[256];
@@ -902,14 +901,14 @@ void CFolderCustomControls::FillControlList()
 
 							SAFE_STRCPY (m_pEntries[i].strControlName[dev], sNewKey);
 
-                            bFound = LTTRUE;
+							bFound = LTTRUE;
 						}
 						else if (contType == CONTROLTYPE_BUTTON)
 						{
 
 							SAFE_STRCPY (m_pEntries[i].strControlName[dev], ptr->strTriggerName);
 
-                            bFound = LTTRUE;
+							bFound = LTTRUE;
 						}
 						else if (devType == DEVICETYPE_MOUSE && contType == CONTROLTYPE_ZAXIS)
 						{
@@ -928,7 +927,7 @@ void CFolderCustomControls::FillControlList()
 			}
 
 		}
-        g_pLTClient->FreeDeviceBindings (pBindings);
+		g_pLTClient->FreeDeviceBindings (pBindings);
 	}
 
 	// Fill out the column text for the bindings
@@ -961,7 +960,7 @@ CLTGUIColumnTextCtrl *CFolderCustomControls::GetControlFromEntryIndex(int nIndex
 
 LTBOOL CFolderCustomControls::CheckMouseWheel (DeviceInput* pInput)
 {
-    if (!g_pLTClient) return LTFALSE;
+	if (!g_pLTClient) return LTFALSE;
 
 	if (pInput->m_DeviceType != DEVICETYPE_MOUSE || pInput->m_ControlType != CONTROLTYPE_ZAXIS)
 		return LTFALSE;
@@ -969,15 +968,15 @@ LTBOOL CFolderCustomControls::CheckMouseWheel (DeviceInput* pInput)
 	LTBOOL bWheelUp = ((int)pInput->m_InputValue > 0);
 
 	char szDevice[256];
-    if (!g_pLTClient->GetDeviceName (pInput->m_DeviceType, szDevice, sizeof(szDevice)) == LT_OK)
+	if (!g_pLTClient->GetDeviceName (pInput->m_DeviceType, szDevice, sizeof(szDevice)) == LT_OK)
 	{
 		_ASSERT(0);
 		return LTFALSE;
 	}
 
 
-    LTBOOL bFound = LTFALSE;
-    DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (pInput->m_DeviceType);
+	LTBOOL bFound = LTFALSE;
+	DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (pInput->m_DeviceType);
 	if (!pBindings) return LTFALSE;
 
 	DeviceBinding* ptr = pBindings;
@@ -1070,21 +1069,21 @@ LTBOOL CFolderCustomControls::CheckMouseWheel (DeviceInput* pInput)
 
 	SetControlText(nIndex);
 	CLTGUIColumnTextCtrl *pCtrl=GetControlFromEntryIndex(nIndex);
-    HSTRING hEmpty=g_pLTClient->CreateString("");
+	HSTRING hEmpty=g_pLTClient->CreateString("");
 	pCtrl->SetString(FOLDER_COLUMN_EQUALS, hEmpty);
-    g_pLTClient->FreeString(hEmpty);
+	g_pLTClient->FreeString(hEmpty);
 
 	g_pLTClient->FreeDeviceBindings (pBindings);
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 void CFolderCustomControls::RebindWheel(int nUpAction,int nDownAction)
 {
 	char szDevice[64];
-    g_pLTClient->GetDeviceName (DEVICETYPE_MOUSE, szDevice, sizeof(szDevice));
+	g_pLTClient->GetDeviceName (DEVICETYPE_MOUSE, szDevice, sizeof(szDevice));
 
 	// Set the binding
 	//rangebind "##mouse" "##z-axis" 0.100000 255.000000 "Forward" -255.000000 -0.100000 "Backward" 
@@ -1101,8 +1100,6 @@ void CFolderCustomControls::RebindWheel(int nUpAction,int nDownAction)
 	}
 
 	sprintf(tempStr, "rangebind \"%s\" \"##z-axis\" %s %s", szDevice, upStr, downStr);
-    g_pLTClient->CPrint(tempStr);
-    g_pLTClient->RunConsoleString(tempStr);
+	g_pLTClient->CPrint(tempStr);
+	g_pLTClient->RunConsoleString(tempStr);
 }
-
-

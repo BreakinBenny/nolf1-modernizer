@@ -24,11 +24,11 @@ namespace
 
 CFolderKeyboard::CFolderKeyboard()
 {
-    m_pLookCtrl = LTNULL;
+	m_pLookCtrl = LTNULL;
 
-    m_bLookspring = LTFALSE;
+	m_bLookspring = LTFALSE;
 
-    m_bMouseLook = LTFALSE;
+	m_bMouseLook	= LTFALSE;
 	m_nNormalTurn	= 15;
 	m_nFastTurn		= 23;
 	m_nLookUp		= 25;
@@ -109,14 +109,14 @@ uint32 CFolderKeyboard::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwPa
 void CFolderKeyboard::OnFocus(LTBOOL bFocus)
 {
 	CGameSettings *pSettings = g_pInterfaceMgr->GetSettings();
-    LTBOOL bMouseLook = pSettings->MouseLook();
+	LTBOOL bMouseLook = pSettings->MouseLook();
 	if (bFocus)
 	{
 		m_bMouseLook = bMouseLook;
 		m_pLookCtrl->Enable(!bMouseLook);
 		if (bMouseLook)
 		{
-            m_bLookspring = LTFALSE;
+			m_bLookspring = LTFALSE;
 		}
 		else
 			m_bLookspring = pSettings->Lookspring();
@@ -133,7 +133,7 @@ void CFolderKeyboard::OnFocus(LTBOOL bFocus)
 		fTemp = pSettings->GetFloatVar("VehicleTurnRateScale");
 		m_nVehicleTurn = (int)(100.0f * fTemp);
 		
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 	}
 	else
 	{
@@ -155,7 +155,7 @@ void CFolderKeyboard::OnFocus(LTBOOL bFocus)
 
 		// Just to be safe save the config incase anything changed...
 
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 	}
 	CBaseFolder::OnFocus(bFocus);
 }

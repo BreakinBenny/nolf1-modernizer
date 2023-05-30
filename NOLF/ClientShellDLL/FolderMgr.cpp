@@ -72,9 +72,9 @@ extern CGameClientShell* g_pGameClientShell;
 
 CFolderMgr::CFolderMgr()
 {
-    m_pClientDE = LTNULL;
-    m_pClientShell = LTNULL;
-    m_pCurrentFolder = LTNULL;
+	m_pClientDE = LTNULL;
+	m_pClientShell = LTNULL;
+	m_pCurrentFolder = LTNULL;
 	m_eCurrentFolderID = FOLDER_ID_NONE;
 	m_eLastFolderID = FOLDER_ID_NONE;
 	m_nHistoryLen = 0;
@@ -87,18 +87,18 @@ CFolderMgr::~CFolderMgr()
 
 
 //////////////////////////////////////////////////////////////////////
-// Function name	: CFolderMgr::Init
-// Description	    :
-// Return type      : LTBOOL
-// Argument         : CClientDE* pClientDE
-// Argument         : CGameClientShell* pClientShell
+// Function name: CFolderMgr::Init
+// Description:
+// Return type:	LTBOOL
+// Argument:	CClientDE* pClientDE
+// Argument:	CGameClientShell* pClientShell
 //////////////////////////////////////////////////////////////////////
 
 LTBOOL CFolderMgr::Init(ILTClient* pClientDE, CGameClientShell* pClientShell)
 {
 	if (!pClientDE)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pClientDE = pClientDE;
@@ -111,13 +111,13 @@ LTBOOL CFolderMgr::Init(ILTClient* pClientDE, CGameClientShell* pClientShell)
 		AddFolder((eFolderID)nID);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 //////////////////////////////////////////////////////////////////////
-// Function name	: CFolderMgr::Term
-// Description	    :
-// Return type		: void
+// Function name: CFolderMgr::Term
+// Description:
+// Return type: void
 //////////////////////////////////////////////////////////////////////
 
 void CFolderMgr::Term()
@@ -141,7 +141,7 @@ LTBOOL CFolderMgr::Render(HSURFACE hDestSurf)
 
 		return m_pCurrentFolder->Render(hDestSurf);
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 void CFolderMgr::UpdateInterfaceSFX()
@@ -192,11 +192,11 @@ LTBOOL CFolderMgr::PreviousFolder()
 		SwitchToFolder(pNewFolder,LTTRUE);
 
 		// The music may change per folder...
-        g_pInterfaceMgr->SetMenuMusic(LTTRUE);
+		g_pInterfaceMgr->SetMenuMusic(LTTRUE);
 
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CFolderMgr::SetCurrentFolder(eFolderID folderID)
@@ -208,11 +208,11 @@ LTBOOL CFolderMgr::SetCurrentFolder(eFolderID folderID)
 		SwitchToFolder(pNewFolder);
 
 		// The music may change per folder...
-        g_pInterfaceMgr->SetMenuMusic(LTTRUE);
+		g_pInterfaceMgr->SetMenuMusic(LTTRUE);
 
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 void CFolderMgr::EscapeCurrentFolder()
@@ -226,7 +226,7 @@ void CFolderMgr::ExitFolders()
 	// Tell the old folder that it is losing focus
 	if (m_pCurrentFolder)
 	{
-        m_pCurrentFolder->OnFocus(LTFALSE);
+		m_pCurrentFolder->OnFocus(LTFALSE);
 	}
 
 	//clear our folder history (no longer relevant)
@@ -244,7 +244,7 @@ void CFolderMgr::SwitchToFolder(CBaseFolder *pNewFolder, LTBOOL bBack)
 	// Tell the old folder that it is losing focus
 	if (m_pCurrentFolder)
 	{
-        m_pCurrentFolder->OnFocus(LTFALSE);
+		m_pCurrentFolder->OnFocus(LTFALSE);
 		if (bBack)
 		{
 			m_nHistoryLen--;
@@ -284,7 +284,7 @@ void CFolderMgr::SwitchToFolder(CBaseFolder *pNewFolder, LTBOOL bBack)
 		// Needs to be timed...
 		//g_pInterfaceMgr->ClearAllScreenBuffers();
 
-        pNewFolder->OnFocus(LTTRUE);
+		pNewFolder->OnFocus(LTTRUE);
 //		g_pClientSoundMgr->PlayInterfaceSound(g_pInterfaceResMgr->GetSoundFolderOpen());
 	}
 }
@@ -353,7 +353,7 @@ void	CFolderMgr::OnMouseMove(int x, int y)
 
 void CFolderMgr::AddFolder(eFolderID folderID)
 {
-    CBaseFolder* pFolder = LTNULL;
+	CBaseFolder* pFolder = LTNULL;
 	switch (folderID)
 	{
 	case FOLDER_ID_MAIN:
@@ -576,7 +576,7 @@ void CFolderMgr::AddFolder(eFolderID folderID)
 
 LTBOOL CFolderMgr::ForceFolderUpdate(eFolderID folderID)
 {
-    if (!m_pCurrentFolder || m_eCurrentFolderID != folderID) return LTFALSE;
+	if (!m_pCurrentFolder || m_eCurrentFolderID != folderID) return LTFALSE;
 
 	return m_pCurrentFolder->HandleForceUpdate();
 }

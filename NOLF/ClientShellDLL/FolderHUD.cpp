@@ -31,9 +31,7 @@ CFolderHUD::CFolderHUD()
 	m_bRestrictAspectRatio = LTFALSE;
 }
 
-CFolderHUD::~CFolderHUD()
-{
-}
+CFolderHUD::~CFolderHUD(){}
 
 LTBOOL CFolderHUD::Build()
 {

@@ -18,31 +18,31 @@ public:
 	virtual ~CFolderPerformance();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL Build();
 
-    void    OnFocus(LTBOOL bFocus);
+	void OnFocus(LTBOOL bFocus);
 
 	LTBOOL	OnLeft();
 	LTBOOL	OnRight();
 	LTBOOL	OnLButtonUp(int x, int y);
 	LTBOOL	OnRButtonUp(int x, int y);
 
-	void	ConfirmSetting(LTBOOL bConfirm);
+	void ConfirmSetting(LTBOOL bConfirm);
 
-	int		GetOverall();
+	int	GetOverall();
 	void	SetOverall(int n);
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
 	
-	CCycleCtrl*		m_pPerformance;
+	CCycleCtrl*	m_pPerformance;
 	CToggleCtrl*	m_pSoundFilters; 
 
 	LTBOOL	m_bSoundFilters;
 	int		m_nOverall;
 
-	uint32	m_nSettingToConfirm;
+	uint32 m_nSettingToConfirm;
 
 };
 

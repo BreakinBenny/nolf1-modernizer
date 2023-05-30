@@ -16,16 +16,16 @@ extern CGameClientShell* g_pGameClientShell;
 
 
 
-extern VarTrack	g_vtNetGameType;
+extern VarTrack g_vtNetGameType;
 
 
 namespace
 {
 	int kHeaderWidth = 300;
 	int kSpacerWidth = 25;
-	int kSliderWidth = 300;
-	int kTotalWidth  = kHeaderWidth + kSpacerWidth;
-	int	g_nWeaponCommands[50];
+	int kSliderWidth	= 300;
+	int kTotalWidth	= kHeaderWidth + kSpacerWidth;
+	int g_nWeaponCommands[50];
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -34,20 +34,17 @@ namespace
 
 CFolderHostOptions::CFolderHostOptions()
 {
-    m_anValues = LTNULL;
+	m_anValues = LTNULL;
 }
 
-CFolderHostOptions::~CFolderHostOptions()
-{
-
-}
+CFolderHostOptions::~CFolderHostOptions(){}
 
 // Build the folder
 LTBOOL CFolderHostOptions::Build()
 {
 	if (!g_vtNetGameType.IsInitted())
 	{
-        g_vtNetGameType.Init(g_pLTClient,"NetGameType",LTNULL,0.0f);
+		g_vtNetGameType.Init(g_pLTClient,"NetGameType",LTNULL,0.0f);
 	}
 
 	if (g_pLayoutMgr->HasCustomValue(FOLDER_ID_HOST_OPTIONS,"ColumnWidth"))
@@ -82,7 +79,7 @@ void CFolderHostOptions::Term()
 	if (m_anValues)
 	{
 		debug_deletea(m_anValues);
-        m_anValues = LTNULL;
+		m_anValues = LTNULL;
 	}
 	// Make sure to call the base class
 	CBaseFolder::Term();
@@ -95,7 +92,7 @@ uint32 CFolderHostOptions::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 d
 
 
 // Change in focus
-void    CFolderHostOptions::OnFocus(LTBOOL bFocus)
+void	CFolderHostOptions::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
 	{
@@ -114,9 +111,9 @@ void    CFolderHostOptions::OnFocus(LTBOOL bFocus)
 
 			switch (pOpt->eType)
 			{
-			case SO_TOGGLE:
+				case SO_TOGGLE:
 				{
-                    CToggleCtrl *pToggle = AddToggle(pOpt->nNameId,pOpt->nHelpId,kTotalWidth,(LTBOOL *)&m_anValues[i]);
+					CToggleCtrl *pToggle = AddToggle(pOpt->nNameId,pOpt->nHelpId,kTotalWidth,(LTBOOL *)&m_anValues[i]);
 					int onId = IDS_ON;
 					int offId = IDS_OFF;
 					if (pOpt->nNumStrings >= 1 && pOpt->nStringId[0])
@@ -130,7 +127,7 @@ void    CFolderHostOptions::OnFocus(LTBOOL bFocus)
 					pToggle->SetOffString(offId);
 					pToggle->SetOnString(onId);
 				} break;
-			case SO_CYCLE:
+				case SO_CYCLE:
 				{
 					CCycleCtrl *pCycle = AddCycleItem(pOpt->nNameId,pOpt->nHelpId,kHeaderWidth,kSpacerWidth,&m_anValues[i]);
 					for (int s = 0; s < pOpt->nNumStrings; s++)
@@ -141,15 +138,15 @@ void    CFolderHostOptions::OnFocus(LTBOOL bFocus)
 							pCycle->AddString(defStrId);
 					}
 				} break;
-			case SO_SLIDER:
-			case SO_SLIDER_NUM:
+				case SO_SLIDER:
+				case SO_SLIDER_NUM:
 				{
 					CSliderCtrl *pSlider = AddSlider(pOpt->nNameId,pOpt->nHelpId,kTotalWidth, kSliderWidth, &m_anValues[i]);
 					pSlider->SetSliderRange(pOpt->nSliderMin, pOpt->nSliderMax);
 					pSlider->SetSliderIncrement(pOpt->nSliderInc);
 					pSlider->SetNumericDisplay( (SO_SLIDER_NUM == pOpt->eType) );
 				} break;
-			case SO_SPECIAL:
+				case SO_SPECIAL:
 				{
 					if (stricmp(pOpt->szVariable,"NetDefaultWeapon") == 0)
 					{
@@ -187,7 +184,7 @@ void    CFolderHostOptions::OnFocus(LTBOOL bFocus)
 			}
 		}
 
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 	}
 	else
 	{
@@ -203,9 +200,9 @@ void    CFolderHostOptions::OnFocus(LTBOOL bFocus)
 					pOpt->SetValue((LTFLOAT)g_nWeaponCommands[m_anValues[i]-1]);
 				}
 				else if (pOpt->fSliderScale == 0.0f)
-                    pOpt->SetValue((LTFLOAT)m_anValues[i]);
+					pOpt->SetValue((LTFLOAT)m_anValues[i]);
 				else
-                    pOpt->SetValue((LTFLOAT)m_anValues[i] * pOpt->fSliderScale);
+					pOpt->SetValue((LTFLOAT)m_anValues[i] * pOpt->fSliderScale);
 			}
 		}
 		RemoveFree();
@@ -227,12 +224,11 @@ void    CFolderHostOptions::OnFocus(LTBOOL bFocus)
 				}
 			}
 
-		    g_pLTClient->EndMessage(hWrite);
+			g_pLTClient->EndMessage(hWrite);
 		}
 
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 
 	}
 	CBaseFolder::OnFocus(bFocus);
 }
-

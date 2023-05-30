@@ -30,15 +30,15 @@ namespace
 
 CFolderMain::CFolderMain()
 {
-    m_BuildVersion = LTNULL;
-    m_pResume = LTNULL;
+	m_BuildVersion = LTNULL;
+	m_pResume = LTNULL;
 }
 
 CFolderMain::~CFolderMain()
 {
-    if (g_pLTClient && m_BuildVersion)
+	if (g_pLTClient && m_BuildVersion)
 	{
-        g_pLTClient->FreeString(m_BuildVersion);
+		g_pLTClient->FreeString(m_BuildVersion);
 	}
 
 }
@@ -52,7 +52,7 @@ LTBOOL CFolderMain::Build()
 
 	// CreateTitle(IDS_TITLE_MAINMENU);
 
-    LTIntPt pos = g_pLayoutMgr->GetFolderCustomPoint((eFolderID)m_nFolderID,"SinglePlayerPos");
+	LTIntPt pos = g_pLayoutMgr->GetFolderCustomPoint((eFolderID)m_nFolderID,"SinglePlayerPos");
 	AddLink(IDS_SINGLEPLAYER,	FOLDER_CMD_SINGLE_PLAYER,	IDS_HELP_SINGLEPLAYER,	pos.x,	pos.y);
 
 	pos = g_pLayoutMgr->GetFolderCustomPoint((eFolderID)m_nFolderID,"ResumePos");
@@ -73,8 +73,8 @@ LTBOOL CFolderMain::Build()
  	// Make sure to call the base class
 	if (!CBaseFolder::Build()) return LTFALSE;
 
-    UseArrows(LTFALSE);
-    UseBack(LTFALSE);
+	UseArrows(LTFALSE);
+	UseBack(LTFALSE);
 
 	return LTTRUE;
 
@@ -86,13 +86,13 @@ void CFolderMain::OnFocus(LTBOOL bFocus)
 	{
 		SetSelection(-1);
 		m_pResume->RemoveAll();
-        HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+		HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 		if (g_pGameClientShell->IsInWorld() && hPlayerObj && !g_pGameClientShell->IsPlayerDead())
 		{
 			m_pResume->AddString(IDS_RESUME);
 			m_pResume->SetHelpID(IDS_HELP_RESUME);
 			m_pResume->CLTGUICtrl::Create(FOLDER_CMD_RESUME,0,0);
-            m_pResume->Enable(LTTRUE);
+			m_pResume->Enable(LTTRUE);
 		}
 		else
 		{
@@ -111,10 +111,10 @@ void CFolderMain::OnFocus(LTBOOL bFocus)
 
 CLTGUITextItemCtrl* CFolderMain::AddLink(int stringID, uint32 commandID, int helpID, int xpos, int ypos)
 {
-    HSTRING hTxt=g_pLTClient->FormatString(stringID);
+	HSTRING hTxt=g_pLTClient->FormatString(stringID);
 	CLTGUITextItemCtrl* pCtrl= CreateTextItem(stringID,commandID,helpID);
 
-    LTIntPt pos(xpos ,ypos);
+	LTIntPt pos(xpos ,ypos);
 	AddFixedControl(pCtrl,pos);
 
 	return pCtrl;
@@ -143,7 +143,7 @@ uint32 CFolderMain::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 		}
 	case FOLDER_CMD_QUIT:
 		{
-            HSTRING hString = g_pLTClient->FormatString(IDS_SUREWANTQUIT);
+			HSTRING hString = g_pLTClient->FormatString(IDS_SUREWANTQUIT);
 			g_pInterfaceMgr->ShowMessageBox(hString,LTMB_YESNO,QuitCallBack,this);
 			g_pLTClient->FreeString(hString);
 			break;
@@ -153,7 +153,7 @@ uint32 CFolderMain::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 #ifdef _DEMO
 			g_pInterfaceMgr->ShowDemoScreens(LTTRUE);
 #else
-            g_pLTClient->Shutdown();
+			g_pLTClient->Shutdown();
 #endif
 			break;
 		}
@@ -169,7 +169,7 @@ uint32 CFolderMain::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 			char strKey[32] = "Continue";
 			CWinUtil::WinGetPrivateProfileString (GAME_NAME, strKey, "", strSaveGameSetting, 256, SAVEGAMEINI_FILENAME);
 			char* pWorldName = strtok(strSaveGameSetting,"|");
-            char* pFileName = strtok(LTNULL,"|");
+			char* pFileName = strtok(LTNULL,"|");
 			if (g_pGameClientShell->LoadGame(pWorldName, pFileName))
 			{
 				g_pInterfaceMgr->ChangeState(GS_PLAYING);
@@ -194,7 +194,7 @@ LTBOOL   CFolderMain::Render(HSURFACE hDestSurf)
 
 /* font test 
 		pFont = g_pInterfaceResMgr->GetTitleFont();
-        LTIntPt pos(320+g_pInterfaceResMgr->GetXOffset(),50+g_pInterfaceResMgr->GetYOffset());
+		LTIntPt pos(320+g_pInterfaceResMgr->GetXOffset(),50+g_pInterfaceResMgr->GetYOffset());
 		int ht = pFont->GetHeight();
 		pFont->Draw("! \" # $ % & ' ( ) *",hDestSurf,pos.x,pos.y,LTF_JUSTIFY_LEFT);
 		pos.y += ht;
@@ -217,7 +217,7 @@ LTBOOL   CFolderMain::Render(HSURFACE hDestSurf)
 		pFont->Draw("v w x y z { | } ~",hDestSurf,pos.x,pos.y,LTF_JUSTIFY_LEFT);
 /*
 		pFont = g_pInterfaceResMgr->GetMsgForeFont();
-        pos = LTIntPt(320+g_pInterfaceResMgr->GetXOffset(),50+g_pInterfaceResMgr->GetYOffset());
+		pos = LTIntPt(320+g_pInterfaceResMgr->GetXOffset(),50+g_pInterfaceResMgr->GetYOffset());
 		ht = pFont->GetHeight();
 		pFont->Draw("! \" # $ % & ' ( ) *",hDestSurf,pos.x,pos.y,LTF_JUSTIFY_LEFT, kWhite);
 		pos.y += ht;
@@ -240,10 +240,10 @@ LTBOOL   CFolderMain::Render(HSURFACE hDestSurf)
 		pFont->Draw("v w x y z { | } ~",hDestSurf,pos.x,pos.y,LTF_JUSTIFY_LEFT, kWhite);
 
 //	*/
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 
 }
 
@@ -251,7 +251,7 @@ LTBOOL   CFolderMain::Render(HSURFACE hDestSurf)
 void CFolderMain::Escape()
 {
 	//quit or return to game?
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (g_pGameClientShell->IsInWorld() && hPlayerObj && 
 		(!g_pGameClientShell->IsPlayerDead() || g_pGameClientShell->GetGameType() != SINGLE))
 	{
@@ -281,7 +281,7 @@ LTBOOL CFolderMain::OnUp()
 
 	SetSelection(FixedIndex(select));
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 /******************************************************************/
@@ -303,5 +303,5 @@ LTBOOL CFolderMain::OnDown()
 
 	SetSelection(FixedIndex(select));
 
-    return LTTRUE;
+	return LTTRUE;
 }

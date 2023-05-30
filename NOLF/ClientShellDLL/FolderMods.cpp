@@ -15,7 +15,7 @@ extern CGameClientShell* g_pGameClientShell;
 namespace
 {
 	HSTRING *hModDesc = LTNULL;
-	char		sIntegratedStr[32] = "";
+	char	sIntegratedStr[32] = "";
 
 }
 
@@ -28,41 +28,33 @@ CFolderMods::CFolderMods()
 	m_nAvailMods = 0;
 }
 
-CFolderMods::~CFolderMods()
-{
-}
+CFolderMods::~CFolderMods(){}
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderMods::Build
 //
-//	ROUTINE:	CFolderMods::Build
-//
-//	PURPOSE:	Build the folder
-//
+//	PURPOSE: Build the folder
 // ----------------------------------------------------------------------- //
-
 LTBOOL CFolderMods::Build()
 {
 	CreateTitle(IDS_TITLE_MODS);
-    LTBOOL success = CBaseSelectionFolder::Build();
+	LTBOOL success = CBaseSelectionFolder::Build();
 	if (strlen(sIntegratedStr) == 0)
 	{
-        HSTRING hTemp = g_pLTClient->FormatString(IDS_INTEGRATED);
-        char *pTemp = g_pLTClient->GetStringData(hTemp);
+		HSTRING hTemp = g_pLTClient->FormatString(IDS_INTEGRATED);
+		char *pTemp = g_pLTClient->GetStringData(hTemp);
 		strncpy(sIntegratedStr,pTemp,ARRAY_LEN(sIntegratedStr));
-        g_pLTClient->FreeString(hTemp);
+		g_pLTClient->FreeString(hTemp);
 	}
 	return success;
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderMods::IsAvailable
 //
-//	ROUTINE:	CFolderMods::IsAvailable
-//
-//	PURPOSE:	Check to see if there any selections to be made here
-//
+//	PURPOSE: Check to see if there any selections to be made here
 // ----------------------------------------------------------------------- //
-
 LTBOOL CFolderMods::IsAvailable()
 {
 	int missionNum = g_pInterfaceMgr->GetMissionData()->GetMissionNum();
@@ -79,13 +71,10 @@ LTBOOL CFolderMods::IsAvailable()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderMods::OnFocus
 //
-//	ROUTINE:	CFolderMods::OnFocus
-//
-//	PURPOSE:	Handle gaining or losing focus
-//
+//	PURPOSE: Handle gaining or losing focus
 // ----------------------------------------------------------------------- //
-
 void CFolderMods::OnFocus(LTBOOL bFocus)
 {
 	if (bFocus)
@@ -111,13 +100,10 @@ void CFolderMods::OnFocus(LTBOOL bFocus)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderMods::BuildModsList
 //
-//	ROUTINE:	CFolderMods::BuildModsList
-//
-//	PURPOSE:	Create the list of Mods
-//
+//	PURPOSE: Create the list of Mods
 // ----------------------------------------------------------------------- //
-
 void	CFolderMods::BuildModsList()
 {
 	//get info from MissionMgr
@@ -139,8 +125,8 @@ void	CFolderMods::BuildModsList()
 	int nNumMods = g_pWeaponMgr->GetNumModTypes();
 	if (nNumMods > 0)
 	{
-        hModDesc = debug_newa(HSTRING, nNumMods);
-        memset(hModDesc, LTNULL, sizeof(HSTRING) * nNumMods);
+		hModDesc = debug_newa(HSTRING, nNumMods);
+		memset(hModDesc, LTNULL, sizeof(HSTRING) * nNumMods);
 	}
 
 	int nMID = WMGR_INVALID_ID;
@@ -239,13 +225,10 @@ void	CFolderMods::BuildModsList()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderMods::UpdateSelection
 //
-//	ROUTINE:	CFolderMods::UpdateSelection
-//
-//	PURPOSE:	Show info based on current selection
-//
+//	PURPOSE: Show info based on current selection
 // ----------------------------------------------------------------------- //
-
 LTBOOL CFolderMods::UpdateSelection()
 {
 	LTBOOL bChanged = CBaseSelectionFolder::UpdateSelection();
@@ -276,13 +259,10 @@ LTBOOL CFolderMods::UpdateSelection()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderMods::ClearModsList
 //
-//	ROUTINE:	CFolderMods::ClearModsList
-//
-//	PURPOSE:	Remove all of the controls
-//
+//	PURPOSE: Remove all of the controls
 // ----------------------------------------------------------------------- //
-
 void CFolderMods::ClearModsList()
 {
 	// Terminate the ctrls
@@ -308,13 +288,10 @@ void CFolderMods::ClearModsList()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderMods::SaveModData
 //
-//	ROUTINE:	CFolderMods::SaveModData
-//
-//	PURPOSE:	Save the players selections
-//
+//	PURPOSE: Save the players selections
 // ----------------------------------------------------------------------- //
-
 void CFolderMods::SaveModData()
 {
 	CMissionData *pData = g_pInterfaceMgr->GetMissionData();
@@ -333,13 +310,10 @@ void CFolderMods::SaveModData()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CFolderMods::OnCommand
 //
-//	ROUTINE:	CFolderMods::OnCommand
-//
-//	PURPOSE:	Handle activation of items
-//
+//	PURPOSE: Handle activation of items
 // ----------------------------------------------------------------------- //
-
 uint32 CFolderMods::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2)
 {
 	switch (dwCommand)
@@ -383,7 +357,7 @@ uint32 CFolderMods::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2
 
 HSTRING CFolderMods::GetHelpString(uint32 dwHelpId, int nControlIndex)
 {
-    MOD* pMod = LTNULL;
+	MOD* pMod = LTNULL;
 	char pStr[512] = "";
 
 	//slots are fixed controls so count  negatively ( 0 > first > last )
@@ -399,8 +373,8 @@ HSTRING CFolderMods::GetHelpString(uint32 dwHelpId, int nControlIndex)
 
 		int nameId = pMod->nDescriptionId;
 
-        HSTRING hTemp = g_pLTClient->FormatString(nameId);
-        char *pName = g_pLTClient->GetStringData(hTemp);
+		HSTRING hTemp = g_pLTClient->FormatString(nameId);
+		char *pName = g_pLTClient->GetStringData(hTemp);
 
 
 
@@ -421,9 +395,9 @@ HSTRING CFolderMods::GetHelpString(uint32 dwHelpId, int nControlIndex)
 			sprintf(pStr,"%s %s",m_sSelectStr,pName);
 		}
 
-        g_pLTClient->FreeString(hTemp);
+		g_pLTClient->FreeString(hTemp);
 		
-        HSTRING hStr = g_pLTClient->CreateString(pStr);
+		HSTRING hStr = g_pLTClient->CreateString(pStr);
 		return hStr;
 	}
 	else
@@ -433,7 +407,7 @@ HSTRING CFolderMods::GetHelpString(uint32 dwHelpId, int nControlIndex)
 
 void CFolderMods::SetContinue()
 {
-    int nHelp = LTNULL;
+	int nHelp = LTNULL;
 	eFolderID eNext = GetNextSelectionFolder(FOLDER_ID_MODS,&nHelp);
 
 	if (eNext != FOLDER_ID_NONE)
@@ -459,19 +433,19 @@ void CFolderMods::CreateModelSFX()
 
 	BSCREATESTRUCT bcs;
 
-    LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
-    LTRotation rRot;
+	LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
+	LTRotation rRot;
 
-    g_pLTClient->GetObjectPos(hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetObjectPos(hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-    g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
-    g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
+	g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
+	g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
 
 	VEC_MULSCALAR(vScale, vScale, m_fScale);
 
-    LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
+	LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
 	VEC_ADD(vModPos,vModPos,m_vOffset);
 
 	VEC_MULSCALAR(vTemp, vF, vModPos.z);
@@ -486,12 +460,12 @@ void CFolderMods::CreateModelSFX()
 
 
 	VEC_COPY(bcs.vPos, vPos);
-    bcs.rRot = rRot;
+	bcs.rRot = rRot;
 	VEC_COPY(bcs.vInitialScale, vScale);
 	VEC_COPY(bcs.vFinalScale, vScale);
 	VEC_SET(bcs.vInitialColor, 1.0f, 1.0f, 1.0f);
 	VEC_SET(bcs.vFinalColor, 1.0f, 1.0f, 1.0f);
-    bcs.bUseUserColors = LTTRUE;
+	bcs.bUseUserColors = LTTRUE;
 
 	bcs.pFilename = m_szModel;
 	bcs.pSkin = m_szSkin;
@@ -503,7 +477,7 @@ void CFolderMods::CreateModelSFX()
 
 	if (m_ModelSFX.Init(&bcs))
 	{
-        m_ModelSFX.CreateObject(g_pLTClient);
+		m_ModelSFX.CreateObject(g_pLTClient);
 		if (m_ModelSFX.GetObject())
 		{
 			g_pInterfaceMgr->AddInterfaceSFX(&m_ModelSFX, IFX_NORMAL);
@@ -528,13 +502,13 @@ void CFolderMods::UpdateInterfaceSFX()
 
 	if (m_ModelSFX.GetObject())
 	{
-        LTFLOAT spin = g_pGameClientShell->GetFrameTime() * m_fSFXRot;
-        LTVector vU, vR, vF;
-        LTRotation rRot;
-        g_pLTClient->GetObjectRotation(m_ModelSFX.GetObject(), &rRot);
-        g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
-        g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
-        g_pLTClient->SetObjectRotation(m_ModelSFX.GetObject(),&rRot);
+		LTFLOAT spin = g_pGameClientShell->GetFrameTime() * m_fSFXRot;
+		LTVector vU, vR, vF;
+		LTRotation rRot;
+		g_pLTClient->GetObjectRotation(m_ModelSFX.GetObject(), &rRot);
+		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
+		g_pLTClient->SetObjectRotation(m_ModelSFX.GetObject(),&rRot);
 	}
 }
 
@@ -580,8 +554,8 @@ void CFolderMods::FillArray()
 	int nNumMods = g_pWeaponMgr->GetNumModTypes();
 	if (nNumMods > 0)
 	{
-        m_nMods = debug_newa(int, nNumMods);
-        memset(m_nMods, SEL_NOT_ALLOWED, sizeof(int) * nNumMods);
+		m_nMods = debug_newa(int, nNumMods);
+		memset(m_nMods, SEL_NOT_ALLOWED, sizeof(int) * nNumMods);
 	}
 
 	for (nMID=0; nMID < nNumMods; nMID++)

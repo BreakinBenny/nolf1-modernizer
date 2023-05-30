@@ -34,15 +34,9 @@ namespace
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CFolderMultiSummary::CFolderMultiSummary()
-{
+CFolderMultiSummary::CFolderMultiSummary(){}
 
-}
-
-CFolderMultiSummary::~CFolderMultiSummary()
-{
-
-}
+CFolderMultiSummary::~CFolderMultiSummary(){}
 
 
 LTBOOL CFolderMultiSummary::Build()
@@ -80,8 +74,8 @@ void CFolderMultiSummary::Escape()
 	{
 		pBrief->Enable(LTFALSE);
 	}
-    HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_EXITLEVEL);
-    g_pLTClient->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_EXITLEVEL);
+	g_pLTClient->EndMessage(hMessage);
 }
 
 uint32 CFolderMultiSummary::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2)
@@ -291,23 +285,23 @@ void CFolderMultiSummary::BuildObjectivesList()
 	CLTGUIFont *pFont = GetSmallFont();
 	for (int i = pObjList->nNumObjectives-1; i >= 0 ; i--)
 	{
-        uint32 objID = pObjList->dwObjectives[i];
+		uint32 objID = pObjList->dwObjectives[i];
 
 		CGroupCtrl *pGroup = new CGroupCtrl;
-        CLTGUITextItemCtrl *pCtrl = CreateTextItem((int)objID, LTNULL, LTNULL, LTTRUE, pFont);
+		CLTGUITextItemCtrl *pCtrl = CreateTextItem((int)objID, LTNULL, LTNULL, LTTRUE, pFont);
 		if (pCtrl)
 		{
-            pCtrl->Enable(LTFALSE);
+			pCtrl->Enable(LTFALSE);
 			pCtrl->SetFixedWidth(440);
 			int nIndex= 0;
 			CBitmapCtrl *pCheck = new CBitmapCtrl;
 			if (pCompObjList->Have(objID,nIndex))
 			{
-                pCheck->Create(g_pLTClient,"interface\\check-on.pcx");
+				pCheck->Create(g_pLTClient,"interface\\check-on.pcx");
 			}
 			else
 			{
-                pCheck->Create(g_pLTClient,"interface\\check-off.pcx");
+				pCheck->Create(g_pLTClient,"interface\\check-off.pcx");
 			}
 
 			int strHeight = pCtrl->GetHeight();
@@ -317,13 +311,13 @@ void CFolderMultiSummary::BuildObjectivesList()
 
 			pGroup->Create(480,height);
 
-            LTIntPt offset(40, (height - strHeight) / 2 );
+			LTIntPt offset(40, (height - strHeight) / 2 );
 			pGroup->AddControl(pCtrl,offset);
 
 			offset.x = 0;
 			offset.y = (height - bmpHeight) / 2;
 			pGroup->AddControl(pCheck,offset);
-            pGroup->Enable(LTFALSE);
+			pGroup->Enable(LTFALSE);
 
 			AddFreeControl(pGroup);
 		}
@@ -337,7 +331,7 @@ LTBOOL CFolderMultiSummary::Render(HSURFACE hDestSurf)
 {
 	if (!hDestSurf)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	int xo = 0;// g_pInterfaceResMgr->GetXOffset();
@@ -390,5 +384,4 @@ LTBOOL CFolderMultiSummary::Render(HSURFACE hDestSurf)
 	}
 
 	return LTTRUE;
-
 }

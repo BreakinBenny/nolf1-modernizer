@@ -18,21 +18,21 @@ public:
 	virtual ~CFolderJoinLAN();
 
 	// Build the folder
-    LTBOOL   Build();
+	LTBOOL   Build();
 
 	LTBOOL	 Render(HSURFACE hDestSurf);
 
-    LTBOOL   OnLButtonUp(int x, int y);
-    LTBOOL   OnRButtonUp(int x, int y);
+	LTBOOL   OnLButtonUp(int x, int y);
+	LTBOOL   OnRButtonUp(int x, int y);
 
-    void    OnFocus(LTBOOL bFocus);
+	void	OnFocus(LTBOOL bFocus);
 	LTBOOL	HandleKeyDown(int key, int rep);
 	void	Escape();
 
 	void	JoinCurGame();
 
 protected:
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
 	LTBOOL	InitSessions();
 	void	FindServers();
