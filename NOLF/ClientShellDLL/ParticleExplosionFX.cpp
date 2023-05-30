@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ParticleExplosionFX.cpp
 //
-// MODULE  : ParticleExplosionFX.cpp
+// PURPOSE: Particle Explosion - Implementation
 //
-// PURPOSE : Particle Explosion - Implementation
-//
-// CREATED : 5/22/98
-//
+// CREATED: 5/22/98
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "ParticleExplosionFX.h"
 #include "iltclient.h"
@@ -21,44 +18,41 @@
 extern LTVector g_vWorldWindVel;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleExplosionFX::Init
 //
-//	ROUTINE:	CParticleExplosionFX::Init
-//
-//	PURPOSE:	Init the Particle trail segment
-//
+//	PURPOSE: Init the Particle trail segment
 // ----------------------------------------------------------------------- //
-
 LTBOOL CParticleExplosionFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CBaseParticleSystemFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CBaseParticleSystemFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	PESCREATESTRUCT* pPE = (PESCREATESTRUCT*)psfxCreateStruct;
-    m_rSurfaceRot = pPE->rSurfaceRot;
-	m_vPos				= pPE->vPos;
-	m_vColor1			= pPE->vColor1;
-	m_vColor2			= pPE->vColor2;
-	m_vMinVel			= pPE->vMinVel;
-	m_vMaxVel			= pPE->vMaxVel;
-	m_vMinDriftVel		= pPE->vMinDriftVel;
-	m_vMaxDriftVel		= pPE->vMaxDriftVel;
-	m_fLifeTime			= pPE->fLifeTime;
-	m_fFadeTime			= pPE->fFadeTime;
+	m_rSurfaceRot = pPE->rSurfaceRot;
+	m_vPos			= pPE->vPos;
+	m_vColor1		= pPE->vColor1;
+	m_vColor2		= pPE->vColor2;
+	m_vMinVel		= pPE->vMinVel;
+	m_vMaxVel		= pPE->vMaxVel;
+	m_vMinDriftVel	= pPE->vMinDriftVel;
+	m_vMaxDriftVel	= pPE->vMaxDriftVel;
+	m_fLifeTime		= pPE->fLifeTime;
+	m_fFadeTime		= pPE->fFadeTime;
 	m_fOffsetTime		= pPE->fOffsetTime;
-	m_fRadius			= pPE->fRadius;
-	m_fGravity			= pPE->fGravity;
-	m_nNumPerPuff		= pPE->nNumPerPuff;
-	m_nNumEmitters		= (pPE->nNumEmitters > MAX_EMITTERS ? MAX_EMITTERS : pPE->nNumEmitters);
-	m_nEmitterFlags		= pPE->nEmitterFlags;
-	m_pTextureName		= pPE->pFilename;
-	m_bCreateDebris		= pPE->bCreateDebris;
-	m_bRotateDebris		= pPE->bRotateDebris;
-	m_nSurfaceType		= pPE->nSurfaceType;
-	m_bIgnoreWind		= pPE->bIgnoreWind;
-	m_nNumSteps			= pPE->nNumSteps;
+	m_fRadius		= pPE->fRadius;
+	m_fGravity		= pPE->fGravity;
+	m_nNumPerPuff	= pPE->nNumPerPuff;
+	m_nNumEmitters	= (pPE->nNumEmitters > MAX_EMITTERS ? MAX_EMITTERS : pPE->nNumEmitters);
+	m_nEmitterFlags	= pPE->nEmitterFlags;
+	m_pTextureName	= pPE->pFilename;
+	m_bCreateDebris	= pPE->bCreateDebris;
+	m_bRotateDebris	= pPE->bRotateDebris;
+	m_nSurfaceType	= pPE->nSurfaceType;
+	m_bIgnoreWind	= pPE->bIgnoreWind;
+	m_nNumSteps		= pPE->nNumSteps;
 
 	VEC_SET(m_vColorRange, m_vColor2.x - m_vColor1.x,
-						   m_vColor2.y - m_vColor1.y,
-						   m_vColor2.z - m_vColor1.z);
+						m_vColor2.y - m_vColor1.y,
+						m_vColor2.z - m_vColor1.z);
 
 	if (m_vColorRange.x < 0.0f) m_vColorRange.x = 0.0f;
 	if (m_vColorRange.y < 0.0f) m_vColorRange.y = 0.0f;
@@ -67,29 +61,26 @@ LTBOOL CParticleExplosionFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 
 	if (m_bRotateDebris)
 	{
-		m_fPitchVel = GetRandom(-MATH_CIRCLE, MATH_CIRCLE);
+		m_fPitchVel	= GetRandom(-MATH_CIRCLE, MATH_CIRCLE);
 		m_fYawVel	= GetRandom(-MATH_CIRCLE, MATH_CIRCLE);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleExplosionFX::CreateObject
 //
-//	ROUTINE:	CParticleExplosionFX::CreateObject
-//
-//	PURPOSE:	Create object associated the particle system.
-//
+//	PURPOSE: Create object associated the particle system.
 // ----------------------------------------------------------------------- //
-
 LTBOOL CParticleExplosionFX::CreateObject(ILTClient *pClientDE)
 {
-    LTBOOL bRet = CBaseParticleSystemFX::CreateObject(pClientDE);
+	LTBOOL bRet = CBaseParticleSystemFX::CreateObject(pClientDE);
 	if (!bRet) return bRet;
 
 	// Initialize the Emitters velocity ranges based on our rotation...
 
-    LTVector vVelMin, vVelMax, vTemp, vU, vR, vF;
+	LTVector vVelMin, vVelMax, vTemp, vU, vR, vF;
 	VEC_SET(vVelMin, 1.0f, 1.0f, 1.0f);
 	VEC_SET(vVelMax, 1.0f, 1.0f, 1.0f);
 
@@ -132,7 +123,7 @@ LTBOOL CParticleExplosionFX::CreateObject(ILTClient *pClientDE)
 
 	// Initialize our Emitters...
 
-    LTVector vStartVel;
+	LTVector vStartVel;
 	for (int i=0; i < m_nNumEmitters; i++)
 	{
 		if (m_bCreateDebris)
@@ -140,12 +131,12 @@ LTBOOL CParticleExplosionFX::CreateObject(ILTClient *pClientDE)
 			m_hDebris[i] = CreateDebris();
 		}
 
-        m_ActiveEmitters[i] = LTTRUE;
+		m_ActiveEmitters[i] = LTTRUE;
 		m_BounceCount[i] = 2;
 
 		VEC_SET(vStartVel, GetRandom(vVelMin.x, vVelMax.x),
-						   GetRandom(vVelMin.y, vVelMax.y),
-						   GetRandom(vVelMin.z, vVelMax.z));
+						GetRandom(vVelMin.y, vVelMax.y),
+						GetRandom(vVelMin.z, vVelMax.z));
 
 		InitMovingObject(&(m_Emitters[i]), &m_vPos, &vStartVel);
 		m_Emitters[i].m_dwPhysicsFlags |= m_nEmitterFlags;
@@ -155,26 +146,23 @@ LTBOOL CParticleExplosionFX::CreateObject(ILTClient *pClientDE)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleExplosionFX::Update
 //
-//	ROUTINE:	CParticleExplosionFX::Update
-//
-//	PURPOSE:	Update the Particle trail (add Particle)
-//
+//	PURPOSE: Update the Particle trail (add Particle)
 // ----------------------------------------------------------------------- //
-
 LTBOOL CParticleExplosionFX::Update()
 {
-    if (!m_hObject || !m_pClientDE) return LTFALSE;
+	if (!m_hObject || !m_pClientDE) return LTFALSE;
 
-    if (!CBaseParticleSystemFX::Update()) return LTFALSE;
+	if (!CBaseParticleSystemFX::Update()) return LTFALSE;
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
 	if (m_bFirstUpdate)
 	{
-        m_bFirstUpdate = LTFALSE;
+		m_bFirstUpdate = LTFALSE;
 		m_fStartTime   = fTime;
-		m_fLastTime	   = fTime;
+		m_fLastTime	= fTime;
 	}
 
 
@@ -182,15 +170,15 @@ LTBOOL CParticleExplosionFX::Update()
 
 	if (fTime > m_fStartTime + m_fFadeTime)
 	{
-        LTFLOAT fEndTime = m_fStartTime + m_fLifeTime;
+		LTFLOAT fEndTime = m_fStartTime + m_fLifeTime;
 		if (fTime > fEndTime)
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 
-        LTFLOAT fScale = (fEndTime - fTime) / (m_fLifeTime - m_fFadeTime);
+		LTFLOAT fScale = (fEndTime - fTime) / (m_fLifeTime - m_fFadeTime);
 
-        LTFLOAT r, g, b, a;
+		LTFLOAT r, g, b, a;
 		m_pClientDE->GetObjectColor(m_hObject, &r, &g, &b, &a);
 		m_pClientDE->SetObjectColor(m_hObject, r, g, b, fScale);
 	}
@@ -220,7 +208,7 @@ LTBOOL CParticleExplosionFX::Update()
 	{
 		if (m_ActiveEmitters[i])
 		{
-            LTBOOL bBounced = LTFALSE;
+			LTBOOL bBounced = LTFALSE;
 			if (bBounced = UpdateEmitter(&m_Emitters[i]))
 			{
 				if (!(m_Emitters[i].m_dwPhysicsFlags & MO_LIQUID) && (m_hDebris[i]))
@@ -245,11 +233,11 @@ LTBOOL CParticleExplosionFX::Update()
 
 			if (m_Emitters[i].m_dwPhysicsFlags & MO_RESTING)
 			{
-                m_ActiveEmitters[i] = LTFALSE;
+				m_ActiveEmitters[i] = LTFALSE;
 				if (m_hDebris[i])
 				{
 					m_pClientDE->DeleteObject(m_hDebris[i]);
-                    m_hDebris[i] = LTNULL;
+					m_hDebris[i] = LTNULL;
 				}
 			}
 			else if (m_hDebris[i])
@@ -268,12 +256,12 @@ LTBOOL CParticleExplosionFX::Update()
 
 					if (m_fPitchVel != 0 || m_fYawVel != 0)
 					{
-                        LTFLOAT fDeltaTime = g_pGameClientShell->GetFrameTime();
+						LTFLOAT fDeltaTime = g_pGameClientShell->GetFrameTime();
 
 						m_fPitch += m_fPitchVel * fDeltaTime;
 						m_fYaw   += m_fYawVel * fDeltaTime;
 
-                        LTRotation rRot;
+						LTRotation rRot;
 						m_pClientDE->SetupEuler(&rRot, m_fPitch, m_fYaw, 0.0f);
 						m_pClientDE->SetObjectRotation(m_hDebris[i], &rRot);
 					}
@@ -282,30 +270,27 @@ LTBOOL CParticleExplosionFX::Update()
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleExplosionFX::UpdateEmitter
 //
-//	ROUTINE:	CParticleExplosionFX::UpdateEmitter
-//
-//	PURPOSE:	Update emitter position
-//
+//	PURPOSE: Update emitter position
 // ----------------------------------------------------------------------- //
-
 LTBOOL CParticleExplosionFX::UpdateEmitter(MovingObject* pObject)
 {
-    if (!m_pClientDE || !pObject || pObject->m_dwPhysicsFlags & MO_RESTING) return LTFALSE;
+	if (!m_pClientDE || !pObject || pObject->m_dwPhysicsFlags & MO_RESTING) return LTFALSE;
 
-    LTBOOL bRet = LTFALSE;
+	LTBOOL bRet = LTFALSE;
 
-    LTVector vNewPos;
-    if (UpdateMovingObject(LTNULL, pObject, &vNewPos))
+	LTVector vNewPos;
+	if (UpdateMovingObject(LTNULL, pObject, &vNewPos))
 	{
 		ClientIntersectInfo info;
 		LTBOOL bBouncedOnGround = LTFALSE;
-        uint32 dwFlags = (INTERSECT_HPOLY | INTERSECT_OBJECTS | IGNORE_NONSOLID);
+		uint32 dwFlags = (INTERSECT_HPOLY | INTERSECT_OBJECTS | IGNORE_NONSOLID);
 
 		bRet = BounceMovingObject(LTNULL, pObject, &vNewPos, &info, 
 			dwFlags, bBouncedOnGround);
@@ -313,7 +298,7 @@ LTBOOL CParticleExplosionFX::UpdateEmitter(MovingObject* pObject)
 		pObject->m_vLastPos	= pObject->m_vPos;
 		pObject->m_vPos		= vNewPos;
 
-        if (m_pClientDE->GetPointStatus(&vNewPos) == LT_OUTSIDE)
+		if (m_pClientDE->GetPointStatus(&vNewPos) == LT_OUTSIDE)
 		{
 			pObject->m_dwPhysicsFlags |= MO_RESTING;
 			pObject->m_vPos = pObject->m_vLastPos;
@@ -324,20 +309,17 @@ LTBOOL CParticleExplosionFX::UpdateEmitter(MovingObject* pObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleExplosionFX::AddParticles
 //
-//	ROUTINE:	CParticleExplosionFX::AddParticles
-//
-//	PURPOSE:	Add particles to system
-//
+//	PURPOSE: Add particles to system
 // ----------------------------------------------------------------------- //
-
 void CParticleExplosionFX::AddParticles(MovingObject* pObject)
 {
 	if (!m_hObject || !m_pClientDE || !pObject || pObject->m_dwPhysicsFlags & MO_RESTING) return;
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
-    LTVector vCurPos, vLastPos, vPos, vDelta, vTemp, vDriftVel, vColor;
+	LTVector vCurPos, vLastPos, vPos, vDelta, vTemp, vDriftVel, vColor;
 
 	vCurPos		= pObject->m_vPos;
 	vLastPos	= pObject->m_vLastPos;
@@ -354,7 +336,7 @@ void CParticleExplosionFX::AddParticles(MovingObject* pObject)
 
 	// How long has it been since the last Particle puff?
 
-    LTFLOAT fTimeOffset = fTime - m_fLastTime;
+	LTFLOAT fTimeOffset = fTime - m_fLastTime;
 
 
 	// Fill the distance between the last projectile position, and it's
@@ -365,10 +347,10 @@ void CParticleExplosionFX::AddParticles(MovingObject* pObject)
 
 	VEC_COPY(vPos, vLastPos);
 
-    LTFLOAT fCurLifeTime    = 10.0f;
-    LTFLOAT fLifeTimeOffset = fTimeOffset / float(m_nNumSteps);
+	LTFLOAT fCurLifeTime	= 10.0f;
+	LTFLOAT fLifeTimeOffset = fTimeOffset / float(m_nNumSteps);
 
-    LTFLOAT fOffset = 0.5f;
+	LTFLOAT fOffset = 0.5f;
 
 	int nNumPerPuff = GetNumParticles(m_nNumPerPuff);
 
@@ -381,8 +363,8 @@ void CParticleExplosionFX::AddParticles(MovingObject* pObject)
 			VEC_COPY(vTemp, vPos);
 
 			VEC_SET(vDriftVel, GetRandom(m_vMinDriftVel.x, m_vMaxDriftVel.x),
-							   GetRandom(m_vMinDriftVel.y, m_vMaxDriftVel.y),
-							   GetRandom(m_vMinDriftVel.z, m_vMaxDriftVel.z));
+							GetRandom(m_vMinDriftVel.y, m_vMaxDriftVel.y),
+							GetRandom(m_vMinDriftVel.z, m_vMaxDriftVel.z));
 
 			if (!m_bIgnoreWind)
 			{
@@ -406,25 +388,22 @@ void CParticleExplosionFX::AddParticles(MovingObject* pObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleExplosionFX::CreateDebris
 //
-//	ROUTINE:	CParticleExplosionFX::CreateDebris
-//
-//	PURPOSE:	Create a debris model
-//
+//	PURPOSE: Create a debris model
 // ----------------------------------------------------------------------- //
-
 HLOCALOBJ CParticleExplosionFX::CreateDebris()
 {
-    return LTNULL;
+	return LTNULL;
 /*
-    LTVector vScale;
+	LTVector vScale;
 	VEC_SET(vScale, 1.0f, 1.0f, 1.0f);
 	VEC_MULSCALAR(vScale, vScale, GetRandom(1.0f, 5.0f));
 
 	char* pFilename = GetDebrisModel(DBT_STONE_BIG, vScale);
-	char* pSkin     = GetDebrisSkin(DBT_STONE_BIG);
+	char* pSkin	 = GetDebrisSkin(DBT_STONE_BIG);
 
-    if (!pFilename) return LTNULL;
+	if (!pFilename) return LTNULL;
 
 	ObjectCreateStruct createStruct;
 	INIT_OBJECTCREATESTRUCT(createStruct);

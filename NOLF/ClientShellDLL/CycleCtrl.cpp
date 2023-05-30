@@ -9,22 +9,10 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CCycleCtrl::CCycleCtrl()
-{
+CCycleCtrl::CCycleCtrl(){}
 
-}
+CCycleCtrl::~CCycleCtrl(){}
 
-CCycleCtrl::~CCycleCtrl()
-{
+CToggleCtrl::CToggleCtrl(){}
 
-}
-
-CToggleCtrl::CToggleCtrl()
-{
-
-}
-
-CToggleCtrl::~CToggleCtrl()
-{
-
-}
+CToggleCtrl::~CToggleCtrl(){}

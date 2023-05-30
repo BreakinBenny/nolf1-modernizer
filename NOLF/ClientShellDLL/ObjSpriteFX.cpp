@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ObjSpriteFX.cpp
 //
-// MODULE  : ObjSpriteFX.cpp
+// PURPOSE: ObjSprite special FX - Implementation
 //
-// PURPOSE : ObjSprite special FX - Implementation
-//
-// CREATED : 10/19/99
+// CREATED: 10/19/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "ObjSpriteFX.h"
 #include "VarTrack.h"
@@ -19,70 +16,54 @@
 extern CGameClientShell*	g_pGameClientShell;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CObjSpriteFX::CObjSpriteFX
 //
-//	ROUTINE:	CObjSpriteFX::CObjSpriteFX
-//
-//	PURPOSE:	Construct
-//
+//	PURPOSE: Construct
 // ----------------------------------------------------------------------- //
-
-CObjSpriteFX::CObjSpriteFX() : CSpecialFX()
-{
-}
+CObjSpriteFX::CObjSpriteFX() : CSpecialFX(){}
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CObjSpriteFX::Init
 //
-//	ROUTINE:	CObjSpriteFX::Init
-//
-//	PURPOSE:	Construct
-//
+//	PURPOSE: Construct
 // ----------------------------------------------------------------------- //
-
 LTBOOL CObjSpriteFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-
-
 	OBJSPRITECREATESTRUCT* pCS = (OBJSPRITECREATESTRUCT*)psfxCreateStruct;
 
 	m_cs = *pCS;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CObjSpriteFX::Init
 //
-//	ROUTINE:	CObjSpriteFX::Init
-//
-//	PURPOSE:	Init the object sprite fx
-//
+//	PURPOSE: Init the object sprite fx
 // ----------------------------------------------------------------------- //
-
 LTBOOL CObjSpriteFX::Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage)
 {
-    if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
-    if (!hMessage) return LTFALSE;
+	if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
+	if (!hMessage) return LTFALSE;
 
 	OBJSPRITECREATESTRUCT scs;
 
 	scs.hServerObj = hServObj;
-    scs.Read(g_pLTClient, hMessage);
+	scs.Read(g_pLTClient, hMessage);
 
 	return Init(&scs);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CObjSpriteFX::Update
 //
-//	ROUTINE:	CObjSpriteFX::Update
-//
-//	PURPOSE:	Update the particle system
-//
+//	PURPOSE: Update the particle system
 // ----------------------------------------------------------------------- //
-
 LTBOOL CObjSpriteFX::Update()
 {
-    if (m_bWantRemove) return LTFALSE;
+	if (m_bWantRemove) return LTFALSE;
 
 
 	if (g_pGameClientShell->GetGameType() == COOPERATIVE_ASSAULT && m_cs.m_nPlayerTeamFilter > 0)

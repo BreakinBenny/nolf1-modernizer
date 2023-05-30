@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CMoveMgr.cpp
 //
-// MODULE  : CMoveMgr.cpp
+// PURPOSE: Client side player movement mgr - Implementation
 //
-// PURPOSE : Client side player movement mgr - Implementation
-//
-// CREATED : 10/2/98
+// CREATED: 10/2/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -28,10 +26,10 @@
 #include "BankedList.h"
 #include "SDL.h"
 
-#define SPECTATOR_ACCELERATION			100000.0f
-#define MIN_ONGROUND_Y					-10000000.0f
-#define DEFAULT_WORLD_GRAVITY			-2000.0f
-#define MAX_STANDING_ON_FRAMES			10
+#define SPECTATOR_ACCELERATION	100000.0f
+#define MIN_ONGROUND_Y			-10000000.0f
+#define DEFAULT_WORLD_GRAVITY	-2000.0f
+#define MAX_STANDING_ON_FRAMES	10
 
 class Pusher
 {
@@ -47,12 +45,12 @@ public:
 		return &theBank;
 	}
 
-    LTVector m_Pos;
+	LTVector m_Pos;
 	float	m_Radius;
 	float	m_Delay;	// How long before it starts actually pushing.
 	float	m_TimeLeft; // Time left for this sphere.
 	float	m_Strength;
-    LTLink   m_Link;
+	LTLink m_Link;
 };
 
 VarTrack	g_vtPlayerGravity;
@@ -85,7 +83,7 @@ VarTrack	g_vtSlideToStopTime;
 
 VarTrack	g_vtCatPhysics;
 
-LTBOOL g_bJumpRequested  = LTFALSE;
+LTBOOL g_bJumpRequested = LTFALSE;
 
 extern VarTrack g_vtVehicleFallDamageMinHeight;
 extern VarTrack g_vtVehicleFallDamageMaxHeight;
@@ -93,11 +91,9 @@ extern VarTrack g_vtVehicleFallDamageMaxHeight;
 CMoveMgr* g_pMoveMgr = LTNULL;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::CMoveMgr
 //
-//	ROUTINE:	CMoveMgr::CMoveMgr
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CMoveMgr::CMoveMgr()
@@ -106,7 +102,7 @@ CMoveMgr::CMoveMgr()
 
 	m_vWantedDims.Init(1, 1, 1);
 
-    m_hObject = LTNULL;
+	m_hObject = LTNULL;
 
 	m_bLoading = LTFALSE;
 	m_vSavedVel.Init();
@@ -129,11 +125,9 @@ CMoveMgr::CMoveMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::~CMoveMgr
 //
-//	ROUTINE:	CMoveMgr::~CMoveMgr
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CMoveMgr::~CMoveMgr()
@@ -150,48 +144,46 @@ CMoveMgr::~CMoveMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::Init
 //
-//	ROUTINE:	CMoveMgr::Init
-//
-//	PURPOSE:	Initialize mgr
-//
+//	PURPOSE: Initialize mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CMoveMgr::Init()
 {
 	m_CV_SpectatorSpeedMul.Init(g_pLTClient, "SpectatorSpeedMul", NULL, 1.0f);
 
- 	g_vtFallDamageMinHeight.Init(g_pLTClient, "FallDamageMinHeight", LTNULL, 300.0f);
-    g_vtFallDamageMaxHeight.Init(g_pLTClient, "FallDamageMaxHeight", LTNULL, 500.0f);
-    g_vtFallDamageMin.Init(g_pLTClient, "FallDamageMin", LTNULL, 5.0f);
-    g_vtFallDamageMax.Init(g_pLTClient, "FallDamageMax", LTNULL, 500.0f);
+	g_vtFallDamageMinHeight.Init(g_pLTClient, "FallDamageMinHeight", LTNULL, 300.0f);
+	g_vtFallDamageMaxHeight.Init(g_pLTClient, "FallDamageMaxHeight", LTNULL, 500.0f);
+	g_vtFallDamageMin.Init(g_pLTClient, "FallDamageMin", LTNULL, 5.0f);
+	g_vtFallDamageMax.Init(g_pLTClient, "FallDamageMax", LTNULL, 500.0f);
 
-    g_vtCamLandMinHeight.Init(g_pLTClient, "CamLandMinHeight", LTNULL, 50.0f);
-    g_vtCamLandMoveDist.Init(g_pLTClient, "CamLandMoveDist", LTNULL, -30.0f);
-    g_vtCamLandDownTime.Init(g_pLTClient, "CamLandDownTime", LTNULL, 0.15f);
-    g_vtCamLandUpTime.Init(g_pLTClient, "CamLandUpTime", LTNULL, 0.4f);
+	g_vtCamLandMinHeight.Init(g_pLTClient, "CamLandMinHeight", LTNULL, 50.0f);
+	g_vtCamLandMoveDist.Init(g_pLTClient, "CamLandMoveDist", LTNULL, -30.0f);
+	g_vtCamLandDownTime.Init(g_pLTClient, "CamLandDownTime", LTNULL, 0.15f);
+	g_vtCamLandUpTime.Init(g_pLTClient, "CamLandUpTime", LTNULL, 0.4f);
 
-    g_vtCamLandRollVal.Init(g_pLTClient, "CamLandRollVal", LTNULL, 5.0f);
-    g_vtCamLandRollTime1.Init(g_pLTClient, "CamLandRollTime1", LTNULL, 0.05f);
-    g_vtCamLandRollTime2.Init(g_pLTClient, "CamLandRollTime2", LTNULL, 0.15f);
+	g_vtCamLandRollVal.Init(g_pLTClient, "CamLandRollVal", LTNULL, 5.0f);
+	g_vtCamLandRollTime1.Init(g_pLTClient, "CamLandRollTime1", LTNULL, 0.05f);
+	g_vtCamLandRollTime2.Init(g_pLTClient, "CamLandRollTime2", LTNULL, 0.15f);
 
-    g_vtCamLandPitchVal.Init(g_pLTClient, "CamLandPitchVal", LTNULL, 5.0f);
-    g_vtCamLandPitchTime1.Init(g_pLTClient, "CamLandPitchTime1", LTNULL, 0.05f);
-    g_vtCamLandPitchTime2.Init(g_pLTClient, "CamLandPitchTime2", LTNULL, 0.15f);
+	g_vtCamLandPitchVal.Init(g_pLTClient, "CamLandPitchVal", LTNULL, 5.0f);
+	g_vtCamLandPitchTime1.Init(g_pLTClient, "CamLandPitchTime1", LTNULL, 0.05f);
+	g_vtCamLandPitchTime2.Init(g_pLTClient, "CamLandPitchTime2", LTNULL, 0.15f);
 
-    g_vtPlayerGravity.Init(g_pLTClient, "PlayerGravity", LTNULL, DEFAULT_WORLD_GRAVITY);
+	g_vtPlayerGravity.Init(g_pLTClient, "PlayerGravity", LTNULL, DEFAULT_WORLD_GRAVITY);
 
-    g_vtSlideToStopTime.Init(g_pLTClient, "SlideToStopTime", LTNULL, 0.1f);
+	g_vtSlideToStopTime.Init(g_pLTClient, "SlideToStopTime", LTNULL, 0.1f);
 
-    g_vtCatPhysics.Init(g_pLTClient, "CatPhysics", LTNULL, 0.0f);
+	g_vtCatPhysics.Init(g_pLTClient, "CatPhysics", LTNULL, 0.0f);
 
  	// Init some defaults.  These should NEVER get used because we don't
 	// have our object until the server sends the physics update.
 
-	m_fSwimVel			= 0.0f;
-	m_fWalkVel			= 0.0f;
-	m_fRunVel			= 400.0f;
-	m_fJumpVel			= 550.0f;
+	m_fSwimVel		= 0.0f;
+	m_fWalkVel		= 0.0f;
+	m_fRunVel		= 400.0f;
+	m_fJumpVel		= 550.0f;
 	m_fZipCordVel		= 100.0f;
 	m_fMoveMultiplier	= 1.0f;
 
@@ -201,16 +193,14 @@ LTBOOL CMoveMgr::Init()
 
 	InitWorldData();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::InitWorldData
 //
-//	ROUTINE:	CMoveMgr::InitWorldData
-//
-//	PURPOSE:	Initialize our data members that are specific to the
-//				current world.
-//
+//	PURPOSE: Initialize our data members that are specific to the
+//			current world.
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::InitWorldData()
@@ -220,53 +210,51 @@ void CMoveMgr::InitWorldData()
 	m_dwControlFlags		= 0;
 	m_dwLastControlFlags	= 0;
 
-	m_fGravity				= DEFAULT_WORLD_GRAVITY;
+	m_fGravity			= DEFAULT_WORLD_GRAVITY;
 
 	dl_TieOff(&m_Pushers);
-    m_bZipCordOn            = LTFALSE;
+	m_bZipCordOn			= LTFALSE;
 	m_fZipCordVel			= 0.0f;
 	m_vZipCordPos.Init();
 	m_vZipHookDims.Init();
 
 	m_eBodyContainerCode	= CC_NO_CONTAINER;
-    m_bBodyInLiquid         = LTFALSE;
-    m_bBodyOnLadder         = LTFALSE;
-    m_bOnGround             = LTTRUE;
-    m_bOnLift               = LTFALSE;
-    m_bFalling              = LTFALSE;
-    m_bAllowMovement        = LTTRUE;
+	m_bBodyInLiquid		= LTFALSE;
+	m_bBodyOnLadder		= LTFALSE;
+	m_bOnGround			= LTTRUE;
+	m_bOnLift			= LTFALSE;
+	m_bFalling			= LTFALSE;
+	m_bAllowMovement		= LTTRUE;
 	m_eStandingOnSurface	= ST_UNKNOWN;
-	m_nMouseStrafeFlags		= 0;
-    m_bSwimmingOnSurface    = LTFALSE;
-    m_bSwimmingJump         = LTFALSE;
-    m_bCanSwimJump          = LTFALSE;
+	m_nMouseStrafeFlags	= 0;
+	m_bSwimmingOnSurface	= LTFALSE;
+	m_bSwimmingJump		= LTFALSE;
+	m_bCanSwimJump		= LTFALSE;
 	m_hStandingOnPoly		= INVALID_HPOLY;
-	m_bUsingPlayerModel		= LTFALSE;
+	m_bUsingPlayerModel	= LTFALSE;
 
 	m_fBaseMoveAccel		= 0.0f;
 	m_fMoveAccelMultiplier	= 1.0f;
 	m_fJumpMultiplier		= 1.0f;
 
-    m_eCurContainerCode		= CC_NO_CONTAINER;
+	m_eCurContainerCode	= CC_NO_CONTAINER;
 	m_eLastContainerCode	= CC_NO_CONTAINER;
 	m_nContainers			= 0;
 
-	m_fLastOnGroundY		= MIN_ONGROUND_Y;
-    m_bJumped               = LTFALSE;
+	m_fLastOnGroundY	= MIN_ONGROUND_Y;
+	m_bJumped		= LTFALSE;
 
-    m_bFirstAniUpdate       = LTTRUE;
+	m_bFirstAniUpdate	= LTTRUE;
 
-    m_pCharFX               = LTNULL;
+	m_pCharFX		= LTNULL;
 
-	m_hZipcordSnd			= LTNULL;
+	m_hZipcordSnd		= LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::OnEnterWorld
 //
-//	ROUTINE:	CMoveMgr::OnEnterWorld
-//
-//	PURPOSE:	Handle entering the world
-//
+//	PURPOSE: Handle entering the world
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::OnEnterWorld()
@@ -277,11 +265,9 @@ void CMoveMgr::OnEnterWorld()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::OnExitWorld
 //
-//	ROUTINE:	CMoveMgr::OnExitWorld
-//
-//	PURPOSE:	Handle exiting the world
-//
+//	PURPOSE: Handle exiting the world
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::OnExitWorld()
@@ -294,16 +280,14 @@ void CMoveMgr::OnExitWorld()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::TermLevel
 //
-//	ROUTINE:	CMoveMgr::TermLevel
-//
-//	PURPOSE:	Terminate any level specific stuff
-//
+//	PURPOSE: Terminate any level specific stuff
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::TermLevel()
 {
-    LTLink *pCur, *pNext;
+	LTLink *pCur, *pNext;
 	for (pCur=m_Pushers.m_pNext; pCur != &m_Pushers; pCur=pNext)
 	{
 		pNext = pCur->m_pNext;
@@ -317,11 +301,9 @@ void CMoveMgr::TermLevel()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateMouseStrafeFlags
 //
-//	ROUTINE:	CMoveMgr::UpdateMouseStrafeFlags
-//
-//	PURPOSE:	Update the mouse strafe flags
-//
+//	PURPOSE: Update the mouse strafe flags
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateMouseStrafeFlags(float *pAxisOffsets)
@@ -351,11 +333,9 @@ void CMoveMgr::UpdateMouseStrafeFlags(float *pAxisOffsets)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateControlFlags
 //
-//	ROUTINE:	CMoveMgr::UpdateControlFlags
-//
-//	PURPOSE:	Update the control flags
-//
+//	PURPOSE: Update the control flags
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateControlFlags()
@@ -380,23 +360,21 @@ void CMoveMgr::UpdateControlFlags()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateNormalControlFlags
 //
-//	ROUTINE:	CMoveMgr::UpdateNormalControlFlags
-//
-//	PURPOSE:	Update the normal physics model control flags
-//
+//	PURPOSE: Update the normal physics model control flags
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateNormalControlFlags()
 {
 	// Determine what commands are currently on...
 
-    if (g_pLTClient->IsCommandOn(COMMAND_ID_LEFT))
+	if (g_pLTClient->IsCommandOn(COMMAND_ID_LEFT))
 	{
 		m_dwControlFlags |= BC_CFLG_LEFT;
 	}
 
-    if (g_pLTClient->IsCommandOn(COMMAND_ID_RIGHT))
+	if (g_pLTClient->IsCommandOn(COMMAND_ID_RIGHT))
 	{
 		m_dwControlFlags |= BC_CFLG_RIGHT;
 	}
@@ -414,9 +392,9 @@ void CMoveMgr::UpdateNormalControlFlags()
 	// Use the player's user flags instead of checking this flag directly
 	// (this insures that the camera will be moved accurately...)
 
-    // Allow normal duck if we have free movement...
+	// Allow normal duck if we have free movement...
 
-    LTBOOL bFreeMovement = (IsFreeMovement() || m_bBodyOnLadder ||
+	LTBOOL bFreeMovement = (IsFreeMovement() || m_bBodyOnLadder ||
 		g_pGameClientShell->IsSpectatorMode());
 
 
@@ -443,7 +421,7 @@ void CMoveMgr::UpdateNormalControlFlags()
 				m_dwControlFlags |= BC_CFLG_DUCK;
 			}
 		}
-		else  // This is needed for some menu specific cheats (player may not be around)
+		else	// This is needed for some menu specific cheats (player may not be around)
 		{
 			if (g_pLTClient->IsCommandOn(COMMAND_ID_DUCK))
 			{
@@ -462,13 +440,13 @@ void CMoveMgr::UpdateNormalControlFlags()
 		}
 	}
 
-    if (g_pLTClient->IsCommandOn(COMMAND_ID_FORWARD))
-    {
+	if (g_pLTClient->IsCommandOn(COMMAND_ID_FORWARD))
+	{
 		m_dwControlFlags |= BC_CFLG_FORWARD;
 	}
 
-    if (g_pLTClient->IsCommandOn(COMMAND_ID_REVERSE))
-    {
+	if (g_pLTClient->IsCommandOn(COMMAND_ID_REVERSE))
+	{
 		m_dwControlFlags |= BC_CFLG_REVERSE;
 	}
 
@@ -523,16 +501,14 @@ void CMoveMgr::UpdateNormalControlFlags()
 	if ((m_dwControlFlags & BC_CFLG_JUMP) &&
 		!(m_dwLastControlFlags & BC_CFLG_JUMP))
 	{
-        g_bJumpRequested = LTTRUE;
+		g_bJumpRequested = LTTRUE;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateContainerViscosity
 //
-//	ROUTINE:	CMoveMgr::UpdateContainerViscosity
-//
-//	PURPOSE:	Update our friction based on the containers we're in
-//
+//	PURPOSE: Update our friction based on the containers we're in
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateContainerViscosity(CContainerInfo *pInfo)
@@ -551,15 +527,15 @@ void CMoveMgr::UpdateContainerViscosity(CContainerInfo *pInfo)
 
 	// Do REAL viscosity dampening (i.e., actually change our velocity)...
 
-    LTVector vVel = GetVelocity();;
-    LTVector vCurVel = vVel;
-
+	LTVector vVel = GetVelocity();;
+	LTVector vCurVel = vVel;
+	
 	if (pInfo->m_fViscosity > 0.0f && VEC_MAG(vCurVel) > 1.0f)
 	{
-        LTVector vDir = vCurVel;
+		LTVector vDir = vCurVel;
 		vDir.Norm();
 
-        LTFLOAT fAdjust = MAX_CONTAINER_VISCOSITY * pInfo->m_fViscosity;
+		LTFLOAT fAdjust = MAX_CONTAINER_VISCOSITY * pInfo->m_fViscosity;
 		fAdjust *= g_pGameClientShell->GetFrameTime();
 
 		vVel = (vDir * fAdjust);
@@ -579,40 +555,36 @@ void CMoveMgr::UpdateContainerViscosity(CContainerInfo *pInfo)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateInLiquid
 //
-//	ROUTINE:	CMoveMgr::UpdateInLiquid
-//
-//	PURPOSE:	Update being in liquid
-//
+//	PURPOSE: Update being in liquid
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateInLiquid(CContainerInfo *pInfo)
 {
-    m_bBodyInLiquid = LTTRUE;
+	m_bBodyInLiquid = LTTRUE;
 
 	// Ladder physics takes priority over liquid...
-
 	if (m_bBodyOnLadder) return;
 
-    LTBOOL bHeadInLiquid = IsHeadInLiquid();
+	LTBOOL bHeadInLiquid = IsHeadInLiquid();
 
-    LTVector vVel = GetVelocity();;
+	LTVector vVel = GetVelocity();;
 
-    LTVector curAccel;
+	LTVector curAccel;
 	g_pPhysicsLT->GetAcceleration(m_hObject, &curAccel);
 
-    uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject);
 
 	// Handle floating around on the surface...
-
 	if (m_bSwimmingOnSurface)
 	{
-        LTBOOL bMoving = ((curAccel.Mag() > 0.01f) || (vVel.Mag() > 0.01f));
+		LTBOOL bMoving = ((curAccel.Mag() > 0.01f) || (vVel.Mag() > 0.01f));
 
 		// Disable gravity.
 		g_pLTClient->SetObjectFlags(m_hObject, dwFlags & ~FLAG_GRAVITY);
 
-		if (bMoving)  // Turn off y acceleration and velocity
+		if (bMoving)	// Turn off y acceleration and velocity
 		{
 			if (vVel.y > 0.0f || curAccel.y > 0.0f)
 			{
@@ -620,7 +592,7 @@ void CMoveMgr::UpdateInLiquid(CContainerInfo *pInfo)
 				curAccel.y = 0.0f;
 			}
 		}
-		else // Pull us down if we're not moving (fast enough)
+		else	// Pull us down if we're not moving (fast enough)
 		{
 			curAccel.y += pInfo->m_fGravity;
 		}
@@ -638,27 +610,23 @@ void CMoveMgr::UpdateInLiquid(CContainerInfo *pInfo)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseCharacter::UpdateOnLadder
 //
-//	ROUTINE:	CBaseCharacter::UpdateOnLadder
-//
-//	PURPOSE:	Update movement when on a ladder
-//
+//	PURPOSE: Update movement when on a ladder
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateOnLadder(CContainerInfo *pInfo)
 {
-    m_bBodyOnLadder = LTTRUE;
+	m_bBodyOnLadder = LTTRUE;
 
-    uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject);
 	g_pLTClient->SetObjectFlags(m_hObject, dwFlags & ~FLAG_GRAVITY);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateOnGround
 //
-//	ROUTINE:	CMoveMgr::UpdateOnGround
-//
-//	PURPOSE:	Update our "on ground" status
-//
+//	PURPOSE: Update our "on ground" status
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateOnGround()
@@ -668,13 +636,13 @@ void CMoveMgr::UpdateOnGround()
 	CollisionInfo Info;
 	g_pPhysicsLT->GetStandingOn(m_hObject, &Info);
 
-    LTVector vPos;
+	LTVector vPos;
 	g_pLTClient->GetObjectPos(m_hObject, &vPos);
 
 	// Clear surface we're standing on...
-    m_bOnLift            = LTFALSE;
-	m_hStandingOnPoly    = INVALID_HPOLY;
-    m_bOnGround          = LTFALSE;
+	m_bOnLift		= LTFALSE;
+	m_hStandingOnPoly	= INVALID_HPOLY;
+	m_bOnGround		= LTFALSE;
 
 	// If we're falling or jumping, we don't want to carry forward our movement
 	if (m_bJumped || m_bFalling) {
@@ -703,7 +671,7 @@ void CMoveMgr::UpdateOnGround()
 
 	if (Info.m_hObject)
 	{
-        m_bOnGround = LTTRUE;
+		m_bOnGround = LTTRUE;
 		
 
 		// If we didn't jump, tell the server we landed (if we jumped, then
@@ -711,21 +679,21 @@ void CMoveMgr::UpdateOnGround()
 
 		if (!m_bJumped && m_bFalling)
 		{
-            HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
-            g_pLTClient->WriteToMessageByte(hMessage, CP_MOTION_STATUS);
-            g_pLTClient->WriteToMessageByte(hMessage, MS_LANDED);
-            g_pLTClient->EndMessage(hMessage);
+			HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
+			g_pLTClient->WriteToMessageByte(hMessage, CP_MOTION_STATUS);
+			g_pLTClient->WriteToMessageByte(hMessage, MS_LANDED);
+			g_pLTClient->EndMessage(hMessage);
 		}
 
-        m_bFalling = LTFALSE;
+		m_bFalling = LTFALSE;
 
 		m_eStandingOnSurface = ST_UNKNOWN;
 		if (Info.m_hPoly && Info.m_hPoly != INVALID_HPOLY)
 		{
-			m_hStandingOnPoly    = Info.m_hPoly;
+			m_hStandingOnPoly	= Info.m_hPoly;
 			m_eStandingOnSurface = GetSurfaceType(Info.m_hPoly);
 		}
-		else // Get the texture flags from the object...
+		else	// Get the texture flags from the object...
 		{
 			m_eStandingOnSurface = GetSurfaceType(Info.m_hObject);
 		}
@@ -733,18 +701,18 @@ void CMoveMgr::UpdateOnGround()
 		// See if we are standing on a lift (i.e., on an object that
 		// may move)...
 
-        uint32 dwUserFlags;
-        g_pLTClient->GetObjectUserFlags(Info.m_hObject, &dwUserFlags);
+		uint32 dwUserFlags;
+		g_pLTClient->GetObjectUserFlags(Info.m_hObject, &dwUserFlags);
 
 		if (dwUserFlags & USRFLG_MOVEABLE)
 		{
-            m_bOnLift = LTTRUE;
+			m_bOnLift = LTTRUE;
 		}
 
 
 		// See if we fell...
 
-        LTFLOAT fDistFell = m_fLastOnGroundY - vPos.y;
+		LTFLOAT fDistFell = m_fLastOnGroundY - vPos.y;
 		m_fLastOnGroundY = vPos.y;
 
 		if (fDistFell > 1.0f && !m_bBodyOnLadder)
@@ -756,23 +724,22 @@ void CMoveMgr::UpdateOnGround()
 
 		if (m_bJumped)
 		{
-            m_bJumped = LTFALSE;
-            UpdateStartMotion(LTTRUE);
+			m_bJumped = LTFALSE;
+			UpdateStartMotion(LTTRUE);
 		}
 
 		// Make sure we fall down step slopes...
 
 		if (Info.m_Plane.m_Normal.y < 0.707)
 		{
-            m_bOnGround = LTFALSE;
+			m_bOnGround = LTFALSE;
 		}
 	}
 
 	// Cases when we can't be on the ground...
-
 	if (m_bJumped || IsHeadInLiquid())
 	{
-        m_bOnGround = LTFALSE;
+		m_bOnGround = LTFALSE;
 	}
 
 
@@ -799,15 +766,14 @@ void CMoveMgr::UpdateOnGround()
 		{
 			if (IsHeadInLiquid())
 			{
-                m_bJumped = LTFALSE;
-                UpdateStartMotion(LTTRUE);
+				m_bJumped = LTFALSE;
+				UpdateStartMotion(LTTRUE);
 			}
 		}
 	}
 
 
 	// Update our standing on surface...
-
 	if (m_bBodyOnLadder)
 	{
 		m_eStandingOnSurface = ST_LADDER;
@@ -821,27 +787,24 @@ void CMoveMgr::UpdateOnGround()
 	// See if we just started falling (i.e., we're not in liquid, we didn't
 	// jump, and there is a bit of distance between us and the ground)...
 
-    LTBOOL bFreeMovement = (IsFreeMovement() || m_bBodyOnLadder || g_pGameClientShell->IsSpectatorMode());
+	LTBOOL bFreeMovement = (IsFreeMovement() || m_bBodyOnLadder || g_pGameClientShell->IsSpectatorMode());
 
 	if (!bFreeMovement && !m_bJumped && !CanDoFootstep() && !m_bFalling)
 	{
-        m_bFalling = LTTRUE;
+		m_bFalling = LTTRUE;
 
 		// Tell the server we're falling...
-
-        HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
-        g_pLTClient->WriteToMessageByte(hMessage, CP_MOTION_STATUS);
-        g_pLTClient->WriteToMessageByte(hMessage, MS_FALLING);
-        g_pLTClient->EndMessage(hMessage);
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
+		g_pLTClient->WriteToMessageByte(hMessage, CP_MOTION_STATUS);
+		g_pLTClient->WriteToMessageByte(hMessage, MS_FALLING);
+		g_pLTClient->EndMessage(hMessage);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::CanDoFootstep
 //
-//	ROUTINE:	CMoveMgr::CanDoFootstep
-//
-//	PURPOSE:	Can we make a footstep sound or footprint?
-//
+//	PURPOSE: Can we make a footstep sound or footprint?
 // ----------------------------------------------------------------------- //
 
 LTBOOL CMoveMgr::CanDoFootstep()
@@ -854,54 +817,52 @@ LTBOOL CMoveMgr::CanDoFootstep()
 
 	if (m_eStandingOnSurface == ST_INVISIBLE || m_eStandingOnSurface == ST_SKY)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	// NOTE the order of these trivial case returns is important...
 
-    if (IsBodyOnLadder()) return LTTRUE;     // Even if underwater
-    if (IsHeadInLiquid()) return LTFALSE;    // Even if on the ground
-    if (m_bOnGround) return LTTRUE;          // Even if we just jumped
-    if (m_bJumped) return LTFALSE;
+	if (IsBodyOnLadder()) return LTTRUE;	// Even if underwater
+	if (IsHeadInLiquid()) return LTFALSE;	// Even if on the ground
+	if (m_bOnGround) return LTTRUE;		// Even if we just jumped
+	if (m_bJumped) return LTFALSE;
 
 
 	// This is sort of lame...but can't think of a better approach.  Cast
 	// a ray down and see if we hit something...
 
-    LTVector vPos;
-    g_pLTClient->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTClient->GetObjectPos(m_hObject, &vPos);
 
-	ClientIntersectQuery iQuery;
-	ClientIntersectInfo  iInfo;
+	ClientIntersectQuery	iQuery;
+	ClientIntersectInfo	iInfo;
 
 	iQuery.m_Flags = IGNORE_NONSOLID | INTERSECT_OBJECTS | INTERSECT_HPOLY;
-	iQuery.m_From  = vPos;
-	iQuery.m_To	   = iQuery.m_From;
-	iQuery.m_To.y -= 150.0f;
+	iQuery.m_From = vPos;
+	iQuery.m_To	= iQuery.m_From;
+	iQuery.m_To.y	-= 150.0f;
 
 	// Don't hit ourself...
 
-    HOBJECT hFilterList[] = {g_pLTClient->GetClientObject(), m_hObject, LTNULL};
+	HOBJECT hFilterList[] = {g_pLTClient->GetClientObject(), m_hObject, LTNULL};
 
-	iQuery.m_FilterFn  = ObjListFilterFn;
+	iQuery.m_FilterFn	= ObjListFilterFn;
 	iQuery.m_pUserData = hFilterList;
 
 	if (!g_pLTClient->IntersectSegment(&iQuery, &iInfo))
 	{
 		m_eStandingOnSurface = ST_UNKNOWN;
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::HandleFallLand
 //
-//	ROUTINE:	CMoveMgr::HandleFallLand
-//
-//	PURPOSE:	Handle landing
-//
+//	PURPOSE: Handle landing
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::HandleFallLand(LTFLOAT fDistFell)
@@ -920,7 +881,7 @@ void CMoveMgr::HandleFallLand(LTFLOAT fDistFell)
 
 		CameraDelta delta;
 
-		delta.PosY.fVar		= g_vtCamLandMoveDist.GetFloat();
+		delta.PosY.fVar	= g_vtCamLandMoveDist.GetFloat();
 		delta.PosY.fTime1	= g_vtCamLandDownTime.GetFloat();
 		delta.PosY.fTime2	= g_vtCamLandUpTime.GetFloat();
 		delta.PosY.eWave1	= Wave_SlowOff;
@@ -983,12 +944,11 @@ void CMoveMgr::HandleFallLand(LTFLOAT fDistFell)
 		g_pGameClientShell->GetCameraOffsetMgr()->AddDelta(delta);
 
 		// If we're on a vehicle, adjust the vehicle model...
-
 		if (m_pVehicleMgr->IsVehiclePhysics())
 		{
 			CameraDelta delta;
 
-			delta.PosY.fVar		= 0.1f;
+			delta.PosY.fVar	= 0.1f;
 			delta.PosY.fTime1	= 0.2f;
 			delta.PosY.fTime2	= 0.5f;
 			delta.PosY.eWave1	= Wave_SlowOff;
@@ -999,13 +959,10 @@ void CMoveMgr::HandleFallLand(LTFLOAT fDistFell)
 	}
 }
 
-
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateMotion
 //
-//	ROUTINE:	CMoveMgr::UpdateMotion
-//
-//	PURPOSE:	Update our motion
-//
+//	PURPOSE: Update our motion
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateMotion()
@@ -1013,7 +970,7 @@ void CMoveMgr::UpdateMotion()
 	if (!m_bAllowMovement)
 	{
 		// Clear accel/velocity...
-	    LTVector vVec;
+		LTVector vVec;
 		g_pPhysicsLT->GetAcceleration(m_hObject, &vVec);
 
 		vVec.x = vVec.z = 0.0f;
@@ -1042,13 +999,10 @@ void CMoveMgr::UpdateMotion()
 	}
 }
 
-
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateSound
 //
-//	ROUTINE:	CMoveMgr::UpdateSound
-//
-//	PURPOSE:	Update our sounds
-//
+//	PURPOSE: Update our sounds
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateSound()
@@ -1056,67 +1010,58 @@ void CMoveMgr::UpdateSound()
 	m_pVehicleMgr->UpdateSound();
 }
 
-
-
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateNormalMotion
 //
-//	ROUTINE:	CMoveMgr::UpdateNormalMotion
-//
-//	PURPOSE:	Update our normal motion
-//
+//	PURPOSE: Update our normal motion
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateNormalMotion()
 {
-    LTFLOAT fTime = g_pLTClient->GetTime();
+	LTFLOAT fTime = g_pLTClient->GetTime();
 
 	// Zero out the acceleration to start with.
-
-    LTVector vAccel(0, 0, 0);
+	LTVector vAccel(0, 0, 0);
 	g_pPhysicsLT->SetAcceleration(m_hObject, &vAccel);
 
 
 	// Update motion due to any containers
-
 	UpdateContainerMotion();
 
 
 	// Update m_bOnGround data member...
-
 	UpdateOnGround();
 
 
 	// Set our current rotation.
-
-    LTRotation rRot;
+	LTRotation rRot;
 	g_pGameClientShell->GetPlayerRotation(&rRot);
 	g_pLTClient->SetObjectRotation(m_hObject, &rRot);
 
 
-    LTVector myVel = GetVelocity();
+	LTVector myVel = GetVelocity();
 
-    LTVector moveVel = myVel;
+	LTVector moveVel = myVel;
 	moveVel.y = 0;
 
 	float fMaxVel;
-    LTBOOL bHeadInLiquid = IsHeadInLiquid();
-    LTBOOL bInLiquid     = (bHeadInLiquid || m_bBodyInLiquid);
-    LTBOOL bFreeMovement = (IsFreeMovement() || m_bBodyOnLadder || g_pGameClientShell->IsSpectatorMode());
+	LTBOOL bHeadInLiquid = IsHeadInLiquid();
+	LTBOOL bInLiquid	 = (bHeadInLiquid || m_bBodyInLiquid);
+	LTBOOL bFreeMovement = (IsFreeMovement() || m_bBodyOnLadder || g_pGameClientShell->IsSpectatorMode());
 
 	fMaxVel = GetMaxVelMag();
 
 
 	// Determine if we are currently trying to jump...
-
-    LTBOOL bJumping = LTFALSE;
+	LTBOOL bJumping = LTFALSE;
 	if (bFreeMovement /*bHeadInLiquid*/)
 	{
 		if (m_dwControlFlags & BC_CFLG_JUMP)
 		{
-            bJumping = LTTRUE;
+			bJumping = LTTRUE;
 		}
 
-        g_bJumpRequested = LTFALSE;
+		g_bJumpRequested = LTFALSE;
 	}
 	else // normal case
 	{
@@ -1124,12 +1069,10 @@ void CMoveMgr::UpdateNormalMotion()
 	}
 
 
-
 	// Limit velocity...
-
 	if (m_bBodyInLiquid || m_bBodyOnLadder)
 	{
-        LTBOOL bCapY = LTTRUE;
+		LTBOOL bCapY = LTTRUE;
 
 		// Cap the velocity in all directions, unless we're falling into,
 		// or jumping out of, liquid...
@@ -1140,7 +1083,7 @@ void CMoveMgr::UpdateNormalMotion()
 			{
 				// Don't cap velocity in the y direction...
 
-                bCapY = LTFALSE;
+				bCapY = LTFALSE;
 			}
 		}
 
@@ -1192,12 +1135,12 @@ void CMoveMgr::UpdateNormalMotion()
 
 	if ((IsLiquid(m_eLastContainerCode) && !bHeadInLiquid) && !m_bOnGround)
 	{
-        m_bSwimmingOnSurface = LTTRUE;
+		m_bSwimmingOnSurface = LTTRUE;
 	}
-	else if (bHeadInLiquid)  // See if we went back under...
+	else if (bHeadInLiquid)	// See if we went back under...
 	{
-        m_bSwimmingOnSurface = LTFALSE;
-        m_bCanSwimJump       = LTTRUE;
+		m_bSwimmingOnSurface	= LTFALSE;
+		m_bCanSwimJump		= LTTRUE;
 	}
 
 
@@ -1220,7 +1163,7 @@ void CMoveMgr::UpdateNormalMotion()
 		g_pLTClient->GetObjectRotation(m_hObject, &rRot);
 	}
 
-    LTVector vUp, vRight, vForward;
+	LTVector vUp, vRight, vForward;
 	g_pLTClient->GetRotationVectors(&rRot, &vUp, &vRight, &vForward);
 	vRight.y = 0.0f;
 
@@ -1231,11 +1174,11 @@ void CMoveMgr::UpdateNormalMotion()
 		fMoveAccelMulti = fMoveAccelMulti < 1.0f ? 1.0f : fMoveAccelMulti;
 	}
 
-    LTFLOAT fMoveAccel = (m_fBaseMoveAccel * fMoveAccelMulti);
+	LTFLOAT fMoveAccel = (m_fBaseMoveAccel * fMoveAccelMulti);
 
 	if (g_pGameClientShell->IsSpectatorMode())
 	{
-        LTVector vZero(0, 0, 0);
+		LTVector vZero(0, 0, 0);
 		g_pPhysicsLT->SetVelocity(m_hObject, &vZero);
 
 		fMoveAccel = (m_dwControlFlags & BC_CFLG_RUN) ? 2.0f * SPECTATOR_ACCELERATION : SPECTATOR_ACCELERATION;
@@ -1258,7 +1201,7 @@ void CMoveMgr::UpdateNormalMotion()
 	}
 
 
-    LTFLOAT fJumpVel = (m_fJumpVel * m_fJumpMultiplier);
+	LTFLOAT fJumpVel = (m_fJumpVel * m_fJumpMultiplier);
 
 	// If we're ducking make us move slower....
 
@@ -1326,25 +1269,25 @@ void CMoveMgr::UpdateNormalMotion()
 
 	g_pPhysicsLT->SetAcceleration(m_hObject, &vAccel);
 
-    LTVector vel = GetVelocity();;
+	LTVector vel = GetVelocity();;
 
 	// We can jump if we are not dead...
 
-    LTBOOL bOkayToJump = LTFALSE;
+	LTBOOL bOkayToJump = LTFALSE;
 	if (bJumping && !g_pGameClientShell->IsPlayerDead())
 	{
 		if (!bHeadInLiquid && m_bBodyInLiquid)
 		{
 			if (m_bCanSwimJump)
 			{
-                m_bSwimmingJump = LTTRUE;
-                m_bCanSwimJump  = LTFALSE;
+				m_bSwimmingJump	= LTTRUE;
+				m_bCanSwimJump	= LTFALSE;
 			}
 			// If our head is out of the liquid and we're standing on the
 			// ground, let us jump out of the water...
 			else if (m_bOnGround)
 			{
-                m_bSwimmingJump = LTTRUE;
+				m_bSwimmingJump = LTTRUE;
 			}
 		}
 
@@ -1354,15 +1297,14 @@ void CMoveMgr::UpdateNormalMotion()
 		{
 			vel.y = fJumpVel;
 
-            m_bJumped            = LTTRUE;
-            m_bSwimmingOnSurface = LTFALSE;
-            g_bJumpRequested     = LTFALSE;
+			m_bJumped			= LTTRUE;
+			m_bSwimmingOnSurface	= LTFALSE;
+			g_bJumpRequested		= LTFALSE;
 		}
 	}
 
 
 	// If in spectator mode, dampen velocity...
-
 	if (g_pGameClientShell->IsSpectatorMode())
 	{
 		vel *= 0.9f;
@@ -1374,10 +1316,9 @@ void CMoveMgr::UpdateNormalMotion()
 
 
 	// If zip cord is on, move us towards it the destination point...
-
 	if (m_bZipCordOn && !g_pGameClientShell->IsPlayerDead())
 	{
-        LTVector myPos;
+		LTVector myPos;
 		g_pLTClient->GetObjectPos(m_hObject, &myPos);
 		vel = m_vZipCordPos - myPos;
 
@@ -1385,7 +1326,7 @@ void CMoveMgr::UpdateNormalMotion()
 		// NOTE:  Need to account for dims of the ZipHook object (since
 		// it is solid)
 
-        LTVector myDims;
+		LTVector myDims;
 		g_pPhysicsLT->GetObjectDims(m_hObject, &myDims);
 		if (vel.Mag() < (myDims.Mag() + m_vZipHookDims.Mag()))
 		{
@@ -1400,16 +1341,14 @@ void CMoveMgr::UpdateNormalMotion()
 	}
 
 	// Add any container currents to my velocity..
-
 	vel += m_vTotalCurrent;
 	g_pPhysicsLT->SetVelocity(m_hObject, &vel);
 
 	// If we're dead, we can't move....
-
 	if (g_pGameClientShell->IsPlayerDead() ||
 		!g_pGameClientShell->IsPlayerMovementAllowed())
 	{
-        LTVector vZero(0, 0, 0);
+		LTVector vZero(0, 0, 0);
 		g_pPhysicsLT->SetAcceleration(m_hObject, &vZero);
 		g_pPhysicsLT->SetVelocity(m_hObject, &vZero);
 		TurnOffZipCord();
@@ -1417,29 +1356,24 @@ void CMoveMgr::UpdateNormalMotion()
 
 
 	// Handle case when we just start moving...
-
 	UpdateStartMotion(bOkayToJump);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateContainerMotion
 //
-//	ROUTINE:	CMoveMgr::UpdateContainerMotion
-//
-//	PURPOSE:	Update motion while in a container
-//
+//	PURPOSE: Update motion while in a container
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateContainerMotion()
 {
 	// Initialize containter totals...
-
 	m_vTotalCurrent.Init();
 	m_fTotalViscosity = 0.0f;
 
 
 	// Normally we have gravity on, but the containers might turn it off.
-
-    uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject) | FLAG_GRAVITY;
+	uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject) | FLAG_GRAVITY;
 	if (g_pGameClientShell->IsSpectatorMode() || m_bZipCordOn)
 	{
 		dwFlags &= ~FLAG_GRAVITY;
@@ -1448,17 +1382,15 @@ void CMoveMgr::UpdateContainerMotion()
 
 
 	m_eBodyContainerCode = CC_NO_CONTAINER;
-    m_bBodyInLiquid = m_bBodyOnLadder = LTFALSE;
+	m_bBodyInLiquid = m_bBodyOnLadder = LTFALSE;
 
 
 	// Do ladder containers first...
-
-    LTBOOL bDidLadder = LTFALSE;
-    uint32 i;
-    for (i=0; i < m_nContainers; i++)
+	LTBOOL bDidLadder = LTFALSE;
+	uint32 i;
+	for (i=0; i < m_nContainers; i++)
 	{
 		// Adjust the player's velocity based on the friction of the container...
-
 		if (!m_Containers[i].m_bHidden && m_Containers[i].m_ContainerCode == CC_LADDER)
 		{
 			m_eBodyContainerCode = m_Containers[i].m_ContainerCode;
@@ -1469,13 +1401,12 @@ void CMoveMgr::UpdateContainerMotion()
 
 				// Only do ladder viscosity once...Make sure we update if
 				// we're on a ladder first...
-
 				if (!bDidLadder)
 				{
 					UpdateContainerViscosity(&m_Containers[i]);
 				}
 
-                bDidLadder = LTTRUE;
+				bDidLadder = LTTRUE;
 			}
 
 			m_vTotalCurrent += m_Containers[i].m_Current * g_pGameClientShell->GetFrameTime();
@@ -1484,22 +1415,19 @@ void CMoveMgr::UpdateContainerMotion()
 
 
 	// Do Non-ladder containers...
-
-    LTBOOL bDidLiquid = LTFALSE;
+	LTBOOL bDidLiquid = LTFALSE;
 	for (i=0; i < m_nContainers; i++)
 	{
 		// Adjust the player's velocity based on the friction of the container...
-
 		if (!m_Containers[i].m_bHidden && m_Containers[i].m_ContainerCode != CC_LADDER)
 		{
 			m_eBodyContainerCode = m_Containers[i].m_ContainerCode;
 
 			// Only do water viscosity once...
-
-            LTBOOL bUpdateViscosity = LTTRUE;
+			LTBOOL bUpdateViscosity = LTTRUE;
 			if (IsLiquid(m_Containers[i].m_ContainerCode) && bDidLiquid)
 			{
-                bUpdateViscosity = LTFALSE;
+				bUpdateViscosity = LTFALSE;
 			}
 
 			if (bUpdateViscosity)
@@ -1510,7 +1438,7 @@ void CMoveMgr::UpdateContainerMotion()
 			if (IsLiquid(m_Containers[i].m_ContainerCode) && !bDidLiquid)
 			{
 				UpdateInLiquid(&m_Containers[i]);
-                bDidLiquid = LTTRUE;
+				bDidLiquid = LTTRUE;
 			}
 
 			m_vTotalCurrent += m_Containers[i].m_Current * g_pGameClientShell->GetFrameTime();
@@ -1520,21 +1448,17 @@ void CMoveMgr::UpdateContainerMotion()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateStartMotion
 //
-//	ROUTINE:	CMoveMgr::UpdateStartMotion
-//
-//	PURPOSE:	Update starting to move
-//
+//	PURPOSE: Update starting to move
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateStartMotion(LTBOOL bForce)
 {
 	// Play a footstep sound to indicate we are moving...
-
 	if (!bForce)
 	{
 		// If we're not moving, check to see if we're ducking...
-
 		uint32 dwTestFlags = (BC_CFLG_MOVING | BC_CFLG_DUCK);
 		if (( (m_dwLastControlFlags & dwTestFlags) ||
 			 !(m_dwControlFlags & dwTestFlags)))
@@ -1545,18 +1469,16 @@ void CMoveMgr::UpdateStartMotion(LTBOOL bForce)
 
 
 	// Tell server if the player just started to jump or just landed...
-
 	if (bForce)
 	{
-        uint8 nStatus = m_bJumped ? MS_JUMPED : MS_LANDED;
-        HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
-        g_pLTClient->WriteToMessageByte(hMessage, CP_MOTION_STATUS);
-        g_pLTClient->WriteToMessageByte(hMessage, nStatus);
-        g_pLTClient->EndMessage(hMessage);
+		uint8 nStatus = m_bJumped ? MS_JUMPED : MS_LANDED;
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
+		g_pLTClient->WriteToMessageByte(hMessage, CP_MOTION_STATUS);
+		g_pLTClient->WriteToMessageByte(hMessage, nStatus);
+		g_pLTClient->EndMessage(hMessage);
 
 		// Play the jump sound for this client so the sound isnt't
 		// lagged in multiplayer...
-
 		if (m_bJumped)
 		{
 			LTBOOL bPlaySound = LTFALSE;
@@ -1581,18 +1503,16 @@ void CMoveMgr::UpdateStartMotion(LTBOOL bForce)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdatePushers
 //
-//	ROUTINE:	CMoveMgr::UpdatePushers
-//
-//	PURPOSE:	Update anything that might push us
-//
+//	PURPOSE: Update anything that might push us
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdatePushers()
 {
-    LTLink *pCur, *pNext;
+	LTLink *pCur, *pNext;
 	Pusher *pPusher;
-    LTVector myPos, pushVec, vel;
+	LTVector myPos, pushVec, vel;
 	float dist, velocity;
 	CollisionInfo info;
 	ClientIntersectQuery iQuery;
@@ -1652,18 +1572,16 @@ void CMoveMgr::UpdatePushers()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdatePlayerAnimation
 //
-//	ROUTINE:	CMoveMgr::UpdatePlayerAnimation
-//
-//	PURPOSE:	Update our animation
-//
+//	PURPOSE: Update our animation
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdatePlayerAnimation()
 {
 	HOBJECT hClientObj;
-    uint32 modelAnim(0), curModelAnim(0), curFlags(0);
-    LTVector oldDims, offset;
+	uint32 modelAnim(0), curModelAnim(0), curFlags(0);
+	LTVector oldDims, offset;
 
 	if (!(hClientObj = g_pLTClient->GetClientObject())) return;
 
@@ -1677,7 +1595,7 @@ void CMoveMgr::UpdatePlayerAnimation()
 		g_pModelLT->GetCurAnim(&(m_pCharFX->m_aAnimTrackers[m_pCharFX->m_cs.nDimsTracker]), modelAnim);
 	}
 
-	//  See if we should use the main anim...
+	// See if we should use the main anim...
 	if (modelAnim == 0)
 	{
 		modelAnim = g_pLTClient->GetModelAnimation(hClientObj);
@@ -1687,7 +1605,7 @@ void CMoveMgr::UpdatePlayerAnimation()
 	{
 		// Force this once to make sure our dims get set correctly...
 
-        m_bFirstAniUpdate = LTFALSE;
+		m_bFirstAniUpdate = LTFALSE;
 
 		// Kind of wierd what we do here.. the engine sets the dims automatically when
 		// we change animations but it doesn't do collision detection (and we don't want
@@ -1723,19 +1641,17 @@ void CMoveMgr::UpdatePlayerAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::AreDimsCorrect
 //
-//	ROUTINE:	CMoveMgr::AreDimsCorrect
-//
-//	PURPOSE:	Validate our dims
-//
+//	PURPOSE: Validate our dims
 // ----------------------------------------------------------------------- //
 
 LTBOOL CMoveMgr::AreDimsCorrect()
 {
-    LTVector curDims;
+	LTVector curDims;
 	
 	if(!m_hObject || !g_pPhysicsLT)
-        return LTTRUE;
+		return LTTRUE;
 
 	g_pPhysicsLT->GetObjectDims(m_hObject, &curDims);
 
@@ -1745,36 +1661,31 @@ LTBOOL CMoveMgr::AreDimsCorrect()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::ResetDims
 //
-//	ROUTINE:	CMoveMgr::ResetDims
-//
-//	PURPOSE:	Reset our dims
-//
+//	PURPOSE: Reset our dims
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::ResetDims(LTVector *pOffset)
 {
-    LTVector smallDims, pos;
+	LTVector smallDims, pos;
 
 	// Don't do stair stepping when we change the dims...
-
-    uint32 dwFlags;
-    g_pLTClient->Common()->GetObjectFlags(m_hObject, OFT_Flags, dwFlags);
+	uint32 dwFlags;
+	g_pLTClient->Common()->GetObjectFlags(m_hObject, OFT_Flags, dwFlags);
 	dwFlags &= ~FLAG_STAIRSTEP;
-    g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags, dwFlags);
+	g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags, dwFlags);
 
 	// Use normal box physics when changing dims (works better)...
-
-    uint32 dwFlags2;
-    g_pLTClient->Common()->GetObjectFlags(m_hObject, OFT_Flags2, dwFlags2);
+	uint32 dwFlags2;
+	g_pLTClient->Common()->GetObjectFlags(m_hObject, OFT_Flags2, dwFlags2);
 	dwFlags2 &= ~FLAG2_PLAYERCOLLIDE;
-    g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags2, dwFlags2);
+	g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags2, dwFlags2);
 
 	smallDims.Init(0.5f, 0.5f, 0.5f);
 
 	// See if we're using the non "cat physics" method, i.e., shrinking
 	// the bounding box down to a point before moving the object...
-
 	if (g_vtCatPhysics.GetFloat() != 0.0f)
 	{
 		g_pPhysicsLT->GetObjectDims(m_hObject, &smallDims);
@@ -1784,7 +1695,6 @@ void CMoveMgr::ResetDims(LTVector *pOffset)
 	g_pPhysicsLT->SetObjectDims(m_hObject, &smallDims, 0);
 
 	// Move them if they want.
-
 	if (pOffset)
 	{
 		g_pLTClient->GetObjectPos(m_hObject, &pos);
@@ -1796,33 +1706,28 @@ void CMoveMgr::ResetDims(LTVector *pOffset)
 	g_pPhysicsLT->SetObjectDims(m_hObject, &m_vWantedDims, SETDIMS_PUSHOBJECTS);
 
 	// Okay, enough of that, back to player physics...
-
 	dwFlags2 |= FLAG2_PLAYERCOLLIDE;
-    g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags2, dwFlags2);
+	g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags2, dwFlags2);
 
 	// Turn it back on ;)
-
-    dwFlags |= FLAG_STAIRSTEP;
-    g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags, dwFlags);
+	dwFlags |= FLAG_STAIRSTEP;
+	g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags, dwFlags);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::MoveLocalSolidObject
 //
-//	ROUTINE:	CMoveMgr::MoveLocalSolidObject
-//
-//	PURPOSE:	Move our object
-//
+//	PURPOSE: Move our object
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::MoveLocalSolidObject()
 {
 	MoveInfo info;
-    LTVector newPos, curPos;
+	LTVector newPos, curPos;
 
 	ILTClientPhysics* pPhysics = (ILTClientPhysics*)g_pPhysicsLT;
 
 	// We may want gravity to be different for us...
-
 	if (g_vtPlayerGravity.GetFloat() != DEFAULT_WORLD_GRAVITY)
 	{
 		m_fGravity = g_vtPlayerGravity.GetFloat();
@@ -1851,26 +1756,22 @@ void CMoveMgr::MoveLocalSolidObject()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::GetVelMagnitude
 //
-//	ROUTINE:	CMoveMgr::GetVelMagnitude
-//
-//	PURPOSE:	Get our velocity's magnitude
-//
+//	PURPOSE: Get our velocity's magnitude
 // ----------------------------------------------------------------------- //
 
 LTFLOAT CMoveMgr::GetVelMagnitude()
 {
 	if (!g_pPhysicsLT || !g_pGameClientShell || !m_hObject) return 0.0f;
 
-    return GetVelocity().Mag();
+	return GetVelocity().Mag();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::SetClientObjNonsolid
 //
-//	ROUTINE:	CMoveMgr::SetClientObjNonsolid
-//
-//	PURPOSE:	Set the client object to non-solid
-//
+//	PURPOSE: Set the client object to non-solid
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::SetClientObjNonsolid()
@@ -1885,11 +1786,9 @@ void CMoveMgr::SetClientObjNonsolid()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateFriction
 //
-//	ROUTINE:	CMoveMgr::UpdateFriction
-//
-//	PURPOSE:	Update fricton
-//
+//	PURPOSE: Update fricton
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateFriction()
@@ -1905,40 +1804,37 @@ void CMoveMgr::UpdateFriction()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateNormalFriction
 //
-//	ROUTINE:	CMoveMgr::UpdateNormalFriction
-//
-//	PURPOSE:	Update normal fricton
-//
+//	PURPOSE: Update normal fricton
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateNormalFriction()
 {
 	// Dampen our velocity so we don't slide around too much...
+	uint32 dwTestFlags = BC_CFLG_MOVING;
 
-    uint32 dwTestFlags = BC_CFLG_MOVING;
-
-    LTVector vZero(0, 0, 0);
+	LTVector vZero(0, 0, 0);
 
 	if ( !(m_dwControlFlags & dwTestFlags) && !m_bJumped && m_bOnGround &&
 		 m_vTotalCurrent == vZero && m_fTotalViscosity == 0.0f)
 	{
-        LTVector vCurVel = GetVelocity();
+		LTVector vCurVel = GetVelocity();
 
-        LTFLOAT fYVal = vCurVel.y;
+		LTFLOAT fYVal = vCurVel.y;
 		vCurVel.y = 0.0f;
 
-        LTVector vVel(0, 0, 0);
+		LTVector vVel(0, 0, 0);
 
 		if (vCurVel.Mag() > 5.0f)
 		{
-            LTVector vDir = vCurVel;
+			LTVector vDir = vCurVel;
 			vDir.Norm();
 
-            LTFLOAT fSlideToStopTime = g_vtSlideToStopTime.GetFloat();
+			LTFLOAT fSlideToStopTime = g_vtSlideToStopTime.GetFloat();
 			fSlideToStopTime = fSlideToStopTime <= 0.0f ? 0.1f : fSlideToStopTime;
 
-            LTFLOAT fAdjust = g_pGameClientShell->GetFrameTime() * (m_fRunVel/fSlideToStopTime);
+			LTFLOAT fAdjust = g_pGameClientShell->GetFrameTime() * (m_fRunVel/fSlideToStopTime);
 
 			vVel = (vDir * fAdjust);
 
@@ -1963,26 +1859,22 @@ void CMoveMgr::UpdateNormalFriction()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::ShowPos
 //
-//	ROUTINE:	CMoveMgr::ShowPos
-//
-//	PURPOSE:	Show our object's position
-//
+//	PURPOSE: Show our object's position
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::ShowPos(char *pBlah)
 {
-    LTVector pos;
+	LTVector pos;
 	g_pLTClient->GetObjectPos(m_hObject, &pos);
 	g_pLTClient->CPrint("%s: %.1f %.1f %.1f", pBlah, VEC_EXPAND(pos));
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::Update
 //
-//	ROUTINE:	CMoveMgr::Update
-//
-//	PURPOSE:	Update the move mgr
-//
+//	PURPOSE: Update the move mgr
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::Update()
@@ -1992,11 +1884,10 @@ void CMoveMgr::Update()
 	HOBJECT hObj = g_pLTClient->GetClientObject();
 	if (!m_hObject || !hObj) return;
 
-	m_eLastContainerCode = m_eCurContainerCode;
-	m_eCurContainerCode  = g_pGameClientShell->GetCurContainerCode();
+	m_eLastContainerCode	= m_eCurContainerCode;
+	m_eCurContainerCode	= g_pGameClientShell->GetCurContainerCode();
 
 	// If were're underwater (or on a ladder), we reset our fall damage data...
-
 	if (IsHeadInLiquid() || m_bBodyOnLadder)
 	{
 		m_fLastOnGroundY = MIN_ONGROUND_Y;
@@ -2010,7 +1901,7 @@ void CMoveMgr::Update()
 
 	UpdateControlFlags();
 
-    UpdateMotion();
+	UpdateMotion();
 
 	UpdateFriction();
 
@@ -2019,7 +1910,6 @@ void CMoveMgr::Update()
 	UpdateSound();
 
 	// Make sure we have desired dims....
-
 	if (!AreDimsCorrect())
 	{
 		ResetDims();
@@ -2028,26 +1918,22 @@ void CMoveMgr::Update()
 	MoveLocalSolidObject();
 
 	// Clear these and they'll get set if mouse is moving...
-
 	m_nMouseStrafeFlags = 0;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::OnPhysicsUpdate
 //
-//	ROUTINE:	CMoveMgr::OnPhysicsUpdate
-//
-//	PURPOSE:	Handle a physics update
-//
+//	PURPOSE: Handle a physics update
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::OnPhysicsUpdate(HMESSAGEREAD hRead)
 {
 	if (!g_pLTClient || !hRead) return;
 
-    uint16 changeFlags = g_pLTClient->ReadFromMessageWord(hRead);
+	uint16 changeFlags = g_pLTClient->ReadFromMessageWord(hRead);
 
 	// See if our container state changed...
-
 	if (changeFlags & PSTATE_CONTAINERTYPE)
 	{
 		m_nContainers = g_pLTClient->ReadFromMessageByte(hRead);
@@ -2062,18 +1948,17 @@ void CMoveMgr::OnPhysicsUpdate(HMESSAGEREAD hRead)
 			m_Containers[i].m_bHidden = g_pLTClient->ReadFromMessageByte(hRead);
 		}
 
-        LTFLOAT fCoeff = g_pLTClient->ReadFromMessageFloat(hRead);
+		LTFLOAT fCoeff = g_pLTClient->ReadFromMessageFloat(hRead);
 		g_pPhysicsLT->SetFrictionCoefficient(m_hObject, fCoeff);
 	}
 
 	// Change our model file?
-
 	if (changeFlags & PSTATE_MODELFILENAMES)
 	{
 		if (m_hObject)
 		{
 			g_pLTClient->DeleteObject(m_hObject);
-            m_hObject = LTNULL;
+			m_hObject = LTNULL;
 		}
 
 		ObjectCreateStruct theStruct;
@@ -2084,7 +1969,6 @@ void CMoveMgr::OnPhysicsUpdate(HMESSAGEREAD hRead)
 		hRead->ReadStringFL(theStruct.m_SkinNames[1], sizeof(theStruct.m_SkinNames[1]));
 
 		// Save off if we are using one of the Cate models or not...
-
 		m_bUsingPlayerModel = LTFALSE;
 		if (theStruct.m_Filename[0])
 		{
@@ -2097,7 +1981,7 @@ void CMoveMgr::OnPhysicsUpdate(HMESSAGEREAD hRead)
 			}
 		}
 
-        theStruct.m_ObjectType = OT_MODEL;
+		theStruct.m_ObjectType = OT_MODEL;
 		theStruct.m_Flags = FLAG_SOLID | FLAG_GRAVITY | FLAG_STAIRSTEP;
 		theStruct.m_Flags2 = FLAG2_PLAYERCOLLIDE;
 
@@ -2111,16 +1995,15 @@ void CMoveMgr::OnPhysicsUpdate(HMESSAGEREAD hRead)
 
 		if (m_hObject)
 		{
-            uint32 dwCFlags = g_pLTClient->GetObjectClientFlags(m_hObject);
+			uint32 dwCFlags = g_pLTClient->GetObjectClientFlags(m_hObject);
 			g_pLTClient->SetObjectClientFlags(m_hObject, dwCFlags | CF_DONTSETDIMS);
 		}
 	}
 	
 	// Gravity change...
-
 	if (changeFlags & PSTATE_GRAVITY)
 	{
-        LTVector vGravity;
+		LTVector vGravity;
 		g_pLTClient->ReadFromMessageVector(hRead, &vGravity);
 		g_pPhysicsLT->SetGlobalForce(vGravity);
 
@@ -2128,7 +2011,6 @@ void CMoveMgr::OnPhysicsUpdate(HMESSAGEREAD hRead)
 	}
 
 	// Speed change...
-
 	if (changeFlags & PSTATE_SPEEDS)
 	{
 		m_fWalkVel = g_pLTClient->ReadFromMessageFloat(hRead);
@@ -2143,12 +2025,11 @@ void CMoveMgr::OnPhysicsUpdate(HMESSAGEREAD hRead)
 		m_fJumpMultiplier = g_pLTClient->ReadFromMessageFloat(hRead);
 		m_fLadderVel = g_pLTClient->ReadFromMessageFloat(hRead);
 
-        LTFLOAT fCoeff = g_pLTClient->ReadFromMessageFloat(hRead);
+		LTFLOAT fCoeff = g_pLTClient->ReadFromMessageFloat(hRead);
 		g_pPhysicsLT->SetFrictionCoefficient(m_hObject, fCoeff);
 	}
 
 	// Vehicle status change...
-
 	if (changeFlags & PSTATE_PHYSICS_MODEL)
 	{
 		PlayerPhysicsModel eModel = (PlayerPhysicsModel) g_pLTClient->ReadFromMessageByte(hRead);
@@ -2157,11 +2038,9 @@ void CMoveMgr::OnPhysicsUpdate(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::OnObjectMove
 //
-//	ROUTINE:	CMoveMgr::OnObjectMove
-//
-//	PURPOSE:	Handle the object moving
-//
+//	PURPOSE: Handle the object moving
 // ----------------------------------------------------------------------- //
 
 LTRESULT CMoveMgr::OnObjectMove(HOBJECT hObj, LTBOOL bTeleport, LTVector *pPos)
@@ -2174,10 +2053,9 @@ LTRESULT CMoveMgr::OnObjectMove(HOBJECT hObj, LTBOOL bTeleport, LTVector *pPos)
 
 	// If it's a solid world model moving, do a regular MoveObject on it so it
 	// can carry/push the player object around.
-
 	if (!bTeleport && hObj != hClientObj && hObj != m_hObject)
 	{
-        uint32 type = g_pLTClient->GetObjectType(hObj);
+		uint32 type = g_pLTClient->GetObjectType(hObj);
 		if (type == OT_WORLDMODEL)
 		{
 			if (g_pLTClient->GetObjectFlags(hObj) & FLAG_SOLID)
@@ -2191,11 +2069,9 @@ LTRESULT CMoveMgr::OnObjectMove(HOBJECT hObj, LTBOOL bTeleport, LTVector *pPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::OnObjectRotate
 //
-//	ROUTINE:	CMoveMgr::OnObjectRotate
-//
-//	PURPOSE:	Handle the object rotating
-//
+//	PURPOSE: Handle the object rotating
 // ----------------------------------------------------------------------- //
 
 LTRESULT CMoveMgr::OnObjectRotate(HOBJECT hObj, LTBOOL bTeleport, LTRotation *pNewRot)
@@ -2225,11 +2101,9 @@ LTRESULT CMoveMgr::OnObjectRotate(HOBJECT hObj, LTBOOL bTeleport, LTRotation *pN
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::AddPusher
 //
-//	ROUTINE:	CMoveMgr::AddPusher
-//
-//	PURPOSE:	Add a pusher object
-//
+//	PURPOSE: Add a pusher object
 // ----------------------------------------------------------------------- //
 
 LTRESULT CMoveMgr::AddPusher(LTVector &pos, float radius, float startDelay, float duration, float strength)
@@ -2250,16 +2124,14 @@ LTRESULT CMoveMgr::AddPusher(LTVector &pos, float radius, float startDelay, floa
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::MoveToClientObj
 //
-//	ROUTINE:	CMoveMgr::MoveToClientObj
-//
-//	PURPOSE:	Move to the client object pos
-//
+//	PURPOSE: Move to the client object pos
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::MoveToClientObj()
 {
-    LTVector cObjPos;
+	LTVector cObjPos;
 	HOBJECT hObj;
 
 	if(!m_hObject || !(hObj = g_pLTClient->GetClientObject()))
@@ -2270,17 +2142,15 @@ void CMoveMgr::MoveToClientObj()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::SetSpectatorMode
 //
-//	ROUTINE:	CMoveMgr::SetSpectatorMode
-//
-//	PURPOSE:	Set spectator mode
-//
+//	PURPOSE: Set spectator mode
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::SetSpectatorMode(LTBOOL bSet)
 {
-    LTVector vPos, vZero;
-    uint32 curFlags;
+	LTVector vPos, vZero;
+	uint32 curFlags;
 
 	if(!m_hObject || !g_pPhysicsLT)
 		return;
@@ -2312,11 +2182,9 @@ void CMoveMgr::SetSpectatorMode(LTBOOL bSet)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::OnServerForcePos
 //
-//	ROUTINE:	CMoveMgr::OnServerForcePos
-//
-//	PURPOSE:	Handle forcing our position
-//
+//	PURPOSE: Handle forcing our position
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::OnServerForcePos(HMESSAGEREAD hRead)
@@ -2344,7 +2212,6 @@ void CMoveMgr::OnServerForcePos(HMESSAGEREAD hRead)
 		g_pPhysicsLT->SetObjectDims(m_hObject, &vCurDims, SETDIMS_PUSHOBJECTS);
 
 		// Clear our velocity and acceleration.
-
 		LTVector vVel(0, 0, 0);
 		g_pPhysicsLT->SetAcceleration(m_hObject, &vVel);
 
@@ -2360,16 +2227,14 @@ void CMoveMgr::OnServerForcePos(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::WritePositionInfo
 //
-//	ROUTINE:	CMoveMgr::WritePositionInfo
-//
-//	PURPOSE:	Write our position info
-//
+//	PURPOSE: Write our position info
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::WritePositionInfo(HMESSAGEWRITE hWrite)
 {
-    LTVector myPos, myVel;
+	LTVector myPos, myVel;
 
 	if (m_hObject)
 	{
@@ -2385,18 +2250,16 @@ void CMoveMgr::WritePositionInfo(HMESSAGEWRITE hWrite)
 	g_pLTClient->WriteToMessageByte(hWrite, m_ClientMoveCode);
 	g_pLTClient->WriteToMessageVector(hWrite, &myPos);
 	g_pLTClient->WriteToMessageVector(hWrite, &myVel);
-    g_pLTClient->WriteToMessageByte(hWrite, (uint8)m_bOnGround);
-    g_pLTClient->WriteToMessageByte(hWrite, (uint8)m_eStandingOnSurface);
-    g_pLTClient->WriteToMessageDWord(hWrite, (uint32)m_hStandingOnPoly);
+	g_pLTClient->WriteToMessageByte(hWrite, (uint8)m_bOnGround);
+	g_pLTClient->WriteToMessageByte(hWrite, (uint8)m_eStandingOnSurface);
+	g_pLTClient->WriteToMessageDWord(hWrite, (uint32)m_hStandingOnPoly);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::UpdateModels
 //
-//	ROUTINE:	CMoveMgr::UpdateModels
-//
-//	PURPOSE:	Update the player-view models
-//
+//	PURPOSE: Update the player-view models
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::UpdateModels()
@@ -2405,16 +2268,14 @@ void CMoveMgr::UpdateModels()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::GetMaxVelMag
 //
-//	ROUTINE:	CMoveMgr::GetMaxVelMag
-//
-//	PURPOSE:	Get the max velocity for our current mode
-//
+//	PURPOSE: Get the max velocity for our current mode
 // ----------------------------------------------------------------------- //
 
 LTFLOAT CMoveMgr::GetMaxVelMag() const
 {
-    LTFLOAT fMaxVel = 0.0f;
+	LTFLOAT fMaxVel = 0.0f;
 
 	LTFLOAT fMoveMultiplier = m_fMoveMultiplier;
 
@@ -2433,7 +2294,7 @@ LTFLOAT CMoveMgr::GetMaxVelMag() const
 		}
 		else if (m_bBodyOnLadder)
 		{
-			fMaxVel =  bRunning ? m_fLadderVel : m_fLadderVel/2.0f;
+			fMaxVel		= bRunning ? m_fLadderVel : m_fLadderVel/2.0f;
 			fMoveMultiplier = fMoveMultiplier < 1.0f ? 1.0f : fMoveMultiplier;
 		}
 		else
@@ -2455,16 +2316,14 @@ LTFLOAT CMoveMgr::GetMaxVelMag() const
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::GetVelocity
 //
-//	ROUTINE:	CMoveMgr::GetVelocity
-//
-//	PURPOSE:	Get our current velocity
-//
+//	PURPOSE: Get our current velocity
 // ----------------------------------------------------------------------- //
 
 LTVector CMoveMgr::GetVelocity() const
 {
-    LTVector vVel(0, 0, 0);
+	LTVector vVel(0, 0, 0);
 
 	if (g_pPhysicsLT && m_hObject)
 	{
@@ -2475,11 +2334,9 @@ LTVector CMoveMgr::GetVelocity() const
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::SetVelocity
 //
-//	ROUTINE:	CMoveMgr::SetVelocity
-//
-//	PURPOSE:	Set our current velocity
-//
+//	PURPOSE: Set our current velocity
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::SetVelocity(LTVector vVel)
@@ -2492,18 +2349,16 @@ void CMoveMgr::SetVelocity(LTVector vVel)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::GetMovementPercent
 //
-//	ROUTINE:	CMoveMgr::GetMovementPercent
-//
-//	PURPOSE:	Get current percentage of maximum velocity player is moving
-//
+//	PURPOSE: Get current percentage of maximum velocity player is moving
 // ----------------------------------------------------------------------- //
 
 LTFLOAT CMoveMgr::GetMovementPercent() const
 {
-    LTFLOAT fPerturb = 0.0f;
-    LTVector vVel = GetVelocity();
-    LTFLOAT  fMaxVel = GetMaxVelMag();
+	LTFLOAT fPerturb = 0.0f;
+	LTVector	vVel = GetVelocity();
+	LTFLOAT fMaxVel = GetMaxVelMag();
 
 	if (fMaxVel > 0.0f)
 	{
@@ -2515,11 +2370,9 @@ LTFLOAT CMoveMgr::GetMovementPercent() const
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::TurnOnZipCord
 //
-//	ROUTINE:	CMoveMgr::TurnOnZipCord
-//
-//	PURPOSE:	Turn on the zipcord (if it is off)
-//
+//	PURPOSE: Turn on the zipcord (if it is off)
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::TurnOnZipCord(HOBJECT hHookObj)
@@ -2528,21 +2381,19 @@ void CMoveMgr::TurnOnZipCord(HOBJECT hHookObj)
 
 	if (!m_bZipCordOn)
 	{
-        m_bZipCordOn = LTTRUE;
+		m_bZipCordOn = LTTRUE;
 
-        g_pLTClient->GetObjectPos(hHookObj, &m_vZipCordPos);
+		g_pLTClient->GetObjectPos(hHookObj, &m_vZipCordPos);
 		g_pPhysicsLT->GetObjectDims(hHookObj, &m_vZipHookDims);
 
 		// Tell the server the zipcord is  on...
-
-        HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
-        g_pLTClient->WriteToMessageByte(hMessage, CP_ZIPCORD);
-        g_pLTClient->WriteToMessageByte(hMessage, ZC_ON);
-        g_pLTClient->WriteToMessageVector(hMessage, &m_vZipCordPos);
-        g_pLTClient->EndMessage(hMessage);
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
+		g_pLTClient->WriteToMessageByte(hMessage, CP_ZIPCORD);
+		g_pLTClient->WriteToMessageByte(hMessage, ZC_ON);
+		g_pLTClient->WriteToMessageVector(hMessage, &m_vZipCordPos);
+		g_pLTClient->EndMessage(hMessage);
 
 		// Start the zip-cord sound...
-
 		if (!m_hZipcordSnd)
 		{
 			char* pSound = "Guns\\snd\\Zipcord\\Zipcord.wav";
@@ -2553,29 +2404,25 @@ void CMoveMgr::TurnOnZipCord(HOBJECT hHookObj)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::TurnOffZipCord
 //
-//	ROUTINE:	CMoveMgr::TurnOffZipCord
-//
-//	PURPOSE:	Turn off the zipcord (if it is on)
-//
+//	PURPOSE: Turn off the zipcord (if it is on)
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::TurnOffZipCord()
 {
 	if (m_bZipCordOn)
 	{
-        m_bZipCordOn = LTFALSE;
+		m_bZipCordOn = LTFALSE;
 
 		// Tell the server the zipcord is no longer on...
-
-        HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
-        g_pLTClient->WriteToMessageByte(hMessage, CP_ZIPCORD);
-        g_pLTClient->WriteToMessageByte(hMessage, ZC_OFF);
-        g_pLTClient->EndMessage(hMessage);
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
+		g_pLTClient->WriteToMessageByte(hMessage, CP_ZIPCORD);
+		g_pLTClient->WriteToMessageByte(hMessage, ZC_OFF);
+		g_pLTClient->EndMessage(hMessage);
 
 
 		// Stop the zipcord sound...
-
 		if (m_hZipcordSnd)
 		{
 			g_pLTClient->KillSoundLoop(m_hZipcordSnd);
@@ -2586,18 +2433,16 @@ void CMoveMgr::TurnOffZipCord()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::OnTouchNotify
 //
-//	ROUTINE:	CMoveMgr::OnTouchNotify
-//
-//	PURPOSE:	Handle our object touching something...
-//
+//	PURPOSE: Handle our object touching something...
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::OnTouchNotify(CollisionInfo *pInfo, float forceMag)
 {
 	if (!pInfo->m_hObject) return;
 
-    uint32 dwFlags = g_pLTClient->GetObjectFlags(pInfo->m_hObject);
+	uint32 dwFlags = g_pLTClient->GetObjectFlags(pInfo->m_hObject);
 	if (!(dwFlags & FLAG_SOLID)) return;
 
 	if (m_pVehicleMgr->IsVehiclePhysics())
@@ -2608,11 +2453,9 @@ void CMoveMgr::OnTouchNotify(CollisionInfo *pInfo, float forceMag)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::Load
 //
-//	ROUTINE:	CMoveMgr::Load
-//
-//	PURPOSE:	Handle loading move mgr data
-//
+//	PURPOSE: Handle loading move mgr data
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::Load(HMESSAGEREAD hRead)
@@ -2628,11 +2471,9 @@ void CMoveMgr::Load(HMESSAGEREAD hRead)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::Save
 //
-//	ROUTINE:	CMoveMgr::Save
-//
-//	PURPOSE:	Handle saving move mgr data
-//
+//	PURPOSE: Handle saving move mgr data
 // ----------------------------------------------------------------------- //
 
 void CMoveMgr::Save(HMESSAGEWRITE hWrite)
@@ -2640,7 +2481,6 @@ void CMoveMgr::Save(HMESSAGEWRITE hWrite)
 	if (!hWrite) return;
 
 	// Save velocity...
-
 	LTVector myVel(0, 0, 0);
 
 	if (m_hObject)
@@ -2654,11 +2494,9 @@ void CMoveMgr::Save(HMESSAGEWRITE hWrite)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMoveMgr::IsPlayerModel
 //
-//	ROUTINE:	CMoveMgr::IsPlayerModel
-//
-//	PURPOSE:	Are we using one of the player (cate) models...
-//
+//	PURPOSE: Are we using one of the player (cate) models...
 // ----------------------------------------------------------------------- //
 
 LTBOOL CMoveMgr::IsPlayerModel()

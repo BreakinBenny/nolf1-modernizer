@@ -62,4 +62,3 @@ void DetourMgr::ConsolePrint(HLTCOLOR iColour, int iLevel, const char* pMsg)
 	// Run the original console print
 	((ConsoleFn)m_pConsoleFunc)(iColour, iLevel, pMsg);
 }
-

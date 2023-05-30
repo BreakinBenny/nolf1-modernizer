@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: NodeLinesFX.cpp
 //
-// MODULE  : NodeLinesFX.cpp
+// PURPOSE: NodeLines special FX - Implementation
 //
-// PURPOSE : NodeLines special FX - Implementation
-//
-// CREATED : 1/21/98
-//
+// CREATED: 1/21/98
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "NodeLinesFX.h"
 #include "iltclient.h"
@@ -18,62 +15,53 @@
 extern CGameClientShell* g_pGameClientShell;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNodeLinesFX::Init
 //
-//	ROUTINE:	CNodeLinesFX::Init
-//
-//	PURPOSE:	Init the node lines fx
-//
+//	PURPOSE: Init the node lines fx
 // ----------------------------------------------------------------------- //
-
 LTBOOL CNodeLinesFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	NLCREATESTRUCT* pNL = (NLCREATESTRUCT*)psfxCreateStruct;
 
 	VEC_COPY(m_vSource, pNL->vSource);
 	VEC_COPY(m_vDestination, pNL->vDestination);
 
-    m_bFirstUpdate = LTTRUE;
+	m_bFirstUpdate = LTTRUE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNodeLinesFX::RemoveFX
 //
-//	ROUTINE:	CNodeLinesFX::RemoveFX
-//
-//	PURPOSE:	Remove all fx
-//
+//	PURPOSE: Remove all fx
 // ----------------------------------------------------------------------- //
-
 void CNodeLinesFX::RemoveFX()
 {
 	if (m_pFX)
 	{
 		debug_delete(m_pFX);
-        m_pFX = LTNULL;
+		m_pFX = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CNodeLinesFX::Update
 //
-//	ROUTINE:	CNodeLinesFX::Update
-//
-//	PURPOSE:	Update the node lines
-//
+//	PURPOSE: Update the node lines
 // ----------------------------------------------------------------------- //
-
 LTBOOL CNodeLinesFX::Update()
 {
-    if(!m_pClientDE) return LTFALSE;
+	if(!m_pClientDE) return LTFALSE;
 
 	if (m_bFirstUpdate)
 	{
 		BSCREATESTRUCT ex;
 
-        LTVector vDirection = m_vDestination - m_vSource;
-        LTFLOAT fDistance = VEC_MAG(vDirection);
+		LTVector vDirection = m_vDestination - m_vSource;
+		LTFLOAT fDistance = VEC_MAG(vDirection);
 
 		vDirection.Norm();
 
@@ -86,33 +74,33 @@ LTBOOL CNodeLinesFX::Update()
 		VEC_SET(ex.vFinalScale, 1.0f, 1.0f, fDistance);
 		VEC_SET(ex.vInitialColor, 1.0f, 0.0f, 0.0f);
 		VEC_SET(ex.vFinalColor, 1.0f, 0.0f, 0.0f);
-        ex.bUseUserColors = LTTRUE;
+		ex.bUseUserColors = LTTRUE;
 
-		ex.dwFlags			= FLAG_VISIBLE | FLAG_NOLIGHT;
-		ex.fLifeTime		= 500000.0f;
+		ex.dwFlags	= FLAG_VISIBLE | FLAG_NOLIGHT;
+		ex.fLifeTime	= 500000.0f;
 		ex.fInitialAlpha	= 1.0f;
-		ex.fFinalAlpha		= 1.0f;
-		ex.pFilename		= "Models\\1x1_square.abc";
-		ex.nType			= OT_MODEL;
-		//ex.pSkin			= "SpecialFX\\Explosions\\Juggernaut.dtx";
+		ex.fFinalAlpha	= 1.0f;
+		ex.pFilename	= "Models\\1x1_square.abc";
+		ex.nType		= OT_MODEL;
+		//ex.pSkin		= "SpecialFX\\Explosions\\Juggernaut.dtx";
 
 		m_pFX = debug_new(CBaseScaleFX);
 		if (!m_pFX)
 		{
 			RemoveFX();
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		m_pFX->Init(&ex);
 		m_pFX->CreateObject(m_pClientDE);
 
-        m_bFirstUpdate = LTFALSE;
+		m_bFirstUpdate = LTFALSE;
 	}
 
 	if (m_bWantRemove)
 	{
 		RemoveFX();
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if (m_pFX)
@@ -120,5 +108,5 @@ LTBOOL CNodeLinesFX::Update()
 		m_pFX->Update();
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }

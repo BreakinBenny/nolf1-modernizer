@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ParticleShower.cpp
 //
-// MODULE  : ParticleShower.cpp
+// PURPOSE: ParticleShower special FX - Implementation
 //
-// PURPOSE : ParticleShower special FX - Implementation
-//
-// CREATED : 1/17/98
-//
+// CREATED: 1/17/98
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "ParticleShowerFX.h"
 #include "iltclient.h"
@@ -15,16 +12,13 @@
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleShowerFX::Init
 //
-//	ROUTINE:	CParticleShowerFX::Init
-//
-//	PURPOSE:	Init the sparks
-//
+//	PURPOSE: Init the sparks
 // ----------------------------------------------------------------------- //
-
 LTBOOL CParticleShowerFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CBaseParticleSystemFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CBaseParticleSystemFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	m_cs = *(PARTICLESHOWERCREATESTRUCT*)psfxCreateStruct;
 
@@ -35,88 +29,80 @@ LTBOOL CParticleShowerFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 	m_vPos			= m_cs.vPos;
 	m_pTextureName	= m_cs.pTexture;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleShowerFX::CreateObject
 //
-//	ROUTINE:	CParticleShowerFX::CreateObject
-//
-//	PURPOSE:	Create object associated the particle system.
-//
+//	PURPOSE: Create object associated the particle system.
 // ----------------------------------------------------------------------- //
-
 LTBOOL CParticleShowerFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!pClientDE ) return LTFALSE;
+	if (!pClientDE ) return LTFALSE;
 
 	if (CBaseParticleSystemFX::CreateObject(pClientDE))
 	{
 		return AddParticles();
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleShowerFX::Update
 //
-//	ROUTINE:	CParticleShowerFX::Update
-//
-//	PURPOSE:	Update the particle shower
-//
+//	PURPOSE: Update the particle shower
 // ----------------------------------------------------------------------- //
-
 LTBOOL CParticleShowerFX::Update()
 {
-    if (!m_hObject || !m_pClientDE) return LTFALSE;
+	if (!m_hObject || !m_pClientDE) return LTFALSE;
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
 	// Check to see if we should go away...
 
 	if (fTime > m_fStartTime + m_cs.fDuration)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 
 	// Fade particles over duration...
 
-    LTFLOAT fScale = (m_cs.fDuration - (fTime - m_fStartTime)) / m_cs.fDuration;
+	LTFLOAT fScale = (m_cs.fDuration - (fTime - m_fStartTime)) / m_cs.fDuration;
 
-    LTFLOAT r, g, b, a;
+	LTFLOAT r, g, b, a;
 	m_pClientDE->GetObjectColor(m_hObject, &r, &g, &b, &a);
 	m_pClientDE->SetObjectColor(m_hObject, r, g, b, fScale);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CParticleShowerFX::AddParticles
 //
-//	ROUTINE:	CParticleShowerFX::AddParticles
-//
-//	PURPOSE:	Make the particles
-//
+//	PURPOSE: Make the particles
 // ----------------------------------------------------------------------- //```
 
 LTBOOL CParticleShowerFX::AddParticles()
 {
-    if(!m_hObject || !m_pClientDE) return LTFALSE;
+	if(!m_hObject || !m_pClientDE) return LTFALSE;
 
-    LTVector vMinOffset, vMaxOffset, vMinVel, vMaxVel;
+	LTVector vMinOffset, vMaxOffset, vMinVel, vMaxVel;
 	VEC_SET(vMinOffset, -m_cs.fEmissionRadius, -m_cs.fEmissionRadius, -m_cs.fEmissionRadius);
 	VEC_SET(vMaxOffset, m_cs.fEmissionRadius, m_cs.fEmissionRadius, m_cs.fEmissionRadius);
 
-    LTFLOAT fVelOffset = m_cs.vDir.Mag();
+	LTFLOAT fVelOffset = m_cs.vDir.Mag();
 	m_cs.vDir.Norm();
 
-    LTRotation rRot;
-    m_pClientDE->AlignRotation(&rRot, &(m_cs.vDir), LTNULL);
+	LTRotation rRot;
+	m_pClientDE->AlignRotation(&rRot, &(m_cs.vDir), LTNULL);
 
-    LTVector vF, vU, vR;
+	LTVector vF, vU, vR;
 	m_pClientDE->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	if (vF.y <= -0.95f || vF.y >= 0.95f)
@@ -138,7 +124,7 @@ LTBOOL CParticleShowerFX::AddParticles()
 		VEC_SET(vU, 0.0f, 1.0f, 0.0f);
 	}
 
-    LTVector vTemp;
+	LTVector vTemp;
 
 	vMinVel = vF * (fVelOffset * .025f);
 	vMaxVel = vF * fVelOffset;
@@ -151,12 +137,12 @@ LTBOOL CParticleShowerFX::AddParticles()
 	int nParticles = GetNumParticles(m_cs.nParticles);
 
 	m_pClientDE->AddParticles(m_hObject, nParticles,
-							  &vMinOffset, &vMaxOffset,		// Position offset
-							  &vMinVel, &vMaxVel,			// Velocity
-							  &m_vColor1, &m_vColor2,		// Color
+							  &vMinOffset, &vMaxOffset,	// Position offset
+							  &vMinVel, &vMaxVel,		// Velocity
+							  &m_vColor1, &m_vColor2,	// Color
 							  m_cs.fDuration, m_cs.fDuration);
 
 	m_fStartTime = m_pClientDE->GetTime();
 
-    return LTTRUE;
+	return LTTRUE;
 }

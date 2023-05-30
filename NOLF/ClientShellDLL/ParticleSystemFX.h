@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ParticleSystemFX.h
 //
-// MODULE  : ParticleSystemFX.h
+// PURPOSE: ParticleSystem special fx class - Definition
 //
-// PURPOSE : ParticleSystem special fx class - Definition
-//
-// CREATED : 10/21/97
-//
+// CREATED: 10/21/97
 // ----------------------------------------------------------------------- //
-
 #ifndef __PARTICLE_SYSTEM_FX_H__
 #define __PARTICLE_SYSTEM_FX_H__
 
@@ -16,25 +13,25 @@
 
 struct PSCREATESTRUCT : public BPSCREATESTRUCT
 {
-    PSCREATESTRUCT();
+	PSCREATESTRUCT();
 
-    LTVector     vColor1;
-    LTVector     vColor2;
-    LTVector     vDims;
-    LTVector     vMinVel;
-    LTVector     vMaxVel;
-    LTVector     vPos;
-    uint32      dwFlags;
-    LTFLOAT      fBurstWait;
-    LTFLOAT      fBurstWaitMin;
-    LTFLOAT      fBurstWaitMax;
-    LTFLOAT      fParticlesPerSecond;
-    LTFLOAT      fParticleLifetime;
-    LTFLOAT      fParticleRadius;
-    LTFLOAT      fGravity;
-    LTFLOAT      fRotationVelocity;
-    LTFLOAT      fViewDist;
-	HSTRING		hstrTextureName;
+	LTVector	vColor1;
+	LTVector	vColor2;
+	LTVector	vDims;
+	LTVector	vMinVel;
+	LTVector	vMaxVel;
+	LTVector	vPos;
+	uint32	dwFlags;
+	LTFLOAT fBurstWait;
+	LTFLOAT fBurstWaitMin;
+	LTFLOAT fBurstWaitMax;
+	LTFLOAT fParticlesPerSecond;
+	LTFLOAT fParticleLifetime;
+	LTFLOAT fParticleRadius;
+	LTFLOAT fGravity;
+	LTFLOAT fRotationVelocity;
+	LTFLOAT fViewDist;
+	HSTRING hstrTextureName;
 };
 
 inline PSCREATESTRUCT::PSCREATESTRUCT()
@@ -45,8 +42,8 @@ inline PSCREATESTRUCT::PSCREATESTRUCT()
 	vMinVel.Init();
 	vMaxVel.Init();
 	vPos.Init();
-	dwFlags				= 0;
-	fBurstWait			= 0.0f;
+	dwFlags			= 0;
+	fBurstWait		= 0.0f;
 	fParticlesPerSecond	= 0.0f;
 	fParticleLifetime	= 0.0f;
 	fParticleRadius		= 0.0f;
@@ -55,7 +52,7 @@ inline PSCREATESTRUCT::PSCREATESTRUCT()
 	fViewDist			= 0.0f;
 	fBurstWaitMin		= 0.01f;
 	fBurstWaitMax		= 1.0f;
-    hstrTextureName     = LTNULL;
+	hstrTextureName	= LTNULL;
 }
 
 class CParticleSystemFX : public CBaseParticleSystemFX
@@ -71,10 +68,10 @@ class CParticleSystemFX : public CBaseParticleSystemFX
 			}
 		}
 
-        virtual LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hRead);
-        virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
-        virtual LTBOOL Update();
-        virtual LTBOOL CreateObject(ILTClient* pClientDE);
+		virtual LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hRead);
+		virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
+		virtual LTBOOL Update();
+		virtual LTBOOL CreateObject(ILTClient* pClientDE);
 
 		virtual uint32 GetSFXID() { return SFX_PARTICLESYSTEM_ID; }
 
@@ -82,15 +79,15 @@ class CParticleSystemFX : public CBaseParticleSystemFX
 
 		// Creation data...
 
-		PSCREATESTRUCT	m_cs;		// Holds all initialization data
+		PSCREATESTRUCT m_cs;	// Holds all initialization data
 
-        LTBOOL   m_bFirstUpdate;     // Is this the first update
-        LTFLOAT  m_fNextUpdate;      // Time between updates
-        LTFLOAT  m_fLastTime;        // When was the last time
-        LTFLOAT  m_fMaxViewDistSqr;  // Max dist to add particles (squared)
+		LTBOOL	m_bFirstUpdate;	// Is this the first update
+		LTFLOAT m_fNextUpdate;	// Time between updates
+		LTFLOAT m_fLastTime;		// When was the last time
+		LTFLOAT m_fMaxViewDistSqr;	// Max dist to add particles (squared)
 
-        LTVector m_vMinOffset;
-        LTVector m_vMaxOffset;
+		LTVector m_vMinOffset;
+		LTVector m_vMaxOffset;
 
 		void TweakSystem();
 };

@@ -1,14 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ParticleShowerFX.h
 //
-// MODULE  : ParticleShowerFX.h
-//
-// PURPOSE : ParticleShower special fx class - Definition
+// PURPOSE: ParticleShower special fx class - Definition
 //			(used to be CSparksFX)
 //
-// CREATED : 1/17/98
-//
+// CREATED: 1/17/98
 // ----------------------------------------------------------------------- //
-
 #ifndef __PARTICLE_SHOWER_FX_H__
 #define __PARTICLE_SHOWER_FX_H__
 
@@ -17,17 +14,17 @@
 
 struct PARTICLESHOWERCREATESTRUCT : public BPSCREATESTRUCT
 {
-    PARTICLESHOWERCREATESTRUCT();
+	PARTICLESHOWERCREATESTRUCT();
 
-    LTVector vPos;
-    LTVector vDir;
-    LTVector vColor1;
-    LTVector vColor2;
-    uint8   nParticles;
-    LTFLOAT  fDuration;
-    LTFLOAT  fEmissionRadius;
-    LTFLOAT  fRadius;
-    LTFLOAT  fGravity;
+	LTVector	vPos;
+	LTVector vDir;
+	LTVector vColor1;
+	LTVector vColor2;
+	uint8		nParticles;
+	LTFLOAT fDuration;
+	LTFLOAT fEmissionRadius;
+	LTFLOAT fRadius;
+	LTFLOAT fGravity;
 	char*	pTexture;
 };
 
@@ -39,10 +36,10 @@ inline PARTICLESHOWERCREATESTRUCT::PARTICLESHOWERCREATESTRUCT()
 	vColor2.Init();
 	nParticles		= 0;
 	fDuration		= 0.0f;
-	fEmissionRadius	= 0.0f;
-	fRadius			= 0.0f;
+	fEmissionRadius = 0.0f;
+	fRadius		= 0.0f;
 	fGravity		= 0.0f;
-    pTexture        = LTNULL;
+	pTexture		= LTNULL;
 }
 
 
@@ -58,19 +55,19 @@ class CParticleShowerFX : public CBaseParticleSystemFX
 			m_fStartTime = 0.0f;
 		}
 
-        virtual LTBOOL CreateObject(ILTClient* pClientDE);
-        virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
-        virtual LTBOOL Update();
+		virtual LTBOOL CreateObject(ILTClient* pClientDE);
+		virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
+		virtual LTBOOL Update();
 
 		virtual uint32 GetSFXID() { return SFX_PARTICLESHOWER_ID; }
 
 	private :
 
-        LTBOOL AddParticles();
+		LTBOOL AddParticles();
 
 		PARTICLESHOWERCREATESTRUCT m_cs;
 
-        LTFLOAT  m_fStartTime;       // When did we start
+		LTFLOAT  m_fStartTime;	// When did we start
 };
 
 #endif // __PARTICLE_SHOWER_FX_H__

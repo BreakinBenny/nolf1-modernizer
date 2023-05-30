@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ObjSpriteFX.h
 //
-// MODULE  : ObjSpriteFX.h
+// PURPOSE: ObjSprite special fx class - Definition
 //
-// PURPOSE : ObjSprite special fx class - Definition
-//
-// CREATED : 9/12/00
+// CREATED: 9/12/00
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #ifndef __OBJSPRITE_FX_H__
 #define __OBJSPRITE_FX_H__
 
@@ -24,8 +21,8 @@ class CObjSpriteFX : public CSpecialFX
 		CObjSpriteFX();
 		~CObjSpriteFX() {};
 
-        virtual LTBOOL Update();
-		virtual	LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
+		virtual LTBOOL Update();
+		virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
 		virtual LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage);
 
 		virtual uint32 GetSFXID() { return SFX_OBJSPRITE_ID; }
@@ -34,7 +31,7 @@ class CObjSpriteFX : public CSpecialFX
 
 		// Creation data...
 
-		OBJSPRITECREATESTRUCT	m_cs;		// Holds all initialization data
+		OBJSPRITECREATESTRUCT m_cs;	// Holds all initialization data
 
 };
 

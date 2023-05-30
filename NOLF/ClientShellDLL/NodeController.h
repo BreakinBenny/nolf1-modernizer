@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: NodeController.h
 //
-// MODULE  : NodeController.h
+// PURPOSE: NodeController definition
 //
-// PURPOSE : NodeController definition
-//
-// CREATED : 05.20.1999
-//
+// CREATED: 05.20.1999
 // ----------------------------------------------------------------------- //
-
 #ifndef __NODE_CONTROLLER_H__
 #define __NODE_CONTROLLER_H__
 
@@ -15,9 +12,9 @@
 
 class CCharacterFX;
 
-#define MAX_NODES				(32)
-#define MAX_NODECONTROLS		(32)
-#define MAX_RECOILS				(2)
+#define MAX_NODES			(32)
+#define MAX_NODECONTROLS	(32)
+#define MAX_RECOILS			(2)
 
 enum Control
 {
@@ -42,7 +39,7 @@ typedef struct NCSTRUCT
 
 	inline void Reset()
 	{
-        bValid = LTFALSE;
+		bValid = LTFALSE;
 		eModelNode = eModelNodeInvalid;
 		eControl = eControlInvalid;
 
@@ -50,9 +47,9 @@ typedef struct NCSTRUCT
 		fRotationDistance = 0.0f;
 		fRotationDuration = 0.0f;
 		fRotationTimer = 0.0f;
-        fnRotationFunction = LTNULL;
+		fnRotationFunction = LTNULL;
 
-        hFollowObj = LTNULL;
+		hFollowObj = LTNULL;
 		hFollowObjNode = INVALID_MODEL_NODE;
 
 		vFollowPos.Init();
@@ -60,11 +57,11 @@ typedef struct NCSTRUCT
 		fFollowRate = 0.0f;
 		vFollowAngles.Init();
 		fFollowExpireTime = 0.0f;
-        bFollowOn = LTFALSE;
+		bFollowOn = LTFALSE;
 
-        hLipSyncSound = LTNULL;
-        pSixteenBitBuffer = LTNULL;
-        pEightBitBuffer = LTNULL;
+		hLipSyncSound = LTNULL;
+		pSixteenBitBuffer = LTNULL;
+		pEightBitBuffer = LTNULL;
 		dwSamplesPerSecond = 0;
 		bShowingSubtitles = LTFALSE;
 
@@ -76,43 +73,43 @@ typedef struct NCSTRUCT
 	}
 
 	// Members used by all control methods
-    LTBOOL       bValid;         // Is the control active or not?
-	ModelNode	eModelNode;		// What model node does it control?
+	LTBOOL		bValid;		 // Is the control active or not?
+	ModelNode	eModelNode;	// What model node does it control?
 	Control		eControl;		// What type of control is this?
 
 	// Timed Rotation members
-    LTVector     vRotationAxis;          // What axis are we rotating around?
-    LTFLOAT      fRotationDistance;      // How far (in radians) will we rotate maximally?
-    LTFLOAT      fRotationDuration;      // How long does the rotation last?
-    LTFLOAT      fRotationTimer;         // How far into the rotation are we?
-	RotationFn	fnRotationFunction;		// The function that maps time to radians
+	LTVector	vRotationAxis;		// What axis are we rotating around?
+	LTFLOAT fRotationDistance;	// How far (in radians) will we rotate maximally?
+	LTFLOAT fRotationDuration;	// How long does the rotation last?
+	LTFLOAT fRotationTimer;	// How far into the rotation are we?
+	RotationFn fnRotationFunction;	// The function that maps time to radians
 
 	// Head follow object rotation members
 	HOBJECT		hFollowObj;
 	HMODELNODE	hFollowObjNode;
 
 	// Head follow position rotation members
-    LTVector     vFollowPos;
+	LTVector	 vFollowPos;
 
 	// General head follow members
-    LTFLOAT      fFollowRate;
-    LTVector     vFollowAngles;
-    LTFLOAT      fFollowExpireTime;
-    LTBOOL       bFollowOn;
+	LTFLOAT fFollowRate;
+	LTVector	vFollowAngles;
+	LTFLOAT fFollowExpireTime;
+	LTBOOL	bFollowOn;
 
 	// Sound rotation members
-    HLTSOUND    hLipSyncSound;
-	int16 *		pSixteenBitBuffer;
-	int8  *     pEightBitBuffer;
-    uint32      dwSamplesPerSecond;
-	LTBOOL		bShowingSubtitles;
+	HLTSOUND	hLipSyncSound;
+	int16 *	pSixteenBitBuffer;
+	int8  *	pEightBitBuffer;
+	uint32	dwSamplesPerSecond;
+	LTBOOL	bShowingSubtitles;
 
 
 	// Script members
-    LTFLOAT      fScriptTime;
-    uint8       nScript;
-	int			nCurrentScriptPt;
-	int			nLastScriptPt;
+	LTFLOAT	fScriptTime;
+	uint8	nScript;
+	int	nCurrentScriptPt;
+	int	nLastScriptPt;
 }
 NCSTRUCT;
 
@@ -124,15 +121,15 @@ typedef struct NSTRUCT
 	{
 		hModelNode = INVALID_MODEL_NODE;
 		eModelNode = eModelNodeInvalid;
-        rRot.Init();
+		rRot.Init();
 		matTransform.Identity();
 		cControllers = 0;
 	}
 
-	HMODELNODE	hModelNode;
+	HMODELNODE hModelNode;
 	ModelNode	eModelNode;
-    LTRotation   rRot;
-    LTMatrix     matTransform;
+	LTRotation	rRot;
+	LTMatrix		matTransform;
 	int			cControllers;
 }
 NSTRUCT;
@@ -150,7 +147,7 @@ class CNodeController
 		CNodeController();
 		~CNodeController();
 
-        LTBOOL Init(CCharacterFX* pCFX);
+		LTBOOL Init(CCharacterFX* pCFX);
 
 		// Simple accessors
 		CCharacterFX*	GetCFX() const { return m_pCharacterFX; }
@@ -166,7 +163,7 @@ class CNodeController
 		void	UpdateHeadFollowPosControl(NCSTRUCT *pNodeControl);
 
 		// Message handlers
-        LTBOOL   HandleNodeControlMessage(uint8 byMsgId, HMESSAGEREAD hMessage);
+		LTBOOL   HandleNodeControlMessage(uint8 byMsgId, HMESSAGEREAD hMessage);
 		void	HandleNodeControlRecoilMessage(HMESSAGEREAD hMessage);
 		void	HandleNodeControlLipSyncMessage(HMESSAGEREAD hMessage);
 		void	HandleNodeControlScriptMessage(HMESSAGEREAD hMessage);
@@ -180,28 +177,28 @@ class CNodeController
 
 		// Node control methods
 		int		AddNodeControl();
-        void    AddNodeControlRotationTimed(ModelNode eModelNode, const LTVector& vAxis, LTFLOAT fDistance, LTFLOAT fDuration);
+		void	AddNodeControlRotationTimed(ModelNode eModelNode, const LTVector& vAxis, LTFLOAT fDistance, LTFLOAT fDuration);
 
 		void	RemoveNodeControl(int iNodeControl);
 
 		// Node control callback methods
-        static void NodeControlFn(HOBJECT hObj, HMODELNODE hNode, LTMatrix *pGlobalMat, void *pUserData);
-        void        HandleNodeControl(HOBJECT hObj, HMODELNODE hNode, LTMatrix *pGlobalMat);
+		static void NodeControlFn(HOBJECT hObj, HMODELNODE hNode, LTMatrix *pGlobalMat, void *pUserData);
+		void		HandleNodeControl(HOBJECT hObj, HMODELNODE hNode, LTMatrix *pGlobalMat);
 
 	protected : // Protected member variables
 
-		CCharacterFX*	m_pCharacterFX;					// Back pointer to our Character FX
+		CCharacterFX* m_pCharacterFX;				// Back pointer to our Character FX
 
-		int			m_cNodeControls;					// The number of active node controls
+		int			m_cNodeControls;				// The number of active node controls
 		NCSTRUCT	m_aNodeControls[MAX_NODECONTROLS];	// The node controls
-		int			m_cNodes;							// The number of nodes
-		NSTRUCT		m_aNodes[MAX_NODES];				// The nodes
+		int			m_cNodes;					// The number of nodes
+		NSTRUCT	m_aNodes[MAX_NODES];		// The nodes
 
-		int			m_cRecoils;							// How many recoils we're controlling
-        LTFLOAT      m_fRecoilTimers[MAX_RECOILS];       // Our recoil timers
+		int			m_cRecoils;					// How many recoils we're controlling
+		LTFLOAT	m_fRecoilTimers[MAX_RECOILS];	// Our recoil timers
 
-        LTFLOAT      m_fCurLipSyncRot;                   // Current lip-sync node rotation
-        LTBOOL       m_bOpeningMouth;                    // Is mouth opening or closing?
+		LTFLOAT	m_fCurLipSyncRot;			// Current lip-sync node rotation
+		LTBOOL		m_bOpeningMouth;			// Is mouth opening or closing?
 };
 
 #endif

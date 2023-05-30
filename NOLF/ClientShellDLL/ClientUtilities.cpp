@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ClientUtilities.cpp
 //
-// MODULE  : ClientUtilities.cpp
+// PURPOSE: Utility functions
 //
-// PURPOSE : Utility functions
-//
-// CREATED : 9/25/97
+// CREATED: 9/25/97
 //
 // (c) 1997-1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -26,46 +24,46 @@ std::unordered_map<std::string, std::string> g_mConfigFile;
 
 CommandID g_CommandArray[] =
 {
-	{ IDS_CONTROL_FORWARD,			COMMAND_ID_FORWARD,			IDS_ACTIONSTRING_FORWARD,			COM_MOVE },
-	{ IDS_CONTROL_BACKWARD,			COMMAND_ID_REVERSE,			IDS_ACTIONSTRING_BACKWARD,			COM_MOVE },
-	{ IDS_CONTROL_STRAFELEFT,		COMMAND_ID_STRAFE_LEFT,		IDS_ACTIONSTRING_STRAFELEFT,		COM_MOVE },
-	{ IDS_CONTROL_STRAFERIGHT,		COMMAND_ID_STRAFE_RIGHT,	IDS_ACTIONSTRING_STRAFERIGHT,		COM_MOVE },
-	{ IDS_CONTROL_TURNLEFT,			COMMAND_ID_LEFT,			IDS_ACTIONSTRING_TURNLEFT,			COM_MOVE },
-	{ IDS_CONTROL_TURNRIGHT,		COMMAND_ID_RIGHT,			IDS_ACTIONSTRING_TURNRIGHT,			COM_MOVE },
-	{ IDS_CONTROL_STRAFE,			COMMAND_ID_STRAFE,			IDS_ACTIONSTRING_STRAFE,			COM_MOVE },
-	{ IDS_CONTROL_RUN,				COMMAND_ID_RUN,				IDS_ACTIONSTRING_RUN,				COM_MOVE },
-	{ IDS_CONTROL_JUMP,				COMMAND_ID_JUMP,			IDS_ACTIONSTRING_JUMP,				COM_MOVE },
-	{ IDS_CONTROL_DUCK,				COMMAND_ID_DUCK,			IDS_ACTIONSTRING_DUCK,				COM_MOVE },
-	{ IDS_CONTROL_TURNAROUND,		COMMAND_ID_TURNAROUND,		IDS_ACTIONSTRING_TURNAROUND,		COM_MOVE },
-	{ IDS_CONTROL_RUNLOCKTOGGLE,	COMMAND_ID_RUNLOCK,			IDS_ACTIONSTRING_RUNLOCKTOGGLE,		COM_MOVE },
+	{ IDS_CONTROL_FORWARD,	COMMAND_ID_FORWARD,	IDS_ACTIONSTRING_FORWARD,	COM_MOVE },
+	{ IDS_CONTROL_BACKWARD,	COMMAND_ID_REVERSE,		IDS_ACTIONSTRING_BACKWARD,	COM_MOVE },
+	{ IDS_CONTROL_STRAFELEFT,	COMMAND_ID_STRAFE_LEFT,	IDS_ACTIONSTRING_STRAFELEFT,	COM_MOVE },
+	{ IDS_CONTROL_STRAFERIGHT, COMMAND_ID_STRAFE_RIGHT, IDS_ACTIONSTRING_STRAFERIGHT, COM_MOVE },
+	{ IDS_CONTROL_TURNLEFT,	COMMAND_ID_LEFT,			IDS_ACTIONSTRING_TURNLEFT,	COM_MOVE },
+	{ IDS_CONTROL_TURNRIGHT,	COMMAND_ID_RIGHT,		IDS_ACTIONSTRING_TURNRIGHT,	COM_MOVE },
+	{ IDS_CONTROL_STRAFE,		COMMAND_ID_STRAFE,		IDS_ACTIONSTRING_STRAFE,		COM_MOVE },
+	{ IDS_CONTROL_RUN,			COMMAND_ID_RUN,			IDS_ACTIONSTRING_RUN,			COM_MOVE },
+	{ IDS_CONTROL_JUMP,		COMMAND_ID_JUMP,			IDS_ACTIONSTRING_JUMP,		COM_MOVE },
+	{ IDS_CONTROL_DUCK,		COMMAND_ID_DUCK,		IDS_ACTIONSTRING_DUCK,		COM_MOVE },
+	{ IDS_CONTROL_TURNAROUND, COMMAND_ID_TURNAROUND, IDS_ACTIONSTRING_TURNAROUND, COM_MOVE },
+	{ IDS_CONTROL_RUNLOCKTOGGLE, COMMAND_ID_RUNLOCK, IDS_ACTIONSTRING_RUNLOCKTOGGLE, COM_MOVE },
 
-	{ IDS_CONTROL_FIRE,				COMMAND_ID_FIRING,			IDS_ACTIONSTRING_FIRE,				COM_INV },
-	{ IDS_CONTROL_ACTIVATE,			COMMAND_ID_ACTIVATE,		IDS_ACTIONSTRING_ACTIVATE,			COM_INV },
-	{ IDS_CONTROL_RELOAD,			COMMAND_ID_RELOAD,			IDS_ACTIONSTRING_RELOAD,			COM_INV },
-	{ IDS_CONTROL_NEXT_AMMO,		COMMAND_ID_NEXT_AMMO,		IDS_ACTIONSTRING_NEXTAMMO,			COM_INV },
-	{ IDS_CONTROL_NEXTWEAPON,		COMMAND_ID_NEXT_WEAPON,		IDS_ACTIONSTRING_NEXTWEAPON,		COM_INV },
-	{ IDS_CONTROL_PREVIOUSWEAPON,	COMMAND_ID_PREV_WEAPON,		IDS_ACTIONSTRING_PREVIOUSWEAPON,	COM_INV },
-	{ IDS_CONTROL_HOLSTERWEAPON,	COMMAND_ID_HOLSTER,			IDS_ACTIONSTRING_HOLSTERWEAPON,		COM_INV },
-	{ IDS_CONTROL_INVENTORY,		COMMAND_ID_INVENTORY,		IDS_ACTIONSTRING_INVENTORY,			COM_INV },
+	{ IDS_CONTROL_FIRE,			COMMAND_ID_FIRING,		IDS_ACTIONSTRING_FIRE,			COM_INV },
+	{ IDS_CONTROL_ACTIVATE,	COMMAND_ID_ACTIVATE,	IDS_ACTIONSTRING_ACTIVATE,	COM_INV },
+	{ IDS_CONTROL_RELOAD,		COMMAND_ID_RELOAD,		IDS_ACTIONSTRING_RELOAD,		COM_INV },
+	{ IDS_CONTROL_NEXT_AMMO,	COMMAND_ID_NEXT_AMMO,	IDS_ACTIONSTRING_NEXTAMMO,	COM_INV },
+	{ IDS_CONTROL_NEXTWEAPON, COMMAND_ID_NEXT_WEAPON, IDS_ACTIONSTRING_NEXTWEAPON, COM_INV },
+	{ IDS_CONTROL_PREVIOUSWEAPON, COMMAND_ID_PREV_WEAPON, IDS_ACTIONSTRING_PREVIOUSWEAPON, COM_INV },
+	{ IDS_CONTROL_HOLSTERWEAPON, COMMAND_ID_HOLSTER, IDS_ACTIONSTRING_HOLSTERWEAPON, COM_INV },
+	{ IDS_CONTROL_INVENTORY,	COMMAND_ID_INVENTORY,	IDS_ACTIONSTRING_INVENTORY,		COM_INV },
 
-	{ IDS_CONTROL_LOOKUP,			COMMAND_ID_LOOKUP,			IDS_ACTIONSTRING_LOOKUP,			COM_VIEW },
-	{ IDS_CONTROL_LOOKDOWN,			COMMAND_ID_LOOKDOWN,		IDS_ACTIONSTRING_LOOKDOWN,			COM_VIEW },
-	{ IDS_CONTROL_MOUSELOOKTOGGLE,	COMMAND_ID_MOUSEAIMTOGGLE,	IDS_ACTIONSTRING_MOUSELOOKTOGGLE,	COM_VIEW },
-	{ IDS_CONTROL_CENTERVIEW,		COMMAND_ID_CENTERVIEW,		IDS_ACTIONSTRING_CENTERVIEW,		COM_VIEW },
-	{ IDS_CONTROL_ZOOM_IN,			COMMAND_ID_ZOOM_IN,			IDS_ACTIONSTRING_ZOOMIN,			COM_VIEW },
-	{ IDS_CONTROL_ZOOM_OUT,			COMMAND_ID_ZOOM_OUT,		IDS_ACTIONSTRING_ZOOMOUT,			COM_VIEW },
-	{ IDS_CONTROL_TOGGLE_ZOOM,		COMMAND_ID_TOGGLE_ZOOM,		IDS_ACTIONSTRING_TOGGLE_ZOOM,		COM_VIEW },
+	{ IDS_CONTROL_LOOKUP,		COMMAND_ID_LOOKUP,		IDS_ACTIONSTRING_LOOKUP,		COM_VIEW },
+	{ IDS_CONTROL_LOOKDOWN,	COMMAND_ID_LOOKDOWN,	IDS_ACTIONSTRING_LOOKDOWN,	COM_VIEW },
+	{ IDS_CONTROL_MOUSELOOKTOGGLE, COMMAND_ID_MOUSEAIMTOGGLE, IDS_ACTIONSTRING_MOUSELOOKTOGGLE,	COM_VIEW },
+	{ IDS_CONTROL_CENTERVIEW,	COMMAND_ID_CENTERVIEW,	IDS_ACTIONSTRING_CENTERVIEW,	COM_VIEW },
+	{ IDS_CONTROL_ZOOM_IN,		COMMAND_ID_ZOOM_IN,		IDS_ACTIONSTRING_ZOOMIN,		COM_VIEW },
+	{ IDS_CONTROL_ZOOM_OUT,		COMMAND_ID_ZOOM_OUT,	IDS_ACTIONSTRING_ZOOMOUT,	COM_VIEW },
+	{ IDS_CONTROL_TOGGLE_ZOOM,	COMMAND_ID_TOGGLE_ZOOM, IDS_ACTIONSTRING_TOGGLE_ZOOM, COM_VIEW },
 
-	{ IDS_CONTROL_FRAGCOUNT,		COMMAND_ID_FRAGCOUNT,		IDS_ACTIONSTRING_FRAGCOUNT,			COM_MISC },
-	{ IDS_CONTROL_MISSION,			COMMAND_ID_MISSION,			IDS_ACTIONSTRING_MISSION,			COM_MISC },
-	{ IDS_CONTROL_FLASHLIGHT,		COMMAND_ID_FLASHLIGHT,		IDS_ACTIONSTRING_FLASHLIGHT,		COM_MISC },
-	{ IDS_CONTROL_CROSSHAIRTOGGLE,	COMMAND_ID_CROSSHAIRTOGGLE,	IDS_ACTIONSTRING_CROSSHAIRTOGGLE,	COM_MISC },
-	{ IDS_CONTROL_SAY,				COMMAND_ID_MESSAGE,			IDS_ACTIONSTRING_SAY,				COM_MISC },
-	{ IDS_CONTROL_TEAM_SAY,			COMMAND_ID_TEAM_MESSAGE,	IDS_ACTIONSTRING_TEAM_SAY,			COM_MISC },
-	{ IDS_CONTROL_CONSOLE,			COMMAND_ID_TOGGLE_CONSOLE,	IDS_ACTIONSTRING_CONSOLE,			COM_MISC },
+	{ IDS_CONTROL_FRAGCOUNT,		COMMAND_ID_FRAGCOUNT,	IDS_ACTIONSTRING_FRAGCOUNT,	COM_MISC },
+	{ IDS_CONTROL_MISSION,			COMMAND_ID_MISSION,		IDS_ACTIONSTRING_MISSION,		COM_MISC },
+	{ IDS_CONTROL_FLASHLIGHT,		COMMAND_ID_FLASHLIGHT,	IDS_ACTIONSTRING_FLASHLIGHT,	COM_MISC },
+	{ IDS_CONTROL_CROSSHAIRTOGGLE, COMMAND_ID_CROSSHAIRTOGGLE, IDS_ACTIONSTRING_CROSSHAIRTOGGLE,	COM_MISC },
+	{ IDS_CONTROL_SAY,			COMMAND_ID_MESSAGE,			IDS_ACTIONSTRING_SAY,			COM_MISC },
+	{ IDS_CONTROL_TEAM_SAY,	COMMAND_ID_TEAM_MESSAGE,	IDS_ACTIONSTRING_TEAM_SAY,	COM_MISC },
+	{ IDS_CONTROL_CONSOLE,	COMMAND_ID_TOGGLE_CONSOLE,	IDS_ACTIONSTRING_CONSOLE,	COM_MISC },
 
 	// This control must always remain as the last one in the array
-	{ IDS_CONTROL_UNASSIGNED,		COMMAND_ID_UNASSIGNED,		IDS_ACTIONSTRING_UNASSIGNED,		COM_MISC }
+	{ IDS_CONTROL_UNASSIGNED,	COMMAND_ID_UNASSIGNED,		IDS_ACTIONSTRING_UNASSIGNED,	COM_MISC }
 };
 
 const int g_kNumCommands = sizeof(g_CommandArray) / sizeof(g_CommandArray[0]);
@@ -84,7 +82,7 @@ char* CommandName(int nCommand)
 {
 	static char buffer[128];
 
-    uint32 nStringID = 0;
+	uint32 nStringID = 0;
 
 	for (int i=0; i < g_kNumCommands; i++)
 	{
@@ -97,9 +95,9 @@ char* CommandName(int nCommand)
 
 	if (nStringID)
 	{
-        HSTRING hStr = g_pLTClient->FormatString(nStringID);
-        SAFE_STRCPY(buffer, g_pLTClient->GetStringData(hStr));
-        g_pLTClient->FreeString(hStr);
+		HSTRING hStr = g_pLTClient->FormatString(nStringID);
+		SAFE_STRCPY(buffer, g_pLTClient->GetStringData(hStr));
+		g_pLTClient->FreeString(hStr);
 	}
 	else
 	{
@@ -124,16 +122,16 @@ HSURFACE CropSurface ( HSURFACE hSurf, HLTCOLOR hBorderColor )
 {
 	if (!g_pGameClientShell) return hSurf;
 
-    if (!hSurf) return LTNULL;
+	if (!hSurf) return LTNULL;
 
-    ILTClient* pClientDE = g_pGameClientShell->GetClientDE();
+	ILTClient* pClientDE = g_pGameClientShell->GetClientDE();
 	if (!pClientDE) return hSurf;
 
-    uint32 nWidth, nHeight;
+	uint32 nWidth, nHeight;
 	pClientDE->GetSurfaceDims (hSurf, &nWidth, &nHeight);
 
-    LTRect rcBorders;
-    memset (&rcBorders, 0, sizeof (LTRect));
+	LTRect rcBorders;
+	memset (&rcBorders, 0, sizeof (LTRect));
 	pClientDE->GetBorderSize (hSurf, hBorderColor, &rcBorders);
 
 	if (rcBorders.left == 0 && rcBorders.top == 0 && rcBorders.right == 0 && rcBorders.bottom == 0) return hSurf;
@@ -141,7 +139,7 @@ HSURFACE CropSurface ( HSURFACE hSurf, HLTCOLOR hBorderColor )
 	HSURFACE hCropped = pClientDE->CreateSurface (nWidth - rcBorders.left - rcBorders.right, nHeight - rcBorders.top - rcBorders.bottom);
 	if (!hCropped) return hSurf;
 
-    LTRect rcSrc;
+	LTRect rcSrc;
 	rcSrc.left = rcBorders.left;
 	rcSrc.top = rcBorders.top;
 	rcSrc.right = nWidth - rcBorders.right;
@@ -165,7 +163,7 @@ HSURFACE CropSurface ( HSURFACE hSurf, HLTCOLOR hBorderColor )
 //
 // If "Function" took 1000 ticks to execute, the above code would print in
 // the console:
-//		Function(30.00, 50.00) : 1000 ticks
+//	Function(30.00, 50.00) : 1000 ticks
 //
 // NOTE:  The timing information is only printed to the console if the server
 // console variable "ShowTiming" is set to 1. (i.e., showtiming 1)
@@ -176,16 +174,16 @@ static LTCounter s_counter;
 
 void StartTimingCounter()
 {
-    if (!g_pLTClient || g_vtShowTimingTrack.GetFloat() < 1.0f) return;
+	if (!g_pLTClient || g_vtShowTimingTrack.GetFloat() < 1.0f) return;
 
-    g_pLTClient->StartCounter(&s_counter);
+	g_pLTClient->StartCounter(&s_counter);
 }
 
 void EndTimingCounter(char *msg, ...)
 {
-    if (!g_pLTClient || g_vtShowTimingTrack.GetFloat() < 1.0f) return;
+	if (!g_pLTClient || g_vtShowTimingTrack.GetFloat() < 1.0f) return;
 
-    uint32 dwTicks = g_pLTClient->EndCounter(&s_counter);
+	uint32 dwTicks = g_pLTClient->EndCounter(&s_counter);
 
 	// parse the message
 
@@ -197,18 +195,18 @@ void EndTimingCounter(char *msg, ...)
 
 	if (nSuccess < 0) return;
 
-    g_pLTClient->CPrint("%s : %d ticks", pMsg, dwTicks);
+	g_pLTClient->CPrint("%s : %d ticks", pMsg, dwTicks);
 }
 
 
 void GetConsoleString(char* sKey, char* sDest, char* sDefault)
 {
-    if (g_pLTClient)
+	if (g_pLTClient)
 	{
-        HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar(sKey);
+		HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar(sKey);
 		if (hVar)
 		{
-            char* sValue = g_pLTClient->GetVarValueString(hVar);
+			char* sValue = g_pLTClient->GetVarValueString(hVar);
 			if (sValue)
 			{
 				strcpy(sDest, sValue);
@@ -244,12 +242,12 @@ std::string GetConsoleString(char* sKey, char* sDefault)
 
 int GetConsoleInt(char* sKey, int nDefault)
 {
-    if (g_pLTClient)
+	if (g_pLTClient)
 	{
-        HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar(sKey);
+		HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar(sKey);
 		if (hVar)
 		{
-            float fValue = g_pLTClient->GetVarValueFloat(hVar);
+			float fValue = g_pLTClient->GetVarValueFloat(hVar);
 			return((int)fValue);
 		}
 	}
@@ -259,12 +257,12 @@ int GetConsoleInt(char* sKey, int nDefault)
 
 LTFLOAT GetConsoleFloat(char* sKey, LTFLOAT fDefault)
 {
-    if (g_pLTClient)
+	if (g_pLTClient)
 	{
-        HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar(sKey);
+		HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar(sKey);
 		if (hVar)
 		{
-            float fValue = g_pLTClient->GetVarValueFloat(hVar);
+			float fValue = g_pLTClient->GetVarValueFloat(hVar);
 			return(fValue);
 		}
 	}
@@ -274,31 +272,31 @@ LTFLOAT GetConsoleFloat(char* sKey, LTFLOAT fDefault)
 
 void WriteConsoleString(char* sKey, char* sValue)
 {
-    if (g_pLTClient)
+	if (g_pLTClient)
 	{
 		char sTemp[256];
-        wsprintf(sTemp, "+%s \"%s\"", sKey, sValue);
-        g_pLTClient->RunConsoleString(sTemp);
+		wsprintf(sTemp, "+%s \"%s\"", sKey, sValue);
+		g_pLTClient->RunConsoleString(sTemp);
 	}
 }
 
 void WriteConsoleInt(char* sKey, int nValue)
 {
-    if (g_pLTClient)
+	if (g_pLTClient)
 	{
 		char sTemp[256];
 		wsprintf(sTemp, "+%s %i", sKey, nValue);
-        g_pLTClient->RunConsoleString(sTemp);
+		g_pLTClient->RunConsoleString(sTemp);
 	}
 }
 
 void WriteConsoleFloat(char* sKey, LTFLOAT fValue)
 {
-    if (g_pLTClient)
+	if (g_pLTClient)
 	{
 		char sTemp[256];
 		sprintf(sTemp, "+%s %f", sKey, fValue);
-        g_pLTClient->RunConsoleString(sTemp);
+		g_pLTClient->RunConsoleString(sTemp);
 	}
 }
 
@@ -604,7 +602,7 @@ namespace
 int GetCommandKey(int nActionCode)
 {
 	int nKey = -1;
-    DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (DEVICETYPE_KEYBOARD);
+	DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (DEVICETYPE_KEYBOARD);
 	if (!pBindings)
 	{
 		return nKey;
@@ -676,8 +674,7 @@ void GetCommandKeyStr(int nActionCode, char *pBuf, int nBufLen)
 
 	}
 
-    g_pLTClient->FreeDeviceBindings (pBindings);
+	g_pLTClient->FreeDeviceBindings (pBindings);
 
 	return;
-
 }

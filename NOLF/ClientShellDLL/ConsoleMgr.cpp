@@ -60,7 +60,7 @@ ConsoleMgr::ConsoleMgr()
 	
 	memset(m_szEdit, 0, sizeof(m_szEdit));
 
-	m_iWidth = 320;			// px
+	m_iWidth = 320;		// px
 	m_iHeight = 240;		// Pixels
 	m_iFontSize = 14;		// Pixels?
 	m_iLineSpacing = 16;	// Pixels!

@@ -92,6 +92,4 @@ unsigned int COptimizedRenderer::GetHashValue(CacheOption options)
 	hash = HashCombine(hash, hasher(options.dims.bottom));
 	hash = HashCombine(hash, hasher(options.dims.right));
 	return HashCombine(hash, hasher(options.colour));
-
 }
-

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ClientUtilities.h
 //
-// MODULE  : ClientUtilities.h
+// PURPOSE: Utility functions
 //
-// PURPOSE : Utility functions
-//
-// CREATED : 9/25/97
+// CREATED: 9/25/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __CLIENT_UTILITIES_H__
@@ -33,25 +31,25 @@ enum CommandType
 
 struct CommandID
 {
-	int		nStringID;
-	int		nCommandID;
-	int		nActionStringID;
-	int		nCommandType;
+	int	nStringID;
+	int	nCommandID;
+	int	nActionStringID;
+	int	nCommandType;
 };
 
 struct DSize
 {
-	DSize()		{ cx = 0; cy = 0; }
+	DSize()	{ cx = 0; cy = 0; }
 
-	unsigned long	cx;
-	unsigned long	cy;
+	unsigned long cx;
+	unsigned long cy;
 };
 
 char* CommandName(int nCommand);
 
 HSURFACE CropSurface(HSURFACE hSurf, HLTCOLOR hBorderColor);
 
-int		GetConsoleInt(char* sKey, int nDefault);
+int	GetConsoleInt(char* sKey, int nDefault);
 void	GetConsoleString(char* sKey, char* sDest, char* sDefault);
 std::string	GetConsoleString(char* sKey, char* sDefault);
 void	WriteConsoleString(char* sKey, char* sValue);
@@ -59,8 +57,8 @@ void	WriteConsoleInt(char* sKey, int nValue);
 LTFLOAT GetConsoleFloat(char* sKey, LTFLOAT fDefault);
 void	WriteConsoleFloat(char* sKey, LTFLOAT fValue);
 
-void GetConfigFile(std::string file);
-int GetConfigInt(std::string key, int defaultValue);
+void	GetConfigFile(std::string file);
+int	GetConfigInt(std::string key, int defaultValue);
 std::string GetConfigString(std::string key, std::string defaultValue);
 LTFLOAT GetConfigFloat(std::string key, LTFLOAT defaultValue);
 
@@ -84,15 +82,15 @@ void EndTimingCounter(char *msg, ...);
 inline LTBOOL GetAttachmentSocketTransform(HOBJECT hObj, char* pSocketName,
                                           LTVector & vPos, LTRotation & rRot)
 {
-    if (!hObj || !pSocketName) return LTFALSE;
+	if (!hObj || !pSocketName) return LTFALSE;
 
 	HOBJECT hAttachList[30];
-    uint32 dwListSize, dwNumAttachments;
+	uint32 dwListSize, dwNumAttachments;
 
-    if (g_pLTClient->Common()->GetAttachments(hObj, hAttachList,
+	if (g_pLTClient->Common()->GetAttachments(hObj, hAttachList,
 		ARRAY_LEN(hAttachList), dwListSize, dwNumAttachments) == LT_OK)
 	{
-        for (uint32 i=0; i < dwListSize; i++)
+		for (uint32 i=0; i < dwListSize; i++)
 		{
 			if (hAttachList[i])
 			{
@@ -101,17 +99,17 @@ inline LTBOOL GetAttachmentSocketTransform(HOBJECT hObj, char* pSocketName,
 				if (g_pModelLT->GetSocket(hAttachList[i], pSocketName, hSocket) == LT_OK)
 				{
 					LTransform transform;
-                    if (g_pModelLT->GetSocketTransform(hAttachList[i], hSocket, transform, LTTRUE) == LT_OK)
+					if (g_pModelLT->GetSocketTransform(hAttachList[i], hSocket, transform, LTTRUE) == LT_OK)
 					{
 						g_pTransLT->Get(transform, vPos, rRot);
-                        return LTTRUE;
+						return LTTRUE;
 					}
 				}
 			}
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 void PlayWeaponSound(WEAPON *pWeapon, LTVector vPos, PlayerSoundId eSoundId,
@@ -123,6 +121,6 @@ int GetCommandKey(int nActionCode);
 //get the name of the key bound to an action, "" if no binding can be found.
 void GetCommandKeyStr(int nActionCode, char *pBuf, int nBufLen);
 
-#define IsKeyDown(key)		(GetAsyncKeyState(key) & 0x80000000)
+#define IsKeyDown(key)	(GetAsyncKeyState(key) & 0x80000000)
 
 #endif // __CLIENT_UTILITIES_H__

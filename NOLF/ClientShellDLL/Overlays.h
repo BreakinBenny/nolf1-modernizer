@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Overlays.h
 //
-// MODULE  : Overlays.h
+// PURPOSE: definitions for overlays
 //
-// PURPOSE : definitions for overlays
-//
-// CREATED : 1/28/00
-//
+// CREATED: 1/28/00
 // ----------------------------------------------------------------------- //
-
 #ifndef __OVERLAYS_H__
 #define __OVERLAYS_H__
 
@@ -36,7 +33,7 @@ enum eOverlayMask
 enum eSunglassMode
 {
 	SUN_NONE	= -1,
-	SUN_CAMERA	= 0,
+	SUN_CAMERA = 0,
 	SUN_MINES,
 	SUN_IR,
 	SUN_INVIS_INK,
