@@ -349,7 +349,7 @@ HSTRING CAIHumanStateIdle::CreateReturnString()
 	char szBuffer[256];
 	sprintf(szBuffer, "GOTO PT=%f,%f,%f NEXT=(FACEDIR %f,%f,%f) NEXT=IDLE MOVE=WALK", EXPANDVEC(GetAI()->GetPosition()), EXPANDVEC(GetAI()->GetForwardVector()));
 
-    return g_pLTServer->CreateString(szBuffer);
+	return g_pLTServer->CreateString(szBuffer);
 }
 
 // ----------------------------------------------------------------------- //
@@ -427,7 +427,7 @@ HSTRING CAIHumanStateAware::CreateReturnString()
 		EXPANDVEC(GetAI()->GetPosition()),
 		EXPANDVEC(GetAI()->GetForwardVector()));
 
-    return g_pLTServer->CreateString(szBuffer);
+	return g_pLTServer->CreateString(szBuffer);
 }
 
 // ----------------------------------------------------------------------- //
@@ -1081,7 +1081,7 @@ void CAIHumanStatePatrol::Update()
 
 	if ( 0 == m_cNodes || 1 == m_cNodes )
 	{
-        g_pLTServer->CPrint("AI had no patrol nodes.");
+		g_pLTServer->CPrint("AI had no patrol nodes.");
 		GetAI()->ChangeState("IDLE");
 		return;
 	}
@@ -1102,7 +1102,7 @@ void CAIHumanStatePatrol::Update()
 	}
 	else
 	{
-        m_fTalkTimer -= g_pLTServer->GetFrameTime();
+		m_fTalkTimer -= g_pLTServer->GetFrameTime();
 	}
 
 	LTBOOL bGotoNextNode = LTFALSE;
@@ -1237,7 +1237,7 @@ LTBOOL CAIHumanStatePatrol::UpdateTaskWait()
 	{
 		// We're waiting at our patrol point
 
-        m_fWaitTimer -= g_pLTServer->GetFrameTime();
+		m_fWaitTimer -= g_pLTServer->GetFrameTime();
 	}
 	else
 	{
@@ -1276,7 +1276,7 @@ void CAIHumanStatePatrol::HandleNameValuePair(char *szName, char *szValue)
 		{
 			if ( m_cNodes == kMaxPatrolNodes )
 			{
-                g_pLTServer->CPrint("Max # patrol waypoints exceeded %s=%s", szName, szValue);
+				g_pLTServer->CPrint("Max # patrol waypoints exceeded %s=%s", szName, szValue);
 			}
 
 			CAINode* pNode = g_pAINodeMgr->GetNode(szPoint);
@@ -1287,7 +1287,7 @@ void CAIHumanStatePatrol::HandleNameValuePair(char *szName, char *szValue)
 			}
 			else
 			{
-                g_pLTServer->CPrint("Unknown patrol waypoint ''%s''", szPoint);
+				g_pLTServer->CPrint("Unknown patrol waypoint ''%s''", szPoint);
 			}
 
 			szPoint = strtok(NULL, ",");
@@ -1355,8 +1355,8 @@ void CAIHumanStatePatrol::Load(HMESSAGEREAD hRead)
 	LOAD_DWORD(m_iNextNode);
 	LOAD_DWORD(m_iDirNode);
 
-    int iNode;
-    for ( iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	int iNode;
+	for ( iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		LOAD_DWORD(m_adwNodes[iNode]);
 	}
@@ -1415,13 +1415,13 @@ HSTRING CAIHumanStatePatrol::CreateReturnString()
 
 	for ( int iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
-        strcat(szBuffer, g_pLTServer->GetStringData(g_pAINodeMgr->GetNode(m_adwNodes[iNode])->GetName()));
+		strcat(szBuffer, g_pLTServer->GetStringData(g_pAINodeMgr->GetNode(m_adwNodes[iNode])->GetName()));
 		strcat(szBuffer, ",");
 	}
 
 	szBuffer[strlen(szBuffer)-1] = 0;
 
-    return g_pLTServer->CreateString(szBuffer);
+	return g_pLTServer->CreateString(szBuffer);
 }
 
 // ----------------------------------------------------------------------- //
@@ -1497,7 +1497,7 @@ HSTRING CAIHumanStateGoto::CreateReturnString()
 		strcat(szBuffer, "RUN");
 	}
 
-    return g_pLTServer->CreateString(szBuffer);
+	return g_pLTServer->CreateString(szBuffer);
 }
 
 // ----------------------------------------------------------------------- //
@@ -1662,7 +1662,7 @@ void CAIHumanStateGoto::HandleNameValuePair(char *szName, char *szValue)
 		{
 			if ( m_cNodes == kMaxGotoNodes )
 			{
-                g_pLTServer->CPrint("Max # Goto waypoints exceeded %s=%s", szName, szValue);
+				g_pLTServer->CPrint("Max # Goto waypoints exceeded %s=%s", szName, szValue);
 			}
 
 			CAINode* pNode = g_pAINodeMgr->GetNode(szPoint);
@@ -1673,7 +1673,7 @@ void CAIHumanStateGoto::HandleNameValuePair(char *szName, char *szValue)
 			}
 			else
 			{
-                g_pLTServer->CPrint("Unknown Goto waypoint ''%s''", szPoint);
+				g_pLTServer->CPrint("Unknown Goto waypoint ''%s''", szPoint);
 			}
 
 			szPoint = strtok(NULL, ",");
@@ -1723,8 +1723,8 @@ void CAIHumanStateGoto::Load(HMESSAGEREAD hRead)
 	LOAD_DWORD(m_iNextNode);
 	LOAD_BOOL(m_bLoop);
 
-    int iNode;
-    for ( iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	int iNode;
+	for ( iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		LOAD_DWORD(m_adwNodes[iNode]);
 	}
@@ -1815,7 +1815,7 @@ void CAIHumanStateFlee::HandleNameValuePair(char *szName, char *szValue)
 
 		if ( LT_OK != FindNamedObject(szValue, m_hDanger) )
 		{
-            g_pLTServer->CPrint("FLEE DANGER=%s -- this object does not exist!", szValue);
+			g_pLTServer->CPrint("FLEE DANGER=%s -- this object does not exist!", szValue);
 			return;
 		}
 
@@ -1936,7 +1936,7 @@ const CAnimationProp& CAIHumanStateSearch::GetRandomSearch(CAINode* pNode) const
 	if ( 0 == nAvailableSearchs )
 	{
 		_ASSERT(LTFALSE);
-        g_pLTServer->CPrint("GetRandomSearch - couldn't get random search action for node %s", g_pLTServer->GetStringData(pNode->GetName()));
+		g_pLTServer->CPrint("GetRandomSearch - couldn't get random search action for node %s", g_pLTServer->GetStringData(pNode->GetName()));
 		return aniAlert1;
 	}
 
@@ -1952,7 +1952,7 @@ const CAnimationProp& CAIHumanStateSearch::GetRandomSearch(CAINode* pNode) const
 	if ( dwSearch == CAINode::kSearchFlagAlert3 )			return aniAlert3;
 
 	_ASSERT(LTFALSE);
-    g_pLTServer->CPrint("GetRandomSearch - couldn't get search action for node %s", g_pLTServer->GetStringData(pNode->GetName()));
+	g_pLTServer->CPrint("GetRandomSearch - couldn't get search action for node %s", g_pLTServer->GetStringData(pNode->GetName()));
 	return aniAlert1;
 }
 
@@ -2419,33 +2419,33 @@ void CAIHumanStateUseObject::HandleNameValuePair(char *szName, char *szValue)
 		CAINode* pAINode = g_pAINodeMgr->GetNode(szValue);
 		if ( !pAINode )
 		{
-            g_pLTServer->CPrint("USEOBJECT DEST=%s -- unable to find node by this name!", szValue);
+			g_pLTServer->CPrint("USEOBJECT DEST=%s -- unable to find node by this name!", szValue);
 			return;
 		}
 
 		if ( !pAINode->HasUseObject() )
 		{
-            g_pLTServer->CPrint("USEOBJECT DEST=%s -- this node has no UseInfo!", szValue);
+			g_pLTServer->CPrint("USEOBJECT DEST=%s -- this node has no UseInfo!", szValue);
 			return;
 		}
 
 		if ( pAINode->IsLocked() )
 		{
-            g_pLTServer->CPrint("USEOBJECT DEST=%s - use node is already locked!", szValue);
+			g_pLTServer->CPrint("USEOBJECT DEST=%s - use node is already locked!", szValue);
 			return;
 		}
 
 		if ( LT_OK != FindNamedObject(pAINode->GetUseObject(), m_hObject) )
 		{
-            g_pLTServer->CPrint("USEOBJECT DEST=%s::%s -- this object does not exist!", szValue, g_pLTServer->GetStringData(pAINode->GetName()));
+			g_pLTServer->CPrint("USEOBJECT DEST=%s::%s -- this object does not exist!", szValue, g_pLTServer->GetStringData(pAINode->GetName()));
 			return;
 		}
 
-        HCLASS hClass = g_pLTServer->GetObjectClass(m_hObject);
+		HCLASS hClass = g_pLTServer->GetObjectClass(m_hObject);
 
-        if ( hClass == g_pLTServer->GetClass("Alarm") )
+		if ( hClass == g_pLTServer->GetClass("Alarm") )
 		{
-            Alarm* pAlarm = (Alarm*)g_pLTServer->HandleToObject(m_hObject);
+			Alarm* pAlarm = (Alarm*)g_pLTServer->HandleToObject(m_hObject);
 			m_eObjectType = eAlarm;
 
 			if ( pAlarm->IsLocked() )
@@ -2456,14 +2456,14 @@ void CAIHumanStateUseObject::HandleNameValuePair(char *szName, char *szValue)
 				return;
 			}
 		}
-        else if ( hClass == g_pLTServer->GetClass("Switch") )
+		else if ( hClass == g_pLTServer->GetClass("Switch") )
 		{
-            Switch* pSwitch = (Switch*)g_pLTServer->HandleToObject(m_hObject);
+			Switch* pSwitch = (Switch*)g_pLTServer->HandleToObject(m_hObject);
 			m_eObjectType = eSwitch;
 		}
 		else
 		{
-            g_pLTServer->CPrint("USEOBJECT OBJECT=%s::%s -- object is not a usable type!", szValue, g_pLTServer->GetStringData(pAINode->GetName()));
+			g_pLTServer->CPrint("USEOBJECT OBJECT=%s::%s -- object is not a usable type!", szValue, g_pLTServer->GetStringData(pAINode->GetName()));
 			return;
 		}
 
@@ -2477,7 +2477,7 @@ void CAIHumanStateUseObject::HandleNameValuePair(char *szName, char *szValue)
 		{
 			m_hObject = LTNULL;
 			m_eObjectType = eNone;
-            g_pLTServer->CPrint("USEOBJECT OBJECT=%s -- unable to find path!", szValue);
+			g_pLTServer->CPrint("USEOBJECT OBJECT=%s -- unable to find path!", szValue);
 		}
 	}
 	else if ( !_stricmp(szName, "MOVE") )
@@ -2643,7 +2643,7 @@ void CAIHumanStatePickupObject::Update()
 
 			// Remove it
 
-            g_pLTServer->RemoveObject(m_hObject);
+			g_pLTServer->RemoveObject(m_hObject);
 		}
 
 		// TODO: check for strategy failure
@@ -2699,7 +2699,7 @@ void CAIHumanStatePickupObject::UpdateAnimation()
 
 void CAIHumanStatePickupObject::DoPickupWeapon()
 {
-    WeaponItem* pWeaponItem = (WeaponItem*)g_pLTServer->HandleToObject(m_hObject);
+	WeaponItem* pWeaponItem = (WeaponItem*)g_pLTServer->HandleToObject(m_hObject);
 
 	char* szWeapon = g_pWeaponMgr->GetWeapon(pWeaponItem->GetWeaponId())->szName;
 	char* szAmmo = g_pWeaponMgr->GetAmmo(pWeaponItem->GetAmmoId())->szName;
@@ -2741,38 +2741,38 @@ void CAIHumanStatePickupObject::HandleNameValuePair(char *szName, char *szValue)
 		CAINode* pAINode = g_pAINodeMgr->GetNode(szValue);
 		if ( !pAINode )
 		{
-            g_pLTServer->CPrint("PICKUPOBJECT DEST=%s -- unable to find node by this name!", szValue);
+			g_pLTServer->CPrint("PICKUPOBJECT DEST=%s -- unable to find node by this name!", szValue);
 			return;
 		}
 
 		if ( !pAINode->HasPickupObject() )
 		{
-            g_pLTServer->CPrint("PICKUPOBJECT DEST=%s -- this node has no PickupObject!", szValue);
+			g_pLTServer->CPrint("PICKUPOBJECT DEST=%s -- this node has no PickupObject!", szValue);
 			return;
 		}
 
 		if ( pAINode->IsLocked() )
 		{
-            g_pLTServer->CPrint("PICKUPOBJECT DEST=%s - pickup node is already locked!", szValue);
+			g_pLTServer->CPrint("PICKUPOBJECT DEST=%s - pickup node is already locked!", szValue);
 			return;
 		}
 
 		if ( LT_OK != FindNamedObject(pAINode->GetPickupObject(), m_hObject) )
 		{
-            g_pLTServer->CPrint("PICKUPOBJECT DEST=%s::%s -- this object does not exist!", szValue, g_pLTServer->GetStringData(pAINode->GetName()));
+			g_pLTServer->CPrint("PICKUPOBJECT DEST=%s::%s -- this object does not exist!", szValue, g_pLTServer->GetStringData(pAINode->GetName()));
 			return;
 		}
 
-        HCLASS hClass = g_pLTServer->GetObjectClass(m_hObject);
+		HCLASS hClass = g_pLTServer->GetObjectClass(m_hObject);
 
-        if ( hClass == g_pLTServer->GetClass("WeaponItem") )
+		if ( hClass == g_pLTServer->GetClass("WeaponItem") )
 		{
-            WeaponItem* pWeapon = (WeaponItem*)g_pLTServer->HandleToObject(m_hObject);
+			WeaponItem* pWeapon = (WeaponItem*)g_pLTServer->HandleToObject(m_hObject);
 			m_eObjectType = eWeapon;
 		}
 		else
 		{
-            g_pLTServer->CPrint("PICKUPOBJECT OBJECT=%s::%s -- object is not a pickupable type!", szValue, g_pLTServer->GetStringData(pAINode->GetName()));
+			g_pLTServer->CPrint("PICKUPOBJECT OBJECT=%s::%s -- object is not a pickupable type!", szValue, g_pLTServer->GetStringData(pAINode->GetName()));
 			return;
 		}
 
@@ -2786,7 +2786,7 @@ void CAIHumanStatePickupObject::HandleNameValuePair(char *szName, char *szValue)
 		{
 			m_hObject = LTNULL;
 			m_eObjectType = eNone;
-            g_pLTServer->CPrint("PICKUPOBJECT OBJECT=%s -- unable to find path!", szValue);
+			g_pLTServer->CPrint("PICKUPOBJECT OBJECT=%s -- unable to find path!", szValue);
 		}
 	}
 	else if ( !_stricmp(szName, "MOVE") )
@@ -2914,7 +2914,7 @@ void CAIHumanStateTail::Update()
 	}
 
 	LTVector vTargetPos;
-    g_pLTServer->GetObjectPos(GetAI()->GetTarget()->GetObject(), &vTargetPos);
+	g_pLTServer->GetObjectPos(GetAI()->GetTarget()->GetObject(), &vTargetPos);
 
 	CAINode* pNode = g_pAINodeMgr->FindTailNode(vTargetPos, GetAI()->GetPosition(), m_adwTailNodes, m_cTailNodes);
 
@@ -3007,7 +3007,7 @@ void CAIHumanStateTail::HandleNameValuePair(char *szName, char *szValue)
 		{
 			if ( m_cTailNodes == kMaxTailNodes )
 			{
-                g_pLTServer->CPrint("Max # Tail waypoints exceeded %s=%s", szName, szValue);
+				g_pLTServer->CPrint("Max # Tail waypoints exceeded %s=%s", szName, szValue);
 			}
 
 			CAINode* pNode = g_pAINodeMgr->GetNode(szPoint);
@@ -3018,7 +3018,7 @@ void CAIHumanStateTail::HandleNameValuePair(char *szName, char *szValue)
 			}
 			else
 			{
-                g_pLTServer->CPrint("Unknown Tail waypoint ''%s''", szPoint);
+				g_pLTServer->CPrint("Unknown Tail waypoint ''%s''", szPoint);
 			}
 
 			szPoint = strtok(NULL, ",");
@@ -3038,8 +3038,8 @@ void CAIHumanStateTail::Load(HMESSAGEREAD hRead)
 	LOAD_DWORD(m_dwTailNode);
 	LOAD_DWORD(m_cTailNodes);
 
-    int iNode;
-    for ( iNode = 0 ; iNode < m_cTailNodes ; iNode++ )
+	int iNode;
+	for ( iNode = 0 ; iNode < m_cTailNodes ; iNode++ )
 	{
 		LOAD_DWORD(m_adwTailNodes[iNode]);
 	}
@@ -3133,7 +3133,7 @@ void CAIHumanStateFollowFootprint::Update()
 	{
 		bDone = LTTRUE;
 
-        CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
+		CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
 		_ASSERT(pCharacter);
 
 		CTList<CharFootprintInfo*>* plistFootprints = pCharacter->GetFootprints();
@@ -3340,12 +3340,12 @@ void CAIHumanStateInvestigate::Update()
 		{
 			case stSeeEnemy:
 			case stSeeEnemyFlashlight:
-		        g_pLTServer->GetObjectPos(m_hEnemy, &vDestination);
+				g_pLTServer->GetObjectPos(m_hEnemy, &vDestination);
 				break;
 
 			case stHearEnemyFootstep:
 			case stHearEnemyDisturbance:
-		        vDestination = m_vPosition;
+				vDestination = m_vPosition;
 				break;
 		}
 
@@ -3500,13 +3500,13 @@ void CAIHumanStateInvestigate::HandleNameValuePair(char *szName, char *szValue)
 			}
 			else
 			{
-                g_pLTServer->CPrint("Investigate ENEMY=%s -- this object is not a CCharacter!", szValue);
+				g_pLTServer->CPrint("Investigate ENEMY=%s -- this object is not a CCharacter!", szValue);
 				m_hEnemy = LTNULL;
 			}
 		}
 		else
 		{
-            g_pLTServer->CPrint("Investigate ENEMY=%s -- this object does not exist!", szName);
+			g_pLTServer->CPrint("Investigate ENEMY=%s -- this object does not exist!", szName);
 		}
 	}
 	else if ( !_stricmp(szName, "SENSE") )
@@ -3834,13 +3834,13 @@ void CAIHumanStateCheckBody::HandleNameValuePair(char *szName, char *szValue)
 			}
 			else
 			{
-                g_pLTServer->CPrint("CHECKBODY BODY=%s -- this object is not a Body!", szValue);
+				g_pLTServer->CPrint("CHECKBODY BODY=%s -- this object is not a Body!", szValue);
 				m_hBody = LTNULL;
 			}
 		}
 		else
 		{
-            g_pLTServer->CPrint("CHECKBODY BODY=%s -- this object does not exist!", szName);
+			g_pLTServer->CPrint("CHECKBODY BODY=%s -- this object does not exist!", szName);
 		}
 	}
 	else if ( !_stricmp(szName, "SEARCH") )
@@ -3984,7 +3984,7 @@ void CAIHumanStateChase::Update()
 
 	if ( pTarget->IsVisibleCompletely() && (eRangeStatus != eRangeStatusTooFar) )
 	{
-        m_fVisibleTimer += g_pLTServer->GetFrameTime();
+		m_fVisibleTimer += g_pLTServer->GetFrameTime();
 
 		if ( m_fVisibleTimer > GetAI()->GetBrain()->GetChaseExtraTime() || (eRangeStatus == eRangeStatusTooClose) )
 		{
@@ -4486,7 +4486,7 @@ void CAIHumanStateAttack::Update()
 
 	if ( pTarget->IsVisibleCompletely() )
 	{
-        CCharacter* pB = (CCharacter*)g_pLTServer->HandleToObject(hTarget);
+		CCharacter* pB = (CCharacter*)g_pLTServer->HandleToObject(hTarget);
 		if (pB && !pB->IsDead())
 		{
 			if ( m_pStrategyGrenade && m_aniPosture == aniStand && m_pStrategyGrenade->ShouldThrow() )
@@ -4509,7 +4509,7 @@ void CAIHumanStateAttack::Update()
 	{
 		// Can't see our target anymore and we're not waiting for one
 
-        m_fChaseTimer -= g_pLTServer->GetFrameTime();
+		m_fChaseTimer -= g_pLTServer->GetFrameTime();
 
 		if ( CanChase(LTFALSE) )
 		{
@@ -4691,13 +4691,13 @@ void CAIHumanStateAttackProp::HandleNameValuePair(char *szName, char *szValue)
 			}
 			else
 			{
-                g_pLTServer->CPrint("ATTACKPROP PROP=%s -- this object is not a Prop!", szValue);
+				g_pLTServer->CPrint("ATTACKPROP PROP=%s -- this object is not a Prop!", szValue);
 				m_hProp = LTNULL;
 			}
 		}
 		else
 		{
-            g_pLTServer->CPrint("ATTACKPROP PROP=%s -- this object does not exist!", szName);
+			g_pLTServer->CPrint("ATTACKPROP PROP=%s -- this object does not exist!", szName);
 		}
 	}
 }
@@ -4945,13 +4945,13 @@ void CAIHumanStateAssassinate::HandleNameValuePair(char *szName, char *szValue)
 
 			if ( !pNode )
 			{
-                g_pLTServer->CPrint("ASSASSINATE DEST=%s - Could not find a node by this name!", szValue);
+				g_pLTServer->CPrint("ASSASSINATE DEST=%s - Could not find a node by this name!", szValue);
 			}
 			else
 			{
 				if ( !m_pStrategyFollowPath->Set(pNode) )
 				{
-                    g_pLTServer->CPrint("ASSASSINATE DEST=%s FollowPath failed", szValue);
+					g_pLTServer->CPrint("ASSASSINATE DEST=%s FollowPath failed", szValue);
 				}
 			}
 		}
@@ -4963,7 +4963,7 @@ void CAIHumanStateAssassinate::HandleNameValuePair(char *szName, char *szValue)
 
 			if ( !m_pStrategyFollowPath->Set(vDest) )
 			{
-                g_pLTServer->CPrint("ASSASSINATE DEST=%s FollowPath failed", szValue);
+				g_pLTServer->CPrint("ASSASSINATE DEST=%s FollowPath failed", szValue);
 			}
 		}
 	}
@@ -5354,7 +5354,7 @@ void CAIHumanStateAttackFromCover::UpdateUseCover()
 			HSTRING hstrReaction = pNode->GetCoverThreatRadiusReaction();
 			if ( hstrReaction )
 			{
-                GetAI()->ChangeState(g_pLTServer->GetStringData(hstrReaction));
+				GetAI()->ChangeState(g_pLTServer->GetStringData(hstrReaction));
 				return;
 			}
 		}
@@ -5502,7 +5502,7 @@ void CAIHumanStateAttackFromCover::HandleNameValuePair(char *szName, char *szVal
 	{
 		if ( GetType() != eStateAttackFromCover )
 		{
-            g_pLTServer->CPrint("DEST= only valid with ATTACKFROMCOVER message!");
+			g_pLTServer->CPrint("DEST= only valid with ATTACKFROMCOVER message!");
 			return;
 		}
 
@@ -5510,24 +5510,24 @@ void CAIHumanStateAttackFromCover::HandleNameValuePair(char *szName, char *szVal
 
 		if ( !pCoverNode )
 		{
-            g_pLTServer->CPrint("ATTACKFROMCOVER DEST=%s - Could not find a node by this name!", szValue);
+			g_pLTServer->CPrint("ATTACKFROMCOVER DEST=%s - Could not find a node by this name!", szValue);
 			return;
 		}
 		else
 		{
 			if ( !pCoverNode->IsCover() )
 			{
-                g_pLTServer->CPrint("ATTACKFROMCOVER DEST=%s - Node offers no cover!", szValue);
+				g_pLTServer->CPrint("ATTACKFROMCOVER DEST=%s - Node offers no cover!", szValue);
 				return;
 			}
 			else if ( pCoverNode->IsLocked() )
 			{
-                g_pLTServer->CPrint("ATTACKFROMCOVER DEST=%s - Cover node is already locked!", szValue);
+				g_pLTServer->CPrint("ATTACKFROMCOVER DEST=%s - Cover node is already locked!", szValue);
 				return;
 			}
 			else if ( !m_pStrategyFollowPath->Set(pCoverNode->GetPos()) )
 			{
-                g_pLTServer->CPrint("ATTACKFROMCOVER DEST=%s - Could not set a path to node!", szValue);
+				g_pLTServer->CPrint("ATTACKFROMCOVER DEST=%s - Could not set a path to node!", szValue);
 				return;
 			}
 
@@ -5576,7 +5576,7 @@ CAIHumanStrategy::AIHumanStrategyType CAIHumanStateAttackFromCover::GetRandomCov
 	if ( 0 == nAvailableCovers )
 	{
 		_ASSERT(LTFALSE);
-        g_pLTServer->CPrint("GetRandomCoverStrategy - couldn't get random cover node for node %s", g_pLTServer->GetStringData(pNode->GetName()));
+		g_pLTServer->CPrint("GetRandomCoverStrategy - couldn't get random cover node for node %s", g_pLTServer->GetStringData(pNode->GetName()));
 		return CAIHumanStrategy::eStrategyCoverBlind;
 	}
 
@@ -5588,7 +5588,7 @@ CAIHumanStrategy::AIHumanStrategyType CAIHumanStateAttackFromCover::GetRandomCov
 	if ( dwCover == CAINode::kCoverFlag2WayCorner )	return CAIHumanStrategy::eStrategyCover2WayCorner;
 
 	_ASSERT(LTFALSE);
-    g_pLTServer->CPrint("GetRandomCoverStrategy - couldn't get random cover node for node %s", g_pLTServer->GetStringData(pNode->GetName()));
+	g_pLTServer->CPrint("GetRandomCoverStrategy - couldn't get random cover node for node %s", g_pLTServer->GetStringData(pNode->GetName()));
 	return CAIHumanStrategy::eStrategyCoverBlind;
 }
 
@@ -5909,12 +5909,12 @@ void CAIHumanStateAttackFromVantage::UpdateAttacking()
 		HSTRING hstrReaction = pNode->GetVantageThreatRadiusReaction();
 		if ( hstrReaction )
 		{
-            GetAI()->ChangeState(g_pLTServer->GetStringData(hstrReaction));
+			GetAI()->ChangeState(g_pLTServer->GetStringData(hstrReaction));
 			return;
 		}
 	}
 
-    m_fAttackTimer -= g_pLTServer->GetFrameTime();
+	m_fAttackTimer -= g_pLTServer->GetFrameTime();
 	GetAI()->FaceTarget();
 
 	if ( m_pStrategyShoot->IsReloading() )
@@ -5942,7 +5942,7 @@ void CAIHumanStateAttackFromVantage::UpdateAttacking()
 
 	if ( pTarget->IsVisibleCompletely() )
 	{
-        CCharacter* pB = (CCharacter*)g_pLTServer->HandleToObject(hTarget);
+		CCharacter* pB = (CCharacter*)g_pLTServer->HandleToObject(hTarget);
 		if (pB && !pB->IsDead())
 		{
 			// TODO: check for strategy failure
@@ -6150,7 +6150,7 @@ void CAIHumanStateAttackFromView::UpdateAnimation()
 
 LTBOOL CAIHumanStateAttackFromView::FindView()
 {
-    CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
+	CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
 	if ( !pCharacter->HasLastVolume() )
 	{
 		return LTFALSE;
@@ -6225,7 +6225,7 @@ void CAIHumanStateAttackFromView::UpdateAttacking()
 	}
 	else
 	{
-        m_fChaseTimer += g_pLTServer->GetFrameTime();
+		m_fChaseTimer += g_pLTServer->GetFrameTime();
 		if ( m_fChaseTimer > GetAI()->GetBrain()->GetAttackFromViewChaseTime() )
 		{
 			GetAI()->ChangeState("CHASE");
@@ -6246,19 +6246,19 @@ void CAIHumanStateAttackFromView::HandleNameValuePair(char *szName, char *szValu
 
 		if ( !pViewNode )
 		{
-            g_pLTServer->CPrint("ATTACKFROMVIEW DEST=%s - Could not find a node by this name!", szValue);
+			g_pLTServer->CPrint("ATTACKFROMVIEW DEST=%s - Could not find a node by this name!", szValue);
 			return;
 		}
 		else
 		{
 			if ( pViewNode->IsLocked() )
 			{
-                g_pLTServer->CPrint("ATTACKFROMVIEW DEST=%s - Cover node is already locked!", szValue);
+				g_pLTServer->CPrint("ATTACKFROMVIEW DEST=%s - Cover node is already locked!", szValue);
 				return;
 			}
 			else if ( !m_pStrategyFollowPath->Set(pViewNode->GetPos()) )
 			{
-                g_pLTServer->CPrint("ATTACKFROMVIEW DEST=%s - Could not set a path to node!", szValue);
+				g_pLTServer->CPrint("ATTACKFROMVIEW DEST=%s - Could not set a path to node!", szValue);
 				return;
 			}
 
@@ -6689,7 +6689,7 @@ const CAnimationProp& CAIHumanStatePanic::GetRandomPanic(CAINode* pNode) const
 	if ( 0 == nAvailablePanics )
 	{
 		_ASSERT(LTFALSE);
-        g_pLTServer->CPrint("GetRandomPanic - couldn't get random Panic action for node %s", g_pLTServer->GetStringData(pNode->GetName()));
+		g_pLTServer->CPrint("GetRandomPanic - couldn't get random Panic action for node %s", g_pLTServer->GetStringData(pNode->GetName()));
 		return aniAlert1;
 	}
 
@@ -6699,7 +6699,7 @@ const CAnimationProp& CAIHumanStatePanic::GetRandomPanic(CAINode* pNode) const
 	if ( dwPanic == CAINode::kPanicFlagCrouch )			return aniCrouch;
 
 	_ASSERT(LTFALSE);
-    g_pLTServer->CPrint("GetRandomPanic - couldn't get Panic action for node %s", g_pLTServer->GetStringData(pNode->GetName()));
+	g_pLTServer->CPrint("GetRandomPanic - couldn't get Panic action for node %s", g_pLTServer->GetStringData(pNode->GetName()));
 	return aniCrouch;
 }
 
@@ -6715,24 +6715,24 @@ void CAIHumanStatePanic::HandleNameValuePair(char *szName, char *szValue)
 
 		if ( !pPanicNode )
 		{
-            g_pLTServer->CPrint("PANIC DEST=%s - Could not find a node by this name!", szValue);
+			g_pLTServer->CPrint("PANIC DEST=%s - Could not find a node by this name!", szValue);
 			return;
 		}
 		else
 		{
 			if ( !pPanicNode->IsPanic() )
 			{
-                g_pLTServer->CPrint("PANIC DEST=%s - Node has no panic options!", szValue);
+				g_pLTServer->CPrint("PANIC DEST=%s - Node has no panic options!", szValue);
 				return;
 			}
 			else if ( pPanicNode->IsLocked() )
 			{
-                g_pLTServer->CPrint("PANIC DEST=%s - Node is already locked!", szValue);
+				g_pLTServer->CPrint("PANIC DEST=%s - Node is already locked!", szValue);
 				return;
 			}
 			else if ( !m_pStrategyFollowPath->Set(pPanicNode->GetPos()) )
 			{
-                g_pLTServer->CPrint("PANIC DEST=%s - Could not set a path to node!", szValue);
+				g_pLTServer->CPrint("PANIC DEST=%s - Could not set a path to node!", szValue);
 				return;
 			}
 
@@ -6827,12 +6827,12 @@ void CAIHumanStateDistress::Update()
 	LTBOOL bDistress = false;
 	if ( GetAI()->GetTarget()->IsVisiblePartially() )
 	{
-        CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
+		CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
 		if ( pCharacter->HasDangerousWeapon() )
 		{
 			LTRotation rRot;
 			LTVector vNull, vForward;
-            g_pLTServer->GetObjectRotation(GetAI()->GetTarget()->GetObject(), &rRot);
+			g_pLTServer->GetObjectRotation(GetAI()->GetTarget()->GetObject(), &rRot);
 			g_pMathLT->GetRotationVectors(rRot, vNull, vNull, vForward);
 
 			LTVector vDir;
@@ -6856,12 +6856,12 @@ void CAIHumanStateDistress::Update()
 	if ( bDistress )
 	{
 		LTFLOAT fIncreaseRate = GetAI()->GetBrain()->GetDistressIncreaseRate();
-        m_fDistress += g_pLTServer->GetFrameTime()*fIncreaseRate;
+		m_fDistress += g_pLTServer->GetFrameTime()*fIncreaseRate;
 	}
 	else
 	{
 		LTFLOAT fDecreaseRate = GetAI()->GetBrain()->GetDistressDecreaseRate();
-        m_fDistress = Max<LTFLOAT>(-3.0f, m_fDistress-g_pLTServer->GetFrameTime()*fDecreaseRate);
+		m_fDistress = Max<LTFLOAT>(-3.0f, m_fDistress-g_pLTServer->GetFrameTime()*fDecreaseRate);
 	}
 
 	// See if we need to go to the next level
@@ -7059,7 +7059,7 @@ void CAIHumanStateGetBackup::HandleNameValuePair(char *szName, char *szValue)
 
 	if ( HasNext() )
 	{
-        g_pLTServer->CPrint("GetBackup -- NEXT= specified, this could have dangerous effects!!!!");
+		g_pLTServer->CPrint("GetBackup -- NEXT= specified, this could have dangerous effects!!!!");
 	}
 
 	if ( !_stricmp(szName, "DEST") )
@@ -7067,19 +7067,19 @@ void CAIHumanStateGetBackup::HandleNameValuePair(char *szName, char *szValue)
 		CAINode* pAINode = g_pAINodeMgr->GetNode(szValue);
 		if ( !pAINode )
 		{
-            g_pLTServer->CPrint("GETBACKUP DEST=%s -- unable to find node by this name!", szValue);
+			g_pLTServer->CPrint("GETBACKUP DEST=%s -- unable to find node by this name!", szValue);
 			return;
 		}
 
 		if ( !pAINode->HasBackupCmd() )
 		{
-            g_pLTServer->CPrint("GETBACKUP DEST=%s -- this node has no backupcmd!", szValue);
+			g_pLTServer->CPrint("GETBACKUP DEST=%s -- this node has no backupcmd!", szValue);
 			return;
 		}
 
 		if ( pAINode->IsLocked() )
 		{
-            g_pLTServer->CPrint("GETBACKUP DEST=%s - Cover node is already locked!", szValue);
+			g_pLTServer->CPrint("GETBACKUP DEST=%s - Cover node is already locked!", szValue);
 			return;
 		}
 
@@ -7090,7 +7090,7 @@ void CAIHumanStateGetBackup::HandleNameValuePair(char *szName, char *szValue)
 		}
 		else
 		{
-            g_pLTServer->CPrint("GETBACKUP OBJECT=%s -- unable to find path!", szValue);
+			g_pLTServer->CPrint("GETBACKUP OBJECT=%s -- unable to find path!", szValue);
 		}
 	}
 	else if ( !_stricmp(szName, "MOVE") )
@@ -7458,7 +7458,7 @@ void CAIHumanStateCharge::Update()
 
 	HOBJECT hTarget = GetAI()->GetTarget()->GetObject();
 	LTVector vTargetPos;
-    g_pLTServer->GetObjectPos(hTarget, &vTargetPos);
+	g_pLTServer->GetObjectPos(hTarget, &vTargetPos);
 	LTFLOAT fTargetDistanceSqr = VEC_DISTSQR(vTargetPos, GetAI()->GetPosition());
 
 	if ( (fTargetDistanceSqr < m_fStopDistanceSqr) || m_pStrategyFollowPath->IsDone() )
@@ -7654,7 +7654,7 @@ HSTRING CAIHumanStateAnimate::CreateReturnString()
 		szNext,
 		m_bInterrupt ? "TRUE" : "FALSE");
 
-    return g_pLTServer->CreateString(szBuffer);
+	return g_pLTServer->CreateString(szBuffer);
 }
 
 // ----------------------------------------------------------------------- //
@@ -7784,7 +7784,7 @@ void CAIHumanStateCome::Update()
 	if ( m_pStrategyFollowPath->IsUnset() )
 	{
 		LTVector vPlayerPosition;
-        g_pLTServer->GetObjectPos(g_pCharacterMgr->FindPlayer()->m_hObject, &vPlayerPosition);
+		g_pLTServer->GetObjectPos(g_pCharacterMgr->FindPlayer()->m_hObject, &vPlayerPosition);
 
 		if ( !m_pStrategyFollowPath->Set(vPlayerPosition) )
 		{
@@ -7912,7 +7912,7 @@ void CAIHumanStateFollow::Update()
 	}
 
 	LTVector vTargetPosition;
-    g_pLTServer->GetObjectPos(GetAI()->GetTarget()->GetObject(), &vTargetPosition);
+	g_pLTServer->GetObjectPos(GetAI()->GetTarget()->GetObject(), &vTargetPosition);
 
 	if ( m_pStrategyFollowPath->IsUnset() )
 	{
@@ -7960,7 +7960,7 @@ void CAIHumanStateFollow::Update()
 		m_pStrategyFollowPath->Update();
 	}
 
-    m_fTimer += g_pLTServer->GetFrameTime();
+	m_fTimer += g_pLTServer->GetFrameTime();
 
 	if ( m_pStrategyFollowPath->IsDone() || m_fTimer > 1.0f )
 	{
@@ -8449,7 +8449,7 @@ void CAIHumanStateHeliAttack::Update()
 		return;
 	}
 
-    AI_Helicopter* pHelicopter = (AI_Helicopter*)g_pLTServer->HandleToObject(m_hHelicopter);
+	AI_Helicopter* pHelicopter = (AI_Helicopter*)g_pLTServer->HandleToObject(m_hHelicopter);
 
 	if ( !pHelicopter->IsRightDoorOpen() )
 	{
@@ -8459,7 +8459,7 @@ void CAIHumanStateHeliAttack::Update()
 	// Figure out if our target is in our fov
 
 	LTVector vTargetPosition;
-    g_pLTServer->GetObjectPos(GetAI()->GetTarget()->GetObject(), &vTargetPosition);
+	g_pLTServer->GetObjectPos(GetAI()->GetTarget()->GetObject(), &vTargetPosition);
 
 	LTVector vDir;
 	vDir = vTargetPosition - pHelicopter->GetGunnerPosition();
@@ -8491,7 +8491,7 @@ LTBOOL CAIHumanStateHeliAttack::CanBeDamagedAsAttachment()
 {
 	if ( !m_hHelicopter ) return LTTRUE;
 
-    AI_Helicopter* pHelicopter = (AI_Helicopter*)g_pLTServer->HandleToObject(m_hHelicopter);
+	AI_Helicopter* pHelicopter = (AI_Helicopter*)g_pLTServer->HandleToObject(m_hHelicopter);
 
 	return super::CanBeDamagedAsAttachment() && pHelicopter->IsRightDoorOpen() && (GetAI()->GetHitPoints() > 0.0f);
 
@@ -8573,14 +8573,14 @@ LTBOOL CAIHumanStateHeliAttack::HandleCommand(char** pTokens, int nArgs)
 
 	if ( m_hHelicopter && !_stricmp(pTokens[0], "OPEN") )
 	{
-        AI_Helicopter* pHelicopter = (AI_Helicopter*)g_pLTServer->HandleToObject(m_hHelicopter);
+		AI_Helicopter* pHelicopter = (AI_Helicopter*)g_pLTServer->HandleToObject(m_hHelicopter);
 		pHelicopter->OpenRightDoor();
 
 		return LTTRUE;
 	}
 	else if ( m_hHelicopter && !_stricmp(pTokens[0], "CLOSE") )
 	{
-        AI_Helicopter* pHelicopter = (AI_Helicopter*)g_pLTServer->HandleToObject(m_hHelicopter);
+		AI_Helicopter* pHelicopter = (AI_Helicopter*)g_pLTServer->HandleToObject(m_hHelicopter);
 		pHelicopter->CloseRightDoor();
 
 		return LTTRUE;
@@ -8608,13 +8608,13 @@ void CAIHumanStateHeliAttack::HandleNameValuePair(char *szName, char *szValue)
 			}
 			else
 			{
-                g_pLTServer->CPrint("HELIATTACK HELI=%s -- this object is not an AI_Helicopter!", szValue);
+				g_pLTServer->CPrint("HELIATTACK HELI=%s -- this object is not an AI_Helicopter!", szValue);
 				m_hHelicopter = LTNULL;
 			}
 		}
 		else
 		{
-            g_pLTServer->CPrint("HELIATTACK HELI=%s::%s -- this object does not exist!", szValue, szValue);
+			g_pLTServer->CPrint("HELIATTACK HELI=%s::%s -- this object does not exist!", szValue, szValue);
 			return;
 		}
 	}
@@ -8777,7 +8777,7 @@ void CAIHumanStateScotBox::HandleModelString(ArgList* pArgList)
 	{
 		if ( !GetAI()->HasTarget() ) return;
 
-        CPlayerObj* pPlayerObj = (CPlayerObj*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
+		CPlayerObj* pPlayerObj = (CPlayerObj*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
 		if ( pPlayerObj->IsOnGround() )
 		{
 			WFireInfo fireInfo;
@@ -8806,8 +8806,8 @@ void CAIHumanStateScotBox::HandleModelString(ArgList* pArgList)
 		static char* aszSlamSounds[] =  { "chars\\snd\\scothit.wav", "chars\\snd\\scothit2.wav" };
 		uint32 cSlamSounds = (sizeof(aszSlamSounds)/sizeof(aszSlamSounds[0])) - 1;
 
-        LTVector temp(GetAI()->GetPosition());
-        g_pServerSoundMgr->PlaySoundFromPos(temp, aszSlamSounds[GetRandom(0, cSlamSounds)], 2000.0f, SOUNDPRIORITY_MISC_MEDIUM, 0);
+		LTVector temp(GetAI()->GetPosition());
+		g_pServerSoundMgr->PlaySoundFromPos(temp, aszSlamSounds[GetRandom(0, cSlamSounds)], 2000.0f, SOUNDPRIORITY_MISC_MEDIUM, 0);
 	}
 }
 
@@ -8835,7 +8835,7 @@ void CAIHumanStateScotBox::HandleNameValuePair(char *szName, char *szValue)
 	if ( !_stricmp(szName, "DEFEAT") )
 	{
 		FREE_HSTRING(m_hstrDefeat);
-        m_hstrDefeat = g_pLTServer->CreateString(szValue);
+		m_hstrDefeat = g_pLTServer->CreateString(szValue);
 	}
 }
 
@@ -8993,7 +8993,7 @@ void CAIHumanStateScotBox::UpdateDefeat()
 {
 	if ( m_hstrDefeat )
 	{
-        g_pCmdMgr->Process(g_pLTServer->GetStringData(m_hstrDefeat));
+		g_pCmdMgr->Process(g_pLTServer->GetStringData(m_hstrDefeat));
 		FREE_HSTRING(m_hstrDefeat);
 	}
 }
@@ -9523,17 +9523,17 @@ void CAIHumanStateIngeSing::HandleModelString(ArgList* pArgList)
 			HCLIENT hClient = pPlayer->GetClient();
 			if (hClient)
 			{
-                HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_SHAKE_SCREEN);
-                g_pLTServer->WriteToMessageVector(hMessage, &LTVector(1, 1, 1));
-                g_pLTServer->EndMessage(hMessage);
+				HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_SHAKE_SCREEN);
+				g_pLTServer->WriteToMessageVector(hMessage, &LTVector(1, 1, 1));
+				g_pLTServer->EndMessage(hMessage);
 			}
 		}
 
 		static char* aszSlamSounds[] =  { "chars\\snd\\scothit.wav", "chars\\snd\\scothit2.wav" };
 		uint32 cSlamSounds = (sizeof(aszSlamSounds)/sizeof(aszSlamSounds[0])) - 1;
 
-        LTVector temp(GetAI()->GetPosition());
-        g_pServerSoundMgr->PlaySoundFromPos(temp, aszSlamSounds[GetRandom(0, cSlamSounds)], 2000.0f, SOUNDPRIORITY_MISC_MEDIUM, 0);
+		LTVector temp(GetAI()->GetPosition());
+		g_pServerSoundMgr->PlaySoundFromPos(temp, aszSlamSounds[GetRandom(0, cSlamSounds)], 2000.0f, SOUNDPRIORITY_MISC_MEDIUM, 0);
 	}
 }
 
@@ -9545,11 +9545,11 @@ void CAIHumanStateIngeSing::Update()
 
 	if ( !GetAI()->HasTarget() || !m_cHenchmen || !m_cTeleporters || !m_cExplosions )
 	{
-        g_pLTServer->CPrint("INGE-SING needs target, HENCHMEN= and TELEPORTERS= and EXPLOSIONS=");
+		g_pLTServer->CPrint("INGE-SING needs target, HENCHMEN= and TELEPORTERS= and EXPLOSIONS=");
 	}
 	else
 	{
-        CPlayerObj* pPlayerObj = (CPlayerObj*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
+		CPlayerObj* pPlayerObj = (CPlayerObj*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
 		if ( pPlayerObj->IsDead() )
 		{
 		}
@@ -9614,9 +9614,9 @@ void CAIHumanStateIngeSing::UpdateSinging()
 
 				if ( hClient )
 				{
-  //                  HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_SHAKE_SCREEN);
-//                    g_pLTServer->WriteToMessageVector(hMessage, &LTVector(.02f, .02f, .02f));
-    //                g_pLTServer->EndMessage(hMessage);
+  //				  HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_SHAKE_SCREEN);
+//					g_pLTServer->WriteToMessageVector(hMessage, &LTVector(.02f, .02f, .02f));
+	//				g_pLTServer->EndMessage(hMessage);
 				}
 			}
 
@@ -9637,7 +9637,7 @@ void CAIHumanStateIngeSing::UpdateSinging()
 				{
 					if ( m_ahHenchmen[iHenchman] )
 					{
-                        SendTriggerMsgToObject(GetAI(), m_ahHenchmen[iHenchman], LTFALSE, "TARGETPLAYER;ATTACK");
+						SendTriggerMsgToObject(GetAI(), m_ahHenchmen[iHenchman], LTFALSE, "TARGETPLAYER;ATTACK");
 					}
 				}
 
@@ -9658,7 +9658,7 @@ void CAIHumanStateIngeSing::UpdateSinging()
 				char szMessage[1024];
 				sprintf(szMessage, "FACEOBJECT (%s);ANIMATE ANIM=StPn LOOP=TRUE INTERRUPT=FALSE", g_pLTServer->GetObjectName(GetAI()->GetObject()));
 
-                SendTriggerMsgToObject(GetAI(), m_ahHenchmen[iHenchman], LTFALSE, szMessage);
+				SendTriggerMsgToObject(GetAI(), m_ahHenchmen[iHenchman], LTFALSE, szMessage);
 			}
 		}
 
@@ -9688,7 +9688,7 @@ void CAIHumanStateIngeSing::UpdatePower()
 		if ( !GetAnimationContext()->IsLocked() )
 		{
 			HOBJECT hSwitch;
-            if ( LT_OK == FindNamedObject(g_pLTServer->GetStringData(pNode->GetUseObject()), hSwitch) )
+			if ( LT_OK == FindNamedObject(g_pLTServer->GetStringData(pNode->GetUseObject()), hSwitch) )
 			{
 				SendTriggerMsgToObject(GetAI(), hSwitch, LTFALSE, "ACTIVATE");
 			}
@@ -9863,14 +9863,14 @@ LTBOOL CAIHumanStateIngeSing::IsTeleporterValid(HOBJECT hTeleporter)
 
 	g_pLTServer->GetObjectPos(hTeleporter, &vTeleporterPosition);
 
-    HCLASS hClass = g_pLTServer->GetClass("CCharacter");
+	HCLASS hClass = g_pLTServer->GetClass("CCharacter");
 
-    ObjectList* pObjectList = g_pLTServer->FindObjectsTouchingSphere(&vTeleporterPosition, fTeleporterRadius);
+	ObjectList* pObjectList = g_pLTServer->FindObjectsTouchingSphere(&vTeleporterPosition, fTeleporterRadius);
 	ObjectLink* pObject = pObjectList ? pObjectList->m_pFirstLink : LTNULL;
 	while ( pObject )
 	{
 		HOBJECT hObject = pObject->m_hObject;
-        if ( g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObject), hClass) )
+		if ( g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObject), hClass) )
 		{
 			// A character is standing in this teleporter, so don't use it
 

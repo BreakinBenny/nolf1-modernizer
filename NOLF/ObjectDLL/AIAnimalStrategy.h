@@ -15,11 +15,9 @@ class CAIPath;
 class CAIPathWaypoint;
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIAnimalStrategy
 //
-// PURPOSE : AI Strategy abstract class
-//
+// PURPOSE: AI Strategy abstract class
 // ----------------------------------------------------------------------- //
 
 class CAIAnimalStrategy
@@ -30,7 +28,7 @@ class CAIAnimalStrategy
 
 		// Ctors/Dtors/etc
 
-        virtual LTBOOL Init(CAIAnimal* pAIAnimal) { m_pAIAnimal = pAIAnimal; return LTTRUE; }
+		virtual LTBOOL Init(CAIAnimal* pAIAnimal) { m_pAIAnimal = pAIAnimal; return LTTRUE; }
 
 	protected : // Protected methods
 
@@ -41,15 +39,13 @@ class CAIAnimalStrategy
 
 	private : // Private member variables
 
-		CAIAnimal*			m_pAIAnimal;
+		CAIAnimal*	m_pAIAnimal;
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIDogStrategy
 //
-// PURPOSE : AI Strategy abstract class
-//
+// PURPOSE: AI Strategy abstract class
 // ----------------------------------------------------------------------- //
 
 class CAIDogStrategy : public CAIAnimalStrategy
@@ -71,14 +67,14 @@ class CAIDogStrategy : public CAIAnimalStrategy
 
 		// Ctors/Dtors/etc
 
-        virtual LTBOOL Init(AI_Dog* pAIDog);
+		virtual LTBOOL Init(AI_Dog* pAIDog);
 
 		virtual void Load(HMESSAGEREAD hRead) {}
 		virtual void Save(HMESSAGEWRITE hWrite) {}
 
 		// Updates
 
-        virtual LTBOOL Update() { return LTTRUE; }
+		virtual LTBOOL Update() { return LTTRUE; }
 
 		// Simple accessors
 
@@ -96,11 +92,9 @@ class CAIDogStrategy : public CAIAnimalStrategy
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIDogStrategyFollowPath
 //
-// PURPOSE : AI Follow path ability - to walk a path of AINodes
-//
+// PURPOSE: AI Follow path ability - to walk a path of AINodes
 // ----------------------------------------------------------------------- //
 
 class CAIDogStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIDogStrategyFollowPath), public CAIDogStrategy
@@ -113,18 +107,18 @@ class CAIDogStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIDogStrategyFollowPath),
 
 		// Ctors/Dtors/etc
 
-        LTBOOL Init(AI_Dog* pAIDog);
+		LTBOOL Init(AI_Dog* pAIDog);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
 
 		// Methods
 
-        LTBOOL Set(const LTVector& vDestination);
-        LTBOOL Set(CAINode* pNodeDestination);
-        LTBOOL Set(CAIVolume* pVolumeDestination);
+		LTBOOL Set(const LTVector& vDestination);
+		LTBOOL Set(CAINode* pNodeDestination);
+		LTBOOL Set(CAIVolume* pVolumeDestination);
 
-        LTBOOL Update();
+		LTBOOL Update();
 
 		// Handlers
 
@@ -138,14 +132,14 @@ class CAIDogStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIDogStrategyFollowPath),
 
 		AIDogStrategyType GetType() { return CAIDogStrategy::eStrategyFollowPath; }
 
-        LTBOOL IsUnset() { return m_eState == eStateUnset; }
-        LTBOOL IsSet() { return m_eState == eStateSet; }
-        LTBOOL IsDone() { return m_eState == eStateDone; }
+		LTBOOL IsUnset() { return m_eState == eStateUnset; }
+		LTBOOL IsSet() { return m_eState == eStateSet; }
+		LTBOOL IsDone() { return m_eState == eStateDone; }
 
 	private :
 
-        LTBOOL UpdateMoveTo(CAIPathWaypoint* pWaypoint);
-        LTBOOL UpdateOpenDoors(CAIPathWaypoint* pWaypoint);
+		LTBOOL UpdateMoveTo(CAIPathWaypoint* pWaypoint);
+		LTBOOL UpdateOpenDoors(CAIPathWaypoint* pWaypoint);
 
 	private : // Private enumerations
 
@@ -165,11 +159,9 @@ class CAIDogStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIDogStrategyFollowPath),
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIDogStrategyOneShotAni
 //
-// PURPOSE : AI CheckingPulse - ability to ... to play a one shot ani
-//
+// PURPOSE: AI CheckingPulse - ability to ... to play a one shot ani
 // ----------------------------------------------------------------------- //
 
 class CAIDogStrategyOneShotAni : DEFINE_FACTORY_CLASS(CAIDogStrategyOneShotAni), public CAIDogStrategy
@@ -187,27 +179,25 @@ class CAIDogStrategyOneShotAni : DEFINE_FACTORY_CLASS(CAIDogStrategyOneShotAni),
 
 		// Methods
 
-        LTBOOL Set(CAnimatorAIAnimal::Main eMain);
+		LTBOOL Set(CAnimatorAIAnimal::Main eMain);
 
-        LTBOOL Update();
+		LTBOOL Update();
 
 		// Simple accessors
 
 		AIDogStrategyType GetType() { return eStrategyOneShotAni; }
-        LTBOOL IsAnimating() { return m_bAnimating; }
+		LTBOOL IsAnimating() { return m_bAnimating; }
 
 	protected : // Protected member variables
 
 		CAnimatorAIAnimal::Main	m_eMain;
-        LTBOOL                   m_bAnimating;
+		LTBOOL				   m_bAnimating;
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIPoodleStrategy
 //
-// PURPOSE : AI Strategy abstract class
-//
+// PURPOSE: AI Strategy abstract class
 // ----------------------------------------------------------------------- //
 
 class CAIPoodleStrategy : public CAIAnimalStrategy
@@ -228,14 +218,14 @@ class CAIPoodleStrategy : public CAIAnimalStrategy
 
 		// Ctors/Dtors/etc
 
-        virtual LTBOOL Init(AI_Poodle* pAIPoodle);
+		virtual LTBOOL Init(AI_Poodle* pAIPoodle);
 
 		virtual void Load(HMESSAGEREAD hRead) {}
 		virtual void Save(HMESSAGEWRITE hWrite) {}
 
 		// Updates
 
-        virtual LTBOOL Update() { return LTTRUE; }
+		virtual LTBOOL Update() { return LTTRUE; }
 
 		// Simple accessors
 
@@ -253,11 +243,9 @@ class CAIPoodleStrategy : public CAIAnimalStrategy
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIPoodleStrategyFollowPath
 //
-// PURPOSE : AI Follow path ability - to walk a path of AINodes
-//
+// PURPOSE: AI Follow path ability - to walk a path of AINodes
 // ----------------------------------------------------------------------- //
 
 class CAIPoodleStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIPoodleStrategyFollowPath), public CAIPoodleStrategy
@@ -270,18 +258,18 @@ class CAIPoodleStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIPoodleStrategyFollow
 
 		// Ctors/Dtors/etc
 
-        LTBOOL Init(AI_Poodle* pAIPoodle);
+		LTBOOL Init(AI_Poodle* pAIPoodle);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
 
 		// Methods
 
-        LTBOOL Set(const LTVector& vDestination);
-        LTBOOL Set(CAINode* pNodeDestination);
-        LTBOOL Set(CAIVolume* pVolumeDestination);
+		LTBOOL Set(const LTVector& vDestination);
+		LTBOOL Set(CAINode* pNodeDestination);
+		LTBOOL Set(CAIVolume* pVolumeDestination);
 
-        LTBOOL Update();
+		LTBOOL Update();
 
 		// Handlers
 
@@ -295,14 +283,14 @@ class CAIPoodleStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIPoodleStrategyFollow
 
 		AIPoodleStrategyType GetType() { return CAIPoodleStrategy::eStrategyFollowPath; }
 
-        LTBOOL IsUnset() { return m_eState == eStateUnset; }
-        LTBOOL IsSet() { return m_eState == eStateSet; }
-        LTBOOL IsDone() { return m_eState == eStateDone; }
+		LTBOOL IsUnset() { return m_eState == eStateUnset; }
+		LTBOOL IsSet() { return m_eState == eStateSet; }
+		LTBOOL IsDone() { return m_eState == eStateDone; }
 
 	private :
 
-        LTBOOL UpdateMoveTo(CAIPathWaypoint* pWaypoint);
-        LTBOOL UpdateOpenDoors(CAIPathWaypoint* pWaypoint);
+		LTBOOL UpdateMoveTo(CAIPathWaypoint* pWaypoint);
+		LTBOOL UpdateOpenDoors(CAIPathWaypoint* pWaypoint);
 
 	private : // Private enumerations
 
@@ -322,11 +310,9 @@ class CAIPoodleStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIPoodleStrategyFollow
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAISharkStrategy
 //
-// PURPOSE : AI Strategy abstract class
-//
+// PURPOSE: AI Strategy abstract class
 // ----------------------------------------------------------------------- //
 
 class CAISharkStrategy : public CAIAnimalStrategy
@@ -348,14 +334,14 @@ class CAISharkStrategy : public CAIAnimalStrategy
 
 		// Ctors/Dtors/etc
 
-        virtual LTBOOL Init(AI_Shark* pAIShark);
+		virtual LTBOOL Init(AI_Shark* pAIShark);
 
 		virtual void Load(HMESSAGEREAD hRead) {}
 		virtual void Save(HMESSAGEWRITE hWrite) {}
 
 		// Updates
 
-        virtual LTBOOL Update() { return LTTRUE; }
+		virtual LTBOOL Update() { return LTTRUE; }
 
 		// Simple accessors
 
@@ -373,11 +359,9 @@ class CAISharkStrategy : public CAIAnimalStrategy
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAISharkStrategyFollowPath
 //
-// PURPOSE : AI Follow path ability - to walk a path of AINodes
-//
+// PURPOSE: AI Follow path ability - to walk a path of AINodes
 // ----------------------------------------------------------------------- //
 
 class CAISharkStrategyFollowPath : DEFINE_FACTORY_CLASS(CAISharkStrategyFollowPath), public CAISharkStrategy
@@ -390,21 +374,21 @@ class CAISharkStrategyFollowPath : DEFINE_FACTORY_CLASS(CAISharkStrategyFollowPa
 
 		// Ctors/Dtors/etc
 
-        LTBOOL Init(AI_Shark* pAIShark);
+		LTBOOL Init(AI_Shark* pAIShark);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
 
 		// Methods
 
-        LTBOOL Set(const LTVector& vDestination);
-        LTBOOL Set(CAINode* pNodeDestination);
-        LTBOOL Set(CAIVolume* pVolumeDestination);
+		LTBOOL Set(const LTVector& vDestination);
+		LTBOOL Set(CAINode* pNodeDestination);
+		LTBOOL Set(CAIVolume* pVolumeDestination);
 		void Stop();
 
 		// Updates
 
-        LTBOOL Update();
+		LTBOOL Update();
 
 		// Handlers
 
@@ -418,14 +402,14 @@ class CAISharkStrategyFollowPath : DEFINE_FACTORY_CLASS(CAISharkStrategyFollowPa
 
 		AISharkStrategyType GetType() { return CAISharkStrategy::eStrategyFollowPath; }
 
-        LTBOOL IsUnset() { return m_eState == eStateUnset; }
-        LTBOOL IsSet() { return m_eState == eStateSet; }
-        LTBOOL IsDone() { return m_eState == eStateDone; }
+		LTBOOL IsUnset() { return m_eState == eStateUnset; }
+		LTBOOL IsSet() { return m_eState == eStateSet; }
+		LTBOOL IsDone() { return m_eState == eStateDone; }
 
 	private :
 
-        LTBOOL UpdateMoveTo(CAIPathWaypoint* pWaypoint);
-        LTBOOL UpdateOpenDoors(CAIPathWaypoint* pWaypoint);
+		LTBOOL UpdateMoveTo(CAIPathWaypoint* pWaypoint);
+		LTBOOL UpdateOpenDoors(CAIPathWaypoint* pWaypoint);
 
 	private : // Private enumerations
 
@@ -445,11 +429,9 @@ class CAISharkStrategyFollowPath : DEFINE_FACTORY_CLASS(CAISharkStrategyFollowPa
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAISharkStrategyOneShotAni
 //
-// PURPOSE : AI CheckingPulse - ability to ... to play a one shot ani
-//
+// PURPOSE: AI CheckingPulse - ability to ... to play a one shot ani
 // ----------------------------------------------------------------------- //
 
 class CAISharkStrategyOneShotAni : DEFINE_FACTORY_CLASS(CAISharkStrategyOneShotAni), public CAISharkStrategy
@@ -467,19 +449,19 @@ class CAISharkStrategyOneShotAni : DEFINE_FACTORY_CLASS(CAISharkStrategyOneShotA
 
 		// Methods
 
-        LTBOOL Set(CAnimatorAIAnimal::Main eMain);
+		LTBOOL Set(CAnimatorAIAnimal::Main eMain);
 
-        LTBOOL Update();
+		LTBOOL Update();
 
 		// Simple accessors
 
 		AISharkStrategyType GetType() { return eStrategyOneShotAni; }
-        LTBOOL IsAnimating() { return m_bAnimating; }
+		LTBOOL IsAnimating() { return m_bAnimating; }
 
 	protected : // Protected member variables
 
 		CAnimatorAIAnimal::Main	m_eMain;
-        LTBOOL                   m_bAnimating;
+		LTBOOL				   m_bAnimating;
 };
 
 #endif

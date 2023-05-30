@@ -55,7 +55,7 @@ class AI_Paratrooper : public CAIHuman
 
 		void InitialUpdate();
 
-        LTBOOL IsParatrooper() { return LTTRUE; }
+		LTBOOL IsParatrooper() { return LTTRUE; }
 };
 
 DEFINE_ALIGNMENTS(Paratrooper)
@@ -68,7 +68,7 @@ class AI_Frogman : public CAIHuman
 
 		void InitialUpdate();
 
-        LTBOOL IsScuba() { return LTTRUE; }
+		LTBOOL IsScuba() { return LTTRUE; }
 };
 
 DEFINE_ALIGNMENTS(Frogman)

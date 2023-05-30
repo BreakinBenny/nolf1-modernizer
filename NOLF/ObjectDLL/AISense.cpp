@@ -14,18 +14,16 @@ IMPLEMENT_FACTORY(CAISenseRecorder, 0)
 static LTFLOAT s_fUpdateBasis = 0.0f;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseMgr::Con/destructor
 //
-//	ROUTINE:	CAISenseMgr::Con/destructor
-//
-//	PURPOSE:	Factory Con/destructor
-//
+//	PURPOSE: Factory Con/destructor
 // ----------------------------------------------------------------------- //
 
 void CAISenseMgr::Constructor()
 {
-    m_pAI = LTNULL;
+	m_pAI = LTNULL;
 
-    m_bEnabled = LTTRUE;
+	m_bEnabled = LTTRUE;
 
 	// These should be arranged in priority order.
 
@@ -47,11 +45,9 @@ void CAISenseMgr::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseMgr::Clear
 //
-//	ROUTINE:	CAISenseMgr::Clear
-//
-//	PURPOSE:	Clears us when we change states etc
-//
+//	PURPOSE: Clears us when we change states etc
 // ----------------------------------------------------------------------- //
 
 void CAISenseMgr::Clear()
@@ -63,11 +59,9 @@ void CAISenseMgr::Clear()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseMgr::Init
 //
-//	ROUTINE:	CAISenseMgr::Init
-//
-//	PURPOSE:	Init the SenseMgr
-//
+//	PURPOSE: Init the SenseMgr
 // ----------------------------------------------------------------------- //
 
 void CAISenseMgr::Init(CAI* pAI)
@@ -90,11 +84,9 @@ void CAISenseMgr::Init(CAI* pAI)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseMgr::HandleBrokenLink
 //
-//	ROUTINE:	CAISenseMgr::HandleBrokenLink
-//
-//	PURPOSE:	Handles a broken link
-//
+//	PURPOSE: Handles a broken link
 // ----------------------------------------------------------------------- //
 
 void CAISenseMgr::HandleBrokenLink(HOBJECT hObject)
@@ -106,16 +98,14 @@ void CAISenseMgr::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseMgr::Update
 //
-//	ROUTINE:	CAISenseMgr::Update
-//
-//	PURPOSE:	Updates the SenseMgr
-//
+//	PURPOSE: Updates the SenseMgr
 // ----------------------------------------------------------------------- //
 
 void CAISenseMgr::Update()
 {
-    m_bStopUpdating = LTFALSE;
+	m_bStopUpdating = LTFALSE;
 
 //	g_pLTServer->CPrint("%s: Next sense update in at %f (now: %f, rate = %f)", m_pAI->GetName(), m_fNextUpdateTime, g_pLTServer->GetTime(), m_fUpdateRate);
 
@@ -144,7 +134,7 @@ void CAISenseMgr::Update()
 		// stop checking its senses if it reacts to a particular one.
 		// That's how this can get set.
 
-        m_apSenses[iSense]->SetUpdated(LTFALSE);
+		m_apSenses[iSense]->SetUpdated(LTFALSE);
 
 		if ( m_bStopUpdating ) return;
 	}}
@@ -155,11 +145,9 @@ void CAISenseMgr::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseMgr::GetAttributes
 //
-//	ROUTINE:	CAISenseMgr::GetAttributes
-//
-//	PURPOSE:	Gets the attributes for various senses
-//
+//	PURPOSE: Gets the attributes for various senses
 // ----------------------------------------------------------------------- //
 
 void CAISenseMgr::GetAttributes(int nTemplateID)
@@ -171,11 +159,9 @@ void CAISenseMgr::GetAttributes(int nTemplateID)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseMgr::GetProperties
 //
-//	ROUTINE:	CAISenseMgr::GetProperties
-//
-//	PURPOSE:	Gets the properties for various senses
-//
+//	PURPOSE: Gets the properties for various senses
 // ----------------------------------------------------------------------- //
 
 void CAISenseMgr::GetProperties(GenericProp* pgp)
@@ -187,11 +173,9 @@ void CAISenseMgr::GetProperties(GenericProp* pgp)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseMgr::UpdateSense
 //
-//	ROUTINE:	CAISenseMgr::UpdateSense
-//
-//	PURPOSE:	Updates the given sense
-//
+//	PURPOSE: Updates the given sense
 // ----------------------------------------------------------------------- //
 
 void CAISenseMgr::UpdateSense(SenseType st)
@@ -206,16 +190,14 @@ void CAISenseMgr::UpdateSense(SenseType st)
 		pAISense->PreUpdate();
 		g_pCharacterMgr->UpdateSense(m_pAI, pAISense, m_fUpdateRate);
 		pAISense->PostUpdate(m_fUpdateRate);
-        pAISense->SetUpdated(LTTRUE);
+		pAISense->SetUpdated(LTTRUE);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseMgr::Save
 //
-//	ROUTINE:	CAISenseMgr::Save
-//
-//	PURPOSE:	Save the SenseMgr
-//
+//	PURPOSE: Save the SenseMgr
 // ----------------------------------------------------------------------- //
 
 void CAISenseMgr::Save(HMESSAGEWRITE hWrite)
@@ -231,11 +213,9 @@ void CAISenseMgr::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseMgr::Load
 //
-//	ROUTINE:	CAISenseMgr::Load
-//
-//	PURPOSE:	Load the SenseMgr
-//
+//	PURPOSE: Load the SenseMgr
 // ----------------------------------------------------------------------- //
 
 void CAISenseMgr::Load(HMESSAGEREAD hRead)
@@ -256,11 +236,9 @@ LTBOOL CAISenseMgr::IsAlert() const
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseMgr::ComputeSquares
 //
-//	ROUTINE:	CAISenseMgr::ComputeSquares
-//
-//	PURPOSE:	Computes our squares
-//
+//	PURPOSE: Computes our squares
 // ----------------------------------------------------------------------- //
 
 void CAISenseMgr::ComputeSquares()
@@ -272,21 +250,19 @@ void CAISenseMgr::ComputeSquares()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::CAISense
 //
-//	ROUTINE:	CAISense::CAISense
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CAISense::CAISense()
 {
-    m_pAI = LTNULL;
+	m_pAI = LTNULL;
 
 	m_soOutcome = soNone;
 
-    m_bUpdated = LTFALSE;
-    m_bEnabled = LTFALSE;
+	m_bUpdated = LTFALSE;
+	m_bEnabled = LTFALSE;
 	m_fDistance = 0.0f;
 	m_fDistanceSqr = 0.0f;
 
@@ -299,27 +275,25 @@ CAISense::CAISense()
 
 	m_rngStimulationThreshhold.Set(0.0f, 0.0f);
 
-    m_bStimulationPartial = LTFALSE;
-    m_bStimulationFull = LTFALSE;
+	m_bStimulationPartial = LTFALSE;
+	m_bStimulationFull = LTFALSE;
 
 	m_cFalseStimulation = 0;
 	m_nFalseStimulationLimit = 0;
 
-    m_bReacting = LTFALSE;
+	m_bReacting = LTFALSE;
 	m_fReactionDelay = 0.0f;
 	m_fReactionDelayTimer = 0.0f;
 
-    m_hStimulus = LTNULL;
+	m_hStimulus = LTNULL;
 
 	m_fTimestamp = 0.0f;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::Clear
 //
-//	ROUTINE:	CAISense::Clear
-//
-//	PURPOSE:	Clears out all dynamic data
-//
+//	PURPOSE: Clears out all dynamic data
 // ----------------------------------------------------------------------- //
 
 void CAISense::Clear()
@@ -329,23 +303,21 @@ void CAISense::Clear()
 	m_fStimulation = 0.0f;
 	m_fStimulationTime = 0.0f;
 
-    m_bStimulationPartial = LTFALSE;
-    m_bStimulationFull = LTFALSE;
+	m_bStimulationPartial = LTFALSE;
+	m_bStimulationFull = LTFALSE;
 
 	m_cFalseStimulation = 0;
 
-    m_bReacting = LTFALSE;
+	m_bReacting = LTFALSE;
 	m_fReactionDelayTimer = 0.0f;
 
 	m_fTimestamp = 0.0f;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::Init
 //
-//	ROUTINE:	CAISense::Init
-//
-//	PURPOSE:	Init the sense
-//
+//	PURPOSE: Init the sense
 // ----------------------------------------------------------------------- //
 
 void CAISense::Init(CAI* pAI)
@@ -355,29 +327,25 @@ void CAISense::Init(CAI* pAI)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::GetProperties
 //
-//	ROUTINE:	CAISense::GetProperties
-//
-//	PURPOSE:	Gets attributes for the sense out of the butes file
-//
+//	PURPOSE: Gets attributes for the sense out of the butes file
 // ----------------------------------------------------------------------- //
 
 void CAISense::GetProperties(GenericProp* pgp)
 {
-    if ( g_pLTServer->GetPropGeneric((char*)GetPropertiesEnabledString(), pgp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric((char*)GetPropertiesEnabledString(), pgp ) == LT_OK )
 		if ( pgp->m_String[0] )
 			m_bEnabled = pgp->m_Bool;
-    if ( g_pLTServer->GetPropGeneric((char*)GetPropertiesDistanceString(), pgp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric((char*)GetPropertiesDistanceString(), pgp ) == LT_OK )
 		if ( pgp->m_String[0] )
 			m_fDistance = pgp->m_Float;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::Update
 //
-//	ROUTINE:	CAISense::Update
-//
-//	PURPOSE:	PreUpdate of the Sense
-//
+//	PURPOSE: PreUpdate of the Sense
 // ----------------------------------------------------------------------- //
 
 void CAISense::PreUpdate()
@@ -386,7 +354,7 @@ void CAISense::PreUpdate()
 	{
 		case scStimulation:		// SeeEnemy, SeeEnemyFlashlight, HearEnemyFootstep
 		{
-            m_bIncreasedStimulation = LTFALSE;
+			m_bIncreasedStimulation = LTFALSE;
 		}
 		break;
 
@@ -399,11 +367,9 @@ void CAISense::PreUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::Update
 //
-//	ROUTINE:	CAISense::Update
-//
-//	PURPOSE:	PostUpdate of the Sense
-//
+//	PURPOSE: PostUpdate of the Sense
 // ----------------------------------------------------------------------- //
 
 void CAISense::PostUpdate(LTFLOAT fTimeDelta)
@@ -414,7 +380,7 @@ void CAISense::PostUpdate(LTFLOAT fTimeDelta)
 		{
 			if ( m_bIncreasedStimulation )
 			{
-                m_fStimulationTime = g_pLTServer->GetTime();
+				m_fStimulationTime = g_pLTServer->GetTime();
 			}
 			else
 			{
@@ -427,8 +393,8 @@ void CAISense::PostUpdate(LTFLOAT fTimeDelta)
 		{
 			if ( m_bReacting )
 			{
-                LTFLOAT fAwarenessModifier = 0.5f + (1.5f*GetAI()->GetAwareness());
-                m_fReactionDelayTimer += fTimeDelta*(fAwarenessModifier);
+				LTFLOAT fAwarenessModifier = 0.5f + (1.5f*GetAI()->GetAwareness());
+				m_fReactionDelayTimer += fTimeDelta*(fAwarenessModifier);
 			}
 		}
 		break;
@@ -436,57 +402,51 @@ void CAISense::PostUpdate(LTFLOAT fTimeDelta)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::IncreaseStimulation
 //
-//	ROUTINE:	CAISense::IncreaseStimulation
-//
-//	PURPOSE:	Stimulate the sense
-//
+//	PURPOSE: Stimulate the sense
 // ----------------------------------------------------------------------- //
 
 void CAISense::IncreaseStimulation(LTFLOAT fTimeDelta, LTFLOAT fRateModifier /* = 1.0f */)
 {
 	_ASSERT(GetClass() == scStimulation);
 
-    LTFLOAT fAwarenessModifier = 0.5f + (1.5f*GetAI()->GetAwareness());
+	LTFLOAT fAwarenessModifier = 0.5f + (1.5f*GetAI()->GetAwareness());
 
-    LTFLOAT fStimulationIncreaseRate = m_pAI->GetSenseMgr()->IsAlert() ? (m_fStimulationIncreaseRateAlert) : (m_fStimulationIncreaseRateUnalert);
-    m_fStimulation = Min<LTFLOAT>((m_rngStimulationThreshhold.GetMax()), m_fStimulation + fTimeDelta*fStimulationIncreaseRate*fRateModifier*fAwarenessModifier);
+	LTFLOAT fStimulationIncreaseRate = m_pAI->GetSenseMgr()->IsAlert() ? (m_fStimulationIncreaseRateAlert) : (m_fStimulationIncreaseRateUnalert);
+	m_fStimulation = Min<LTFLOAT>((m_rngStimulationThreshhold.GetMax()), m_fStimulation + fTimeDelta*fStimulationIncreaseRate*fRateModifier*fAwarenessModifier);
 	if ( m_fStimulation == (m_rngStimulationThreshhold.GetMax()) )
 	{
-        m_bStimulationFull = LTTRUE;
+		m_bStimulationFull = LTTRUE;
 	}
 	else if ( m_fStimulation > (m_rngStimulationThreshhold.GetMin()) )
 	{
-        m_bStimulationPartial = LTTRUE;
+		m_bStimulationPartial = LTTRUE;
 	}
 
-    m_bIncreasedStimulation = LTTRUE;
+	m_bIncreasedStimulation = LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::DecreaseStimulation
 //
-//	ROUTINE:	CAISense::DecreaseStimulation
-//
-//	PURPOSE:	Decay the stimulation of the sense
-//
+//	PURPOSE: Decay the stimulation of the sense
 // ----------------------------------------------------------------------- //
 
 void CAISense::DecreaseStimulation(LTFLOAT fTimeDelta, LTFLOAT fRateModifier /* = 1.0f */)
 {
 	_ASSERT(GetClass() == scStimulation);
 
-    LTFLOAT fAwarenessModifier = 0.5f + (1.5f*GetAI()->GetAwareness());
+	LTFLOAT fAwarenessModifier = 0.5f + (1.5f*GetAI()->GetAwareness());
 
-    LTFLOAT fStimulationDecreaseRate = m_pAI->GetSenseMgr()->IsAlert() ? (m_fStimulationDecreaseRateAlert) : (m_fStimulationDecreaseRateUnalert);
-    m_fStimulation = Max<LTFLOAT>(0.0f, m_fStimulation - fTimeDelta*fStimulationDecreaseRate*fRateModifier*fAwarenessModifier);
+	LTFLOAT fStimulationDecreaseRate = m_pAI->GetSenseMgr()->IsAlert() ? (m_fStimulationDecreaseRateAlert) : (m_fStimulationDecreaseRateUnalert);
+	m_fStimulation = Max<LTFLOAT>(0.0f, m_fStimulation - fTimeDelta*fStimulationDecreaseRate*fRateModifier*fAwarenessModifier);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::Save
 //
-//	ROUTINE:	CAISense::Save
-//
-//	PURPOSE:	Save the sense
-//
+//	PURPOSE: Save the sense
 // ----------------------------------------------------------------------- //
 
 void CAISense::Save(HMESSAGEWRITE hWrite)
@@ -518,11 +478,9 @@ void CAISense::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::Save
 //
-//	ROUTINE:	CAISense::Save
-//
-//	PURPOSE:	Restore the sense
-//
+//	PURPOSE: Restore the sense
 // ----------------------------------------------------------------------- //
 
 void CAISense::Load(HMESSAGEREAD hRead)
@@ -554,11 +512,9 @@ void CAISense::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::SetStimulus
 //
-//	ROUTINE:	CAISense::SetStimulus
-//
-//	PURPOSE:	Sets the stimulus
-//
+//	PURPOSE: Sets the stimulus
 // ----------------------------------------------------------------------- //
 
 void CAISense::SetStimulus(HOBJECT hStimulus)
@@ -571,11 +527,9 @@ void CAISense::SetStimulus(HOBJECT hStimulus)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::ComputeSquares
 //
-//	ROUTINE:	CAISense::ComputeSquares
-//
-//	PURPOSE:	Computes our squares
-//
+//	PURPOSE: Computes our squares
 // ----------------------------------------------------------------------- //
 
 void CAISense::ComputeSquares()
@@ -584,28 +538,24 @@ void CAISense::ComputeSquares()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense::HandleBrokenLink
 //
-//	ROUTINE:	CAISense::HandleBrokenLink
-//
-//	PURPOSE:	Computes our squares
-//
+//	PURPOSE: Computes our squares
 // ----------------------------------------------------------------------- //
 
 void CAISense::HandleBrokenLink(HOBJECT hObject)
 {
 	if ( m_hStimulus == hObject )
 	{
-        m_hStimulus = LTNULL;
+		m_hStimulus = LTNULL;
 		Clear();
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseSeeEnemy::*
 //
-//	ROUTINE:	CAISenseSeeEnemy::*
-//
-//	PURPOSE:	SeeEnemy sense methods
-//
+//	PURPOSE: SeeEnemy sense methods
 // ----------------------------------------------------------------------- //
 
 CAISenseSeeEnemy::CAISenseSeeEnemy()
@@ -637,11 +587,9 @@ void CAISenseSeeEnemy::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISense*::Update
 //
-//	ROUTINE:	CAISense*::Update
-//
-//	PURPOSE:	Updates to see if the sense can perceive the given stimulus
-//
+//	PURPOSE: Updates to see if the sense can perceive the given stimulus
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISenseSeeEnemy::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
@@ -652,10 +600,10 @@ LTBOOL CAISenseSeeEnemy::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 	{
 		// If we're innocent, we only consider someone an enemy if they have a gun
 
-        CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(hStimulus);
+		CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(hStimulus);
 		if ( !pCharacter->HasDangerousWeapon() )
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 	}
 
@@ -669,36 +617,36 @@ LTBOOL CAISenseSeeEnemy::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 	int nXRange = m_rngGridX.GetMax() - m_rngGridX.GetMin();
 	int nYRange = m_rngGridY.GetMax() - m_rngGridY.GetMin();
 
-    LTVector vDims;
-    g_pLTServer->GetObjectDims(hStimulus, &vDims);
+	LTVector vDims;
+	g_pLTServer->GetObjectDims(hStimulus, &vDims);
 
-    LTFLOAT fX = vDims.x * ((LTFLOAT)m_nGridX/(LTFLOAT)nXRange);
-    LTFLOAT fY = vDims.y * ((LTFLOAT)m_nGridY/(LTFLOAT)nYRange);
+	LTFLOAT fX = vDims.x * ((LTFLOAT)m_nGridX/(LTFLOAT)nXRange);
+	LTFLOAT fY = vDims.y * ((LTFLOAT)m_nGridY/(LTFLOAT)nYRange);
 
-    LTVector vPosition;
-    g_pLTServer->GetObjectPos(hStimulus, &vPosition);
+	LTVector vPosition;
+	g_pLTServer->GetObjectPos(hStimulus, &vPosition);
 
-    LTRotation rRot;
-    g_pLTServer->GetObjectRotation(hStimulus, &rRot);
+	LTRotation rRot;
+	g_pLTServer->GetObjectRotation(hStimulus, &rRot);
 
-    LTVector vUp, vRight, vForward;
-    g_pLTServer->GetRotationVectors(&rRot, &vUp, &vRight, &vForward);
+	LTVector vUp, vRight, vForward;
+	g_pLTServer->GetRotationVectors(&rRot, &vUp, &vRight, &vForward);
 
 	vPosition += vRight*fX;
 	vPosition += vUp*fY;
 
 	// Update the point
 
-    LTFLOAT fDistanceSqr;
-    LTBOOL bVisible;
+	LTFLOAT fDistanceSqr;
+	LTBOOL bVisible;
 
 	if ( m_pAI->CanSeeThrough() )
 	{
-        bVisible = m_pAI->IsObjectPositionVisibleFromEye(CAI::SeeThroughFilterFn, CAI::SeeThroughPolyFilterFn, hStimulus, vPosition, (m_fDistanceSqr), LTTRUE, &fDistanceSqr);
+		bVisible = m_pAI->IsObjectPositionVisibleFromEye(CAI::SeeThroughFilterFn, CAI::SeeThroughPolyFilterFn, hStimulus, vPosition, (m_fDistanceSqr), LTTRUE, &fDistanceSqr);
 	}
 	else
 	{
-        bVisible = m_pAI->IsObjectPositionVisibleFromEye(CAI::DefaultFilterFn, NULL, hStimulus, vPosition, (m_fDistanceSqr), LTTRUE, &fDistanceSqr);
+		bVisible = m_pAI->IsObjectPositionVisibleFromEye(CAI::DefaultFilterFn, NULL, hStimulus, vPosition, (m_fDistanceSqr), LTTRUE, &fDistanceSqr);
 	}
 
 	if ( bVisible )
@@ -742,7 +690,7 @@ LTBOOL CAISenseSeeEnemyFootprint::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 	{
 		CharFootprintInfo* pFootprint = *ppFootprint;
 
-        if ( m_pAI->IsPositionVisibleFromEye(CAI::DefaultFilterFn, NULL, pFootprint->vPos, (m_fDistanceSqr), LTTRUE) )
+		if ( m_pAI->IsPositionVisibleFromEye(CAI::DefaultFilterFn, NULL, pFootprint->vPos, (m_fDistanceSqr), LTTRUE) )
 		{
 			React();
 
@@ -750,38 +698,38 @@ LTBOOL CAISenseSeeEnemyFootprint::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 
 			m_fTimestamp = pFootprint->fTimeStamp;
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 
 		ppFootprint = plistFootprints->GetItem(TLIT_NEXT);
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CAISenseSeeEnemyFlashlight::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 {
 	if ( !IsPlayer(hStimulus) ) return LTFALSE;
 
-    CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hStimulus);
+	CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hStimulus);
 
 	if ( pPlayer->IsFlashlightOn() )
 	{
-        const LTVector& vPos = pPlayer->GetFlashlightPos();
-        const static LTFLOAT fRadiusSqr = 40000.0f;
+		const LTVector& vPos = pPlayer->GetFlashlightPos();
+		const static LTFLOAT fRadiusSqr = 40000.0f;
 
-        LTFLOAT fDistanceSqr = VEC_DISTSQR(m_pAI->GetPosition(), vPos);
+		LTFLOAT fDistanceSqr = VEC_DISTSQR(m_pAI->GetPosition(), vPos);
 
 		if ( fDistanceSqr < (fRadiusSqr) )
 		{
-            LTFLOAT fRateModifier = (1.0f - fDistanceSqr/m_fDistanceSqr);
+			LTFLOAT fRateModifier = (1.0f - fDistanceSqr/m_fDistanceSqr);
 			IncreaseStimulation(fTimeDelta, (fRateModifier));
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CAISenseHearEnemyWeaponFire::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
@@ -795,19 +743,19 @@ LTBOOL CAISenseHearEnemyWeaponFire::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta
 
 	// Make sure this is a recent firing of the weapon...
 
-    if (info.fTime + 1.0 < g_pLTServer->GetTime() || info.nWeaponId == WMGR_INVALID_ID) return LTFALSE;
+	if (info.fTime + 1.0 < g_pLTServer->GetTime() || info.nWeaponId == WMGR_INVALID_ID) return LTFALSE;
 
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(info.nWeaponId);
-    if (!pWeapon) return LTFALSE;
+	if (!pWeapon) return LTFALSE;
 
 	// Get the Distance that fire noise carries
 
-    LTFLOAT fWeaponFireNoiseDistance = (LTFLOAT)pWeapon->nAIFireSoundRadius;
+	LTFLOAT fWeaponFireNoiseDistance = (LTFLOAT)pWeapon->nAIFireSoundRadius;
 	if (info.bSilenced) fWeaponFireNoiseDistance *= 0.25f;
 
 	// Get the distance from the fire
 
-    LTFLOAT fDistance  = VEC_DIST(info.vFiredPos, m_pAI->GetPosition());
+	LTFLOAT fDistance  = VEC_DIST(info.vFiredPos, m_pAI->GetPosition());
 
 	// Are we close enough to hear?
 
@@ -819,31 +767,31 @@ LTBOOL CAISenseHearEnemyWeaponFire::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta
 
 		m_fTimestamp = info.fTime;
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CAISenseHearEnemyWeaponImpact::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 {
 	if ( !IsCharacter(hStimulus) ) return LTFALSE;
 
-    CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hStimulus);
+	CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hStimulus);
 
 	CharFireInfo info;
 	pChar->GetLastFireInfo(info);
 
 	// Make sure this is a recent firing of the weapon...
 
-    if (info.fTime + 1.0 < g_pLTServer->GetTime() || info.nWeaponId == WMGR_INVALID_ID) return LTFALSE;
+	if (info.fTime + 1.0 < g_pLTServer->GetTime() || info.nWeaponId == WMGR_INVALID_ID) return LTFALSE;
 
 	AMMO* pAmmo = g_pWeaponMgr->GetAmmo(info.nAmmoId);
-    if (!pAmmo || !pAmmo->pImpactFX) return LTFALSE;
+	if (!pAmmo || !pAmmo->pImpactFX) return LTFALSE;
 
 	// Get the Distance that the impact noise carries
 
-    LTFLOAT fWeaponImpactNoiseDistance = (LTFLOAT) pAmmo->pImpactFX->nAISoundRadius;
+	LTFLOAT fWeaponImpactNoiseDistance = (LTFLOAT) pAmmo->pImpactFX->nAISoundRadius;
 
 	// Scale based on surface types
 
@@ -856,7 +804,7 @@ LTBOOL CAISenseHearEnemyWeaponImpact::Update(HOBJECT hStimulus, LTFLOAT fTimeDel
 
 	// Get the distance from the impact
 
-    LTFLOAT fDistance = VEC_DIST(info.vImpactPos, m_pAI->GetPosition());
+	LTFLOAT fDistance = VEC_DIST(info.vImpactPos, m_pAI->GetPosition());
 
 	// Are we close enough to hear? (or did it hit us?)
 
@@ -868,7 +816,7 @@ LTBOOL CAISenseHearEnemyWeaponImpact::Update(HOBJECT hStimulus, LTFLOAT fTimeDel
 
 		m_fTimestamp = info.fTime;
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else
 	{
@@ -903,27 +851,27 @@ LTBOOL CAISenseHearEnemyWeaponImpact::Update(HOBJECT hStimulus, LTFLOAT fTimeDel
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CAISenseHearEnemyFootstep::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 {
 	if ( !IsCharacter(hStimulus) ) return LTFALSE;
 
-    CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hStimulus);
+	CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hStimulus);
 
 	CharMoveInfo info;
 	pChar->GetLastMoveInfo(info);
 
 	if ( info.fTime > m_fStimulationTime &&
-         g_pLTServer->GetTime() > info.fTime &&
-         g_pLTServer->GetTime() < info.fTime + 0.50f )
+		 g_pLTServer->GetTime() > info.fTime &&
+		 g_pLTServer->GetTime() < info.fTime + 0.50f )
 	{
-        LTVector vMovementPos;
-        g_pLTServer->GetObjectPos(hStimulus, &vMovementPos);
+		LTVector vMovementPos;
+		g_pLTServer->GetObjectPos(hStimulus, &vMovementPos);
 
-        LTFLOAT fDistance = VEC_DIST(vMovementPos, m_pAI->GetPosition());
-        LTFLOAT fMovementNoiseDistance = g_pAIButeMgr->GetSenses()->fEnemyMovementNoiseDistance;
+		LTFLOAT fDistance = VEC_DIST(vMovementPos, m_pAI->GetPosition());
+		LTFLOAT fMovementNoiseDistance = g_pAIButeMgr->GetSenses()->fEnemyMovementNoiseDistance;
 		fMovementNoiseDistance *= info.fVolume;
 
 		if ( fDistance < (m_fDistance + fMovementNoiseDistance) )
@@ -938,28 +886,28 @@ LTBOOL CAISenseHearEnemyFootstep::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 
 			m_vStimulusPosition = vMovementPos;
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CAISenseHearEnemyDisturbance::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 {
 	if ( !IsCharacter(hStimulus) ) return LTFALSE;
 
-    CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hStimulus);
+	CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hStimulus);
 
 	CharCoinInfo info;
 	pChar->GetLastCoinInfo(info);
 
 	if ( /*info.fTime > m_fStimulationTime &&*/
-         g_pLTServer->GetTime() > info.fTime &&
-         g_pLTServer->GetTime() < info.fTime + 0.50f )
+		 g_pLTServer->GetTime() > info.fTime &&
+		 g_pLTServer->GetTime() < info.fTime + 0.50f )
 	{
-        LTFLOAT fDistance = VEC_DIST(info.vPosition, m_pAI->GetPosition());
-        LTFLOAT fCoinNoiseDistance = g_pAIButeMgr->GetSenses()->fCoinNoiseDistance;
+		LTFLOAT fDistance = VEC_DIST(info.vPosition, m_pAI->GetPosition());
+		LTFLOAT fCoinNoiseDistance = g_pAIButeMgr->GetSenses()->fCoinNoiseDistance;
 		fCoinNoiseDistance *= info.fVolume;
 
 		if ( fDistance < (m_fDistance + fCoinNoiseDistance) )
@@ -974,25 +922,25 @@ LTBOOL CAISenseHearEnemyDisturbance::Update(HOBJECT hStimulus, LTFLOAT fTimeDelt
 
 			m_vStimulusPosition = info.vPosition;
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CAISenseSeeAllyDeath::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 {
 	if ( !IsBody(hStimulus) ) return LTFALSE;
 
-    if ( m_pAI->IsObjectVisibleFromEye(CAI::BodyFilterFn, NULL, hStimulus, (m_fDistanceSqr), LTTRUE) )
+	if ( m_pAI->IsObjectVisibleFromEye(CAI::BodyFilterFn, NULL, hStimulus, (m_fDistanceSqr), LTTRUE) )
 	{
 		React();
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CAISenseHearAllyDeath::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
@@ -1005,13 +953,13 @@ LTBOOL CAISenseHearAllyDeath::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 
 	// Time has got to be greater than the death scene noise time but not too much greater
 
-    if ( g_pLTServer->GetTime() > pDeathScene->GetNoiseTime() &&
-         g_pLTServer->GetTime() < pDeathScene->GetNoiseTime() + 1.0f )
+	if ( g_pLTServer->GetTime() > pDeathScene->GetNoiseTime() &&
+		 g_pLTServer->GetTime() < pDeathScene->GetNoiseTime() + 1.0f )
 	{
 		// Noise has to be within audible radius
 
-        LTFLOAT fDistance = VEC_DIST(pDeathScene->GetPosition(), m_pAI->GetPosition());
-        LTFLOAT fDeathSceneNoiseDistance = g_pAIButeMgr->GetSenses()->fAllyDeathNoiseDistance;
+		LTFLOAT fDistance = VEC_DIST(pDeathScene->GetPosition(), m_pAI->GetPosition());
+		LTFLOAT fDeathSceneNoiseDistance = g_pAIButeMgr->GetSenses()->fAllyDeathNoiseDistance;
 		fDeathSceneNoiseDistance *= pDeathScene->GetNoiseVolume();
 
 		if ( fDistance < (m_fDistance + fDeathSceneNoiseDistance) )
@@ -1022,28 +970,28 @@ LTBOOL CAISenseHearAllyDeath::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 
 			m_vStimulusPosition = pDeathScene->GetPosition();
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
 	// Gotta check the pain noise too (using same criterion as pain noise)
 
-    if ( g_pLTServer->GetTime() > pDeathScene->GetLastPainTime() &&
-         g_pLTServer->GetTime() < pDeathScene->GetLastPainTime() + 1.0f )
+	if ( g_pLTServer->GetTime() > pDeathScene->GetLastPainTime() &&
+		 g_pLTServer->GetTime() < pDeathScene->GetLastPainTime() + 1.0f )
 	{
 		// LastPain has to be within audible radius
 
-        LTFLOAT fDistance = VEC_DIST(pDeathScene->GetPosition(), m_pAI->GetPosition());
-        LTFLOAT fPainNoiseDistance = g_pAIButeMgr->GetSenses()->fAllyPainNoiseDistance;
+		LTFLOAT fDistance = VEC_DIST(pDeathScene->GetPosition(), m_pAI->GetPosition());
+		LTFLOAT fPainNoiseDistance = g_pAIButeMgr->GetSenses()->fAllyPainNoiseDistance;
 		fPainNoiseDistance *= pDeathScene->GetLastPainVolume();
 
 		if ( fDistance < (m_fDistance + fPainNoiseDistance) )
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CAISenseHearAllyPain::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
@@ -1056,21 +1004,21 @@ LTBOOL CAISenseHearAllyPain::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 
 	// See if we can hear the pain
 
-    CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hStimulus);
+	CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hStimulus);
 
 	// Time has got to be greater than the pain noise time but not too much greater
 
 	LTFLOAT fTime = g_pLTServer->GetTime();
 
-    if ( (fTime > pChar->GetLastPainTime()) && (fTime < pChar->GetLastPainTime() + 1.0f) )
+	if ( (fTime > pChar->GetLastPainTime()) && (fTime < pChar->GetLastPainTime() + 1.0f) )
 	{
 		// Noise has to be within audible radius
 
-        LTVector vPainPos;
-        g_pLTServer->GetObjectPos(hStimulus, &vPainPos);
+		LTVector vPainPos;
+		g_pLTServer->GetObjectPos(hStimulus, &vPainPos);
 
-        LTFLOAT fDistance = VEC_DIST(vPainPos, m_pAI->GetPosition());
-        LTFLOAT fPainNoiseDistance = g_pAIButeMgr->GetSenses()->fAllyPainNoiseDistance;
+		LTFLOAT fDistance = VEC_DIST(vPainPos, m_pAI->GetPosition());
+		LTFLOAT fPainNoiseDistance = g_pAIButeMgr->GetSenses()->fAllyPainNoiseDistance;
 		fPainNoiseDistance *= pChar->GetLastPainVolume();
 
 		if ( fDistance < (m_fDistance + fPainNoiseDistance) )
@@ -1085,11 +1033,11 @@ LTBOOL CAISenseHearAllyPain::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 
 			m_vStimulusPosition = vPainPos;
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CAISenseHearAllyWeaponFire::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
@@ -1103,19 +1051,19 @@ LTBOOL CAISenseHearAllyWeaponFire::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 
 	// Make sure this is a recent firing of the weapon...
 
-    if (info.fTime + 1.0 < g_pLTServer->GetTime() || info.nWeaponId == WMGR_INVALID_ID) return LTFALSE;
+	if (info.fTime + 1.0 < g_pLTServer->GetTime() || info.nWeaponId == WMGR_INVALID_ID) return LTFALSE;
 
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(info.nWeaponId);
-    if (!pWeapon) return LTFALSE;
+	if (!pWeapon) return LTFALSE;
 
 	// Get the Distance that fire noise carries
 
-    LTFLOAT fWeaponFireNoiseDistance = (LTFLOAT)pWeapon->nAIFireSoundRadius;
+	LTFLOAT fWeaponFireNoiseDistance = (LTFLOAT)pWeapon->nAIFireSoundRadius;
 	if (info.bSilenced) fWeaponFireNoiseDistance *= 0.25f;
 
 	// Get the distance from the fire
 
-    LTFLOAT fDistance  = VEC_DIST(info.vFiredPos, m_pAI->GetPosition());
+	LTFLOAT fDistance  = VEC_DIST(info.vFiredPos, m_pAI->GetPosition());
 
 	// Are we close enough to hear?
 
@@ -1127,23 +1075,21 @@ LTBOOL CAISenseHearAllyWeaponFire::Update(HOBJECT hStimulus, LTFLOAT fTimeDelta)
 
 		m_fTimestamp = info.fTime;
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseRecord::Constructor/Destructor
 //
-//	ROUTINE:	CAISenseRecord::Constructor/Destructor
-//
-//	PURPOSE:	Ctors/Dtors
-//
+//	PURPOSE: Ctors/Dtors
 // ----------------------------------------------------------------------- //
 
 void CAISenseRecord::Constructor()
 {
-    m_hObject = LTNULL;
+	m_hObject = LTNULL;
 	m_stType = stInvalid;
 	m_soOutcome = soNone;
 	m_fTimestamp = 0.0f;
@@ -1156,11 +1102,9 @@ void CAISenseRecord::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseRecord::Save/Load
 //
-//	ROUTINE:	CAISenseRecord::Save/Load
-//
-//	PURPOSE:	Save/Load methods
-//
+//	PURPOSE: Save/Load methods
 // ----------------------------------------------------------------------- //
 
 void CAISenseRecord::Save(HMESSAGEWRITE hWrite)
@@ -1182,11 +1126,9 @@ void CAISenseRecord::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseRecord::FromSense
 //
-//	ROUTINE:	CAISenseRecord::FromSense
-//
-//	PURPOSE:	Makes a record from a sense
-//
+//	PURPOSE: Makes a record from a sense
 // ----------------------------------------------------------------------- //
 
 void CAISenseRecord::FromSense(CAISense* pAISense)
@@ -1198,10 +1140,9 @@ void CAISenseRecord::FromSense(CAISense* pAISense)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseRecord::IsSame
 //
-//	ROUTINE:	CAISenseRecord::IsSame
-//
-//	PURPOSE:	Is the same sense as this one?
+//	PURPOSE: Is the same sense as this one?
 //
 //  NOTE:		Note "this" should be treated as the NEW sense, while
 //				pAISenseRecord should be treated as the existing sense.
@@ -1212,7 +1153,6 @@ void CAISenseRecord::FromSense(CAISense* pAISense)
 //
 //				STIM = important to realize that this is a stim-based sense
 //				???? = might not be making this calculation right
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISenseRecord::IsSame(CAISenseRecord* pAISenseRecord)
@@ -1231,7 +1171,7 @@ LTBOOL CAISenseRecord::IsSame(CAISenseRecord* pAISenseRecord)
 
 				if ( m_fTimestamp == pAISenseRecord->GetTimestamp() )
 				{
-                    return LTTRUE;
+					return LTTRUE;
 				}
 			}
 			break;
@@ -1241,7 +1181,7 @@ LTBOOL CAISenseRecord::IsSame(CAISenseRecord* pAISenseRecord)
 			{
 				// If it's a body, it's trivially the same.
 
-                return LTTRUE;
+				return LTTRUE;
 			}
 			break;
 
@@ -1254,14 +1194,14 @@ LTBOOL CAISenseRecord::IsSame(CAISenseRecord* pAISenseRecord)
 				{
 					if ( pAISenseRecord->GetSenseOutcome() == soFalseStimulation )
 					{
-                        return LTTRUE;
+						return LTTRUE;
 					}
 				}
 				else
 				{
 					if ( pAISenseRecord->GetSenseOutcome() != soFalseStimulation )
 					{
-                        return LTTRUE;
+						return LTTRUE;
 					}
 				}
 			}
@@ -1274,7 +1214,7 @@ LTBOOL CAISenseRecord::IsSame(CAISenseRecord* pAISenseRecord)
 
 				if ( (m_fTimestamp - pAISenseRecord->GetTimestamp()) < 10.0f )
 				{
-                    return LTTRUE;
+					return LTTRUE;
 				}
 			}
 			break;
@@ -1293,14 +1233,14 @@ LTBOOL CAISenseRecord::IsSame(CAISenseRecord* pAISenseRecord)
 					{
 						if ( pAISenseRecord->GetSenseOutcome() == soFalseStimulation )
 						{
-                            return LTTRUE;
+							return LTTRUE;
 						}
 					}
 					else
 					{
 						if ( pAISenseRecord->GetSenseOutcome() != soFalseStimulation )
 						{
-                            return LTTRUE;
+							return LTTRUE;
 						}
 					}
 				}
@@ -1315,28 +1255,26 @@ LTBOOL CAISenseRecord::IsSame(CAISenseRecord* pAISenseRecord)
 
 			default:
 			{
-                _ASSERT(LTFALSE);
+				_ASSERT(LTFALSE);
 			}
 			break;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseRecorder::Constructor/Destructor
 //
-//	ROUTINE:	CAISenseRecorder::Constructor/Destructor
-//
-//	PURPOSE:	Ctors/Dtors for factory
-//
+//	PURPOSE: Ctors/Dtors for factory
 // ----------------------------------------------------------------------- //
 
 CAISenseRecorder::CAISenseRecorder()
 {
 	for ( int iSense = 0 ; iSense < CAISense::kNumSenses ; iSense++ )
 	{
-        m_alstpSenseRecords[iSense].Init(LTFALSE);
+		m_alstpSenseRecords[iSense].Init(LTFALSE);
 	}
 }
 
@@ -1347,7 +1285,7 @@ void CAISenseRecorder::Constructor()
 		m_alstpSenseRecords[iSense].Clear();
 	}
 
-    m_hOwner = LTNULL;
+	m_hOwner = LTNULL;
 }
 
 void CAISenseRecorder::Destructor()
@@ -1365,11 +1303,9 @@ void CAISenseRecorder::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseRecorder::Init
 //
-//	ROUTINE:	CAISenseRecorder::Init
-//
-//	PURPOSE:	Initialize us
-//
+//	PURPOSE: Initialize us
 // ----------------------------------------------------------------------- //
 
 void CAISenseRecorder::Init(HOBJECT hOwner)
@@ -1380,25 +1316,23 @@ void CAISenseRecorder::Init(HOBJECT hOwner)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseRecorder::Save/Load
 //
-//	ROUTINE:	CAISenseRecorder::Save/Load
-//
-//	PURPOSE:	Saves/Loads us
-//
+//	PURPOSE: Saves/Loads us
 // ----------------------------------------------------------------------- //
 
 LTBOOL FnSaveSenseRecordsList(HMESSAGEWRITE hWrite, void* pPtDataItem)
 {
 	CAISenseRecord** ppAISenseRecord = (CAISenseRecord**)pPtDataItem;
 	(*ppAISenseRecord)->Save(hWrite);
-    return LTTRUE;
+	return LTTRUE;
 }
 
 void CAISenseRecorder::Save(HMESSAGEWRITE hWrite)
 {
 	for ( int iSense = 0 ; iSense < CAISense::kNumSenses ; iSense++ )
 	{
-        m_alstpSenseRecords[iSense].Save(g_pLTServer, hWrite, FnSaveSenseRecordsList);
+		m_alstpSenseRecords[iSense].Save(g_pLTServer, hWrite, FnSaveSenseRecordsList);
 	}
 }
 
@@ -1408,30 +1342,28 @@ LTBOOL FnLoadSenseRecordsList(HMESSAGEREAD hRead, void* pPtDataItem)
 	*((CAISenseRecord**)pPtDataItem) = pAISenseRecord;
 	pAISenseRecord->Load(hRead);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 void CAISenseRecorder::Load(HMESSAGEREAD hRead)
 {
 	for ( int iSense = 0 ; iSense < CAISense::kNumSenses ; iSense++ )
 	{
-        m_alstpSenseRecords[iSense].Load(g_pLTServer, hRead, FnLoadSenseRecordsList);
+		m_alstpSenseRecords[iSense].Load(g_pLTServer, hRead, FnLoadSenseRecordsList);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseRecorder::Update
 //
-//	ROUTINE:	CAISenseRecorder::Update
-//
-//	PURPOSE:	Updates us
-//
+//	PURPOSE: Updates us
 // ----------------------------------------------------------------------- //
 
 void CAISenseRecorder::Update()
 {
 	// TODO: Optimize this so we don't do it every frame.
 
-    LTFLOAT fTime = g_pLTServer->GetTime();
+	LTFLOAT fTime = g_pLTServer->GetTime();
 
 	for ( int iSense = 0 ; iSense < CAISense::kNumSenses ; iSense++ )
 	{
@@ -1455,11 +1387,9 @@ void CAISenseRecorder::Update()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseRecorder::HandleBrokenLink
 //
-//	ROUTINE:	CAISenseRecorder::HandleBrokenLink
-//
-//	PURPOSE:	Handles a broken link
-//
+//	PURPOSE: Handles a broken link
 // ----------------------------------------------------------------------- //
 
 void CAISenseRecorder::HandleBrokenLink(HOBJECT hObject)
@@ -1484,11 +1414,9 @@ void CAISenseRecorder::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseRecorder::IsRecorded
 //
-//	ROUTINE:	CAISenseRecorder::IsRecorded
-//
-//	PURPOSE:	Queries whether a sense has been recorded or not
-//
+//	PURPOSE: Queries whether a sense has been recorded or not
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISenseRecorder::IsRecorded(CAISense* pAISense)
@@ -1501,7 +1429,7 @@ LTBOOL CAISenseRecorder::IsRecorded(CAISense* pAISense)
 	{
 		if ( record.IsSame(*ppRecord) )
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 
 		ppRecord = m_alstpSenseRecords[pAISense->GetType()].GetItem(TLIT_NEXT);
@@ -1536,15 +1464,13 @@ LTBOOL CAISenseRecorder::IsRecorded(CAISense* pAISense)
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISenseRecorder::Record
 //
-//	ROUTINE:	CAISenseRecorder::Record
-//
-//	PURPOSE:	Records a sense
-//
+//	PURPOSE: Records a sense
 // ----------------------------------------------------------------------- //
 
 static LTFLOAT GetLifetime(CAISense* pAISense)
@@ -1562,7 +1488,7 @@ static LTFLOAT GetLifetime(CAISense* pAISense)
 		case stHearAllyPain:			return 5.0f;
 		case stHearAllyWeaponFire:		return 5.0f;
 		case stSeeEnemy:				return 5.0f;
-        default: _ASSERT(LTFALSE);		return 0.0f;
+		default: _ASSERT(LTFALSE);		return 0.0f;
 	}
 }
 

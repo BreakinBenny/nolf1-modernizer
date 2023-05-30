@@ -18,16 +18,14 @@ IMPLEMENT_FACTORY(CAIHelicopterStrategyFollowPath, 0);
 IMPLEMENT_FACTORY(CAIHelicopterStrategyShoot, 0);
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIVehicleStrategy::Constructor/Destructor
 //
-//	ROUTINE:	CAIVehicleStrategy::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIVehicleStrategy::Constructor()
 {
-    m_pAIVehicle = LTNULL;
+	m_pAIVehicle = LTNULL;
 }
 
 void CAIVehicleStrategy::Destructor()
@@ -35,11 +33,9 @@ void CAIVehicleStrategy::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIVehicleStrategy::GetAnimator
 //
-//	ROUTINE:	CAIVehicleStrategy::GetAnimator
-//
-//	PURPOSE:	Gets our animator
-//
+//	PURPOSE: Gets our animator
 // ----------------------------------------------------------------------- //
 
 CAnimatorAIVehicle* CAIVehicleStrategy::GetAnimator()
@@ -48,18 +44,16 @@ CAnimatorAIVehicle* CAIVehicleStrategy::GetAnimator()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategy::Constructor/Destructor
 //
-//	ROUTINE:	CAIHelicopterStrategy::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategy::Constructor()
 {
 	CAIVehicleStrategy::Constructor();
 
-    m_pAIHelicopter = LTNULL;
+	m_pAIHelicopter = LTNULL;
 }
 
 void CAIHelicopterStrategy::Destructor()
@@ -68,11 +62,9 @@ void CAIHelicopterStrategy::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategy::Init
 //
-//	ROUTINE:	CAIHelicopterStrategy::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHelicopterStrategy::Init(AI_Helicopter* pAIHelicopter)
@@ -81,15 +73,13 @@ LTBOOL CAIHelicopterStrategy::Init(AI_Helicopter* pAIHelicopter)
 
 	m_pAIHelicopter = pAIHelicopter;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyFollowPath::Constructor/Destructor
 //
-//	ROUTINE:	CAIHelicopterStrategyFollowPath::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyFollowPath::Constructor()
@@ -110,36 +100,32 @@ void CAIHelicopterStrategyFollowPath::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyFollowPath::Init
 //
-//	ROUTINE:	CAIHelicopterStrategyFollowPath::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHelicopterStrategyFollowPath::Init(AI_Helicopter* pAIHelicopter)
 {
 	if ( !CAIHelicopterStrategy::Init(pAIHelicopter) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_AIMovement.Init(pAIHelicopter) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pPath->Init(pAIHelicopter);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyFollowPath::HandleBrokenLink
 //
-//	ROUTINE:	CAIHelicopterStrategyFollowPath::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyFollowPath::HandleBrokenLink(HOBJECT hObject)
@@ -151,18 +137,16 @@ void CAIHelicopterStrategyFollowPath::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyFollowPath::Update
 //
-//	ROUTINE:	CAIHelicopterStrategyFollowPath::Update
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHelicopterStrategyFollowPath::Update()
 {
 	if ( !CAIHelicopterStrategy::Update() )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	_ASSERT(m_eState == eStateSet);
@@ -181,9 +165,9 @@ LTBOOL CAIHelicopterStrategyFollowPath::Update()
 
 			default:
 			{
-                g_pLTServer->CPrint("CAIHelicopterStrategyFollowPath::Update - unrecognized waypoint instruction");
+				g_pLTServer->CPrint("CAIHelicopterStrategyFollowPath::Update - unrecognized waypoint instruction");
 				_ASSERT(!"CAIHelicopterStrategyFollowPath::Update - unrecognized waypoint instruction");
-                return LTFALSE;
+				return LTFALSE;
 			}
 			break;
 		}
@@ -194,15 +178,13 @@ LTBOOL CAIHelicopterStrategyFollowPath::Update()
 		m_eState = eStateDone;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyFollowPath::UpdateMoveTo
 //
-//	ROUTINE:	CAIHelicopterStrategyFollowPath::UpdateMoveTo
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHelicopterStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
@@ -213,7 +195,7 @@ LTBOOL CAIHelicopterStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
 
 		if ( !m_AIMovement.Update() )
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		if ( m_AIMovement.IsDone() )
@@ -230,15 +212,13 @@ LTBOOL CAIHelicopterStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
 
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyFollowPath::Set
 //
-//	ROUTINE:	CAIHelicopterStrategyFollowPath::Set
-//
-//	PURPOSE:	Sets the path that we will be following
-//
+//	PURPOSE: Sets the path that we will be following
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHelicopterStrategyFollowPath::Set(const LTVector& vDestination)
@@ -263,11 +243,9 @@ LTBOOL CAIHelicopterStrategyFollowPath::Set(CAIVolume* pVolumeDestination)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyFollowPath::Load
 //
-//	ROUTINE:	CAIHelicopterStrategyFollowPath::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyFollowPath::Load(HMESSAGEREAD hRead)
@@ -281,11 +259,9 @@ void CAIHelicopterStrategyFollowPath::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyFollowPath::Save
 //
-//	ROUTINE:	CAIHelicopterStrategyFollowPath::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyFollowPath::Save(HMESSAGEREAD hWrite)
@@ -299,18 +275,16 @@ void CAIHelicopterStrategyFollowPath::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyShoot::Constructor/Destructor
 //
-//	ROUTINE:	CAIHelicopterStrategyShoot::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyShoot::Constructor()
 {
 	CAIHelicopterStrategy::Constructor();
 
-    m_hTarget = LTNULL;
+	m_hTarget = LTNULL;
 	m_eFire = CAnimatorAIVehicle::eFireFull;
 }
 
@@ -320,18 +294,16 @@ void CAIHelicopterStrategyShoot::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyShoot::Init
 //
-//	ROUTINE:	CAIHelicopterStrategyShoot::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHelicopterStrategyShoot::Init(AI_Helicopter* pAIHelicopter)
 {
 	if ( !CAIHelicopterStrategy::Init(pAIHelicopter) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	// For each weapon, setup burst info
@@ -353,15 +325,13 @@ LTBOOL CAIHelicopterStrategyShoot::Init(AI_Helicopter* pAIHelicopter)
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyShoot::HandleBrokenLink
 //
-//	ROUTINE:	CAIHelicopterStrategyShoot::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyShoot::HandleBrokenLink(HOBJECT hObject)
@@ -373,23 +343,21 @@ void CAIHelicopterStrategyShoot::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyShoot::Update
 //
-//	ROUTINE:	CAIHelicopterStrategyShoot::Update
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHelicopterStrategyShoot::Update()
 {
 	if ( !CAIHelicopterStrategy::Update() )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_hTarget )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	for ( int iWeapon = 0 ; iWeapon < GetAI()->GetNumWeapons() ; iWeapon++ )
@@ -409,7 +377,7 @@ LTBOOL CAIHelicopterStrategyShoot::Update()
 
 		if ( 0 == pWeapon->GetAmmoInClip() )
 		{
-            pWeapon->ReloadClip(LTFALSE);
+			pWeapon->ReloadClip(LTFALSE);
 		}
 
 		if ( 0 == pWeapon->GetParent()->GetAmmoCount(pWeapon->GetAmmoId()) )
@@ -418,16 +386,14 @@ LTBOOL CAIHelicopterStrategyShoot::Update()
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyShoot::Aim
 //
-//	ROUTINE:	CAIHelicopterStrategyShoot::Aim
-//
-//	PURPOSE:	Makes us Aim
-//
+//	PURPOSE: Makes us Aim
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyShoot::Aim(CWeapon* pWeapon, BURSTSTRUCT* pBurst)
@@ -436,11 +402,9 @@ void CAIHelicopterStrategyShoot::Aim(CWeapon* pWeapon, BURSTSTRUCT* pBurst)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyShoot::Fire
 //
-//	ROUTINE:	CAIHelicopterStrategyShoot::Fire
-//
-//	PURPOSE:	Makes us fire
-//
+//	PURPOSE: Makes us fire
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyShoot::Fire(CWeapon* pWeapon, BURSTSTRUCT* pBurst)
@@ -449,11 +413,9 @@ void CAIHelicopterStrategyShoot::Fire(CWeapon* pWeapon, BURSTSTRUCT* pBurst)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyShoot::Load
 //
-//	ROUTINE:	CAIHelicopterStrategyShoot::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyShoot::Load(HMESSAGEREAD hRead)
@@ -470,11 +432,9 @@ void CAIHelicopterStrategyShoot::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyShoot::Save
 //
-//	ROUTINE:	CAIHelicopterStrategyShoot::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyShoot::Save(HMESSAGEREAD hWrite)
@@ -491,11 +451,9 @@ void CAIHelicopterStrategyShoot::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyShoot::UpdateFiring
 //
-//	ROUTINE:	CAIHelicopterStrategyShoot::UpdateFiring
-//
-//	PURPOSE:	Handles firing
-//
+//	PURPOSE: Handles firing
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyShoot::UpdateFiring(CWeapon* pWeapon, BURSTSTRUCT* pBurst)
@@ -503,14 +461,14 @@ void CAIHelicopterStrategyShoot::UpdateFiring(CWeapon* pWeapon, BURSTSTRUCT* pBu
 	// Get our fire position
 
 	LTVector vFirePos = GetAI()->GetAttachmentPosition(pWeapon->GetModelObject());
-    LTRotation rFireRot = GetAI()->GetAttachmentRotation(pWeapon->GetModelObject());
+	LTRotation rFireRot = GetAI()->GetAttachmentRotation(pWeapon->GetModelObject());
 	LTVector vFireRight, vFireUp, vFireForward;
 	g_pMathLT->GetRotationVectors(rFireRot, vFireUp, vFireRight, vFireForward);
 
 	// Get target's position
 
 	LTVector vTargetPos;
-    g_pLTServer->GetObjectPos(m_hTarget, &vTargetPos);
+	g_pLTServer->GetObjectPos(m_hTarget, &vTargetPos);
 
 	// Get our firing vector
 
@@ -520,7 +478,7 @@ void CAIHelicopterStrategyShoot::UpdateFiring(CWeapon* pWeapon, BURSTSTRUCT* pBu
 	// Make sure it's in our field of firce
 
 	LTFLOAT fDp = vFireDir.Dot(vFireForward);
-//    g_pLTServer->CPrint("fireangle = %f", (acos(fDp)/MATH_PI)*180.0f);
+//	g_pLTServer->CPrint("fireangle = %f", (acos(fDp)/MATH_PI)*180.0f);
 	if ( fDp <= c_fFOV90 )
 	{
 		Aim(pWeapon, pBurst);
@@ -538,7 +496,7 @@ void CAIHelicopterStrategyShoot::UpdateFiring(CWeapon* pWeapon, BURSTSTRUCT* pBu
 	fireInfo.fPerturbR	= 4.0f*(1.0f - GetAI()->GetAccuracy());
 	fireInfo.fPerturbU	= 4.0f*(1.0f - GetAI()->GetAccuracy());
 
-    pWeapon->UpdateWeapon(fireInfo, LTTRUE);
+	pWeapon->UpdateWeapon(fireInfo, LTTRUE);
 
 	// Decrement our burst counter and update the last ammo count
 
@@ -564,11 +522,9 @@ void CAIHelicopterStrategyShoot::UpdateFiring(CWeapon* pWeapon, BURSTSTRUCT* pBu
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyShoot::UpdateAiming
 //
-//	ROUTINE:	CAIHelicopterStrategyShoot::UpdateAiming
-//
-//	PURPOSE:	Handles Aiming
-//
+//	PURPOSE: Handles Aiming
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyShoot::UpdateAiming(CWeapon* pWeapon, BURSTSTRUCT* pBurst)
@@ -577,7 +533,7 @@ void CAIHelicopterStrategyShoot::UpdateAiming(CWeapon* pWeapon, BURSTSTRUCT* pBu
 	{
 		// We are still waiting to fire.
 
-        pBurst->m_fBurstInterval -= g_pLTServer->GetFrameTime();
+		pBurst->m_fBurstInterval -= g_pLTServer->GetFrameTime();
 
 		// So just aim.
 
@@ -592,11 +548,9 @@ void CAIHelicopterStrategyShoot::UpdateAiming(CWeapon* pWeapon, BURSTSTRUCT* pBu
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStrategyShoot::CalculateBurst
 //
-//	ROUTINE:	CAIHelicopterStrategyShoot::CalculateBurst
-//
-//	PURPOSE:	Calculate all our burst parameters
-//
+//	PURPOSE: Calculate all our burst parameters
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStrategyShoot::CalculateBurst(CWeapon* pWeapon, BURSTSTRUCT* pBurst)

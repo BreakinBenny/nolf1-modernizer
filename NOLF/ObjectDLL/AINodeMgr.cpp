@@ -23,60 +23,54 @@ static CBankedList<CAINode> s_bankCAINode;
 extern int g_cIntersectSegmentCalls;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::CAINodeMgr
 //
-//	ROUTINE:	CAINodeMgr::CAINodeMgr
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 CAINodeMgr::CAINodeMgr()
 {
 	g_pAINodeMgr = this;
 
-    m_bInitialized = LTFALSE;
-    m_apNode = LTNULL;
+	m_bInitialized = LTFALSE;
+	m_apNode = LTNULL;
 	m_cNodes = 0;
 	m_dwNextID = 0;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::Term
 //
-//	ROUTINE:	CAINodeMgr::Term
-//
-//	PURPOSE:	Terminates the AINodeMgr
-//
+//	PURPOSE: Terminates the AINodeMgr
 // ----------------------------------------------------------------------- //
 
 void CAINodeMgr::Term()
 {
-    RemoveNodeDebug(LTFALSE);
+	RemoveNodeDebug(LTFALSE);
 
 	if ( m_apNode )
 	{
-        for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+		for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 		{
 			_ASSERT(m_apNode[iNode]);
 
 			s_bankCAINode.Delete(m_apNode[iNode]);
-            m_apNode[iNode] = LTNULL;
+			m_apNode[iNode] = LTNULL;
 		}
 
 		debug_deletea(m_apNode);
 	}
 
-    m_apNode = LTNULL;
+	m_apNode = LTNULL;
 	m_cNodes = 0;
 	m_dwNextID = 0;
-    m_bInitialized = LTFALSE;
+	m_bInitialized = LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::Init
 //
-//	ROUTINE:	CAINodeMgr::Init
-//
-//	PURPOSE:	Create a list of all the Nodes in the level.
-//
+//	PURPOSE: Create a list of all the Nodes in the level.
 // ----------------------------------------------------------------------- //
 
 void CAINodeMgr::Init()
@@ -85,20 +79,20 @@ void CAINodeMgr::Init()
 
 	// First, we count up the number of Nodes in the level
 
-    HCLASS  hAINode = g_pLTServer->GetClass("AINode");
-    HOBJECT hCurObject = LTNULL;
-    while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
+	HCLASS  hAINode = g_pLTServer->GetClass("AINode");
+	HOBJECT hCurObject = LTNULL;
+	while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAINode))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAINode))
 		{
 			m_cNodes++;
 		}
 	}
 
-    hCurObject = LTNULL;
-    while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
+	hCurObject = LTNULL;
+	while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAINode))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAINode))
 		{
 			m_cNodes++;
 		}
@@ -110,20 +104,20 @@ void CAINodeMgr::Init()
 
 	// Now we put the nodes into our array
 
-    hCurObject = LTNULL;
-    while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
+	hCurObject = LTNULL;
+	while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAINode))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAINode))
 		{
 			CAINode* pNode = s_bankCAINode.New();
 
 			// Generate an ID
 
-            uint32 dwID = m_dwNextID++;
+			uint32 dwID = m_dwNextID++;
 
 			// Setup the node
 
-            pNode->Init(dwID, *(AINode*)g_pLTServer->HandleToObject(hCurObject));
+			pNode->Init(dwID, *(AINode*)g_pLTServer->HandleToObject(hCurObject));
 
 			// Add the node to our internal list
 
@@ -131,24 +125,24 @@ void CAINodeMgr::Init()
 
 			// Remove the object
 
-            g_pLTServer->RemoveObject(hCurObject);
+			g_pLTServer->RemoveObject(hCurObject);
 		}
 	}
 
-    hCurObject = LTNULL;
-    while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
+	hCurObject = LTNULL;
+	while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAINode))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAINode))
 		{
 			CAINode* pNode = s_bankCAINode.New();
 
 			// Generate an ID
 
-            uint32 dwID = m_dwNextID++;
+			uint32 dwID = m_dwNextID++;
 
 			// Setup the node
 
-            pNode->Init(dwID, *(AINode*)g_pLTServer->HandleToObject(hCurObject));
+			pNode->Init(dwID, *(AINode*)g_pLTServer->HandleToObject(hCurObject));
 
 			// Add the node to our internal list
 
@@ -156,30 +150,28 @@ void CAINodeMgr::Init()
 
 			// Remove the object
 
-            g_pLTServer->RemoveObject(hCurObject);
+			g_pLTServer->RemoveObject(hCurObject);
 		}
 	}
 
 #ifndef _FINAL
-    g_pLTServer->CPrint("Added %d nodes", m_cNodes);
+	g_pLTServer->CPrint("Added %d nodes", m_cNodes);
 #endif
 
-    m_bInitialized = LTTRUE;
+	m_bInitialized = LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::Verify
 //
-//	ROUTINE:	CAINodeMgr::Verify
-//
-//	PURPOSE:	Verifies all our nodes
-//
+//	PURPOSE: Verifies all our nodes
 // ----------------------------------------------------------------------- //
 
 void CAINodeMgr::Verify()
 {
 	if ( m_apNode )
 	{
-        for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+		for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 		{
 			if ( m_apNode[iNode] )
 			{
@@ -190,11 +182,9 @@ void CAINodeMgr::Verify()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::Load
 //
-//	ROUTINE:	CAINodeMgr::Load
-//
-//	PURPOSE:	Restores the state of the AINodeMgr
-//
+//	PURPOSE: Restores the state of the AINodeMgr
 // ----------------------------------------------------------------------- //
 
 void CAINodeMgr::Load(HMESSAGEREAD hRead)
@@ -207,7 +197,7 @@ void CAINodeMgr::Load(HMESSAGEREAD hRead)
 
 	m_apNode = debug_newa(CAINode*, m_cNodes);
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		m_apNode[iNode] = s_bankCAINode.New();
 		m_apNode[iNode]->Load(hRead);
@@ -216,11 +206,9 @@ void CAINodeMgr::Load(HMESSAGEREAD hRead)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::Save
 //
-//	ROUTINE:	CAINodeMgr::Save
-//
-//	PURPOSE:	Saves the state of the AINodeMgr
-//
+//	PURPOSE: Saves the state of the AINodeMgr
 // ----------------------------------------------------------------------- //
 
 void CAINodeMgr::Save(HMESSAGEWRITE hWrite)
@@ -231,7 +219,7 @@ void CAINodeMgr::Save(HMESSAGEWRITE hWrite)
 
 	if ( m_apNode )
 	{
-        for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+		for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 		{
 			// We should never have a null pointer in this list
 
@@ -243,18 +231,16 @@ void CAINodeMgr::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::AddNodeDebug
 //
-//	ROUTINE:	CAINodeMgr::AddNodeDebug
-//
-//	PURPOSE:	Add the node models
-//
+//	PURPOSE: Add the node models
 // ----------------------------------------------------------------------- //
 
 void CAINodeMgr::AddNodeDebug()
 {
-    if (!g_pLTServer) return;
+	if (!g_pLTServer) return;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( m_apNode[iNode] )
 		{
@@ -267,33 +253,33 @@ void CAINodeMgr::AddNodeDebug()
 			theStruct.m_Flags = FLAG_VISIBLE | FLAG_NOLIGHT;
 			theStruct.m_ObjectType = OT_MODEL;
 
-            HCLASS hClass = g_pLTServer->GetClass("BaseClass");
-            LPBASECLASS pModel = g_pLTServer->CreateObject(hClass, &theStruct);
+			HCLASS hClass = g_pLTServer->GetClass("BaseClass");
+			LPBASECLASS pModel = g_pLTServer->CreateObject(hClass, &theStruct);
 			if (!pModel) return;
 
-            LTVector vScale;
+			LTVector vScale;
 			VEC_SET(vScale, 20.0f, 20.0f, 20.0f);
-            g_pLTServer->ScaleObject(pModel->m_hObject, &vScale);
+			g_pLTServer->ScaleObject(pModel->m_hObject, &vScale);
 
 			if ( m_apNode[iNode]->IsCover() )
 			{
-                g_pLTServer->SetObjectColor(pModel->m_hObject, .75f, 0.0f, 0.0f, 1.0f);
+				g_pLTServer->SetObjectColor(pModel->m_hObject, .75f, 0.0f, 0.0f, 1.0f);
 			}
 			else if ( m_apNode[iNode]->IsPanic() )
 			{
-                g_pLTServer->SetObjectColor(pModel->m_hObject, 0.0f, .75f, 0.0f, 1.0f);
+				g_pLTServer->SetObjectColor(pModel->m_hObject, 0.0f, .75f, 0.0f, 1.0f);
 			}
 			else if ( m_apNode[iNode]->IsVantage() )
 			{
-                g_pLTServer->SetObjectColor(pModel->m_hObject, 0.0f, 0.0f, .75f, 1.0f);
+				g_pLTServer->SetObjectColor(pModel->m_hObject, 0.0f, 0.0f, .75f, 1.0f);
 			}
 			else if ( m_apNode[iNode]->IsSearchable() )
 			{
-                g_pLTServer->SetObjectColor(pModel->m_hObject, 0.0f, 0.75f, .75f, 1.0f);
+				g_pLTServer->SetObjectColor(pModel->m_hObject, 0.0f, 0.75f, .75f, 1.0f);
 			}
 			else
 			{
-                g_pLTServer->SetObjectColor(pModel->m_hObject, 1.0f, 1.0f, 1.0f, 1.0f);
+				g_pLTServer->SetObjectColor(pModel->m_hObject, 1.0f, 1.0f, 1.0f, 1.0f);
 			}
 
 			m_listNodeModels.AddTail(pModel);
@@ -303,23 +289,21 @@ void CAINodeMgr::AddNodeDebug()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::RemoveNodeDebug
 //
-//	ROUTINE:	CAINodeMgr::RemoveNodeDebug
-//
-//	PURPOSE:	Removes the node models
-//
+//	PURPOSE: Removes the node models
 // ----------------------------------------------------------------------- //
 
 void CAINodeMgr::RemoveNodeDebug(LTBOOL bRemoveObjects /*= LTFALSE */)
 {
-    if (!g_pLTServer) return;
+	if (!g_pLTServer) return;
 
 	BaseClass** pClass= m_listNodeModels.GetItem(TLIT_FIRST);
 	while ( pClass && *pClass )
 	{
 		if ( bRemoveObjects )
 		{
-            g_pLTServer->RemoveObject((*pClass)->m_hObject);
+			g_pLTServer->RemoveObject((*pClass)->m_hObject);
 		}
 
 		pClass = m_listNodeModels.GetItem(TLIT_NEXT);
@@ -329,23 +313,21 @@ void CAINodeMgr::RemoveNodeDebug(LTBOOL bRemoveObjects /*= LTFALSE */)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindTailNode
 //
-//	ROUTINE:	CAINodeMgr::FindTailNode
-//
-//	PURPOSE:	Determines the tail node that one should be at
-//
+//	PURPOSE: Determines the tail node that one should be at
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindTailNode(const LTVector& vTargetPos, const LTVector& vPos, uint32* adwTailNodes, int cTailNodes)
 {
-    LTFLOAT fMinDistance = (float)INT_MAX;
+	LTFLOAT fMinDistance = (float)INT_MAX;
 	int iTailedNode = CAINode::kInvalidNodeID;
 
 	// Find the node closest to the tailed object
 
 	{for ( int iTailNode = 0 ; iTailNode < cTailNodes ; iTailNode++ )
 	{
-        LTFLOAT fDistance = VEC_DISTSQR(vTargetPos, m_apNode[adwTailNodes[iTailNode]]->GetPos());
+		LTFLOAT fDistance = VEC_DISTSQR(vTargetPos, m_apNode[adwTailNodes[iTailNode]]->GetPos());
 		if ( fDistance < fMinDistance )
 		{
 			iTailedNode = iTailNode;
@@ -360,7 +342,7 @@ CAINode* CAINodeMgr::FindTailNode(const LTVector& vTargetPos, const LTVector& vP
 
 	{for ( int iTailNode = 0 ; iTailNode < cTailNodes ; iTailNode++ )
 	{
-        LTFLOAT fDistance = VEC_DISTSQR(vPos, m_apNode[adwTailNodes[iTailNode]]->GetPos());
+		LTFLOAT fDistance = VEC_DISTSQR(vPos, m_apNode[adwTailNodes[iTailNode]]->GetPos());
 		if ( fDistance < fMinDistance )
 		{
 			iTailerNode = iTailNode;
@@ -399,21 +381,19 @@ CAINode* CAINodeMgr::FindTailNode(const LTVector& vTargetPos, const LTVector& vP
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestNode
 //
-//	ROUTINE:	CAINodeMgr::FindNearestNode
-//
-//	PURPOSE:	Finds the nearest node to vPos
-//
+//	PURPOSE: Finds the nearest node to vPos
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestNode(const LTVector& vPos)
 {
-    LTFLOAT  fMinDistance = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistance = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
-        LTFLOAT  fDistance = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+		LTFLOAT  fDistance = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 		if ( fDistance < fMinDistance )
 		{
@@ -426,23 +406,21 @@ CAINode* CAINodeMgr::FindNearestNode(const LTVector& vPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestPoodleNode
 //
-//	ROUTINE:	CAINodeMgr::FindNearestPoodleNode
-//
-//	PURPOSE:	Finds the nearest poodle node to vPos
-//
+//	PURPOSE: Finds the nearest poodle node to vPos
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestPoodleNode(const LTVector& vPos)
 {
-    LTFLOAT  fMinDistance = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistance = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( m_apNode[iNode]->IsPoodle() )
 		{
-            LTFLOAT  fDistance = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+			LTFLOAT  fDistance = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 			if ( fDistance < fMinDistance )
 			{
@@ -456,23 +434,21 @@ CAINode* CAINodeMgr::FindNearestPoodleNode(const LTVector& vPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestCover
 //
-//	ROUTINE:	CAINodeMgr::FindNearestCover
-//
-//	PURPOSE:	Finds the nearest cover node to vPos
-//
+//	PURPOSE: Finds the nearest cover node to vPos
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestCover(const LTVector& vPos)
 {
-    LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( !m_apNode[iNode]->IsLocked() && m_apNode[iNode]->IsCover() )
 		{
-            LTFLOAT fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+			LTFLOAT fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 			if ( (fDistanceSqr < fMinDistanceSqr) && (fDistanceSqr < m_apNode[iNode]->GetCoverRadiusSqr()) )
 			{
@@ -486,23 +462,21 @@ CAINode* CAINodeMgr::FindNearestCover(const LTVector& vPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestCoverFromThreat
 //
-//	ROUTINE:	CAINodeMgr::FindNearestCoverFromThreat
-//
-//	PURPOSE:	Finds the nearest cover node that protects us from hThreat
-//
+//	PURPOSE: Finds the nearest cover node that protects us from hThreat
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestCoverFromThreat(const LTVector& vPos, HOBJECT hThreat)
 {
-    LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( !m_apNode[iNode]->IsLocked() && m_apNode[iNode]->IsCover() )
 		{
-            LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+			LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 			if ( (fDistanceSqr < fMinDistanceSqr) && (fDistanceSqr < m_apNode[iNode]->GetCoverRadiusSqr()) )
 			{
@@ -519,23 +493,21 @@ CAINode* CAINodeMgr::FindNearestCoverFromThreat(const LTVector& vPos, HOBJECT hT
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestPanicFromThreat
 //
-//	ROUTINE:	CAINodeMgr::FindNearestPanicFromThreat
-//
-//	PURPOSE:	Finds the nearest Panic node that protects us from hThreat
-//
+//	PURPOSE: Finds the nearest Panic node that protects us from hThreat
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestPanicFromThreat(const LTVector& vPos, HOBJECT hThreat)
 {
-    LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( !m_apNode[iNode]->IsLocked() && m_apNode[iNode]->IsPanic() )
 		{
-            LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+			LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 			if ( (fDistanceSqr < fMinDistanceSqr) && (fDistanceSqr < m_apNode[iNode]->GetPanicRadiusSqr()) )
 			{
@@ -552,23 +524,21 @@ CAINode* CAINodeMgr::FindNearestPanicFromThreat(const LTVector& vPos, HOBJECT hT
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestPanic
 //
-//	ROUTINE:	CAINodeMgr::FindNearestPanic
-//
-//	PURPOSE:	Finds the nearest panic node to vPos
-//
+//	PURPOSE: Finds the nearest panic node to vPos
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestPanic(const LTVector& vPos)
 {
-    LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( !m_apNode[iNode]->IsLocked() && m_apNode[iNode]->IsPanic() )
 		{
-            LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+			LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 			if ( (fDistanceSqr < fMinDistanceSqr) && (fDistanceSqr < m_apNode[iNode]->GetPanicRadiusSqr()) )
 			{
@@ -582,23 +552,21 @@ CAINode* CAINodeMgr::FindNearestPanic(const LTVector& vPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestVantage
 //
-//	ROUTINE:	CAINodeMgr::FindNearestVantage
-//
-//	PURPOSE:	Finds the nearest Vantage node to vPos
-//
+//	PURPOSE: Finds the nearest Vantage node to vPos
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestVantage(const LTVector& vPos)
 {
-    LTFLOAT  fMinDistance = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistance = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( !m_apNode[iNode]->IsLocked() && m_apNode[iNode]->IsVantage() )
 		{
-            LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+			LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 			if ( (fDistanceSqr < fMinDistance) && (fDistanceSqr < m_apNode[iNode]->GetVantageRadiusSqr()) )
 			{
@@ -612,23 +580,21 @@ CAINode* CAINodeMgr::FindNearestVantage(const LTVector& vPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestVantageToThreat
 //
-//	ROUTINE:	CAINodeMgr::FindNearestVantageToThreat
-//
-//	PURPOSE:	Finds the nearest vantage node that lets us see the hThreat
-//
+//	PURPOSE: Finds the nearest vantage node that lets us see the hThreat
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestVantageToThreat(const LTVector& vPos, HOBJECT hThreat)
 {
-    LTFLOAT  fMinDistance = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistance = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( !m_apNode[iNode]->IsLocked() && m_apNode[iNode]->IsVantage() )
 		{
-            LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+			LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 			if ( (fDistanceSqr < fMinDistance) && (fDistanceSqr < m_apNode[iNode]->GetVantageRadiusSqr()) )
 			{
@@ -645,32 +611,30 @@ CAINode* CAINodeMgr::FindNearestVantageToThreat(const LTVector& vPos, HOBJECT hT
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestUseObject
 //
-//	ROUTINE:	CAINodeMgr::FindNearestUseObject
-//
-//	PURPOSE:	Finds the nearest use object node to pos
-//
+//	PURPOSE: Finds the nearest use object node to pos
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestUseObject(const LTVector& vPos, const char* szClass)
 {
-    LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( !m_apNode[iNode]->IsLocked() && m_apNode[iNode]->HasUseObject() )
 		{
-            LTFLOAT fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+			LTFLOAT fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 			if ( (fDistanceSqr < fMinDistanceSqr) && (fDistanceSqr < m_apNode[iNode]->GetUseObjectRadiusSqr()) )
 			{
 				HOBJECT hObject;
 				if ( LT_OK == FindNamedObject(m_apNode[iNode]->GetUseObject(), hObject) )
 				{
-                    HCLASS hClass = g_pLTServer->GetClass((char*)szClass);
+					HCLASS hClass = g_pLTServer->GetClass((char*)szClass);
 
-                    if ( g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObject), hClass) )
+					if ( g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObject), hClass) )
 					{
 						fMinDistanceSqr = fDistanceSqr;
 						pClosestNode = m_apNode[iNode];
@@ -684,32 +648,30 @@ CAINode* CAINodeMgr::FindNearestUseObject(const LTVector& vPos, const char* szCl
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestPickupObject
 //
-//	ROUTINE:	CAINodeMgr::FindNearestPickupObject
-//
-//	PURPOSE:	Finds the nearest Pickup object node to pos
-//
+//	PURPOSE: Finds the nearest Pickup object node to pos
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestPickupObject(const LTVector& vPos, const char* szClass)
 {
-    LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( !m_apNode[iNode]->IsLocked() && m_apNode[iNode]->HasPickupObject() )
 		{
-            LTFLOAT fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+			LTFLOAT fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 			if ( (fDistanceSqr < fMinDistanceSqr) && (fDistanceSqr < m_apNode[iNode]->GetPickupObjectRadiusSqr()) )
 			{
 				HOBJECT hObject;
 				if ( LT_OK == FindNamedObject(m_apNode[iNode]->GetPickupObject(), hObject) )
 				{
-                    HCLASS hClass = g_pLTServer->GetClass((char*)szClass);
+					HCLASS hClass = g_pLTServer->GetClass((char*)szClass);
 
-                    if ( g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObject), hClass) )
+					if ( g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObject), hClass) )
 					{
 						fMinDistanceSqr = fDistanceSqr;
 						pClosestNode = m_apNode[iNode];
@@ -723,23 +685,21 @@ CAINode* CAINodeMgr::FindNearestPickupObject(const LTVector& vPos, const char* s
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestBackup
 //
-//	ROUTINE:	CAINodeMgr::FindNearestBackup
-//
-//	PURPOSE:	Finds the nearest Backup node to vPos
-//
+//	PURPOSE: Finds the nearest Backup node to vPos
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestBackup(const LTVector& vPos)
 {
-    LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( !m_apNode[iNode]->IsLocked() && m_apNode[iNode]->HasBackupCmd() )
 		{
-            LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+			LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 			if ( (fDistanceSqr < fMinDistanceSqr) && (fDistanceSqr < m_apNode[iNode]->GetBackupRadiusSqr()) )
 			{
@@ -753,23 +713,21 @@ CAINode* CAINodeMgr::FindNearestBackup(const LTVector& vPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestTrainingFailure
 //
-//	ROUTINE:	CAINodeMgr::FindNearestTrainingFailure
-//
-//	PURPOSE:	Finds the nearest Training Failure node to vPos
-//
+//	PURPOSE: Finds the nearest Training Failure node to vPos
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::FindNearestTrainingFailure(const LTVector& vPos)
 {
-    LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		if ( !m_apNode[iNode]->IsLocked() && m_apNode[iNode]->HasTrainingFailureCmd() )
 		{
-            LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
+			LTFLOAT  fDistanceSqr = VEC_DISTSQR(vPos, m_apNode[iNode]->GetPos());
 
 			if ( fDistanceSqr < fMinDistanceSqr )
 			{
@@ -783,11 +741,9 @@ CAINode* CAINodeMgr::FindNearestTrainingFailure(const LTVector& vPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::UnlockNode
 //
-//	ROUTINE:	CAINodeMgr::UnlockNode
-//
-//	PURPOSE:	Unlocks the node for public use
-//
+//	PURPOSE: Unlocks the node for public use
 // ----------------------------------------------------------------------- //
 
 void CAINodeMgr::UnlockNode(uint32 dwNode)
@@ -799,11 +755,9 @@ void CAINodeMgr::UnlockNode(uint32 dwNode)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::LockNode
 //
-//	ROUTINE:	CAINodeMgr::LockNode
-//
-//	PURPOSE:	Claims the node for exclusive use
-//
+//	PURPOSE: Claims the node for exclusive use
 // ----------------------------------------------------------------------- //
 
 void CAINodeMgr::LockNode(uint32 dwNode)
@@ -815,11 +769,9 @@ void CAINodeMgr::LockNode(uint32 dwNode)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::GetNode
 //
-//	ROUTINE:	CAINodeMgr::GetNode
-//
-//	PURPOSE:	Finds a node based on its name
-//
+//	PURPOSE: Finds a node based on its name
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::GetNode(uint32 iNode)
@@ -830,44 +782,40 @@ CAINode* CAINodeMgr::GetNode(uint32 iNode)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::GetNode
 //
-//	ROUTINE:	CAINodeMgr::GetNode
-//
-//	PURPOSE:	Finds a node based on its name
-//
+//	PURPOSE: Finds a node based on its name
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::GetNode(HSTRING hstrName)
 {
-    if ( !g_pLTServer ) return LTNULL;
+	if ( !g_pLTServer ) return LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
-        if ( g_pLTServer->CompareStringsUpper(m_apNode[iNode]->GetName(), hstrName) )
+		if ( g_pLTServer->CompareStringsUpper(m_apNode[iNode]->GetName(), hstrName) )
 		{
 			return m_apNode[iNode];
 		}
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::GetNode
 //
-//	ROUTINE:	CAINodeMgr::GetNode
-//
-//	PURPOSE:	Finds a node based on its name
-//
+//	PURPOSE: Finds a node based on its name
 // ----------------------------------------------------------------------- //
 
 CAINode* CAINodeMgr::GetNode(const char *szName)
 {
-    if ( !g_pLTServer ) return LTNULL;
+	if ( !g_pLTServer ) return LTNULL;
 
-    for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	for ( uint32 iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
-        const char* szNodeName = g_pLTServer->GetStringData(m_apNode[iNode]->GetName());
+		const char* szNodeName = g_pLTServer->GetStringData(m_apNode[iNode]->GetName());
 
 		if ( !_stricmp(szNodeName, szName) )
 		{
@@ -875,5 +823,5 @@ CAINode* CAINodeMgr::GetNode(const char *szName)
 		}
 	}
 
-    return LTNULL;
+	return LTNULL;
 }

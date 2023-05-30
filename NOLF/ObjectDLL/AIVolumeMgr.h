@@ -30,7 +30,7 @@ class CAIVolumeMgr
 
 		// Methods
 
-        CAIVolume* FindContainingVolume(const LTVector& vPos, LTFLOAT fVerticalThreshhold = 0.0f, CAIVolume* pVolumeStart = LTNULL, LTBOOL bBruteForce = LTTRUE);
+		CAIVolume* FindContainingVolume(const LTVector& vPos, LTFLOAT fVerticalThreshhold = 0.0f, CAIVolume* pVolumeStart = LTNULL, LTBOOL bBruteForce = LTTRUE);
 		CAIVolumeNeighbor* FindNeighbor(CAIVolume* pVolume, CAIVolume* pVolumeNeighbor);
 		LTBOOL FindDangerScatterPosition(CAIVolume* pVolume, const LTVector& vAIPos, const LTVector& vDangerPos, LTFLOAT fDangerDistanceSqr, LTVector* pvScatterPosition, LTBOOL bNeighbor = LTFALSE);
 
@@ -49,7 +49,7 @@ class CAIVolumeMgr
 
 	protected :
 
-        CAIVolume* FindContainingVolumeBruteForce(const LTVector& vPos, LTFLOAT fVerticalThreshhold);
+		CAIVolume* FindContainingVolumeBruteForce(const LTVector& vPos, LTFLOAT fVerticalThreshhold);
 
 	protected :
 

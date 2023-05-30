@@ -41,7 +41,7 @@ CAIPathMgr::CAIPathMgr()
 {
 	g_pAIPathMgr = this;
 
-    m_bInitialized = LTFALSE;
+	m_bInitialized = LTFALSE;
 }
 
 CAIPathMgr::~CAIPathMgr()
@@ -57,7 +57,7 @@ void CAIPathMgr::Term()
 	s_AIVolumeMgr.Term();
 	s_AINodeMgr.Term();
 
-    m_bInitialized = LTFALSE;
+	m_bInitialized = LTFALSE;
 }
 
 void CAIPathMgr::Init()
@@ -74,7 +74,7 @@ void CAIPathMgr::Init()
 	s_AINodeMgr.Verify();
 #endif
 
-    m_bInitialized = LTTRUE;
+	m_bInitialized = LTTRUE;
 }
 
 void CAIPathMgr::Load(HMESSAGEREAD hRead)
@@ -120,7 +120,7 @@ LTBOOL CAIPathMgr::FindPath(CAI* pAI, CAIVolume* pVolumeDest, CAIPath* pPath)
 	pPath->ClearWaypoints();
 
 	CAIVolume* pVolumeSrc = g_pAIVolumeMgr->FindContainingVolume(pAI->GetPosition(), pAI->GetDims().y*2.0f);
-    LTVector vPosDest;
+	LTVector vPosDest;
 
 	return FindPath(pAI, pAI->GetPosition(), pVolumeSrc, vPosDest, pVolumeDest, pPath);
 }
@@ -133,7 +133,7 @@ LTBOOL CAIPathMgr::FindPath(CAI* pAI, const LTVector& vPosSrc, CAIVolume* pVolum
 
 //		g_pLTServer->CPrint("pathfinding failed (0 iterations)");
 
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !pVolumeSrc )
@@ -159,7 +159,7 @@ LTBOOL CAIPathMgr::FindPath(CAI* pAI, const LTVector& vPosSrc, CAIVolume* pVolum
 
 //		g_pLTServer->CPrint("pathfinding took 0 iterations");
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 	// pq is the priority queue (heap) used for dijkstra's
@@ -192,7 +192,7 @@ LTBOOL CAIPathMgr::FindPath(CAI* pAI, const LTVector& vPosSrc, CAIVolume* pVolum
 			pVolume->SetShortestEstimate((float)INT_MAX);
 		}
 
-        pVolume->SetPreviousVolume(LTNULL);
+		pVolume->SetPreviousVolume(LTNULL);
 
 		// Add to priority queue
 
@@ -228,7 +228,7 @@ LTBOOL CAIPathMgr::FindPath(CAI* pAI, const LTVector& vPosSrc, CAIVolume* pVolum
 			CAIVolumeNeighbor *pVolumeNeighbor = pCurrentVolume->GetNeighborByIndex(iNeighbor);
 			CAIVolume *pNeighborVolume = g_pAIVolumeMgr->GetVolumeByIndex(pVolumeNeighbor->GetIndex());
 
-            LTFLOAT fDistance = pCurrentVolume->GetShortestEstimate() + pCurrentVolume->GetEntryPosition().DistSqr((LTVector)pVolumeNeighbor->GetConnectionPos());
+			LTFLOAT fDistance = pCurrentVolume->GetShortestEstimate() + pCurrentVolume->GetEntryPosition().DistSqr((LTVector)pVolumeNeighbor->GetConnectionPos());
 
 			if ( (pNeighborVolume->GetShortestEstimate() > fDistance) && (fDistance < pVolumeDest->GetShortestEstimate()) )
 			{
@@ -278,10 +278,10 @@ LTBOOL CAIPathMgr::FindPath(CAI* pAI, const LTVector& vPosSrc, CAIVolume* pVolum
 
 		BuildPath(pAI, pPath, pVolumeSrc, vPosDest);
 /*
-        g_pLTServer->CPrint("path =");
+		g_pLTServer->CPrint("path =");
 		for ( int iWaypoint = 0 ; iWaypoint < pPath->GetNumWaypoints() ; iWaypoint++ )
 		{
-            g_pLTServer->CPrint("   pt%d = %f,%f,%f", iWaypoint, EXPANDVEC(pPath->GetWaypoint(iWaypoint)->GetArgumentVector1()));
+			g_pLTServer->CPrint("   pt%d = %f,%f,%f", iWaypoint, EXPANDVEC(pPath->GetWaypoint(iWaypoint)->GetArgumentVector1()));
 		}
 */
 	}
@@ -289,15 +289,15 @@ LTBOOL CAIPathMgr::FindPath(CAI* pAI, const LTVector& vPosSrc, CAIVolume* pVolum
 	{
 		if ( pAI->GetDebugLevel() > 2 )
 		{
-	        g_pLTServer->CPrint("%s: No path from %s to %s", pAI->GetName(), pVolumeSrc->GetName(), pVolumeDest->GetName());
+			g_pLTServer->CPrint("%s: No path from %s to %s", pAI->GetName(), pVolumeSrc->GetName(), pVolumeDest->GetName());
 		}
 
 //		g_pLTServer->CPrint("pathfinding failed (%d iterations)", nPathfindingIterations);
 
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 void CAIPathMgr::ReversePath(CAIVolume* pVolume, CAIVolume* pVolumeNext /* = LTNULL */)
@@ -337,22 +337,22 @@ void CAIPathMgr::BuildPath(CAI* pAI, CAIPath* pPath, CAIVolume* pVolume, const L
 
 		CAIVolumeNeighbor* pVolumeNeighbor = g_pAIVolumeMgr->FindNeighbor(pVolume, pNextVolume);
 
-        LTFLOAT fRadius = pAI->GetRadius()*1.25f;
+		LTFLOAT fRadius = pAI->GetRadius()*1.25f;
 
-        LTVector vEndpoint1 = pVolumeNeighbor->GetConnectionEndpoint1();
-        LTVector vEndpoint2 = pVolumeNeighbor->GetConnectionEndpoint2();
-        LTVector vEndpointDir = vEndpoint2 - vEndpoint1;
+		LTVector vEndpoint1 = pVolumeNeighbor->GetConnectionEndpoint1();
+		LTVector vEndpoint2 = pVolumeNeighbor->GetConnectionEndpoint2();
+		LTVector vEndpointDir = vEndpoint2 - vEndpoint1;
 
-        LTFLOAT fLength = vEndpoint2.Dist(vEndpoint1);
+		LTFLOAT fLength = vEndpoint2.Dist(vEndpoint1);
 
 		vEndpointDir /= fLength;
 
-        LTVector vIntersectionPoint;
+		LTVector vIntersectionPoint;
 
 		// Calculate the intersection point
 
 		{
-            LTVector vNextWalkthroughPosition;
+			LTVector vNextWalkthroughPosition;
 
 			// line :: X = Q + tw
 			//
@@ -377,13 +377,13 @@ void CAIPathMgr::BuildPath(CAI* pAI, CAIPath* pPath, CAIVolume* pVolume, const L
 				vNextWalkthroughPosition = vPosDest;
 			}
 
-            LTVector vQ = pVolume->GetWalkthroughPosition();
+			LTVector vQ = pVolume->GetWalkthroughPosition();
 			vQ.y = 0;
-            LTVector vW = vNextWalkthroughPosition - vQ;
+			LTVector vW = vNextWalkthroughPosition - vQ;
 			vW.Norm();
 
-            LTVector vv = pVolumeNeighbor->GetConnectionPerpDir();
-            LTVector vP = pVolumeNeighbor->GetConnectionPos();
+			LTVector vv = pVolumeNeighbor->GetConnectionPerpDir();
+			LTVector vP = pVolumeNeighbor->GetConnectionPos();
 
 #if 1
 			// Dot product can cause some division by zero errors.
@@ -409,7 +409,7 @@ void CAIPathMgr::BuildPath(CAI* pAI, CAIPath* pPath, CAIVolume* pVolume, const L
 
 		LTBOOL bCorner = LTFALSE;
 		{
-            LTFLOAT fT = (vIntersectionPoint - vEndpoint1).Dot(vEndpointDir);
+			LTFLOAT fT = (vIntersectionPoint - vEndpoint1).Dot(vEndpointDir);
 
 			if ( fT > (fLength-fRadius) )
 			{
@@ -521,7 +521,7 @@ void CAIPathMgr::BuildPath(CAI* pAI, CAIPath* pPath, CAIVolume* pVolume, const L
 				}
 			}
 
-            waypt.SetArgumentVector1(LTVector(vIntersectionPoint.x, fY, vIntersectionPoint.z));
+			waypt.SetArgumentVector1(LTVector(vIntersectionPoint.x, fY, vIntersectionPoint.z));
 			pPath->AddWaypoint(waypt);
 		}
 		else if ( !pVolume->IsVertical() )

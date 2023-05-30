@@ -24,10 +24,10 @@ LTBOOL CSteerable::Steerable_Update(const LTVector& vSteeringDirection)
 {
 	// Now do the step update outlined in [Reynolds 99]
 
-    LTVector vSteeringForce;
-    LTVector vAcceleration;
-    LTVector vVelocity;
-    LTVector vPosition;
+	LTVector vSteeringForce;
+	LTVector vAcceleration;
+	LTVector vVelocity;
+	LTVector vPosition;
 
 	// steering_force = truncate(steering_direction, max_force)
 
@@ -44,7 +44,7 @@ LTBOOL CSteerable::Steerable_Update(const LTVector& vSteeringDirection)
 
 	// velocity = truncate(velocity+acceleration, max_speed)
 
-    vVelocity = Steerable_GetVelocity()+vAcceleration;//*g_pLTServer->GetFrameTime();
+	vVelocity = Steerable_GetVelocity()+vAcceleration;//*g_pLTServer->GetFrameTime();
 	if ( VEC_MAG(vVelocity) > Steerable_GetMaxSpeed() )
 	{
 		vVelocity.Norm();
@@ -53,12 +53,12 @@ LTBOOL CSteerable::Steerable_Update(const LTVector& vSteeringDirection)
 
 	// position = position + velocity
 
-    vPosition = Steerable_GetPosition() + vVelocity*g_pLTServer->GetFrameTime();
+	vPosition = Steerable_GetPosition() + vVelocity*g_pLTServer->GetFrameTime();
 
 	// now do our basis vectors - this is an approximation
 
-    LTVector vForward;
-    LTVector vRight;
+	LTVector vForward;
+	LTVector vRight;
 
 	// new_forward = normalize(velocity);
 
@@ -80,34 +80,34 @@ LTBOOL CSteerable::Steerable_Update(const LTVector& vSteeringDirection)
 
 	Steerable_m_vLastForce = vSteeringForce;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 CSteeringMgr::CSteeringMgr()
 {
-    m_pSteerable = LTNULL;
+	m_pSteerable = LTNULL;
 }
 
 void CSteeringMgr::Term()
 {
-    m_pSteerable = LTNULL;
+	m_pSteerable = LTNULL;
 }
 
 LTBOOL CSteeringMgr::Init(CSteerable* pSteerable)
 {
 	_ASSERT(pSteerable);
-    if ( !pSteerable ) return LTFALSE;
+	if ( !pSteerable ) return LTFALSE;
 
 	m_pSteerable = pSteerable;
 
 	if ( !m_SteeringSeek.Init(m_pSteerable) ||
 		 !m_SteeringArrival.Init(m_pSteerable) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 void CSteeringMgr::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -160,7 +160,7 @@ CSteering* CSteeringMgr::GetSteering(CSteering::SteeringType eSteering)
 	{
 		case CSteering::eSteeringSeek:					return &m_SteeringSeek;					break;
 		case CSteering::eSteeringArrival:				return &m_SteeringArrival;				break;
-        default : _ASSERT(FALSE);                       return LTNULL;                           break;
+		default : _ASSERT(FALSE);					   return LTNULL;						   break;
 	}
 }
 
@@ -170,12 +170,12 @@ LTBOOL CSteeringMgr::Update()
 
 	if ( !m_pSteerable->Steerable_PreUpdate() )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	// Use all the steering behaviors to determine a steering force
 
-    LTVector vSteering(0,0,0);
+	LTVector vSteering(0,0,0);
 
 	// Get all our steering directions
 
@@ -186,34 +186,34 @@ LTBOOL CSteeringMgr::Update()
 
 	if ( !m_pSteerable->Steerable_Update(vSteering) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	// Post update the steerable
 
 	if ( !m_pSteerable->Steerable_PostUpdate() )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 CSteering::CSteering()
 {
 	m_fPriority = 1.0f;
-    m_pSteerable = LTNULL;
-    m_bEnabled = LTFALSE;
+	m_pSteerable = LTNULL;
+	m_bEnabled = LTFALSE;
 }
 
 LTBOOL CSteering::Init(CSteerable *pSteerable)
 {
 	_ASSERT(pSteerable);
-    if ( !pSteerable ) return LTFALSE;
+	if ( !pSteerable ) return LTFALSE;
 
 	m_pSteerable = pSteerable;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 void CSteering::Term()
@@ -246,7 +246,7 @@ void CSteeringSeek::Term()
 
 LTVector CSteeringSeek::Update()
 {
-    LTVector vSteering;
+	LTVector vSteering;
 
 	// desired_velocity = normalize(position-target)*max_speed;
 
@@ -263,7 +263,7 @@ LTVector CSteeringSeek::Update()
 
 LTVector CSteeringArrival::Update()
 {
-    LTVector vSteering;
+	LTVector vSteering;
 
 	// target offset = target - position
 
@@ -271,22 +271,22 @@ LTVector CSteeringArrival::Update()
 
 	// distance = length(target_offset)
 
-    LTFLOAT fDistance = VEC_MAG(vSteering);
+	LTFLOAT fDistance = VEC_MAG(vSteering);
 
-    LTFLOAT fSpeed = VEC_MAG(GetSteerable()->Steerable_GetVelocity());
+	LTFLOAT fSpeed = VEC_MAG(GetSteerable()->Steerable_GetVelocity());
 
 	// ramped speed = max speed * (distance / slowing distance)
 	// we only used 90% arrival distance in order to guarantee that we will get to the point eventually
 
-    LTFLOAT fRampedSpeed =  GetSteerable()->Steerable_GetMaxSpeed() * (fDistance/(.90f*m_fArrivalDistance));
+	LTFLOAT fRampedSpeed =  GetSteerable()->Steerable_GetMaxSpeed() * (fDistance/(.90f*m_fArrivalDistance));
 
 	// clipped speed = minimum ( ramped speed , max speed )
 
-    LTFLOAT fClippedSpeed = Min<float>(fRampedSpeed, GetSteerable()->Steerable_GetMaxSpeed());
+	LTFLOAT fClippedSpeed = Min<float>(fRampedSpeed, GetSteerable()->Steerable_GetMaxSpeed());
 
 	// desired velocity = ( clipped speed / distance ) * target offset
 
-    LTVector vDesiredVelocity = vSteering*(fClippedSpeed/fDistance);
+	LTVector vDesiredVelocity = vSteering*(fClippedSpeed/fDistance);
 
 	// steering = desired_velocity - velocity
 

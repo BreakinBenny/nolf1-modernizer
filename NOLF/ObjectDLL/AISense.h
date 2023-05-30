@@ -30,7 +30,7 @@ class CAISense
 		// Updates
 
 		virtual void PreUpdate();
-        virtual LTBOOL Update(HOBJECT hStimulus, LTFLOAT fTimeDelta) = 0;
+		virtual LTBOOL Update(HOBJECT hStimulus, LTFLOAT fTimeDelta) = 0;
 		virtual void PostUpdate(LTFLOAT fTimeDelta);
 
 		// Handlers
@@ -39,8 +39,8 @@ class CAISense
 
 		// Methods
 
-        void IncreaseStimulation(LTFLOAT fTimeDelta, LTFLOAT fRateModifier = 1.0f);
-        void DecreaseStimulation(LTFLOAT fTimeDelta, LTFLOAT fRateModifier = 1.0f);
+		void IncreaseStimulation(LTFLOAT fTimeDelta, LTFLOAT fRateModifier = 1.0f);
+		void DecreaseStimulation(LTFLOAT fTimeDelta, LTFLOAT fRateModifier = 1.0f);
 
 		// Simple accessors
 
@@ -48,10 +48,10 @@ class CAISense
 		virtual SenseType GetType() = 0;
 		virtual SenseClass GetClass() = 0;
 
-        LTBOOL IsEnabled() const { return m_bEnabled; }
+		LTBOOL IsEnabled() const { return m_bEnabled; }
 
-        LTFLOAT GetDistance() const { return m_fDistance; }
-        LTFLOAT GetDistanceSqr() const { return m_fDistanceSqr; }
+		LTFLOAT GetDistance() const { return m_fDistance; }
+		LTFLOAT GetDistanceSqr() const { return m_fDistanceSqr; }
 
 		void SetOutcome(SenseOutcome soOutcome) { m_soOutcome = soOutcome; }
 		SenseOutcome GetOutcome() const { return m_soOutcome; }
@@ -61,29 +61,29 @@ class CAISense
 
 		// Stimulation
 
-        LTFLOAT GetStimulation() { return m_fStimulation; }
-        LTFLOAT GetStimulationTime() { return m_fStimulationTime; }
+		LTFLOAT GetStimulation() { return m_fStimulation; }
+		LTFLOAT GetStimulationTime() { return m_fStimulationTime; }
 
 		void IncreaseFalseStimulation() { m_cFalseStimulation++; }
 		int GetFalseStimulation() { return m_cFalseStimulation; }
 		int GetFalseStimulationLimit(){ return m_nFalseStimulationLimit; }
 
-        void ClearStimulationPartial() { m_bStimulationPartial = LTFALSE; }
-        void ClearStimulationFull() { m_bStimulationFull = LTFALSE; }
-        LTBOOL HasStimulationPartial() { return m_bStimulationPartial; }
-        LTBOOL HasStimulationFull() { return m_bStimulationFull; }
+		void ClearStimulationPartial() { m_bStimulationPartial = LTFALSE; }
+		void ClearStimulationFull() { m_bStimulationFull = LTFALSE; }
+		LTBOOL HasStimulationPartial() { return m_bStimulationPartial; }
+		LTBOOL HasStimulationFull() { return m_bStimulationFull; }
 
 		// Delay
 
-        LTBOOL IsReacting() { return m_bReacting; }
-        void React() { m_bReacting = LTTRUE; }
-        LTFLOAT GetReactionDelay() { return (m_fReactionDelay); }
-        LTFLOAT GetReactionDelayTimer() { return m_fReactionDelayTimer; }
+		LTBOOL IsReacting() { return m_bReacting; }
+		void React() { m_bReacting = LTTRUE; }
+		LTFLOAT GetReactionDelay() { return (m_fReactionDelay); }
+		LTFLOAT GetReactionDelayTimer() { return m_fReactionDelayTimer; }
 
 		// Sense recording
 
-        void SetTimestamp(LTFLOAT fTimestamp) { m_fTimestamp = fTimestamp; }
-        LTFLOAT GetTimestamp() { return m_fTimestamp; }
+		void SetTimestamp(LTFLOAT fTimestamp) { m_fTimestamp = fTimestamp; }
+		LTFLOAT GetTimestamp() { return m_fTimestamp; }
 
 		// Simple accessors
 
@@ -96,12 +96,12 @@ class CAISense
 
 		// Simple accessors
 
-        void SetUpdated(LTBOOL bUpdated) { m_bUpdated = bUpdated; }
-        LTBOOL IsUpdated() { return m_bUpdated; }
+		void SetUpdated(LTBOOL bUpdated) { m_bUpdated = bUpdated; }
+		LTBOOL IsUpdated() { return m_bUpdated; }
 
-        void SetEnabled(LTBOOL bEnabled) { m_bEnabled = bEnabled; }
-        void Ensable() { m_bEnabled = LTTRUE; }
-        void Disable() { m_bEnabled = LTFALSE; }
+		void SetEnabled(LTBOOL bEnabled) { m_bEnabled = bEnabled; }
+		void Ensable() { m_bEnabled = LTTRUE; }
+		void Disable() { m_bEnabled = LTFALSE; }
 
 		void SetStimulus(HOBJECT hStimulus);
 
@@ -120,8 +120,8 @@ class CAISense
 		virtual void Save(HMESSAGEWRITE hWrite);
 		virtual void Load(HMESSAGEREAD hRead);
 
-        void Link(HOBJECT hObject) { if ( hObject ) g_pLTServer->CreateInterObjectLink(m_hObject, hObject); }
-        void Unlink(HOBJECT hObject) { if ( hObject ) g_pLTServer->BreakInterObjectLink(m_hObject, hObject); }
+		void Link(HOBJECT hObject) { if ( hObject ) g_pLTServer->CreateInterObjectLink(m_hObject, hObject); }
+		void Unlink(HOBJECT hObject) { if ( hObject ) g_pLTServer->BreakInterObjectLink(m_hObject, hObject); }
 
 	protected : // Protected member variables
 
@@ -132,10 +132,10 @@ class CAISense
 
 		// These are properties that determine what activates the sense
 
-        LTBOOL       m_bEnabled;                         // Are we enabled?
-        LTFLOAT      m_fDistance;                        // The distance at which the sense can perceive its stimulus
-        LTFLOAT      m_fDistanceSqr;                     // This value squared, for convenience's sake
-        LTBOOL       m_bUpdated;                         // Did we update last frame? If not, we get cleared out
+		LTBOOL	   m_bEnabled;						 // Are we enabled?
+		LTFLOAT	  m_fDistance;						// The distance at which the sense can perceive its stimulus
+		LTFLOAT	  m_fDistanceSqr;					 // This value squared, for convenience's sake
+		LTBOOL	   m_bUpdated;						 // Did we update last frame? If not, we get cleared out
 
 		// Shared variables
 
@@ -147,29 +147,29 @@ class CAISense
 
 		// Variables for stimulation-based senses
 
-        LTFLOAT          m_fStimulation;                     // Our current level of stimulation
-        LTFLOAT          m_fStimulationIncreaseRateAlert;    // The rate at which stimulation increases in the presence of the stimulus, if we are alert
-        LTFLOAT          m_fStimulationDecreaseRateAlert;    // The rate at which stimulation decreases in the absence of the stimulus, if we are alert
-        LTFLOAT          m_fStimulationIncreaseRateUnalert;  // The rate at which stimulation increases in the presence of the stimulus, if we are unalert
-        LTFLOAT          m_fStimulationDecreaseRateUnalert;  // The rate at which stimulation decreases in the absence of the stimulus, if we are unalert
-        LTFLOAT          m_fStimulationTime;                 // The last time this sense was stimulated
-        CRange<LTFLOAT>  m_rngStimulationThreshhold;         // The partial and full stimulation threshholds
-        LTBOOL           m_bStimulationPartial;              // Have we achieved partial stimulation?
-        LTBOOL           m_bStimulationFull;                 // Have we achieved full stimulation?
-        LTBOOL           m_bIncreasedStimulation;            // A flag (does not need saving) that says whether or not our stimulation was increased this update
+		LTFLOAT		  m_fStimulation;					 // Our current level of stimulation
+		LTFLOAT		  m_fStimulationIncreaseRateAlert;	// The rate at which stimulation increases in the presence of the stimulus, if we are alert
+		LTFLOAT		  m_fStimulationDecreaseRateAlert;	// The rate at which stimulation decreases in the absence of the stimulus, if we are alert
+		LTFLOAT		  m_fStimulationIncreaseRateUnalert;  // The rate at which stimulation increases in the presence of the stimulus, if we are unalert
+		LTFLOAT		  m_fStimulationDecreaseRateUnalert;  // The rate at which stimulation decreases in the absence of the stimulus, if we are unalert
+		LTFLOAT		  m_fStimulationTime;				 // The last time this sense was stimulated
+		CRange<LTFLOAT>  m_rngStimulationThreshhold;		 // The partial and full stimulation threshholds
+		LTBOOL		   m_bStimulationPartial;			  // Have we achieved partial stimulation?
+		LTBOOL		   m_bStimulationFull;				 // Have we achieved full stimulation?
+		LTBOOL		   m_bIncreasedStimulation;			// A flag (does not need saving) that says whether or not our stimulation was increased this update
 
 		int				m_cFalseStimulation;				// How many false stimulations have we received
 		int				m_nFalseStimulationLimit;			// How many false stimulations can we take before we just cheat and get the full stimulation
 
 		// Variables for delay-based senses
 
-        LTBOOL           m_bReacting;                        // Have we started reacting
-        LTFLOAT          m_fReactionDelay;                   // How long we should delay a Reaction based on this sense for?
-        LTFLOAT          m_fReactionDelayTimer;              // A timer for this delay (counts down)
+		LTBOOL		   m_bReacting;						// Have we started reacting
+		LTFLOAT		  m_fReactionDelay;				   // How long we should delay a Reaction based on this sense for?
+		LTFLOAT		  m_fReactionDelayTimer;			  // A timer for this delay (counts down)
 
 		// Data we need to preserve for sense recording
 
-        LTFLOAT          m_fTimestamp;                       // The timestamp on the sense (if there was one)
+		LTFLOAT		  m_fTimestamp;					   // The timestamp on the sense (if there was one)
 };
 
 // Macro for adding all the sense properties to an AI
@@ -216,7 +216,7 @@ class CAISense##sense## : public CAISense { \
 			m_fDistance = g_pAIButeMgr->GetTemplate(nTemplateID)->f##sense##Distance; \
 			m_fReactionDelay = g_pAIButeMgr->GetSenses()->f##sense##ReactionDelay; \
 		} \
-        virtual LTBOOL Update(HOBJECT hStimulus, LTFLOAT fTimeDelta);
+		virtual LTBOOL Update(HOBJECT hStimulus, LTFLOAT fTimeDelta);
 
 #define END_DELAY_SENSE_DEFINITION() };
 
@@ -241,7 +241,7 @@ class CAISense##sense## : public CAISense { \
 			m_rngStimulationThreshhold = g_pAIButeMgr->GetSenses()->rng##sense##StimulationThreshhold; \
 			m_nFalseStimulationLimit = g_pAIButeMgr->GetSenses()->n##sense##FalseStimulationLimit; \
 		} \
-        virtual LTBOOL Update(HOBJECT hStimulus, LTFLOAT fTimeDelta);
+		virtual LTBOOL Update(HOBJECT hStimulus, LTFLOAT fTimeDelta);
 
 #define END_STIMULATION_SENSE_DEFINITION() };
 
@@ -333,7 +333,7 @@ class CAISenseMgr : DEFINE_FACTORY_CLASS(CAISenseMgr)
 		void Update();
 		void UpdateSense(SenseType st);
 
-        void StopUpdating() { m_bStopUpdating = LTTRUE; }
+		void StopUpdating() { m_bStopUpdating = LTTRUE; }
 
 		void SetUpdateRate(LTFLOAT fUpdateRate) { m_fUpdateRate = fUpdateRate; }
 		LTFLOAT GetUpdateRate() const { return m_fUpdateRate; }
@@ -346,7 +346,7 @@ class CAISenseMgr : DEFINE_FACTORY_CLASS(CAISenseMgr)
 
 		LTBOOL IsAlert() const;
 
-        void SetEnabled(LTBOOL bEnabled) { m_bEnabled = bEnabled; }
+		void SetEnabled(LTBOOL bEnabled) { m_bEnabled = bEnabled; }
 		LTBOOL IsEnabled() { return m_bEnabled; }
 
 		CAISense* GetSense(SenseType st) { return m_apSenses[st]; }
@@ -366,8 +366,8 @@ class CAISenseMgr : DEFINE_FACTORY_CLASS(CAISenseMgr)
 	protected : // Protected member variables
 
 		CAI*			m_pAI;								// AI backpointer
-        LTBOOL          m_bEnabled;							// Are we enabled?
-        LTBOOL			m_bStopUpdating;					// Does not need to be saved. Reset ever frame.
+		LTBOOL		  m_bEnabled;							// Are we enabled?
+		LTBOOL			m_bStopUpdating;					// Does not need to be saved. Reset ever frame.
 		LTFLOAT			m_fUpdateRate;						// How often we update
 		LTFLOAT			m_fNextUpdateTime;					// Our next update time
 															
@@ -401,23 +401,23 @@ class CAISenseRecord : DEFINE_FACTORY_CLASS(CAISenseRecord)
 		// Conversion/Comparison methods
 
 		void FromSense(CAISense* pAISense);
-        LTBOOL IsSame(CAISenseRecord* pAISenseRecord);
+		LTBOOL IsSame(CAISenseRecord* pAISenseRecord);
 
 		// Simple accessors
 
-        void SetLifetime(LTFLOAT fLifetime) { m_fLifetime = fLifetime; }
-        LTBOOL UpdateLifetime(LTFLOAT fTime) { return m_fLifetime > fTime; }
+		void SetLifetime(LTFLOAT fLifetime) { m_fLifetime = fLifetime; }
+		LTBOOL UpdateLifetime(LTFLOAT fTime) { return m_fLifetime > fTime; }
 
 		HOBJECT GetObject() { return m_hObject; }
-        LTFLOAT GetTimestamp() { return m_fTimestamp; }
+		LTFLOAT GetTimestamp() { return m_fTimestamp; }
 		SenseType GetSenseType() { return m_stType; }
 		SenseOutcome GetSenseOutcome() { return m_soOutcome; }
 
 	protected :
 
 		HOBJECT			m_hObject;
-        LTFLOAT         m_fTimestamp;
-        LTFLOAT         m_fLifetime;
+		LTFLOAT		 m_fTimestamp;
+		LTFLOAT		 m_fLifetime;
 		SenseType		m_stType;
 		SenseOutcome	m_soOutcome;
 };
@@ -447,15 +447,15 @@ class CAISenseRecorder : DEFINE_FACTORY_CLASS(CAISenseRecorder)
 
 		// Recording methods
 
-        LTBOOL IsRecorded( CAISense* pAISense);
+		LTBOOL IsRecorded( CAISense* pAISense);
 		void Record( CAISense* pAISense);
 
 	protected : // Protected methods
 
 		// Helpers
 
-        void Link(HOBJECT hObject) { if ( hObject && m_hOwner ) g_pLTServer->CreateInterObjectLink(m_hOwner, hObject); }
-        void Unlink(HOBJECT hObject) { if ( hObject && m_hOwner ) g_pLTServer->BreakInterObjectLink(m_hOwner, hObject); }
+		void Link(HOBJECT hObject) { if ( hObject && m_hOwner ) g_pLTServer->CreateInterObjectLink(m_hOwner, hObject); }
+		void Unlink(HOBJECT hObject) { if ( hObject && m_hOwner ) g_pLTServer->BreakInterObjectLink(m_hOwner, hObject); }
 
 	protected :
 

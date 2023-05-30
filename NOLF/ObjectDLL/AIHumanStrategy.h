@@ -71,11 +71,9 @@ class CAIHumanStrategy
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyOneShotAni
 //
-// PURPOSE : AI CheckingPulse - ability to ... to play a one shot ani
-//
+// PURPOSE: AI CheckingPulse - ability to ... to play a one shot ani
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyOneShotAni : DEFINE_FACTORY_CLASS(CAIHumanStrategyOneShotAni), public CAIHumanStrategy
@@ -125,11 +123,9 @@ class CAIHumanStrategyOneShotAni : DEFINE_FACTORY_CLASS(CAIHumanStrategyOneShotA
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyFollowPath
 //
-// PURPOSE : AI Follow path ability - to walk a path of AINodes
-//
+// PURPOSE: AI Follow path ability - to walk a path of AINodes
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIHumanStrategyFollowPath), public CAIHumanStrategy
@@ -242,11 +238,9 @@ class CAIHumanStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIHumanStrategyFollowPa
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyDodge
 //
-// PURPOSE : AI ability to dodge
-//
+// PURPOSE: AI ability to dodge
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyDodge : DEFINE_FACTORY_CLASS(CAIHumanStrategyDodge), public CAIHumanStrategy
@@ -336,11 +330,9 @@ class CAIHumanStrategyDodge : DEFINE_FACTORY_CLASS(CAIHumanStrategyDodge), publi
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyCover
 //
-// PURPOSE : AI ability to use cover
-//
+// PURPOSE: AI ability to use cover
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyCover : public CAIHumanStrategy
@@ -416,11 +408,9 @@ class CAIHumanStrategyCover : public CAIHumanStrategy
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyCoverDuck
 //
-// PURPOSE : AI cover ability that uses ducking
-//
+// PURPOSE: AI cover ability that uses ducking
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyCoverDuck : DEFINE_FACTORY_CLASS(CAIHumanStrategyCoverDuck), public CAIHumanStrategyCover
@@ -440,11 +430,9 @@ class CAIHumanStrategyCoverDuck : DEFINE_FACTORY_CLASS(CAIHumanStrategyCoverDuck
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyCoverBlind
 //
-// PURPOSE : AI cover ability that simply stays behind cover and blind fires
-//
+// PURPOSE: AI cover ability that simply stays behind cover and blind fires
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyCoverBlind : DEFINE_FACTORY_CLASS(CAIHumanStrategyCoverBlind), public CAIHumanStrategyCover
@@ -466,11 +454,9 @@ class CAIHumanStrategyCoverBlind : DEFINE_FACTORY_CLASS(CAIHumanStrategyCoverBli
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyCover1WayCorner
 //
-// PURPOSE : AI cover ability that uses Cornerping in one direction
-//
+// PURPOSE: AI cover ability that uses Cornerping in one direction
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyCover1WayCorner : DEFINE_FACTORY_CLASS(CAIHumanStrategyCover1WayCorner), public CAIHumanStrategyCover
@@ -503,11 +489,9 @@ class CAIHumanStrategyCover1WayCorner : DEFINE_FACTORY_CLASS(CAIHumanStrategyCov
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyCover2WayCorner
 //
-// PURPOSE : AI cover ability that uses Cornerping in one direction
-//
+// PURPOSE: AI cover ability that uses Cornerping in one direction
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyCover2WayCorner : DEFINE_FACTORY_CLASS(CAIHumanStrategyCover2WayCorner), public CAIHumanStrategyCover
@@ -540,11 +524,9 @@ class CAIHumanStrategyCover2WayCorner : DEFINE_FACTORY_CLASS(CAIHumanStrategyCov
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyGrenade
 //
-// PURPOSE : AI ability to use Grenade
-//
+// PURPOSE: AI ability to use Grenade
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyGrenade : public CAIHumanStrategy
@@ -577,11 +559,9 @@ class CAIHumanStrategyGrenade : public CAIHumanStrategy
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyGrenadeThrow
 //
-// PURPOSE : AI Grenade ability that throws the grenade
-//
+// PURPOSE: AI Grenade ability that throws the grenade
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyGrenadeThrow : DEFINE_FACTORY_CLASS(CAIHumanStrategyGrenadeThrow), public CAIHumanStrategyGrenade
@@ -632,11 +612,9 @@ class CAIHumanStrategyGrenadeThrow : DEFINE_FACTORY_CLASS(CAIHumanStrategyGrenad
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyShoot
 //
-// PURPOSE : AI shoot ability - to fire at something
-//
+// PURPOSE: AI shoot ability - to fire at something
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyShoot : public CAIHumanStrategy
@@ -652,7 +630,7 @@ class CAIHumanStrategyShoot : public CAIHumanStrategy
 
 		// Updates
 
-        void Update(HOBJECT hTarget = LTNULL);
+		void Update(HOBJECT hTarget = LTNULL);
 		void UpdateAnimation();
 
 		// Handlers
@@ -718,11 +696,9 @@ class CAIHumanStrategyShoot : public CAIHumanStrategy
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyShootBurst
 //
-// PURPOSE : AI shoot ability - to burst fire at something
-//
+// PURPOSE: AI shoot ability - to burst fire at something
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyShootBurst : DEFINE_FACTORY_CLASS(CAIHumanStrategyShootBurst), public CAIHumanStrategyShoot
@@ -768,11 +744,9 @@ class CAIHumanStrategyShootBurst : DEFINE_FACTORY_CLASS(CAIHumanStrategyShootBur
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyShootBurstBlind
 //
-// PURPOSE : AI shoot ability - to burst fire blindly
-//
+// PURPOSE: AI shoot ability - to burst fire blindly
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyShootBurstBlind : DEFINE_FACTORY_CLASS(CAIHumanStrategyShootBurstBlind), public CAIHumanStrategyShootBurst
@@ -791,11 +765,9 @@ class CAIHumanStrategyShootBurstBlind : DEFINE_FACTORY_CLASS(CAIHumanStrategySho
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHumanStrategyFlashlight
 //
-// PURPOSE : AI strategy for using a flashlight
-//
+// PURPOSE: AI strategy for using a flashlight
 // ----------------------------------------------------------------------- //
 
 class CAIHumanStrategyFlashlight : DEFINE_FACTORY_CLASS(CAIHumanStrategyFlashlight), public CAIHumanStrategy

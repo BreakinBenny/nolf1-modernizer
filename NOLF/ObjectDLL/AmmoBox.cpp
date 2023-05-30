@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: AmmoBox.cpp
 //
-// MODULE  : AmmoBox.cpp
+// PURPOSE: AmmoBox object implementation
 //
-// PURPOSE : AmmoBox object implementation
-//
-// CREATED : 10/28/99
+// CREATED: 10/28/99
 //
 // (c) 1999-2001 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -44,11 +42,9 @@ BEGIN_CLASS(AmmoBox)
 END_CLASS_DEFAULT_FLAGS_PLUGIN(AmmoBox, PickupItem, NULL, NULL, 0, CAmmoBoxPlugin)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AmmoBox::AmmoBox
 //
-//	ROUTINE:	AmmoBox::AmmoBox
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 AmmoBox::AmmoBox() : PickupItem()
@@ -61,11 +57,9 @@ AmmoBox::AmmoBox() : PickupItem()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AmmoBox::EngineMessageFn
 //
-//	ROUTINE:	AmmoBox::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 AmmoBox::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -74,7 +68,7 @@ uint32 AmmoBox::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 	{
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE || fData == PRECREATE_STRINGPROP)
 			{
@@ -87,13 +81,13 @@ uint32 AmmoBox::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -104,11 +98,9 @@ uint32 AmmoBox::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AmmoBox::ReadProp
 //
-//	ROUTINE:	AmmoBox::ReadProp
-//
-//	PURPOSE:	Read object properties
-//
+//	PURPOSE: Read object properties
 // ----------------------------------------------------------------------- //
 
 void AmmoBox::ReadProp(ObjectCreateStruct *pStruct)
@@ -120,7 +112,7 @@ void AmmoBox::ReadProp(ObjectCreateStruct *pStruct)
 		char key[40];
 
 		sprintf(key, "AmmoType%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			if (_stricmp(genProp.m_String, UNUSED_STRING) != 0)
 			{
@@ -133,7 +125,7 @@ void AmmoBox::ReadProp(ObjectCreateStruct *pStruct)
 		}
 
 		sprintf(key, "AmmoCount%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			m_nAmmoCount[i] = m_nOriginalAmmoCount[i] = genProp.m_Long;
 		}
@@ -143,17 +135,15 @@ void AmmoBox::ReadProp(ObjectCreateStruct *pStruct)
 	// Set up the appropriate pick up sound...
 
 	FREE_HSTRING(m_hstrSoundFile);
-    m_hstrSoundFile = g_pLTServer->CreateString("Powerups\\Snd\\pu_ammo.wav");
+	m_hstrSoundFile = g_pLTServer->CreateString("Powerups\\Snd\\pu_ammo.wav");
  
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AmmoBox::ObjectTouch
 //
-//	ROUTINE:	AmmoBox::ObjectTouch
-//
-//	PURPOSE:	Add weapon PickupItem to object
-//
+//	PURPOSE: Add weapon PickupItem to object
 // ----------------------------------------------------------------------- //
 
 void AmmoBox::ObjectTouch(HOBJECT hObject)
@@ -164,7 +154,7 @@ void AmmoBox::ObjectTouch(HOBJECT hObject)
 
 	if (IsPlayer(hObject))
 	{
-        CCharacter* pCharObj = (CCharacter*)g_pLTServer->HandleToObject(hObject);
+		CCharacter* pCharObj = (CCharacter*)g_pLTServer->HandleToObject(hObject);
 
 		if (pCharObj && !pCharObj->IsDead())
 		{
@@ -178,17 +168,17 @@ void AmmoBox::ObjectTouch(HOBJECT hObject)
 			}
 			if (nValidIds)
 			{
-                HMESSAGEWRITE hMessage = g_pLTServer->StartMessageToObject(this, hObject, MID_AMMOBOX);
-                g_pLTServer->WriteToMessageByte(hMessage, nValidIds);
+				HMESSAGEWRITE hMessage = g_pLTServer->StartMessageToObject(this, hObject, MID_AMMOBOX);
+				g_pLTServer->WriteToMessageByte(hMessage, nValidIds);
 				for (int i=0; i < AB_MAX_TYPES; i++)
 				{
 					if (m_nAmmoId[i] != WMGR_INVALID_ID)
 					{
-                        g_pLTServer->WriteToMessageByte(hMessage, m_nAmmoId[i]);
-                        g_pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)m_nAmmoCount[i]);
+						g_pLTServer->WriteToMessageByte(hMessage, m_nAmmoId[i]);
+						g_pLTServer->WriteToMessageFloat(hMessage, (LTFLOAT)m_nAmmoCount[i]);
 					}
 				}
-                g_pLTServer->EndMessage(hMessage);
+				g_pLTServer->EndMessage(hMessage);
 			}
 		}
 	}
@@ -196,11 +186,9 @@ void AmmoBox::ObjectTouch(HOBJECT hObject)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AmmoBox::Save
 //
-//	ROUTINE:	AmmoBox::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void AmmoBox::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -209,18 +197,16 @@ void AmmoBox::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 	for (int i=0; i < AB_MAX_TYPES; i++)
 	{
-        g_pLTServer->WriteToMessageByte(hWrite, m_nAmmoId[i]);
-        g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)m_nAmmoCount[i]);
+		g_pLTServer->WriteToMessageByte(hWrite, m_nAmmoId[i]);
+		g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)m_nAmmoCount[i]);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AmmoBox::Load
 //
-//	ROUTINE:	AmmoBox::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void AmmoBox::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -229,18 +215,16 @@ void AmmoBox::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	for (int i=0; i < AB_MAX_TYPES; i++)
 	{
-        m_nAmmoId[i] = g_pLTServer->ReadFromMessageByte(hRead);
-        m_nAmmoCount[i] = (int)g_pLTServer->ReadFromMessageFloat(hRead);
+		m_nAmmoId[i] = g_pLTServer->ReadFromMessageByte(hRead);
+		m_nAmmoCount[i] = (int)g_pLTServer->ReadFromMessageFloat(hRead);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AmmoBox::ObjectMessageFn
 //
-//	ROUTINE:	AmmoBox::ObjectMessageFn
-//
-//	PURPOSE:	Handle object messages
-//
+//	PURPOSE: Handle object messages
 // ----------------------------------------------------------------------- //
 
 uint32 AmmoBox::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -262,22 +246,20 @@ uint32 AmmoBox::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AmmoBox::Leftovers
 //
-//	ROUTINE:	AmmoBox::Leftovers
-//
-//	PURPOSE:	Handle object messages
-//
+//	PURPOSE: Handle object messages
 // ----------------------------------------------------------------------- //
 
 void AmmoBox::Leftovers(HMESSAGEREAD hRead)
 {
-    uint8 numAmmoTypes = g_pLTServer->ReadFromMessageByte(hRead);
+	uint8 numAmmoTypes = g_pLTServer->ReadFromMessageByte(hRead);
 
-    int i;
-    for (i = 0; i < numAmmoTypes; i++)
+	int i;
+	for (i = 0; i < numAmmoTypes; i++)
 	{
-        m_nAmmoId[i]    = g_pLTServer->ReadFromMessageByte(hRead);
-        m_nAmmoCount[i] = (int) g_pLTServer->ReadFromMessageFloat(hRead);
+		m_nAmmoId[i]	= g_pLTServer->ReadFromMessageByte(hRead);
+		m_nAmmoCount[i] = (int) g_pLTServer->ReadFromMessageFloat(hRead);
 	}
 
 	for (i=numAmmoTypes; i < AB_MAX_TYPES; i++)
@@ -290,12 +272,10 @@ void AmmoBox::Leftovers(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AmmoBox::PickedUp()
 //
-//	ROUTINE:	AmmoBox::PickedUp()
-//
-//	PURPOSE:	Called when an object tells this item that the object
+//	PURPOSE: Called when an object tells this item that the object
 //				picked it up.
-//
 // ----------------------------------------------------------------------- //
 
 void AmmoBox::PickedUp(HMESSAGEREAD hRead)
@@ -316,11 +296,9 @@ void AmmoBox::PickedUp(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAmmoBoxPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CAmmoBoxPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Requests a state change
-//
+//	PURPOSE: Requests a state change
 // ----------------------------------------------------------------------- //
 
 LTRESULT CAmmoBoxPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
@@ -339,9 +317,9 @@ LTRESULT CAmmoBoxPlugin::PreHook_EditStringList(const char* szRezPath, const cha
 	{
 		sprintf(key, "AmmoType%d", index);
 
-        if (_stricmp(key, szPropName) == 0)
+		if (_stricmp(key, szPropName) == 0)
 		{
-            uint32 dwAmmoTypes = sm_ButeMgr.GetNumAmmoTypes();
+			uint32 dwAmmoTypes = sm_ButeMgr.GetNumAmmoTypes();
 
 			_ASSERT(cMaxStrings >= dwAmmoTypes);
 			*pcStrings = 1;
@@ -350,9 +328,9 @@ LTRESULT CAmmoBoxPlugin::PreHook_EditStringList(const char* szRezPath, const cha
 
 			strcpy(aszStrings[0], UNUSED_STRING);
 
-            AMMO* pAmmo = LTNULL;
+			AMMO* pAmmo = LTNULL;
 
-            for (uint32 i=1; i <= dwAmmoTypes; i++)
+			for (uint32 i=1; i <= dwAmmoTypes; i++)
 			{
 				pAmmo = sm_ButeMgr.GetAmmo(i-1);
 

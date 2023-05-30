@@ -11,16 +11,16 @@ struct AniAIVehicleMain
 	{
 	}
 
-    AniAIVehicleMain(LTBOOL b, Ani e1)
+	AniAIVehicleMain(LTBOOL b, Ani e1)
 	{
 		eAni = e1;
 		bLoops = b;
 	}
 
-    LTBOOL IsLoops() { return bLoops; }
+	LTBOOL IsLoops() { return bLoops; }
 
 	Ani eAni;
-    LTBOOL bLoops;
+	LTBOOL bLoops;
 };
 
 struct AniAIVehicleFire
@@ -86,8 +86,8 @@ class CAnimatorAIVehicle : public CAnimator
 
 		// Simple accessors
 
-        LTBOOL IsAnimatingMain(Main eMain) const;
-        LTBOOL IsAnimatingMainDone(Main eMain) const;
+		LTBOOL IsAnimatingMain(Main eMain) const;
+		LTBOOL IsAnimatingMainDone(Main eMain) const;
 		inline void SetMain(Main eMain) { m_eMain = eMain; }
 		inline Main GetMain() { return m_eMain; }
 		inline Main GetLastMain() { return m_eLastMain; }
@@ -102,7 +102,7 @@ class CAnimatorAIVehicle : public CAnimator
 
 		// Dims
 
-        LTBOOL SetDims(HMODELANIM hAni);
+		LTBOOL SetDims(HMODELANIM hAni);
 
 	protected :
 

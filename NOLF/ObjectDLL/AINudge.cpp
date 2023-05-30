@@ -59,9 +59,9 @@ void CNudge::Update(LTBOOL bMoving)
 	CAIHuman* apAIs[64];
 	uint32 cAIs = 0;
 
-    static HCLASS hClass = g_pLTServer->GetClass("CAIHuman");
+	static HCLASS hClass = g_pLTServer->GetClass("CAIHuman");
 
-    ObjectList* pObjectList = g_pLTServer->FindObjectsTouchingSphere(&vPos, fRadius);
+	ObjectList* pObjectList = g_pLTServer->FindObjectsTouchingSphere(&vPos, fRadius);
 	ObjectLink* pObject = pObjectList ? pObjectList->m_pFirstLink : LTNULL;
 
 	while ( pObject && cAIs < 64 )
@@ -73,9 +73,9 @@ void CNudge::Update(LTBOOL bMoving)
 			{
 				hPlayer = hObject;
 			}
-            else if ( g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObject), hClass) )
+			else if ( g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObject), hClass) )
 			{
-                apAIs[cAIs++] = (CAIHuman*)g_pLTServer->HandleToObject(hObject);
+				apAIs[cAIs++] = (CAIHuman*)g_pLTServer->HandleToObject(hObject);
 			}
 		}
 
@@ -126,7 +126,7 @@ void CNudge::Update(LTBOOL bMoving)
 			vNudgeDir.Norm();
 		}
 
-        m_vNudge += vNudgeDir*fNudgeAmount*g_pLTServer->GetFrameTime();
+		m_vNudge += vNudgeDir*fNudgeAmount*g_pLTServer->GetFrameTime();
 	}
 
 	_ASSERT((LTFLOAT)fabs(m_vNudge.y < MATH_EPSILON));

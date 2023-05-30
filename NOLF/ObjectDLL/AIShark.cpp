@@ -107,11 +107,9 @@ static STATEMAP s_aStateMaps[] =
 static int s_cStateMaps = sizeof(s_aStateMaps)/sizeof(STATEMAP);
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::AI_Shark()
 //
-//	ROUTINE:	AI_Shark::AI_Shark()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 AI_Shark::AI_Shark() : CAIAnimal()
@@ -119,7 +117,7 @@ AI_Shark::AI_Shark() : CAIAnimal()
 	m_eModelId = g_pModelButeMgr->GetModelId("Shark");
 	m_eModelSkeleton = g_pModelButeMgr->GetModelSkeleton(m_eModelId);
 	m_cc = BAD;
-    m_hstrAttributeTemplate = g_pLTServer->CreateString("Shark");
+	m_hstrAttributeTemplate = g_pLTServer->CreateString("Shark");
 
 	m_fSpeed			= 100.0f;
 
@@ -133,23 +131,21 @@ AI_Shark::AI_Shark() : CAIAnimal()
 //	m_fRunVel			= 0.0f;
 	m_fSwimVel			= 0.0f;
 
-    m_pSharkState = LTNULL;
+	m_pSharkState = LTNULL;
 
 	if ( !m_SteeringMgr.Init(this) )
 	{
-        _ASSERT(LTFALSE);
-        g_pLTServer->CPrint("could not initialize Shark's steeringmgr");
+		_ASSERT(LTFALSE);
+		g_pLTServer->CPrint("could not initialize Shark's steeringmgr");
 	}
 
 	SetState(CAISharkState::eStateIdle);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::~AI_Shark()
 //
-//	ROUTINE:	AI_Shark::~AI_Shark()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 AI_Shark::~AI_Shark()
@@ -157,18 +153,16 @@ AI_Shark::~AI_Shark()
 	if ( m_pSharkState )
 	{
 		FACTORY_DELETE(m_pSharkState);
-        m_pSharkState = LTNULL;
-        m_pAnimalState = LTNULL;
-        m_pState = LTNULL;
+		m_pSharkState = LTNULL;
+		m_pAnimalState = LTNULL;
+		m_pState = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::CreateAttachments
 //
-//	ROUTINE:	AI_Shark::CreateAttachments
-//
-//	PURPOSE:	Creates our attachments aggregate
-//
+//	PURPOSE: Creates our attachments aggregate
 // ----------------------------------------------------------------------- //
 
 void AI_Shark::CreateAttachments()
@@ -180,16 +174,14 @@ void AI_Shark::CreateAttachments()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::HandleModelString()
 //
-//	ROUTINE:	AI_Shark::HandleModelString()
-//
-//	PURPOSE:	Handles model keyframe strings
-//
+//	PURPOSE: Handles model keyframe strings
 // ----------------------------------------------------------------------- //
 
 void AI_Shark::HandleModelString(ArgList* pArgList)
 {
-    if (!g_pLTServer || !pArgList || !pArgList->argv || pArgList->argc == 0) return;
+	if (!g_pLTServer || !pArgList || !pArgList->argv || pArgList->argc == 0) return;
 
 	CAIAnimal::HandleModelString(pArgList);
 
@@ -198,8 +190,8 @@ void AI_Shark::HandleModelString(ArgList* pArgList)
 
 	if (stricmp(pKey, c_szKeyBite) == 0)
 	{
-        LTFLOAT fBiteDistance = 200.0f;  // TODO: Bute
-        LTFLOAT fBiteDamage = 10.0f;     // TODO: Bute
+		LTFLOAT fBiteDistance = 200.0f;  // TODO: Bute
+		LTFLOAT fBiteDamage = 10.0f;	 // TODO: Bute
 
 		if ( !HasTarget() ) return;
 
@@ -225,28 +217,26 @@ void AI_Shark::HandleModelString(ArgList* pArgList)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::ReadProp
 //
-//	ROUTINE:	AI_Shark::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL AI_Shark::ReadProp(ObjectCreateStruct *pData)
 {
 	GenericProp genProp;
-    if (!g_pLTServer || !pData) return LTFALSE;
+	if (!g_pLTServer || !pData) return LTFALSE;
 
 	// If we have an attribute template, fill in the info
 
 	if ( m_hstrAttributeTemplate )
 	{
-        char *szAttributeTemplate = g_pLTServer->GetStringData(m_hstrAttributeTemplate);
+		char *szAttributeTemplate = g_pLTServer->GetStringData(m_hstrAttributeTemplate);
 		int nTemplateID = g_pAIButeMgr->GetTemplateIDByName(szAttributeTemplate);
 
 		if ( nTemplateID < 0 )
 		{
-            g_pLTServer->CPrint("Bad AI Attribute Template referenced! : %s", szAttributeTemplate);
+			g_pLTServer->CPrint("Bad AI Attribute Template referenced! : %s", szAttributeTemplate);
 		}
 		else
 		{
@@ -258,12 +248,12 @@ LTBOOL AI_Shark::ReadProp(ObjectCreateStruct *pData)
 	}
 	else
 	{
-        g_pLTServer->CPrint("No attribute template specified for AI!");
+		g_pLTServer->CPrint("No attribute template specified for AI!");
 	}
 
 	// Now get the overrides
 
-    if ( g_pLTServer->GetPropGeneric("AttackDistance", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("AttackDistance", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fAttackDistance = genProp.m_Float;
 
@@ -275,7 +265,7 @@ LTBOOL AI_Shark::ReadProp(ObjectCreateStruct *pData)
 //		if ( genProp.m_String[0] )
 //			m_fRunVel = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("SwimSpeed", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("SwimSpeed", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fSwimVel = genProp.m_Float;
 
@@ -283,11 +273,9 @@ LTBOOL AI_Shark::ReadProp(ObjectCreateStruct *pData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::InitialUpdate
 //
-//	ROUTINE:	AI_Shark::InitialUpdate
-//
-//	PURPOSE:	Performs our initial update
-//
+//	PURPOSE: Performs our initial update
 // ----------------------------------------------------------------------- //
 
 void AI_Shark::InitialUpdate()
@@ -296,7 +284,7 @@ void AI_Shark::InitialUpdate()
 
 	// Set all our steerable info
 
-    g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
+	g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
 
 	Steerable_SetMass(m_fMass);
 	Steerable_SetMaxForce(m_fMaxForce);
@@ -304,7 +292,7 @@ void AI_Shark::InitialUpdate()
 
 	// Turn off gravity
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 	if ( !(dwFlags & FLAG_GRAVITY) )
 	{
 		m_dwFlags &= ~FLAG_GRAVITY;
@@ -312,11 +300,9 @@ void AI_Shark::InitialUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::ComputeSquares
 //
-//	ROUTINE:	AI_Shark::ComputeSquares
-//
-//	PURPOSE:	Precompute any squares of values we need
-//
+//	PURPOSE: Precompute any squares of values we need
 // ----------------------------------------------------------------------- //
 
 void AI_Shark::ComputeSquares()
@@ -327,18 +313,16 @@ void AI_Shark::ComputeSquares()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::HandleCommand()
 //
-//	ROUTINE:	AI_Shark::HandleCommand()
-//
-//	PURPOSE:	Handles a command
-//
+//	PURPOSE: Handles a command
 // --------------------------------------------------------------------------- //
 
 LTBOOL AI_Shark::HandleCommand(char** pTokens, int nArgs)
 {
 	// Let base class have a whack at it...
 
-    if (CAIAnimal::HandleCommand(pTokens, nArgs)) return LTTRUE;
+	if (CAIAnimal::HandleCommand(pTokens, nArgs)) return LTTRUE;
 
 	// State-changing message
 
@@ -351,7 +335,7 @@ LTBOOL AI_Shark::HandleCommand(char** pTokens, int nArgs)
 			SetState(s_aStateMaps[iState].eState);
 			HandleCommandParameters(pTokens, nArgs);
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
@@ -363,11 +347,11 @@ LTBOOL AI_Shark::HandleCommand(char** pTokens, int nArgs)
 		{
 			m_fTurnRadius = FOV2DP((LTFLOAT)atof(pTokens[1]));
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		else
 		{
-            g_pLTServer->CPrint("TURNRADIUS missing argument");
+			g_pLTServer->CPrint("TURNRADIUS missing argument");
 		}
 	}
 	else if ( !_stricmp(pTokens[0], "MASS") )
@@ -378,11 +362,11 @@ LTBOOL AI_Shark::HandleCommand(char** pTokens, int nArgs)
 		{
 			m_fMass = FOV2DP((LTFLOAT)atof(pTokens[1]));
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		else
 		{
-            g_pLTServer->CPrint("MASS missing argument");
+			g_pLTServer->CPrint("MASS missing argument");
 		}
 	}
 	else if ( !_stricmp(pTokens[0], "BRAKE") )
@@ -393,11 +377,11 @@ LTBOOL AI_Shark::HandleCommand(char** pTokens, int nArgs)
 		{
 			m_fBrakeMultiplier = FOV2DP((LTFLOAT)atof(pTokens[1]));
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		else
 		{
-            g_pLTServer->CPrint("BRAKE missing argument");
+			g_pLTServer->CPrint("BRAKE missing argument");
 		}
 	}
 	else if ( !_stricmp(pTokens[0], "MAXFORCE") )
@@ -408,37 +392,35 @@ LTBOOL AI_Shark::HandleCommand(char** pTokens, int nArgs)
 		{
 			m_fMaxForce = FOV2DP((LTFLOAT)atof(pTokens[1]));
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		else
 		{
-            g_pLTServer->CPrint("MAXFORCE missing argument");
+			g_pLTServer->CPrint("MAXFORCE missing argument");
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::SetState
 //
-//	ROUTINE:	AI_Shark::SetState
-//
-//	PURPOSE:	Changes our current state
-//
+//	PURPOSE: Changes our current state
 // ----------------------------------------------------------------------- //
 
 void AI_Shark::SetState(CAISharkState::AISharkStateType eState)
 {
-    if ( !g_pLTServer ) return;
+	if ( !g_pLTServer ) return;
 
 	// Delete the old state
 
 	if ( m_pSharkState )
 	{
 		FACTORY_DELETE(m_pSharkState);
-        m_pSharkState = LTNULL;
-        m_pAnimalState = LTNULL;
-        m_pState = LTNULL;
+		m_pSharkState = LTNULL;
+		m_pAnimalState = LTNULL;
+		m_pState = LTNULL;
 	}
 
 	switch ( eState )
@@ -456,7 +438,7 @@ void AI_Shark::SetState(CAISharkState::AISharkStateType eState)
 
 	if ( !m_pSharkState )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return;
 	}
 
@@ -464,18 +446,16 @@ void AI_Shark::SetState(CAISharkState::AISharkStateType eState)
 
 	if ( !m_pSharkState->Init(this) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		FACTORY_DELETE(m_pSharkState);
-        m_pSharkState = LTNULL;
+		m_pSharkState = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::UpdateMovement()
 //
-//	ROUTINE:	AI_Shark::UpdateMovement()
-//
-//	PURPOSE:	Moves us to a given position
-//
+//	PURPOSE: Moves us to a given position
 // ----------------------------------------------------------------------- //
 
 void AI_Shark::UpdateMovement()
@@ -484,7 +464,7 @@ void AI_Shark::UpdateMovement()
 
 	if ( !m_SteeringMgr.Update() )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 	}
 
 	if ( -1 != m_iLastVolume )
@@ -510,11 +490,9 @@ void AI_Shark::UpdateMovement()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::UpdateAnimator
 //
-//	ROUTINE:	AI_Shark::UpdateAnimator
-//
-//	PURPOSE:	Handles any pending Animator changes
-//
+//	PURPOSE: Handles any pending Animator changes
 // ----------------------------------------------------------------------- //
 
 void AI_Shark::UpdateAnimator()
@@ -526,11 +504,9 @@ void AI_Shark::UpdateAnimator()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::Steerable_PreUpdate
 //
-//	ROUTINE:	AI_Shark::Steerable_PreUpdate
-//
-//	PURPOSE:	Post update of our steerable
-//
+//	PURPOSE: Post update of our steerable
 // ----------------------------------------------------------------------- //
 
 LTBOOL AI_Shark::Steerable_PreUpdate()
@@ -541,69 +517,65 @@ LTBOOL AI_Shark::Steerable_PreUpdate()
 	Steerable_SetRightVector(GetRightVector());
 	Steerable_SetPosition(GetPosition());
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::Steerable_PostUpdate
 //
-//	ROUTINE:	AI_Shark::Steerable_PostUpdate
-//
-//	PURPOSE:	Post update of our steerable
-//
+//	PURPOSE: Post update of our steerable
 // ----------------------------------------------------------------------- //
 
 LTBOOL AI_Shark::Steerable_PostUpdate()
 {
 	// Set our orientation (forward only)
 
-    LTVector vForward = Steerable_GetForwardVector();
-    LTRotation rRot;
+	LTVector vForward = Steerable_GetForwardVector();
+	LTRotation rRot;
 
-    g_pLTServer->AlignRotation(&rRot, &vForward, NULL);
+	g_pLTServer->AlignRotation(&rRot, &vForward, NULL);
 
-    g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+	g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 
 	// Set our position
 
-    LTVector vPosition = Steerable_GetPosition();
-    g_pLTServer->MoveObject(m_hObject, &vPosition);
+	LTVector vPosition = Steerable_GetPosition();
+	g_pLTServer->MoveObject(m_hObject, &vPosition);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::Steerable_Update
 //
-//	ROUTINE:	AI_Shark::Steerable_Update
-//
-//	PURPOSE:	Update of our steerable
-//
+//	PURPOSE: Update of our steerable
 // ----------------------------------------------------------------------- //
 
 LTBOOL AI_Shark::Steerable_Update(const LTVector& vSteeringDirection)
 {
 	// Get our speed
 
-    LTFLOAT fSpeed = Steerable_GetVelocity().Mag();
-    LTFLOAT fMaxSpeed = Steerable_GetMaxSpeed();
+	LTFLOAT fSpeed = Steerable_GetVelocity().Mag();
+	LTFLOAT fMaxSpeed = Steerable_GetMaxSpeed();
 
 	// See if we're stopped.
 
 	if ( fMaxSpeed == 0.0f )
 	{
-        Steerable_SetVelocity(LTVector(0,0,0));
+		Steerable_SetVelocity(LTVector(0,0,0));
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 	// Get our acceleration relative to our forward and right components
 
-    LTVector vAccel = vSteeringDirection;
-    LTFLOAT fAccelMag = vSteeringDirection.Mag();
+	LTVector vAccel = vSteeringDirection;
+	LTFLOAT fAccelMag = vSteeringDirection.Mag();
 
 	vAccel.Norm();
 
-    LTFLOAT fAccelDotRight = vAccel.Dot(m_vRight);
-    LTFLOAT fAccelDotForward = vAccel.x*m_vForward.x + vAccel.z*m_vForward.z;
+	LTFLOAT fAccelDotRight = vAccel.Dot(m_vRight);
+	LTFLOAT fAccelDotForward = vAccel.x*m_vForward.x + vAccel.z*m_vForward.z;
 
 	if ( fAccelDotForward <= 0.0f )
 	{
@@ -612,7 +584,7 @@ LTBOOL AI_Shark::Steerable_Update(const LTVector& vSteeringDirection)
 
 	// The min accel.forward we can have is based on a cone which grows wider the faster we go
 
-    LTFLOAT fMinAccelDotForward = 1.0f - m_fTurnRadius*fSpeed/fMaxSpeed;
+	LTFLOAT fMinAccelDotForward = 1.0f - m_fTurnRadius*fSpeed/fMaxSpeed;
 
 	// If accel.forward is not great enough, then raise vAccel to the min
 
@@ -621,23 +593,23 @@ LTBOOL AI_Shark::Steerable_Update(const LTVector& vSteeringDirection)
 	{
 		// change vAccel to whatever the vector at fMinAccelDotForward is
 
-        LTRotation rRot;
-        g_pLTServer->AlignRotation(&rRot, &m_vForward, &m_vUp);
+		LTRotation rRot;
+		g_pLTServer->AlignRotation(&rRot, &m_vForward, &m_vUp);
 		if ( fAccelDotRight > 0.0f )
 		{
 			// Rotate "right"
-            g_pLTServer->RotateAroundAxis(&rRot, &m_vUp, (float)acos(fMinAccelDotForward));
+			g_pLTServer->RotateAroundAxis(&rRot, &m_vUp, (float)acos(fMinAccelDotForward));
 		}
 		else
 		{
 			// Rotate "left"
-            g_pLTServer->RotateAroundAxis(&rRot, &m_vUp, (float)-acos(fMinAccelDotForward));
+			g_pLTServer->RotateAroundAxis(&rRot, &m_vUp, (float)-acos(fMinAccelDotForward));
 		}
 
-        LTVector vNull;
-        LTVector vNewAccel;
+		LTVector vNull;
+		LTVector vNewAccel;
 
-        g_pLTServer->GetRotationVectors(&rRot, &vNull, &vNull, &vNewAccel);
+		g_pLTServer->GetRotationVectors(&rRot, &vNull, &vNull, &vNewAccel);
 		vNewAccel.y = vAccel.y;
 		vNewAccel.Norm();
 		vAccel = vNewAccel;
@@ -647,18 +619,16 @@ LTBOOL AI_Shark::Steerable_Update(const LTVector& vSteeringDirection)
 
 	if ( !CSteerable::Steerable_Update(vAccel*fAccelMag) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::Save
 //
-//	ROUTINE:	AI_Shark::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void AI_Shark::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -670,10 +640,10 @@ void AI_Shark::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 	// Save state...
 
-    uint32 dwState = (uint32)-1;
+	uint32 dwState = (uint32)-1;
 	if (m_pSharkState)
 	{
-        dwState = (uint32) m_pSharkState->GetType();
+		dwState = (uint32) m_pSharkState->GetType();
 	}
 
 	SAVE_DWORD(dwState);
@@ -694,11 +664,9 @@ void AI_Shark::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::Load
 //
-//	ROUTINE:	AI_Shark::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void AI_Shark::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -710,7 +678,7 @@ void AI_Shark::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	// Load state...
 
-    uint32 dwState;
+	uint32 dwState;
 	LOAD_DWORD(dwState);
 
 	if (dwState != (DWORD)-1)
@@ -734,11 +702,9 @@ void AI_Shark::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::PreCreateSpecialFX()
 //
-//	ROUTINE:	AI_Shark::PreCreateSpecialFX()
-//
-//	PURPOSE:	Last chance to change our characterfx struct
-//
+//	PURPOSE: Last chance to change our characterfx struct
 // ----------------------------------------------------------------------- //
 
 void AI_Shark::PreCreateSpecialFX(CHARCREATESTRUCT& cs)
@@ -750,11 +716,9 @@ void AI_Shark::PreCreateSpecialFX(CHARCREATESTRUCT& cs)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Shark::GetBodyState()
 //
-//	ROUTINE:	AI_Shark::GetBodyState()
-//
-//	PURPOSE:	Gets the state of our body
-//
+//	PURPOSE: Gets the state of our body
 // ----------------------------------------------------------------------- //
 
 BodyState AI_Shark::GetBodyState()

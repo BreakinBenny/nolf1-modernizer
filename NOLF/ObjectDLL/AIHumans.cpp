@@ -113,14 +113,14 @@ END_IMPLEMENT_HUMAN(MaleBystander, NEUTRAL)
 // Special humans...
 BEGIN_IMPLEMENT_HUMAN(Paratrooper, BAD)
 	ADD_GRAVITY_FLAG(1, 0)
-    ADD_BOOLPROP(MoveToFloor, LTFALSE)
+	ADD_BOOLPROP(MoveToFloor, LTFALSE)
 END_IMPLEMENT_HUMAN(Paratrooper, BAD)
 
 void AI_Paratrooper::InitialUpdate()
 {
 	CAIHuman::InitialUpdate();
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 	if ( !(dwFlags & FLAG_GRAVITY) )
 	{
 		m_dwFlags &= ~FLAG_GRAVITY;
@@ -132,7 +132,7 @@ BEGIN_IMPLEMENT_HUMAN(Frogman, BAD)
 	ADD_ATTACHMENT(Back, "Frogman Tank")
 	ADD_ATTACHMENT(Eyes, "Frogman Mask")
 	ADD_ATTACHMENT(RightHand, "SpearGun")
-    ADD_BOOLPROP(MoveToFloor, LTFALSE)
+	ADD_BOOLPROP(MoveToFloor, LTFALSE)
 END_IMPLEMENT_HUMAN(Frogman, BAD)
 
 void AI_Frogman::InitialUpdate()
@@ -141,13 +141,13 @@ void AI_Frogman::InitialUpdate()
 
 	// Give us the underwater flag
 
-    uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
 	dwUserFlags |= USRFLG_PLAYER_UNDERWATER;
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags);
 
 	// Turn off gravity
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 	if ( !(dwFlags & FLAG_GRAVITY) )
 	{
 		m_dwFlags &= ~FLAG_GRAVITY;

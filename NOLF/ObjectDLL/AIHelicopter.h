@@ -52,13 +52,13 @@ class AI_Helicopter : public CAIVehicle
 
 		LTBOOL ReadProp(ObjectCreateStruct *pData);
 		void InitialUpdate();
-        void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 
 		// Character stuff
 
 		void PreCreateSpecialFX(CHARCREATESTRUCT& cs);
-        LTBOOL CanLipSync() { return LTFALSE; }
+		LTBOOL CanLipSync() { return LTFALSE; }
 
 		// Update methods
 

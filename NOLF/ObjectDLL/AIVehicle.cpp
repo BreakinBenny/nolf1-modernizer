@@ -11,25 +11,21 @@ BEGIN_CLASS(CAIVehicle)
 END_CLASS_DEFAULT_FLAGS_PLUGIN(CAIVehicle, CAI, NULL, NULL, CF_HIDDEN, CAIVehiclePlugin)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIVehicle::CAIVehicle()
 //
-//	ROUTINE:	CAIVehicle::CAIVehicle()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CAIVehicle::CAIVehicle() : CAI()
 {
-    m_pVehicleState = LTNULL;
+	m_pVehicleState = LTNULL;
 	m_pAnimator = &m_Animator;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIVehicle::~CAIVehicle()
 //
-//	ROUTINE:	CAIVehicle::~CAIVehicle()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CAIVehicle::~CAIVehicle()
@@ -37,17 +33,15 @@ CAIVehicle::~CAIVehicle()
 	if ( m_pVehicleState )
 	{
 		FACTORY_DELETE(m_pVehicleState);
-        m_pVehicleState = LTNULL;
-        m_pState = LTNULL;
+		m_pVehicleState = LTNULL;
+		m_pState = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIVehicle::CreateAttachments
 //
-//	ROUTINE:	CAIVehicle::CreateAttachments
-//
-//	PURPOSE:	Creates our attachments aggregate
-//
+//	PURPOSE: Creates our attachments aggregate
 // ----------------------------------------------------------------------- //
 
 void CAIVehicle::CreateAttachments()

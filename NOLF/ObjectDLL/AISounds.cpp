@@ -178,11 +178,9 @@ m10s01 - american
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetSound()
 //
-//	ROUTINE:	GetSound()
-//
-//	PURPOSE:	Get the particular sound
-//
+//	PURPOSE: Get the particular sound
 // ----------------------------------------------------------------------- //
 
 char* GetSound(CCharacter* pCharacter, AISound ais)
@@ -243,11 +241,9 @@ char* GetSound(CCharacter* pCharacter, AISound ais)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CacheAISounds()
 //
-//	ROUTINE:	CacheAISounds()
-//
-//	PURPOSE:	Cache all the sounds used by the particular AI
-//
+//	PURPOSE: Cache all the sounds used by the particular AI
 // ----------------------------------------------------------------------- //
 
 void CacheAISounds(CCharacter* pCharacter)

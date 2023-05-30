@@ -8,11 +8,9 @@
 #include "Character.h"
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorAIAnimal::CAnimatorAIAnimal()
 //
-//	ROUTINE:	CAnimatorAIAnimal::CAnimatorAIAnimal()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CAnimatorAIAnimal::CAnimatorAIAnimal()
@@ -23,11 +21,9 @@ CAnimatorAIAnimal::CAnimatorAIAnimal()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorAIAnimal::~CAnimatorAIAnimal()
 //
-//	ROUTINE:	CAnimatorAIAnimal::~CAnimatorAIAnimal()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CAnimatorAIAnimal::~CAnimatorAIAnimal()
@@ -35,11 +31,9 @@ CAnimatorAIAnimal::~CAnimatorAIAnimal()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorAIAnimal::Init()
 //
-//	ROUTINE:	CAnimatorAIAnimal::Init()
-//
-//	PURPOSE:	Initialize the AIAnimal animator
-//
+//	PURPOSE: Initialize the AIAnimal animator
 // ----------------------------------------------------------------------- //
 
 void CAnimatorAIAnimal::Init(ILTCSBase *pInterface, HOBJECT hObject)
@@ -53,24 +47,24 @@ void CAnimatorAIAnimal::Init(ILTCSBase *pInterface, HOBJECT hObject)
 
 	// Get Main anis
 
-    m_AniBase                   = AniAIAnimalMain(LTTRUE,    _A("Base"));
-    m_AniIdle                   = AniAIAnimalMain(LTTRUE,    _A("Idle"));
-    m_AniWalking                = AniAIAnimalMain(LTTRUE,    _A("Walking"));
-    m_AniRunning                = AniAIAnimalMain(LTTRUE,    _A("Running"));
-    m_AniBite                   = AniAIAnimalMain(LTFALSE,   _A("Attack"));
-    m_AniIdleStand              = AniAIAnimalMain(LTTRUE,    _A("Idle"));
-    m_AniIdleLay                = AniAIAnimalMain(LTTRUE,    _A("LayDown"));
-    m_AniIdleSit                = AniAIAnimalMain(LTTRUE,    _A("Sit"));
-    m_AniFenceJump              = AniAIAnimalMain(LTFALSE,   _A("FenceJump"));
-    m_AniFenceBark              = AniAIAnimalMain(LTTRUE,    _A("FenceBark"));
-    m_AniFenceUnjump            = AniAIAnimalMain(LTFALSE,   _A("FenceUnjump"));
-    m_AniSniffPoodle            = AniAIAnimalMain(LTTRUE,    _A("SniffPoodle"));
-    m_AniSwimming               = AniAIAnimalMain(LTTRUE,    _A("Swimming"));
-    m_AniMaul                   = AniAIAnimalMain(LTTRUE,    _A("Maul"));
+	m_AniBase				   = AniAIAnimalMain(LTTRUE,	_A("Base"));
+	m_AniIdle				   = AniAIAnimalMain(LTTRUE,	_A("Idle"));
+	m_AniWalking				= AniAIAnimalMain(LTTRUE,	_A("Walking"));
+	m_AniRunning				= AniAIAnimalMain(LTTRUE,	_A("Running"));
+	m_AniBite				   = AniAIAnimalMain(LTFALSE,   _A("Attack"));
+	m_AniIdleStand			  = AniAIAnimalMain(LTTRUE,	_A("Idle"));
+	m_AniIdleLay				= AniAIAnimalMain(LTTRUE,	_A("LayDown"));
+	m_AniIdleSit				= AniAIAnimalMain(LTTRUE,	_A("Sit"));
+	m_AniFenceJump			  = AniAIAnimalMain(LTFALSE,   _A("FenceJump"));
+	m_AniFenceBark			  = AniAIAnimalMain(LTTRUE,	_A("FenceBark"));
+	m_AniFenceUnjump			= AniAIAnimalMain(LTFALSE,   _A("FenceUnjump"));
+	m_AniSniffPoodle			= AniAIAnimalMain(LTTRUE,	_A("SniffPoodle"));
+	m_AniSwimming			   = AniAIAnimalMain(LTTRUE,	_A("Swimming"));
+	m_AniMaul				   = AniAIAnimalMain(LTTRUE,	_A("Maul"));
 
 	// Setup our lookup tables
 
-    memset(m_apAniAIAnimalMains, LTNULL, sizeof(void*)*kNumMains);
+	memset(m_apAniAIAnimalMains, LTNULL, sizeof(void*)*kNumMains);
 
 	m_apAniAIAnimalMains[eIdle]				= &m_AniIdle;
 	m_apAniAIAnimalMains[eWalking]			= &m_AniWalking;
@@ -92,11 +86,9 @@ void CAnimatorAIAnimal::Init(ILTCSBase *pInterface, HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorAIAnimal::Update()
 //
-//	ROUTINE:	CAnimatorAIAnimal::Update()
-//
-//	PURPOSE:	Updates the AIAnimal animator
-//
+//	PURPOSE: Updates the AIAnimal animator
 // ----------------------------------------------------------------------- //
 
 void CAnimatorAIAnimal::Update()
@@ -109,17 +101,17 @@ void CAnimatorAIAnimal::Update()
 
 		if ( !pAniAIAnimalMain )
 		{
-            g_pLTServer->CPrint("missing ani %d", m_eMain);
+			g_pLTServer->CPrint("missing ani %d", m_eMain);
 			return;
 		}
 
 		if ( pAniAIAnimalMain->bLoops && !IsAniTrackerLooping(eAniTrackerMain) )
 		{
-            LoopAniTracker(eAniTrackerMain, LTTRUE);
+			LoopAniTracker(eAniTrackerMain, LTTRUE);
 		}
 		else if ( !pAniAIAnimalMain->bLoops && IsAniTrackerLooping(eAniTrackerMain) )
 		{
-            LoopAniTracker(eAniTrackerMain, LTFALSE);
+			LoopAniTracker(eAniTrackerMain, LTFALSE);
 		}
 
 		SetAni(pAniAIAnimalMain->eAni, eAniTrackerMain);
@@ -139,67 +131,61 @@ void CAnimatorAIAnimal::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorAIAnimal::ResetAniTracker()
 //
-//	ROUTINE:	CAnimatorAIAnimal::ResetAniTracker()
-//
-//	PURPOSE:	Resets an anitracker
-//
+//	PURPOSE: Resets an anitracker
 // ----------------------------------------------------------------------- //
 
 void CAnimatorAIAnimal::ResetAniTracker(AniTracker eAniTracker)
 {
 	CAnimator::ResetAniTracker(eAniTracker);
 
-    HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_SFX_MESSAGE);
-    g_pLTServer->WriteToMessageByte(hMessage, SFX_CHARACTER_ID);
-    g_pLTServer->WriteToMessageObject(hMessage, m_hObject);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_SFX_MESSAGE);
+	g_pLTServer->WriteToMessageByte(hMessage, SFX_CHARACTER_ID);
+	g_pLTServer->WriteToMessageObject(hMessage, m_hObject);
 	if ( eAniTracker == eAniTrackerMain )
 	{
-        g_pLTServer->WriteToMessageByte(hMessage, CFX_RESET_TRACKER);
-        g_pLTServer->WriteToMessageByte(hMessage, 0);
+		g_pLTServer->WriteToMessageByte(hMessage, CFX_RESET_TRACKER);
+		g_pLTServer->WriteToMessageByte(hMessage, 0);
 	}
 	else
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 	}
-    g_pLTServer->EndMessage(hMessage);
+	g_pLTServer->EndMessage(hMessage);
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorAIAnimal::SetDims()
 //
-//	ROUTINE:	CAnimatorAIAnimal::SetDims()
-//
-//	PURPOSE:	Sets the AIAnimal's dims based on the ani
-//
+//	PURPOSE: Sets the AIAnimal's dims based on the ani
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAnimatorAIAnimal::SetDims(HMODELANIM hAni)
 {
-    LTVector vDims;
-    LTRESULT dResult = g_pLTServer->GetModelAnimUserDims(m_hObject, &vDims, hAni);
-    _ASSERT(dResult == LT_OK);
+	LTVector vDims;
+	LTRESULT dResult = g_pLTServer->GetModelAnimUserDims(m_hObject, &vDims, hAni);
+	_ASSERT(dResult == LT_OK);
 
-    CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(m_hObject);
+	CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(m_hObject);
 
 	// If we could update the dims, or we're forcing the animation, set it
 
-    if ( pCharacter->SetDims(&vDims, LTFALSE) /*|| IS DEATH ANI*/)
+	if ( pCharacter->SetDims(&vDims, LTFALSE) /*|| IS DEATH ANI*/)
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorAIAnimal::IsAnimating*()
 //
-//	ROUTINE:	CAnimatorAIAnimal::IsAnimating*()
-//
-//	PURPOSE:	Is the parameter responsible for the current animation?
-//
+//	PURPOSE: Is the parameter responsible for the current animation?
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAnimatorAIAnimal::IsAnimatingMain(Main eMain) const

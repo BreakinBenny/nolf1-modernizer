@@ -17,48 +17,48 @@ typedef struct
 {
 	char	szName[64];
 	CharacterClass ccAlignment;
-    LTFLOAT  fRunSpeed;
-    LTFLOAT  fCreepSpeed;
-    LTFLOAT  fWalkSpeed;
-    LTFLOAT  fRollSpeed;
-    LTFLOAT  fSwimSpeed;
-    LTFLOAT  fFlySpeed;
-    LTFLOAT  fMarksmanship;
-    LTFLOAT  fBravado;
-    LTFLOAT  fAwareness;
-    LTFLOAT  fSoundRadius;
-    LTFLOAT  fHitPoints;
-    LTFLOAT  fArmor;
-    LTFLOAT  fAccuracy;
-    LTFLOAT  fAccuracyIncreaseRate;
-    LTFLOAT  fAccuracyDecreaseRate;
-    LTFLOAT  fLag;
-    LTFLOAT  fLagIncreaseRate;
-    LTFLOAT  fLagDecreaseRate;
-    LTBOOL   bCanSeeEnemy;
-    LTFLOAT  fSeeEnemyDistance;
-    LTBOOL   bCanSeeAllyDeath;
-    LTFLOAT  fSeeAllyDeathDistance;
-    LTBOOL   bCanHearAllyDeath;
-    LTFLOAT  fHearAllyDeathDistance;
-    LTBOOL   bCanHearAllyPain;
-    LTFLOAT  fHearAllyPainDistance;
-    LTBOOL   bCanHearEnemyFootstep;
-    LTFLOAT  fHearEnemyFootstepDistance;
-    LTBOOL   bCanSeeEnemyFootprint;
-    LTFLOAT  fSeeEnemyFootprintDistance;
-    LTBOOL   bCanHearEnemyWeaponImpact;
-    LTFLOAT  fHearEnemyWeaponImpactDistance;
-    LTBOOL   bCanHearEnemyWeaponFire;
-    LTFLOAT  fHearEnemyWeaponFireDistance;
-    LTBOOL   bCanHearAllyWeaponFire;
-    LTFLOAT  fHearAllyWeaponFireDistance;
-    LTBOOL   bCanSeeEnemyFlashlight;
-    LTFLOAT  fSeeEnemyFlashlightDistance;
-    LTBOOL   bCanHearEnemyDisturbance;
-    LTFLOAT  fHearEnemyDisturbanceDistance;
-    LTFLOAT  fBarkDistance;
-    LTFLOAT  fAttackDistance;
+	LTFLOAT  fRunSpeed;
+	LTFLOAT  fCreepSpeed;
+	LTFLOAT  fWalkSpeed;
+	LTFLOAT  fRollSpeed;
+	LTFLOAT  fSwimSpeed;
+	LTFLOAT  fFlySpeed;
+	LTFLOAT  fMarksmanship;
+	LTFLOAT  fBravado;
+	LTFLOAT  fAwareness;
+	LTFLOAT  fSoundRadius;
+	LTFLOAT  fHitPoints;
+	LTFLOAT  fArmor;
+	LTFLOAT  fAccuracy;
+	LTFLOAT  fAccuracyIncreaseRate;
+	LTFLOAT  fAccuracyDecreaseRate;
+	LTFLOAT  fLag;
+	LTFLOAT  fLagIncreaseRate;
+	LTFLOAT  fLagDecreaseRate;
+	LTBOOL   bCanSeeEnemy;
+	LTFLOAT  fSeeEnemyDistance;
+	LTBOOL   bCanSeeAllyDeath;
+	LTFLOAT  fSeeAllyDeathDistance;
+	LTBOOL   bCanHearAllyDeath;
+	LTFLOAT  fHearAllyDeathDistance;
+	LTBOOL   bCanHearAllyPain;
+	LTFLOAT  fHearAllyPainDistance;
+	LTBOOL   bCanHearEnemyFootstep;
+	LTFLOAT  fHearEnemyFootstepDistance;
+	LTBOOL   bCanSeeEnemyFootprint;
+	LTFLOAT  fSeeEnemyFootprintDistance;
+	LTBOOL   bCanHearEnemyWeaponImpact;
+	LTFLOAT  fHearEnemyWeaponImpactDistance;
+	LTBOOL   bCanHearEnemyWeaponFire;
+	LTFLOAT  fHearEnemyWeaponFireDistance;
+	LTBOOL   bCanHearAllyWeaponFire;
+	LTFLOAT  fHearAllyWeaponFireDistance;
+	LTBOOL   bCanSeeEnemyFlashlight;
+	LTFLOAT  fSeeEnemyFlashlightDistance;
+	LTBOOL   bCanHearEnemyDisturbance;
+	LTFLOAT  fHearEnemyDisturbanceDistance;
+	LTFLOAT  fBarkDistance;
+	LTFLOAT  fAttackDistance;
 }
 AIBM_Template;
 
@@ -70,13 +70,13 @@ typedef struct
 	LTFLOAT	fDodgeVectorCheckChance;
 	LTFLOAT fDodgeVectorDelayTime;
 	LTFLOAT fDodgeVectorShuffleChance;
-    LTFLOAT fDodgeVectorRollChance;
-    LTFLOAT fDodgeVectorCoverChance;
+	LTFLOAT fDodgeVectorRollChance;
+	LTFLOAT fDodgeVectorCoverChance;
 
 	LTFLOAT	fDodgeProjectileCheckTime;
 	LTFLOAT	fDodgeProjectileCheckChance;
 	LTFLOAT fDodgeProjectileDelayTime;
-    LTFLOAT fDodgeProjectileFleeChance;
+	LTFLOAT fDodgeProjectileFleeChance;
 
 	LTFLOAT	fAttackVectorRangeMin;
 	LTFLOAT	fAttackVectorRangeMax;
@@ -129,24 +129,24 @@ typedef struct
 AIBM_Brain;
 
 #define SENSE_STIMULATION(sense) \
-    LTFLOAT  f##sense##StimulationIncreaseRateAlert; \
-    LTFLOAT  f##sense##StimulationIncreaseRateUnalert; \
-    LTFLOAT  f##sense##StimulationDecreaseRateAlert; \
-    LTFLOAT  f##sense##StimulationDecreaseRateUnalert; \
-    CRange<LTFLOAT>  rng##sense##StimulationThreshhold; \
+	LTFLOAT  f##sense##StimulationIncreaseRateAlert; \
+	LTFLOAT  f##sense##StimulationIncreaseRateUnalert; \
+	LTFLOAT  f##sense##StimulationDecreaseRateAlert; \
+	LTFLOAT  f##sense##StimulationDecreaseRateUnalert; \
+	CRange<LTFLOAT>  rng##sense##StimulationThreshhold; \
 	int		n##sense##FalseStimulationLimit;
 
 #define SENSE_DELAY(sense) \
-    LTFLOAT  f##sense##ReactionDelay;
+	LTFLOAT  f##sense##ReactionDelay;
 
 typedef struct
 {
-    LTFLOAT fAllyDeathNoiseDistance;
-    LTFLOAT fAllyPainNoiseDistance;
-    LTFLOAT fEnemyMovementNoiseDistance;
-    LTFLOAT fCoinNoiseDistance;
-    LTFLOAT fNoFOVDistanceSqr;
-    LTFLOAT fInstantSeeDistanceSqr;
+	LTFLOAT fAllyDeathNoiseDistance;
+	LTFLOAT fAllyPainNoiseDistance;
+	LTFLOAT fEnemyMovementNoiseDistance;
+	LTFLOAT fCoinNoiseDistance;
+	LTFLOAT fNoFOVDistanceSqr;
+	LTFLOAT fInstantSeeDistanceSqr;
 
 	SENSE_STIMULATION(SeeEnemy);
 	SENSE_DELAY(SeeEnemyFootprint);
@@ -164,7 +164,7 @@ AIBM_Senses;
 
 typedef struct
 {
-    LTFLOAT fNoTargetTime;
+	LTFLOAT fNoTargetTime;
 }
 AIBM_Attract;
 
@@ -180,7 +180,7 @@ class CAIButeMgr : public CGameButeMgr
 		CAIButeMgr();
 		~CAIButeMgr();
 
-        LTBOOL       Init(ILTCSBase *pInterface, const char* szAttributeFile = "Attributes\\AIButes.txt");
+		LTBOOL	   Init(ILTCSBase *pInterface, const char* szAttributeFile = "Attributes\\AIButes.txt");
 		void		Term();
 
 		// Templates

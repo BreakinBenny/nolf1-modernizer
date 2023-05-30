@@ -85,10 +85,10 @@ void CAnimationLex::HandleNewline()
 
 LTBOOL CAnimationLex::Lex(const char* szFile)
 {
-    ILTStream* pDStream;
-    LTRESULT dr = g_pLTServer->OpenFile((char*)szFile, &pDStream);
+	ILTStream* pDStream;
+	LTRESULT dr = g_pLTServer->OpenFile((char*)szFile, &pDStream);
 
-    if (dr != LT_OK) return(LTFALSE);
+	if (dr != LT_OK) return(LTFALSE);
 
 	// Read the file...
 

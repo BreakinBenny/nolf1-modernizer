@@ -19,23 +19,23 @@ class AI_Poodle : public CAIAnimal
 		void Walk() { m_fSpeed = GetWalkSpeed(); }
 		void Run() { m_fSpeed = GetRunSpeed(); }
 		void Stop() { m_fSpeed = 0.0f; }
-        LTFLOAT GetSpeed() { return m_fSpeed; }
+		LTFLOAT GetSpeed() { return m_fSpeed; }
 
-        void Move(const LTVector& vPos);
+		void Move(const LTVector& vPos);
 
 		// Attributes
 
-        LTFLOAT GetWalkSpeed() { return m_fWalkVel; }
-        LTFLOAT GetRunSpeed() { return m_fRunVel; }
+		LTFLOAT GetWalkSpeed() { return m_fWalkVel; }
+		LTFLOAT GetRunSpeed() { return m_fRunVel; }
 
 	protected : // Protected member functions
 
 		// Engine methods
 
-        LTBOOL ReadProp(ObjectCreateStruct *pData);
+		LTBOOL ReadProp(ObjectCreateStruct *pData);
 		void InitialUpdate();
-        void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 
 		// Character stuff
 
@@ -48,7 +48,7 @@ class AI_Poodle : public CAIAnimal
 
 		// Handlers
 
-        LTBOOL HandleCommand(char** pTokens, int nArgs);
+		LTBOOL HandleCommand(char** pTokens, int nArgs);
 
 		// State methods
 
@@ -62,9 +62,9 @@ class AI_Poodle : public CAIAnimal
 
 		// Movement
 
-        LTVector    m_vMovePos;			// Position to move to
-        LTBOOL      m_bMove;			// Are we moving or not this frame
-        LTFLOAT     m_fSpeed;			// Our current movement speed
+		LTVector	m_vMovePos;			// Position to move to
+		LTBOOL	  m_bMove;			// Are we moving or not this frame
+		LTFLOAT	 m_fSpeed;			// Our current movement speed
 
 		// Sound
 

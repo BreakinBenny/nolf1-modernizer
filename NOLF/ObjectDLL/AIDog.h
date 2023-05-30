@@ -21,21 +21,21 @@ class AI_Dog : public CAIAnimal, public CSteerable
 		void Walk() { m_fSpeed = GetWalkSpeed(); }
 		void Run() { m_fSpeed = GetRunSpeed(); }
 		void Stop() { m_fSpeed = 0.0f; }
-        LTFLOAT GetSpeed() { return m_fSpeed; }
+		LTFLOAT GetSpeed() { return m_fSpeed; }
 
 		// Attributes
 
-        LTFLOAT GetBarkDistance() { return m_fBarkDistance; }
-        LTFLOAT GetBarkDistanceSqr() { return m_fBarkDistanceSqr; }
-        LTFLOAT GetAttackDistance() { return m_fAttackDistance; }
-        LTFLOAT GetAttackDistanceSqr() { return m_fAttackDistanceSqr; }
-        LTFLOAT GetWalkSpeed() { return m_fWalkVel; }
-        LTFLOAT GetRunSpeed() { return m_fRunVel; }
-        LTFLOAT GetAttractingNoTargetTime() { return g_pAIButeMgr->GetAttract()->fNoTargetTime; }
+		LTFLOAT GetBarkDistance() { return m_fBarkDistance; }
+		LTFLOAT GetBarkDistanceSqr() { return m_fBarkDistanceSqr; }
+		LTFLOAT GetAttackDistance() { return m_fAttackDistance; }
+		LTFLOAT GetAttackDistanceSqr() { return m_fAttackDistanceSqr; }
+		LTFLOAT GetWalkSpeed() { return m_fWalkVel; }
+		LTFLOAT GetRunSpeed() { return m_fRunVel; }
+		LTFLOAT GetAttractingNoTargetTime() { return g_pAIButeMgr->GetAttract()->fNoTargetTime; }
 
 		// Misc
 
-        LTBOOL HasBarked() { return m_bBarked; }
+		LTBOOL HasBarked() { return m_bBarked; }
 
 		// Simple accessors
 
@@ -45,16 +45,16 @@ class AI_Dog : public CAIAnimal, public CSteerable
 
 		// Engine methods
 
-        LTBOOL ReadProp(ObjectCreateStruct *pData);
+		LTBOOL ReadProp(ObjectCreateStruct *pData);
 		void HandleModelString(ArgList* pArgList);
 		void InitialUpdate();
-        void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 
 		// Character stuff
 
 		void PreCreateSpecialFX(CHARCREATESTRUCT& cs);
-        LTBOOL CanLipSync() { return LTFALSE; }
+		LTBOOL CanLipSync() { return LTFALSE; }
 
 		// Update methods
 
@@ -65,8 +65,8 @@ class AI_Dog : public CAIAnimal, public CSteerable
 
 		// Handlers
 
-        LTBOOL HandleCommand(char** pTokens, int nArgs);
-        void DoReaction(HSTRING hstrReaction, CAISense* pAISense, LTBOOL bIndividual);
+		LTBOOL HandleCommand(char** pTokens, int nArgs);
+		void DoReaction(HSTRING hstrReaction, CAISense* pAISense, LTBOOL bIndividual);
 
 		// State methods
 
@@ -78,9 +78,9 @@ class AI_Dog : public CAIAnimal, public CSteerable
 
 	protected : // Protected methods for CSteerable
 
-        LTBOOL Steerable_PreUpdate();
-        LTBOOL Steerable_Update(const LTVector& vSteeringDirection);
-        LTBOOL Steerable_PostUpdate();
+		LTBOOL Steerable_PreUpdate();
+		LTBOOL Steerable_Update(const LTVector& vSteeringDirection);
+		LTBOOL Steerable_PostUpdate();
 
 	protected : // Protected member variables
 
@@ -90,18 +90,18 @@ class AI_Dog : public CAIAnimal, public CSteerable
 
 		// Movement
 
-        LTFLOAT          m_fSpeed;       // Our current movement speed
+		LTFLOAT		  m_fSpeed;	   // Our current movement speed
 
 		// Senses
 
-        LTFLOAT          m_fBarkDistance;        // Distance at which we will only bark at enemies
-        LTFLOAT          m_fBarkDistanceSqr;     // This value squared
-        LTFLOAT          m_fAttackDistance;      // Distance at which we will attack enemies
-        LTFLOAT          m_fAttackDistanceSqr;   // This value squared
+		LTFLOAT		  m_fBarkDistance;		// Distance at which we will only bark at enemies
+		LTFLOAT		  m_fBarkDistanceSqr;	 // This value squared
+		LTFLOAT		  m_fAttackDistance;	  // Distance at which we will attack enemies
+		LTFLOAT		  m_fAttackDistanceSqr;   // This value squared
 
 		// Misc
 
-        LTBOOL           m_bBarked;              // Did we bark last frame?
+		LTBOOL		   m_bBarked;			  // Did we bark last frame?
 
 		// Steering
 

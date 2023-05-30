@@ -291,14 +291,12 @@ int g_cAIReactions = sizeof(g_aAIReactions)/sizeof(REACTIONSTRUCT);
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::DoReaction()
 //
-//	ROUTINE:	CAI::DoReaction()
-//
-//	PURPOSE:	Execute a reaction
-//
+//	PURPOSE: Execute a reaction
 // ----------------------------------------------------------------------- //
 
 void CAI::DoReaction(HSTRING hstrReaction, CAISense* pAISense, LTBOOL bIndividual)
 {
-    char* szReaction = g_pLTServer->GetStringData(hstrReaction);
+	char* szReaction = g_pLTServer->GetStringData(hstrReaction);
 }

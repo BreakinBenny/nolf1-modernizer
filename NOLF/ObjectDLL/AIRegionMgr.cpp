@@ -47,7 +47,7 @@ void CAIRegionMgr::Init()
 	HOBJECT	hCurObject = LTNULL;
 	while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIRegion))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIRegion))
 		{
 			m_cRegions++;
 		}
@@ -56,7 +56,7 @@ void CAIRegionMgr::Init()
 	hCurObject = LTNULL;
 	while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIRegion))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIRegion))
 		{
 			m_cRegions++;
 		}
@@ -73,38 +73,38 @@ void CAIRegionMgr::Init()
 	hCurObject = LTNULL;
 	while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIRegion))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIRegion))
 		{
 			// Setup the region
 
-            m_aRegions[iRegion].Init(iRegion, *(AIRegion*)g_pLTServer->HandleToObject(hCurObject));
+			m_aRegions[iRegion].Init(iRegion, *(AIRegion*)g_pLTServer->HandleToObject(hCurObject));
 			iRegion++;
 
 			// Remove the object
 
-            g_pLTServer->RemoveObject(hCurObject);
+			g_pLTServer->RemoveObject(hCurObject);
 		}
 	}
 
 	hCurObject = LTNULL;
 	while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIRegion))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIRegion))
 		{
 			// Setup the region
 
-            m_aRegions[iRegion].Init(iRegion, *(AIRegion*)g_pLTServer->HandleToObject(hCurObject));
+			m_aRegions[iRegion].Init(iRegion, *(AIRegion*)g_pLTServer->HandleToObject(hCurObject));
 			iRegion++;
 
 			// Remove the object
 
-            g_pLTServer->RemoveObject(hCurObject);
+			g_pLTServer->RemoveObject(hCurObject);
 		}
 	}
 
 	// All done
 
-    g_pLTServer->CPrint("Added %d regions", m_cRegions);
+	g_pLTServer->CPrint("Added %d regions", m_cRegions);
 
 	m_bInitialized = LTTRUE;
 }

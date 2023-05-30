@@ -30,11 +30,9 @@ static STATEMAP s_aStateMaps[] =
 static int s_cStateMaps = sizeof(s_aStateMaps)/sizeof(STATEMAP);
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::AI_Poodle()
 //
-//	ROUTINE:	AI_Poodle::AI_Poodle()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 AI_Poodle::AI_Poodle() : CAIAnimal()
@@ -42,19 +40,19 @@ AI_Poodle::AI_Poodle() : CAIAnimal()
 	m_eModelId = g_pModelButeMgr->GetModelId("Poodle");
 	m_eModelSkeleton = g_pModelButeMgr->GetModelSkeleton(m_eModelId);
 	m_cc = BAD;
-    m_hstrAttributeTemplate = g_pLTServer->CreateString("Poodle");
+	m_hstrAttributeTemplate = g_pLTServer->CreateString("Poodle");
 
 	m_fRotationSpeed	= .3f;
 
-    m_vMovePos          = LTVector(0,0,0);
-    m_bMove             = LTFALSE;
+	m_vMovePos		  = LTVector(0,0,0);
+	m_bMove			 = LTFALSE;
 
 	m_fSpeed			= 100.0f;
 
 	m_fWalkVel			= 0.0f;
 	m_fRunVel			= 0.0f;
 
-    m_pPoodleState		= LTNULL;
+	m_pPoodleState		= LTNULL;
 
 	m_hRunningSound		= LTNULL;
 
@@ -62,11 +60,9 @@ AI_Poodle::AI_Poodle() : CAIAnimal()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::~AI_Poodle()
 //
-//	ROUTINE:	AI_Poodle::~AI_Poodle()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 AI_Poodle::~AI_Poodle()
@@ -74,9 +70,9 @@ AI_Poodle::~AI_Poodle()
 	if ( m_pPoodleState )
 	{
 		FACTORY_DELETE(m_pPoodleState);
-        m_pPoodleState = LTNULL;
-        m_pAnimalState = LTNULL;
-        m_pState = LTNULL;
+		m_pPoodleState = LTNULL;
+		m_pAnimalState = LTNULL;
+		m_pState = LTNULL;
 	}
 
 	if ( m_hRunningSound )
@@ -87,11 +83,9 @@ AI_Poodle::~AI_Poodle()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::InitialUpdate
 //
-//	ROUTINE:	AI_Poodle::InitialUpdate
-//
-//	PURPOSE:	Performs our initial update
-//
+//	PURPOSE: Performs our initial update
 // ----------------------------------------------------------------------- //
 
 void AI_Poodle::InitialUpdate()
@@ -102,32 +96,30 @@ void AI_Poodle::InitialUpdate()
 
 	CreateSmokepuffs();
 
-    g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
+	g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::ReadProp
 //
-//	ROUTINE:	AI_Poodle::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL AI_Poodle::ReadProp(ObjectCreateStruct *pData)
 {
 	GenericProp genProp;
-    if (!g_pLTServer || !pData) return LTFALSE;
+	if (!g_pLTServer || !pData) return LTFALSE;
 
 	// If we have an attribute template, fill in the info
 
 	if ( m_hstrAttributeTemplate )
 	{
-        char *szAttributeTemplate = g_pLTServer->GetStringData(m_hstrAttributeTemplate);
+		char *szAttributeTemplate = g_pLTServer->GetStringData(m_hstrAttributeTemplate);
 		int nTemplateID = g_pAIButeMgr->GetTemplateIDByName(szAttributeTemplate);
 
 		if ( nTemplateID < 0 )
 		{
-            g_pLTServer->CPrint("Bad AI Attribute Template referenced! : %s", szAttributeTemplate);
+			g_pLTServer->CPrint("Bad AI Attribute Template referenced! : %s", szAttributeTemplate);
 		}
 		else
 		{
@@ -137,16 +129,16 @@ LTBOOL AI_Poodle::ReadProp(ObjectCreateStruct *pData)
 	}
 	else
 	{
-        g_pLTServer->CPrint("No attribute template specified for AI!");
+		g_pLTServer->CPrint("No attribute template specified for AI!");
 	}
 
 	// Now get the overrides
 
-    if ( g_pLTServer->GetPropGeneric("WalkSpeed", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("WalkSpeed", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fWalkVel = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("RunSpeed", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("RunSpeed", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fRunVel = genProp.m_Float;
 
@@ -154,18 +146,16 @@ LTBOOL AI_Poodle::ReadProp(ObjectCreateStruct *pData)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::HandleCommand()
 //
-//	ROUTINE:	AI_Poodle::HandleCommand()
-//
-//	PURPOSE:	Handles a command
-//
+//	PURPOSE: Handles a command
 // --------------------------------------------------------------------------- //
 
 LTBOOL AI_Poodle::HandleCommand(char** pTokens, int nArgs)
 {
 	// Let base class have a whack at it...
 
-    if (CAIAnimal::HandleCommand(pTokens, nArgs)) return LTTRUE;
+	if (CAIAnimal::HandleCommand(pTokens, nArgs)) return LTTRUE;
 
 	// State-changing message
 
@@ -178,33 +168,31 @@ LTBOOL AI_Poodle::HandleCommand(char** pTokens, int nArgs)
 			SetState(s_aStateMaps[iState].eState);
 			HandleCommandParameters(pTokens, nArgs);
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::SetState
 //
-//	ROUTINE:	AI_Poodle::SetState
-//
-//	PURPOSE:	Changes our current state
-//
+//	PURPOSE: Changes our current state
 // ----------------------------------------------------------------------- //
 
 void AI_Poodle::SetState(CAIPoodleState::AIPoodleStateType eState)
 {
-    if ( !g_pLTServer ) return;
+	if ( !g_pLTServer ) return;
 
 	// Delete the old state
 
 	if ( m_pPoodleState )
 	{
 		FACTORY_DELETE(m_pPoodleState);
-        m_pPoodleState = LTNULL;
-        m_pAnimalState = LTNULL;
-        m_pState = LTNULL;
+		m_pPoodleState = LTNULL;
+		m_pAnimalState = LTNULL;
+		m_pState = LTNULL;
 	}
 
 	switch ( eState )
@@ -230,7 +218,7 @@ void AI_Poodle::SetState(CAIPoodleState::AIPoodleStateType eState)
 
 	if ( !m_pPoodleState )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return;
 	}
 
@@ -238,32 +226,28 @@ void AI_Poodle::SetState(CAIPoodleState::AIPoodleStateType eState)
 
 	if ( !m_pPoodleState->Init(this) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		FACTORY_DELETE(m_pPoodleState);
-        m_pPoodleState = LTNULL;
+		m_pPoodleState = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::Move()
 //
-//	ROUTINE:	AI_Poodle::Move()
-//
-//	PURPOSE:	Sets our new position for this frame
-//
+//	PURPOSE: Sets our new position for this frame
 // ----------------------------------------------------------------------- //
 
 void AI_Poodle::Move(const LTVector& vPos)
 {
 	m_vMovePos = vPos;
-    m_bMove = LTTRUE;
+	m_bMove = LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::UpdateMovement()
 //
-//	ROUTINE:	AI_Poodle::UpdateMovement()
-//
-//	PURPOSE:	Moves us to a given position
-//
+//	PURPOSE: Moves us to a given position
 // ----------------------------------------------------------------------- //
 
 void AI_Poodle::UpdateMovement()
@@ -274,19 +258,17 @@ void AI_Poodle::UpdateMovement()
 
 	// Move us
 
-    g_pLTServer->MoveObject(m_hObject, &m_vMovePos);
+	g_pLTServer->MoveObject(m_hObject, &m_vMovePos);
 
 	// Clear out movement info
 
-    m_bMove = LTFALSE;
+	m_bMove = LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::UpdateAnimator
 //
-//	ROUTINE:	AI_Poodle::UpdateAnimator
-//
-//	PURPOSE:	Handles any pending Animator changes
-//
+//	PURPOSE: Handles any pending Animator changes
 // ----------------------------------------------------------------------- //
 
 void AI_Poodle::UpdateAnimator()
@@ -298,11 +280,9 @@ void AI_Poodle::UpdateAnimator()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::Save
 //
-//	ROUTINE:	AI_Poodle::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void AI_Poodle::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -311,10 +291,10 @@ void AI_Poodle::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 	// Save state...
 
-    uint32 dwState = (uint32)-1;
+	uint32 dwState = (uint32)-1;
 	if (m_pPoodleState)
 	{
-        dwState = (uint32) m_pPoodleState->GetType();
+		dwState = (uint32) m_pPoodleState->GetType();
 	}
 
 	SAVE_DWORD(dwState);
@@ -330,11 +310,9 @@ void AI_Poodle::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::Load
 //
-//	ROUTINE:	AI_Poodle::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void AI_Poodle::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -343,7 +321,7 @@ void AI_Poodle::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	// Load state...
 
-    uint32 dwState;
+	uint32 dwState;
 	LOAD_DWORD(dwState);
 
 	if (dwState != (DWORD)-1)
@@ -362,11 +340,9 @@ void AI_Poodle::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Poodle::PreCreateSpecialFX()
 //
-//	ROUTINE:	AI_Poodle::PreCreateSpecialFX()
-//
-//	PURPOSE:	Last chance to change our characterfx struct
-//
+//	PURPOSE: Last chance to change our characterfx struct
 // ----------------------------------------------------------------------- //
 
 void AI_Poodle::PreCreateSpecialFX(CHARCREATESTRUCT& cs)

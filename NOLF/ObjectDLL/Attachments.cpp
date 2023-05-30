@@ -121,16 +121,14 @@ void CAttachment::Destroy(CAttachment* pAttachment)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::CAttachments
 //
-//	ROUTINE:	CAttachments::CAttachments
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CAttachments::CAttachments() : IAggregate()
 {
-    m_hObject = LTNULL;
+	m_hObject = LTNULL;
 
 	m_cAttachmentPositions = 0;
 
@@ -141,11 +139,9 @@ CAttachments::CAttachments() : IAggregate()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::~CAttachments
 //
-//	ROUTINE:	CAttachments::~CAttachments
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CAttachments::~CAttachments()
@@ -154,11 +150,9 @@ CAttachments::~CAttachments()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::EngineMessageFn
 //
-//	ROUTINE:	CAttachments::EngineMessageFn
-//
-//	PURPOSE:	Handle message from the engine
-//
+//	PURPOSE: Handle message from the engine
 // ----------------------------------------------------------------------- //
 
 uint32 CAttachments::EngineMessageFn(LPBASECLASS pObject, uint32 messageID, void *pData, LTFLOAT fData)
@@ -197,27 +191,25 @@ uint32 CAttachments::EngineMessageFn(LPBASECLASS pObject, uint32 messageID, void
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint8)fData);
+			Save((HMESSAGEWRITE)pData, (uint8)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint8)fData);
+			Load((HMESSAGEREAD)pData, (uint8)fData);
 		}
 		break;
 	}
 
-    return IAggregate::EngineMessageFn(pObject, messageID, pData, fData);
+	return IAggregate::EngineMessageFn(pObject, messageID, pData, fData);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::ObjectMessageFn
 //
-//	ROUTINE:	CAttachments::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 CAttachments::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -238,16 +230,14 @@ uint32 CAttachments::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, uint3
 		m_apAttachmentPositions[iAttachmentPosition]->ObjectMessageFn(pObject, hSender, messageID, hRead);
 	}}
 
-    return IAggregate::ObjectMessageFn(pObject, hSender, messageID, hRead);
+	return IAggregate::ObjectMessageFn(pObject, hSender, messageID, hRead);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::ReadProp
 //
-//	ROUTINE:	CAttachments::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAttachments::ReadProp(BaseClass *pObject, ObjectCreateStruct *pStruct)
@@ -259,10 +249,10 @@ LTBOOL CAttachments::ReadProp(BaseClass *pObject, ObjectCreateStruct *pStruct)
 
 	{for ( int iAttachmentPosition = 0 ; iAttachmentPosition < m_cAttachmentPositions ; iAttachmentPosition++ )
 	{
-        if ( g_pLTServer->GetPropGeneric( (char*)m_apAttachmentPositions[iAttachmentPosition]->GetName(), &genProp ) == LT_OK )
+		if ( g_pLTServer->GetPropGeneric( (char*)m_apAttachmentPositions[iAttachmentPosition]->GetName(), &genProp ) == LT_OK )
 			if ( genProp.m_String[0] )
 			{
-                m_apAttachmentPositions[iAttachmentPosition]->SetAttachmentName(g_pLTServer->CreateString(genProp.m_String));
+				m_apAttachmentPositions[iAttachmentPosition]->SetAttachmentName(g_pLTServer->CreateString(genProp.m_String));
 			}
 	}}
 
@@ -270,11 +260,9 @@ LTBOOL CAttachments::ReadProp(BaseClass *pObject, ObjectCreateStruct *pStruct)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::Attach
 //
-//	ROUTINE:	CAttachments::Attach
-//
-//	PURPOSE:	Dynamically add an attachment
-//
+//	PURPOSE: Dynamically add an attachment
 // ----------------------------------------------------------------------- //
 
 void CAttachments::Attach(const char* szAttachmentPosition, const char* szAttachment)
@@ -291,7 +279,7 @@ void CAttachments::Attach(const char* szAttachmentPosition, const char* szAttach
 			}
 			else
 			{
-                pAttachmentPosition->SetAttachmentName(g_pLTServer->CreateString((char*)szAttachment));
+				pAttachmentPosition->SetAttachmentName(g_pLTServer->CreateString((char*)szAttachment));
 				CreateAttachment(pAttachmentPosition);
 			}
 
@@ -301,11 +289,9 @@ void CAttachments::Attach(const char* szAttachmentPosition, const char* szAttach
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::Detach
 //
-//	ROUTINE:	CAttachments::Detach
-//
-//	PURPOSE:	Dynamically remove an attachment
-//
+//	PURPOSE: Dynamically remove an attachment
 // ----------------------------------------------------------------------- //
 
 void CAttachments::Detach(const char* szAttachmentPosition)
@@ -334,7 +320,7 @@ void CAttachments::Detach(const char* szAttachmentPosition)
 						break;
 				}
 
-                g_pLTServer->RemoveObject(pAttachment->GetModel());
+				g_pLTServer->RemoveObject(pAttachment->GetModel());
 				CAttachment::Destroy(pAttachment);
 
 				pAttachmentPosition->SetAttachment(NULL);
@@ -344,11 +330,9 @@ void CAttachments::Detach(const char* szAttachmentPosition)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::CreateAttachment
 //
-//	ROUTINE:	CAttachments::CreateAttachment
-//
-//	PURPOSE:	Creates an attachment
-//
+//	PURPOSE: Creates an attachment
 // ----------------------------------------------------------------------- //
 
 void CAttachments::CreateAttachment(CAttachmentPosition *pAttachmentPosition)
@@ -359,12 +343,12 @@ void CAttachments::CreateAttachment(CAttachmentPosition *pAttachmentPosition)
 	if ( pAttachmentPosition->HasAttachment() ) return;
 	if ( !pAttachmentPosition->HasAttachmentName() ) return;
 
-    char *szAttachmentName = g_pLTServer->GetStringData(pAttachmentPosition->GetAttachmentName());
+	char *szAttachmentName = g_pLTServer->GetStringData(pAttachmentPosition->GetAttachmentName());
 
-    if ( !_stricmp(c_szNoAttachment, szAttachmentName) ) return;
+	if ( !_stricmp(c_szNoAttachment, szAttachmentName) ) return;
 
-    uint8 nWeaponID = WMGR_INVALID_ID;
-    uint8 nAmmoID = WMGR_INVALID_ID;
+	uint8 nWeaponID = WMGR_INVALID_ID;
+	uint8 nAmmoID = WMGR_INVALID_ID;
 	char szAttachmentNameCopy[128];
 	strcpy(szAttachmentNameCopy, szAttachmentName);
 	g_pWeaponMgr->ReadWeapon(szAttachmentNameCopy, nWeaponID, nAmmoID);
@@ -379,7 +363,7 @@ void CAttachments::CreateAttachment(CAttachmentPosition *pAttachmentPosition)
 
 	if ( -1 == nAttachmentID )
 	{
-        g_pLTServer->CPrint("Unmatched attable name %s (Line %d of %s)", szAttachmentName, __LINE__, __FILE__);
+		g_pLTServer->CPrint("Unmatched attable name %s (Line %d of %s)", szAttachmentName, __LINE__, __FILE__);
 		return;
 	}
 
@@ -399,7 +383,7 @@ void CAttachments::CreateAttachment(CAttachmentPosition *pAttachmentPosition)
 
 		default:
 		{
-            g_pLTServer->CPrint("Illegal attachment type encountered on attachment #%d", nAttachmentID);
+			g_pLTServer->CPrint("Illegal attachment type encountered on attachment #%d", nAttachmentID);
 			return;
 		}
 		break;
@@ -407,11 +391,9 @@ void CAttachments::CreateAttachment(CAttachmentPosition *pAttachmentPosition)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::CreateWeaponAttachment
 //
-//	ROUTINE:	CAttachments::CreateWeaponAttachment
-//
-//	PURPOSE:	Creates a weapon attachment
-//
+//	PURPOSE: Creates a weapon attachment
 // ----------------------------------------------------------------------- //
 
 void CAttachments::CreateWeaponAttachment(CAttachmentPosition *pAttachmentPosition, const char* szAttachmentName, uint8 nWeaponID, uint8 nAmmoID)
@@ -458,14 +440,14 @@ void CAttachments::CreateWeaponAttachment(CAttachmentPosition *pAttachmentPositi
 
 	// Create the attachment
 
-    HCLASS hClass = g_pLTServer->GetClass(szClass);
-    LPBASECLASS pModel = g_pLTServer->CreateObject(hClass, &theStruct);
+	HCLASS hClass = g_pLTServer->GetClass(szClass);
+	LPBASECLASS pModel = g_pLTServer->CreateObject(hClass, &theStruct);
 	if ( !pModel ) return;
 
 	// Attach it
 
 	HATTACHMENT hAttachment;
-    LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, pModel->m_hObject, (char*)pAttachmentPosition->GetName(),
+	LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, pModel->m_hObject, (char*)pAttachmentPosition->GetName(),
 												 &LTVector(0,0,0), &LTRotation(0,0,0,1), &hAttachment);
 
 	((CAttachmentWeapon*)pAttachment)->Init(m_hObject, pModel->m_hObject, -1, nWeaponID, nAmmoID);
@@ -476,11 +458,9 @@ void CAttachments::CreateWeaponAttachment(CAttachmentPosition *pAttachmentPositi
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::CreateObjectAttachment
 //
-//	ROUTINE:	CAttachments::CreateObjectAttachment
-//
-//	PURPOSE:	Creates an object attachment
-//
+//	PURPOSE: Creates an object attachment
 // ----------------------------------------------------------------------- //
 
 void CAttachments::CreateObjectAttachment(CAttachmentPosition *pAttachmentPosition, int nAttachmentID)
@@ -511,14 +491,14 @@ void CAttachments::CreateObjectAttachment(CAttachmentPosition *pAttachmentPositi
 
 	// Create the attachment
 
-    HCLASS hClass = g_pLTServer->GetClass(szClass);
-    LPBASECLASS pModel = g_pLTServer->CreateObjectProps(hClass, &theStruct, (char*)(LPCSTR)g_pAttachButeMgr->GetAttachmentProperties(nAttachmentID));
+	HCLASS hClass = g_pLTServer->GetClass(szClass);
+	LPBASECLASS pModel = g_pLTServer->CreateObjectProps(hClass, &theStruct, (char*)(LPCSTR)g_pAttachButeMgr->GetAttachmentProperties(nAttachmentID));
 	if ( !pModel ) return;
 
 	// Attach it
 
 	HATTACHMENT hAttachment;
-    LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, pModel->m_hObject, (char*)pAttachmentPosition->GetName(),
+	LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, pModel->m_hObject, (char*)pAttachmentPosition->GetName(),
 											   &LTVector(0,0,0), &LTRotation(0,0,0,1), &hAttachment);
 
 	CAttachment* pAttachment = CAttachment::Create(ATTACHMENT_TYPE_OBJECT);
@@ -530,11 +510,9 @@ void CAttachments::CreateObjectAttachment(CAttachmentPosition *pAttachmentPositi
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::CreatePropAttachment
 //
-//	ROUTINE:	CAttachments::CreatePropAttachment
-//
-//	PURPOSE:	Creates a prop attachment
-//
+//	PURPOSE: Creates a prop attachment
 // ----------------------------------------------------------------------- //
 
 void CAttachments::CreatePropAttachment(CAttachmentPosition *pAttachmentPosition, int nAttachmentID)
@@ -567,19 +545,19 @@ void CAttachments::CreatePropAttachment(CAttachmentPosition *pAttachmentPosition
 
 	// Create the attachment
 
-    HCLASS hClass = g_pLTServer->GetClass(szClass);
-    Prop* pModel = (Prop*)g_pLTServer->CreateObjectProps(hClass, &theStruct, (char*)(LPCSTR)g_pAttachButeMgr->GetAttachmentProperties(nAttachmentID));
+	HCLASS hClass = g_pLTServer->GetClass(szClass);
+	Prop* pModel = (Prop*)g_pLTServer->CreateObjectProps(hClass, &theStruct, (char*)(LPCSTR)g_pAttachButeMgr->GetAttachmentProperties(nAttachmentID));
 	if ( !pModel ) return;
 
 	pModel->GetDestructible()->SetNeverDestroy(LTTRUE);
 
 	LTRotation rRot;
-    g_pLTServer->GetObjectRotation(pModel->m_hObject, &rRot);
+	g_pLTServer->GetObjectRotation(pModel->m_hObject, &rRot);
 
 	// Attach it
 
 	HATTACHMENT hAttachment;
-    LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, pModel->m_hObject, (char*)pAttachmentPosition->GetName(),
+	LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, pModel->m_hObject, (char*)pAttachmentPosition->GetName(),
 											   &LTVector(0,0,0), &rRot, &hAttachment);
 
 	pAttachment->Init(m_hObject, pModel->m_hObject, nAttachmentID);
@@ -589,11 +567,9 @@ void CAttachments::CreatePropAttachment(CAttachmentPosition *pAttachmentPosition
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::ReInit
 //
-//	ROUTINE:	CAttachments::ReInit
-//
-//	PURPOSE:	Re-initialize the attachments with a new object
-//
+//	PURPOSE: Re-initialize the attachments with a new object
 // ----------------------------------------------------------------------- //
 
 void CAttachments::ReInit(HOBJECT hNewObj)
@@ -617,14 +593,14 @@ void CAttachments::ReInit(HOBJECT hNewObj)
 			if (hModel)
 			{
 				HATTACHMENT hAttachment;
-                if (LT_OK == g_pLTServer->FindAttachment(hOldObj, hModel, &hAttachment))
+				if (LT_OK == g_pLTServer->FindAttachment(hOldObj, hModel, &hAttachment))
 				{
-                    g_pLTServer->RemoveAttachment(hAttachment);
+					g_pLTServer->RemoveAttachment(hAttachment);
 				}
 
 				// Attach the model to us...
 
-                g_pLTServer->CreateAttachment(m_hObject, hModel, (char*)pCurPos->GetName(),
+				g_pLTServer->CreateAttachment(m_hObject, hModel, (char*)pCurPos->GetName(),
 					&LTVector(0,0,0), &LTRotation(0,0,0,1), &hAttachment);
 
 				// Re-init to set m_hObject...
@@ -637,11 +613,9 @@ void CAttachments::ReInit(HOBJECT hNewObj)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::EnumerateWeapons
 //
-//	ROUTINE:	CAttachments::EnumerateWeapons
-//
-//	PURPOSE:	Fills out an array with a list of all weapon attachments
-//
+//	PURPOSE: Fills out an array with a list of all weapon attachments
 // ----------------------------------------------------------------------- //
 
 int CAttachments::EnumerateWeapons(CWeapon** apWeapons, CAttachmentPosition** apAttachmentPositions, int cMaxWeapons)
@@ -654,7 +628,7 @@ int CAttachments::EnumerateWeapons(CWeapon** apWeapons, CAttachmentPosition** ap
 		if ( pAttachment && (pAttachment->GetType() == ATTACHMENT_TYPE_WEAPON) )
 		{
 			CAttachmentWeapon* pAttachmentWeapon = (CAttachmentWeapon*)pAttachment;
-            CHHWeaponModel* pHHWeaponModel = (CHHWeaponModel*)g_pLTServer->HandleToObject(pAttachmentWeapon->GetModel());
+			CHHWeaponModel* pHHWeaponModel = (CHHWeaponModel*)g_pLTServer->HandleToObject(pAttachmentWeapon->GetModel());
 
 			apAttachmentPositions[cWeapons] = m_apAttachmentPositions[iAttachmentPosition];
 			apWeapons[cWeapons] = pHHWeaponModel->GetParent();
@@ -670,11 +644,9 @@ int CAttachments::EnumerateWeapons(CWeapon** apWeapons, CAttachmentPosition** ap
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::EnumerateProps
 //
-//	ROUTINE:	CAttachments::EnumerateProps
-//
-//	PURPOSE:	Fills out an array with a list of all Prop attachments
-//
+//	PURPOSE: Fills out an array with a list of all Prop attachments
 // ----------------------------------------------------------------------- //
 
 int CAttachments::EnumerateProps(Prop** apProps, CAttachmentPosition** apAttachmentPositions, int cMaxProps)
@@ -687,7 +659,7 @@ int CAttachments::EnumerateProps(Prop** apProps, CAttachmentPosition** apAttachm
 		if ( pAttachment && (pAttachment->GetType() == ATTACHMENT_TYPE_PROP) )
 		{
 			CAttachmentProp* pAttachmentProp = (CAttachmentProp*)pAttachment;
-            Prop* pProp = (Prop*)g_pLTServer->HandleToObject(pAttachmentProp->GetModel());
+			Prop* pProp = (Prop*)g_pLTServer->HandleToObject(pAttachmentProp->GetModel());
 
 			apAttachmentPositions[cProps] = m_apAttachmentPositions[iAttachmentPosition];
 			apProps[cProps] = pProp;
@@ -704,11 +676,9 @@ int CAttachments::EnumerateProps(Prop** apProps, CAttachmentPosition** apAttachm
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::EnumerateObjects
 //
-//	ROUTINE:	CAttachments::EnumerateObjects
-//
-//	PURPOSE:	Fills out an array with a list of all Object attachments
-//
+//	PURPOSE: Fills out an array with a list of all Object attachments
 // ----------------------------------------------------------------------- //
 
 int CAttachments::EnumerateObjects(BaseClass** apObjects, CAttachmentPosition** apAttachmentPositions, int cMaxObjects)
@@ -721,7 +691,7 @@ int CAttachments::EnumerateObjects(BaseClass** apObjects, CAttachmentPosition** 
 		if ( pAttachment && (pAttachment->GetType() == ATTACHMENT_TYPE_OBJECT) )
 		{
 			CAttachmentObject* pAttachmentObject = (CAttachmentObject*)pAttachment;
-            BaseClass* pObject = g_pLTServer->HandleToObject(pAttachmentObject->GetModel());
+			BaseClass* pObject = g_pLTServer->HandleToObject(pAttachmentObject->GetModel());
 
 			apAttachmentPositions[cObjects] = m_apAttachmentPositions[iAttachmentPosition];
 			apObjects[cObjects] = pObject;
@@ -737,11 +707,9 @@ int CAttachments::EnumerateObjects(BaseClass** apObjects, CAttachmentPosition** 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::GetInfiniteAmmo
 //
-//	ROUTINE:	CAttachments::GetInfiniteAmmo
-//
-//	PURPOSE:	Used by the AIs to get a big mess of ammunition
-//
+//	PURPOSE: Used by the AIs to get a big mess of ammunition
 // ----------------------------------------------------------------------- //
 
 void CAttachments::GetInfiniteAmmo()
@@ -768,11 +736,9 @@ void CAttachments::GetInfiniteAmmo()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::Init
 //
-//	ROUTINE:	CAttachments::Init
-//
-//	PURPOSE:	Initializes us
-//
+//	PURPOSE: Initializes us
 // ----------------------------------------------------------------------- //
 
 void CAttachments::Init(HOBJECT hObject)
@@ -787,11 +753,9 @@ void CAttachments::Init(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::ResetRequirements
 //
-//	ROUTINE:	CAttachments::ResetRequirements
-//
-//	PURPOSE:	Initializes us
-//
+//	PURPOSE: Initializes us
 // ----------------------------------------------------------------------- //
 
 void CAttachments::ResetRequirements()
@@ -815,11 +779,9 @@ void CAttachments::ResetRequirements()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::AddRequirements
 //
-//	ROUTINE:	CAttachments::AddRequirements
-//
-//	PURPOSE:	Initializes us
-//
+//	PURPOSE: Initializes us
 // ----------------------------------------------------------------------- //
 
 void CAttachments::AddRequirements(ModelId eModelId, ModelStyle eModelStyle)
@@ -841,11 +803,9 @@ void CAttachments::AddRequirements(ModelId eModelId, ModelStyle eModelStyle)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::Update
 //
-//	ROUTINE:	CAttachments::Update
-//
-//	PURPOSE:	Handle object updates
-//
+//	PURPOSE: Handle object updates
 // ----------------------------------------------------------------------- //
 
 void CAttachments::Update()
@@ -892,15 +852,15 @@ void CAttachments::Update()
 			HOBJECT hModel = pAttachmentPosition->GetAttachment()->GetObject();
 
 			HATTACHMENT hAttachment;
-            if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hModel, &hAttachment) )
+			if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hModel, &hAttachment) )
 			{
-                g_pLTServer->RemoveAttachment(hAttachment);
+				g_pLTServer->RemoveAttachment(hAttachment);
 			}
 
 			// Determine the direction to point
 
 			LTRotation rRotModel;
-            g_pLTServer->GetObjectRotation(hModel, &rRotModel);
+			g_pLTServer->GetObjectRotation(hModel, &rRotModel);
 
 			HMODELSOCKET hSocket;
 			g_pModelLT->GetSocket(m_hObject, (char*)pAttachmentPosition->GetName(), hSocket);
@@ -911,29 +871,27 @@ void CAttachments::Update()
 			LTRotation rRotSocket;
 			g_pTransLT->GetRot(transform, rRotSocket);
 
-            LTMatrix m1, m2, m3;
+			LTMatrix m1, m2, m3;
 
-            g_pLTServer->SetupRotationMatrix(&m1, &rRotModel);
-            g_pLTServer->SetupRotationMatrix(&m2, &rRotSocket);
+			g_pLTServer->SetupRotationMatrix(&m1, &rRotModel);
+			g_pLTServer->SetupRotationMatrix(&m2, &rRotSocket);
 
 			MatTranspose3x3(&m1);
 			MatMul(&m3, &m2, &m1);
-            g_pLTServer->SetupRotationFromMatrix(&rRotModel, &m3);
+			g_pLTServer->SetupRotationFromMatrix(&rRotModel, &m3);
 
-            g_pLTServer->SetObjectRotation(hModel, &rRotModel);
+			g_pLTServer->SetObjectRotation(hModel, &rRotModel);
 
-            LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, hModel, (char*)pAttachmentPosition->GetName(),
+			LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, hModel, (char*)pAttachmentPosition->GetName(),
 													   &LTVector(0,0,0), &rRotModel, &hAttachment);
 		}
 	}}
 */}
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::HandleProjectileImpact
 //
-//	ROUTINE:	CAttachments::HandleProjectileImpact
-//
-//	PURPOSE:	Handles being hit by a projectile
-//
+//	PURPOSE: Handles being hit by a projectile
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAttachments::HandleProjectileImpact(CProjectile* pProjectile, IntersectInfo& iInfo, LTVector& vDir, LTVector& vFrom, ModelSkeleton eModelSkeleton, ModelNode eModelNode)
@@ -955,11 +913,9 @@ LTBOOL CAttachments::HandleProjectileImpact(CProjectile* pProjectile, IntersectI
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::HandleDeath
 //
-//	ROUTINE:	CAttachments::HandleDeath
-//
-//	PURPOSE:	Handles being killed
-//
+//	PURPOSE: Handles being killed
 // ----------------------------------------------------------------------- //
 
 void CAttachments::HandleDeath()
@@ -974,18 +930,16 @@ void CAttachments::HandleDeath()
 			HOBJECT hModel = pAttachment->GetModel();
 			if ( IsCharacter(hModel) )
 			{
-                g_pCharacterMgr->Remove((CCharacter*)g_pLTServer->HandleToObject(hModel));
+				g_pCharacterMgr->Remove((CCharacter*)g_pLTServer->HandleToObject(hModel));
 			}
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::HandleTrigger
 //
-//	ROUTINE:	CAttachments::HandleTrigger
-//
-//	PURPOSE:	Handle trigger message.
-//
+//	PURPOSE: Handle trigger message.
 // ----------------------------------------------------------------------- //
 
 void CAttachments::HandleTrigger(LPBASECLASS pObject, HOBJECT hSender, HMESSAGEREAD hRead)
@@ -995,11 +949,9 @@ void CAttachments::HandleTrigger(LPBASECLASS pObject, HOBJECT hSender, HMESSAGER
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::Save
 //
-//	ROUTINE:	CAttachments::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void CAttachments::Save(HMESSAGEWRITE hWrite, uint8 nType)
@@ -1020,11 +972,9 @@ void CAttachments::Save(HMESSAGEWRITE hWrite, uint8 nType)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachments::Load
 //
-//	ROUTINE:	CAttachments::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void CAttachments::Load(HMESSAGEREAD hRead, uint8 nType)
@@ -1044,17 +994,15 @@ void CAttachments::Load(HMESSAGEREAD hRead, uint8 nType)
 
 	{for ( int iAttachmentPosition = m_cAttachmentPositions ; iAttachmentPosition < MAX_ATTACHMENT_POSITIONS ; iAttachmentPosition++ )
 	{
-        m_apAttachmentPositions[iAttachmentPosition] = LTNULL;
+		m_apAttachmentPositions[iAttachmentPosition] = LTNULL;
 	}}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CHumanAttachments::CAttachments
 //
-//	ROUTINE:	CHumanAttachments::CAttachments
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CHumanAttachments::CHumanAttachments() : CAttachments()
@@ -1085,33 +1033,29 @@ CHumanAttachments::CHumanAttachments() : CAttachments()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CPlayerAttachments::CPlayerAttachments
 //
-//	ROUTINE:	CPlayerAttachments::CPlayerAttachments
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CPlayerAttachments::CPlayerAttachments()
 {
-    m_RightHand.SetAttachmentName(g_pLTServer->CreateString("Fisty Cuffs"));
+	m_RightHand.SetAttachmentName(g_pLTServer->CreateString("Fisty Cuffs"));
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CPlayerAttachments::HandleCheatFullAmmo
 //
-//	ROUTINE:	CPlayerAttachments::HandleCheatFullAmmo
-//
-//	PURPOSE:	Do the full ammo cheat for the player
-//
+//	PURPOSE: Do the full ammo cheat for the player
 // ----------------------------------------------------------------------- //
 
 void CPlayerAttachments::HandleCheatFullAmmo()
 {
-    if ( LTNULL != GetDefaultAttachmentWeapon() )
+	if ( LTNULL != GetDefaultAttachmentWeapon() )
 	{
 		CWeapons* pWeapons = GetDefaultAttachmentWeapon()->GetWeapons();
 
-        uint8 nNumAmmoTypes = g_pWeaponMgr->GetNumAmmoTypes();
+		uint8 nNumAmmoTypes = g_pWeaponMgr->GetNumAmmoTypes();
 
 		for (int i=0; i < nNumAmmoTypes; i++)
 		{
@@ -1121,16 +1065,14 @@ void CPlayerAttachments::HandleCheatFullAmmo()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CPlayerAttachments::HandleCheatFullWeapon
 //
-//	ROUTINE:	CPlayerAttachments::HandleCheatFullWeapon
-//
-//	PURPOSE:	Do the full weapon cheat for the player
-//
+//	PURPOSE: Do the full weapon cheat for the player
 // ----------------------------------------------------------------------- //
 
 void CPlayerAttachments::HandleCheatFullWeapon()
 {
-    if ( LTNULL != GetDefaultAttachmentWeapon() )
+	if ( LTNULL != GetDefaultAttachmentWeapon() )
 	{
 		HandleCheatFullAmmo();
 
@@ -1148,16 +1090,14 @@ void CPlayerAttachments::HandleCheatFullWeapon()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CPlayerAttachments::HandleCheatFullMods
 //
-//	ROUTINE:	CPlayerAttachments::HandleCheatFullMods
-//
-//	PURPOSE:	Do the full mod cheat for the player
-//
+//	PURPOSE: Do the full mod cheat for the player
 // ----------------------------------------------------------------------- //
 
 void CPlayerAttachments::HandleCheatFullMods()
 {
-    if ( LTNULL != GetDefaultAttachmentWeapon() )
+	if ( LTNULL != GetDefaultAttachmentWeapon() )
 	{
 		CWeapons* pWeapons = GetDefaultAttachmentWeapon()->GetWeapons();
 
@@ -1179,11 +1119,9 @@ void CPlayerAttachments::HandleCheatFullMods()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CVehicleAttachments::CAttachments
 //
-//	ROUTINE:	CVehicleAttachments::CAttachments
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CVehicleAttachments::CVehicleAttachments() : CAttachments()
@@ -1194,11 +1132,9 @@ CVehicleAttachments::CVehicleAttachments() : CAttachments()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CHelicopterAttachments::CAttachments
 //
-//	ROUTINE:	CHelicopterAttachments::CAttachments
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CHelicopterAttachments::CHelicopterAttachments() : CVehicleAttachments()
@@ -1221,11 +1157,9 @@ CHelicopterAttachments::CHelicopterAttachments() : CVehicleAttachments()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSharkAttachments::CAttachments
 //
-//	ROUTINE:	CSharkAttachments::CAttachments
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CSharkAttachments::CSharkAttachments() : CAnimalAttachments()
@@ -1236,53 +1170,47 @@ CSharkAttachments::CSharkAttachments() : CAnimalAttachments()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachment::CAttachment
 //
-//	ROUTINE:	CAttachment::CAttachment
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CAttachment::CAttachment()
 {
-    m_hModel        = LTNULL;
-    m_hObject       = LTNULL;
+	m_hModel		= LTNULL;
+	m_hObject	   = LTNULL;
 	m_nAttachmentID	= -1;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachment::~CAttachment
 //
-//	ROUTINE:	CAttachment::~CAttachment
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CAttachment::~CAttachment()
 {
 	if ( m_hObject && m_hModel )
 	{
-        HATTACHMENT hAttachment = LTNULL;
+		HATTACHMENT hAttachment = LTNULL;
 
-        g_pLTServer->FindAttachment(m_hObject, m_hModel, &hAttachment);
+		g_pLTServer->FindAttachment(m_hObject, m_hModel, &hAttachment);
 
-        if ( hAttachment != LTNULL )
+		if ( hAttachment != LTNULL )
 		{
-            g_pLTServer->RemoveAttachment(hAttachment);
+			g_pLTServer->RemoveAttachment(hAttachment);
 		}
 
-        g_pLTServer->RemoveObject(m_hModel);
+		g_pLTServer->RemoveObject(m_hModel);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachment::Init
 //
-//	ROUTINE:	CAttachment::Init
-//
-//	PURPOSE:	Initialilze the attachment
-//
+//	PURPOSE: Initialilze the attachment
 // ----------------------------------------------------------------------- //
 
 void CAttachment::Init(HOBJECT hObj, HOBJECT hModel, int nAttachmentID)
@@ -1291,16 +1219,14 @@ void CAttachment::Init(HOBJECT hObj, HOBJECT hModel, int nAttachmentID)
 	m_hModel = hModel;
 	m_nAttachmentID = nAttachmentID;
 
-    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(hModel);
-    g_pLTServer->SetObjectUserFlags(hModel, dwUsrFlags | USRFLG_ATTACH_HIDE1SHOW3);
+	uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(hModel);
+	g_pLTServer->SetObjectUserFlags(hModel, dwUsrFlags | USRFLG_ATTACH_HIDE1SHOW3);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachment::Save
 //
-//	ROUTINE:	CAttachment::Save
-//
-//	PURPOSE:	Save
-//
+//	PURPOSE: Save
 // ----------------------------------------------------------------------- //
 
 void CAttachment::Save(HMESSAGEWRITE hWrite)
@@ -1311,11 +1237,9 @@ void CAttachment::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachment::Load
 //
-//	ROUTINE:	CAttachment::Load
-//
-//	PURPOSE:	Load
-//
+//	PURPOSE: Load
 // ----------------------------------------------------------------------- //
 
 void CAttachment::Load(HMESSAGEREAD hRead)
@@ -1326,11 +1250,9 @@ void CAttachment::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentProp::HandleProjectileImpact
 //
-//	ROUTINE:	CAttachmentProp::HandleProjectileImpact
-//
-//	PURPOSE:	Tests being hit by a projectile
-//
+//	PURPOSE: Tests being hit by a projectile
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAttachmentProp::HandleProjectileImpact(CProjectile* pProjectile, CAttachmentPosition* pAttachmentPosition, IntersectInfo& iInfo, LTVector& vDir, LTVector& vFrom)
@@ -1339,11 +1261,9 @@ LTBOOL CAttachmentProp::HandleProjectileImpact(CProjectile* pProjectile, CAttach
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentProp::CreateSpawnString
 //
-//	ROUTINE:	CAttachmentProp::CreateSpawnString
-//
-//	PURPOSE:	Creates a spawn string for when we are dropped
-//
+//	PURPOSE: Creates a spawn string for when we are dropped
 // ----------------------------------------------------------------------- //
 
 void CAttachmentProp::CreateSpawnString(char* szSpawn)
@@ -1353,11 +1273,9 @@ void CAttachmentProp::CreateSpawnString(char* szSpawn)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentObject::HandleProjectileImpact
 //
-//	ROUTINE:	CAttachmentObject::HandleProjectileImpact
-//
-//	PURPOSE:	Tests being hit by a projectile
-//
+//	PURPOSE: Tests being hit by a projectile
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAttachmentObject::HandleProjectileImpact(CProjectile* pProjectile, CAttachmentPosition* pAttachmentPosition, IntersectInfo& iInfo, LTVector& vDir, LTVector& vFrom)
@@ -1380,7 +1298,7 @@ LTBOOL CAttachmentObject::HandleProjectileImpact(CProjectile* pProjectile, CAtta
 		}
 
 		g_pTransLT->GetPos(transform, vPos);
-        g_pLTServer->GetObjectDims(m_hModel, &vDims);
+		g_pLTServer->GetObjectDims(m_hModel, &vDims);
 
 		LTVector vMinBox = vPos - vDims;
 		LTVector vMaxBox = vPos + vDims;
@@ -1389,10 +1307,10 @@ LTBOOL CAttachmentObject::HandleProjectileImpact(CProjectile* pProjectile, CAtta
 		// an attachment of ... so ... whatever.
 		if ( DoesSegmentIntersectAABB(iInfo.m_Point, iInfo.m_Point+vDir*2000.0f, vMinBox, vMaxBox) )
 		{
-            CAI* pAI = (CAI*)g_pLTServer->HandleToObject(m_hModel);
+			CAI* pAI = (CAI*)g_pLTServer->HandleToObject(m_hModel);
 			if ( pAI->CanBeDamagedAsAttachment() )
 			{
-                g_pLTServer->CPrint("dam: %f -> %f", g_pLTServer->GetTime(), pAI->GetHitPoints());
+				g_pLTServer->CPrint("dam: %f -> %f", g_pLTServer->GetTime(), pAI->GetHitPoints());
 				iInfo.m_hObject = m_hModel;
 				return LTTRUE;
 			}
@@ -1403,11 +1321,9 @@ LTBOOL CAttachmentObject::HandleProjectileImpact(CProjectile* pProjectile, CAtta
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentObject::CreateSpawnString
 //
-//	ROUTINE:	CAttachmentObject::CreateSpawnString
-//
-//	PURPOSE:	Creates a spawn string for when we are dropped
-//
+//	PURPOSE: Creates a spawn string for when we are dropped
 // ----------------------------------------------------------------------- //
 
 void CAttachmentObject::CreateSpawnString(char* szSpawn)
@@ -1417,11 +1333,9 @@ void CAttachmentObject::CreateSpawnString(char* szSpawn)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentWeapon::Init
 //
-//	ROUTINE:	CAttachmentWeapon::Init
-//
-//	PURPOSE:	Init
-//
+//	PURPOSE: Init
 // ----------------------------------------------------------------------- //
 
 void CAttachmentWeapon::Init(HOBJECT hObj, HOBJECT hWeaponModel, int nAttachmentID, int nWeaponID, int nAmmoID)
@@ -1433,16 +1347,14 @@ void CAttachmentWeapon::Init(HOBJECT hObj, HOBJECT hWeaponModel, int nAttachment
 	m_Weapons.ChangeWeapon(nWeaponID);
 	m_Weapons.GetCurWeapon()->SetAmmoId(nAmmoID);
 
-    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hModel);
-    g_pLTServer->SetObjectUserFlags(m_hModel, dwUsrFlags | USRFLG_NIGHT_INFRARED);
+	uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hModel);
+	g_pLTServer->SetObjectUserFlags(m_hModel, dwUsrFlags | USRFLG_NIGHT_INFRARED);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentWeapon::HandleProjectileImpact
 //
-//	ROUTINE:	CAttachmentWeapon::HandleProjectileImpact
-//
-//	PURPOSE:	Tests being hit by a projectile
-//
+//	PURPOSE: Tests being hit by a projectile
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAttachmentWeapon::HandleProjectileImpact(CProjectile* pProjectile, CAttachmentPosition* pAttachmentPosition, IntersectInfo& iInfo, LTVector& vDir, LTVector& vFrom)
@@ -1451,11 +1363,9 @@ LTBOOL CAttachmentWeapon::HandleProjectileImpact(CProjectile* pProjectile, CAtta
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentWeapon::CreateSpawnString
 //
-//	ROUTINE:	CAttachmentWeapon::CreateSpawnString
-//
-//	PURPOSE:	Creates a spawn string for when we are dropped
-//
+//	PURPOSE: Creates a spawn string for when we are dropped
 // ----------------------------------------------------------------------- //
 
 void CAttachmentWeapon::CreateSpawnString(char* szSpawn)
@@ -1481,11 +1391,9 @@ void CAttachmentWeapon::CreateSpawnString(char* szSpawn)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentWeapon::ObjectMessageFn
 //
-//	ROUTINE:	CAttachmentWeapon::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 CAttachmentWeapon::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -1498,11 +1406,9 @@ uint32 CAttachmentWeapon::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentWeapon::Save
 //
-//	ROUTINE:	CAttachmentWeapon::Save
-//
-//	PURPOSE:	Save
-//
+//	PURPOSE: Save
 // ----------------------------------------------------------------------- //
 
 void CAttachmentWeapon::Save(HMESSAGEWRITE hWrite)
@@ -1513,11 +1419,9 @@ void CAttachmentWeapon::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentWeapon::Load
 //
-//	ROUTINE:	CAttachmentWeapon::Load
-//
-//	PURPOSE:	Load
-//
+//	PURPOSE: Load
 // ----------------------------------------------------------------------- //
 
 void CAttachmentWeapon::Load(HMESSAGEREAD hRead)
@@ -1525,32 +1429,28 @@ void CAttachmentWeapon::Load(HMESSAGEREAD hRead)
 	CAttachment::Load(hRead);
 
 	m_Weapons.Load(hRead, 0);
-    uint8 nWeaponID = m_Weapons.GetCurWeapon()->GetId();
+	uint8 nWeaponID = m_Weapons.GetCurWeapon()->GetId();
 	m_Weapons.DeselectCurWeapon();	// Deselect so we'll change to it
 	m_Weapons.ChangeWeapon(nWeaponID);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentPosition::CAttachmentPosition
 //
-//	ROUTINE:	CAttachmentPosition::CAttachmentPosition
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CAttachmentPosition::CAttachmentPosition()
 {
-    m_szName = LTNULL;
-    m_hstrAttachmentName = LTNULL;
-    m_pAttachment = LTNULL;
+	m_szName = LTNULL;
+	m_hstrAttachmentName = LTNULL;
+	m_pAttachment = LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentPosition::~CAttachmentPosition
 //
-//	ROUTINE:	CAttachmentPosition::~CAttachmentPosition
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CAttachmentPosition::~CAttachmentPosition()
@@ -1565,11 +1465,9 @@ CAttachmentPosition::~CAttachmentPosition()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentPosition::ObjectMessageFn
 //
-//	ROUTINE:	CAttachmentPosition::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 CAttachmentPosition::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -1583,11 +1481,9 @@ uint32 CAttachmentPosition::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentPosition::Save
 //
-//	ROUTINE:	CAttachmentPosition::Save
-//
-//	PURPOSE:	Save
-//
+//	PURPOSE: Save
 // ----------------------------------------------------------------------- //
 
 void CAttachmentPosition::Save(HMESSAGEWRITE hWrite)
@@ -1603,11 +1499,9 @@ void CAttachmentPosition::Save(HMESSAGEWRITE hWrite)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentPosition::Load
 //
-//	ROUTINE:	CAttachmentPosition::Load
-//
-//	PURPOSE:	Load
-//
+//	PURPOSE: Load
 // ----------------------------------------------------------------------- //
 
 void CAttachmentPosition::Load(HMESSAGEREAD hRead)
@@ -1618,9 +1512,9 @@ void CAttachmentPosition::Load(HMESSAGEREAD hRead)
 
 	if ( bAttachment )
 	{
-        uint32  dwAttachmentType;
+		uint32  dwAttachmentType;
 
-        m_pAttachment = LTNULL;
+		m_pAttachment = LTNULL;
 
 		LOAD_DWORD(dwAttachmentType);
 
@@ -1636,11 +1530,9 @@ void CAttachmentPosition::Load(HMESSAGEREAD hRead)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentPosition::RemoveWeapon
 //
-//	ROUTINE:	CAttachmentPosition::RemoveWeapon
-//
-//	PURPOSE:	RemoveWeapon
-//
+//	PURPOSE: RemoveWeapon
 // ----------------------------------------------------------------------- //
 
 void CAttachmentPosition::RemoveWeapon()
@@ -1662,11 +1554,9 @@ CAttachButeMgr CAttachmentsPlugin::sm_AttachButeMgr;
 CWeaponMgrPlugin CAttachmentsPlugin::sm_WeaponMgrPlugin;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentsPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CAttachmentsPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Callback handler for EditStringList plugin
-//
+//	PURPOSE: Callback handler for EditStringList plugin
 // ----------------------------------------------------------------------- //
 
 LTRESULT CAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
@@ -1676,7 +1566,7 @@ LTRESULT CAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath, const
 		char szFile[256];
 		sprintf(szFile, "%s\\Attributes\\Attachments.txt", szRezPath);
 		sm_AttachButeMgr.SetInRezFile(LTFALSE);
-        sm_AttachButeMgr.Init(g_pLTServer, szFile);
+		sm_AttachButeMgr.Init(g_pLTServer, szFile);
 		sm_bInitted = LTTRUE;
 		sm_WeaponMgrPlugin.PreHook_EditStringList(szRezPath, szPropName, aszStrings, pcStrings, cMaxStrings, cMaxStringLength);
 
@@ -1696,10 +1586,10 @@ LTRESULT CAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath, const
 void CAttachmentsPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {
 	// TODO: make sure we don't overflow cMaxStringLength or cMaxStrings
-    uint32 cAttachments = sm_AttachButeMgr.GetNumAttachments();
+	uint32 cAttachments = sm_AttachButeMgr.GetNumAttachments();
 	_ASSERT(cMaxStrings >= cAttachments);
 	strcpy(aszStrings[(*pcStrings)++], c_szNoAttachment);
-    for ( uint32 iAttachment = 0 ; iAttachment < cAttachments ; iAttachment++ )
+	for ( uint32 iAttachment = 0 ; iAttachment < cAttachments ; iAttachment++ )
 	{
 		strcpy(aszStrings[(*pcStrings)++], sm_AttachButeMgr.GetAttachmentName(iAttachment));
 	}
@@ -1707,11 +1597,9 @@ void CAttachmentsPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAttachmentsPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CAttachmentsPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Callback handler for EditStringList plugin
-//
+//	PURPOSE: Callback handler for EditStringList plugin
 // ----------------------------------------------------------------------- //
 
 LTRESULT CHumanAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
@@ -1721,17 +1609,17 @@ LTRESULT CHumanAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath, 
 		return LT_OK;
 	}
 
-    if ( !_stricmp("LeftHand",      szPropName) ||
-         !_stricmp("RightHand",     szPropName) ||
-         !_stricmp("LeftFoot",      szPropName) ||
-         !_stricmp("RightFoot",     szPropName) ||
-         !_stricmp("Motorcycle",    szPropName) ||
-         !_stricmp("Snowmobile",    szPropName) ||
-         !_stricmp("Head",          szPropName) ||
-         !_stricmp("Eyes",          szPropName) ||
-         !_stricmp("Nose",          szPropName) ||
-         !_stricmp("Chin",          szPropName) ||
-         !_stricmp("Back",          szPropName) )
+	if ( !_stricmp("LeftHand",	  szPropName) ||
+		 !_stricmp("RightHand",	 szPropName) ||
+		 !_stricmp("LeftFoot",	  szPropName) ||
+		 !_stricmp("RightFoot",	 szPropName) ||
+		 !_stricmp("Motorcycle",	szPropName) ||
+		 !_stricmp("Snowmobile",	szPropName) ||
+		 !_stricmp("Head",		  szPropName) ||
+		 !_stricmp("Eyes",		  szPropName) ||
+		 !_stricmp("Nose",		  szPropName) ||
+		 !_stricmp("Chin",		  szPropName) ||
+		 !_stricmp("Back",		  szPropName) )
 	{
 		PopulateStringList(aszStrings, pcStrings, cMaxStrings, cMaxStringLength);
 		return LT_OK;
@@ -1743,11 +1631,9 @@ LTRESULT CHumanAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath, 
 };
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CVehicleAttachmentsPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CVehicleAttachmentsPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Callback handler for EditStringList plugin
-//
+//	PURPOSE: Callback handler for EditStringList plugin
 // ----------------------------------------------------------------------- //
 
 LTRESULT CVehicleAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
@@ -1757,7 +1643,7 @@ LTRESULT CVehicleAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath
 		return LT_OK;
 	}
 
-    if ( !_stricmp("Driver",    szPropName) )
+	if ( !_stricmp("Driver",	szPropName) )
 	{
 		PopulateStringList(aszStrings, pcStrings, cMaxStrings, cMaxStringLength);
 		return LT_OK;
@@ -1769,11 +1655,9 @@ LTRESULT CVehicleAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath
 };
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CHelicopterAttachmentsPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CHelicopterAttachmentsPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Callback handler for EditStringList plugin
-//
+//	PURPOSE: Callback handler for EditStringList plugin
 // ----------------------------------------------------------------------- //
 
 LTRESULT CHelicopterAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
@@ -1783,13 +1667,13 @@ LTRESULT CHelicopterAttachmentsPlugin::PreHook_EditStringList(const char* szRezP
 		return LT_OK;
 	}
 
-    if ( !_stricmp("FrontBelly", szPropName) ||
-         !_stricmp("RearBelly", szPropName) ||
-         !_stricmp("LeftSkid", szPropName) ||
-         !_stricmp("RightSkid", szPropName) ||
-         !_stricmp("TopRotor", szPropName) ||
-         !_stricmp("BackRotor", szPropName) ||
-         !_stricmp("RightGunner", szPropName) )
+	if ( !_stricmp("FrontBelly", szPropName) ||
+		 !_stricmp("RearBelly", szPropName) ||
+		 !_stricmp("LeftSkid", szPropName) ||
+		 !_stricmp("RightSkid", szPropName) ||
+		 !_stricmp("TopRotor", szPropName) ||
+		 !_stricmp("BackRotor", szPropName) ||
+		 !_stricmp("RightGunner", szPropName) )
 	{
 		PopulateStringList(aszStrings, pcStrings, cMaxStrings, cMaxStringLength);
 		return LT_OK;
@@ -1801,11 +1685,9 @@ LTRESULT CHelicopterAttachmentsPlugin::PreHook_EditStringList(const char* szRezP
 };
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimalAttachmentsPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CAnimalAttachmentsPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Callback handler for EditStringList plugin
-//
+//	PURPOSE: Callback handler for EditStringList plugin
 // ----------------------------------------------------------------------- //
 
 LTRESULT CAnimalAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
@@ -1827,11 +1709,9 @@ LTRESULT CAnimalAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath,
 };
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CSharkAttachmentsPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CSharkAttachmentsPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Callback handler for EditStringList plugin
-//
+//	PURPOSE: Callback handler for EditStringList plugin
 // ----------------------------------------------------------------------- //
 
 LTRESULT CSharkAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
@@ -1841,7 +1721,7 @@ LTRESULT CSharkAttachmentsPlugin::PreHook_EditStringList(const char* szRezPath, 
 		return LT_OK;
 	}
 
-    if ( !_stricmp("Mouth", szPropName) )
+	if ( !_stricmp("Mouth", szPropName) )
 	{
 		PopulateStringList(aszStrings, pcStrings, cMaxStrings, cMaxStringLength);
 		return LT_OK;

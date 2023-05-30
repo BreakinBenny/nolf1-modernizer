@@ -8,24 +8,22 @@
 IMPLEMENT_FACTORY(CAITarget, 0)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAITarget::Constructor/Destructor
 //
-//	ROUTINE:	CAITarget::Constructor/Destructor
-//
-//	PURPOSE:	Factory con/destructor
-//
+//	PURPOSE: Factory con/destructor
 // ----------------------------------------------------------------------- //
 
 void CAITarget::Constructor()
 {
-    m_bValid = LTFALSE;
-    m_bVisibleFromEye = LTFALSE;
-    m_bVisibleFromWeapon = LTFALSE;
-    m_hObject = LTNULL;
+	m_bValid = LTFALSE;
+	m_bVisibleFromEye = LTFALSE;
+	m_bVisibleFromWeapon = LTFALSE;
+	m_hObject = LTNULL;
 	VEC_INIT(m_vPosition);
 	VEC_INIT(m_vShootPosition);
 	VEC_INIT(m_vNextShootPosition);
 
-    m_bAttacking = LTFALSE;
+	m_bAttacking = LTFALSE;
 
 	m_bHack = LTFALSE;
 
@@ -38,16 +36,14 @@ void CAITarget::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAITarget::Save
 //
-//	ROUTINE:	CAITarget::Save
-//
-//	PURPOSE:	Saves our data
-//
+//	PURPOSE: Saves our data
 // ----------------------------------------------------------------------- //
 
 void CAITarget::Save(HMESSAGEWRITE hWrite)
 {
-    if ( !g_pLTServer || !hWrite ) return;
+	if ( !g_pLTServer || !hWrite ) return;
 
 	SAVE_BOOL(m_bValid);
 	SAVE_BOOL(m_bVisibleFromEye);
@@ -63,16 +59,14 @@ void CAITarget::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAITarget::Load
 //
-//	ROUTINE:	CAITarget::Load
-//
-//	PURPOSE:	Loads our data
-//
+//	PURPOSE: Loads our data
 // ----------------------------------------------------------------------- //
 
 void CAITarget::Load(HMESSAGEREAD hRead)
 {
-    if ( !g_pLTServer || !hRead ) return;
+	if ( !g_pLTServer || !hRead ) return;
 
 	LOAD_BOOL(m_bValid);
 	LOAD_BOOL(m_bVisibleFromEye);
@@ -88,11 +82,9 @@ void CAITarget::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAITarget::UpdateShootPosition
 //
-//	ROUTINE:	CAITarget::UpdateShootPosition
-//
-//	PURPOSE:	Shuffle the new shooting position into place
-//
+//	PURPOSE: Shuffle the new shooting position into place
 // ----------------------------------------------------------------------- //
 
 void CAITarget::UpdateShootPosition(const LTVector& vShootPosition, LTFLOAT fError, LTBOOL bNewError /* = LTFALSE */)
@@ -110,11 +102,9 @@ void CAITarget::UpdateShootPosition(const LTVector& vShootPosition, LTFLOAT fErr
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAITarget::UpdateVisibility
 //
-//	ROUTINE:	CAITarget::UpdateVisibility
-//
-//	PURPOSE:	Updates the target's visibility
-//
+//	PURPOSE: Updates the target's visibility
 // ----------------------------------------------------------------------- //
 
 void CAITarget::UpdateVisibility()
@@ -137,7 +127,7 @@ void CAITarget::UpdateVisibility()
 
 	vPosition.y += (-53.0f + LTFLOAT(m_nPhase)*13.25f);
 
-    LTFLOAT fSeeEnemyDistanceSqr = GetAI()->GetSenseMgr()->GetSense(stSeeEnemy)->GetDistanceSqr();
+	LTFLOAT fSeeEnemyDistanceSqr = GetAI()->GetSenseMgr()->GetSense(stSeeEnemy)->GetDistanceSqr();
 
 	if ( !GetAI()->CanShootThrough() )
 	{

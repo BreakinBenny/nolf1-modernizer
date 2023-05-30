@@ -8,45 +8,45 @@
 struct AniPlayerLower
 {
 	AniPlayerLower() {}
-    AniPlayerLower(LTBOOL b, Ani e) { bLoops = b; eAni = e; }
+	AniPlayerLower(LTBOOL b, Ani e) { bLoops = b; eAni = e; }
 
-    LTBOOL IsLoops() { return bLoops; }
+	LTBOOL IsLoops() { return bLoops; }
 
-    virtual LTBOOL IsStrafe() { return LTFALSE; }
-    virtual LTBOOL IsCrouch() { return LTFALSE; }
-    virtual LTBOOL IsSwim() { return LTFALSE; }
+	virtual LTBOOL IsStrafe() { return LTFALSE; }
+	virtual LTBOOL IsCrouch() { return LTFALSE; }
+	virtual LTBOOL IsSwim() { return LTFALSE; }
 
 	Ani		eAni;
-    LTBOOL   bLoops;
+	LTBOOL   bLoops;
 };
 
 struct AniPlayerLowerStrafe : public AniPlayerLower
 {
 	AniPlayerLowerStrafe() {}
-    AniPlayerLowerStrafe(LTBOOL b, Ani e) : AniPlayerLower(b, e) {}
-    virtual LTBOOL IsStrafe() { return LTTRUE; }
+	AniPlayerLowerStrafe(LTBOOL b, Ani e) : AniPlayerLower(b, e) {}
+	virtual LTBOOL IsStrafe() { return LTTRUE; }
 };
 
 struct AniPlayerLowerCrouch : public AniPlayerLower
 {
 	AniPlayerLowerCrouch() {}
-    AniPlayerLowerCrouch(LTBOOL b, Ani e) : AniPlayerLower(b, e) {}
-    virtual LTBOOL IsCrouch() { return LTTRUE; }
+	AniPlayerLowerCrouch(LTBOOL b, Ani e) : AniPlayerLower(b, e) {}
+	virtual LTBOOL IsCrouch() { return LTTRUE; }
 };
 
 struct AniPlayerLowerSwim : public AniPlayerLower
 {
 	AniPlayerLowerSwim() {}
-    AniPlayerLowerSwim(LTBOOL b, Ani e) : AniPlayerLower(b, e) {}
-    virtual LTBOOL IsSwim() { return LTTRUE; }
+	AniPlayerLowerSwim(LTBOOL b, Ani e) : AniPlayerLower(b, e) {}
+	virtual LTBOOL IsSwim() { return LTTRUE; }
 };
 
 struct AniPlayerLowerCrouchStrafe : public AniPlayerLower
 {
 	AniPlayerLowerCrouchStrafe() {}
-    AniPlayerLowerCrouchStrafe(LTBOOL b, Ani e) : AniPlayerLower(b, e) {}
-    virtual LTBOOL IsCrouch() { return LTTRUE; }
-    virtual LTBOOL IsStrafe() { return LTTRUE; }
+	AniPlayerLowerCrouchStrafe(LTBOOL b, Ani e) : AniPlayerLower(b, e) {}
+	virtual LTBOOL IsCrouch() { return LTTRUE; }
+	virtual LTBOOL IsStrafe() { return LTTRUE; }
 };
 
 struct AniPlayerUpper
@@ -56,7 +56,7 @@ struct AniPlayerUpper
 
 	}
 
-    AniPlayerUpper(LTBOOL b, Ani e1, Ani e2, Ani e3, Ani e4, Ani e5)
+	AniPlayerUpper(LTBOOL b, Ani e1, Ani e2, Ani e3, Ani e4, Ani e5)
 	{
 		bLoops				= b;
 		eAni				= e1;
@@ -66,14 +66,14 @@ struct AniPlayerUpper
 		eAniStrafeCrouch	= e5;
 	}
 
-    LTBOOL IsLoops() { return bLoops; }
+	LTBOOL IsLoops() { return bLoops; }
 
 	Ani	eAni;
 	Ani	eAniStrafe;
 	Ani	eAniCrouch;
 	Ani	eAniSwim;
 	Ani	eAniStrafeCrouch;
-    LTBOOL bLoops;
+	LTBOOL bLoops;
 };
 
 struct AniPlayerMain
@@ -82,16 +82,16 @@ struct AniPlayerMain
 	{
 	}
 
-    AniPlayerMain(LTBOOL b, Ani e1)
+	AniPlayerMain(LTBOOL b, Ani e1)
 	{
 		eAni = e1;
 		bLoops = b;
 	}
 
-    LTBOOL IsLoops() { return bLoops; }
+	LTBOOL IsLoops() { return bLoops; }
 
 	Ani eAni;
-    LTBOOL bLoops;
+	LTBOOL bLoops;
 };
 
 class CAnimatorPlayer : public CAnimator
@@ -190,32 +190,32 @@ class CAnimatorPlayer : public CAnimator
 
 		// Simple accessors
 
-        LTBOOL IsAnimatingMain(Main eMain) const;
-        LTBOOL IsAnimatingMainDone(Main eMain) const;
+		LTBOOL IsAnimatingMain(Main eMain) const;
+		LTBOOL IsAnimatingMainDone(Main eMain) const;
 		inline void SetMain(Main eMain) { m_eMain = eMain; }
 		inline Main GetMain() { return m_eMain; }
 		inline Main GetLastMain() { return m_eLastMain; }
 
-        LTBOOL IsAnimatingWeapon(Weapon eWeapon) const;
-        LTBOOL IsAnimatingWeaponDone(Weapon eWeapon) const;
+		LTBOOL IsAnimatingWeapon(Weapon eWeapon) const;
+		LTBOOL IsAnimatingWeaponDone(Weapon eWeapon) const;
 		inline void SetWeapon(Weapon eWeapon) { m_eWeapon = eWeapon; }
 		inline Weapon GetWeapon() { return m_eWeapon; }
 		inline Weapon GetLastWeapon() { return m_eLastWeapon; }
 
-        LTBOOL IsAnimatingPosture(Posture ePosture) const;
-        LTBOOL IsAnimatingPostureDone(Posture ePosture) const;
+		LTBOOL IsAnimatingPosture(Posture ePosture) const;
+		LTBOOL IsAnimatingPostureDone(Posture ePosture) const;
 		inline void SetPosture(Posture ePosture) { m_ePosture = ePosture; }
 		inline Posture GetPosture() { return m_ePosture; }
 		inline Posture GetLastPosture() { return m_eLastPosture; }
 
-        LTBOOL IsAnimatingMovement(Movement eMovement) const;
-        LTBOOL IsAnimatingMovementDone(Movement eMovement) const;
+		LTBOOL IsAnimatingMovement(Movement eMovement) const;
+		LTBOOL IsAnimatingMovementDone(Movement eMovement) const;
 		inline void SetMovement(Movement eMovement) { m_eMovement = eMovement; }
 		inline Movement GetMovement() { return m_eMovement; }
 		inline Movement GetLastMovement() { return m_eLastMovement; }
 
-        LTBOOL IsAnimatingDirection(Direction eDirection) const;
-        LTBOOL IsAnimatingDirectionDone(Direction eDirection) const;
+		LTBOOL IsAnimatingDirection(Direction eDirection) const;
+		LTBOOL IsAnimatingDirectionDone(Direction eDirection) const;
 		inline void SetDirection(Direction eDirection) { m_eDirection = eDirection; }
 		inline Direction GetDirection() { return m_eDirection; }
 		inline Direction GetLastDirection() { return m_eLastDirection; }
@@ -228,7 +228,7 @@ class CAnimatorPlayer : public CAnimator
 
 		// Dims
 
-        LTBOOL SetDims(HMODELANIM hAni);
+		LTBOOL SetDims(HMODELANIM hAni);
 
 	protected :
 

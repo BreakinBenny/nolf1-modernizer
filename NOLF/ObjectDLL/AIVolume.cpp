@@ -15,7 +15,7 @@
 BEGIN_CLASS(AIVolume)
 		ADD_STRINGPROP(StairsDir,	"")
 		ADD_STRINGPROP(LedgeDir,	"")
-        ADD_BOOLPROP(Vertical, LTFALSE)
+		ADD_BOOLPROP(Vertical, LTFALSE)
 		ADD_STRINGPROP_FLAG(ViewNode1, "", PF_OBJECTLINK)
 		ADD_STRINGPROP_FLAG(ViewNode2, "", PF_OBJECTLINK)
 		ADD_STRINGPROP_FLAG(ViewNode3, "", PF_OBJECTLINK)
@@ -39,18 +39,16 @@ END_CLASS_DEFAULT(AIVolume, BaseClass, NULL, NULL)
 const static LTFLOAT c_fNeighborThreshhold = 0.5f;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIVolume::AIVolume()
 //
-//	ROUTINE:	AIVolume::AIVolume()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 AIVolume::AIVolume() : BaseClass(OT_WORLDMODEL)
 {
-    m_bStairs = LTFALSE;
-    m_bLedge = LTFALSE;
-    m_bVertical = LTTRUE;
+	m_bStairs = LTFALSE;
+	m_bLedge = LTFALSE;
+	m_bVertical = LTTRUE;
 
 	for ( uint32 iViewNode = 0 ; iViewNode < kMaxViewNodes ; iViewNode++ )
 	{
@@ -59,11 +57,9 @@ AIVolume::AIVolume() : BaseClass(OT_WORLDMODEL)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIVolume::~AIVolume()
 //
-//	ROUTINE:	AIVolume::~AIVolume()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 AIVolume::~AIVolume()
@@ -75,11 +71,9 @@ AIVolume::~AIVolume()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIVolume::EngineMessageFn
 //
-//	ROUTINE:	AIVolume::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 AIVolume::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -88,9 +82,9 @@ uint32 AIVolume::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 	{
 		case MID_PRECREATE:
 		{
-            g_pLTServer->SetNextUpdate(m_hObject, 0.01f);
+			g_pLTServer->SetNextUpdate(m_hObject, 0.01f);
 
-            uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
 			if (fData == PRECREATE_WORLDFILE || fData == PRECREATE_STRINGPROP)
 			{
 				ReadProp((ObjectCreateStruct*)pData);
@@ -115,33 +109,31 @@ uint32 AIVolume::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIVolume::ReadProp
 //
-//	ROUTINE:	AIVolume::ReadProp
-//
-//	PURPOSE:	Reads properties
-//
+//	PURPOSE: Reads properties
 // ----------------------------------------------------------------------- //
 
 LTBOOL AIVolume::ReadProp(ObjectCreateStruct *pData)
 {
 	GenericProp genProp;
-    if (!g_pLTServer || !pData) return LTFALSE;
+	if (!g_pLTServer || !pData) return LTFALSE;
 
-    if ( (g_pLTServer->GetPropGeneric("StairsDir", &genProp ) == LT_OK) && genProp.m_String[0] )
+	if ( (g_pLTServer->GetPropGeneric("StairsDir", &genProp ) == LT_OK) && genProp.m_String[0] )
 	{
-        m_bStairs = LTTRUE;
+		m_bStairs = LTTRUE;
 		sscanf(genProp.m_String, "%f %f %f", &m_vStairsDir.x, &m_vStairsDir.y, &m_vStairsDir.z);
 		m_vStairsDir.Norm();
 	}
 
-    if ( (g_pLTServer->GetPropGeneric("LedgeDir", &genProp ) == LT_OK) && genProp.m_String[0] )
+	if ( (g_pLTServer->GetPropGeneric("LedgeDir", &genProp ) == LT_OK) && genProp.m_String[0] )
 	{
-        m_bLedge = LTTRUE;
+		m_bLedge = LTTRUE;
 		sscanf(genProp.m_String, "%f %f %f", &m_vLedgeDir.x, &m_vLedgeDir.y, &m_vLedgeDir.z);
 		m_vLedgeDir.Norm();
 	}
 
-    if ( (g_pLTServer->GetPropGeneric("Vertical", &genProp ) == LT_OK) )
+	if ( (g_pLTServer->GetPropGeneric("Vertical", &genProp ) == LT_OK) )
 	{
 		m_bVertical = genProp.m_Bool;
 	}
@@ -151,13 +143,13 @@ LTBOOL AIVolume::ReadProp(ObjectCreateStruct *pData)
 		char szBuffer[128];
 		sprintf(szBuffer, "ViewNode%d", iViewNode+1);
 
-        if ( g_pLTServer->GetPropGeneric( szBuffer, &genProp ) == LT_OK )
+		if ( g_pLTServer->GetPropGeneric( szBuffer, &genProp ) == LT_OK )
 			if ( genProp.m_String[0] )
-                m_ahstrViewNodes[iViewNode] = g_pLTServer->CreateString( genProp.m_String );
+				m_ahstrViewNodes[iViewNode] = g_pLTServer->CreateString( genProp.m_String );
 
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 CAIVolumeNeighbor::CAIVolumeNeighbor()
@@ -197,10 +189,10 @@ void CAIVolumeNeighbor::Init(CAIVolume* pThis, CAIVolume* pNeighbor)
 	// Compute the 2d intersection of the two volumes, and compute important
 	// things about the geometry of the connection
 
-    LTVector vFrontLeft(0,0,0);
-    LTVector vFrontRight(0,0,0);
-    LTVector vBackLeft(0,0,0);
-    LTVector vBackRight(0,0,0);
+	LTVector vFrontLeft(0,0,0);
+	LTVector vFrontRight(0,0,0);
+	LTVector vBackLeft(0,0,0);
+	LTVector vBackRight(0,0,0);
 
 	vFrontLeft.x = Max<LTFLOAT>(pThis->GetFrontTopLeft().x, pNeighbor->GetFrontTopLeft().x);
 	vFrontLeft.z = Min<LTFLOAT>(pThis->GetFrontTopLeft().z, pNeighbor->GetFrontTopLeft().z);
@@ -252,7 +244,7 @@ void CAIVolumeNeighbor::Init(CAIVolume* pThis, CAIVolume* pNeighbor)
 	else
 	{
 		m_vConnectionPos.y = -float(INT_MAX);
-        DANGER(g_pLTServer, blong);
+		DANGER(g_pLTServer, blong);
 	}
 
 	// Find the endpoints of the line across the connection, and the vector perpendicular to this
@@ -260,8 +252,8 @@ void CAIVolumeNeighbor::Init(CAIVolume* pThis, CAIVolume* pNeighbor)
 	if ( pThis->Inside(pNeighbor->GetFrontTopLeft()) || pThis->Inside(pNeighbor->GetBackTopRight()) ||
 		 pThis->Inside(pNeighbor->GetFrontBottomLeft()) || pThis->Inside(pNeighbor->GetBackBottomRight()) )
 	{
-        m_avConnectionEndpoints[0] = vFrontRight + LTVector(0, m_vConnectionPos.y, 0);
-        m_avConnectionEndpoints[1] = vBackLeft + LTVector(0, m_vConnectionPos.y, 0);
+		m_avConnectionEndpoints[0] = vFrontRight + LTVector(0, m_vConnectionPos.y, 0);
+		m_avConnectionEndpoints[1] = vBackLeft + LTVector(0, m_vConnectionPos.y, 0);
 		m_vConnectionPerpDir = vFrontRight - vBackLeft;
 		m_vConnectionDir = m_avConnectionEndpoints[1] - m_avConnectionEndpoints[0];
 		m_vConnectionDir.y = 0.0f;
@@ -270,8 +262,8 @@ void CAIVolumeNeighbor::Init(CAIVolume* pThis, CAIVolume* pNeighbor)
 	}
 	else
 	{
-        m_avConnectionEndpoints[0] = vFrontLeft + LTVector(0, m_vConnectionPos.y, 0);
-        m_avConnectionEndpoints[1] = vBackRight + LTVector(0, m_vConnectionPos.y, 0);
+		m_avConnectionEndpoints[0] = vFrontLeft + LTVector(0, m_vConnectionPos.y, 0);
+		m_avConnectionEndpoints[1] = vBackRight + LTVector(0, m_vConnectionPos.y, 0);
 		m_vConnectionPerpDir = vFrontLeft - vBackRight;
 		m_vConnectionDir = m_avConnectionEndpoints[1] - m_avConnectionEndpoints[0];
 		m_vConnectionDir.y = 0.0f;
@@ -286,8 +278,8 @@ void CAIVolumeNeighbor::Init(CAIVolume* pThis, CAIVolume* pNeighbor)
 
 	// Make sure it points into this volume
 
-    LTVector vThisCenter = (pThis->GetFrontTopLeft()+pThis->GetBackTopRight())/2.0f;
-    LTVector vThisCenterDir = vThisCenter - m_vConnectionPos;
+	LTVector vThisCenter = (pThis->GetFrontTopLeft()+pThis->GetBackTopRight())/2.0f;
+	LTVector vThisCenterDir = vThisCenter - m_vConnectionPos;
 	vThisCenterDir.y = 0;
 	vThisCenterDir.Norm();
 
@@ -302,27 +294,27 @@ void CAIVolumeNeighbor::Init(CAIVolume* pThis, CAIVolume* pNeighbor)
 
 CAIVolume::CAIVolume()
 {
-    m_hstrName = LTNULL;
+	m_hstrName = LTNULL;
 
 	m_iRegion = CAIRegion::kInvalidRegion;
 
 	m_cNeighbors = 0;
-    m_aNeighbors = LTNULL;
+	m_aNeighbors = LTNULL;
 
-    m_bStairs = LTFALSE;
-    m_bLedge = LTFALSE;
-    m_bVertical = LTFALSE;
+	m_bStairs = LTFALSE;
+	m_bLedge = LTFALSE;
+	m_bVertical = LTFALSE;
 
-    m_bHadDoors = LTFALSE;
+	m_bHadDoors = LTFALSE;
 	m_cDoors = 0;
-    memset(m_ahDoors, LTNULL, cm_nMaxDoors*sizeof(HOBJECT));
+	memset(m_ahDoors, LTNULL, cm_nMaxDoors*sizeof(HOBJECT));
 
 	for ( uint32 iViewNode = 0 ; iViewNode < kMaxViewNodes ; iViewNode++ )
 	{
 		m_adwViewNodes[iViewNode] = CAINode::kInvalidNodeID;
 	}
 
-    m_hLift = LTNULL;
+	m_hLift = LTNULL;
 }
 
 CAIVolume::~CAIVolume()
@@ -424,25 +416,25 @@ void CAIVolume::Save(HMESSAGEWRITE hWrite)
 void CAIVolume::Init(int32 iVolume, const AIVolume& vol)
 {
 	char szName[128];
-    g_pLTServer->GetObjectName(vol.m_hObject, szName, 127);
-    m_hstrName = g_pLTServer->CreateString(szName);
+	g_pLTServer->GetObjectName(vol.m_hObject, szName, 127);
+	m_hstrName = g_pLTServer->CreateString(szName);
 
 	m_iVolume = iVolume;
 
-    LTVector vVolumePos;
-    LTVector vVolumeDims;
+	LTVector vVolumePos;
+	LTVector vVolumeDims;
 
-    g_pLTServer->GetObjectPos(vol.m_hObject, &vVolumePos);
-    g_pLTServer->GetObjectDims(vol.m_hObject, &vVolumeDims);
+	g_pLTServer->GetObjectPos(vol.m_hObject, &vVolumePos);
+	g_pLTServer->GetObjectDims(vol.m_hObject, &vVolumeDims);
 
-    m_vFrontTopRight    = vVolumePos + LTVector(vVolumeDims.x,   vVolumeDims.y,  vVolumeDims.z);
-    m_vFrontTopLeft     = vVolumePos + LTVector(-vVolumeDims.x,  vVolumeDims.y,  vVolumeDims.z);
-    m_vBackTopRight     = vVolumePos + LTVector(vVolumeDims.x,   vVolumeDims.y,  -vVolumeDims.z);
-    m_vBackTopLeft      = vVolumePos + LTVector(-vVolumeDims.x,  vVolumeDims.y,  -vVolumeDims.z);
-    m_vFrontBottomRight = vVolumePos + LTVector(vVolumeDims.x,   -vVolumeDims.y, vVolumeDims.z);
-    m_vFrontBottomLeft  = vVolumePos + LTVector(-vVolumeDims.x,  -vVolumeDims.y, vVolumeDims.z);
-    m_vBackBottomRight  = vVolumePos + LTVector(vVolumeDims.x,   -vVolumeDims.y, -vVolumeDims.z);
-    m_vBackBottomLeft   = vVolumePos + LTVector(-vVolumeDims.x,  -vVolumeDims.y, -vVolumeDims.z);
+	m_vFrontTopRight	= vVolumePos + LTVector(vVolumeDims.x,   vVolumeDims.y,  vVolumeDims.z);
+	m_vFrontTopLeft	 = vVolumePos + LTVector(-vVolumeDims.x,  vVolumeDims.y,  vVolumeDims.z);
+	m_vBackTopRight	 = vVolumePos + LTVector(vVolumeDims.x,   vVolumeDims.y,  -vVolumeDims.z);
+	m_vBackTopLeft	  = vVolumePos + LTVector(-vVolumeDims.x,  vVolumeDims.y,  -vVolumeDims.z);
+	m_vFrontBottomRight = vVolumePos + LTVector(vVolumeDims.x,   -vVolumeDims.y, vVolumeDims.z);
+	m_vFrontBottomLeft  = vVolumePos + LTVector(-vVolumeDims.x,  -vVolumeDims.y, vVolumeDims.z);
+	m_vBackBottomRight  = vVolumePos + LTVector(vVolumeDims.x,   -vVolumeDims.y, -vVolumeDims.z);
+	m_vBackBottomLeft   = vVolumePos + LTVector(-vVolumeDims.x,  -vVolumeDims.y, -vVolumeDims.z);
 
 	// Get the view volumes
 
@@ -465,32 +457,32 @@ void CAIVolume::Init(int32 iVolume, const AIVolume& vol)
 
 	// Find any doors located in our volume
 
-    HCLASS  hDoor = g_pLTServer->GetClass("Door");
-    HCLASS  hSwitch = g_pLTServer->GetClass("Switch");
-    HOBJECT hCurObject = LTNULL;
-    while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
+	HCLASS  hDoor = g_pLTServer->GetClass("Door");
+	HCLASS  hSwitch = g_pLTServer->GetClass("Switch");
+	HOBJECT hCurObject = LTNULL;
+	while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hDoor) && !g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hSwitch))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hDoor) && !g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hSwitch))
 		{
-            Door* pDoor = (Door*)g_pLTServer->HandleToObject(hCurObject);
+			Door* pDoor = (Door*)g_pLTServer->HandleToObject(hCurObject);
 			if ( !pDoor->IsAITriggerable() ) continue;
 
-            LTVector vPos;
-            LTVector vDims;
+			LTVector vPos;
+			LTVector vDims;
 
-            g_pLTServer->GetObjectPos(hCurObject, &vPos);
-            g_pLTServer->GetObjectDims(hCurObject, &vDims);
+			g_pLTServer->GetObjectPos(hCurObject, &vPos);
+			g_pLTServer->GetObjectDims(hCurObject, &vDims);
 
 			if ( Inside(vPos, vDims.y*2.0f) )
 			{
 				if ( m_cDoors == cm_nMaxDoors )
 				{
 					_ASSERT(!"Max number of doors in a volume exceeded!!!!");
-                    g_pLTServer->CPrint("Max number of doors in a volume exceeded!!!!");
+					g_pLTServer->CPrint("Max number of doors in a volume exceeded!!!!");
 				}
 				else
 				{
-                    m_bHadDoors = LTTRUE;
+					m_bHadDoors = LTTRUE;
 					g_pAIVolumeMgr->Link(hCurObject);
 					m_ahDoors[m_cDoors++] = hCurObject;
 				}
@@ -498,30 +490,30 @@ void CAIVolume::Init(int32 iVolume, const AIVolume& vol)
 		}
 	}
 
-    hCurObject = LTNULL;
-    while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
+	hCurObject = LTNULL;
+	while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hDoor) && !g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hSwitch))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hDoor) && !g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hSwitch))
 		{
-            Door* pDoor = (Door*)g_pLTServer->HandleToObject(hCurObject);
+			Door* pDoor = (Door*)g_pLTServer->HandleToObject(hCurObject);
 			if ( !pDoor->IsAITriggerable() ) continue;
 
-            LTVector vPos;
-            LTVector vDims;
+			LTVector vPos;
+			LTVector vDims;
 
-            g_pLTServer->GetObjectPos(hCurObject, &vPos);
-            g_pLTServer->GetObjectDims(hCurObject, &vDims);
+			g_pLTServer->GetObjectPos(hCurObject, &vPos);
+			g_pLTServer->GetObjectDims(hCurObject, &vDims);
 
 			if ( Inside(vPos, vDims.y*2.0f) )
 			{
 				if ( m_cDoors == cm_nMaxDoors )
 				{
 					_ASSERT(!"Max number of doors in a volume exceeded!!!!");
-                    g_pLTServer->CPrint("Max number of doors in a volume exceeded!!!!");
+					g_pLTServer->CPrint("Max number of doors in a volume exceeded!!!!");
 				}
 				else
 				{
-                    m_bHadDoors = LTTRUE;
+					m_bHadDoors = LTTRUE;
 					g_pAIVolumeMgr->Link(hCurObject);
 					m_ahDoors[m_cDoors++] = hCurObject;
 				}
@@ -534,15 +526,15 @@ void CAIVolume::Init(int32 iVolume, const AIVolume& vol)
 	if ( m_cDoors == 0 )
 	{
 		if ( vVolumeDims.x < 32 )
-            g_pLTServer->CPrint("WARNING: Volume \"%s\" is only %d units wide/x (should be at least 64)", GetName(), (int)vVolumeDims.x*2);
+			g_pLTServer->CPrint("WARNING: Volume \"%s\" is only %d units wide/x (should be at least 64)", GetName(), (int)vVolumeDims.x*2);
 
 		if ( vVolumeDims.z < 32 )
-            g_pLTServer->CPrint("WARNING: Volume \"%s\" is only %d units deep/z (should be at least 64)", GetName(), (int)vVolumeDims.z*2);
+			g_pLTServer->CPrint("WARNING: Volume \"%s\" is only %d units deep/z (should be at least 64)", GetName(), (int)vVolumeDims.z*2);
 	}
 	else //	if ( m_cDoors != 0 )
 	{
 		if ( vVolumeDims.x >= 128 && vVolumeDims.z >= 128 )
-            g_pLTServer->CPrint("WARNING: Volume \"%s\" is a suspiciously large door volume!", GetName());
+			g_pLTServer->CPrint("WARNING: Volume \"%s\" is a suspiciously large door volume!", GetName());
 	}
 #endif
 
@@ -574,14 +566,14 @@ void CAIVolume::HandleBrokenLink(HOBJECT hObject)
 {
 	if ( m_hLift == hObject )
 	{
-        m_hLift = LTNULL;
+		m_hLift = LTNULL;
 	}
 
 	for ( int iDoor = 0 ; iDoor < cm_nMaxDoors ; iDoor++ )
 	{
 		if ( m_ahDoors[iDoor] == hObject )
 		{
-            m_ahDoors[iDoor] = LTNULL;
+			m_ahDoors[iDoor] = LTNULL;
 			m_cDoors--;
 		}
 	}
@@ -699,12 +691,12 @@ LTBOOL CAIVolume::Inside(const LTVector& vPos, LTFLOAT fVerticalThreshhold /* = 
 
 void CAIVolume::InitNeighbors(CAIVolume** apVolumeNeighbors, uint32 cNeighbors)
 {
-    LTBOOL abValidNeighbors[32];
+	LTBOOL abValidNeighbors[32];
 
 	{for ( uint32 iNeighbor = 0 ; iNeighbor < cNeighbors ; iNeighbor++ )
 	{
-        LTVector vFrontLeft(0,0,0);
-        LTVector vBackRight(0,0,0);
+		LTVector vFrontLeft(0,0,0);
+		LTVector vBackRight(0,0,0);
 
 		CAIVolume* pNeighbor = apVolumeNeighbors[iNeighbor];
 
@@ -718,11 +710,11 @@ void CAIVolume::InitNeighbors(CAIVolume** apVolumeNeighbors, uint32 cNeighbors)
 
 		if ( vFrontLeft.DistSqr(vBackRight) < c_fNeighborThreshhold )
 		{
-            abValidNeighbors[iNeighbor] = LTFALSE;
+			abValidNeighbors[iNeighbor] = LTFALSE;
 		}
 		else
 		{
-            abValidNeighbors[iNeighbor] = LTTRUE;
+			abValidNeighbors[iNeighbor] = LTTRUE;
 			m_cNeighbors++;
 		}
 	}}

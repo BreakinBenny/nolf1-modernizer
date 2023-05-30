@@ -44,7 +44,7 @@ CAnimationParser::CAnimationParser()
 
 struct FnForEachPropertyGroupDelete : public FnForEach<CStr, PROPERTYGROUP*>
 {
-    void operator()(const CStr& sName, PROPERTYGROUP* pPropertyGroup)
+	void operator()(const CStr& sName, PROPERTYGROUP* pPropertyGroup)
 	{
 		debug_delete(pPropertyGroup);
 	}
@@ -52,7 +52,7 @@ struct FnForEachPropertyGroupDelete : public FnForEach<CStr, PROPERTYGROUP*>
 
 struct FnForEachPropertyDelete : public FnForEach<CStr, PROPERTY*>
 {
-    void operator()(const CStr& sName, PROPERTY* pProperty)
+	void operator()(const CStr& sName, PROPERTY* pProperty)
 	{
 		debug_delete(pProperty);
 	}
@@ -60,10 +60,10 @@ struct FnForEachPropertyDelete : public FnForEach<CStr, PROPERTY*>
 
 CAnimationParser::~CAnimationParser()
 {
-    struct FnForEachPropertyGroupDelete temp = FnForEachPropertyGroupDelete();
-    m_mapPropertyGroups.ForEach(temp);
-    struct FnForEachPropertyDelete temp2 = FnForEachPropertyDelete();
-    m_mapProperties.ForEach(temp2);
+	struct FnForEachPropertyGroupDelete temp = FnForEachPropertyGroupDelete();
+	m_mapPropertyGroups.ForEach(temp);
+	struct FnForEachPropertyDelete temp2 = FnForEachPropertyDelete();
+	m_mapProperties.ForEach(temp2);
 
 	if ( m_pAnimationCurrent )
 	{
@@ -176,7 +176,7 @@ void CAnimationParser::AddPropertyToCurrentGroup(const CStr& sName)
 
 struct FnFinalizePropertyGroups : public FnForEach<CStr, PROPERTYGROUP*>
 {
-    void operator()(const CStr& sName, PROPERTYGROUP* pPropertyGroup)
+	void operator()(const CStr& sName, PROPERTYGROUP* pPropertyGroup)
 	{
 		uint32 nId = 1;
 
@@ -199,8 +199,8 @@ struct FnFinalizePropertyGroups : public FnForEach<CStr, PROPERTYGROUP*>
 
 void CAnimationParser::BeginAnimations()
 {
-    struct FnFinalizePropertyGroups temp = FnFinalizePropertyGroups();
-    m_mapPropertyGroups.ForEach(temp);
+	struct FnFinalizePropertyGroups temp = FnFinalizePropertyGroups();
+	m_mapPropertyGroups.ForEach(temp);
 	m_pAnimationCurrent = NULL;
 	m_pTransitionCurrent = NULL;
 }
@@ -346,7 +346,7 @@ struct FnEnumerateProperties : public FnForEach<CStr, PROPERTYGROUP*>
 		m_pcProperties = pcProperties;
 	}
 
-    void operator()(const CStr& sName, PROPERTYGROUP* pPropertyGroup)
+	void operator()(const CStr& sName, PROPERTYGROUP* pPropertyGroup)
 	{
 		uint32 nId = 1;
 
@@ -371,8 +371,8 @@ struct FnEnumerateProperties : public FnForEach<CStr, PROPERTYGROUP*>
 void CAnimationParser::EnumerateProperties(const char** aszNames, uint32* aiIndices, int32* anValues, uint32* pcProperties)
 {
 	*pcProperties = 0;
-    FnEnumerateProperties temp(aszNames, aiIndices, anValues, pcProperties);
-    m_mapPropertyGroups.ForEach(temp);
+	FnEnumerateProperties temp(aszNames, aiIndices, anValues, pcProperties);
+	m_mapPropertyGroups.ForEach(temp);
 }
 
 void CAnimationParser::EnumerateAnimations(const char** aszNames, const char* aaszProperties[512][32], uint32 acProperties[512], uint32* pcAnimations)

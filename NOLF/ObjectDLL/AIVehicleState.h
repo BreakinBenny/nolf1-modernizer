@@ -26,7 +26,7 @@ class CAIVehicleState : public CAIState
 
 		// Ctors/Dtors/etc
 
-        LTBOOL Init(CAIVehicle* pAIVehicle);
+		LTBOOL Init(CAIVehicle* pAIVehicle);
 
 	protected : // Protected methods
 
@@ -59,7 +59,7 @@ class CAIHelicopterState : public CAIVehicleState
 
 		// Ctors/Dtors/etc
 
-        virtual LTBOOL Init(AI_Helicopter* pAIHelicopter);
+		virtual LTBOOL Init(AI_Helicopter* pAIHelicopter);
 
 		// Updates
 
@@ -110,7 +110,7 @@ class CAIHelicopterStateGoto : DEFINE_FACTORY_CLASS(CAIHelicopterStateGoto), pub
 
 		// Ctors/Dtors/Etc
 
-        LTBOOL Init(AI_Helicopter* pAIHelicopter);
+		LTBOOL Init(AI_Helicopter* pAIHelicopter);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
@@ -136,11 +136,11 @@ class CAIHelicopterStateGoto : DEFINE_FACTORY_CLASS(CAIHelicopterStateGoto), pub
 
 	protected : // Protected member variables
 
-        LTVector	m_vDest;
-        uint32		m_adwNodes[kMaxGotoNodes];
+		LTVector	m_vDest;
+		uint32		m_adwNodes[kMaxGotoNodes];
 		int			m_cNodes;
 		int			m_iNextNode;
-        LTBOOL		m_bLoop;
+		LTBOOL		m_bLoop;
 };
 
 class CAIHelicopterStateAttack : DEFINE_FACTORY_CLASS(CAIHelicopterStateAttack), public CAIHelicopterState
@@ -151,7 +151,7 @@ class CAIHelicopterStateAttack : DEFINE_FACTORY_CLASS(CAIHelicopterStateAttack),
 
 		// Ctor/Dtors/etc
 
-        LTBOOL Init(AI_Helicopter* pAIHelicopter);
+		LTBOOL Init(AI_Helicopter* pAIHelicopter);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEREAD hWrite);
@@ -163,7 +163,7 @@ class CAIHelicopterStateAttack : DEFINE_FACTORY_CLASS(CAIHelicopterStateAttack),
 		// Handlers
 
 		void HandleBrokenLink(HOBJECT hObject);
-        LTBOOL HandleCommand(char** pTokens, int nArgs);
+		LTBOOL HandleCommand(char** pTokens, int nArgs);
 		void HandleNameValuePair(char *szName, char *szValue);
 		void HandleModelString(ArgList* pArgList);
 
@@ -173,7 +173,7 @@ class CAIHelicopterStateAttack : DEFINE_FACTORY_CLASS(CAIHelicopterStateAttack),
 
 	protected :
 
-        LTBOOL   m_abActiveWeapons[AI_MAX_WEAPONS];
+		LTBOOL   m_abActiveWeapons[AI_MAX_WEAPONS];
 		HOBJECT	m_hTarget;
 };
 

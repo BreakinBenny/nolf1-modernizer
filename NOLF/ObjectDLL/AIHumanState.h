@@ -145,7 +145,7 @@ class CAIHumanStateIdle : DEFINE_FACTORY_CLASS(CAIHumanStateIdle), public CAIHum
 
 		// Return query
 
-        LTBOOL CanReturn() { return LTTRUE; }
+		LTBOOL CanReturn() { return LTTRUE; }
 		HSTRING CreateReturnString();
 
 		// Simple acccessors
@@ -173,7 +173,7 @@ class CAIHumanStateAware : DEFINE_FACTORY_CLASS(CAIHumanStateAware), public CAIH
 
 		// Return query
 
-        LTBOOL CanReturn() { return LTTRUE; }
+		LTBOOL CanReturn() { return LTTRUE; }
 		HSTRING CreateReturnString();
 
 		// Simple acccessors
@@ -556,7 +556,7 @@ class CAIHumanStateAttackFromCover : DEFINE_FACTORY_CLASS(CAIHumanStateAttackFro
 	protected :
 
 		State	m_eState;
-        uint32  m_dwCoverNode;
+		uint32  m_dwCoverNode;
 		int32	m_nRetries;
 };
 
@@ -608,7 +608,7 @@ class CAIHumanStateAttackFromVantage : DEFINE_FACTORY_CLASS(CAIHumanStateAttackF
 	protected :
 
 		State	m_eState;
-        uint32  m_dwVantageNode;
+		uint32  m_dwVantageNode;
 		LTFLOAT	m_fAttackTimer;
 };
 
@@ -661,7 +661,7 @@ class CAIHumanStateAttackFromView : DEFINE_FACTORY_CLASS(CAIHumanStateAttackFrom
 	protected :
 
 		State	m_eState;
-        uint32  m_dwViewNode;
+		uint32  m_dwViewNode;
 		LTFLOAT	m_fChaseTimer;
 };
 
@@ -740,7 +740,7 @@ class CAIHumanStateCover : DEFINE_FACTORY_CLASS(CAIHumanStateCover), public CAIH
 	protected :
 
 		State	m_eState;
-        uint32  m_dwCoverNode;
+		uint32  m_dwCoverNode;
 };
 
 class CAIHumanStatePanic : DEFINE_FACTORY_CLASS(CAIHumanStatePanic), public CAIHumanState
@@ -783,7 +783,7 @@ class CAIHumanStatePanic : DEFINE_FACTORY_CLASS(CAIHumanStatePanic), public CAIH
 	protected :
 
 		LTBOOL			m_bAtPanicDestination;
-        uint32			m_dwPanicNode;
+		uint32			m_dwPanicNode;
 		LTBOOL			m_bCanActivate;
 		CAnimationProp	m_aniPanic;
 };
@@ -888,7 +888,7 @@ class CAIHumanStatePatrol : DEFINE_FACTORY_CLASS(CAIHumanStatePatrol), public CA
 		LTFLOAT					m_fTalkTimer;
 
 		LTBOOL					m_bForward;
-        uint32					m_adwNodes[kMaxPatrolNodes];
+		uint32					m_adwNodes[kMaxPatrolNodes];
 		int						m_cNodes;
 		int						m_iNextNode;
 		int						m_iDirNode;
@@ -925,7 +925,7 @@ class CAIHumanStateGoto : DEFINE_FACTORY_CLASS(CAIHumanStateGoto), public CAIHum
 
 		// Return query
 
-        LTBOOL CanReturn() { return LTTRUE; }
+		LTBOOL CanReturn() { return LTTRUE; }
 		HSTRING CreateReturnString();
 
 		// Simple acccessors
@@ -949,7 +949,7 @@ class CAIHumanStateGoto : DEFINE_FACTORY_CLASS(CAIHumanStateGoto), public CAIHum
 
 		LTBOOL		m_bFace;
 		LTVector	m_vDest;
-        uint32		m_adwNodes[kMaxGotoNodes];
+		uint32		m_adwNodes[kMaxGotoNodes];
 		int			m_cNodes;
 		int			m_iNextNode;
 		LTBOOL		m_bLoop;
@@ -1025,7 +1025,7 @@ class CAIHumanStateSearch : DEFINE_FACTORY_CLASS(CAIHumanStateSearch), public CA
 
 	protected :
 
-        uint32			m_iSearchNode;
+		uint32			m_iSearchNode;
 		uint32			m_iSearchRegion;
 
 		LTBOOL			m_bFace;
@@ -1086,7 +1086,7 @@ class CAIHumanStatePickupObject : DEFINE_FACTORY_CLASS(CAIHumanStatePickupObject
 		LTBOOL		m_bPickedUp;
 		ObjectType	m_eObjectType;
 		HOBJECT		m_hObject;
-        uint32      m_dwPickupNode;
+		uint32	  m_dwPickupNode;
 };
 
 class CAIHumanStateUseObject : DEFINE_FACTORY_CLASS(CAIHumanStateUseObject), public CAIHumanState
@@ -1132,7 +1132,7 @@ class CAIHumanStateUseObject : DEFINE_FACTORY_CLASS(CAIHumanStateUseObject), pub
 
 		ObjectType						m_eObjectType;
 		HOBJECT							m_hObject;
-        uint32                          m_dwUseNode;
+		uint32						  m_dwUseNode;
 };
 
 class CAIHumanStateTail : DEFINE_FACTORY_CLASS(CAIHumanStateTail), public CAIHumanState
@@ -1182,9 +1182,9 @@ class CAIHumanStateTail : DEFINE_FACTORY_CLASS(CAIHumanStateTail), public CAIHum
 	protected :
 
 		State	m_eState;
-        uint32  m_dwTailNode;
+		uint32  m_dwTailNode;
 		int		m_cTailNodes;
-        uint32  m_adwTailNodes[kMaxTailNodes];
+		uint32  m_adwTailNodes[kMaxTailNodes];
 };
 
 class CAIHumanStateFollowFootprint : DEFINE_FACTORY_CLASS(CAIHumanStateFollowFootprint), public CAIHumanState
@@ -1374,7 +1374,7 @@ class CAIHumanStateGetBackup : DEFINE_FACTORY_CLASS(CAIHumanStateGetBackup), pub
 
 	protected :
 
-        uint32      m_dwNode;
+		uint32	  m_dwNode;
 		LTBOOL		m_bSendingTrigger;		// This does not need to get saved.
 };
 
@@ -1495,7 +1495,7 @@ class CAIHumanStateAnimate : DEFINE_FACTORY_CLASS(CAIHumanStateAnimate), public 
 
 		// Return query
 
-        LTBOOL CanReturn() { return LTTRUE; }
+		LTBOOL CanReturn() { return LTTRUE; }
 		HSTRING CreateReturnString();
 
 		// Simple acccessors

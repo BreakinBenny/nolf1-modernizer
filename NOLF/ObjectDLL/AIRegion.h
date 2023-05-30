@@ -67,7 +67,7 @@ class CAIRegion : public AIRegion
 
 		// Name
 
-        const char* GetName() const { return g_pLTServer->GetStringData(m_hstrName); }
+		const char* GetName() const { return g_pLTServer->GetStringData(m_hstrName); }
 		uint32 GetIndex() const { return m_iRegion; }
 
 	protected :

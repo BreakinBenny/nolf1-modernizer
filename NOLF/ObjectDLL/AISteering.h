@@ -8,11 +8,9 @@
 #include "AIUtils.h"
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CSteerable
 //
-// PURPOSE : Steerable abstract class
-//
+// PURPOSE: Steerable abstract class
 // ----------------------------------------------------------------------- //
 
 class CSteerable
@@ -23,24 +21,24 @@ class CSteerable
 
 		// Simple accessors
 
-        LTFLOAT Steerable_GetMass() { return Steerable_m_fMass; }
-        LTFLOAT Steerable_GetMaxForce() { return Steerable_m_fMaxForce; }
-        LTFLOAT Steerable_GetMaxSpeed() { return Steerable_m_fMaxSpeed; }
-        const LTVector& Steerable_GetUpVector() { return Steerable_m_vUp; }
-        const LTVector& Steerable_GetForwardVector() { return Steerable_m_vForward; }
-        const LTVector& Steerable_GetRightVector() { return Steerable_m_vRight; }
-        const LTVector& Steerable_GetPosition() { return Steerable_m_vPosition; }
-        const LTVector& Steerable_GetVelocity() { return Steerable_m_vVelocity; }
-        const LTVector& Steerable_GetLastForce() { return Steerable_m_vLastForce; }
+		LTFLOAT Steerable_GetMass() { return Steerable_m_fMass; }
+		LTFLOAT Steerable_GetMaxForce() { return Steerable_m_fMaxForce; }
+		LTFLOAT Steerable_GetMaxSpeed() { return Steerable_m_fMaxSpeed; }
+		const LTVector& Steerable_GetUpVector() { return Steerable_m_vUp; }
+		const LTVector& Steerable_GetForwardVector() { return Steerable_m_vForward; }
+		const LTVector& Steerable_GetRightVector() { return Steerable_m_vRight; }
+		const LTVector& Steerable_GetPosition() { return Steerable_m_vPosition; }
+		const LTVector& Steerable_GetVelocity() { return Steerable_m_vVelocity; }
+		const LTVector& Steerable_GetLastForce() { return Steerable_m_vLastForce; }
 
-        void Steerable_SetMass(LTFLOAT fMass) { Steerable_m_fMass = fMass; }
-        void Steerable_SetMaxForce(LTFLOAT fMaxForce) { Steerable_m_fMaxForce = fMaxForce; }
-        void Steerable_SetMaxSpeed(LTFLOAT fMaxSpeed) { Steerable_m_fMaxSpeed = fMaxSpeed; }
-        void Steerable_SetUpVector(const LTVector& vUp) { Steerable_m_vUp = vUp; }
-        void Steerable_SetForwardVector(const LTVector& vForward) { Steerable_m_vForward = vForward; }
-        void Steerable_SetRightVector(const LTVector& vRight) { Steerable_m_vRight = vRight; }
-        void Steerable_SetPosition(const LTVector& vPosition) { Steerable_m_vPosition = vPosition; }
-        void Steerable_SetVelocity(const LTVector& vVelocity) { Steerable_m_vVelocity = vVelocity; }
+		void Steerable_SetMass(LTFLOAT fMass) { Steerable_m_fMass = fMass; }
+		void Steerable_SetMaxForce(LTFLOAT fMaxForce) { Steerable_m_fMaxForce = fMaxForce; }
+		void Steerable_SetMaxSpeed(LTFLOAT fMaxSpeed) { Steerable_m_fMaxSpeed = fMaxSpeed; }
+		void Steerable_SetUpVector(const LTVector& vUp) { Steerable_m_vUp = vUp; }
+		void Steerable_SetForwardVector(const LTVector& vForward) { Steerable_m_vForward = vForward; }
+		void Steerable_SetRightVector(const LTVector& vRight) { Steerable_m_vRight = vRight; }
+		void Steerable_SetPosition(const LTVector& vPosition) { Steerable_m_vPosition = vPosition; }
+		void Steerable_SetVelocity(const LTVector& vVelocity) { Steerable_m_vVelocity = vVelocity; }
 
 	protected : // Protected methods
 
@@ -48,11 +46,11 @@ class CSteerable
 
 		// Derived CSteerables must implement the Pre and Post update. the Update itself is optional
 
-        virtual LTBOOL Steerable_PreUpdate() = 0;
-        virtual LTBOOL Steerable_Update(const LTVector& vSteeringDirection);
-        virtual LTBOOL Steerable_PostUpdate() = 0;
+		virtual LTBOOL Steerable_PreUpdate() = 0;
+		virtual LTBOOL Steerable_Update(const LTVector& vSteeringDirection);
+		virtual LTBOOL Steerable_PostUpdate() = 0;
 
-        virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
+		virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 		{
 			SAVE_FLOAT(Steerable_m_fMass);
 			SAVE_FLOAT(Steerable_m_fMaxForce);
@@ -65,7 +63,7 @@ class CSteerable
 			SAVE_VECTOR(Steerable_m_vLastForce);
 		}
 
-        virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
+		virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 		{
 			LOAD_FLOAT(Steerable_m_fMass);
 			LOAD_FLOAT(Steerable_m_fMaxForce);
@@ -80,26 +78,24 @@ class CSteerable
 
 	private : // Private member variables
 
-        LTFLOAT Steerable_m_fMass;
-        LTFLOAT Steerable_m_fMaxForce;
-        LTFLOAT Steerable_m_fMaxSpeed;
+		LTFLOAT Steerable_m_fMass;
+		LTFLOAT Steerable_m_fMaxForce;
+		LTFLOAT Steerable_m_fMaxSpeed;
 
-        LTVector Steerable_m_vPosition;
-        LTVector Steerable_m_vVelocity;
+		LTVector Steerable_m_vPosition;
+		LTVector Steerable_m_vVelocity;
 
-        LTVector Steerable_m_vUp;
-        LTVector Steerable_m_vForward;
-        LTVector Steerable_m_vRight;
+		LTVector Steerable_m_vUp;
+		LTVector Steerable_m_vForward;
+		LTVector Steerable_m_vRight;
 
-        LTVector Steerable_m_vLastForce;
+		LTVector Steerable_m_vLastForce;
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CSteering
 //
-// PURPOSE : Steering abstract class
-//
+// PURPOSE: Steering abstract class
 // ----------------------------------------------------------------------- //
 
 class CSteering
@@ -121,10 +117,10 @@ class CSteering
 
 		// Methods
 
-        virtual LTBOOL Init(CSteerable* pSteerable);
+		virtual LTBOOL Init(CSteerable* pSteerable);
 		virtual void Term();
 
-        virtual LTVector Update() = 0;
+		virtual LTVector Update() = 0;
 
 		// Simple accessors
 
@@ -132,31 +128,29 @@ class CSteering
 
 		CSteerable* GetSteerable() { return m_pSteerable; }
 
-        LTFLOAT GetPriority() { return m_fPriority; }
-        void SetPriority(LTFLOAT fPriority) { m_fPriority = fPriority; }
+		LTFLOAT GetPriority() { return m_fPriority; }
+		void SetPriority(LTFLOAT fPriority) { m_fPriority = fPriority; }
 
-        LTBOOL IsEnabled() { return m_bEnabled; }
-        void Enable() { m_bEnabled = LTTRUE; }
-        void Disable() { m_bEnabled = LTFALSE; }
+		LTBOOL IsEnabled() { return m_bEnabled; }
+		void Enable() { m_bEnabled = LTTRUE; }
+		void Disable() { m_bEnabled = LTFALSE; }
 
 		// Save/Load
 
-        virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 
 	private : // Private member variables
 
-        LTFLOAT      m_fPriority;    // Our priority in SteeringMgr
-        LTBOOL       m_bEnabled;     // Are we enabled?
+		LTFLOAT	  m_fPriority;	// Our priority in SteeringMgr
+		LTBOOL	   m_bEnabled;	 // Are we enabled?
 		CSteerable* m_pSteerable;	// The steerable we will be controlling
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CSteeringSeek
 //
-// PURPOSE : "Seek" steering behavior
-//
+// PURPOSE: "Seek" steering behavior
 // ----------------------------------------------------------------------- //
 
 class CSteeringSeek : public CSteering
@@ -172,8 +166,8 @@ class CSteeringSeek : public CSteering
 
 		// Methods
 
-        virtual void Set(const LTVector& vTarget) { m_vTarget = vTarget; }
-        virtual LTVector Update();
+		virtual void Set(const LTVector& vTarget) { m_vTarget = vTarget; }
+		virtual LTVector Update();
 
 		// Simple accessors
 
@@ -181,14 +175,14 @@ class CSteeringSeek : public CSteering
 
 		// Save/Load
 
-        virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
+		virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 		{
 			CSteering::Save(hWrite, dwSaveFlags);
 
 			SAVE_VECTOR(m_vTarget);
 		}
 
-        virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
+		virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 		{
 			CSteering::Load(hRead, dwLoadFlags);
 
@@ -197,16 +191,14 @@ class CSteeringSeek : public CSteering
 
 	protected : // Private member variables
 
-        LTVector     m_vTarget;
+		LTVector	 m_vTarget;
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CSteeringArrival
 //
-// PURPOSE : "Arrival" steering behavior. It's the same as seek except it
+// PURPOSE: "Arrival" steering behavior. It's the same as seek except it
 //			 slows down as it gets closer to the target.
-//
 // ----------------------------------------------------------------------- //
 
 class CSteeringArrival : public CSteeringSeek
@@ -215,13 +207,13 @@ class CSteeringArrival : public CSteeringSeek
 
 		// Methods
 
-        virtual void Set(const LTVector& vTarget, LTFLOAT fArrivalDistance)
+		virtual void Set(const LTVector& vTarget, LTFLOAT fArrivalDistance)
 		{
 			m_vTarget = vTarget;
 			m_fArrivalDistance = fArrivalDistance;
 		}
 
-        virtual LTVector Update();
+		virtual LTVector Update();
 
 		// Simple accessors
 
@@ -229,14 +221,14 @@ class CSteeringArrival : public CSteeringSeek
 
 		// Save/Load
 
-        virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
+		virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 		{
 			CSteeringSeek::Save(hWrite, dwSaveFlags);
 
 			SAVE_FLOAT(m_fArrivalDistance);
 		}
 
-        virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
+		virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 		{
 			CSteeringSeek::Load(hRead, dwLoadFlags);
 
@@ -245,15 +237,13 @@ class CSteeringArrival : public CSteeringSeek
 
 	protected : // Protected methods
 
-        LTFLOAT      m_fArrivalDistance;
+		LTFLOAT	  m_fArrivalDistance;
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CSteeringMgr
 //
-// PURPOSE : Mgr to handle all steering behaviors
-//
+// PURPOSE: Mgr to handle all steering behaviors
 // ----------------------------------------------------------------------- //
 
 class CSteeringMgr
@@ -267,10 +257,10 @@ class CSteeringMgr
 
 		// Methods
 
-        LTBOOL Init(CSteerable* pSteerable);
+		LTBOOL Init(CSteerable* pSteerable);
 		void Term();
 
-        LTBOOL Update();
+		LTBOOL Update();
 
 		void EnableAllSteering();										// No reason to ever call this really
 		void DisableAllSteering();										// Probably want to do this each time you change states
@@ -282,8 +272,8 @@ class CSteeringMgr
 
 		// Save/Load
 
-        void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 
 	private : // Private member variables
 

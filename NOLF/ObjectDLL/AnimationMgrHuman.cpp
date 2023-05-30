@@ -5,12 +5,10 @@
 
 using namespace AnimationsHuman;
 
-// ----------------------------------------------------------------------- //
-//	
+// ----------------------------------------------------------------------- //	
 //	DATA:		AnimationsHuman
 //
-//	PURPOSE:	All the human animation props
-//
+//	PURPOSE: All the human animation props
 // ----------------------------------------------------------------------- //
 
 // Global animation mgr pointer
@@ -115,11 +113,9 @@ namespace AnimationsHuman
 };
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimationMgrHuman::Init
 //
-//	ROUTINE:	CAnimationMgrHuman::Init
-//
-//	PURPOSE:	Initializes all the animation props
-//
+//	PURPOSE: Initializes all the animation props
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAnimationMgrHuman::Init()

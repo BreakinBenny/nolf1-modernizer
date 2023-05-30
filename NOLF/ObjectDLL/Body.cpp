@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Body.cpp
 //
-// MODULE  : Body.cpp
+// PURPOSE: Body Prop - Implementation
 //
-// PURPOSE : Body Prop - Implementation
-//
-// CREATED : 1997 (was BodyProp)
+// CREATED: 1997 (was BodyProp)
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -46,11 +44,9 @@ static char s_szKeyNoise[]	= "NOISE";
 static char s_szKeyLand[]	= "LAND";
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::Body()
 //
-//	ROUTINE:	Body::Body()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 Body::Body() : Prop()
@@ -66,10 +62,10 @@ Body::Body() : Prop()
 	m_eBodyStatePrevious= eBodyStateNormal;
  	m_eModelNodeLastHit = eModelNodeInvalid;
 	m_pAttachments  = LTNULL;
-    m_hHitBox       = LTNULL;
+	m_hHitBox	   = LTNULL;
 
 	m_eBodyState	= eBodyStateNormal;
-    m_pState        = LTNULL;
+	m_pState		= LTNULL;
 
 	m_bMoveToFloor	= LTFALSE;
 
@@ -84,11 +80,9 @@ Body::Body() : Prop()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::~Body()
 //
-//	ROUTINE:	Body::~Body()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 Body::~Body()
@@ -96,14 +90,14 @@ Body::~Body()
 	if (m_pAttachments)
 	{
 		CAttachments::Destroy(m_pAttachments);
-        m_pAttachments = LTNULL;
+		m_pAttachments = LTNULL;
 	}
 
 	g_pCharacterMgr->RemoveDeathScene(&m_DeathScene);
 
 	if (m_hHitBox)
 	{
-        g_pLTServer->RemoveObject(m_hHitBox);
+		g_pLTServer->RemoveObject(m_hHitBox);
 	}
 
 	if ( m_hChecker )
@@ -129,11 +123,9 @@ Body::~Body()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::EngineMessageFn
 //
-//	ROUTINE:	Body::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 Body::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -198,10 +190,10 @@ uint32 Body::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 			m_Animator.Init(m_hObject);
 
-            SetNextUpdate(s_fUpdateDelta);
+			SetNextUpdate(s_fUpdateDelta);
 
-            uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-            g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags | USRFLG_NIGHT_INFRARED);
+			uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+			g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags | USRFLG_NIGHT_INFRARED);
 
 			return dwRet;
 		}
@@ -255,11 +247,9 @@ uint32 Body::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::ObjectMessageFn
 //
-//	ROUTINE:	Body::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 Body::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -282,11 +272,9 @@ uint32 Body::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRe
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Body::TriggerMsg()
 //
-//	ROUTINE:	Body::TriggerMsg()
-//
-//	PURPOSE:	Handler for prop trigger messages.
-//
+//	PURPOSE: Handler for prop trigger messages.
 // --------------------------------------------------------------------------- //
 
 static char s_tokenSpace[PARSE_MAXTOKENS*PARSE_MAXTOKENSIZE];
@@ -300,11 +288,11 @@ void Body::TriggerMsg(HOBJECT hSender, const char* szMsg)
 	// ILTServer::Parse does not destroy pCommand, so this is safe
 	char* pCommand = (char*)szMsg;
 
-    LTBOOL bMore = LTTRUE;
+	LTBOOL bMore = LTTRUE;
 	while (bMore)
 	{
 		int nArgs;
-        bMore = g_pLTServer->Parse(pCommand, &s_pCommandPos, s_tokenSpace, s_pTokens, &nArgs);
+		bMore = g_pLTServer->Parse(pCommand, &s_pCommandPos, s_tokenSpace, s_pTokens, &nArgs);
 
 		if ( !_stricmp(s_pTokens[0], "SPLASH") )
 		{
@@ -315,7 +303,7 @@ void Body::TriggerMsg(HOBJECT hSender, const char* szMsg)
 		else
 		{
 #ifndef _FINAL
-            g_pLTServer->CPrint("Unrecognized command (\"%s\")", s_pTokens[0]);
+			g_pLTServer->CPrint("Unrecognized command (\"%s\")", s_pTokens[0]);
 #endif
 		}
 
@@ -324,16 +312,14 @@ void Body::TriggerMsg(HOBJECT hSender, const char* szMsg)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::HandleModelString()
 //
-//	ROUTINE:	Body::HandleModelString()
-//
-//	PURPOSE:	Handles model keyframe strings
-//
+//	PURPOSE: Handles model keyframe strings
 // ----------------------------------------------------------------------- //
 
 void Body::HandleModelString(ArgList* pArgList)
 {
-    if (!g_pLTServer || !pArgList || !pArgList->argv || pArgList->argc == 0) return;
+	if (!g_pLTServer || !pArgList || !pArgList->argv || pArgList->argc == 0) return;
 
 	char* pKey = pArgList->argv[0];
 	if (!pKey) return;
@@ -347,7 +333,7 @@ void Body::HandleModelString(ArgList* pArgList)
 /*
 		SurfaceType eSurface = ST_UNKNOWN;
 		CollisionInfo Info;
-        g_pLTServer->GetStandingOn(m_hObject, &Info);
+		g_pLTServer->GetStandingOn(m_hObject, &Info);
 
 		if (Info.m_hPoly && Info.m_hPoly != INVALID_HPOLY)
 		{
@@ -364,7 +350,7 @@ void Body::HandleModelString(ArgList* pArgList)
 */
 
 		LTVector vPos;
-        g_pLTServer->GetObjectPos(m_hObject, &vPos);
+		g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 		IntersectQuery IQuery;
 		IntersectInfo IInfo;
@@ -377,7 +363,7 @@ void Body::HandleModelString(ArgList* pArgList)
 		SurfaceType eSurface;
 
 		g_cIntersectSegmentCalls++;
-        if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
+		if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
 		{
 			if (IInfo.m_hPoly && IInfo.m_hPoly != INVALID_HPOLY)
 			{
@@ -404,16 +390,14 @@ void Body::HandleModelString(ArgList* pArgList)
 		// Update the noise info. We use a time in the future so AI's don't *instantly* react to the sound
 		// AI's twice as sensitive to landing sound (because it's louder)
 
-        m_DeathScene.SetNoise(pSurf->fDeathNoiseModifier * (bLand ? 2.0f : 1.0f), g_pLTServer->GetTime() + GetRandom(0.5f, 1.0f));
+		m_DeathScene.SetNoise(pSurf->fDeathNoiseModifier * (bLand ? 2.0f : 1.0f), g_pLTServer->GetTime() + GetRandom(0.5f, 1.0f));
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::Init()
 //
-//	ROUTINE:	Body::Init()
-//
-//	PURPOSE:	Setup the object
-//
+//	PURPOSE: Setup the object
 // ----------------------------------------------------------------------- //
 
 void Body::Init(const BODYINITSTRUCT& bi)
@@ -424,7 +408,7 @@ void Body::Init(const BODYINITSTRUCT& bi)
 
 	m_eDeathType		= bi.pCharacter->GetDeathType();
 	m_eModelId			= bi.pCharacter->GetModelId();
-	m_eModelSkeleton    = bi.pCharacter->GetModelSkeleton();
+	m_eModelSkeleton	= bi.pCharacter->GetModelSkeleton();
 	m_eModelStyle		= bi.pCharacter->GetModelStyle();
 
 	// Get the body lifetime
@@ -441,10 +425,10 @@ void Body::Init(const BODYINITSTRUCT& bi)
 		bcs.nClientId = (uint8) g_pLTServer->GetClientID(pPlayer->GetClient());
 	}
 
-    HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
-    g_pLTServer->WriteToMessageByte(hMessage, SFX_BODY_ID);
-    bcs.Write(g_pLTServer, hMessage);
-    g_pLTServer->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
+	g_pLTServer->WriteToMessageByte(hMessage, SFX_BODY_ID);
+	bcs.Write(g_pLTServer, hMessage);
+	g_pLTServer->EndMessage(hMessage);
 
 
 	// Create the death scene
@@ -490,23 +474,23 @@ void Body::Init(const BODYINITSTRUCT& bi)
 
 	// Copy our user flags over, setting our surface type to flesh
 
-    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject) | USRFLG_NIGHT_INFRARED;
+	uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject) | USRFLG_NIGHT_INFRARED;
 	dwUsrFlags |= SurfaceToUserFlag(ST_FLESH);
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags);
 
 	// Make sure model doesn't slide all over the place...
 
-    g_pLTServer->SetFrictionCoefficient(m_hObject, 500.0f);
+	g_pLTServer->SetFrictionCoefficient(m_hObject, 500.0f);
 
 	LTVector vDims;
-    g_pLTServer->GetObjectDims(bi.pCharacter->m_hObject, &vDims);
+	g_pLTServer->GetObjectDims(bi.pCharacter->m_hObject, &vDims);
 
 	// Set the dims.  If we can't set the dims that big, set them
 	// as big as possible...
 
-    if (g_pLTServer->SetObjectDims2(m_hObject, &vDims) == LT_ERROR)
+	if (g_pLTServer->SetObjectDims2(m_hObject, &vDims) == LT_ERROR)
 	{
-        g_pLTServer->SetObjectDims2(m_hObject, &vDims);
+		g_pLTServer->SetObjectDims2(m_hObject, &vDims);
 	}
 
 
@@ -516,24 +500,24 @@ void Body::Init(const BODYINITSTRUCT& bi)
 
 
 	LTFLOAT r, g, b, a;
-    g_pLTServer->GetObjectColor(bi.pCharacter->m_hObject, &r, &g, &b, &a);
-    g_pLTServer->SetObjectColor(m_hObject, r, g, b, a);
+	g_pLTServer->GetObjectColor(bi.pCharacter->m_hObject, &r, &g, &b, &a);
+	g_pLTServer->SetObjectColor(m_hObject, r, g, b, a);
 
 	LTVector vScale;
-    g_pLTServer->GetObjectScale(bi.pCharacter->m_hObject, &vScale);
-    g_pLTServer->ScaleObject(m_hObject, &vScale);
+	g_pLTServer->GetObjectScale(bi.pCharacter->m_hObject, &vScale);
+	g_pLTServer->ScaleObject(m_hObject, &vScale);
 
 	// Copy our animation over
 
-    HMODELANIM hAni = g_pLTServer->GetModelAnimation(bi.pCharacter->m_hObject);
-    g_pLTServer->SetModelAnimation(m_hObject, hAni);
-    g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
+	HMODELANIM hAni = g_pLTServer->GetModelAnimation(bi.pCharacter->m_hObject);
+	g_pLTServer->SetModelAnimation(m_hObject, hAni);
+	g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
 
 	// Copy the flags from the character to us
 
 	uint32 dwFlags = g_pLTServer->GetObjectFlags(bi.pCharacter->m_hObject);
 	m_dwFlags |= FLAG_REMOVEIFOUTSIDE;
-    g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
+	g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
 
 	// Move the attachments aggregate from the char to us...
 
@@ -575,11 +559,9 @@ void Body::Init(const BODYINITSTRUCT& bi)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::SetState()
 //
-//	ROUTINE:	Body::SetState()
-//
-//	PURPOSE:	Changes our state
-//
+//	PURPOSE: Changes our state
 // ----------------------------------------------------------------------- //
 
 void Body::SetState(BodyState eBodyState, LTBOOL bLoad /* = LTFALSE */)
@@ -590,7 +572,7 @@ void Body::SetState(BodyState eBodyState, LTBOOL bLoad /* = LTFALSE */)
 	if ( m_pState )
 	{
 		FACTORY_DELETE(m_pState);
-        m_pState = LTNULL;
+		m_pState = LTNULL;
 	}
 
 	switch ( m_eBodyState )
@@ -650,7 +632,7 @@ void Body::SetState(BodyState eBodyState, LTBOOL bLoad /* = LTFALSE */)
 		case eBodyStateFly:
 		case eBodyStateStuck:
 		default:
-            m_pState = LTNULL;
+			m_pState = LTNULL;
 			break;
 	}
 
@@ -668,16 +650,14 @@ void Body::SetState(BodyState eBodyState, LTBOOL bLoad /* = LTFALSE */)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::FaceDir()
 //
-//	ROUTINE:	Body::FaceDir()
-//
-//	PURPOSE:	Turn to face a specificied direction
-//
+//	PURPOSE: Turn to face a specificied direction
 // ----------------------------------------------------------------------- //
 
 void Body::FaceDir(const LTVector& vTargetDir)
 {
-    if (!g_pLTServer || !m_hObject) return;
+	if (!g_pLTServer || !m_hObject) return;
 
 	LTVector vDir = vTargetDir;
 
@@ -691,26 +671,24 @@ void Body::FaceDir(const LTVector& vTargetDir)
 	vDir.y = 0.0f; // Don't look up/down
 	VEC_NORM(vDir);
 
-    LTRotation rRot;
-    LTVector temp(0,1,0);
-    g_pMathLT->AlignRotation(rRot, vDir, temp);
-    g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+	LTRotation rRot;
+	LTVector temp(0,1,0);
+	g_pMathLT->AlignRotation(rRot, vDir, temp);
+	g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::FacePos()
 //
-//	ROUTINE:	Body::FacePos()
-//
-//	PURPOSE:	Turn to face a specific pos
-//
+//	PURPOSE: Turn to face a specific pos
 // ----------------------------------------------------------------------- //
 
 void Body::FacePos(const LTVector& vTargetPos)
 {
-    if (!g_pLTServer || !m_hObject) return;
+	if (!g_pLTServer || !m_hObject) return;
 
 	LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	LTVector vDir;
 	VEC_SUB(vDir, vTargetPos, vPos);
@@ -725,18 +703,16 @@ void Body::FacePos(const LTVector& vTargetPos)
 	vDir.y = 0.0f; // Don't look up/down
 	VEC_NORM(vDir);
 
-    LTRotation rRot;
-    LTVector temp(0,1,0);
-    g_pMathLT->AlignRotation(rRot, vDir, temp);
-    g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+	LTRotation rRot;
+	LTVector temp(0,1,0);
+	g_pMathLT->AlignRotation(rRot, vDir, temp);
+	g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::CreateHitBox()
 //
-//	ROUTINE:	Body::CreateHitBox()
-//
-//	PURPOSE:	Create our hit box
-//
+//	PURPOSE: Create our hit box
 // ----------------------------------------------------------------------- //
 
 void Body::CreateHitBox(const BODYINITSTRUCT& bi)
@@ -744,20 +720,20 @@ void Body::CreateHitBox(const BODYINITSTRUCT& bi)
 	if (m_hHitBox) return;
 
 	LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
-    HCLASS hClass = g_pLTServer->GetClass("CCharacterHitBox");
+	HCLASS hClass = g_pLTServer->GetClass("CCharacterHitBox");
 	if (!hClass) return;
 
 	ObjectCreateStruct theStruct;
 	INIT_OBJECTCREATESTRUCT(theStruct);
 
 	theStruct.m_Pos = vPos;
-    g_pLTServer->GetObjectRotation(m_hObject, &theStruct.m_Rotation);
+	g_pLTServer->GetObjectRotation(m_hObject, &theStruct.m_Rotation);
 
 	// Allocate an object...
 
-    CCharacterHitBox* pHitBox = (CCharacterHitBox *)g_pLTServer->CreateObject(hClass, &theStruct);
+	CCharacterHitBox* pHitBox = (CCharacterHitBox *)g_pLTServer->CreateObject(hClass, &theStruct);
 	if (!pHitBox) return;
 
 	m_hHitBox = pHitBox->m_hObject;
@@ -775,20 +751,18 @@ void Body::CreateHitBox(const BODYINITSTRUCT& bi)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::Update()
 //
-//	ROUTINE:	Body::Update()
-//
-//	PURPOSE:	Do update
-//
+//	PURPOSE: Do update
 // ----------------------------------------------------------------------- //
 
 void Body::Update()
 {
 	if ( !m_hObject ) return;
 
-    LTVector vPos, vMin, vMax;
-    g_pLTServer->GetWorldBox(vMin, vMax);
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos, vMin, vMax;
+	g_pLTServer->GetWorldBox(vMin, vMax);
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	if (vPos.x < vMin.x || vPos.y < vMin.y || vPos.z < vMin.z ||
 		vPos.x > vMax.x || vPos.y > vMax.y || vPos.z > vMax.z)
@@ -881,23 +855,21 @@ void Body::Update()
 
 	if ( bUpdatingDims || (m_pState && !m_pState->CanDeactivate()) )
 	{
-	    SetNextUpdate(s_fUpdateDelta);
+		SetNextUpdate(s_fUpdateDelta);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::UpdateHitBox()
 //
-//	ROUTINE:	Body::UpdateHitBox()
-//
-//	PURPOSE:	Update our hit box position
-//
+//	PURPOSE: Update our hit box position
 // ----------------------------------------------------------------------- //
 
 void Body::UpdateHitBox()
 {
 	if ( !m_hHitBox ) return;
 
-    CCharacterHitBox* pHitBox = (CCharacterHitBox*) g_pLTServer->HandleToObject(m_hHitBox);
+	CCharacterHitBox* pHitBox = (CCharacterHitBox*) g_pLTServer->HandleToObject(m_hHitBox);
 	if ( pHitBox )
 	{
 		pHitBox->Update();
@@ -905,11 +877,9 @@ void Body::UpdateHitBox()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::HandleDamage()
 //
-//	ROUTINE:	Body::HandleDamage()
-//
-//	PURPOSE:	Handle getting damaged
-//
+//	PURPOSE: Handle getting damaged
 // ----------------------------------------------------------------------- //
 
 void Body::HandleDamage(const DamageStruct& damage)
@@ -929,7 +899,7 @@ void Body::HandleDamage(const DamageStruct& damage)
 		{
 			// Only twitch when we've "settled"
 
-	        if ( g_pLTServer->GetModelPlaybackState(m_hObject) & MS_PLAYDONE )
+			if ( g_pLTServer->GetModelPlaybackState(m_hObject) & MS_PLAYDONE )
 			{
 				m_Animator.Twitch();
 			}
@@ -938,11 +908,9 @@ void Body::HandleDamage(const DamageStruct& damage)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::CreateDeathScene()
 //
-//	ROUTINE:	Body::CreateDeathScene()
-//
-//	PURPOSE:	Create the appropriate kind of death scene
-//
+//	PURPOSE: Create the appropriate kind of death scene
 // ----------------------------------------------------------------------- //
 
 void Body::CreateDeathScene(CCharacter *pChar)
@@ -958,11 +926,9 @@ void Body::CreateDeathScene(CCharacter *pChar)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::RemoveObject()
 //
-//	ROUTINE:	Body::RemoveObject()
-//
-//	PURPOSE:	Remove the object
-//
+//	PURPOSE: Remove the object
 // ----------------------------------------------------------------------- //
 
 void Body::RemoveObject()
@@ -972,16 +938,14 @@ void Body::RemoveObject()
 		ReleasePowerups();
 
 		g_pCharacterMgr->RemoveDeathScene(&m_DeathScene);
-        g_pLTServer->RemoveObject(m_hObject);
+		g_pLTServer->RemoveObject(m_hObject);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::AddSpear
 //
-//	ROUTINE:	Body::AddSpear
-//
-//	PURPOSE:	Stick a spear into us
-//
+//	PURPOSE: Stick a spear into us
 // ----------------------------------------------------------------------- //
 
 void Body::AddSpear(HOBJECT hSpear, const LTRotation& rRot, ModelNode eModelNode)
@@ -1028,11 +992,9 @@ void Body::AddSpear(HOBJECT hSpear, const LTRotation& rRot, ModelNode eModelNode
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::Save
 //
-//	ROUTINE:	Body::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void Body::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -1089,11 +1051,9 @@ void Body::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Body::Load
 //
-//	ROUTINE:	Body::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void Body::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -1163,11 +1123,9 @@ void Body::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorBody::Init
 //
-//	ROUTINE:	CAnimatorBody::Init
-//
-//	PURPOSE:	Initialize the animator
-//
+//	PURPOSE: Initialize the animator
 // ----------------------------------------------------------------------- //
 
 void CAnimatorBody::Init(HOBJECT hObject)
@@ -1177,18 +1135,16 @@ void CAnimatorBody::Init(HOBJECT hObject)
 	// Set up our twitch ani
 
 	m_eAniTrackerTwitch = AddAniTracker("Twitch");
-    m_eAniTwitch = AddAni("Twitch");
+	m_eAniTwitch = AddAni("Twitch");
 
 	EnableAniTracker(m_eAniTrackerTwitch);
-    LoopAniTracker(m_eAniTrackerTwitch, LTFALSE);
+	LoopAniTracker(m_eAniTrackerTwitch, LTFALSE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorBody::Update
 //
-//	ROUTINE:	CAnimatorBody::Update
-//
-//	PURPOSE:	Update the animator
-//
+//	PURPOSE: Update the animator
 // ----------------------------------------------------------------------- //
 
 void CAnimatorBody::Update()
@@ -1197,11 +1153,9 @@ void CAnimatorBody::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorBody::Twitch
 //
-//	ROUTINE:	CAnimatorBody::Twitch
-//
-//	PURPOSE:	Blend in a twitch animation (if we're not currently doing so)
-//
+//	PURPOSE: Blend in a twitch animation (if we're not currently doing so)
 // ----------------------------------------------------------------------- //
 
 void CAnimatorBody::Twitch()

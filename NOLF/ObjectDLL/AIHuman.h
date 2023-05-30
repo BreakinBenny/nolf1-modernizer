@@ -20,8 +20,8 @@ class CAIHuman : public CAI
 
 		// Type
 
-        virtual LTBOOL IsScuba() { return LTFALSE; }
-        virtual LTBOOL IsParatrooper() { return LTFALSE; }
+		virtual LTBOOL IsScuba() { return LTFALSE; }
+		virtual LTBOOL IsParatrooper() { return LTFALSE; }
 
 		// Attachments
 
@@ -29,12 +29,12 @@ class CAIHuman : public CAI
 
 		// Senses
 
-        virtual LTBOOL IsObjectVisibleFromKnee(ObjectFilterFn fn, HOBJECT hObj, LTFLOAT fVisibleDistanceSqr, LTBOOL bFOV /* = LTTRUE */);
-        virtual LTBOOL IsPositionVisibleFromKnee(ObjectFilterFn fn, const LTVector& vSourcePosition, LTFLOAT fVisibleDistanceSqr, LTBOOL bFOV /* = LTTRUE */);
+		virtual LTBOOL IsObjectVisibleFromKnee(ObjectFilterFn fn, HOBJECT hObj, LTFLOAT fVisibleDistanceSqr, LTBOOL bFOV /* = LTTRUE */);
+		virtual LTBOOL IsPositionVisibleFromKnee(ObjectFilterFn fn, const LTVector& vSourcePosition, LTFLOAT fVisibleDistanceSqr, LTBOOL bFOV /* = LTTRUE */);
 
 		// Weapons
 
-        virtual LTVector GetWeaponPosition(CWeapon *pWeapon);
+		virtual LTVector GetWeaponPosition(CWeapon *pWeapon);
 
 		// Brain
 
@@ -125,8 +125,8 @@ class CAIHuman : public CAI
 		// Engine methods
 
 		virtual LTBOOL ReadProp(ObjectCreateStruct *pInfo);
-        virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		virtual void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		virtual void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 
 		// Character stuff
 
@@ -134,7 +134,7 @@ class CAIHuman : public CAI
 
 		// Handlers
 
-        virtual void HandleGadget(uint8 nAmmoID);
+		virtual void HandleGadget(uint8 nAmmoID);
 		virtual void HandleDamage(const DamageStruct& damage);
 		virtual LTBOOL HandleCommand(char **pTokens, int nArgs);
 		virtual void HandleTeleport(const LTVector& vPos);
@@ -221,7 +221,7 @@ class CAIHumanPlugin : public CAIPlugin
 {
 	public:
 
-        virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
+		virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
 		virtual CAttachmentsPlugin* GetAttachmentsPlugin() { return &m_HumanAttachmentsPlugin; }
 		virtual void GetReactions(REACTIONSTRUCT** ppReactions, int* pcReactions) { *ppReactions = g_aAIHumanReactions; *pcReactions = g_cAIHumanReactions; }
 

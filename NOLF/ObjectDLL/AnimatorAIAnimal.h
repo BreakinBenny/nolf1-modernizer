@@ -11,16 +11,16 @@ struct AniAIAnimalMain
 	{
 	}
 
-    AniAIAnimalMain(LTBOOL b, Ani e1)
+	AniAIAnimalMain(LTBOOL b, Ani e1)
 	{
 		eAni = e1;
 		bLoops = b;
 	}
 
-    LTBOOL IsLoops() { return bLoops; }
+	LTBOOL IsLoops() { return bLoops; }
 
 	Ani eAni;
-    LTBOOL bLoops;
+	LTBOOL bLoops;
 };
 
 class CAnimatorAIAnimal : public CAnimator
@@ -69,8 +69,8 @@ class CAnimatorAIAnimal : public CAnimator
 
 		// Simple accessors
 
-        LTBOOL IsAnimatingMain(Main eMain) const;
-        LTBOOL IsAnimatingMainDone(Main eMain) const;
+		LTBOOL IsAnimatingMain(Main eMain) const;
+		LTBOOL IsAnimatingMainDone(Main eMain) const;
 		inline void SetMain(Main eMain) { m_eMain = eMain; }
 		inline Main GetMain() { return m_eMain; }
 		inline Main GetLastMain() { return m_eLastMain; }
@@ -83,7 +83,7 @@ class CAnimatorAIAnimal : public CAnimator
 
 		// Dims
 
-        LTBOOL SetDims(HMODELANIM hAni);
+		LTBOOL SetDims(HMODELANIM hAni);
 
 	protected :
 

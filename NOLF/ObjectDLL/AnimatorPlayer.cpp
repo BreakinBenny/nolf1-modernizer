@@ -8,11 +8,9 @@
 #include "PlayerObj.h"
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorPlayer::CAnimatorPlayer()
 //
-//	ROUTINE:	CAnimatorPlayer::CAnimatorPlayer()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CAnimatorPlayer::CAnimatorPlayer()
@@ -34,27 +32,25 @@ CAnimatorPlayer::CAnimatorPlayer()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorPlayer::~CAnimatorPlayer()
 //
-//	ROUTINE:	CAnimatorPlayer::~CAnimatorPlayer()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CAnimatorPlayer::~CAnimatorPlayer()
 {
-    LTRESULT dwResult;
+	LTRESULT dwResult;
 
-    dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerUpper].m_pAnimTracker);
+	dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerUpper].m_pAnimTracker);
 	_ASSERT(LT_OK == dwResult);
 
-    dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerLower].m_pAnimTracker);
+	dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerLower].m_pAnimTracker);
 	_ASSERT(LT_OK == dwResult);
 
-    dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerPitchUp].m_pAnimTracker);
+	dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerPitchUp].m_pAnimTracker);
 	_ASSERT(LT_OK == dwResult);
 
-    dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerPitchDown].m_pAnimTracker);
+	dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerPitchDown].m_pAnimTracker);
 	_ASSERT(LT_OK == dwResult);
 }
 
@@ -81,28 +77,26 @@ void CAnimatorPlayer::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorPlayer::Reset()
 //
-//	ROUTINE:	CAnimatorPlayer::Reset()
-//
-//	PURPOSE:	Initialize the Player animator
-//
+//	PURPOSE: Initialize the Player animator
 // ----------------------------------------------------------------------- //
 
 void CAnimatorPlayer::Reset(HOBJECT hObject)
 {
-    LTRESULT dwResult;
+	LTRESULT dwResult;
 
-    dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerUpper].m_pAnimTracker);
-    _ASSERT(LT_OK == dwResult);
+	dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerUpper].m_pAnimTracker);
+	_ASSERT(LT_OK == dwResult);
 
-    dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerLower].m_pAnimTracker);
-    _ASSERT(LT_OK == dwResult);
+	dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerLower].m_pAnimTracker);
+	_ASSERT(LT_OK == dwResult);
 
-    dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerPitchUp].m_pAnimTracker);
-    _ASSERT(LT_OK == dwResult);
+	dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerPitchUp].m_pAnimTracker);
+	_ASSERT(LT_OK == dwResult);
 
-    dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerPitchDown].m_pAnimTracker);
-    _ASSERT(LT_OK == dwResult);
+	dwResult = g_pModelLT->RemoveTracker(m_hObject, m_aAniTrackers[m_eAniTrackerPitchDown].m_pAnimTracker);
+	_ASSERT(LT_OK == dwResult);
 
 	m_cAniTrackers = 1;
 
@@ -111,17 +105,15 @@ void CAnimatorPlayer::Reset(HOBJECT hObject)
 	m_eAniTrackerDims = eAniTrackerInvalid;
 	m_hObject = NULL;
 
-    m_bInitialized = LTFALSE;
+	m_bInitialized = LTFALSE;
 
 	Init(g_pLTServer, hObject);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorPlayer::Init()
 //
-//	ROUTINE:	CAnimatorPlayer::Init()
-//
-//	PURPOSE:	Initialize the Player animator
-//
+//	PURPOSE: Initialize the Player animator
 // ----------------------------------------------------------------------- //
 
 void CAnimatorPlayer::Init(ILTCSBase* pInterface, HOBJECT hObject)
@@ -153,92 +145,92 @@ void CAnimatorPlayer::Init(ILTCSBase* pInterface, HOBJECT hObject)
 
 	// Get Lower anis
 
-    m_AniLowerBase              = AniPlayerLower            (LTTRUE,     _A("Base"));
+	m_AniLowerBase			  = AniPlayerLower			(LTTRUE,	 _A("Base"));
 
-    m_AniStand                  = AniPlayerLower            (LTTRUE,     _A("LSt"));
+	m_AniStand				  = AniPlayerLower			(LTTRUE,	 _A("LSt"));
 
-    m_AniWalkForward            = AniPlayerLower            (LTTRUE,     _A("LWF"));
-    m_AniWalkBackward           = AniPlayerLower            (LTTRUE,     _A("LWB"));
-    m_AniWalkStrafeLeft         = AniPlayerLowerStrafe      (LTTRUE,     _A("LWL"));
-    m_AniWalkStrafeRight        = AniPlayerLowerStrafe      (LTTRUE,     _A("LWR"));
+	m_AniWalkForward			= AniPlayerLower			(LTTRUE,	 _A("LWF"));
+	m_AniWalkBackward		   = AniPlayerLower			(LTTRUE,	 _A("LWB"));
+	m_AniWalkStrafeLeft		 = AniPlayerLowerStrafe	  (LTTRUE,	 _A("LWL"));
+	m_AniWalkStrafeRight		= AniPlayerLowerStrafe	  (LTTRUE,	 _A("LWR"));
 
-    m_AniRunForward             = AniPlayerLower            (LTTRUE,     _A("LRF"));
-    m_AniRunBackward            = AniPlayerLower            (LTTRUE,     _A("LRB"));
-    m_AniRunStrafeLeft          = AniPlayerLowerStrafe      (LTTRUE,     _A("LRL"));
-    m_AniRunStrafeRight         = AniPlayerLowerStrafe      (LTTRUE,     _A("LRR"));
+	m_AniRunForward			 = AniPlayerLower			(LTTRUE,	 _A("LRF"));
+	m_AniRunBackward			= AniPlayerLower			(LTTRUE,	 _A("LRB"));
+	m_AniRunStrafeLeft		  = AniPlayerLowerStrafe	  (LTTRUE,	 _A("LRL"));
+	m_AniRunStrafeRight		 = AniPlayerLowerStrafe	  (LTTRUE,	 _A("LRR"));
 
-    m_AniCrouch                 = AniPlayerLowerCrouch      (LTTRUE,     _A("LC"));
-    m_AniCrouchForward          = AniPlayerLowerCrouch      (LTTRUE,     _A("LCF"));
-    m_AniCrouchBackward         = AniPlayerLowerCrouch      (LTTRUE,     _A("LCB"));
-    m_AniCrouchStrafeLeft       = AniPlayerLowerCrouchStrafe(LTTRUE,     _A("LCL"));
-    m_AniCrouchStrafeRight      = AniPlayerLowerCrouchStrafe(LTTRUE,     _A("LCR"));
+	m_AniCrouch				 = AniPlayerLowerCrouch	  (LTTRUE,	 _A("LC"));
+	m_AniCrouchForward		  = AniPlayerLowerCrouch	  (LTTRUE,	 _A("LCF"));
+	m_AniCrouchBackward		 = AniPlayerLowerCrouch	  (LTTRUE,	 _A("LCB"));
+	m_AniCrouchStrafeLeft	   = AniPlayerLowerCrouchStrafe(LTTRUE,	 _A("LCL"));
+	m_AniCrouchStrafeRight	  = AniPlayerLowerCrouchStrafe(LTTRUE,	 _A("LCR"));
 
-    m_AniSwim                   = AniPlayerLowerSwim        (LTTRUE,     _A("LSw"));
-    m_AniSwimForward            = AniPlayerLowerSwim        (LTTRUE,     _A("LSwF"));
+	m_AniSwim				   = AniPlayerLowerSwim		(LTTRUE,	 _A("LSw"));
+	m_AniSwimForward			= AniPlayerLowerSwim		(LTTRUE,	 _A("LSwF"));
 
-    m_AniJumpJump               = AniPlayerLower            (LTFALSE,    _A("LJJ"));
-    m_AniJumpTuck               = AniPlayerLower            (LTTRUE,     _A("LJT"));
-    m_AniJumpLand               = AniPlayerLower            (LTFALSE,    _A("LJL"));
+	m_AniJumpJump			   = AniPlayerLower			(LTFALSE,	_A("LJJ"));
+	m_AniJumpTuck			   = AniPlayerLower			(LTTRUE,	 _A("LJT"));
+	m_AniJumpLand			   = AniPlayerLower			(LTFALSE,	_A("LJL"));
 
 	// Get Upper anis
 
-    m_AniUpperBase              = AniPlayerUpper           (LTTRUE,     _A("Base"), _N,             _N,             _N,             _N);
+	m_AniUpperBase			  = AniPlayerUpper		   (LTTRUE,	 _A("Base"), _N,			 _N,			 _N,			 _N);
 
-    m_AniRifleUnalert           = AniPlayerUpper           (LTTRUE,     _A("URUn"), _N,             _N,             _N,             _N);
-    m_AniRifleAlert             = AniPlayerUpper           (LTTRUE,     _A("URAl"), _N,             _N,             _N,             _N);
-    m_AniRifleAim               = AniPlayerUpper           (LTTRUE,     _A("URAm"), _A("URSAm"),    _A("URCAm"),    _A("URSwAm"),   _A("URCSAm"));
-    m_AniRifleFire              = AniPlayerUpper           (LTFALSE,    _A("URFi"), _A("URSFi"),    _A("URCFi"),    _A("URSwFi"),   _A("URCSFi"));
-    m_AniRifleReload            = AniPlayerUpper           (LTFALSE,    _A("URRe"), _N,             _A("URCRe"),    _A("URSwRe"),   _N);
-    m_AniRifleSelect            = AniPlayerUpper           (LTFALSE,    _A("URSe"), _N,             _A("URCRe"),    _A("URSwRe"),   _N);
-    m_AniRifleDeselect          = AniPlayerUpper           (LTFALSE,    _A("URDe"), _N,             _A("URCRe"),    _A("URSwRe"),   _N);
+	m_AniRifleUnalert		   = AniPlayerUpper		   (LTTRUE,	 _A("URUn"), _N,			 _N,			 _N,			 _N);
+	m_AniRifleAlert			 = AniPlayerUpper		   (LTTRUE,	 _A("URAl"), _N,			 _N,			 _N,			 _N);
+	m_AniRifleAim			   = AniPlayerUpper		   (LTTRUE,	 _A("URAm"), _A("URSAm"),	_A("URCAm"),	_A("URSwAm"),   _A("URCSAm"));
+	m_AniRifleFire			  = AniPlayerUpper		   (LTFALSE,	_A("URFi"), _A("URSFi"),	_A("URCFi"),	_A("URSwFi"),   _A("URCSFi"));
+	m_AniRifleReload			= AniPlayerUpper		   (LTFALSE,	_A("URRe"), _N,			 _A("URCRe"),	_A("URSwRe"),   _N);
+	m_AniRifleSelect			= AniPlayerUpper		   (LTFALSE,	_A("URSe"), _N,			 _A("URCRe"),	_A("URSwRe"),   _N);
+	m_AniRifleDeselect		  = AniPlayerUpper		   (LTFALSE,	_A("URDe"), _N,			 _A("URCRe"),	_A("URSwRe"),   _N);
 
-    m_AniPistolUnalert          = AniPlayerUpper           (LTTRUE,     _A("UPUn"), _N,             _N,             _N,             _N);
-    m_AniPistolAlert            = AniPlayerUpper           (LTTRUE,     _A("UPAl"), _N,             _N,             _N,             _N);
-    m_AniPistolAim              = AniPlayerUpper           (LTTRUE,     _A("UPAm"), _A("UPSAm"),    _A("UPCAm"),    _N,             _A("UPCSAm"));
-    m_AniPistolFire             = AniPlayerUpper           (LTFALSE,    _A("UPFi"), _A("UPSFi"),    _A("UPCFi"),    _N,             _A("UPCSFi"));
-    m_AniPistolReload           = AniPlayerUpper           (LTFALSE,    _A("UPRe"), _N,             _A("UPCRe"),    _N,             _N);
-    m_AniPistolSelect           = AniPlayerUpper           (LTFALSE,    _A("UPSe"), _N,             _A("URCRe"),    _N,             _N);
-    m_AniPistolDeselect         = AniPlayerUpper           (LTFALSE,    _A("UPDe"), _N,             _A("URCRe"),    _N,             _N);
+	m_AniPistolUnalert		  = AniPlayerUpper		   (LTTRUE,	 _A("UPUn"), _N,			 _N,			 _N,			 _N);
+	m_AniPistolAlert			= AniPlayerUpper		   (LTTRUE,	 _A("UPAl"), _N,			 _N,			 _N,			 _N);
+	m_AniPistolAim			  = AniPlayerUpper		   (LTTRUE,	 _A("UPAm"), _A("UPSAm"),	_A("UPCAm"),	_N,			 _A("UPCSAm"));
+	m_AniPistolFire			 = AniPlayerUpper		   (LTFALSE,	_A("UPFi"), _A("UPSFi"),	_A("UPCFi"),	_N,			 _A("UPCSFi"));
+	m_AniPistolReload		   = AniPlayerUpper		   (LTFALSE,	_A("UPRe"), _N,			 _A("UPCRe"),	_N,			 _N);
+	m_AniPistolSelect		   = AniPlayerUpper		   (LTFALSE,	_A("UPSe"), _N,			 _A("URCRe"),	_N,			 _N);
+	m_AniPistolDeselect		 = AniPlayerUpper		   (LTFALSE,	_A("UPDe"), _N,			 _A("URCRe"),	_N,			 _N);
 
-    m_AniMeleeUnalert           = AniPlayerUpper           (LTTRUE,     _A("UMUn"), _N,             _N,             _N,             _N);
-    m_AniMeleeAlert             = AniPlayerUpper           (LTTRUE,     _A("UMAl"), _N,             _N,             _N,             _N);
-    m_AniMeleeAim               = AniPlayerUpper           (LTTRUE,     _A("UMAm"), _A("UMSAm"),    _A("UMCAm"),    _N,             _A("UMCSAm"));
-    m_AniMeleeFire              = AniPlayerUpper           (LTFALSE,    _A("UMFi"), _A("UMSFi"),    _A("UMCFi"),    _N,             _A("UMCSFi"));
-    m_AniMeleeReload            = AniPlayerUpper           (LTFALSE,    _A("UMRe"), _N,             _A("UMCRe"),    _N,             _N);
-    m_AniMeleeSelect            = AniPlayerUpper           (LTFALSE,    _A("UMSe"), _N,             _A("UMCRe"),    _N,             _N);
-    m_AniMeleeDeselect          = AniPlayerUpper           (LTFALSE,    _A("UMDe"), _N,             _A("UMCRe"),    _N,             _N);
+	m_AniMeleeUnalert		   = AniPlayerUpper		   (LTTRUE,	 _A("UMUn"), _N,			 _N,			 _N,			 _N);
+	m_AniMeleeAlert			 = AniPlayerUpper		   (LTTRUE,	 _A("UMAl"), _N,			 _N,			 _N,			 _N);
+	m_AniMeleeAim			   = AniPlayerUpper		   (LTTRUE,	 _A("UMAm"), _A("UMSAm"),	_A("UMCAm"),	_N,			 _A("UMCSAm"));
+	m_AniMeleeFire			  = AniPlayerUpper		   (LTFALSE,	_A("UMFi"), _A("UMSFi"),	_A("UMCFi"),	_N,			 _A("UMCSFi"));
+	m_AniMeleeReload			= AniPlayerUpper		   (LTFALSE,	_A("UMRe"), _N,			 _A("UMCRe"),	_N,			 _N);
+	m_AniMeleeSelect			= AniPlayerUpper		   (LTFALSE,	_A("UMSe"), _N,			 _A("UMCRe"),	_N,			 _N);
+	m_AniMeleeDeselect		  = AniPlayerUpper		   (LTFALSE,	_A("UMDe"), _N,			 _A("UMCRe"),	_N,			 _N);
 
-    m_AniThrowUnalert           = AniPlayerUpper           (LTTRUE,     _A("UTUn"), _N,             _N,             _N,             _N);
-    m_AniThrowAlert             = AniPlayerUpper           (LTTRUE,     _A("UTAl"), _N,             _N,             _N,             _N);
-    m_AniThrowAim               = AniPlayerUpper           (LTTRUE,     _A("UTAm"), _A("UTSAm"),    _A("UTCAm"),    _N,             _A("UTCSAm"));
-    m_AniThrowFire              = AniPlayerUpper           (LTFALSE,    _A("UTFi"), _A("UTSFi"),    _A("UTCFi"),    _N,             _A("UTCSFi"));
-    m_AniThrowReload            = AniPlayerUpper           (LTFALSE,    _A("UTRe"), _N,             _A("UTCRe"),    _N,             _N);
-    m_AniThrowSelect            = AniPlayerUpper           (LTFALSE,    _A("UTSe"), _N,             _A("UTCRe"),    _N,             _N);
-    m_AniThrowDeselect          = AniPlayerUpper           (LTFALSE,    _A("UTDe"), _N,             _A("UTCRe"),    _N,             _N);
+	m_AniThrowUnalert		   = AniPlayerUpper		   (LTTRUE,	 _A("UTUn"), _N,			 _N,			 _N,			 _N);
+	m_AniThrowAlert			 = AniPlayerUpper		   (LTTRUE,	 _A("UTAl"), _N,			 _N,			 _N,			 _N);
+	m_AniThrowAim			   = AniPlayerUpper		   (LTTRUE,	 _A("UTAm"), _A("UTSAm"),	_A("UTCAm"),	_N,			 _A("UTCSAm"));
+	m_AniThrowFire			  = AniPlayerUpper		   (LTFALSE,	_A("UTFi"), _A("UTSFi"),	_A("UTCFi"),	_N,			 _A("UTCSFi"));
+	m_AniThrowReload			= AniPlayerUpper		   (LTFALSE,	_A("UTRe"), _N,			 _A("UTCRe"),	_N,			 _N);
+	m_AniThrowSelect			= AniPlayerUpper		   (LTFALSE,	_A("UTSe"), _N,			 _A("UTCRe"),	_N,			 _N);
+	m_AniThrowDeselect		  = AniPlayerUpper		   (LTFALSE,	_A("UTDe"), _N,			 _A("UTCRe"),	_N,			 _N);
 
-    m_AniSunglassesUnalert      = AniPlayerUpper           (LTTRUE,     _A("Sung"), _N,				_N,				_N,             _N);
-    m_AniSunglassesAlert        = AniPlayerUpper           (LTTRUE,     _A("Sung"), _N,				_N,				_N,             _N);
-    m_AniSunglassesAim          = AniPlayerUpper           (LTTRUE,     _A("Sung"), _N,				_N,				_N,             _N);
-    m_AniSunglassesFire         = AniPlayerUpper           (LTFALSE,    _A("Sung"), _N,				_N,				_N,             _N);
-    m_AniSunglassesReload       = AniPlayerUpper           (LTFALSE,    _A("Sung"), _N,				_N,				_N,             _N);
-    m_AniSunglassesSelect       = AniPlayerUpper           (LTFALSE,    _A("Sung"), _N,				_N,				_N,             _N);
-    m_AniSunglassesDeselect     = AniPlayerUpper           (LTFALSE,    _A("Sung"), _N,				_N,				_N,             _N);
+	m_AniSunglassesUnalert	  = AniPlayerUpper		   (LTTRUE,	 _A("Sung"), _N,				_N,				_N,			 _N);
+	m_AniSunglassesAlert		= AniPlayerUpper		   (LTTRUE,	 _A("Sung"), _N,				_N,				_N,			 _N);
+	m_AniSunglassesAim		  = AniPlayerUpper		   (LTTRUE,	 _A("Sung"), _N,				_N,				_N,			 _N);
+	m_AniSunglassesFire		 = AniPlayerUpper		   (LTFALSE,	_A("Sung"), _N,				_N,				_N,			 _N);
+	m_AniSunglassesReload	   = AniPlayerUpper		   (LTFALSE,	_A("Sung"), _N,				_N,				_N,			 _N);
+	m_AniSunglassesSelect	   = AniPlayerUpper		   (LTFALSE,	_A("Sung"), _N,				_N,				_N,			 _N);
+	m_AniSunglassesDeselect	 = AniPlayerUpper		   (LTFALSE,	_A("Sung"), _N,				_N,				_N,			 _N);
 
 	// Get Main anis
 
-    m_AniMainBase               = AniPlayerMain            (LTTRUE,     _A("Base"));
+	m_AniMainBase			   = AniPlayerMain			(LTTRUE,	 _A("Base"));
 
-    m_AniClimb                  = AniPlayerMain            (LTTRUE,     _A("Cl"));
-    m_AniClimbUp                = AniPlayerMain            (LTTRUE,     _A("ClU"));
-    m_AniClimbDown              = AniPlayerMain            (LTTRUE,     _A("ClD"));
-    m_AniMotorcycle             = AniPlayerMain            (LTTRUE,     _A("LRdM"));
-    m_AniSnowmobile             = AniPlayerMain            (LTTRUE,     _A("LRdS"));
+	m_AniClimb				  = AniPlayerMain			(LTTRUE,	 _A("Cl"));
+	m_AniClimbUp				= AniPlayerMain			(LTTRUE,	 _A("ClU"));
+	m_AniClimbDown			  = AniPlayerMain			(LTTRUE,	 _A("ClD"));
+	m_AniMotorcycle			 = AniPlayerMain			(LTTRUE,	 _A("LRdM"));
+	m_AniSnowmobile			 = AniPlayerMain			(LTTRUE,	 _A("LRdS"));
 
 	// Setup our lookup tables
 
-    memset(m_aapAniPlayerUppers, LTNULL, sizeof(void*)*kNumWeapons*kNumPostures);
-    memset(m_aapAniPlayerLowers, LTNULL, sizeof(void*)*kNumMovements*kNumDirections);
-    memset(m_apAniPlayerMains, LTNULL, sizeof(void*)*kNumMains);
+	memset(m_aapAniPlayerUppers, LTNULL, sizeof(void*)*kNumWeapons*kNumPostures);
+	memset(m_aapAniPlayerLowers, LTNULL, sizeof(void*)*kNumMovements*kNumDirections);
+	memset(m_apAniPlayerMains, LTNULL, sizeof(void*)*kNumMains);
 
 	m_aapAniPlayerUppers[eRifle][eUnalert]			= &m_AniRifleUnalert;
 	m_aapAniPlayerUppers[eRifle][eAlert]			= &m_AniRifleAlert;
@@ -337,11 +329,9 @@ void CAnimatorPlayer::Init(ILTCSBase* pInterface, HOBJECT hObject)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorPlayer::Update()
 //
-//	ROUTINE:	CAnimatorPlayer::Update()
-//
-//	PURPOSE:	Updates the Player animator
-//
+//	PURPOSE: Updates the Player animator
 // ----------------------------------------------------------------------- //
 
 void CAnimatorPlayer::Update()
@@ -360,11 +350,11 @@ void CAnimatorPlayer::Update()
 
 		if ( !IsAniTrackerLooping(m_eAniTrackerUpper) )
 		{
-            LoopAniTracker(m_eAniTrackerUpper, LTTRUE);
+			LoopAniTracker(m_eAniTrackerUpper, LTTRUE);
 		}
 		if ( !IsAniTrackerLooping(m_eAniTrackerLower) )
 		{
-            LoopAniTracker(m_eAniTrackerLower, LTTRUE);
+			LoopAniTracker(m_eAniTrackerLower, LTTRUE);
 		}
 
 		SetAni(m_AniUpperBase.eAni, m_eAniTrackerUpper);
@@ -378,7 +368,7 @@ void CAnimatorPlayer::Update()
 
 		if ( !IsAniTrackerLooping(eAniTrackerMain) )
 		{
-            LoopAniTracker(eAniTrackerMain, LTTRUE);
+			LoopAniTracker(eAniTrackerMain, LTTRUE);
 		}
 
 		SetAni(m_AniMainBase.eAni, eAniTrackerMain);
@@ -390,17 +380,17 @@ void CAnimatorPlayer::Update()
 
 		if ( !pAniPlayerMain )
 		{
-            g_pLTServer->CPrint("missing ani %d", m_eMain);
+			g_pLTServer->CPrint("missing ani %d", m_eMain);
 			return;
 		}
 
 		if ( pAniPlayerMain->bLoops && !IsAniTrackerLooping(eAniTrackerMain) )
 		{
-            LoopAniTracker(eAniTrackerMain, LTTRUE);
+			LoopAniTracker(eAniTrackerMain, LTTRUE);
 		}
 		else if ( !pAniPlayerMain->bLoops && IsAniTrackerLooping(eAniTrackerMain) )
 		{
-            LoopAniTracker(eAniTrackerMain, LTFALSE);
+			LoopAniTracker(eAniTrackerMain, LTFALSE);
 		}
 
 		SetAni(pAniPlayerMain->eAni, eAniTrackerMain);
@@ -412,7 +402,7 @@ void CAnimatorPlayer::Update()
 
 		if ( !pAniPlayerUpper || !pAniPlayerLower )
 		{
-            g_pLTServer->CPrint("missing ani %d/%d  %d/%d", m_eWeapon, m_ePosture, m_eMovement, m_eDirection);
+			g_pLTServer->CPrint("missing ani %d/%d  %d/%d", m_eWeapon, m_ePosture, m_eMovement, m_eDirection);
 			return;
 		}
 
@@ -453,20 +443,20 @@ void CAnimatorPlayer::Update()
 
 		if ( pAniPlayerUpper->bLoops && !IsAniTrackerLooping(m_eAniTrackerUpper) )
 		{
-            LoopAniTracker(m_eAniTrackerUpper, LTTRUE);
+			LoopAniTracker(m_eAniTrackerUpper, LTTRUE);
 		}
 		else if ( !pAniPlayerUpper->bLoops && IsAniTrackerLooping(m_eAniTrackerUpper) )
 		{
-            LoopAniTracker(m_eAniTrackerUpper, LTFALSE);
+			LoopAniTracker(m_eAniTrackerUpper, LTFALSE);
 		}
 
 		if ( pAniPlayerLower->bLoops && !IsAniTrackerLooping(m_eAniTrackerLower) )
 		{
-            LoopAniTracker(m_eAniTrackerLower, LTTRUE);
+			LoopAniTracker(m_eAniTrackerLower, LTTRUE);
 		}
 		else if ( !pAniPlayerLower->bLoops && IsAniTrackerLooping(m_eAniTrackerLower) )
 		{
-            LoopAniTracker(m_eAniTrackerLower, LTFALSE);
+			LoopAniTracker(m_eAniTrackerLower, LTFALSE);
 		}
 
 		SetAni(eAniUpper, m_eAniTrackerUpper);
@@ -491,45 +481,41 @@ void CAnimatorPlayer::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorPlayer::ResetAniTracker()
 //
-//	ROUTINE:	CAnimatorPlayer::ResetAniTracker()
-//
-//	PURPOSE:	Resets an anitracker
-//
+//	PURPOSE: Resets an anitracker
 // ----------------------------------------------------------------------- //
 
 void CAnimatorPlayer::ResetAniTracker(AniTracker eAniTracker)
 {
 	CAnimator::ResetAniTracker(eAniTracker);
 
-    HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_SFX_MESSAGE);
-    g_pLTServer->WriteToMessageByte(hMessage, SFX_CHARACTER_ID);
-    g_pLTServer->WriteToMessageObject(hMessage, m_hObject);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_SFX_MESSAGE);
+	g_pLTServer->WriteToMessageByte(hMessage, SFX_CHARACTER_ID);
+	g_pLTServer->WriteToMessageObject(hMessage, m_hObject);
 	if ( eAniTracker == eAniTrackerMain )
 	{
-        g_pLTServer->WriteToMessageByte(hMessage, CFX_RESET_TRACKER);
-        g_pLTServer->WriteToMessageByte(hMessage, 0);
+		g_pLTServer->WriteToMessageByte(hMessage, CFX_RESET_TRACKER);
+		g_pLTServer->WriteToMessageByte(hMessage, 0);
 	}
 	else if ( eAniTracker == m_eAniTrackerLower )
 	{
-        g_pLTServer->WriteToMessageByte(hMessage, CFX_RESET_TRACKER);
-        g_pLTServer->WriteToMessageByte(hMessage, 1);
+		g_pLTServer->WriteToMessageByte(hMessage, CFX_RESET_TRACKER);
+		g_pLTServer->WriteToMessageByte(hMessage, 1);
 	}
 	else if ( eAniTracker == m_eAniTrackerUpper )
 	{
-        g_pLTServer->WriteToMessageByte(hMessage, CFX_RESET_TRACKER);
-        g_pLTServer->WriteToMessageByte(hMessage, 2);
+		g_pLTServer->WriteToMessageByte(hMessage, CFX_RESET_TRACKER);
+		g_pLTServer->WriteToMessageByte(hMessage, 2);
 	}
-    g_pLTServer->EndMessage(hMessage);
+	g_pLTServer->EndMessage(hMessage);
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorPlayer::UpdateDims()
 //
-//	ROUTINE:	CAnimatorPlayer::UpdateDims()
-//
-//	PURPOSE:	Updates the Player's dims based on the ani
-//
+//	PURPOSE: Updates the Player's dims based on the ani
 // ----------------------------------------------------------------------- //
 
 void CAnimatorPlayer::UpdateDims()
@@ -568,28 +554,26 @@ void CAnimatorPlayer::UpdateDims()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorPlayer::SetDims()
 //
-//	ROUTINE:	CAnimatorPlayer::SetDims()
-//
-//	PURPOSE:	Sets the Player's dims based on the ani
-//
+//	PURPOSE: Sets the Player's dims based on the ani
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAnimatorPlayer::SetDims(HMODELANIM hAni)
 {
-    LTVector vDims;
-    LTRESULT dResult = g_pLTServer->GetModelAnimUserDims(m_hObject, &vDims, hAni);
-    _ASSERT(dResult == LT_OK);
+	LTVector vDims;
+	LTRESULT dResult = g_pLTServer->GetModelAnimUserDims(m_hObject, &vDims, hAni);
+	_ASSERT(dResult == LT_OK);
 
-    CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hObject);
+	CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hObject);
 
 	pPlayer->ForceDuck(LTFALSE);
 
 	// If we could update the dims, or we're forcing the animation, set it
 
-    if ( pPlayer->SetDims(&vDims, LTFALSE) /*|| IS DEATH ANI*/)
+	if ( pPlayer->SetDims(&vDims, LTFALSE) /*|| IS DEATH ANI*/)
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else
 	{
@@ -604,16 +588,14 @@ LTBOOL CAnimatorPlayer::SetDims(HMODELANIM hAni)
 		{
 		}
 
-        return LTFALSE;
+		return LTFALSE;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAnimatorPlayer::IsAnimating*()
 //
-//	ROUTINE:	CAnimatorPlayer::IsAnimating*()
-//
-//	PURPOSE:	Is the parameter responsible for the current animation?
-//
+//	PURPOSE: Is the parameter responsible for the current animation?
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAnimatorPlayer::IsAnimatingMain(Main eMain) const

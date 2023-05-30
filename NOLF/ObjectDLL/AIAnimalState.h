@@ -35,7 +35,7 @@ class CAIAnimalState : public CAIState
 
 		// Ctors/Dtors/etc
 
-        LTBOOL Init(CAIAnimal* pAIAnimal);
+		LTBOOL Init(CAIAnimal* pAIAnimal);
 
 	protected : // Protected methods
 
@@ -47,7 +47,7 @@ class CAIAnimalState : public CAIState
 
 		// These do not need to be saved
 
-		CAIAnimal*			m_pAIAnimal;
+		CAIAnimal*	m_pAIAnimal;
 };
 
 class CAIDogState : public CAIAnimalState
@@ -70,7 +70,7 @@ class CAIDogState : public CAIAnimalState
 
 		// Ctors/Dtors/etc
 
-        virtual LTBOOL Init(AI_Dog* pAIDog);
+		virtual LTBOOL Init(AI_Dog* pAIDog);
 
 		// Updates
 
@@ -139,7 +139,7 @@ class CAIDogStateBark : DEFINE_FACTORY_CLASS(CAIDogStateBark), public CAIDogStat
 
 		// Ctor/Dtors/etc
 
-        LTBOOL Init(AI_Dog* pAIDog);
+		LTBOOL Init(AI_Dog* pAIDog);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEREAD hWrite);
@@ -167,7 +167,7 @@ class CAIDogStateBark : DEFINE_FACTORY_CLASS(CAIDogStateBark), public CAIDogStat
 	protected :
 
 		State	m_eState;
-        uint32  m_dwNode;
+		uint32  m_dwNode;
 		LTFLOAT	m_fPause;
 };
 
@@ -201,7 +201,7 @@ class CAIDogStateHeat : DEFINE_FACTORY_CLASS(CAIDogStateHeat), public CAIDogStat
 
 		// Ctors/Dtors/etc
 
-        LTBOOL Init(AI_Dog* pAIDog);
+		LTBOOL Init(AI_Dog* pAIDog);
 
 		// Updates
 
@@ -235,7 +235,7 @@ class CAIPoodleState : public CAIAnimalState
 
 		// Ctors/Dtors/etc
 
-        virtual LTBOOL Init(AI_Poodle* pAIPoodle);
+		virtual LTBOOL Init(AI_Poodle* pAIPoodle);
 
 		// Updates
 
@@ -273,7 +273,7 @@ class CAIPoodleStateSeduce : DEFINE_FACTORY_CLASS(CAIPoodleStateSeduce), public 
 
 		// Ctors/Dtors/Etc
 
-        LTBOOL Init(AI_Poodle* pAIPoodle);
+		LTBOOL Init(AI_Poodle* pAIPoodle);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
@@ -302,7 +302,7 @@ class CAIPoodleStateDischarge : DEFINE_FACTORY_CLASS(CAIPoodleStateDischarge), p
 
 		// Ctors/Dtors/Etc
 
-        LTBOOL Init(AI_Poodle* pAIPoodle);
+		LTBOOL Init(AI_Poodle* pAIPoodle);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
@@ -318,7 +318,7 @@ class CAIPoodleStateDischarge : DEFINE_FACTORY_CLASS(CAIPoodleStateDischarge), p
 
 	protected :
 
-        LTBOOL       m_bDischarged;
+		LTBOOL	   m_bDischarged;
 };
 
 class CAIPoodleStateShutdown : DEFINE_FACTORY_CLASS(CAIPoodleStateShutdown), public CAIPoodleState
@@ -362,7 +362,7 @@ class CAISharkState : public CAIAnimalState
 
 		// Ctors/Dtors/etc
 
-        virtual LTBOOL Init(AI_Shark* pAIShark);
+		virtual LTBOOL Init(AI_Shark* pAIShark);
 
 		// Updates
 
@@ -431,7 +431,7 @@ class CAISharkStateChase : DEFINE_FACTORY_CLASS(CAISharkStateChase), public CAIS
 
 		// Ctors/Dtors/Etc
 
-        LTBOOL Init(AI_Shark* pAIShark);
+		LTBOOL Init(AI_Shark* pAIShark);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
@@ -466,7 +466,7 @@ class CAISharkStateGoto : DEFINE_FACTORY_CLASS(CAISharkStateGoto), public CAISha
 
 		// Ctors/Dtors/Etc
 
-        LTBOOL Init(AI_Shark* pAIShark);
+		LTBOOL Init(AI_Shark* pAIShark);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
@@ -502,7 +502,7 @@ class CAISharkStateBite : DEFINE_FACTORY_CLASS(CAISharkStateBite), public CAISha
 
 		// Ctors/Dtors/Etc
 
-        LTBOOL Init(AI_Shark* pAIShark);
+		LTBOOL Init(AI_Shark* pAIShark);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
@@ -517,7 +517,7 @@ class CAISharkStateBite : DEFINE_FACTORY_CLASS(CAISharkStateBite), public CAISha
 
 	protected :
 
-        LTBOOL       m_bBiting;
+		LTBOOL	   m_bBiting;
 };
 
 class CAISharkStateMaul : DEFINE_FACTORY_CLASS(CAISharkStateMaul), public CAISharkState
@@ -530,7 +530,7 @@ class CAISharkStateMaul : DEFINE_FACTORY_CLASS(CAISharkStateMaul), public CAISha
 
 		// Ctors/Dtors/Etc
 
-        LTBOOL Init(AI_Shark* pAIShark);
+		LTBOOL Init(AI_Shark* pAIShark);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
@@ -551,7 +551,7 @@ class CAISharkStateMaul : DEFINE_FACTORY_CLASS(CAISharkStateMaul), public CAISha
 	protected :
 
 		HOBJECT		m_hTarget;
-        LTBOOL      m_bBiting;
+		LTBOOL	  m_bBiting;
 		LTBOOL		m_bDone;
 		LTFLOAT		m_fMaulTime;
 };
@@ -566,7 +566,7 @@ class CAISharkStateWait : DEFINE_FACTORY_CLASS(CAISharkStateWait), public CAISha
 
 		// Ctors/Dtors/Etc
 
-        LTBOOL Init(AI_Shark* pAIShark);
+		LTBOOL Init(AI_Shark* pAIShark);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);

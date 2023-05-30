@@ -16,11 +16,9 @@ class CAIPathWaypoint;
 class CWeapon;
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIVehicleStrategy
 //
-// PURPOSE : AI Strategy abstract class
-//
+// PURPOSE: AI Strategy abstract class
 // ----------------------------------------------------------------------- //
 
 class CAIVehicleStrategy
@@ -31,7 +29,7 @@ class CAIVehicleStrategy
 
 		// Ctors/Dtors/etc
 
-        virtual LTBOOL Init(CAIVehicle* pAIVehicle) { m_pAIVehicle = pAIVehicle; return LTTRUE; }
+		virtual LTBOOL Init(CAIVehicle* pAIVehicle) { m_pAIVehicle = pAIVehicle; return LTTRUE; }
 
 	protected : // Protected methods
 
@@ -46,11 +44,9 @@ class CAIVehicleStrategy
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHelicopterStrategy
 //
-// PURPOSE : AI Strategy abstract class
-//
+// PURPOSE: AI Strategy abstract class
 // ----------------------------------------------------------------------- //
 
 class CAIHelicopterStrategy : public CAIVehicleStrategy
@@ -77,7 +73,7 @@ class CAIHelicopterStrategy : public CAIVehicleStrategy
 
 		// Updates
 
-        virtual LTBOOL Update() { return LTTRUE; }
+		virtual LTBOOL Update() { return LTTRUE; }
 
 		// Simple accessors
 
@@ -95,11 +91,9 @@ class CAIHelicopterStrategy : public CAIVehicleStrategy
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHelicopterStrategyFollowPath
 //
-// PURPOSE : AI Follow path ability - to walk a path of AINodes
-//
+// PURPOSE: AI Follow path ability - to walk a path of AINodes
 // ----------------------------------------------------------------------- //
 
 class CAIHelicopterStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIHelicopterStrategyFollowPath), public CAIHelicopterStrategy
@@ -157,11 +151,9 @@ class CAIHelicopterStrategyFollowPath : DEFINE_FACTORY_CLASS(CAIHelicopterStrate
 };
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIHelicopterStrategyShoot
 //
-// PURPOSE : AI shoot ability - to fire at something
-//
+// PURPOSE: AI shoot ability - to fire at something
 // ----------------------------------------------------------------------- //
 
 class CAIHelicopterStrategyShoot : DEFINE_FACTORY_CLASS(CAIHelicopterStrategyShoot), public CAIHelicopterStrategy

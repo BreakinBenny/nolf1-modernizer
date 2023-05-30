@@ -13,7 +13,7 @@ class AIGoalPlugin : public IObjectPlugin
 {
 	public:
 
-        LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
+		LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
 		{
 			if ( 1 )
 			{
@@ -45,7 +45,7 @@ uint32 AIGoal::EngineMessageFn(uint32 messageID, void *pocs, LTFLOAT fData)
 	{
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = super::EngineMessageFn(messageID, pocs, fData);
+			uint32 dwRet = super::EngineMessageFn(messageID, pocs, fData);
 
 			ReadProp((ObjectCreateStruct*)pocs);
 

@@ -292,9 +292,9 @@ void CAnimationContext::Update()
 //					g_pLTServer->CPrint("m_iAnimation = %d, props = %s", m_iAnimation, szBuffer);
 
 //					g_pLTServer->CPrint("normal locked: playing animation %s", m_pAnimationMgr->GetAnimation(AnimationInstance.GetIndex()).GetName());
-                    g_pLTServer->SetModelAnimation(m_hObject, AnimationInstance.GetAni());
-                    g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
-                    g_pLTServer->ResetModelAnimation(m_hObject);
+					g_pLTServer->SetModelAnimation(m_hObject, AnimationInstance.GetAni());
+					g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
+					g_pLTServer->ResetModelAnimation(m_hObject);
 
 					if ( AnimationInstance.IsPitched() )
 					{
@@ -323,16 +323,16 @@ void CAnimationContext::Update()
 						m_eState = eStateTransition;
 
 //						g_pLTServer->CPrint("transition: playing transition %s", m_pAnimationMgr->GetTransition(TransitionInstance.GetIndex()).GetName());
-                        g_pLTServer->SetModelAnimation(m_hObject, TransitionInstance.GetAni());
-                        g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
+						g_pLTServer->SetModelAnimation(m_hObject, TransitionInstance.GetAni());
+						g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
 
 						DisablePitch();
 					}
 					else
 					{
 //						g_pLTServer->CPrint("normal: playing animation %s", m_pAnimationMgr->GetAnimation(AnimationInstance.GetIndex()).GetName());
-                        g_pLTServer->SetModelAnimation(m_hObject, AnimationInstance.GetAni());
-                        g_pLTServer->SetModelLooping(m_hObject, LTTRUE);
+						g_pLTServer->SetModelAnimation(m_hObject, AnimationInstance.GetAni());
+						g_pLTServer->SetModelLooping(m_hObject, LTTRUE);
 
 						if ( AnimationInstance.IsPitched() )
 						{
@@ -370,7 +370,7 @@ void CAnimationContext::Update()
 				DisablePitch();
 			}
 
-            if ( MS_PLAYDONE & g_pLTServer->GetModelPlaybackState(m_hObject) )
+			if ( MS_PLAYDONE & g_pLTServer->GetModelPlaybackState(m_hObject) )
 			{
 				// We'll linger on the last frame until the next update, when the user
 				// specifies new properties.
@@ -383,13 +383,13 @@ void CAnimationContext::Update()
 
 		case eStateTransition:
 		{
-            if ( MS_PLAYDONE & g_pLTServer->GetModelPlaybackState(m_hObject) )
+			if ( MS_PLAYDONE & g_pLTServer->GetModelPlaybackState(m_hObject) )
 			{
 				m_eState = eStateNormal;
 
 //				g_pLTServer->CPrint("transition done: playing animation %s", m_pAnimationMgr->GetAnimation(m_iAnimation).GetName());
-                g_pLTServer->SetModelAnimation(m_hObject, m_aAnimationInstances[m_iAnimation].GetAni());
-                g_pLTServer->SetModelLooping(m_hObject, LTTRUE);
+				g_pLTServer->SetModelAnimation(m_hObject, m_aAnimationInstances[m_iAnimation].GetAni());
+				g_pLTServer->SetModelLooping(m_hObject, LTTRUE);
 
 				if ( m_aAnimationInstances[m_iAnimation].IsPitched() )
 				{
@@ -405,9 +405,9 @@ void CAnimationContext::Update()
 
 		case eStateStartSpecial:
 		{
-            g_pLTServer->SetModelAnimation(m_hObject, m_haniSpecial);
-            g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
-            g_pLTServer->ResetModelAnimation(m_hObject);
+			g_pLTServer->SetModelAnimation(m_hObject, m_haniSpecial);
+			g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
+			g_pLTServer->ResetModelAnimation(m_hObject);
 
 			m_eState = eStateSpecial;
 		}
@@ -415,9 +415,9 @@ void CAnimationContext::Update()
 
 		case eStateStartSpecialLinger:
 		{
-            g_pLTServer->SetModelAnimation(m_hObject, m_haniSpecial);
-            g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
-//          g_pLTServer->ResetModelAnimation(m_hObject);
+			g_pLTServer->SetModelAnimation(m_hObject, m_haniSpecial);
+			g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
+//		  g_pLTServer->ResetModelAnimation(m_hObject);
 
 			m_eState = eStateSpecialLinger;
 		}
@@ -425,9 +425,9 @@ void CAnimationContext::Update()
 
 		case eStateStartSpecialLoop:
 		{
-            g_pLTServer->SetModelAnimation(m_hObject, m_haniSpecial);
-            g_pLTServer->SetModelLooping(m_hObject, LTTRUE);
-            g_pLTServer->ResetModelAnimation(m_hObject);
+			g_pLTServer->SetModelAnimation(m_hObject, m_haniSpecial);
+			g_pLTServer->SetModelLooping(m_hObject, LTTRUE);
+			g_pLTServer->ResetModelAnimation(m_hObject);
 
 			m_eState = eStateSpecialLoop;
 		}
@@ -435,7 +435,7 @@ void CAnimationContext::Update()
 
 		case eStateSpecial:
 		{
-            if ( MS_PLAYDONE & g_pLTServer->GetModelPlaybackState(m_hObject) )
+			if ( MS_PLAYDONE & g_pLTServer->GetModelPlaybackState(m_hObject) )
 			{
 				m_eState = eStateStopSpecial;
 			}
@@ -460,10 +460,10 @@ void CAnimationContext::Update()
 
 void CAnimationContext::SetSpecial(const char* szName)
 {
-    m_haniSpecial = g_pLTServer->GetAnimIndex(m_hObject, (char*)szName);
+	m_haniSpecial = g_pLTServer->GetAnimIndex(m_hObject, (char*)szName);
 	if ( INVALID_MODEL_ANIM == m_haniSpecial )
 	{
-        g_pLTServer->CPrint("Could not find scripted animation: %s", szName);
+		g_pLTServer->CPrint("Could not find scripted animation: %s", szName);
 	}
 }
 
@@ -511,7 +511,7 @@ LTBOOL CAnimationMgr::Init(const char* szFilename)
 {
 	if ( m_bInitialized )
 	{
-        g_pLTServer->CPrint("Attempted to initialize the same CAnimationMgr twice.");
+		g_pLTServer->CPrint("Attempted to initialize the same CAnimationMgr twice.");
 		return LTTRUE;
 	}
 
@@ -618,10 +618,10 @@ HMODELANIM CAnimationMgr::GetAnimationInstance(HOBJECT hObject, const char *szNa
 
 	HMODELANIM hAni = INVALID_MODEL_ANIM;
 
-    hAni = g_pLTServer->GetAnimIndex(hObject, szOverride);
+	hAni = g_pLTServer->GetAnimIndex(hObject, szOverride);
 	if ( INVALID_MODEL_ANIM == hAni )
 	{
-        hAni = g_pLTServer->GetAnimIndex(hObject, (char*)szName);
+		hAni = g_pLTServer->GetAnimIndex(hObject, (char*)szName);
 	}
 
 	return hAni;
@@ -643,7 +643,7 @@ CAnimationContext* CAnimationMgr::CreateAnimationContext(HOBJECT hObject)
 		pAnimationContext->m_aAnimationInstances[iAnimation].m_hAni = hAni;
 		if ( INVALID_MODEL_ANIM == hAni )
 		{
-            //g_pLTServer->CPrint("Could not find animation: %s", m_aAnimations[iAnimation].m_szName);
+			//g_pLTServer->CPrint("Could not find animation: %s", m_aAnimations[iAnimation].m_szName);
 		}
 
 		// Check for pitched pair of ani
@@ -675,7 +675,7 @@ CAnimationContext* CAnimationMgr::CreateAnimationContext(HOBJECT hObject)
 		pAnimationContext->m_aTransitionInstances[iTransition].m_hAni = hAni;
 		if ( INVALID_MODEL_ANIM == hAni )
 		{
-            //g_pLTServer->CPrint("Could not find transition: %s", m_aTransitions[iTransition].m_szName);
+			//g_pLTServer->CPrint("Could not find transition: %s", m_aTransitions[iTransition].m_szName);
 		}
 	}
 
@@ -719,7 +719,7 @@ const CAnimationProp& CAnimationMgr::FindAnimationProp(const char* szName) const
 
 	for ( uint32 iAnimationProp = 0 ; iAnimationProp < m_cAnimationProps ; iAnimationProp++ )
 	{
-        if ( !_stricmp(m_aszAnimationPropNames[iAnimationProp], szName) )
+		if ( !_stricmp(m_aszAnimationPropNames[iAnimationProp], szName) )
 		{
 			return m_aAnimationProps[iAnimationProp];
 		}

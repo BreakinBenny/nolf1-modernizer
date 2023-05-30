@@ -32,8 +32,8 @@ class CAIAnimal : public CAI
 
 	protected : // Protected member variables
 
-		CAnimatorAIAnimal	m_Animator;			// Our animator
-		CAIAnimalState*		m_pAnimalState;		// Our Animal state
+		CAnimatorAIAnimal	m_Animator;		// Our animator
+		CAIAnimalState*	m_pAnimalState;	// Our Animal state
 };
 
 class CAIAnimalPlugin : public CAIPlugin
@@ -44,7 +44,7 @@ class CAIAnimalPlugin : public CAIPlugin
 
 	private :
 
-		CAnimalAttachmentsPlugin	m_AnimalAttachmentsPlugin;
+		CAnimalAttachmentsPlugin m_AnimalAttachmentsPlugin;
 };
 
 #endif // __AI_H__

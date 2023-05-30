@@ -41,7 +41,7 @@ class CAIState
 
 		virtual LTBOOL CanActivate() { return LTTRUE; }
 		virtual LTBOOL CanReturn() { return LTFALSE; }
-        virtual HSTRING CreateReturnString() { return LTNULL; }
+		virtual HSTRING CreateReturnString() { return LTNULL; }
 		void ReturnOr(const char* szState);
 
 		LTBOOL HasNext() { return m_cNexts > 0; }

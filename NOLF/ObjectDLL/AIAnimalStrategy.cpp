@@ -25,16 +25,14 @@ IMPLEMENT_FACTORY(CAISharkStrategyFollowPath, 0);
 IMPLEMENT_FACTORY(CAISharkStrategyOneShotAni, 0);
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIAnimalStrategy::Constructor/Destructor
 //
-//	ROUTINE:	CAIAnimalStrategy::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIAnimalStrategy::Constructor()
 {
-    m_pAIAnimal = LTNULL;
+	m_pAIAnimal = LTNULL;
 }
 
 void CAIAnimalStrategy::Destructor()
@@ -42,11 +40,9 @@ void CAIAnimalStrategy::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIAnimalStrategy::GetAnimator
 //
-//	ROUTINE:	CAIAnimalStrategy::GetAnimator
-//
-//	PURPOSE:	Gets our animator
-//
+//	PURPOSE: Gets our animator
 // ----------------------------------------------------------------------- //
 
 CAnimatorAIAnimal* CAIAnimalStrategy::GetAnimator()
@@ -55,18 +51,16 @@ CAnimatorAIAnimal* CAIAnimalStrategy::GetAnimator()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategy::Constructor/Destructor
 //
-//	ROUTINE:	CAIDogStrategy::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIDogStrategy::Constructor()
 {
 	super::Constructor();
 
-    m_pAIDog = LTNULL;
+	m_pAIDog = LTNULL;
 }
 
 void CAIDogStrategy::Destructor()
@@ -75,11 +69,9 @@ void CAIDogStrategy::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategy::Init
 //
-//	ROUTINE:	CAIDogStrategy::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIDogStrategy::Init(AI_Dog* pAIDog)
@@ -88,15 +80,13 @@ LTBOOL CAIDogStrategy::Init(AI_Dog* pAIDog)
 
 	m_pAIDog = pAIDog;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyFollowPath::Constructor/Destructor
 //
-//	ROUTINE:	CAIDogStrategyFollowPath::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIDogStrategyFollowPath::Constructor()
@@ -118,37 +108,33 @@ void CAIDogStrategyFollowPath::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyFollowPath::Init
 //
-//	ROUTINE:	CAIDogStrategyFollowPath::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIDogStrategyFollowPath::Init(AI_Dog* pAIDog)
 {
 	if ( !super::Init(pAIDog) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_AIMovement.Init(pAIDog) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pPath->Init(pAIDog);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyFollowPath::HandleBrokenLink
 //
-//	ROUTINE:	CAIDogStrategyFollowPath::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAIDogStrategyFollowPath::HandleBrokenLink(HOBJECT hObject)
@@ -160,18 +146,16 @@ void CAIDogStrategyFollowPath::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyFollowPath::Update
 //
-//	ROUTINE:	CAIDogStrategyFollowPath::Update
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIDogStrategyFollowPath::Update()
 {
 	if ( !super::Update() )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	_ASSERT(m_eState == eStateSet);
@@ -196,9 +180,9 @@ LTBOOL CAIDogStrategyFollowPath::Update()
 
 			default:
 			{
-                g_pLTServer->CPrint("CAIDogStrategyFollowPath::Update - unrecognized waypoint instruction");
+				g_pLTServer->CPrint("CAIDogStrategyFollowPath::Update - unrecognized waypoint instruction");
 				_ASSERT(!"CAIDogStrategyFollowPath::Update - unrecognized waypoint instruction");
-                return LTFALSE;
+				return LTFALSE;
 			}
 			break;
 		}
@@ -209,15 +193,13 @@ LTBOOL CAIDogStrategyFollowPath::Update()
 		m_eState = eStateDone;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyFollowPath::UpdateMoveTo
 //
-//	ROUTINE:	CAIDogStrategyFollowPath::UpdateMoveTo
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIDogStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
@@ -226,7 +208,7 @@ LTBOOL CAIDogStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
 	{
 		if ( !m_AIMovement.Update() )
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		if ( m_AIMovement.IsDone() )
@@ -245,20 +227,18 @@ LTBOOL CAIDogStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
 
 	GetAnimator()->SetMain(m_eMovement);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyFollowPath::UpdateOpenDoors
 //
-//	ROUTINE:	CAIDogStrategyFollowPath::UpdateOpenDoors
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIDogStrategyFollowPath::UpdateOpenDoors(CAIPathWaypoint* pWaypoint)
 {
-    LTBOOL bDoorsOpen = LTTRUE;
+	LTBOOL bDoorsOpen = LTTRUE;
 	HOBJECT hDoor1, hDoor2;
 
 	hDoor1 = pWaypoint->GetArgumentObject1();
@@ -269,15 +249,13 @@ LTBOOL CAIDogStrategyFollowPath::UpdateOpenDoors(CAIPathWaypoint* pWaypoint)
 		GetAnimator()->SetMain(CAnimatorAIAnimal::eIdle);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyFollowPath::Set
 //
-//	ROUTINE:	CAIDogStrategyFollowPath::Set
-//
-//	PURPOSE:	Sets the path that we will be following
-//
+//	PURPOSE: Sets the path that we will be following
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIDogStrategyFollowPath::Set(const LTVector& vDestination)
@@ -302,13 +280,11 @@ LTBOOL CAIDogStrategyFollowPath::Set(CAIVolume* pVolumeDestination)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyFollowPath::SetMovement
 //
-//	ROUTINE:	CAIDogStrategyFollowPath::SetMovement
-//
-//	PURPOSE:	Sets our "default" movement type (sometimes we may be forced
+//	PURPOSE: Sets our "default" movement type (sometimes we may be forced
 //				to do a particular style of movement, like a crawl, jump, or
 //				climb)
-//
 // ----------------------------------------------------------------------- //
 
 void CAIDogStrategyFollowPath::SetMovement(CAnimatorAIAnimal::Main eMovement)
@@ -317,18 +293,16 @@ void CAIDogStrategyFollowPath::SetMovement(CAnimatorAIAnimal::Main eMovement)
 	{
 		case CAnimatorAIAnimal::eWalking:		GetAI()->Walk();	break;
 		case CAnimatorAIAnimal::eRunning:		GetAI()->Run();		break;
-        default:                                _ASSERT(LTFALSE);    break;
+		default:								_ASSERT(LTFALSE);	break;
 	}
 
 	m_eMovement = eMovement;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyFollowPath::Load
 //
-//	ROUTINE:	CAIDogStrategyFollowPath::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIDogStrategyFollowPath::Load(HMESSAGEREAD hRead)
@@ -343,11 +317,9 @@ void CAIDogStrategyFollowPath::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyFollowPath::Save
 //
-//	ROUTINE:	CAIDogStrategyFollowPath::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIDogStrategyFollowPath::Save(HMESSAGEREAD hWrite)
@@ -362,18 +334,16 @@ void CAIDogStrategyFollowPath::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyOneShotAni::Constructor/Destructor
 //
-//	ROUTINE:	CAIDogStrategyOneShotAni::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIDogStrategyOneShotAni::Constructor()
 {
 	super::Constructor();
 
-    m_bAnimating = LTFALSE;
+	m_bAnimating = LTFALSE;
 	m_eMain = CAnimatorAIAnimal::eIdle;
 }
 
@@ -383,11 +353,9 @@ void CAIDogStrategyOneShotAni::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyOneShotAni::Set
 //
-//	ROUTINE:	CAIDogStrategyOneShotAni::Set
-//
-//	PURPOSE:	Sets the one shot ani
-//
+//	PURPOSE: Sets the one shot ani
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIDogStrategyOneShotAni::Set(CAnimatorAIAnimal::Main eMain)
@@ -395,44 +363,40 @@ LTBOOL CAIDogStrategyOneShotAni::Set(CAnimatorAIAnimal::Main eMain)
 	GetAnimator()->SetMain(eMain);
 
 	m_eMain = eMain;
-    m_bAnimating = LTTRUE;
+	m_bAnimating = LTTRUE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyOneShotAni::Update
 //
-//	ROUTINE:	CAIDogStrategyOneShotAni::Update
-//
-//	PURPOSE:	Updates the strategy
-//
+//	PURPOSE: Updates the strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIDogStrategyOneShotAni::Update()
 {
 	super::Update();
 
-    if ( !m_bAnimating )
+	if ( !m_bAnimating )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( GetAnimator()->IsAnimatingMainDone(m_eMain) )
 	{
-        m_bAnimating = LTFALSE;
+		m_bAnimating = LTFALSE;
 	}
 
 	GetAnimator()->SetMain(m_eMain);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyOneShotAni::Load
 //
-//	ROUTINE:	CAIDogStrategyOneShotAni::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIDogStrategyOneShotAni::Load(HMESSAGEREAD hRead)
@@ -444,11 +408,9 @@ void CAIDogStrategyOneShotAni::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStrategyOneShotAni::Save
 //
-//	ROUTINE:	CAIDogStrategyOneShotAni::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIDogStrategyOneShotAni::Save(HMESSAGEREAD hWrite)
@@ -460,18 +422,16 @@ void CAIDogStrategyOneShotAni::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategy::Constructor/Destructor
 //
-//	ROUTINE:	CAIPoodleStrategy::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStrategy::Constructor()
 {
 	super::Constructor();
 
-    m_pAIPoodle = LTNULL;
+	m_pAIPoodle = LTNULL;
 }
 
 void CAIPoodleStrategy::Destructor()
@@ -480,11 +440,9 @@ void CAIPoodleStrategy::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategy::Init
 //
-//	ROUTINE:	CAIPoodleStrategy::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIPoodleStrategy::Init(AI_Poodle* pAIPoodle)
@@ -493,15 +451,13 @@ LTBOOL CAIPoodleStrategy::Init(AI_Poodle* pAIPoodle)
 
 	m_pAIPoodle = pAIPoodle;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategyFollowPath::Constructor/Destructor
 //
-//	ROUTINE:	CAIPoodleStrategyFollowPath::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStrategyFollowPath::Constructor()
@@ -523,37 +479,33 @@ void CAIPoodleStrategyFollowPath::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategyFollowPath::Init
 //
-//	ROUTINE:	CAIPoodleStrategyFollowPath::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIPoodleStrategyFollowPath::Init(AI_Poodle* pAIPoodle)
 {
 	if ( !super::Init(pAIPoodle) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_AIMovement.Init(pAIPoodle) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pPath->Init(pAIPoodle);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategyFollowPath::HandleBrokenLink
 //
-//	ROUTINE:	CAIPoodleStrategyFollowPath::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStrategyFollowPath::HandleBrokenLink(HOBJECT hObject)
@@ -565,18 +517,16 @@ void CAIPoodleStrategyFollowPath::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategyFollowPath::Update
 //
-//	ROUTINE:	CAIPoodleStrategyFollowPath::Update
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIPoodleStrategyFollowPath::Update()
 {
 	if ( !super::Update() )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	_ASSERT(m_eState == eStateSet);
@@ -601,9 +551,9 @@ LTBOOL CAIPoodleStrategyFollowPath::Update()
 
 			default:
 			{
-                g_pLTServer->CPrint("CAIPoodleStrategyFollowPath::Update - unrecognized waypoint instruction");
+				g_pLTServer->CPrint("CAIPoodleStrategyFollowPath::Update - unrecognized waypoint instruction");
 				_ASSERT(!"CAIPoodleStrategyFollowPath::Update - unrecognized waypoint instruction");
-                return LTFALSE;
+				return LTFALSE;
 			}
 			break;
 		}
@@ -614,15 +564,13 @@ LTBOOL CAIPoodleStrategyFollowPath::Update()
 		m_eState = eStateDone;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategyFollowPath::UpdateMoveTo
 //
-//	ROUTINE:	CAIPoodleStrategyFollowPath::UpdateMoveTo
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIPoodleStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
@@ -631,7 +579,7 @@ LTBOOL CAIPoodleStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
 	{
 		if ( !m_AIMovement.Update() )
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		if ( m_AIMovement.IsDone() )
@@ -663,20 +611,18 @@ LTBOOL CAIPoodleStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
 
 	GetAnimator()->SetMain(m_eMovement);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategyFollowPath::UpdateOpenDoors
 //
-//	ROUTINE:	CAIPoodleStrategyFollowPath::UpdateOpenDoors
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIPoodleStrategyFollowPath::UpdateOpenDoors(CAIPathWaypoint* pWaypoint)
 {
-    LTBOOL bDoorsOpen = LTTRUE;
+	LTBOOL bDoorsOpen = LTTRUE;
 	HOBJECT hDoor1, hDoor2;
 
 	hDoor1 = pWaypoint->GetArgumentObject1();
@@ -687,15 +633,13 @@ LTBOOL CAIPoodleStrategyFollowPath::UpdateOpenDoors(CAIPathWaypoint* pWaypoint)
 		GetAnimator()->SetMain(CAnimatorAIAnimal::eIdle);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategyFollowPath::Set
 //
-//	ROUTINE:	CAIPoodleStrategyFollowPath::Set
-//
-//	PURPOSE:	Sets the path that we will be following
-//
+//	PURPOSE: Sets the path that we will be following
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIPoodleStrategyFollowPath::Set(const LTVector& vDestination)
@@ -720,13 +664,11 @@ LTBOOL CAIPoodleStrategyFollowPath::Set(CAIVolume* pVolumeDestination)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategyFollowPath::SetMovement
 //
-//	ROUTINE:	CAIPoodleStrategyFollowPath::SetMovement
-//
-//	PURPOSE:	Sets our "default" movement type (sometimes we may be forced
+//	PURPOSE: Sets our "default" movement type (sometimes we may be forced
 //				to do a particular style of movement, like a crawl, jump, or
 //				climb)
-//
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStrategyFollowPath::SetMovement(CAnimatorAIAnimal::Main eMovement)
@@ -735,18 +677,16 @@ void CAIPoodleStrategyFollowPath::SetMovement(CAnimatorAIAnimal::Main eMovement)
 	{
 		case CAnimatorAIAnimal::eWalking:		GetAI()->Walk();	break;
 		case CAnimatorAIAnimal::eRunning:		GetAI()->Run();		break;
-        default:                                _ASSERT(LTFALSE);    break;
+		default:								_ASSERT(LTFALSE);	break;
 	}
 
 	m_eMovement = eMovement;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategyFollowPath::Load
 //
-//	ROUTINE:	CAIPoodleStrategyFollowPath::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStrategyFollowPath::Load(HMESSAGEREAD hRead)
@@ -761,11 +701,9 @@ void CAIPoodleStrategyFollowPath::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStrategyFollowPath::Save
 //
-//	ROUTINE:	CAIPoodleStrategyFollowPath::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStrategyFollowPath::Save(HMESSAGEREAD hWrite)
@@ -780,18 +718,16 @@ void CAIPoodleStrategyFollowPath::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategy::Constructor/Destructor
 //
-//	ROUTINE:	CAISharkStrategy::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAISharkStrategy::Constructor()
 {
 	super::Constructor();
 
-    m_pAIShark = LTNULL;
+	m_pAIShark = LTNULL;
 }
 
 void CAISharkStrategy::Destructor()
@@ -800,11 +736,9 @@ void CAISharkStrategy::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategy::Init
 //
-//	ROUTINE:	CAISharkStrategy::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStrategy::Init(AI_Shark* pAIShark)
@@ -813,15 +747,13 @@ LTBOOL CAISharkStrategy::Init(AI_Shark* pAIShark)
 
 	m_pAIShark = pAIShark;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyFollowPath::Constructor/Destructor
 //
-//	ROUTINE:	CAISharkStrategyFollowPath::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAISharkStrategyFollowPath::Constructor()
@@ -843,37 +775,33 @@ void CAISharkStrategyFollowPath::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyFollowPath::Init
 //
-//	ROUTINE:	CAISharkStrategyFollowPath::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStrategyFollowPath::Init(AI_Shark* pAIShark)
 {
 	if ( !super::Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_AIMovement.Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pPath->Init(pAIShark);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyFollowPath::HandleBrokenLink
 //
-//	ROUTINE:	CAISharkStrategyFollowPath::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAISharkStrategyFollowPath::HandleBrokenLink(HOBJECT hObject)
@@ -885,18 +813,16 @@ void CAISharkStrategyFollowPath::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyFollowPath::Update
 //
-//	ROUTINE:	CAISharkStrategyFollowPath::Update
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStrategyFollowPath::Update()
 {
 	if ( !super::Update() )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	_ASSERT(m_eState == eStateSet);
@@ -921,9 +847,9 @@ LTBOOL CAISharkStrategyFollowPath::Update()
 
 			default:
 			{
-                g_pLTServer->CPrint("CAISharkStrategyFollowPath::Update - unrecognized waypoint instruction");
+				g_pLTServer->CPrint("CAISharkStrategyFollowPath::Update - unrecognized waypoint instruction");
 				_ASSERT(!"CAISharkStrategyFollowPath::Update - unrecognized waypoint instruction");
-                return LTFALSE;
+				return LTFALSE;
 			}
 			break;
 		}
@@ -934,15 +860,13 @@ LTBOOL CAISharkStrategyFollowPath::Update()
 		m_eState = eStateDone;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyFollowPath::UpdateMoveTo
 //
-//	ROUTINE:	CAISharkStrategyFollowPath::UpdateMoveTo
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
@@ -951,7 +875,7 @@ LTBOOL CAISharkStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
 	{
 		if ( !m_AIMovement.Update() )
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		if ( m_AIMovement.IsDone() )
@@ -970,20 +894,18 @@ LTBOOL CAISharkStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
 
 	GetAnimator()->SetMain(m_eMovement);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyFollowPath::UpdateOpenDoors
 //
-//	ROUTINE:	CAISharkStrategyFollowPath::UpdateOpenDoors
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStrategyFollowPath::UpdateOpenDoors(CAIPathWaypoint* pWaypoint)
 {
-    LTBOOL bDoorsOpen = LTTRUE;
+	LTBOOL bDoorsOpen = LTTRUE;
 	HOBJECT hDoor1, hDoor2;
 
 	hDoor1 = pWaypoint->GetArgumentObject1();
@@ -996,15 +918,13 @@ LTBOOL CAISharkStrategyFollowPath::UpdateOpenDoors(CAIPathWaypoint* pWaypoint)
 
 	m_pPath->IncrementWaypointIndex();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyFollowPath::Set
 //
-//	ROUTINE:	CAISharkStrategyFollowPath::Set
-//
-//	PURPOSE:	Sets the path that we will be following
-//
+//	PURPOSE: Sets the path that we will be following
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStrategyFollowPath::Set(const LTVector& vDestination)
@@ -1035,13 +955,11 @@ void CAISharkStrategyFollowPath::Stop()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyFollowPath::SetMovement
 //
-//	ROUTINE:	CAISharkStrategyFollowPath::SetMovement
-//
-//	PURPOSE:	Sets our "default" movement type (sometimes we may be forced
+//	PURPOSE: Sets our "default" movement type (sometimes we may be forced
 //				to do a particular style of movement, like a crawl, jump, or
 //				climb)
-//
 // ----------------------------------------------------------------------- //
 
 void CAISharkStrategyFollowPath::SetMovement(CAnimatorAIAnimal::Main eMovement)
@@ -1049,18 +967,16 @@ void CAISharkStrategyFollowPath::SetMovement(CAnimatorAIAnimal::Main eMovement)
 	switch ( eMovement )
 	{
 		case CAnimatorAIAnimal::eSwimming:		GetAI()->Swim();	break;
-        default:                                _ASSERT(LTFALSE);    break;
+		default:								_ASSERT(LTFALSE);	break;
 	}
 
 	m_eMovement = eMovement;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyFollowPath::Load
 //
-//	ROUTINE:	CAISharkStrategyFollowPath::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAISharkStrategyFollowPath::Load(HMESSAGEREAD hRead)
@@ -1075,11 +991,9 @@ void CAISharkStrategyFollowPath::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyFollowPath::Save
 //
-//	ROUTINE:	CAISharkStrategyFollowPath::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAISharkStrategyFollowPath::Save(HMESSAGEREAD hWrite)
@@ -1094,18 +1008,16 @@ void CAISharkStrategyFollowPath::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyOneShotAni::Constructor/Destructor
 //
-//	ROUTINE:	CAISharkStrategyOneShotAni::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAISharkStrategyOneShotAni::Constructor()
 {
 	super::Constructor();
 
-    m_bAnimating = LTFALSE;
+	m_bAnimating = LTFALSE;
 	m_eMain = CAnimatorAIAnimal::eIdle;
 }
 
@@ -1115,11 +1027,9 @@ void CAISharkStrategyOneShotAni::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyOneShotAni::Set
 //
-//	ROUTINE:	CAISharkStrategyOneShotAni::Set
-//
-//	PURPOSE:	Sets the one shot ani
-//
+//	PURPOSE: Sets the one shot ani
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStrategyOneShotAni::Set(CAnimatorAIAnimal::Main eMain)
@@ -1127,44 +1037,40 @@ LTBOOL CAISharkStrategyOneShotAni::Set(CAnimatorAIAnimal::Main eMain)
 	GetAnimator()->SetMain(eMain);
 
 	m_eMain = eMain;
-    m_bAnimating = LTTRUE;
+	m_bAnimating = LTTRUE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyOneShotAni::Update
 //
-//	ROUTINE:	CAISharkStrategyOneShotAni::Update
-//
-//	PURPOSE:	Updates the strategy
-//
+//	PURPOSE: Updates the strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStrategyOneShotAni::Update()
 {
 	super::Update();
 
-    if ( !m_bAnimating )
+	if ( !m_bAnimating )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( GetAnimator()->IsAnimatingMainDone(m_eMain) )
 	{
-        m_bAnimating = LTFALSE;
+		m_bAnimating = LTFALSE;
 	}
 
 	GetAnimator()->SetMain(m_eMain);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyOneShotAni::Load
 //
-//	ROUTINE:	CAISharkStrategyOneShotAni::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAISharkStrategyOneShotAni::Load(HMESSAGEREAD hRead)
@@ -1176,11 +1082,9 @@ void CAISharkStrategyOneShotAni::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStrategyOneShotAni::Save
 //
-//	ROUTINE:	CAISharkStrategyOneShotAni::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAISharkStrategyOneShotAni::Save(HMESSAGEREAD hWrite)

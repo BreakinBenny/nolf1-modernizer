@@ -108,11 +108,9 @@ static STATEMAP s_aStateMaps[] =
 static int s_cStateMaps = sizeof(s_aStateMaps)/sizeof(STATEMAP);
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::AI_Helicopter()
 //
-//	ROUTINE:	AI_Helicopter::AI_Helicopter()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 AI_Helicopter::AI_Helicopter() : CAIVehicle()
@@ -120,7 +118,7 @@ AI_Helicopter::AI_Helicopter() : CAIVehicle()
 	m_eModelId = g_pModelButeMgr->GetModelId("Helicopter");
 	m_eModelSkeleton = g_pModelButeMgr->GetModelSkeleton(m_eModelId);
 	m_cc = BAD;
-    m_hstrAttributeTemplate = g_pLTServer->CreateString("Helicopter");
+	m_hstrAttributeTemplate = g_pLTServer->CreateString("Helicopter");
 
 	m_fFlySpeed			= 0.0f;
 	m_fSpeed			= 0.0f;
@@ -148,17 +146,15 @@ AI_Helicopter::AI_Helicopter() : CAIVehicle()
 	m_bWantsLeftDoorClosed = LTFALSE;
 	m_bLeftDoorOpened = LTFALSE;
 
-    m_pHelicopterState = LTNULL;
+	m_pHelicopterState = LTNULL;
 
 	SetState(CAIHelicopterState::eStateIdle);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::~AI_Helicopter()
 //
-//	ROUTINE:	AI_Helicopter::~AI_Helicopter()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 AI_Helicopter::~AI_Helicopter()
@@ -171,9 +167,9 @@ AI_Helicopter::~AI_Helicopter()
 	if ( m_pHelicopterState )
 	{
 		FACTORY_DELETE(m_pHelicopterState);
-        m_pHelicopterState = LTNULL;
-        m_pVehicleState = LTNULL;
-        m_pState = LTNULL;
+		m_pHelicopterState = LTNULL;
+		m_pVehicleState = LTNULL;
+		m_pState = LTNULL;
 	}
 
 	if ( -1 != m_iObjectGunner && m_apObjects[m_iObjectGunner] )
@@ -192,11 +188,9 @@ AI_Helicopter::~AI_Helicopter()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::HandleBrokenLink()
 //
-//	ROUTINE:	AI_Helicopter::HandleBrokenLink()
-//
-//	PURPOSE:	Handle a broken interobject link
-//
+//	PURPOSE: Handle a broken interobject link
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::HandleBrokenLink(HOBJECT hLink)
@@ -212,28 +206,26 @@ void AI_Helicopter::HandleBrokenLink(HOBJECT hLink)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::ReadProp
 //
-//	ROUTINE:	AI_Helicopter::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL AI_Helicopter::ReadProp(ObjectCreateStruct *pData)
 {
 	GenericProp genProp;
-    if (!g_pLTServer || !pData) return LTFALSE;
+	if (!g_pLTServer || !pData) return LTFALSE;
 
 	// If we have an attribute template, fill in the info
 
 	if ( m_hstrAttributeTemplate )
 	{
-        char *szAttributeTemplate = g_pLTServer->GetStringData(m_hstrAttributeTemplate);
+		char *szAttributeTemplate = g_pLTServer->GetStringData(m_hstrAttributeTemplate);
 		int nTemplateID = g_pAIButeMgr->GetTemplateIDByName(szAttributeTemplate);
 
 		if ( nTemplateID < 0 )
 		{
-            g_pLTServer->CPrint("Bad AI Attribute Template referenced! : %s", szAttributeTemplate);
+			g_pLTServer->CPrint("Bad AI Attribute Template referenced! : %s", szAttributeTemplate);
 		}
 		else
 		{
@@ -242,43 +234,41 @@ LTBOOL AI_Helicopter::ReadProp(ObjectCreateStruct *pData)
 	}
 	else
 	{
-        g_pLTServer->CPrint("No attribute template specified for AI!");
+		g_pLTServer->CPrint("No attribute template specified for AI!");
 	}
 
 	// Now get the overrides
 
-    if ( g_pLTServer->GetPropGeneric("FlySpeed", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("FlySpeed", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fFlySpeed = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("DeathMessage", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("DeathMessage", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_hstrDeathMessage = g_pLTServer->CreateString(genProp.m_String);
 
-    if ( g_pLTServer->GetPropGeneric("Death0_3rdMessage", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("Death0_3rdMessage", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_hstrDeath0_3rdMessage = g_pLTServer->CreateString(genProp.m_String);
 
-    if ( g_pLTServer->GetPropGeneric("Death1_3rdMessage", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("Death1_3rdMessage", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_hstrDeath1_3rdMessage = g_pLTServer->CreateString(genProp.m_String);
 
-    if ( g_pLTServer->GetPropGeneric("Death2_3rdMessage", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("Death2_3rdMessage", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_hstrDeath2_3rdMessage = g_pLTServer->CreateString(genProp.m_String);
 
-    if ( g_pLTServer->GetPropGeneric("DeathDelay", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("DeathDelay", &genProp ) == LT_OK )
 			m_fDeathDelay = genProp.m_Float;
 
 	return CAIVehicle::ReadProp(pData);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::InitialUpdate
 //
-//	ROUTINE:	AI_Helicopter::InitialUpdate
-//
-//	PURPOSE:	Performs our initial update
-//
+//	PURPOSE: Performs our initial update
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::InitialUpdate()
@@ -287,7 +277,7 @@ void AI_Helicopter::InitialUpdate()
 
 	// Turn off gravity
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 	if ( !(dwFlags & FLAG_GRAVITY) )
 	{
 		m_dwFlags &= ~FLAG_GRAVITY;
@@ -299,11 +289,9 @@ void AI_Helicopter::InitialUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::ComputeSquares
 //
-//	ROUTINE:	AI_Helicopter::ComputeSquares
-//
-//	PURPOSE:	Precompute any squares of values we need
-//
+//	PURPOSE: Precompute any squares of values we need
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::ComputeSquares()
@@ -312,11 +300,9 @@ void AI_Helicopter::ComputeSquares()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::HandleDamage()
 //
-//	ROUTINE:	AI_Helicopter::HandleDamage()
-//
-//	PURPOSE:	Notification that we are hit by something
-//
+//	PURPOSE: Notification that we are hit by something
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::HandleDamage(const DamageStruct& damage)
@@ -363,11 +349,9 @@ void AI_Helicopter::HandleDamage(const DamageStruct& damage)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::HandleCommand()
 //
-//	ROUTINE:	AI_Helicopter::HandleCommand()
-//
-//	PURPOSE:	Handles a command
-//
+//	PURPOSE: Handles a command
 // --------------------------------------------------------------------------- //
 
 LTBOOL AI_Helicopter::HandleCommand(char** pTokens, int nArgs)
@@ -461,11 +445,9 @@ LTBOOL AI_Helicopter::HandleCommand(char** pTokens, int nArgs)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::SetState
 //
-//	ROUTINE:	AI_Helicopter::SetState
-//
-//	PURPOSE:	Changes our current state
-//
+//	PURPOSE: Changes our current state
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::SetState(CAIHelicopterState::AIHelicopterStateType eState)
@@ -475,9 +457,9 @@ void AI_Helicopter::SetState(CAIHelicopterState::AIHelicopterStateType eState)
 	if ( m_pHelicopterState )
 	{
 		FACTORY_DELETE(m_pHelicopterState);
-        m_pHelicopterState = LTNULL;
-        m_pVehicleState = LTNULL;
-        m_pState = LTNULL;
+		m_pHelicopterState = LTNULL;
+		m_pVehicleState = LTNULL;
+		m_pState = LTNULL;
 	}
 
 	switch ( eState )
@@ -502,7 +484,7 @@ void AI_Helicopter::SetState(CAIHelicopterState::AIHelicopterStateType eState)
 	{
 		_ASSERT(LTFALSE);
 		FACTORY_DELETE(m_pHelicopterState);
-        m_pHelicopterState = LTNULL;
+		m_pHelicopterState = LTNULL;
 	}
 }
 
@@ -558,11 +540,9 @@ void AI_Helicopter::InitAttachments()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::PostUpdate
 //
-//	ROUTINE:	AI_Helicopter::PostUpdate
-//
-//	PURPOSE:	Performs the post-update of our object
-//
+//	PURPOSE: Performs the post-update of our object
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::PostUpdate()
@@ -576,11 +556,9 @@ void AI_Helicopter::PostUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::UpdateAnimation
 //
-//	ROUTINE:	AI_Helicopter::UpdateAnimation
-//
-//	PURPOSE:	TEMPORARY
-//
+//	PURPOSE: TEMPORARY
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::UpdateAnimation()
@@ -591,11 +569,9 @@ void AI_Helicopter::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::UpdateAnimator
 //
-//	ROUTINE:	AI_Helicopter::UpdateAnimator
-//
-//	PURPOSE:	Handles any pending Animator changes
-//
+//	PURPOSE: Handles any pending Animator changes
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::UpdateAnimator()
@@ -646,11 +622,9 @@ void AI_Helicopter::UpdateAnimator()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::Save
 //
-//	ROUTINE:	AI_Helicopter::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -659,10 +633,10 @@ void AI_Helicopter::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 	// Save state...
 
-    uint32 dwState = (uint32)-1;
+	uint32 dwState = (uint32)-1;
 	if (m_pHelicopterState)
 	{
-        dwState = (uint32) m_pHelicopterState->GetType();
+		dwState = (uint32) m_pHelicopterState->GetType();
 	}
 
 	SAVE_DWORD(dwState);
@@ -697,11 +671,9 @@ void AI_Helicopter::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::Load
 //
-//	ROUTINE:	AI_Helicopter::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -710,7 +682,7 @@ void AI_Helicopter::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	// Load state...
 
-    uint32 dwState;
+	uint32 dwState;
 	LOAD_DWORD(dwState);
 
 	if (dwState != (DWORD)-1)
@@ -748,11 +720,9 @@ void AI_Helicopter::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::CreateAttachments
 //
-//	ROUTINE:	AI_Helicopter::CreateAttachments
-//
-//	PURPOSE:	Creates our attachments aggregate
-//
+//	PURPOSE: Creates our attachments aggregate
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::CreateAttachments()
@@ -764,11 +734,9 @@ void AI_Helicopter::CreateAttachments()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::PreCreateSpecialFX()
 //
-//	ROUTINE:	AI_Helicopter::PreCreateSpecialFX()
-//
-//	PURPOSE:	Last chance to change our characterfx struct
-//
+//	PURPOSE: Last chance to change our characterfx struct
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::PreCreateSpecialFX(CHARCREATESTRUCT& cs)
@@ -780,11 +748,9 @@ void AI_Helicopter::PreCreateSpecialFX(CHARCREATESTRUCT& cs)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::GetSearchlightRotation
 //
-//	ROUTINE:	AI_Helicopter::GetSearchlightRotation
-//
-//	PURPOSE:	Rotate the searchlight in the desired direction
-//
+//	PURPOSE: Rotate the searchlight in the desired direction
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::SetSearchlightRotation(LTRotation& rRot)
@@ -803,9 +769,9 @@ void AI_Helicopter::SetSearchlightRotation(LTRotation& rRot)
 	if (!hSearchLight) return;
 
 	HATTACHMENT hAttachment;
-    if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hSearchLight, &hAttachment) )
+	if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hSearchLight, &hAttachment) )
 	{
-        LTRotation rSocketRot;
+		LTRotation rSocketRot;
 		HMODELSOCKET hSocket;
 		if ( g_pModelLT->GetSocket(m_hObject, (char*)m_apObjectPositions[m_iObjectSearchLight]->GetName(), hSocket) == LT_OK )
 		{
@@ -816,21 +782,19 @@ void AI_Helicopter::SetSearchlightRotation(LTRotation& rRot)
 			}
 		}
 
-        g_pLTServer->RemoveAttachment(hAttachment);
-        LTRotation rotTemp(~rSocketRot*rRot);
-        g_pLTServer->CreateAttachment(m_hObject, hSearchLight, (char*)m_apObjectPositions[m_iObjectSearchLight]->GetName(),
-            &LTVector(0,0,0), &rotTemp, &hAttachment);
+		g_pLTServer->RemoveAttachment(hAttachment);
+		LTRotation rotTemp(~rSocketRot*rRot);
+		g_pLTServer->CreateAttachment(m_hObject, hSearchLight, (char*)m_apObjectPositions[m_iObjectSearchLight]->GetName(),
+			&LTVector(0,0,0), &rotTemp, &hAttachment);
 
 		m_rRotSearchlight = rRot;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::GetSearchlightRotation
 //
-//	ROUTINE:	AI_Helicopter::GetSearchlightRotation
-//
-//	PURPOSE:	Return the searchlight's rotation
-//
+//	PURPOSE: Return the searchlight's rotation
 // ----------------------------------------------------------------------- //
 
 LTRotation AI_Helicopter::GetSearchlightRotation()
@@ -838,10 +802,10 @@ LTRotation AI_Helicopter::GetSearchlightRotation()
 	ControlledSearchLight* pSearchLight = ((ControlledSearchLight*)m_apObjects[m_iObjectSearchLight]);
 
 	HATTACHMENT hAttachment;
-    if ( pSearchLight && (LT_OK == g_pLTServer->FindAttachment(m_hObject, pSearchLight->m_hObject, &hAttachment)) )
+	if ( pSearchLight && (LT_OK == g_pLTServer->FindAttachment(m_hObject, pSearchLight->m_hObject, &hAttachment)) )
 	{
 		LTransform transform;
-        g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
+		g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
 		g_pTransLT->Get(transform, m_vPosSearchlight, m_rRotSearchlight);
 	}
 	return m_rRotSearchlight;
@@ -849,44 +813,40 @@ LTRotation AI_Helicopter::GetSearchlightRotation()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::GetAttachmentRotation
 //
-//	ROUTINE:	AI_Helicopter::GetAttachmentRotation
-//
-//	PURPOSE:	Return the searchlight's rotation
-//
+//	PURPOSE: Return the searchlight's rotation
 // ----------------------------------------------------------------------- //
 
 LTRotation AI_Helicopter::GetAttachmentRotation(HOBJECT hObject)
 {
-    LTRotation rRot(0,0,0,1);
+	LTRotation rRot(0,0,0,1);
 
 	HATTACHMENT hAttachment;
-    if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hObject, &hAttachment) )
+	if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hObject, &hAttachment) )
 	{
 		LTransform transform;
-        g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
+		g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
 		g_pTransLT->GetRot(transform, rRot);
 	}
 	return rRot;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::GetAttachmentPosition
 //
-//	ROUTINE:	AI_Helicopter::GetAttachmentPosition
-//
-//	PURPOSE:	Return the searchlight's Position
-//
+//	PURPOSE: Return the searchlight's Position
 // ----------------------------------------------------------------------- //
 
 LTVector AI_Helicopter::GetAttachmentPosition(HOBJECT hObject)
 {
-    LTVector vPos(0,0,0);
+	LTVector vPos(0,0,0);
 
 	HATTACHMENT hAttachment;
-    if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hObject, &hAttachment) )
+	if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hObject, &hAttachment) )
 	{
 		LTransform transform;
-        g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
+		g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
 		g_pTransLT->GetPos(transform, vPos);
 	}
 	return vPos;
@@ -894,11 +854,9 @@ LTVector AI_Helicopter::GetAttachmentPosition(HOBJECT hObject)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::GetSearchlightPosition
 //
-//	ROUTINE:	AI_Helicopter::GetSearchlightPosition
-//
-//	PURPOSE:	Rotate the searchlight in the desired direction
-//
+//	PURPOSE: Rotate the searchlight in the desired direction
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::SetSearchlightPosition(LTVector& vPos)
@@ -914,11 +872,11 @@ void AI_Helicopter::SetSearchlightPosition(LTVector& vPos)
 	HOBJECT hSearchLight = m_apObjects[m_iObjectSearchLight]->m_hObject;
 
 	HATTACHMENT hAttachment;
-    if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hSearchLight, &hAttachment) )
+	if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hSearchLight, &hAttachment) )
 	{
-        g_pLTServer->RemoveAttachment(hAttachment);
+		g_pLTServer->RemoveAttachment(hAttachment);
 
-        g_pLTServer->CreateAttachment(m_hObject, hSearchLight, (char*)m_apObjectPositions[m_iObjectSearchLight]->GetName(),
+		g_pLTServer->CreateAttachment(m_hObject, hSearchLight, (char*)m_apObjectPositions[m_iObjectSearchLight]->GetName(),
 			&vPos, &m_rRotSearchlight, &hAttachment);
 
 		m_vPosSearchlight = vPos;
@@ -928,11 +886,9 @@ void AI_Helicopter::SetSearchlightPosition(LTVector& vPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::GetSearchlightPosition
 //
-//	ROUTINE:	AI_Helicopter::GetSearchlightPosition
-//
-//	PURPOSE:	Return the searchlight's Position
-//
+//	PURPOSE: Return the searchlight's Position
 // ----------------------------------------------------------------------- //
 
 LTVector AI_Helicopter::GetSearchlightPosition()
@@ -940,21 +896,19 @@ LTVector AI_Helicopter::GetSearchlightPosition()
 	ControlledSearchLight* pSearchLight = ((ControlledSearchLight*)m_apObjects[m_iObjectSearchLight]);
 
 	HATTACHMENT hAttachment;
-    if ( pSearchLight && (LT_OK == g_pLTServer->FindAttachment(m_hObject, pSearchLight->m_hObject, &hAttachment)) )
+	if ( pSearchLight && (LT_OK == g_pLTServer->FindAttachment(m_hObject, pSearchLight->m_hObject, &hAttachment)) )
 	{
 		LTransform transform;
-        g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
+		g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
 		g_pTransLT->Get(transform, m_vPosSearchlight, m_rRotSearchlight);
 	}
 	return m_vPosSearchlight;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::GetGunnerRotation
 //
-//	ROUTINE:	AI_Helicopter::GetGunnerRotation
-//
-//	PURPOSE:	Rotate the Gunner in the desired direction
-//
+//	PURPOSE: Rotate the Gunner in the desired direction
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::SetGunnerRotation(LTRotation& rRot)
@@ -973,9 +927,9 @@ void AI_Helicopter::SetGunnerRotation(LTRotation& rRot)
 	if (!hGunner) return;
 
 	HATTACHMENT hAttachment;
-    if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hGunner, &hAttachment) )
+	if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hGunner, &hAttachment) )
 	{
-        LTRotation rSocketRot;
+		LTRotation rSocketRot;
 		HMODELSOCKET hSocket;
 		if ( g_pModelLT->GetSocket(m_hObject, (char*)m_apObjectPositions[m_iObjectGunner]->GetName(), hSocket) == LT_OK )
 		{
@@ -986,21 +940,19 @@ void AI_Helicopter::SetGunnerRotation(LTRotation& rRot)
 			}
 		}
 
-        g_pLTServer->RemoveAttachment(hAttachment);
-        LTRotation rotTemp(~rSocketRot*rRot);
-        g_pLTServer->CreateAttachment(m_hObject, hGunner, (char*)m_apObjectPositions[m_iObjectGunner]->GetName(),
-            &LTVector(0,0,0), &rotTemp, &hAttachment);
+		g_pLTServer->RemoveAttachment(hAttachment);
+		LTRotation rotTemp(~rSocketRot*rRot);
+		g_pLTServer->CreateAttachment(m_hObject, hGunner, (char*)m_apObjectPositions[m_iObjectGunner]->GetName(),
+			&LTVector(0,0,0), &rotTemp, &hAttachment);
 
 		m_rRotGunner = rRot;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::GetGunnerRotation
 //
-//	ROUTINE:	AI_Helicopter::GetGunnerRotation
-//
-//	PURPOSE:	Return the Gunner's rotation
-//
+//	PURPOSE: Return the Gunner's rotation
 // ----------------------------------------------------------------------- //
 
 LTRotation AI_Helicopter::GetGunnerRotation()
@@ -1008,10 +960,10 @@ LTRotation AI_Helicopter::GetGunnerRotation()
 	CAI* pGunner = ((CAI*)m_apObjects[m_iObjectGunner]);
 
 	HATTACHMENT hAttachment;
-    if ( pGunner && (LT_OK == g_pLTServer->FindAttachment(m_hObject, pGunner->m_hObject, &hAttachment)) )
+	if ( pGunner && (LT_OK == g_pLTServer->FindAttachment(m_hObject, pGunner->m_hObject, &hAttachment)) )
 	{
 		LTransform transform;
-        g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
+		g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
 		g_pTransLT->Get(transform, m_vPosGunner, m_rRotGunner);
 	}
 	return m_rRotGunner;
@@ -1019,11 +971,9 @@ LTRotation AI_Helicopter::GetGunnerRotation()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::GetGunnerPosition
 //
-//	ROUTINE:	AI_Helicopter::GetGunnerPosition
-//
-//	PURPOSE:	Rotate the Gunner in the desired direction
-//
+//	PURPOSE: Rotate the Gunner in the desired direction
 // ----------------------------------------------------------------------- //
 
 void AI_Helicopter::SetGunnerPosition(LTVector& vPos)
@@ -1039,11 +989,11 @@ void AI_Helicopter::SetGunnerPosition(LTVector& vPos)
 	HOBJECT hGunner = m_apObjects[m_iObjectGunner]->m_hObject;
 
 	HATTACHMENT hAttachment;
-    if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hGunner, &hAttachment) )
+	if ( LT_OK == g_pLTServer->FindAttachment(m_hObject, hGunner, &hAttachment) )
 	{
-        g_pLTServer->RemoveAttachment(hAttachment);
+		g_pLTServer->RemoveAttachment(hAttachment);
 
-        g_pLTServer->CreateAttachment(m_hObject, hGunner, (char*)m_apObjectPositions[m_iObjectGunner]->GetName(),
+		g_pLTServer->CreateAttachment(m_hObject, hGunner, (char*)m_apObjectPositions[m_iObjectGunner]->GetName(),
 			&vPos, &m_rRotGunner, &hAttachment);
 
 		m_vPosGunner = vPos;
@@ -1053,11 +1003,9 @@ void AI_Helicopter::SetGunnerPosition(LTVector& vPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Helicopter::GetGunnerPosition
 //
-//	ROUTINE:	AI_Helicopter::GetGunnerPosition
-//
-//	PURPOSE:	Return the Gunner's Position
-//
+//	PURPOSE: Return the Gunner's Position
 // ----------------------------------------------------------------------- //
 
 LTVector AI_Helicopter::GetGunnerPosition()
@@ -1065,10 +1013,10 @@ LTVector AI_Helicopter::GetGunnerPosition()
 	CAI* pGunner = ((CAI*)m_apObjects[m_iObjectGunner]);
 
 	HATTACHMENT hAttachment;
-    if ( pGunner && (LT_OK == g_pLTServer->FindAttachment(m_hObject, pGunner->m_hObject, &hAttachment)) )
+	if ( pGunner && (LT_OK == g_pLTServer->FindAttachment(m_hObject, pGunner->m_hObject, &hAttachment)) )
 	{
 		LTransform transform;
-        g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
+		g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
 		g_pTransLT->Get(transform, m_vPosGunner, m_rRotGunner);
 	}
 	return m_vPosGunner;

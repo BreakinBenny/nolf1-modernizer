@@ -80,41 +80,39 @@ END_CLASS_DEFAULT(AINode, BaseClass, NULL, NULL)
 
 // Statics
 
-const uint32    CAINode::kInvalidNodeID				= 0xFFFFFFFF;
+const uint32	CAINode::kInvalidNodeID				= 0xFFFFFFFF;
 
-const uint32    CAINode::kSearchFlagShineFlashlight	= 0x01;
-const uint32    CAINode::kSearchFlagLookUnder		= 0x02;
-const uint32    CAINode::kSearchFlagLookOver		= 0x04;
-const uint32    CAINode::kSearchFlagLookLeft		= 0x08;
-const uint32    CAINode::kSearchFlagLookRight		= 0x10;
-const uint32    CAINode::kSearchFlagAlert1			= 0x20;
-const uint32    CAINode::kSearchFlagAlert2			= 0x40;
-const uint32    CAINode::kSearchFlagAlert3			= 0x80;
-const uint32    CAINode::kSearchFlagAny				= 0xFF;
+const uint32	CAINode::kSearchFlagShineFlashlight	= 0x01;
+const uint32	CAINode::kSearchFlagLookUnder		= 0x02;
+const uint32	CAINode::kSearchFlagLookOver		= 0x04;
+const uint32	CAINode::kSearchFlagLookLeft		= 0x08;
+const uint32	CAINode::kSearchFlagLookRight		= 0x10;
+const uint32	CAINode::kSearchFlagAlert1			= 0x20;
+const uint32	CAINode::kSearchFlagAlert2			= 0x40;
+const uint32	CAINode::kSearchFlagAlert3			= 0x80;
+const uint32	CAINode::kSearchFlagAny				= 0xFF;
 const uint32	CAINode::kNumSearchFlags			= 8;
 
-const uint32    CAINode::kCoverFlagDuck				= 0x01;
-const uint32    CAINode::kCoverFlagBlind			= 0x02;
-const uint32    CAINode::kCoverFlag1WayCorner		= 0x04;
-const uint32    CAINode::kCoverFlag2WayCorner		= 0x08;
-const uint32    CAINode::kCoverFlagAny				= 0x0F;
+const uint32	CAINode::kCoverFlagDuck				= 0x01;
+const uint32	CAINode::kCoverFlagBlind			= 0x02;
+const uint32	CAINode::kCoverFlag1WayCorner		= 0x04;
+const uint32	CAINode::kCoverFlag2WayCorner		= 0x08;
+const uint32	CAINode::kCoverFlagAny				= 0x0F;
 const uint32	CAINode::kNumCoverFlags				= 4;
 
-const uint32    CAINode::kPanicFlagStand			= 0x01;
-const uint32    CAINode::kPanicFlagCrouch			= 0x02;
-const uint32    CAINode::kPanicFlagAny				= 0x03;
+const uint32	CAINode::kPanicFlagStand			= 0x01;
+const uint32	CAINode::kPanicFlagCrouch			= 0x02;
+const uint32	CAINode::kPanicFlagAny				= 0x03;
 const uint32	CAINode::kNumPanicFlags				= 2;
 
-const uint32    CAINode::kVantageFlagVantage		= 0x01;
-const uint32    CAINode::kVantageFlagAny			= 0x01;
+const uint32	CAINode::kVantageFlagVantage		= 0x01;
+const uint32	CAINode::kVantageFlagAny			= 0x01;
 const uint32	CAINode::kNumVantageFlags			= 1;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AINode::AINode()
 //
-//	ROUTINE:	AINode::AINode()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 AINode::AINode() : BaseClass(OT_NORMAL)
@@ -162,11 +160,9 @@ AINode::AINode() : BaseClass(OT_NORMAL)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AINode::~AINode()
 //
-//	ROUTINE:	AINode::~AINode()
-//
-//	PURPOSE:	Destroy the object
-//
+//	PURPOSE: Destroy the object
 // ----------------------------------------------------------------------- //
 
 AINode::~AINode()
@@ -186,177 +182,175 @@ AINode::~AINode()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AINode::ReadProp
 //
-//	ROUTINE:	AINode::ReadProp
-//
-//	PURPOSE:	Reads properties
-//
+//	PURPOSE: Reads properties
 // ----------------------------------------------------------------------- //
 
 LTBOOL AINode::ReadProp(ObjectCreateStruct *pData)
 {
 	GenericProp genProp;
-    if (!g_pLTServer || !pData) return LTFALSE;
+	if (!g_pLTServer || !pData) return LTFALSE;
 
 	m_dwSearchFlags = 0x0;
 	m_dwCoverFlags = 0x0;
 	m_dwPanicFlags = 0x0;
 	m_dwVantageFlags = 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "ShineFlashlight", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "ShineFlashlight", &genProp ) == LT_OK )
 		m_dwSearchFlags |= genProp.m_Bool ? CAINode::kSearchFlagShineFlashlight : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "LookUnder", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "LookUnder", &genProp ) == LT_OK )
 		m_dwSearchFlags |= genProp.m_Bool ? CAINode::kSearchFlagLookUnder : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "LookOver", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "LookOver", &genProp ) == LT_OK )
 		m_dwSearchFlags |= genProp.m_Bool ? CAINode::kSearchFlagLookOver : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "LookLeft", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "LookLeft", &genProp ) == LT_OK )
 		m_dwSearchFlags |= genProp.m_Bool ? CAINode::kSearchFlagLookLeft : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "LookRight", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "LookRight", &genProp ) == LT_OK )
 		m_dwSearchFlags |= genProp.m_Bool ? CAINode::kSearchFlagLookRight : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "Alert1", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Alert1", &genProp ) == LT_OK )
 		m_dwSearchFlags |= genProp.m_Bool ? CAINode::kSearchFlagAlert1 : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "Alert2", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Alert2", &genProp ) == LT_OK )
 		m_dwSearchFlags |= genProp.m_Bool ? CAINode::kSearchFlagAlert2 : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "Alert3", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Alert3", &genProp ) == LT_OK )
 		m_dwSearchFlags |= genProp.m_Bool ? CAINode::kSearchFlagAlert3 : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "Duck", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Duck", &genProp ) == LT_OK )
 		m_dwCoverFlags |= genProp.m_Bool ? CAINode::kCoverFlagDuck : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "BlindFire", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "BlindFire", &genProp ) == LT_OK )
 		m_dwCoverFlags |= genProp.m_Bool ? CAINode::kCoverFlagBlind : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "1WayRoll", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "1WayRoll", &genProp ) == LT_OK )
 		m_dwCoverFlags |= genProp.m_Bool ? CAINode::kCoverFlag1WayCorner : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "2WayRoll", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "2WayRoll", &genProp ) == LT_OK )
 		m_dwCoverFlags |= genProp.m_Bool ? CAINode::kCoverFlag2WayCorner : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "1WayStep", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "1WayStep", &genProp ) == LT_OK )
 		m_dwCoverFlags |= genProp.m_Bool ? CAINode::kCoverFlag1WayCorner : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "2WayStep", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "2WayStep", &genProp ) == LT_OK )
 		m_dwCoverFlags |= genProp.m_Bool ? CAINode::kCoverFlag2WayCorner : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "IgnoreCoverDir", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "IgnoreCoverDir", &genProp ) == LT_OK )
 		m_bIgnoreCoverDir = genProp.m_Bool;
 
-    if ( g_pLTServer->GetPropGeneric( "CoverFov", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "CoverFov", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fCoverFov = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric( "Stand", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Stand", &genProp ) == LT_OK )
 		m_dwPanicFlags |= genProp.m_Bool ? CAINode::kPanicFlagStand : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "Crouch", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Crouch", &genProp ) == LT_OK )
 		m_dwPanicFlags |= genProp.m_Bool ? CAINode::kPanicFlagCrouch : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "Vantage", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Vantage", &genProp ) == LT_OK )
 		m_dwVantageFlags |= genProp.m_Bool ? CAINode::kVantageFlagVantage : 0x0;
 
-    if ( g_pLTServer->GetPropGeneric( "IgnoreVantageDir", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "IgnoreVantageDir", &genProp ) == LT_OK )
 		m_bIgnoreVantageDir = genProp.m_Bool;
 
-    if ( g_pLTServer->GetPropGeneric( "VantageFov", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "VantageFov", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fVantageFov = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric( "CoverObject", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "CoverObject", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrCoverObject = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrCoverObject = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "CoverRadius", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "CoverRadius", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fCoverRadiusSqr = genProp.m_Float*genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric( "CoverThreatRadius", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "CoverThreatRadius", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fCoverThreatRadiusSqr = genProp.m_Float*genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric( "CoverThreatRadiusReaction", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "CoverThreatRadiusReaction", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrCoverThreatRadiusReaction = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrCoverThreatRadiusReaction = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "CoverDamageCmd", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "CoverDamageCmd", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrCoverDamageCmd = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrCoverDamageCmd = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "CoverTimeout", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "CoverTimeout", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fCoverTimeout = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric( "CoverHitpointsBoost", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "CoverHitpointsBoost", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fCoverHitpointsBoost = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric( "CoverTimeoutCmd", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "CoverTimeoutCmd", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrCoverTimeoutCmd = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrCoverTimeoutCmd = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "VantageRadius", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "VantageRadius", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fVantageRadiusSqr = genProp.m_Float*genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric( "VantageThreatRadius", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "VantageThreatRadius", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fVantageThreatRadiusSqr = genProp.m_Float*genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric( "VantageThreatRadiusReaction", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "VantageThreatRadiusReaction", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrVantageThreatRadiusReaction = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrVantageThreatRadiusReaction = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "VantageDamageCmd", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "VantageDamageCmd", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrVantageDamageCmd = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrVantageDamageCmd = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "PanicObject", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "PanicObject", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrPanicObject = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrPanicObject = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "PanicRadius", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "PanicRadius", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fPanicRadiusSqr = genProp.m_Float*genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric( "UseObject", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "UseObject", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrUseObject = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrUseObject = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "UseObjectRadius", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "UseObjectRadius", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fUseObjectRadiusSqr = genProp.m_Float*genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric( "PickupObject", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "PickupObject", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrPickupObject = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrPickupObject = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "PickupRadius", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "PickupRadius", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fPickupObjectRadiusSqr = genProp.m_Float*genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric( "BackupCmd", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "BackupCmd", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrBackupCmd = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrBackupCmd = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "TrainingFailureCmd", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "TrainingFailureCmd", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrTrainingFailureCmd = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrTrainingFailureCmd = g_pLTServer->CreateString( genProp.m_String );
 
 	if ( g_pLTServer->GetPropGeneric( "BackupRadius", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fBackupRadiusSqr = genProp.m_Float*genProp.m_Float;
 
 	LTVector vAngles;
-    if ( g_pLTServer->GetPropRotationEuler( "Rotation", &vAngles ) == LT_OK )
+	if ( g_pLTServer->GetPropRotationEuler( "Rotation", &vAngles ) == LT_OK )
 		m_vInitialPitchYawRoll = vAngles;
 
-    if ( g_pLTServer->GetPropGeneric( "Poodle", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Poodle", &genProp ) == LT_OK )
 		m_bPoodle = genProp.m_Bool;
 
 	return LTTRUE;
@@ -364,11 +358,9 @@ LTBOOL AINode::ReadProp(ObjectCreateStruct *pData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AINode::EngineMessageFn
 //
-//	ROUTINE:	AINode::EngineMessageFn
-//
-//	PURPOSE:	Handles engine message functions
-//
+//	PURPOSE: Handles engine message functions
 // ----------------------------------------------------------------------- //
 
 uint32 AINode::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -377,7 +369,7 @@ uint32 AINode::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 	{
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
 
 			int nInfo = (int)fData;
 			if (nInfo == PRECREATE_WORLDFILE || nInfo == PRECREATE_STRINGPROP)
@@ -395,11 +387,9 @@ uint32 AINode::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINode::CAINode()
 //
-//	ROUTINE:	CAINode::CAINode()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 CAINode::CAINode()
@@ -458,11 +448,9 @@ CAINode::CAINode()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINode::~CAINode()
 //
-//	ROUTINE:	CAINode::~CAINode()
-//
-//	PURPOSE:	Destroy the object
-//
+//	PURPOSE: Destroy the object
 // ----------------------------------------------------------------------- //
 
 CAINode::~CAINode()
@@ -483,31 +471,29 @@ CAINode::~CAINode()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINode::Init()
 //
-//	ROUTINE:	CAINode::Init()
-//
-//	PURPOSE:	Initialize us from an engine object AINode
-//
+//	PURPOSE: Initialize us from an engine object AINode
 // ----------------------------------------------------------------------- //
 
 void CAINode::Init(uint32 dwID, const AINode& node)
 {
 	m_dwID = dwID;
 
-    m_hstrName = g_pLTServer->CreateString(g_pLTServer->GetObjectName(node.m_hObject));
+	m_hstrName = g_pLTServer->CreateString(g_pLTServer->GetObjectName(node.m_hObject));
 
 	m_dwSearchFlags = node.m_dwSearchFlags;
 
 	m_dwCoverFlags = node.m_dwCoverFlags;
 	m_bIgnoreCoverDir = node.m_bIgnoreCoverDir;
 	m_fCoverFovDp = FOV2DP(node.m_fCoverFov);
-    m_hstrCoverObject = g_pLTServer->CopyString(node.m_hstrCoverObject);
+	m_hstrCoverObject = g_pLTServer->CopyString(node.m_hstrCoverObject);
 	m_fCoverRadiusSqr = node.m_fCoverRadiusSqr;
 	m_fCoverThreatRadiusSqr = node.m_fCoverThreatRadiusSqr;
-    m_hstrCoverThreatRadiusReaction = g_pLTServer->CopyString(node.m_hstrCoverThreatRadiusReaction);
+	m_hstrCoverThreatRadiusReaction = g_pLTServer->CopyString(node.m_hstrCoverThreatRadiusReaction);
 	m_fCoverTimeout = node.m_fCoverTimeout;
-    m_hstrCoverTimeoutCmd = g_pLTServer->CopyString(node.m_hstrCoverTimeoutCmd);
-    m_hstrCoverDamageCmd = g_pLTServer->CopyString(node.m_hstrCoverDamageCmd);
+	m_hstrCoverTimeoutCmd = g_pLTServer->CopyString(node.m_hstrCoverTimeoutCmd);
+	m_hstrCoverDamageCmd = g_pLTServer->CopyString(node.m_hstrCoverDamageCmd);
 
 	m_fCoverHitpointsBoost = node.m_fCoverHitpointsBoost;
 
@@ -516,25 +502,25 @@ void CAINode::Init(uint32 dwID, const AINode& node)
 	m_fVantageFovDp = FOV2DP(node.m_fVantageFov);
 	m_fVantageRadiusSqr = node.m_fVantageRadiusSqr;
 	m_fVantageThreatRadiusSqr = node.m_fVantageThreatRadiusSqr;
-    m_hstrVantageThreatRadiusReaction = g_pLTServer->CopyString(node.m_hstrVantageThreatRadiusReaction);
-    m_hstrVantageDamageCmd = g_pLTServer->CopyString(node.m_hstrVantageDamageCmd);
+	m_hstrVantageThreatRadiusReaction = g_pLTServer->CopyString(node.m_hstrVantageThreatRadiusReaction);
+	m_hstrVantageDamageCmd = g_pLTServer->CopyString(node.m_hstrVantageDamageCmd);
 
-    m_hstrUseObject = g_pLTServer->CopyString(node.m_hstrUseObject);
+	m_hstrUseObject = g_pLTServer->CopyString(node.m_hstrUseObject);
 	m_fUseObjectRadiusSqr = node.m_fUseObjectRadiusSqr;
-    
+	
 	m_hstrPickupObject = g_pLTServer->CopyString(node.m_hstrPickupObject);
 	m_fPickupObjectRadiusSqr = node.m_fPickupObjectRadiusSqr;
 
-    m_hstrBackupCmd = g_pLTServer->CopyString(node.m_hstrBackupCmd);
+	m_hstrBackupCmd = g_pLTServer->CopyString(node.m_hstrBackupCmd);
 	m_fBackupRadiusSqr = node.m_fBackupRadiusSqr;
 
-    m_hstrTrainingFailureCmd = g_pLTServer->CopyString(node.m_hstrTrainingFailureCmd);
+	m_hstrTrainingFailureCmd = g_pLTServer->CopyString(node.m_hstrTrainingFailureCmd);
 
 	m_dwPanicFlags = node.m_dwPanicFlags;
-    m_hstrPanicObject = g_pLTServer->CopyString(node.m_hstrPanicObject);
+	m_hstrPanicObject = g_pLTServer->CopyString(node.m_hstrPanicObject);
 	m_fPanicRadiusSqr = node.m_fPanicRadiusSqr;
 
-    g_pLTServer->GetObjectPos(node.m_hObject, &m_vPos);
+	g_pLTServer->GetObjectPos(node.m_hObject, &m_vPos);
 
 	if ( m_dwCoverFlags & CAINode::kCoverFlag1WayCorner && 
 		 m_dwCoverFlags & CAINode::kCoverFlag2WayCorner )
@@ -570,11 +556,9 @@ void CAINode::Init(uint32 dwID, const AINode& node)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINode::Verify()
 //
-//	ROUTINE:	CAINode::Verify()
-//
-//	PURPOSE:	Sanity check
-//
+//	PURPOSE: Sanity check
 // ----------------------------------------------------------------------- //
 
 void CAINode::Verify()
@@ -586,11 +570,9 @@ void CAINode::Verify()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINode::Save()
 //
-//	ROUTINE:	CAINode::Save()
-//
-//	PURPOSE:	Save the node
-//
+//	PURPOSE: Save the node
 // ----------------------------------------------------------------------- //
 
 void CAINode::Save(HMESSAGEWRITE hWrite)
@@ -637,11 +619,9 @@ void CAINode::Save(HMESSAGEWRITE hWrite)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINode::Load()
 //
-//	ROUTINE:	CAINode::Load()
-//
-//	PURPOSE:	Load the node
-//
+//	PURPOSE: Load the node
 // ----------------------------------------------------------------------- //
 
 void CAINode::Load(HMESSAGEREAD hRead)
@@ -687,11 +667,9 @@ void CAINode::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINode::Search()
 //
-//	ROUTINE:	CAINode::Search()
-//
-//	PURPOSE:	Searches the node
-//
+//	PURPOSE: Searches the node
 // ----------------------------------------------------------------------- //
 
 void CAINode::Search()
@@ -703,11 +681,9 @@ void CAINode::Search()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINode::GetSearchStatus()
 //
-//	ROUTINE:	CAINode::GetSearchStatus()
-//
-//	PURPOSE:	Gets the node's Search status relative to a threat
-//
+//	PURPOSE: Gets the node's Search status relative to a threat
 // ----------------------------------------------------------------------- //
 
 SearchStatus CAINode::GetSearchStatus(const LTVector& vPos, HOBJECT hThreat) const
@@ -723,11 +699,9 @@ SearchStatus CAINode::GetSearchStatus(const LTVector& vPos, HOBJECT hThreat) con
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINode::GetCoverStatus()
 //
-//	ROUTINE:	CAINode::GetCoverStatus()
-//
-//	PURPOSE:	Gets the node's cover status relative to a threat
-//
+//	PURPOSE: Gets the node's cover status relative to a threat
 // ----------------------------------------------------------------------- //
 
 CoverStatus CAINode::GetCoverStatus(const LTVector& vPos, HOBJECT hThreat) const
@@ -735,7 +709,7 @@ CoverStatus CAINode::GetCoverStatus(const LTVector& vPos, HOBJECT hThreat) const
 	_ASSERT(IsCover());
 
 	LTVector vThreatPos;
-    g_pLTServer->GetObjectPos(hThreat, &vThreatPos);
+	g_pLTServer->GetObjectPos(hThreat, &vThreatPos);
 
 	if ( VEC_DISTSQR(m_vPos, vThreatPos) < m_fCoverThreatRadiusSqr )
 	{
@@ -758,11 +732,9 @@ CoverStatus CAINode::GetCoverStatus(const LTVector& vPos, HOBJECT hThreat) const
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINode::IsPanicFromThreat()
 //
-//	ROUTINE:	CAINode::IsPanicFromThreat()
-//
-//	PURPOSE:	Is Panic from the threat
-//
+//	PURPOSE: Is Panic from the threat
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAINode::IsPanicFromThreat(const LTVector& vPos, HOBJECT hThreat) const
@@ -773,11 +745,9 @@ LTBOOL CAINode::IsPanicFromThreat(const LTVector& vPos, HOBJECT hThreat) const
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINode::GetVantageStatus()
 //
-//	ROUTINE:	CAINode::GetVantageStatus()
-//
-//	PURPOSE:	Get the node's vantage status relative to a threat
-//
+//	PURPOSE: Get the node's vantage status relative to a threat
 // ----------------------------------------------------------------------- //
 
 VantageStatus CAINode::GetVantageStatus(const LTVector& vPos, HOBJECT hThreat) const
@@ -785,7 +755,7 @@ VantageStatus CAINode::GetVantageStatus(const LTVector& vPos, HOBJECT hThreat) c
 	_ASSERT(IsVantage());
 
 	LTVector vThreatPos;
-    g_pLTServer->GetObjectPos(hThreat, &vThreatPos);
+	g_pLTServer->GetObjectPos(hThreat, &vThreatPos);
 
 	if ( VEC_DISTSQR(m_vPos, vThreatPos) < m_fVantageThreatRadiusSqr )
 	{

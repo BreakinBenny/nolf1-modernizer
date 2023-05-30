@@ -136,7 +136,7 @@ AI_##alignment##_##ai##::AI_##alignment##_##ai##() : AI_##ai##() \
 { \
 	m_cc = ##alignment##; \
 	m_fSenseUpdateRate = 0.10f; \
-    m_hstrAttributeTemplate = g_pLTServer->CreateString("AI_" #alignment "_" #ai ); \
+	m_hstrAttributeTemplate = g_pLTServer->CreateString("AI_" #alignment "_" #ai ); \
 } \
 
 #ifdef NUKE_REACTIONS
@@ -273,7 +273,7 @@ AI_##human##::AI_##human##() : CAIHuman() \
 	m_eModelId = g_pModelButeMgr->GetModelId(#human);\
 	m_eModelSkeleton = g_pModelButeMgr->GetModelSkeleton(m_eModelId);\
 	m_cc = ##alignment##;\
-    m_hstrAttributeTemplate = g_pLTServer->CreateString(#human);\
+	m_hstrAttributeTemplate = g_pLTServer->CreateString(#human);\
 }\
 \
 IMPLEMENT_ALIGNMENTS(##human##);\
@@ -299,39 +299,39 @@ class CAIReactions
 		HSTRING m_ahstrHearAllyDeath[2];
 		HSTRING m_ahstrHearAllyWeaponFire[2];
 
-        CAIReactions()
+		CAIReactions()
 		{
-            m_ahstrSeeEnemy[0] = LTNULL;
-            m_ahstrSeeEnemy[1] = LTNULL;
-            m_ahstrSeeEnemyFalse[0] = LTNULL;
-            m_ahstrSeeEnemyFalse[1] = LTNULL;
-            m_ahstrSeeEnemyFlashlight[0] = LTNULL;
-            m_ahstrSeeEnemyFlashlight[1] = LTNULL;
-            m_ahstrSeeEnemyFlashlightFalse[0] = LTNULL;
-            m_ahstrSeeEnemyFlashlightFalse[1] = LTNULL;
-            m_ahstrHearEnemyFootstep[0] = LTNULL;
-            m_ahstrHearEnemyFootstep[1] = LTNULL;
-            m_ahstrHearEnemyFootstepFalse[0] = LTNULL;
-            m_ahstrHearEnemyFootstepFalse[1] = LTNULL;
-            m_ahstrHearEnemyWeaponFire[0] = LTNULL;
-            m_ahstrHearEnemyWeaponFire[1] = LTNULL;
-            m_ahstrHearEnemyWeaponImpact[0] = LTNULL;
-            m_ahstrHearEnemyWeaponImpact[1] = LTNULL;
-            m_ahstrSeeAllyDeath[0] = LTNULL;
-            m_ahstrSeeAllyDeath[1] = LTNULL;
-            m_ahstrSeeEnemyFootprint[0] = LTNULL;
-            m_ahstrSeeEnemyFootprint[1] = LTNULL;
-            m_ahstrHearEnemyDisturbance[0] = LTNULL;
-            m_ahstrHearEnemyDisturbance[1] = LTNULL;
-            m_ahstrHearAllyPain[0] = LTNULL;
-            m_ahstrHearAllyPain[1] = LTNULL;
-            m_ahstrHearAllyDeath[0] = LTNULL;
-            m_ahstrHearAllyDeath[1] = LTNULL;
-            m_ahstrHearAllyWeaponFire[0] = LTNULL;
-            m_ahstrHearAllyWeaponFire[1] = LTNULL;
+			m_ahstrSeeEnemy[0] = LTNULL;
+			m_ahstrSeeEnemy[1] = LTNULL;
+			m_ahstrSeeEnemyFalse[0] = LTNULL;
+			m_ahstrSeeEnemyFalse[1] = LTNULL;
+			m_ahstrSeeEnemyFlashlight[0] = LTNULL;
+			m_ahstrSeeEnemyFlashlight[1] = LTNULL;
+			m_ahstrSeeEnemyFlashlightFalse[0] = LTNULL;
+			m_ahstrSeeEnemyFlashlightFalse[1] = LTNULL;
+			m_ahstrHearEnemyFootstep[0] = LTNULL;
+			m_ahstrHearEnemyFootstep[1] = LTNULL;
+			m_ahstrHearEnemyFootstepFalse[0] = LTNULL;
+			m_ahstrHearEnemyFootstepFalse[1] = LTNULL;
+			m_ahstrHearEnemyWeaponFire[0] = LTNULL;
+			m_ahstrHearEnemyWeaponFire[1] = LTNULL;
+			m_ahstrHearEnemyWeaponImpact[0] = LTNULL;
+			m_ahstrHearEnemyWeaponImpact[1] = LTNULL;
+			m_ahstrSeeAllyDeath[0] = LTNULL;
+			m_ahstrSeeAllyDeath[1] = LTNULL;
+			m_ahstrSeeEnemyFootprint[0] = LTNULL;
+			m_ahstrSeeEnemyFootprint[1] = LTNULL;
+			m_ahstrHearEnemyDisturbance[0] = LTNULL;
+			m_ahstrHearEnemyDisturbance[1] = LTNULL;
+			m_ahstrHearAllyPain[0] = LTNULL;
+			m_ahstrHearAllyPain[1] = LTNULL;
+			m_ahstrHearAllyDeath[0] = LTNULL;
+			m_ahstrHearAllyDeath[1] = LTNULL;
+			m_ahstrHearAllyWeaponFire[0] = LTNULL;
+			m_ahstrHearAllyWeaponFire[1] = LTNULL;
 		}
 
-        ~CAIReactions()
+		~CAIReactions()
 		{
 			FREE_HSTRING(m_ahstrSeeEnemy[0]);
 			FREE_HSTRING(m_ahstrSeeEnemy[1]);
@@ -363,7 +363,7 @@ class CAIReactions
 			FREE_HSTRING(m_ahstrHearAllyWeaponFire[1]);
 		}
 
-        void Save(HMESSAGEWRITE hWrite)
+		void Save(HMESSAGEWRITE hWrite)
 		{
 			SAVE_HSTRING(m_ahstrSeeEnemy[0]);
 			SAVE_HSTRING(m_ahstrSeeEnemy[1]);
@@ -395,7 +395,7 @@ class CAIReactions
 			SAVE_HSTRING(m_ahstrHearAllyWeaponFire[1]);
 		}
 
-        void Load(HMESSAGEREAD hRead)
+		void Load(HMESSAGEREAD hRead)
 		{
 			LOAD_HSTRING(m_ahstrSeeEnemy[0]);
 			LOAD_HSTRING(m_ahstrSeeEnemy[1]);

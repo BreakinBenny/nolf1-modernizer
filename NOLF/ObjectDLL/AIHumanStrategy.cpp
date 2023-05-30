@@ -32,11 +32,9 @@ IMPLEMENT_FACTORY(CAIHumanStrategyShootBurstBlind, 0);
 IMPLEMENT_FACTORY(CAIHumanStrategyFlashlight, 0);
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategy::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategy::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategy::Constructor()
@@ -49,11 +47,9 @@ void CAIHumanStrategy::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategy::Init
 //
-//	ROUTINE:	CAIHumanStrategy::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHumanStrategy::Init(CAIHuman* pAIHuman)
@@ -64,11 +60,9 @@ LTBOOL CAIHumanStrategy::Init(CAIHuman* pAIHuman)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategy::GetAnimationContext
 //
-//	ROUTINE:	CAIHumanStrategy::GetAnimationContext
-//
-//	PURPOSE:	Gets our AnimationContext
-//
+//	PURPOSE: Gets our AnimationContext
 // ----------------------------------------------------------------------- //
 
 CAnimationContext* CAIHumanStrategy::GetAnimationContext()
@@ -77,11 +71,9 @@ CAnimationContext* CAIHumanStrategy::GetAnimationContext()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFollowPath::Constructor()
@@ -111,11 +103,9 @@ void CAIHumanStrategyFollowPath::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::Init
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHumanStrategyFollowPath::Init(CAIHuman* pAIHuman)
@@ -142,11 +132,9 @@ LTBOOL CAIHumanStrategyFollowPath::Init(CAIHuman* pAIHuman)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::HandleBrokenLink
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFollowPath::HandleBrokenLink(HOBJECT hObject)
@@ -158,11 +146,9 @@ void CAIHumanStrategyFollowPath::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::HandleModelString
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::HandleModelString
-//
-//	PURPOSE:	Handles getting a model key string
-//
+//	PURPOSE: Handles getting a model key string
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFollowPath::HandleModelString(ArgList* pArgList)
@@ -181,11 +167,9 @@ void CAIHumanStrategyFollowPath::HandleModelString(ArgList* pArgList)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::Update
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::Update
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFollowPath::Update()
@@ -230,7 +214,7 @@ void CAIHumanStrategyFollowPath::Update()
 
 			default:
 			{
-                g_pLTServer->CPrint("CAIHumanStrategyFollowPath::Update - unrecognized waypoint instruction");
+				g_pLTServer->CPrint("CAIHumanStrategyFollowPath::Update - unrecognized waypoint instruction");
 				_ASSERT(!"CAIHumanStrategyFollowPath::Update - unrecognized waypoint instruction");
 			}
 			break;
@@ -249,11 +233,9 @@ void CAIHumanStrategyFollowPath::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::UpdateAnimation
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::UpdateAnimation
-//
-//	PURPOSE:	Handles any pending AnimationContext changes
-//
+//	PURPOSE: Handles any pending AnimationContext changes
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFollowPath::UpdateAnimation()
@@ -362,11 +344,9 @@ void CAIHumanStrategyFollowPath::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::UpdateMoveTo
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::UpdateMoveTo
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHumanStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
@@ -392,11 +372,9 @@ LTBOOL CAIHumanStrategyFollowPath::UpdateMoveTo(CAIPathWaypoint* pWaypoint)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::UpdateOpenDoors
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::UpdateOpenDoors
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHumanStrategyFollowPath::UpdateOpenDoors(CAIPathWaypoint* pWaypoint)
@@ -497,11 +475,9 @@ LTBOOL CAIHumanStrategyFollowPath::UpdateOpenDoors(CAIPathWaypoint* pWaypoint)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::UpdateWaitForDoors
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::UpdateWaitForDoors
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHumanStrategyFollowPath::UpdateWaitForDoors(CAIPathWaypoint* pWaypoint)
@@ -518,7 +494,7 @@ LTBOOL CAIHumanStrategyFollowPath::UpdateWaitForDoors(CAIPathWaypoint* pWaypoint
 	hDoor = pWaypoint->GetArgumentObject1();
 	if ( hDoor )
 	{
-        Door* pDoor = (Door*)g_pLTServer->HandleToObject(hDoor);
+		Door* pDoor = (Door*)g_pLTServer->HandleToObject(hDoor);
 		if ( pDoor->GetState() == DOORSTATE_CLOSED )
 		{
 			GetAI()->OpenDoor(hDoor);
@@ -534,7 +510,7 @@ LTBOOL CAIHumanStrategyFollowPath::UpdateWaitForDoors(CAIPathWaypoint* pWaypoint
 	hDoor = pWaypoint->GetArgumentObject2();
 	if ( hDoor )
 	{
-        Door* pDoor = (Door*)g_pLTServer->HandleToObject(hDoor);
+		Door* pDoor = (Door*)g_pLTServer->HandleToObject(hDoor);
 		if ( pDoor->GetState() == DOORSTATE_CLOSED )
 		{
 			GetAI()->OpenDoor(hDoor);
@@ -561,11 +537,9 @@ LTBOOL CAIHumanStrategyFollowPath::UpdateWaitForDoors(CAIPathWaypoint* pWaypoint
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::UpdateFaceDoor
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::UpdateFaceDoor
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHumanStrategyFollowPath::UpdateFaceDoor(CAIPathWaypoint* pWaypoint)
@@ -598,11 +572,9 @@ LTBOOL CAIHumanStrategyFollowPath::UpdateFaceDoor(CAIPathWaypoint* pWaypoint)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::Reset
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::Reset
-//
-//	PURPOSE:	Gets us ready for a new path
-//
+//	PURPOSE: Gets us ready for a new path
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFollowPath::Reset()
@@ -614,11 +586,9 @@ void CAIHumanStrategyFollowPath::Reset()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::Set
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::Set
-//
-//	PURPOSE:	Sets the path that we will be following
-//
+//	PURPOSE: Sets the path that we will be following
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHumanStrategyFollowPath::Set(const LTVector& vDestination)
@@ -646,11 +616,9 @@ LTBOOL CAIHumanStrategyFollowPath::Set(CAIVolume* pVolumeDestination)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::Load
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFollowPath::Load(HMESSAGEREAD hRead)
@@ -673,11 +641,9 @@ void CAIHumanStrategyFollowPath::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFollowPath::Save
 //
-//	ROUTINE:	CAIHumanStrategyFollowPath::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFollowPath::Save(HMESSAGEREAD hWrite)
@@ -700,11 +666,9 @@ void CAIHumanStrategyFollowPath::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyOneShotAni::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyOneShotAni::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyOneShotAni::Constructor()
@@ -720,11 +684,9 @@ void CAIHumanStrategyOneShotAni::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyOneShotAni::Set
 //
-//	ROUTINE:	CAIHumanStrategyOneShotAni::Set
-//
-//	PURPOSE:	Sets the one shot ani
-//
+//	PURPOSE: Sets the one shot ani
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyOneShotAni::Set(const CAnimationProp& Prop)
@@ -734,11 +696,9 @@ void CAIHumanStrategyOneShotAni::Set(const CAnimationProp& Prop)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyOneShotAni::Update
 //
-//	ROUTINE:	CAIHumanStrategyOneShotAni::Update
-//
-//	PURPOSE:	Updates the strategy
-//
+//	PURPOSE: Updates the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyOneShotAni::Update()
@@ -779,11 +739,9 @@ void CAIHumanStrategyOneShotAni::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyOneShotAni::UpdateAnimation
 //
-//	ROUTINE:	CAIHumanStrategyOneShotAni::UpdateAnimation
-//
-//	PURPOSE:	Handles any pending AnimationContext changes
-//
+//	PURPOSE: Handles any pending AnimationContext changes
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyOneShotAni::UpdateAnimation()
@@ -807,11 +765,9 @@ void CAIHumanStrategyOneShotAni::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyOneShotAni::Load
 //
-//	ROUTINE:	CAIHumanStrategyOneShotAni::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyOneShotAni::Load(HMESSAGEREAD hRead)
@@ -824,11 +780,9 @@ void CAIHumanStrategyOneShotAni::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyOneShotAni::Save
 //
-//	ROUTINE:	CAIHumanStrategyOneShotAni::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyOneShotAni::Save(HMESSAGEREAD hWrite)
@@ -841,11 +795,9 @@ void CAIHumanStrategyOneShotAni::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyDodge::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::Constructor()
@@ -868,11 +820,9 @@ void CAIHumanStrategyDodge::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::Update
 //
-//	ROUTINE:	CAIHumanStrategyDodge::Update
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::Update()
@@ -890,11 +840,9 @@ void CAIHumanStrategyDodge::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::UpdateAnimation
 //
-//	ROUTINE:	CAIHumanStrategyDodge::UpdateAnimation
-//
-//	PURPOSE:	Handles any pending AnimationContext changes
-//
+//	PURPOSE: Handles any pending AnimationContext changes
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::UpdateAnimation()
@@ -958,11 +906,9 @@ void CAIHumanStrategyDodge::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::UpdateCheck
 //
-//	ROUTINE:	CAIHumanStrategyDodge::UpdateCheck
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::UpdateCheck()
@@ -1006,11 +952,9 @@ void CAIHumanStrategyDodge::UpdateCheck()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::UpdateDodge
 //
-//	ROUTINE:	CAIHumanStrategyDodge::UpdateDodge
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::UpdateDodge()
@@ -1083,11 +1027,9 @@ LTFLOAT CAIHumanStrategyDodge::GetMovementData()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::UpdateDodgeShuffle
 //
-//	ROUTINE:	CAIHumanStrategyDodge::UpdateDodgeShuffle
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::UpdateDodgeShuffle()
@@ -1113,11 +1055,9 @@ void CAIHumanStrategyDodge::UpdateDodgeShuffle()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::UpdateDodgeRoll
 //
-//	ROUTINE:	CAIHumanStrategyDodge::UpdateDodgeRoll
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::UpdateDodgeRoll()
@@ -1143,11 +1083,9 @@ void CAIHumanStrategyDodge::UpdateDodgeRoll()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::UpdateDodgeDive
 //
-//	ROUTINE:	CAIHumanStrategyDodge::UpdateDodgeDive
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::UpdateDodgeDive()
@@ -1155,11 +1093,9 @@ void CAIHumanStrategyDodge::UpdateDodgeDive()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::UpdateDodgeFlee
 //
-//	ROUTINE:	CAIHumanStrategyDodge::UpdateDodgeFlee
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::UpdateDodgeFlee()
@@ -1182,11 +1118,9 @@ void CAIHumanStrategyDodge::UpdateDodgeFlee()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::UpdateDodgeCover
 //
-//	ROUTINE:	CAIHumanStrategyDodge::UpdateDodgeCover
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::UpdateDodgeCover()
@@ -1206,11 +1140,9 @@ void CAIHumanStrategyDodge::UpdateDodgeCover()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCheck::Check
 //
-//	ROUTINE:	CAIHumanStrategyCheck::Check
-//
-//	PURPOSE:	Go back to the checking state (reset all check times)
-//
+//	PURPOSE: Go back to the checking state (reset all check times)
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::Check()
@@ -1221,11 +1153,9 @@ void CAIHumanStrategyDodge::Check()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::Dodge
 //
-//	ROUTINE:	CAIHumanStrategyDodge::Dodge
-//
-//	PURPOSE:	Dodge by doing the current action
-//
+//	PURPOSE: Dodge by doing the current action
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::Dodge()
@@ -1261,11 +1191,9 @@ void CAIHumanStrategyDodge::Dodge()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::Shuffle
 //
-//	ROUTINE:	CAIHumanStrategyDodge::Shuffle
-//
-//	PURPOSE:	Dodge by doing the current action
-//
+//	PURPOSE: Dodge by doing the current action
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::Shuffle()
@@ -1275,11 +1203,9 @@ void CAIHumanStrategyDodge::Shuffle()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::Roll
 //
-//	ROUTINE:	CAIHumanStrategyDodge::Roll
-//
-//	PURPOSE:	Dodge by doing the current action
-//
+//	PURPOSE: Dodge by doing the current action
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::Roll()
@@ -1289,11 +1215,9 @@ void CAIHumanStrategyDodge::Roll()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::Dive
 //
-//	ROUTINE:	CAIHumanStrategyDodge::Dive
-//
-//	PURPOSE:	Dodge by doing the current action
-//
+//	PURPOSE: Dodge by doing the current action
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::Dive()
@@ -1303,11 +1227,9 @@ void CAIHumanStrategyDodge::Dive()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::Dodge
 //
-//	ROUTINE:	CAIHumanStrategyDodge::Dodge
-//
-//	PURPOSE:	Dodge by doing the current action
-//
+//	PURPOSE: Dodge by doing the current action
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::Flee()
@@ -1317,11 +1239,9 @@ void CAIHumanStrategyDodge::Flee()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::Dodge
 //
-//	ROUTINE:	CAIHumanStrategyDodge::Dodge
-//
-//	PURPOSE:	Dodge by doing the current action
-//
+//	PURPOSE: Dodge by doing the current action
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::Cover()
@@ -1331,11 +1251,9 @@ void CAIHumanStrategyDodge::Cover()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::Load
 //
-//	ROUTINE:	CAIHumanStrategyDodge::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::Load(HMESSAGEREAD hRead)
@@ -1354,11 +1272,9 @@ void CAIHumanStrategyDodge::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyDodge::Save
 //
-//	ROUTINE:	CAIHumanStrategyDodge::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyDodge::Save(HMESSAGEREAD hWrite)
@@ -1377,11 +1293,9 @@ void CAIHumanStrategyDodge::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyCover::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover::Constructor()
@@ -1400,11 +1314,9 @@ void CAIHumanStrategyCover::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover::Clear
 //
-//	ROUTINE:	CAIHumanStrategyCover::Clear
-//
-//	PURPOSE:	Resets us to our initial state
-//
+//	PURPOSE: Resets us to our initial state
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover::Clear()
@@ -1421,18 +1333,16 @@ void CAIHumanStrategyCover::Clear()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover::Update
 //
-//	ROUTINE:	CAIHumanStrategyCover::Update
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover::Update()
 {
 	CAIHumanStrategy::Update();
 
-    LTFLOAT fTimeDelta = g_pLTServer->GetFrameTime();
+	LTFLOAT fTimeDelta = g_pLTServer->GetFrameTime();
 
 	switch ( m_eState )
 	{
@@ -1505,11 +1415,9 @@ void CAIHumanStrategyCover::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover::UpdateAnimation
 //
-//	ROUTINE:	CAIHumanStrategyCover::UpdateAnimation
-//
-//	PURPOSE:	Handles any pending AnimationContext changes
-//
+//	PURPOSE: Handles any pending AnimationContext changes
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover::UpdateAnimation()
@@ -1517,11 +1425,9 @@ void CAIHumanStrategyCover::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover::SwitchToCover
 //
-//	ROUTINE:	CAIHumanStrategyCover::SwitchToCover
-//
-//	PURPOSE:	Changes our state to Covered
-//
+//	PURPOSE: Changes our state to Covered
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover::SwitchToCover()
@@ -1540,11 +1446,9 @@ void CAIHumanStrategyCover::SwitchToCover()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover::SwitchToUncover
 //
-//	ROUTINE:	CAIHumanStrategyCover::SwitchToUncover
-//
-//	PURPOSE:	Changes our state to Uncovered
-//
+//	PURPOSE: Changes our state to Uncovered
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover::SwitchToUncover()
@@ -1563,11 +1467,9 @@ void CAIHumanStrategyCover::SwitchToUncover()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover::Cover
 //
-//	ROUTINE:	CAIHumanStrategyCover::Cover
-//
-//	PURPOSE:	Requests that the strategy Covers
-//
+//	PURPOSE: Requests that the strategy Covers
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover::Cover(LTFLOAT fDelay /* = 0.0f */)
@@ -1577,11 +1479,9 @@ void CAIHumanStrategyCover::Cover(LTFLOAT fDelay /* = 0.0f */)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover::Uncover
 //
-//	ROUTINE:	CAIHumanStrategyCover::Uncover
-//
-//	PURPOSE:	Requests that the strategy Uncovers
-//
+//	PURPOSE: Requests that the strategy Uncovers
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover::Uncover(LTFLOAT fDelay /* = 0.0f */)
@@ -1591,11 +1491,9 @@ void CAIHumanStrategyCover::Uncover(LTFLOAT fDelay /* = 0.0f */)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover::Load
 //
-//	ROUTINE:	CAIHumanStrategyCover::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover::Load(HMESSAGEREAD hRead)
@@ -1616,11 +1514,9 @@ void CAIHumanStrategyCover::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover::Save
 //
-//	ROUTINE:	CAIHumanStrategyCover::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover::Save(HMESSAGEREAD hWrite)
@@ -1641,11 +1537,9 @@ void CAIHumanStrategyCover::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCoverDuck::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyCoverDuck::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCoverDuck::Constructor()
@@ -1659,11 +1553,9 @@ void CAIHumanStrategyCoverDuck::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCoverDuck::Update
 //
-//	ROUTINE:	CAIHumanStrategyCoverDuck::Update
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCoverDuck::Update()
@@ -1719,11 +1611,9 @@ void CAIHumanStrategyCoverDuck::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCoverDuck::UpdateAnimation
 //
-//	ROUTINE:	CAIHumanStrategyCoverDuck::UpdateAnimation
-//
-//	PURPOSE:	Handles any pending AnimationContext changes
-//
+//	PURPOSE: Handles any pending AnimationContext changes
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCoverDuck::UpdateAnimation()
@@ -1751,11 +1641,9 @@ void CAIHumanStrategyCoverDuck::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover1WayCorner::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyCover1WayCorner::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover1WayCorner::Constructor()
@@ -1773,11 +1661,9 @@ void CAIHumanStrategyCover1WayCorner::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover1WayCorner::Save
 //
-//	ROUTINE:	CAIHumanStrategyCover1WayCorner::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover1WayCorner::Save(HMESSAGEREAD hWrite)
@@ -1942,11 +1828,9 @@ void CAIHumanStrategyCover1WayCorner::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover1WayCorner::UpdateAnimation
 //
-//	ROUTINE:	CAIHumanStrategyCover1WayCorner::UpdateAnimation
-//
-//	PURPOSE:	Handles any pending AnimationContext changes
-//
+//	PURPOSE: Handles any pending AnimationContext changes
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover1WayCorner::UpdateAnimation()
@@ -1997,11 +1881,9 @@ void CAIHumanStrategyCover1WayCorner::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover2WayCorner::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyCover2WayCorner::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover2WayCorner::Constructor()
@@ -2019,11 +1901,9 @@ void CAIHumanStrategyCover2WayCorner::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover2WayCorner::Save
 //
-//	ROUTINE:	CAIHumanStrategyCover2WayCorner::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover2WayCorner::Save(HMESSAGEREAD hWrite)
@@ -2115,7 +1995,7 @@ void CAIHumanStrategyCover2WayCorner::Update()
 			HOBJECT hTarget = pTarget->GetObject();
 
 			LTVector vTargetPos;
-            g_pLTServer->GetObjectPos(hTarget, &vTargetPos);
+			g_pLTServer->GetObjectPos(hTarget, &vTargetPos);
 
 			LTVector vDir = vTargetPos - m_pCoverNode->GetPos();
 			vDir.Norm();
@@ -2221,11 +2101,9 @@ void CAIHumanStrategyCover2WayCorner::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCover2WayCorner::UpdateAnimation
 //
-//	ROUTINE:	CAIHumanStrategyCover2WayCorner::UpdateAnimation
-//
-//	PURPOSE:	Handles any pending AnimationContext changes
-//
+//	PURPOSE: Handles any pending AnimationContext changes
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCover2WayCorner::UpdateAnimation()
@@ -2276,11 +2154,9 @@ void CAIHumanStrategyCover2WayCorner::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCoverBlind::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyCoverBlind::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCoverBlind::Constructor()
@@ -2294,11 +2170,9 @@ void CAIHumanStrategyCoverBlind::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCoverBlind::Update
 //
-//	ROUTINE:	CAIHumanStrategyCoverBlind::Update
-//
-//	PURPOSE:	Updates the Strategy
-//
+//	PURPOSE: Updates the Strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCoverBlind::Update()
@@ -2354,11 +2228,9 @@ void CAIHumanStrategyCoverBlind::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyCoverBlind::UpdateAnimation
 //
-//	ROUTINE:	CAIHumanStrategyCoverBlind::UpdateAnimation
-//
-//	PURPOSE:	Handles any pending AnimationContext changes
-//
+//	PURPOSE: Handles any pending AnimationContext changes
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyCoverBlind::UpdateAnimation()
@@ -2386,11 +2258,9 @@ void CAIHumanStrategyCoverBlind::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyGrenade::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyGrenade::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyGrenade::Constructor()
@@ -2415,11 +2285,9 @@ CAIHumanStrategyGrenade* CAIHumanStrategyGrenade::Create(AIHumanStrategyType eTy
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyGrenadeThrow::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyGrenadeThrow::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyGrenadeThrow::Constructor()
@@ -2436,11 +2304,9 @@ void CAIHumanStrategyGrenadeThrow::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyGrenadeThrow::HandleModelString
 //
-//	ROUTINE:	CAIHumanStrategyGrenadeThrow::HandleModelString
-//
-//	PURPOSE:	Handles getting a model key string
-//
+//	PURPOSE: Handles getting a model key string
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyGrenadeThrow::HandleModelString(ArgList* pArgList)
@@ -2463,11 +2329,9 @@ void CAIHumanStrategyGrenadeThrow::HandleModelString(ArgList* pArgList)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyGrenadeThrow::Update
 //
-//	ROUTINE:	CAIHumanStrategyGrenadeThrow::Update
-//
-//	PURPOSE:	Updates our state
-//
+//	PURPOSE: Updates our state
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyGrenadeThrow::Update()
@@ -2517,7 +2381,7 @@ void CAIHumanStrategyGrenadeThrow::Update()
 		LTVector vGravity;
 		g_pPhysicsLT->GetGlobalForce(vGravity);
 
-		// Vo = (S - R - 1/2*G*t^2) / t         Vo = initial velocity, S = destination, R = origin, G = gravity, t = hangtime
+		// Vo = (S - R - 1/2*G*t^2) / t		 Vo = initial velocity, S = destination, R = origin, G = gravity, t = hangtime
 
 		LTVector vVelocity = (vTargetPos - vFirePos - vGravity*.5f*m_fHangtime*m_fHangtime)/m_fHangtime;
 		LTFLOAT fVelocity = vVelocity.Mag();
@@ -2545,11 +2409,9 @@ void CAIHumanStrategyGrenadeThrow::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyGrenadeThrow::UpdateAnimation
 //
-//	ROUTINE:	CAIHumanStrategyGrenadeThrow::UpdateAnimation
-//
-//	PURPOSE:	Handles any pending animator changes
-//
+//	PURPOSE: Handles any pending animator changes
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyGrenadeThrow::UpdateAnimation()
@@ -2562,11 +2424,9 @@ void CAIHumanStrategyGrenadeThrow::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyGrenadeThrow::*Throw*
 //
-//	ROUTINE:	CAIHumanStrategyGrenadeThrow::*Throw*
-//
-//	PURPOSE:	Throwing related methods
-//
+//	PURPOSE: Throwing related methods
 // ----------------------------------------------------------------------- //
 	
 void CAIHumanStrategyGrenadeThrow::Throw(LTFLOAT fTime /*= 0.5f*/)
@@ -2591,11 +2451,9 @@ LTBOOL CAIHumanStrategyGrenadeThrow::IsThrowing()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyGrenadeThrow::Load
 //
-//	ROUTINE:	CAIHumanStrategyGrenadeThrow::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyGrenadeThrow::Load(HMESSAGEREAD hRead)
@@ -2607,11 +2465,9 @@ void CAIHumanStrategyGrenadeThrow::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyGrenadeThrow::Save
 //
-//	ROUTINE:	CAIHumanStrategyGrenadeThrow::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyGrenadeThrow::Save(HMESSAGEREAD hWrite)
@@ -2623,11 +2479,9 @@ void CAIHumanStrategyGrenadeThrow::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyShoot::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::Constructor()
@@ -2648,11 +2502,9 @@ void CAIHumanStrategyShoot::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::Reload
 //
-//	ROUTINE:	CAIHumanStrategyShoot::Reload
-//
-//	PURPOSE:	Reloads our weapon
-//
+//	PURPOSE: Reloads our weapon
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::Reload(LTBOOL bInstant /* = LTFALSE */)
@@ -2673,11 +2525,9 @@ void CAIHumanStrategyShoot::Reload(LTBOOL bInstant /* = LTFALSE */)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::HandleModelString
 //
-//	ROUTINE:	CAIHumanStrategyShoot::HandleModelString
-//
-//	PURPOSE:	Handles getting a model key string
-//
+//	PURPOSE: Handles getting a model key string
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::HandleModelString(ArgList* pArgList)
@@ -2694,11 +2544,9 @@ void CAIHumanStrategyShoot::HandleModelString(ArgList* pArgList)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::HandleFired
 //
-//	ROUTINE:	CAIHumanStrategyShoot::HandleFired
-//
-//	PURPOSE:	Handle the fire key
-//
+//	PURPOSE: Handle the fire key
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::HandleFired()
@@ -2707,17 +2555,15 @@ void CAIHumanStrategyShoot::HandleFired()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::Update
 //
-//	ROUTINE:	CAIHumanStrategyShoot::Update
-//
-//	PURPOSE:	Updates the Strategy
+//	PURPOSE: Updates the Strategy
 //
 //	NOTES:		This is NOT a virtual function. Derived shooting strategies
 //				should implement UpdateFiring/UpdateAiming().
 //
 //  NOTES:		If hTarget is supplied, that means we're firing at a prop or
 //				something. If it's not, it means to use the AI's target.
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::Update(HOBJECT hTarget /* = LTNULL */)
@@ -2763,7 +2609,7 @@ void CAIHumanStrategyShoot::Update(HOBJECT hTarget /* = LTNULL */)
 				// Get the target's dims
 
 				LTVector vTargetDims;
-                g_pLTServer->GetObjectDims(hTarget, &vTargetDims);
+				g_pLTServer->GetObjectDims(hTarget, &vTargetDims);
 
 				// Shoot halfway between torso and head
 
@@ -2771,7 +2617,7 @@ void CAIHumanStrategyShoot::Update(HOBJECT hTarget /* = LTNULL */)
 			}
 			else
 			{
-                g_pLTServer->GetObjectPos(hTarget, &vTargetPos);
+				g_pLTServer->GetObjectPos(hTarget, &vTargetPos);
 			}
 
 			UpdateFiring(hTarget, vTargetPos, pWeapon);
@@ -2796,11 +2642,9 @@ void CAIHumanStrategyShoot::Update(HOBJECT hTarget /* = LTNULL */)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::UpdateAnimation
 //
-//	ROUTINE:	CAIHumanStrategyShoot::UpdateAnimation
-//
-//	PURPOSE:	Handles any pending AnimationContext changes
-//
+//	PURPOSE: Handles any pending AnimationContext changes
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::UpdateAnimation()
@@ -2848,11 +2692,9 @@ void CAIHumanStrategyShoot::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::UpdateReloading
 //
-//	ROUTINE:	CAIHumanStrategyShoot::UpdateReloading
-//
-//	PURPOSE:	Update our reloading
-//
+//	PURPOSE: Update our reloading
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::UpdateReloading(CWeapon* pWeapon)
@@ -2864,11 +2706,9 @@ void CAIHumanStrategyShoot::UpdateReloading(CWeapon* pWeapon)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::UpdateNeedsReload
 //
-//	ROUTINE:	CAIHumanStrategyShoot::UpdateNeedsReload
-//
-//	PURPOSE:	Update whether or not we need to reload
-//
+//	PURPOSE: Update whether or not we need to reload
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::UpdateNeedsReload(CWeapon* pWeapon)
@@ -2894,11 +2734,9 @@ void CAIHumanStrategyShoot::UpdateNeedsReload(CWeapon* pWeapon)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::Aim
 //
-//	ROUTINE:	CAIHumanStrategyShoot::Aim
-//
-//	PURPOSE:	Makes us Aim
-//
+//	PURPOSE: Makes us Aim
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::Aim()
@@ -2907,11 +2745,9 @@ void CAIHumanStrategyShoot::Aim()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::Fire
 //
-//	ROUTINE:	CAIHumanStrategyShoot::Fire
-//
-//	PURPOSE:	Makes us fire
-//
+//	PURPOSE: Makes us fire
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::Fire()
@@ -2920,11 +2756,9 @@ void CAIHumanStrategyShoot::Fire()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::Load
 //
-//	ROUTINE:	CAIHumanStrategyShoot::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::Load(HMESSAGEREAD hRead)
@@ -2940,11 +2774,9 @@ void CAIHumanStrategyShoot::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShoot::Save
 //
-//	ROUTINE:	CAIHumanStrategyShoot::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShoot::Save(HMESSAGEREAD hWrite)
@@ -2960,11 +2792,9 @@ void CAIHumanStrategyShoot::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShootBurst::Constructor
 //
-//	ROUTINE:	CAIHumanStrategyShootBurst::Constructor
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShootBurst::Constructor()
@@ -2977,11 +2807,9 @@ void CAIHumanStrategyShootBurst::Constructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShootBurst::Destructor
 //
-//	ROUTINE:	CAIHumanStrategyShootBurst::Destructor
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShootBurst::Destructor()
@@ -2990,11 +2818,9 @@ void CAIHumanStrategyShootBurst::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShootBurst::Init
 //
-//	ROUTINE:	CAIHumanStrategyShootBurst::Init
-//
-//	PURPOSE:	Initializes the Strategy
-//
+//	PURPOSE: Initializes the Strategy
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHumanStrategyShootBurst::Init(CAIHuman* pAIHuman)
@@ -3024,11 +2850,9 @@ LTBOOL CAIHumanStrategyShootBurst::Init(CAIHuman* pAIHuman)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShootBurst::HandleFired
 //
-//	ROUTINE:	CAIHumanStrategyShootBurst::HandleFired
-//
-//	PURPOSE:	Handle the fire key
-//
+//	PURPOSE: Handle the fire key
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShootBurst::HandleFired()
@@ -3039,11 +2863,9 @@ void CAIHumanStrategyShootBurst::HandleFired()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShootBurst::Load
 //
-//	ROUTINE:	CAIHumanStrategyShootBurst::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShootBurst::Load(HMESSAGEREAD hRead)
@@ -3055,11 +2877,9 @@ void CAIHumanStrategyShootBurst::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShootBurst::Save
 //
-//	ROUTINE:	CAIHumanStrategyShootBurst::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShootBurst::Save(HMESSAGEREAD hWrite)
@@ -3071,11 +2891,9 @@ void CAIHumanStrategyShootBurst::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShootBurst::UpdateFiring
 //
-//	ROUTINE:	CAIHumanStrategyShootBurst::UpdateFiring
-//
-//	PURPOSE:	Handles firing
-//
+//	PURPOSE: Handles firing
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShootBurst::UpdateFiring(HOBJECT hTarget, const LTVector& vTargetPos, CWeapon* pWeapon)
@@ -3129,11 +2947,9 @@ void CAIHumanStrategyShootBurst::UpdateFiring(HOBJECT hTarget, const LTVector& v
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShootBurst::CalculateBurst
 //
-//	ROUTINE:	CAIHumanStrategyShootBurst::CalculateBurst
-//
-//	PURPOSE:	Calculate all our burst parameters
-//
+//	PURPOSE: Calculate all our burst parameters
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShootBurst::CalculateBurst()
@@ -3153,11 +2969,9 @@ void CAIHumanStrategyShootBurst::CalculateBurst()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShootBurst::UpdateAiming
 //
-//	ROUTINE:	CAIHumanStrategyShootBurst::UpdateAiming
-//
-//	PURPOSE:	Handles Aiming
-//
+//	PURPOSE: Handles Aiming
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShootBurst::UpdateAiming(HOBJECT hTarget)
@@ -3172,7 +2986,7 @@ void CAIHumanStrategyShootBurst::UpdateAiming(HOBJECT hTarget)
 	{
 		// We are still waiting to fire.
 
-        m_fBurstInterval -= g_pLTServer->GetFrameTime();
+		m_fBurstInterval -= g_pLTServer->GetFrameTime();
 
 		// So just aim.
 
@@ -3209,11 +3023,9 @@ void CAIHumanStrategyShootBurst::UpdateAiming(HOBJECT hTarget)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShootBurstBlind::Constructor
 //
-//	ROUTINE:	CAIHumanStrategyShootBurstBlind::Constructor
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShootBurstBlind::Constructor()
@@ -3222,11 +3034,9 @@ void CAIHumanStrategyShootBurstBlind::Constructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyShootBurstBlind::Destructor
 //
-//	ROUTINE:	CAIHumanStrategyShootBurstBlind::Destructor
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyShootBurstBlind::Destructor()
@@ -3235,11 +3045,9 @@ void CAIHumanStrategyShootBurstBlind::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFlashlight::Constructor/Destructor
 //
-//	ROUTINE:	CAIHumanStrategyFlashlight::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFlashlight::Constructor()
@@ -3259,11 +3067,9 @@ void CAIHumanStrategyFlashlight::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFlashlight::Flashlight*
 //
-//	ROUTINE:	CAIHumanStrategyFlashlight::Flashlight*
-//
-//	PURPOSE:	Helpers for flashlight operations
-//
+//	PURPOSE: Helpers for flashlight operations
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFlashlight::FlashlightShow()
@@ -3345,11 +3151,9 @@ void CAIHumanStrategyFlashlight::FlashlightDestroy()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFlashlight::HandleBrokenLink
 //
-//	ROUTINE:	CAIHumanStrategyFlashlight::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFlashlight::HandleBrokenLink(HOBJECT hObject)
@@ -3375,11 +3179,9 @@ void CAIHumanStrategyFlashlight::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFlashlight::HandleModelString
 //
-//	ROUTINE:	CAIHumanStrategyFlashlight::HandleModelString
-//
-//	PURPOSE:	Handles getting a model key string
-//
+//	PURPOSE: Handles getting a model key string
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFlashlight::HandleModelString(ArgList* pArgList)
@@ -3418,11 +3220,9 @@ void CAIHumanStrategyFlashlight::HandleModelString(ArgList* pArgList)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFlashlight::Load
 //
-//	ROUTINE:	CAIHumanStrategyFlashlight::Load
-//
-//	PURPOSE:	Restores the strategy
-//
+//	PURPOSE: Restores the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFlashlight::Load(HMESSAGEREAD hRead)
@@ -3433,11 +3233,9 @@ void CAIHumanStrategyFlashlight::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHumanStrategyFlashlight::Save
 //
-//	ROUTINE:	CAIHumanStrategyFlashlight::Save
-//
-//	PURPOSE:	Saves the strategy
-//
+//	PURPOSE: Saves the strategy
 // ----------------------------------------------------------------------- //
 
 void CAIHumanStrategyFlashlight::Save(HMESSAGEREAD hWrite)

@@ -11,25 +11,21 @@ BEGIN_CLASS(CAIAnimal)
 END_CLASS_DEFAULT_FLAGS_PLUGIN(CAIAnimal, CAI, NULL, NULL, CF_HIDDEN, CAIAnimalPlugin)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIAnimal::CAIAnimal()
 //
-//	ROUTINE:	CAIAnimal::CAIAnimal()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CAIAnimal::CAIAnimal() : CAI()
 {
-    m_pAnimalState = LTNULL;
+	m_pAnimalState = LTNULL;
 	m_pAnimator = &m_Animator;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIAnimal::~CAIAnimal()
 //
-//	ROUTINE:	CAIAnimal::~CAIAnimal()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CAIAnimal::~CAIAnimal()
@@ -37,17 +33,15 @@ CAIAnimal::~CAIAnimal()
 	if ( m_pAnimalState )
 	{
 		FACTORY_DELETE(m_pAnimalState);
-        m_pAnimalState = LTNULL;
-        m_pState = LTNULL;
+		m_pAnimalState = LTNULL;
+		m_pState = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIAnimal::CreateAttachments
 //
-//	ROUTINE:	CAIAnimal::CreateAttachments
-//
-//	PURPOSE:	Creates our attachments aggregate
-//
+//	PURPOSE: Creates our attachments aggregate
 // ----------------------------------------------------------------------- //
 
 void CAIAnimal::CreateAttachments()
@@ -59,11 +53,9 @@ void CAIAnimal::CreateAttachments()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIAnimal::GetDeathAni()
 //
-//	ROUTINE:	CAIAnimal::GetDeathAni()
-//
-//	PURPOSE:	Get the death animation
-//
+//	PURPOSE: Get the death animation
 // ----------------------------------------------------------------------- //
 
 HMODELANIM CAIAnimal::GetDeathAni(LTBOOL bFront)

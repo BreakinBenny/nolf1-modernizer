@@ -36,36 +36,32 @@ const static char s_szMessageAdd[] = "ADD ";
 const static int s_nMessageAddLen = strlen(s_szMessageAdd);
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::AIGroup()
 //
-//	ROUTINE:	AIGroup::AIGroup()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 AIGroup::AIGroup() : BaseClass()
 {
-    m_hstrName = LTNULL;
+	m_hstrName = LTNULL;
 
 	{for ( int iMember = 0 ; iMember < kMaxMembers ; iMember++ )
 	{
-        m_ahstrMembers[iMember] = LTNULL;
-        m_ahMembers[iMember] = LTNULL;
+		m_ahstrMembers[iMember] = LTNULL;
+		m_ahMembers[iMember] = LTNULL;
 	}}
 
 	m_cMembers = 0;
 
-    m_bFirstUpdate = LTTRUE;
+	m_bFirstUpdate = LTTRUE;
 
 	m_pAISenseRecorder = FACTORY_NEW(CAISenseRecorder);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::~AIGroup()
 //
-//	ROUTINE:	AIGroup::~AIGroup()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 AIGroup::~AIGroup()
@@ -79,7 +75,7 @@ AIGroup::~AIGroup()
 		if ( m_ahMembers[iMember] )
 		{
 			Unlink(m_ahMembers[iMember]);
-            m_ahMembers[iMember] = LTNULL;
+			m_ahMembers[iMember] = LTNULL;
 		}
 	}
 
@@ -87,11 +83,9 @@ AIGroup::~AIGroup()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::Save
 //
-//	ROUTINE:	AIGroup::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void AIGroup::Save(HMESSAGEWRITE hWrite)
@@ -113,11 +107,9 @@ void AIGroup::Save(HMESSAGEWRITE hWrite)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::Load
 //
-//	ROUTINE:	AIGroup::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void AIGroup::Load(HMESSAGEREAD hRead)
@@ -135,7 +127,7 @@ void AIGroup::Load(HMESSAGEREAD hRead)
 
 		if ( m_ahMembers[iMember] )
 		{
-            CAI* pAI = (CAI*)g_pLTServer->HandleToObject(m_ahMembers[iMember]);
+			CAI* pAI = (CAI*)g_pLTServer->HandleToObject(m_ahMembers[iMember]);
 			pAI->SetGroup(this);
 		}
 	}}
@@ -144,11 +136,9 @@ void AIGroup::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::EngineMessageFn
 //
-//	ROUTINE:	AIGroup::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 AIGroup::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -157,7 +147,7 @@ uint32 AIGroup::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 	{
 		case MID_INITIALUPDATE:
 		{
-            g_pLTServer->SetNextUpdate(m_hObject, c_fUpdateDelta);
+			g_pLTServer->SetNextUpdate(m_hObject, c_fUpdateDelta);
 		}
 		break;
 
@@ -165,7 +155,7 @@ uint32 AIGroup::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 		{
 			Update();
 
-            g_pLTServer->SetNextUpdate(m_hObject, c_fUpdateDelta);
+			g_pLTServer->SetNextUpdate(m_hObject, c_fUpdateDelta);
 		}
 		break;
 
@@ -201,11 +191,9 @@ uint32 AIGroup::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::HandleBrokenLink
 //
-//	ROUTINE:	AIGroup::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to a member or threat being broken
-//
+//	PURPOSE: Handles a link to a member or threat being broken
 // ----------------------------------------------------------------------- //
 
 void AIGroup::HandleBrokenLink(HOBJECT hObject)
@@ -218,18 +206,16 @@ void AIGroup::HandleBrokenLink(HOBJECT hObject)
 		{
 			// This member is going away
 
-            m_ahMembers[iMember] = LTNULL;
+			m_ahMembers[iMember] = LTNULL;
 			m_cMembers--;
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::HandleSense
 //
-//	ROUTINE:	AIGroup::HandleSense
-//
-//	PURPOSE:	Handles being told about a sense by an AI
-//
+//	PURPOSE: Handles being told about a sense by an AI
 // ----------------------------------------------------------------------- //
 
 void AIGroup::HandleSense(CAI* pAI, CAISense* pAISense)
@@ -244,7 +230,7 @@ void AIGroup::HandleSense(CAI* pAI, CAISense* pAISense)
 
 		for ( int iMember = 0 ; iMember < kMaxMembers ; iMember++ )
 		{
-            CAI* pAIMember = m_ahMembers[iMember] ? (CAI*)g_pLTServer->HandleToObject(m_ahMembers[iMember]) : LTNULL;
+			CAI* pAIMember = m_ahMembers[iMember] ? (CAI*)g_pLTServer->HandleToObject(m_ahMembers[iMember]) : LTNULL;
 
 			if ( !pAIMember )
 			{
@@ -255,13 +241,13 @@ void AIGroup::HandleSense(CAI* pAI, CAISense* pAISense)
 				// If it's the AI telling us about it, he can do his individual reaction.
 
 				HSTRING hstrReaction = pAIMember->GetIndividualSenseReaction(pAISense);
-                const char* szReaction = g_pLTServer->GetStringData(hstrReaction);
+				const char* szReaction = g_pLTServer->GetStringData(hstrReaction);
 
 #ifndef _FINAL
-                g_pLTServer->CPrint("%s doing individual reaction \"%s\" to %s", g_pLTServer->GetStringData(m_ahstrMembers[iMember]), szReaction, pAISense->GetName());
+				g_pLTServer->CPrint("%s doing individual reaction \"%s\" to %s", g_pLTServer->GetStringData(m_ahstrMembers[iMember]), szReaction, pAISense->GetName());
 #endif
 
-                pAIMember->DoReaction(hstrReaction, pAISense, LTTRUE);
+				pAIMember->DoReaction(hstrReaction, pAISense, LTTRUE);
 			}
 			else
 			{
@@ -272,24 +258,22 @@ void AIGroup::HandleSense(CAI* pAI, CAISense* pAISense)
 				// Otherwise, the AI should do his group reaction.
 
 				HSTRING hstrReaction = pAIMember->GetGroupSenseReaction(pAISense);
-                const char* szReaction = g_pLTServer->GetStringData(hstrReaction);
+				const char* szReaction = g_pLTServer->GetStringData(hstrReaction);
 
 #ifndef _FINAL
-                g_pLTServer->CPrint("%s doing group reaction \"%s\" to %s", g_pLTServer->GetStringData(m_ahstrMembers[iMember]), szReaction, pAISense->GetName());
+				g_pLTServer->CPrint("%s doing group reaction \"%s\" to %s", g_pLTServer->GetStringData(m_ahstrMembers[iMember]), szReaction, pAISense->GetName());
 #endif
 
-                pAIMember->DoReaction(hstrReaction, pAISense, LTFALSE);
+				pAIMember->DoReaction(hstrReaction, pAISense, LTFALSE);
 			}
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::ObjectMessageFn
 //
-//	ROUTINE:	AIGroup::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 AIGroup::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -298,7 +282,7 @@ uint32 AIGroup::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD 
 	{
 		case MID_TRIGGER:
 		{
-            const char* szMessage = (const char*)g_pLTServer->ReadFromMessageDWord(hRead);
+			const char* szMessage = (const char*)g_pLTServer->ReadFromMessageDWord(hRead);
 			TriggerMsg(hSender, szMessage);
 		}
 		break;
@@ -308,11 +292,9 @@ uint32 AIGroup::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD 
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::TriggerMsg()
 //
-//	ROUTINE:	AIGroup::TriggerMsg()
-//
-//	PURPOSE:	Handler for AIGroup trigger messages.
-//
+//	PURPOSE: Handler for AIGroup trigger messages.
 // --------------------------------------------------------------------------- //
 
 void AIGroup::TriggerMsg(HOBJECT hSender, const char* szMessage)
@@ -329,7 +311,7 @@ void AIGroup::TriggerMsg(HOBJECT hSender, const char* szMessage)
 			if ( !IsKindOf(hObject, "CAI") ) return;
 			if ( kMaxMembers == m_cMembers ) return;
 
-            CAI* pAI = (CAI*)g_pLTServer->HandleToObject(hObject);
+			CAI* pAI = (CAI*)g_pLTServer->HandleToObject(hObject);
 			pAI->SetGroup(this);
 
 			m_ahMembers[m_cMembers++] = pAI->GetObject();
@@ -339,16 +321,14 @@ void AIGroup::TriggerMsg(HOBJECT hSender, const char* szMessage)
 	else if ( !_stricmp(szMessage, s_szMessageRemove) )
 	{
 		SendMessageToAllMembers(s_szMessageRemove);
-        g_pLTServer->RemoveObject(m_hObject);
+		g_pLTServer->RemoveObject(m_hObject);
 	}
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::SendMessageToAllMembers()
 //
-//	ROUTINE:	AIGroup::SendMessageToAllMembers()
-//
-//	PURPOSE:	Sends a messsage to all group members
-//
+//	PURPOSE: Sends a messsage to all group members
 // --------------------------------------------------------------------------- //
 
 void AIGroup::SendMessageToAllMembers(const char* szMessage)
@@ -363,11 +343,9 @@ void AIGroup::SendMessageToAllMembers(const char* szMessage)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::SendMessageToMember()
 //
-//	ROUTINE:	AIGroup::SendMessageToMember()
-//
-//	PURPOSE:	Sends a messsage to a group member
-//
+//	PURPOSE: Sends a messsage to a group member
 // --------------------------------------------------------------------------- //
 
 void AIGroup::SendMessageToMember(const char* szMessage, HOBJECT hMember)
@@ -378,42 +356,38 @@ void AIGroup::SendMessageToMember(const char* szMessage, HOBJECT hMember)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::ReadProp
 //
-//	ROUTINE:	AIGroup::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL AIGroup::ReadProp(ObjectCreateStruct *pInfo)
 {
-    if (!pInfo) return LTFALSE;
+	if (!pInfo) return LTFALSE;
 
 	GenericProp genProp;
 
-    if ( g_pLTServer->GetPropGeneric( "Name", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Name", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrName = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrName = g_pLTServer->CreateString( genProp.m_String );
 
 	{for ( int iMember = 0 ; iMember < kMaxMembers ; iMember++ )
 	{
 		char szProp[64];
 		sprintf(szProp, "Member%d", iMember+1);
 
-        if ( g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK )
+		if ( g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK )
 			if ( genProp.m_String[0] )
-                m_ahstrMembers[iMember] = g_pLTServer->CreateString( genProp.m_String );
+				m_ahstrMembers[iMember] = g_pLTServer->CreateString( genProp.m_String );
 	}}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::FirstUpdate()
 //
-//	ROUTINE:	AIGroup::FirstUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 void AIGroup::FirstUpdate()
@@ -434,7 +408,7 @@ void AIGroup::FirstUpdate()
 					continue;
 				}
 
-                CAI* pAI = (CAI*)g_pLTServer->HandleToObject(hObject);
+				CAI* pAI = (CAI*)g_pLTServer->HandleToObject(hObject);
 				pAI->SetGroup(this);
 
 				if ( bFirst )
@@ -458,11 +432,9 @@ void AIGroup::FirstUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIGroup::Update()
 //
-//	ROUTINE:	AIGroup::Update()
-//
-//	PURPOSE:	Update
-//
+//	PURPOSE: Update
 // ----------------------------------------------------------------------- //
 
 void AIGroup::Update()
@@ -470,7 +442,7 @@ void AIGroup::Update()
 	if ( m_bFirstUpdate )
 	{
 		FirstUpdate();
-        m_bFirstUpdate = LTFALSE;
+		m_bFirstUpdate = LTFALSE;
 	}
 
 	m_pAISenseRecorder->Update();

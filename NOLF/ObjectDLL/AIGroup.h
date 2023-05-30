@@ -32,8 +32,8 @@ class AIGroup : public BaseClass
 
 		// Engine functions
 
-        uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
-        uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 	protected :
 
@@ -46,8 +46,8 @@ class AIGroup : public BaseClass
 
 		void TriggerMsg(HOBJECT hSender, const char* szMessage);
 
-        LTBOOL ReadProp(ObjectCreateStruct *pData);
-        LTBOOL Setup(ObjectCreateStruct *pData);
+		LTBOOL ReadProp(ObjectCreateStruct *pData);
+		LTBOOL Setup(ObjectCreateStruct *pData);
 
 		void FirstUpdate();
 		void Update();
@@ -57,8 +57,8 @@ class AIGroup : public BaseClass
 
 		// Object linking helpers
 
-        void Link(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->CreateInterObjectLink(m_hObject, hObject); }
-        void Unlink(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->BreakInterObjectLink(m_hObject, hObject); }
+		void Link(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->CreateInterObjectLink(m_hObject, hObject); }
+		void Unlink(HOBJECT hObject) { if ( g_pLTServer && hObject ) g_pLTServer->BreakInterObjectLink(m_hObject, hObject); }
 
 	protected : // Protected member variables
 
@@ -78,7 +78,7 @@ class AIGroup : public BaseClass
 
 		// Misc
 
-        LTBOOL           m_bFirstUpdate;                 // First update flag. DO NOT SAVE
+		LTBOOL		   m_bFirstUpdate;				 // First update flag. DO NOT SAVE
 };
 
 #endif // __AIGROUP_H__

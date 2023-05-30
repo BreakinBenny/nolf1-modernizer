@@ -32,18 +32,16 @@ IMPLEMENT_FACTORY(CAISharkStateMaul, 0)
 IMPLEMENT_FACTORY(CAISharkStateWait, 0)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIAnimalState::Constructor/Destructor
 //
-//	ROUTINE:	CAIAnimalState::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIAnimalState::Constructor()
 {
 	super::Constructor();
 
-    m_pAIAnimal = LTNULL;
+	m_pAIAnimal = LTNULL;
 }
 
 void CAIAnimalState::Destructor()
@@ -52,40 +50,36 @@ void CAIAnimalState::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIAnimalState::Init
 //
-//	ROUTINE:	CAIAnimalState::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIAnimalState::Init(CAIAnimal* pAIAnimal)
 {
 	if ( !super::Init(pAIAnimal) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pAIAnimal = pAIAnimal;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogState::Constructor/Destructor
 //
-//	ROUTINE:	CAIDogState::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIDogState::Constructor()
 {
 	super::Constructor();
 
-    m_pAIDog = LTNULL;
-    m_pStrategyFollowPath = LTNULL;
-    m_pStrategyOneShotAni = LTNULL;
+	m_pAIDog = LTNULL;
+	m_pStrategyFollowPath = LTNULL;
+	m_pStrategyOneShotAni = LTNULL;
 }
 
 void CAIDogState::Destructor()
@@ -94,31 +88,27 @@ void CAIDogState::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogState::Init
 //
-//	ROUTINE:	CAIDogState::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIDogState::Init(AI_Dog* pAIDog)
 {
 	if ( !super::Init(pAIDog) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pAIDog = pAIDog;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogState::HandleBrokenLink
 //
-//	ROUTINE:	CAIDogState::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAIDogState::HandleBrokenLink(HOBJECT hObject)
@@ -132,11 +122,9 @@ void CAIDogState::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogState::UpdateSenses
 //
-//	ROUTINE:	CAIDogState::UpdateSenses
-//
-//	PURPOSE:	Updates the AIs senses
-//
+//	PURPOSE: Updates the AIs senses
 // ----------------------------------------------------------------------- //
 
 void CAIDogState::UpdateSenses()
@@ -164,11 +152,9 @@ void CAIDogState::UpdateSenses()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateIdle::Constructor/Destructor
 //
-//	ROUTINE:	CAIDogStateIdle::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateIdle::Constructor()
@@ -184,11 +170,9 @@ void CAIDogStateIdle::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateIdle::Load
 //
-//	ROUTINE:	CAIDogStateIdle::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateIdle::Load(HMESSAGEREAD hRead)
@@ -199,11 +183,9 @@ void CAIDogStateIdle::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateIdle::Save
 //
-//	ROUTINE:	CAIDogStateIdle::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateIdle::Save(HMESSAGEREAD hWrite)
@@ -214,11 +196,9 @@ void CAIDogStateIdle::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateIdle::Update
 //
-//	ROUTINE:	CAIDogStateIdle::Update
-//
-//	PURPOSE:	Updates the state
-//
+//	PURPOSE: Updates the state
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateIdle::Update()
@@ -229,11 +209,9 @@ void CAIDogStateIdle::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateIdle::HandleNameValuePair
 //
-//	ROUTINE:	CAIDogStateIdle::HandleNameValuePair
-//
-//	PURPOSE:	Handles getting a name/value pair
-//
+//	PURPOSE: Handles getting a name/value pair
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateIdle::HandleNameValuePair(char *szName, char *szValue)
@@ -258,11 +236,9 @@ void CAIDogStateIdle::HandleNameValuePair(char *szName, char *szValue)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateBark::Constructor/Destructor
 //
-//	ROUTINE:	CAIDogStateBark::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateBark::Constructor()
@@ -287,41 +263,37 @@ void CAIDogStateBark::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateBark::Init
 //
-//	ROUTINE:	CAIDogStateBark::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIDogStateBark::Init(AI_Dog* pAIDog)
 {
 	if ( !super::Init(pAIDog) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_pStrategyFollowPath->Init(pAIDog) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_pStrategyOneShotAni->Init(pAIDog) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pStrategyFollowPath->SetMovement(CAnimatorAIAnimal::eRunning);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateBark::Update
 //
-//	ROUTINE:	CAIDogStateBark::Update
-//
-//	PURPOSE:	Updates the state
-//
+//	PURPOSE: Updates the state
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateBark::Update()
@@ -462,11 +434,9 @@ Error:
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateBark::Load
 //
-//	ROUTINE:	CAIDogStateBark::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateBark::Load(HMESSAGEREAD hRead)
@@ -482,11 +452,9 @@ void CAIDogStateBark::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateBark::Save
 //
-//	ROUTINE:	CAIDogStateBark::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateBark::Save(HMESSAGEREAD hWrite)
@@ -502,11 +470,9 @@ void CAIDogStateBark::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateBark::GetDeathAni
 //
-//	ROUTINE:	CAIDogStateBark::GetDeathAni
-//
-//	PURPOSE:	Gets our death ani
-//
+//	PURPOSE: Gets our death ani
 // ----------------------------------------------------------------------- //
 
 HMODELANIM CAIDogStateBark::GetDeathAni(LTBOOL bFront)
@@ -521,11 +487,9 @@ HMODELANIM CAIDogStateBark::GetDeathAni(LTBOOL bFront)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateExcited::Constructor/Destructor
 //
-//	ROUTINE:	CAIDogStateExcited::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateExcited::Constructor()
@@ -539,11 +503,9 @@ void CAIDogStateExcited::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateExcited::Update
 //
-//	ROUTINE:	CAIDogStateExcited::Update
-//
-//	PURPOSE:	Updates the state
-//
+//	PURPOSE: Updates the state
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateExcited::Update()
@@ -552,11 +514,9 @@ void CAIDogStateExcited::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateHeat::Constructor/Destructor
 //
-//	ROUTINE:	CAIDogStateHeat::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateHeat::Constructor()
@@ -572,31 +532,27 @@ void CAIDogStateHeat::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateHeat::Init
 //
-//	ROUTINE:	CAIDogStateHeat::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIDogStateHeat::Init(AI_Dog* pAIDog)
 {
 	if ( !super::Init(pAIDog) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	GetAI()->CreateHearts();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIDogStateHeat::Update
 //
-//	ROUTINE:	CAIDogStateHeat::Update
-//
-//	PURPOSE:	Updates the state
-//
+//	PURPOSE: Updates the state
 // ----------------------------------------------------------------------- //
 
 void CAIDogStateHeat::Update()
@@ -607,19 +563,17 @@ void CAIDogStateHeat::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleState::Constructor/Destructor
 //
-//	ROUTINE:	CAIPoodleState::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleState::Constructor()
 {
 	super::Constructor();
 
-    m_pAIPoodle = LTNULL;
-    m_pStrategyFollowPath = LTNULL;
+	m_pAIPoodle = LTNULL;
+	m_pStrategyFollowPath = LTNULL;
 }
 
 void CAIPoodleState::Destructor()
@@ -628,31 +582,27 @@ void CAIPoodleState::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleState::Init
 //
-//	ROUTINE:	CAIPoodleState::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIPoodleState::Init(AI_Poodle* pAIPoodle)
 {
 	if ( !super::Init(pAIPoodle) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pAIPoodle = pAIPoodle;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleState::HandleBrokenLink
 //
-//	ROUTINE:	CAIPoodleState::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleState::HandleBrokenLink(HOBJECT hObject)
@@ -666,11 +616,9 @@ void CAIPoodleState::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleState::UpdateSenses
 //
-//	ROUTINE:	CAIPoodleState::UpdateSenses
-//
-//	PURPOSE:	Updates the AIs senses
-//
+//	PURPOSE: Updates the AIs senses
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleState::UpdateSenses()
@@ -679,11 +627,9 @@ void CAIPoodleState::UpdateSenses()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateSeduce::Constructor/Destructor
 //
-//	ROUTINE:	CAIPoodleStateSeduce::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStateSeduce::Constructor()
@@ -702,36 +648,32 @@ void CAIPoodleStateSeduce::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateSeduce::Init
 //
-//	ROUTINE:	CAIPoodleStateSeduce::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIPoodleStateSeduce::Init(AI_Poodle* pAIPoodle)
 {
 	if ( !super::Init(pAIPoodle) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_pStrategyFollowPath->Init(pAIPoodle) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pStrategyFollowPath->SetMovement(CAnimatorAIAnimal::eRunning);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateSeduce::Update
 //
-//	ROUTINE:	CAIPoodleStateSeduce::Update
-//
-//	PURPOSE:	Update of the state
-//
+//	PURPOSE: Update of the state
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStateSeduce::Update()
@@ -776,11 +718,9 @@ Error:
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateSeduce::Load
 //
-//	ROUTINE:	CAIPoodleStateSeduce::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStateSeduce::Load(HMESSAGEREAD hRead)
@@ -793,11 +733,9 @@ void CAIPoodleStateSeduce::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateSeduce::Save
 //
-//	ROUTINE:	CAIPoodleStateSeduce::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStateSeduce::Save(HMESSAGEREAD hWrite)
@@ -810,18 +748,16 @@ void CAIPoodleStateSeduce::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateDischarge::Constructor/Destructor
 //
-//	ROUTINE:	CAIPoodleStateDischarge::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStateDischarge::Constructor()
 {
 	super::Constructor();
 
-    m_bDischarged = LTFALSE;
+	m_bDischarged = LTFALSE;
 }
 
 void CAIPoodleStateDischarge::Destructor()
@@ -830,29 +766,25 @@ void CAIPoodleStateDischarge::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateDischarge::Init
 //
-//	ROUTINE:	CAIPoodleStateDischarge::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIPoodleStateDischarge::Init(AI_Poodle* pAIPoodle)
 {
 	if ( !super::Init(pAIPoodle) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateDischarge::Update
 //
-//	ROUTINE:	CAIPoodleStateDischarge::Update
-//
-//	PURPOSE:	Update of the state
-//
+//	PURPOSE: Update of the state
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStateDischarge::Update()
@@ -873,21 +805,19 @@ void CAIPoodleStateDischarge::Update()
 
 		while (pCur && *pCur)
 		{
-            SendTriggerMsgToObject(GetAI(), (*pCur)->m_hObject, LTFALSE, "HEAT");
+			SendTriggerMsgToObject(GetAI(), (*pCur)->m_hObject, LTFALSE, "HEAT");
 
 			pCur = lstDogs.GetItem(TLIT_NEXT);
 		}
 
-        m_bDischarged = LTTRUE;
+		m_bDischarged = LTTRUE;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateDischarge::Load
 //
-//	ROUTINE:	CAIPoodleStateDischarge::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStateDischarge::Load(HMESSAGEREAD hRead)
@@ -898,11 +828,9 @@ void CAIPoodleStateDischarge::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateDischarge::Save
 //
-//	ROUTINE:	CAIPoodleStateDischarge::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStateDischarge::Save(HMESSAGEREAD hWrite)
@@ -913,11 +841,9 @@ void CAIPoodleStateDischarge::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateShutdown::Constructor/Destructor
 //
-//	ROUTINE:	CAIPoodleStateShutdown::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStateShutdown::Constructor()
@@ -931,11 +857,9 @@ void CAIPoodleStateShutdown::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPoodleStateShutdown::Update
 //
-//	ROUTINE:	CAIPoodleStateShutdown::Update
-//
-//	PURPOSE:	Updates the state
-//
+//	PURPOSE: Updates the state
 // ----------------------------------------------------------------------- //
 
 void CAIPoodleStateShutdown::Update()
@@ -949,20 +873,18 @@ void CAIPoodleStateShutdown::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkState::Constructor/Destructor
 //
-//	ROUTINE:	CAISharkState::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAISharkState::Constructor()
 {
 	super::Constructor();
 
-    m_pAIShark = LTNULL;
-    m_pStrategyFollowPath = LTNULL;
-    m_pStrategyOneShotAni = LTNULL;
+	m_pAIShark = LTNULL;
+	m_pStrategyFollowPath = LTNULL;
+	m_pStrategyOneShotAni = LTNULL;
 }
 
 void CAISharkState::Destructor()
@@ -971,31 +893,27 @@ void CAISharkState::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkState::Init
 //
-//	ROUTINE:	CAISharkState::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkState::Init(AI_Shark* pAIShark)
 {
 	if ( !super::Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pAIShark = pAIShark;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkState::HandleBrokenLink
 //
-//	ROUTINE:	CAISharkState::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAISharkState::HandleBrokenLink(HOBJECT hObject)
@@ -1009,11 +927,9 @@ void CAISharkState::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateIdle::Constructor/Destructor
 //
-//	ROUTINE:	CAISharkStateIdle::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateIdle::Constructor()
@@ -1029,11 +945,9 @@ void CAISharkStateIdle::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateIdle::Load
 //
-//	ROUTINE:	CAISharkStateIdle::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateIdle::Load(HMESSAGEREAD hRead)
@@ -1044,11 +958,9 @@ void CAISharkStateIdle::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateIdle::Save
 //
-//	ROUTINE:	CAISharkStateIdle::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateIdle::Save(HMESSAGEREAD hWrite)
@@ -1059,11 +971,9 @@ void CAISharkStateIdle::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateIdle::Update
 //
-//	ROUTINE:	CAISharkStateIdle::Update
-//
-//	PURPOSE:	Updates the state
-//
+//	PURPOSE: Updates the state
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateIdle::Update()
@@ -1074,11 +984,9 @@ void CAISharkStateIdle::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateIdle::Update
 //
-//	ROUTINE:	CAISharkStateIdle::Update
-//
-//	PURPOSE:	Updates the state
-//
+//	PURPOSE: Updates the state
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateIdle::HandleNameValuePair(char *szName, char *szValue)
@@ -1103,11 +1011,9 @@ void CAISharkStateIdle::HandleNameValuePair(char *szName, char *szValue)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateChase::Constructor/Destructor
 //
-//	ROUTINE:	CAISharkStateChase::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateChase::Constructor()
@@ -1125,36 +1031,32 @@ void CAISharkStateChase::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateChase::Init
 //
-//	ROUTINE:	CAISharkStateChase::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStateChase::Init(AI_Shark* pAIShark)
 {
 	if ( !super::Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_pStrategyFollowPath->Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pStrategyFollowPath->SetMovement(CAnimatorAIAnimal::eSwimming);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateChase::HandleTouch
 //
-//	ROUTINE:	CAISharkStateChase::HandleTouch
-//
-//	PURPOSE:	Handles getting touch notifies
-//
+//	PURPOSE: Handles getting touch notifies
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateChase::HandleTouch(HOBJECT hObject)
@@ -1171,11 +1073,9 @@ void CAISharkStateChase::HandleTouch(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateChase::Update
 //
-//	ROUTINE:	CAISharkStateChase::Update
-//
-//	PURPOSE:	Update of the state
-//
+//	PURPOSE: Update of the state
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateChase::Update()
@@ -1190,9 +1090,9 @@ void CAISharkStateChase::Update()
 
 	if ( m_pStrategyFollowPath->IsUnset() )
 	{
-        CCharacter* pTarget = (CCharacter*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
+		CCharacter* pTarget = (CCharacter*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
 
-        LTVector vTargetPos = pTarget->GetLastVolumePos();
+		LTVector vTargetPos = pTarget->GetLastVolumePos();
 //		vTargetPos.y = GetAI()->GetPosition().y;
 
 		if ( !m_pStrategyFollowPath->Set(vTargetPos) )
@@ -1223,11 +1123,9 @@ void CAISharkStateChase::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateChase::Load
 //
-//	ROUTINE:	CAISharkStateChase::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateChase::Load(HMESSAGEREAD hRead)
@@ -1238,11 +1136,9 @@ void CAISharkStateChase::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateChase::Save
 //
-//	ROUTINE:	CAISharkStateChase::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateChase::Save(HMESSAGEREAD hWrite)
@@ -1253,11 +1149,9 @@ void CAISharkStateChase::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateGoto::Constructor/Destructor
 //
-//	ROUTINE:	CAISharkStateGoto::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateGoto::Constructor()
@@ -1266,10 +1160,10 @@ void CAISharkStateGoto::Constructor()
 
 	m_pStrategyFollowPath = FACTORY_NEW(CAISharkStrategyFollowPath);
 
-    m_vDest = LTVector(0,0,0);
+	m_vDest = LTVector(0,0,0);
 	m_cNodes = 0;
 	m_iNextNode = 0;
-    m_bLoop = LTFALSE;
+	m_bLoop = LTFALSE;
 }
 
 void CAISharkStateGoto::Destructor()
@@ -1280,38 +1174,34 @@ void CAISharkStateGoto::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateGoto::Init
 //
-//	ROUTINE:	CAISharkStateGoto::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStateGoto::Init(AI_Shark* pAIShark)
 {
 	if ( !super::Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_pStrategyFollowPath->Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	// Set up our default movement speed
 
 	m_pStrategyFollowPath->SetMovement(CAnimatorAIAnimal::eSwimming);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateGoto::Update
 //
-//	ROUTINE:	CAISharkStateGoto::Update
-//
-//	PURPOSE:	Update of the state
-//
+//	PURPOSE: Update of the state
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateGoto::Update()
@@ -1384,11 +1274,9 @@ void CAISharkStateGoto::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateGoto::HandleNameValuePair
 //
-//	ROUTINE:	CAISharkStateGoto::HandleNameValuePair
-//
-//	PURPOSE:	Sets data from name/value pairs
-//
+//	PURPOSE: Sets data from name/value pairs
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateGoto::HandleNameValuePair(char *szName, char *szValue)
@@ -1405,7 +1293,7 @@ void CAISharkStateGoto::HandleNameValuePair(char *szName, char *szValue)
 		HOBJECT hObject;
 		if ( LT_OK != FindNamedObject(szValue, hObject) )
 		{
-            g_pLTServer->CPrint("GOTO OBJ=%s -- this object does not exist!", szValue);
+			g_pLTServer->CPrint("GOTO OBJ=%s -- this object does not exist!", szValue);
 			return;
 		}
 		g_pLTServer->GetObjectPos(hObject, &m_vDest);
@@ -1420,7 +1308,7 @@ void CAISharkStateGoto::HandleNameValuePair(char *szName, char *szValue)
 		{
 			if ( m_cNodes == CAISharkStateGoto::kMaxGotoNodes )
 			{
-                g_pLTServer->CPrint("Max # Goto waypoints exceeded %s=%s", szName, szValue);
+				g_pLTServer->CPrint("Max # Goto waypoints exceeded %s=%s", szName, szValue);
 			}
 
 			CAINode* pNode = g_pAINodeMgr->GetNode(szPoint);
@@ -1431,7 +1319,7 @@ void CAISharkStateGoto::HandleNameValuePair(char *szName, char *szValue)
 			}
 			else
 			{
-                g_pLTServer->CPrint("Unknown Goto waypoint ''%s''", szPoint);
+				g_pLTServer->CPrint("Unknown Goto waypoint ''%s''", szPoint);
 			}
 
 			szPoint = strtok(NULL, ",");
@@ -1444,11 +1332,9 @@ void CAISharkStateGoto::HandleNameValuePair(char *szName, char *szValue)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateGoto::Load
 //
-//	ROUTINE:	CAISharkStateGoto::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateGoto::Load(HMESSAGEREAD hRead)
@@ -1462,8 +1348,8 @@ void CAISharkStateGoto::Load(HMESSAGEREAD hRead)
 	LOAD_DWORD(m_iNextNode);
 	LOAD_BOOL(m_bLoop);
 
-    int iNode;
-    for ( iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	int iNode;
+	for ( iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		LOAD_DWORD(m_adwNodes[iNode]);
 	}
@@ -1475,11 +1361,9 @@ void CAISharkStateGoto::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateGoto::Save
 //
-//	ROUTINE:	CAISharkStateGoto::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateGoto::Save(HMESSAGEREAD hWrite)
@@ -1500,11 +1384,9 @@ void CAISharkStateGoto::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateBite::Constructor/Destructor
 //
-//	ROUTINE:	CAISharkStateBite::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateBite::Constructor()
@@ -1513,7 +1395,7 @@ void CAISharkStateBite::Constructor()
 
 	m_pStrategyOneShotAni = FACTORY_NEW(CAISharkStrategyOneShotAni);
 
-    m_bBiting = LTFALSE;
+	m_bBiting = LTFALSE;
 }
 
 void CAISharkStateBite::Destructor()
@@ -1524,34 +1406,30 @@ void CAISharkStateBite::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateBite::Init
 //
-//	ROUTINE:	CAISharkStateBite::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStateBite::Init(AI_Shark* pAIShark)
 {
 	if ( !super::Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_pStrategyOneShotAni->Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateBite::Update
 //
-//	ROUTINE:	CAISharkStateBite::Update
-//
-//	PURPOSE:	Update of the state
-//
+//	PURPOSE: Update of the state
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateBite::Update()
@@ -1564,8 +1442,8 @@ void CAISharkStateBite::Update()
 	}
 	else if ( m_bBiting && !m_pStrategyOneShotAni->IsAnimating() )
 	{
-        LTVector vPos;
-        g_pLTServer->GetObjectPos(GetAI()->GetTarget()->GetObject(), &vPos);
+		LTVector vPos;
+		g_pLTServer->GetObjectPos(GetAI()->GetTarget()->GetObject(), &vPos);
 
 		if ( VEC_DISTSQR(GetAI()->GetPosition(), vPos) > 5625.0f )
 		{
@@ -1578,7 +1456,7 @@ void CAISharkStateBite::Update()
 	}
 	else if ( !m_bBiting )
 	{
-        m_bBiting = LTTRUE;
+		m_bBiting = LTTRUE;
 	}
 
 	m_pStrategyOneShotAni->Set(CAnimatorAIAnimal::eBite);
@@ -1589,11 +1467,9 @@ void CAISharkStateBite::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateBite::Load
 //
-//	ROUTINE:	CAISharkStateBite::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateBite::Load(HMESSAGEREAD hRead)
@@ -1606,11 +1482,9 @@ void CAISharkStateBite::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateBite::Save
 //
-//	ROUTINE:	CAISharkStateBite::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateBite::Save(HMESSAGEREAD hWrite)
@@ -1623,11 +1497,9 @@ void CAISharkStateBite::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateMaul::Constructor/Destructor
 //
-//	ROUTINE:	CAISharkStateMaul::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateMaul::Constructor()
@@ -1637,7 +1509,7 @@ void CAISharkStateMaul::Constructor()
 	m_pStrategyOneShotAni = FACTORY_NEW(CAISharkStrategyOneShotAni);
 
 	m_hTarget = LTNULL;
-    m_bBiting = LTFALSE;
+	m_bBiting = LTFALSE;
 	m_bDone = LTFALSE;
 	m_fMaulTime = 15.0f;
 }
@@ -1652,34 +1524,30 @@ void CAISharkStateMaul::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateMaul::Init
 //
-//	ROUTINE:	CAISharkStateMaul::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStateMaul::Init(AI_Shark* pAIShark)
 {
 	if ( !super::Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_pStrategyOneShotAni->Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateMaul::Update
 //
-//	ROUTINE:	CAISharkStateMaul::Update
-//
-//	PURPOSE:	Update of the state
-//
+//	PURPOSE: Update of the state
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateMaul::Update()
@@ -1732,7 +1600,7 @@ void CAISharkStateMaul::Update()
 	}
 	else if ( !m_bBiting )
 	{
-        m_bBiting = LTTRUE;
+		m_bBiting = LTTRUE;
 	}
 
 	m_pStrategyOneShotAni->Set(CAnimatorAIAnimal::eBite);
@@ -1770,7 +1638,7 @@ void CAISharkStateMaul::HandleNameValuePair(char *szName, char *szValue)
 
 		if ( LT_OK != FindNamedObject(szValue, m_hTarget) )
 		{
-            g_pLTServer->CPrint("MAUL TARGET=%s -- this object does not exist!", szValue);
+			g_pLTServer->CPrint("MAUL TARGET=%s -- this object does not exist!", szValue);
 			return;
 		}
 
@@ -1779,11 +1647,9 @@ void CAISharkStateMaul::HandleNameValuePair(char *szName, char *szValue)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateMaul::Load
 //
-//	ROUTINE:	CAISharkStateMaul::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateMaul::Load(HMESSAGEREAD hRead)
@@ -1799,11 +1665,9 @@ void CAISharkStateMaul::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateMaul::Save
 //
-//	ROUTINE:	CAISharkStateMaul::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateMaul::Save(HMESSAGEREAD hWrite)
@@ -1819,11 +1683,9 @@ void CAISharkStateMaul::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateWait::Constructor/Destructor
 //
-//	ROUTINE:	CAISharkStateWait::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateWait::Constructor()
@@ -1842,36 +1704,32 @@ void CAISharkStateWait::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateWait::Init
 //
-//	ROUTINE:	CAISharkStateWait::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAISharkStateWait::Init(AI_Shark* pAIShark)
 {
 	if ( !super::Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_pStrategyFollowPath->Init(pAIShark) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pStrategyFollowPath->SetMovement(CAnimatorAIAnimal::eSwimming);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateWait::Update
 //
-//	ROUTINE:	CAISharkStateWait::Update
-//
-//	PURPOSE:	Update of the state
-//
+//	PURPOSE: Update of the state
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateWait::Update()
@@ -1884,8 +1742,8 @@ void CAISharkStateWait::Update()
 		return;
 	}
 
-    CCharacter* pTarget = (CCharacter*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
-    LTVector vTargetPos = pTarget->GetLastVolumePos();
+	CCharacter* pTarget = (CCharacter*)g_pLTServer->HandleToObject(GetAI()->GetTarget()->GetObject());
+	LTVector vTargetPos = pTarget->GetLastVolumePos();
 
 	if ( m_pStrategyFollowPath->IsUnset() )
 	{
@@ -1953,11 +1811,9 @@ void CAISharkStateWait::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateWait::Load
 //
-//	ROUTINE:	CAISharkStateWait::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateWait::Load(HMESSAGEREAD hRead)
@@ -1969,11 +1825,9 @@ void CAISharkStateWait::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAISharkStateWait::Save
 //
-//	ROUTINE:	CAISharkStateWait::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAISharkStateWait::Save(HMESSAGEREAD hWrite)

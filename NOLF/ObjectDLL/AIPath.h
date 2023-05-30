@@ -47,7 +47,7 @@ class CAIPathWaypoint
 		// Simple accessors
 
 		Instruction GetInstruction() const { return m_eInstruction; }
-        const LTVector& GetArgumentVector1() const { return m_vVector1; }
+		const LTVector& GetArgumentVector1() const { return m_vVector1; }
 		HOBJECT GetArgumentObject1() const { return m_hObject1; }
 		HOBJECT GetArgumentObject2() const { return m_hObject2; }
 
@@ -60,7 +60,7 @@ class CAIPathWaypoint
 
 		void SetAI(CAI* pAI) { m_pAI = pAI; }
 		void SetInstruction(Instruction eInstruction) { m_eInstruction = eInstruction; }
-        void SetArgumentVector1(const LTVector& vVector1) { m_vVector1 = vVector1; }
+		void SetArgumentVector1(const LTVector& vVector1) { m_vVector1 = vVector1; }
 		void SetArgumentObject1(HOBJECT hObject1);
 		void SetArgumentObject2(HOBJECT hObject2);
 
@@ -68,7 +68,7 @@ class CAIPathWaypoint
 
 		CAI*			m_pAI;
 		Instruction		m_eInstruction;
-        LTVector        m_vVector1;
+		LTVector		m_vVector1;
 		HOBJECT			m_hObject1;
 		HOBJECT			m_hObject2;
 };
@@ -95,7 +95,7 @@ class CAIPath : DEFINE_FACTORY_CLASS(CAIPath)
 		CAIPathWaypoint* GetWaypoint(int iWaypoint) { return &m_aWaypoints[iWaypoint]; }
 		CAIPathWaypoint* GetCurrentWaypoint() { return &m_aWaypoints[m_iWaypoint]; }
 
-        LTBOOL HasRemainingWaypoints() const { return m_iWaypoint < m_cWaypoints; }
+		LTBOOL HasRemainingWaypoints() const { return m_iWaypoint < m_cWaypoints; }
 		int GetCurrentWaypointIndex() const { return m_iWaypoint; }
 		int GetNumWaypoints() const { return m_cWaypoints; }
 
@@ -105,7 +105,7 @@ class CAIPath : DEFINE_FACTORY_CLASS(CAIPath)
 
 		friend class CAIPathMgr;
 
-        LTBOOL HasAI() { return !!m_pAI; }
+		LTBOOL HasAI() { return !!m_pAI; }
 
 		// Setup methods
 

@@ -249,7 +249,7 @@ class CAttachments : public IAggregate
 		void GetInfiniteAmmo();
 
 		virtual void HandleDeath();
-        virtual LTBOOL HandleProjectileImpact(CProjectile* pProjectile, IntersectInfo& iInfo, LTVector& vDir, LTVector& vFrom, ModelSkeleton eModelSkeleton, ModelNode eModelNode);
+		virtual LTBOOL HandleProjectileImpact(CProjectile* pProjectile, IntersectInfo& iInfo, LTVector& vDir, LTVector& vFrom, ModelSkeleton eModelSkeleton, ModelNode eModelNode);
 
 		virtual void Init(HOBJECT hObject);
 		virtual void ReInit(HOBJECT hObject);
@@ -276,7 +276,7 @@ class CAttachments : public IAggregate
 		virtual void	Update();
 
 		virtual void	CreateAttachment(CAttachmentPosition *pAttachmentPosition);
-        void            CreateWeaponAttachment(CAttachmentPosition *pAttachmentPosition, const char* szAttachmentName, uint8 nWeaponID, uint8 nAmmoID);
+		void			CreateWeaponAttachment(CAttachmentPosition *pAttachmentPosition, const char* szAttachmentName, uint8 nWeaponID, uint8 nAmmoID);
 		void			CreateObjectAttachment(CAttachmentPosition *pAttachmentPosition, int nAttachmentID);
 		void			CreatePropAttachment(CAttachmentPosition *pAttachmentPosition, int nAttachmentID);
 
@@ -287,8 +287,8 @@ class CAttachments : public IAggregate
 		// Engine stuff
 
 		virtual LTBOOL	ReadProp(LPBASECLASS pObject, ObjectCreateStruct *pInfo);
-        virtual void    Save(HMESSAGEWRITE hWrite, uint8 nType);
-        virtual void    Load(HMESSAGEREAD hRead, uint8 nType);
+		virtual void	Save(HMESSAGEWRITE hWrite, uint8 nType);
+		virtual void	Load(HMESSAGEREAD hRead, uint8 nType);
 
 	protected :
 
@@ -344,7 +344,7 @@ class CPlayerAttachments : public CHumanAttachments
 
 		// Weapons aggregate methods
 
-        inline CWeapon* GetWeapon(uint8 nWeaponId)
+		inline CWeapon* GetWeapon(uint8 nWeaponId)
 		{
 			CAttachmentWeapon* pAttachmentWeapon = GetDefaultAttachmentWeapon();
 			if ( pAttachmentWeapon )
@@ -402,7 +402,7 @@ class CPlayerAttachments : public CHumanAttachments
 		}
 
 		inline void ObtainWeapon(int nWeaponID, int nAmmoID = AMMO_DEFAULT_ID,
-            int nDefaultAmmo = -1, LTBOOL bNotifyClient=LTFALSE)
+			int nDefaultAmmo = -1, LTBOOL bNotifyClient=LTFALSE)
 		{
 			CAttachmentWeapon* pAttachmentWeapon = GetDefaultAttachmentWeapon();
 			if ( pAttachmentWeapon )
@@ -525,7 +525,7 @@ class CAttachmentsPlugin : public IObjectPlugin
 {
 	public:
 
-        virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
+		virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
 	protected :
 
@@ -542,7 +542,7 @@ class CHumanAttachmentsPlugin : public CAttachmentsPlugin
 {
 	public:
 
-        virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
+		virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
 };
 
@@ -550,7 +550,7 @@ class CVehicleAttachmentsPlugin : public CAttachmentsPlugin
 {
 	public:
 
-        virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
+		virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
 };
 
@@ -558,7 +558,7 @@ class CHelicopterAttachmentsPlugin : public CVehicleAttachmentsPlugin
 {
 	public:
 
-        virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
+		virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
 };
 
@@ -566,7 +566,7 @@ class CAnimalAttachmentsPlugin : public CAttachmentsPlugin
 {
 	public:
 
-        virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
+		virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
 };
 
@@ -574,7 +574,7 @@ class CSharkAttachmentsPlugin : public CAnimalAttachmentsPlugin
 {
 	public:
 
-        virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
+		virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
 };
 

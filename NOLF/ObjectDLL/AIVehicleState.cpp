@@ -16,18 +16,16 @@ IMPLEMENT_FACTORY(CAIHelicopterStateGoto, 0)
 IMPLEMENT_FACTORY(CAIHelicopterStateAttack, 0)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIVehicleState::Constructor/Destructor
 //
-//	ROUTINE:	CAIVehicleState::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIVehicleState::Constructor()
 {
 	CAIState::Constructor();
 
-    m_pAIVehicle = LTNULL;
+	m_pAIVehicle = LTNULL;
 }
 
 void CAIVehicleState::Destructor()
@@ -36,39 +34,35 @@ void CAIVehicleState::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIVehicleState::Init
 //
-//	ROUTINE:	CAIVehicleState::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIVehicleState::Init(CAIVehicle* pAIVehicle)
 {
 	if ( !CAIState::Init(pAIVehicle) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pAIVehicle = pAIVehicle;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterState::Constructor/Destructor
 //
-//	ROUTINE:	CAIHelicopterState::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterState::Constructor()
 {
 	CAIVehicleState::Constructor();
 
-    m_pAIHelicopter = LTNULL;
-    m_pStrategyFollowPath = LTNULL;
+	m_pAIHelicopter = LTNULL;
+	m_pStrategyFollowPath = LTNULL;
 }
 
 void CAIHelicopterState::Destructor()
@@ -77,31 +71,27 @@ void CAIHelicopterState::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterState::Init
 //
-//	ROUTINE:	CAIHelicopterState::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHelicopterState::Init(AI_Helicopter* pAIHelicopter)
 {
 	if ( !CAIVehicleState::Init(pAIHelicopter) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pAIHelicopter = pAIHelicopter;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterState::HandleBrokenLink
 //
-//	ROUTINE:	CAIHelicopterState::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterState::HandleBrokenLink(HOBJECT hObject)
@@ -120,11 +110,9 @@ void CAIHelicopterState::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateIdle::Constructor/Destructor
 //
-//	ROUTINE:	CAIHelicopterStateIdle::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateIdle::Constructor()
@@ -138,11 +126,9 @@ void CAIHelicopterStateIdle::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateGoto::Constructor/Destructor
 //
-//	ROUTINE:	CAIHelicopterStateGoto::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateGoto::Constructor()
@@ -151,10 +137,10 @@ void CAIHelicopterStateGoto::Constructor()
 
 	m_pStrategyFollowPath = FACTORY_NEW(CAIHelicopterStrategyFollowPath);
 
-    m_vDest = LTVector(0,0,0);
+	m_vDest = LTVector(0,0,0);
 	m_cNodes = 0;
 	m_iNextNode = 0;
-    m_bLoop = LTFALSE;
+	m_bLoop = LTFALSE;
 }
 
 void CAIHelicopterStateGoto::Destructor()
@@ -165,34 +151,30 @@ void CAIHelicopterStateGoto::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateGoto::Init
 //
-//	ROUTINE:	CAIHelicopterStateGoto::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHelicopterStateGoto::Init(AI_Helicopter* pAIHelicopter)
 {
 	if ( !CAIHelicopterState::Init(pAIHelicopter) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_pStrategyFollowPath->Init(pAIHelicopter) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateGoto::Update
 //
-//	ROUTINE:	CAIHelicopterStateGoto::Update
-//
-//	PURPOSE:	Update of the state
-//
+//	PURPOSE: Update of the state
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateGoto::Update()
@@ -270,11 +252,9 @@ void CAIHelicopterStateGoto::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateGoto::HandleNameValuePair
 //
-//	ROUTINE:	CAIHelicopterStateGoto::HandleNameValuePair
-//
-//	PURPOSE:	Sets data from name/value pairs
-//
+//	PURPOSE: Sets data from name/value pairs
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateGoto::HandleNameValuePair(char *szName, char *szValue)
@@ -295,7 +275,7 @@ void CAIHelicopterStateGoto::HandleNameValuePair(char *szName, char *szValue)
 		{
 			if ( m_cNodes == kMaxGotoNodes )
 			{
-                g_pLTServer->CPrint("Max # Goto waypoints exceeded %s=%s", szName, szValue);
+				g_pLTServer->CPrint("Max # Goto waypoints exceeded %s=%s", szName, szValue);
 			}
 
 			CAINode* pNode = g_pAINodeMgr->GetNode(szPoint);
@@ -306,7 +286,7 @@ void CAIHelicopterStateGoto::HandleNameValuePair(char *szName, char *szValue)
 			}
 			else
 			{
-                g_pLTServer->CPrint("Unknown Goto waypoint ''%s''", szPoint);
+				g_pLTServer->CPrint("Unknown Goto waypoint ''%s''", szPoint);
 			}
 
 			szPoint = strtok(NULL, ",");
@@ -319,11 +299,9 @@ void CAIHelicopterStateGoto::HandleNameValuePair(char *szName, char *szValue)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateGoto::Load
 //
-//	ROUTINE:	CAIHelicopterStateGoto::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateGoto::Load(HMESSAGEREAD hRead)
@@ -337,8 +315,8 @@ void CAIHelicopterStateGoto::Load(HMESSAGEREAD hRead)
 	LOAD_DWORD(m_iNextNode);
 	LOAD_BOOL(m_bLoop);
 
-    int iNode;
-    for ( iNode = 0 ; iNode < m_cNodes ; iNode++ )
+	int iNode;
+	for ( iNode = 0 ; iNode < m_cNodes ; iNode++ )
 	{
 		LOAD_DWORD(m_adwNodes[iNode]);
 	}
@@ -350,11 +328,9 @@ void CAIHelicopterStateGoto::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateGoto::Save
 //
-//	ROUTINE:	CAIHelicopterStateGoto::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateGoto::Save(HMESSAGEREAD hWrite)
@@ -375,11 +351,9 @@ void CAIHelicopterStateGoto::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateAttack::Constructor/Destructor
 //
-//	ROUTINE:	CAIHelicopterStateAttack::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateAttack::Constructor()
@@ -388,7 +362,7 @@ void CAIHelicopterStateAttack::Constructor()
 
 	for ( int iWeapon = 0 ; iWeapon < AI_MAX_WEAPONS ; iWeapon++ )
 	{
-        m_abActiveWeapons[iWeapon] = LTTRUE;
+		m_abActiveWeapons[iWeapon] = LTTRUE;
 	}
 
 	m_pStrategyShoot = FACTORY_NEW(CAIHelicopterStrategyShoot);
@@ -403,36 +377,32 @@ void CAIHelicopterStateAttack::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateHeliAttack::Init
 //
-//	ROUTINE:	CAIHelicopterStateHeliAttack::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHelicopterStateAttack::Init(AI_Helicopter* pAIHelicopter)
 {
 	if ( !CAIHelicopterState::Init(pAIHelicopter) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( !m_pStrategyShoot->Init(pAIHelicopter) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	m_pStrategyShoot->SetFire(CAnimatorAIVehicle::eFireFull);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateAttack::Load
 //
-//	ROUTINE:	CAIHelicopterStateAttack::Load
-//
-//	PURPOSE:	Restores the State
-//
+//	PURPOSE: Restores the State
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateAttack::Load(HMESSAGEREAD hRead)
@@ -450,11 +420,9 @@ void CAIHelicopterStateAttack::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateAttack::Save
 //
-//	ROUTINE:	CAIHelicopterStateAttack::Save
-//
-//	PURPOSE:	Saves the State
-//
+//	PURPOSE: Saves the State
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateAttack::Save(HMESSAGEREAD hWrite)
@@ -472,11 +440,9 @@ void CAIHelicopterStateAttack::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateAttack::Update
 //
-//	ROUTINE:	CAIHelicopterStateAttack::Update
-//
-//	PURPOSE:	Updates the state
-//
+//	PURPOSE: Updates the state
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateAttack::Update()
@@ -498,11 +464,9 @@ void CAIHelicopterStateAttack::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateAttack::HandleModelString
 //
-//	ROUTINE:	CAIHelicopterStateAttack::HandleModelString
-//
-//	PURPOSE:	Handles getting a model key string
-//
+//	PURPOSE: Handles getting a model key string
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateAttack::HandleModelString(ArgList* pArgList)
@@ -533,21 +497,19 @@ void CAIHelicopterStateAttack::HandleModelString(ArgList* pArgList)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateAttack::HandleCommand
 //
-//	ROUTINE:	CAIHelicopterStateAttack::HandleCommand
-//
-//	PURPOSE:	Handles a command
-//
+//	PURPOSE: Handles a command
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIHelicopterStateAttack::HandleCommand(char** pTokens, int nArgs)
 {
 	_ASSERT(pTokens && (nArgs >= 1));
-    if (!pTokens || nArgs < 1) return LTFALSE;
+	if (!pTokens || nArgs < 1) return LTFALSE;
 
 	if ( CAIHelicopterState::HandleCommand(pTokens, nArgs) )
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 	if ( !_stricmp(pTokens[0], "ON") )
@@ -560,7 +522,7 @@ LTBOOL CAIHelicopterStateAttack::HandleCommand(char** pTokens, int nArgs)
 			}
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if ( !_stricmp(pTokens[0], "OFF") )
 	{
@@ -572,18 +534,16 @@ LTBOOL CAIHelicopterStateAttack::HandleCommand(char** pTokens, int nArgs)
 			}
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateAttack::HandleBrokenLink
 //
-//	ROUTINE:	CAIHelicopterStateAttack::HandleBrokenLink
-//
-//	PURPOSE:	Handles a link to the AI being broken
-//
+//	PURPOSE: Handles a link to the AI being broken
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateAttack::HandleBrokenLink(HOBJECT hObject)
@@ -597,11 +557,9 @@ void CAIHelicopterStateAttack::HandleBrokenLink(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIHelicopterStateAttack::HandleNameValuePair
 //
-//	ROUTINE:	CAIHelicopterStateAttack::HandleNameValuePair
-//
-//	PURPOSE:	Handles getting a name/value pair
-//
+//	PURPOSE: Handles getting a name/value pair
 // ----------------------------------------------------------------------- //
 
 void CAIHelicopterStateAttack::HandleNameValuePair(char *szName, char *szValue)
@@ -632,7 +590,7 @@ void CAIHelicopterStateAttack::HandleNameValuePair(char *szName, char *szValue)
 		}
 		else
 		{
-            g_pLTServer->CPrint("CAIHelicopterStateAttack - FIRE=%s is not a valid fire type", szValue);
+			g_pLTServer->CPrint("CAIHelicopterStateAttack - FIRE=%s is not a valid fire type", szValue);
 		}
 	}
 	else if ( !_stricmp(szName, "TARGET") )
@@ -648,13 +606,13 @@ void CAIHelicopterStateAttack::HandleNameValuePair(char *szName, char *szValue)
 			}
 			else
 			{
-                g_pLTServer->CPrint("ATTACK TARGET=%s -- this object is not a CCharacter!", szValue);
+				g_pLTServer->CPrint("ATTACK TARGET=%s -- this object is not a CCharacter!", szValue);
 				m_hTarget = LTNULL;
 			}
 		}
 		else
 		{
-            g_pLTServer->CPrint("ATTACK TARGET=%s -- this object does not exist!", szName);
+			g_pLTServer->CPrint("ATTACK TARGET=%s -- this object does not exist!", szName);
 		}
 	}
 }

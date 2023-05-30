@@ -87,14 +87,14 @@ class CAINode
 
 		const static uint32 kInvalidNodeID;
 
-        const static uint32 kSearchFlagShineFlashlight;
-        const static uint32 kSearchFlagLookUnder;
-        const static uint32 kSearchFlagLookOver;
-        const static uint32 kSearchFlagLookLeft;
-        const static uint32 kSearchFlagLookRight;
-        const static uint32 kSearchFlagAlert1;
-        const static uint32 kSearchFlagAlert2;
-        const static uint32 kSearchFlagAlert3;
+		const static uint32 kSearchFlagShineFlashlight;
+		const static uint32 kSearchFlagLookUnder;
+		const static uint32 kSearchFlagLookOver;
+		const static uint32 kSearchFlagLookLeft;
+		const static uint32 kSearchFlagLookRight;
+		const static uint32 kSearchFlagAlert1;
+		const static uint32 kSearchFlagAlert2;
+		const static uint32 kSearchFlagAlert3;
 		const static uint32 kSearchFlagAny;
 		const static uint32 kNumSearchFlags;
 

@@ -6,11 +6,9 @@
 class CAIHuman;
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIMovementHuman
 //
-// PURPOSE : AI Movement manager
-//
+// PURPOSE: AI Movement manager
 // ----------------------------------------------------------------------- //
 
 class CAIMovementHuman
@@ -22,17 +20,17 @@ class CAIMovementHuman
 		void Constructor();
 		void Destructor();
 
-        LTBOOL Init(CAIHuman* pAIHuman);
+		LTBOOL Init(CAIHuman* pAIHuman);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
 
 		// Methods
 
-        void Set(const LTVector& vDest);
+		void Set(const LTVector& vDest);
 		void Clear() { m_eState = eStateUnset; }
 
-        LTBOOL Update();
+		LTBOOL Update();
 		void UpdateAnimation();
 
 		// Type
@@ -42,13 +40,13 @@ class CAIMovementHuman
 
 		// Underwater?
 
-        void SetUnderwater(LTBOOL bUnderwater) { m_bUnderwater = bUnderwater; }
+		void SetUnderwater(LTBOOL bUnderwater) { m_bUnderwater = bUnderwater; }
 
 		// Simple accessors
 
-        LTBOOL IsUnset() const { return m_eState == eStateUnset; }
-        LTBOOL IsSet() const { return m_eState == eStateSet; }
-        LTBOOL IsDone() const { return m_eState == eStateDone; }
+		LTBOOL IsUnset() const { return m_eState == eStateUnset; }
+		LTBOOL IsSet() const { return m_eState == eStateSet; }
+		LTBOOL IsDone() const { return m_eState == eStateDone; }
 
 	private : // Private methods
 
@@ -70,18 +68,16 @@ class CAIMovementHuman
 		CAIHuman*		m_pAIHuman;
 		CAnimationProp	m_aniMovement;
 		State			m_eState;
-        LTVector		m_vDest;
-        LTBOOL			m_bUnderwater;
+		LTVector		m_vDest;
+		LTBOOL			m_bUnderwater;
 };
 
 class AI_Dog;
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIMovementDog
 //
-// PURPOSE : AI Movement manager
-//
+// PURPOSE: AI Movement manager
 // ----------------------------------------------------------------------- //
 
 class CAIMovementDog
@@ -93,23 +89,23 @@ class CAIMovementDog
 		void Constructor();
 		void Destructor();
 
-        LTBOOL Init(AI_Dog* pAIDog);
+		LTBOOL Init(AI_Dog* pAIDog);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
 
 		// Methods
 
-        void Set(const LTVector& vDest);
+		void Set(const LTVector& vDest);
 		void Clear();
 
-        LTBOOL Update();
+		LTBOOL Update();
 
 		// Simple accessors
 
-        LTBOOL IsUnset() const { return m_eState == eStateUnset; }
-        LTBOOL IsSet() const { return m_eState == eStateSet; }
-        LTBOOL IsDone() const { return m_eState == eStateDone; }
+		LTBOOL IsUnset() const { return m_eState == eStateUnset; }
+		LTBOOL IsSet() const { return m_eState == eStateSet; }
+		LTBOOL IsDone() const { return m_eState == eStateDone; }
 
 	private : // Private methods
 
@@ -130,18 +126,16 @@ class CAIMovementDog
 
 		AI_Dog*		m_pAIDog;
 		State		m_eState;
-        LTVector     m_vDest;
-        LTVector     m_vDestDir;
+		LTVector	 m_vDest;
+		LTVector	 m_vDestDir;
 };
 
 class AI_Poodle;
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIMovementPoodle
 //
-// PURPOSE : AI Movement manager
-//
+// PURPOSE: AI Movement manager
 // ----------------------------------------------------------------------- //
 
 class CAIMovementPoodle
@@ -153,23 +147,23 @@ class CAIMovementPoodle
 		void Constructor();
 		void Destructor();
 
-        LTBOOL Init(AI_Poodle* pAIPoodle);
+		LTBOOL Init(AI_Poodle* pAIPoodle);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
 
 		// Methods
 
-        void Set(const LTVector& vDest);
+		void Set(const LTVector& vDest);
 		void Clear() { m_eState = eStateUnset; }
 
-        LTBOOL Update();
+		LTBOOL Update();
 
 		// Simple accessors
 
-        LTBOOL IsUnset() const { return m_eState == eStateUnset; }
-        LTBOOL IsSet() const { return m_eState == eStateSet; }
-        LTBOOL IsDone() const { return m_eState == eStateDone; }
+		LTBOOL IsUnset() const { return m_eState == eStateUnset; }
+		LTBOOL IsSet() const { return m_eState == eStateSet; }
+		LTBOOL IsDone() const { return m_eState == eStateDone; }
 
 	private : // Private methods
 
@@ -190,17 +184,15 @@ class CAIMovementPoodle
 
 		AI_Poodle*	m_pAIPoodle;
 		State		m_eState;
-        LTVector     m_vDest;
+		LTVector	 m_vDest;
 };
 
 class AI_Shark;
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIMovementShark
 //
-// PURPOSE : AI Movement manager
-//
+// PURPOSE: AI Movement manager
 // ----------------------------------------------------------------------- //
 
 class CAIMovementShark
@@ -212,23 +204,23 @@ class CAIMovementShark
 		void Constructor();
 		void Destructor();
 
-        LTBOOL Init(AI_Shark* pAIShark);
+		LTBOOL Init(AI_Shark* pAIShark);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
 
 		// Methods
 
-        void Set(const LTVector& vDest);
+		void Set(const LTVector& vDest);
 		void Clear();
 
-        LTBOOL Update();
+		LTBOOL Update();
 
 		// Simple accessors
 
-        LTBOOL IsUnset() const { return m_eState == eStateUnset; }
-        LTBOOL IsSet() const { return m_eState == eStateSet; }
-        LTBOOL IsDone() const { return m_eState == eStateDone; }
+		LTBOOL IsUnset() const { return m_eState == eStateUnset; }
+		LTBOOL IsSet() const { return m_eState == eStateSet; }
+		LTBOOL IsDone() const { return m_eState == eStateDone; }
 
 	private : // Private methods
 
@@ -249,18 +241,16 @@ class CAIMovementShark
 
 		AI_Shark*	m_pAIShark;
 		State		m_eState;
-        LTVector     m_vDest;
-        LTVector     m_vDestDir;
+		LTVector	 m_vDest;
+		LTVector	 m_vDestDir;
 };
 
 class AI_Helicopter;
 
 // ----------------------------------------------------------------------- //
-//
 // CLASS   : CAIMovementHelicopter
 //
-// PURPOSE : AI Movement manager
-//
+// PURPOSE: AI Movement manager
 // ----------------------------------------------------------------------- //
 
 class CAIMovementHelicopter
@@ -272,23 +262,23 @@ class CAIMovementHelicopter
 		void Constructor();
 		void Destructor();
 
-        LTBOOL Init(AI_Helicopter* pAIHelicopter);
+		LTBOOL Init(AI_Helicopter* pAIHelicopter);
 
 		void Load(HMESSAGEREAD hRead);
 		void Save(HMESSAGEWRITE hWrite);
 
 		// Methods
 
-        void Set(const LTVector& vDest);
+		void Set(const LTVector& vDest);
 		void Clear();
 
-        LTBOOL Update();
+		LTBOOL Update();
 
 		// Simple accessors
 
-        LTBOOL IsUnset() const { return m_eState == eStateUnset; }
-        LTBOOL IsSet() const { return m_eState == eStateSet; }
-        LTBOOL IsDone() const { return m_eState == eStateDone; }
+		LTBOOL IsUnset() const { return m_eState == eStateUnset; }
+		LTBOOL IsSet() const { return m_eState == eStateSet; }
+		LTBOOL IsDone() const { return m_eState == eStateDone; }
 
 	private : // Private methods
 
@@ -309,8 +299,8 @@ class CAIMovementHelicopter
 
 		AI_Helicopter*	m_pAIHelicopter;
 		State		m_eState;
-        LTVector     m_vDest;
-        LTVector     m_vDestDir;
+		LTVector	 m_vDest;
+		LTVector	 m_vDestDir;
 };
 
 
@@ -324,10 +314,10 @@ enum MovementData
 	mdRifle		 = 0,
 	mdPistol	 = 1,
 	mdCorner	 = 2,
-	mdShuffle    = 3,
-	mdRoll       = 4,
-	mdLeft       = 5,
-	mdRight      = 6,
+	mdShuffle	= 3,
+	mdRoll	   = 4,
+	mdLeft	   = 5,
+	mdRight	  = 6,
 };
 
 LTFLOAT GetMovementData(MovementData mdWeapon, MovementData mdAction, MovementData mdDirection, float fTimePrev, float fTime);

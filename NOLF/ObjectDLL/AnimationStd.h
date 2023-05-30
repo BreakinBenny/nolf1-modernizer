@@ -40,7 +40,7 @@ namespace Animation
 
 			// Concatenation
 
-            void operator+=(const CStr& sStr)
+			void operator+=(const CStr& sStr)
 			{
 				strcat(m_szString, sStr);
 			}
@@ -141,7 +141,7 @@ namespace Animation
 	template <class t_ClsKey, class t_ClsValue>
 	struct FnForEach
 	{
-        virtual void operator()(const t_ClsKey& Key, t_ClsValue Value) = 0;
+		virtual void operator()(const t_ClsKey& Key, t_ClsValue Value) = 0;
 	};
 
 	template <class t_ClsKey, class t_ClsValue, uint32 t_nSize>
@@ -170,8 +170,8 @@ namespace Animation
 
 			// Methods
 
-           virtual const FnHash& GetFnHash() const = 0;
-           virtual const FnCompare& GetFnCompare() const = 0;
+		   virtual const FnHash& GetFnHash() const = 0;
+		   virtual const FnCompare& GetFnCompare() const = 0;
 			t_ClsValue* Add(const t_ClsKey& clsKey, const t_ClsValue& clsValue);
 			void Remove(const t_ClsKey& clsKey);
 			LTBOOL Find(const t_ClsKey& clsKey, t_ClsValue** ppclsValue = LTNULL) const;
@@ -343,13 +343,13 @@ namespace Animation
 
 			// Methods
 
-            const CMap<CStr, CStr, t_nSize>::FnHash& GetFnHash() const
+			const CMap<CStr, CStr, t_nSize>::FnHash& GetFnHash() const
 			{
 				static FnHashCStr fnHashCStr;
 				return fnHashCStr;
 			}
 
-            const CMap<CStr, CStr, t_nSize>::FnCompare& GetFnCompare() const
+			const CMap<CStr, CStr, t_nSize>::FnCompare& GetFnCompare() const
 			{
 				static FnCompareCStr fnCompareCStr;
 				return fnCompareCStr;
@@ -365,10 +365,10 @@ namespace Animation
 
 			struct FnHashCStr : public CMap<CStr, t_Cls, t_nSize>::FnHash
 			{
-                uint32 Hash(CStr const& sString) const
+				uint32 Hash(CStr const& sString) const
 				{
-                    LPCTSTR temp = sString;
-                    return t_bCaseInsensitive ? toupper(temp[0]) : temp[0];
+					LPCTSTR temp = sString;
+					return t_bCaseInsensitive ? toupper(temp[0]) : temp[0];
 				}
 			};
 
@@ -384,13 +384,13 @@ namespace Animation
 
 			// Methods
 
-            const CMap<CStr, t_Cls, t_nSize>::FnHash& GetFnHash() const
+			const CMap<CStr, t_Cls, t_nSize>::FnHash& GetFnHash() const
 			{
 				static FnHashCStr fnHashCStr;
 				return fnHashCStr;
 			}
 
-            const CMap<CStr, t_Cls, t_nSize>::FnCompare& GetFnCompare() const
+			const CMap<CStr, t_Cls, t_nSize>::FnCompare& GetFnCompare() const
 			{
 				static FnCompareCStr fnCompareCStr;
 				return fnCompareCStr;

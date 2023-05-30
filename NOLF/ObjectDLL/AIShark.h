@@ -19,14 +19,14 @@ class AI_Shark : public CAIAnimal, public CSteerable
 
 		void Swim() { m_fSpeed = GetSwimSpeed(); }
 		void Stop() { m_fSpeed = 0.0f; }
-        LTFLOAT GetSpeed() { return m_fSpeed; }
+		LTFLOAT GetSpeed() { return m_fSpeed; }
 
 		// Attributes
 
-        LTFLOAT GetAttackDistance() { return m_fAttackDistance; }
-        LTFLOAT GetAttackDistanceSqr() { return m_fAttackDistanceSqr; }
-        LTFLOAT GetSwimSpeed() { return m_fSwimVel; }
-        LTFLOAT GetAttractingNoTargetTime() { return g_pAIButeMgr->GetAttract()->fNoTargetTime; }
+		LTFLOAT GetAttackDistance() { return m_fAttackDistance; }
+		LTFLOAT GetAttackDistanceSqr() { return m_fAttackDistanceSqr; }
+		LTFLOAT GetSwimSpeed() { return m_fSwimVel; }
+		LTFLOAT GetAttractingNoTargetTime() { return g_pAIButeMgr->GetAttract()->fNoTargetTime; }
 
 		// Simple accessors
 
@@ -36,16 +36,16 @@ class AI_Shark : public CAIAnimal, public CSteerable
 
 		// Engine methods
 
-        LTBOOL ReadProp(ObjectCreateStruct *pData);
+		LTBOOL ReadProp(ObjectCreateStruct *pData);
 		void HandleModelString(ArgList* pArgList);
 		void InitialUpdate();
-        void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 
 		// Character stuff
 
 		void PreCreateSpecialFX(CHARCREATESTRUCT& cs);
-        LTBOOL CanLipSync() { return LTFALSE; }
+		LTBOOL CanLipSync() { return LTFALSE; }
 		BodyState GetBodyState();
 
 		// Attachments
@@ -59,7 +59,7 @@ class AI_Shark : public CAIAnimal, public CSteerable
 
 		// Handlers
 
-        LTBOOL HandleCommand(char** pTokens, int nArgs);
+		LTBOOL HandleCommand(char** pTokens, int nArgs);
 
 		// State methods
 
@@ -71,9 +71,9 @@ class AI_Shark : public CAIAnimal, public CSteerable
 
 	protected : // Protected methods for CSteerable
 
-        LTBOOL Steerable_PreUpdate();
-        LTBOOL Steerable_Update(const LTVector& vSteeringDirection);
-        LTBOOL Steerable_PostUpdate();
+		LTBOOL Steerable_PreUpdate();
+		LTBOOL Steerable_Update(const LTVector& vSteeringDirection);
+		LTBOOL Steerable_PostUpdate();
 
 	protected : // Protected member variables
 
@@ -83,7 +83,7 @@ class AI_Shark : public CAIAnimal, public CSteerable
 
 		// Movement
 
-        LTFLOAT          m_fSpeed;       // Our current movement speed
+		LTFLOAT		  m_fSpeed;	   // Our current movement speed
 
 		// Physical properties (hack)
 
@@ -94,8 +94,8 @@ class AI_Shark : public CAIAnimal, public CSteerable
 
 		// Senses
 
-        LTFLOAT          m_fAttackDistance;      // Distance at which we will attack enemies
-        LTFLOAT          m_fAttackDistanceSqr;   // This value squared
+		LTFLOAT		  m_fAttackDistance;	  // Distance at which we will attack enemies
+		LTFLOAT		  m_fAttackDistanceSqr;   // This value squared
 
 		// Steering
 

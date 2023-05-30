@@ -9,11 +9,9 @@
 #include "AITarget.h"
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::Constructor/Destructor
 //
-//	ROUTINE:	CAIState::Constructor/Destructor
-//
-//	PURPOSE:	Construct/Destruct when created/destroyed via our Factory
-//
+//	PURPOSE: Construct/Destruct when created/destroyed via our Factory
 // ----------------------------------------------------------------------- //
 
 void CAIState::Constructor()
@@ -48,11 +46,9 @@ void CAIState::Destructor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::Init
 //
-//	ROUTINE:	CAIState::Init
-//
-//	PURPOSE:	Initializes the state
-//
+//	PURPOSE: Initializes the state
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAIState::Init(CAI* pAI)
@@ -63,18 +59,16 @@ LTBOOL CAIState::Init(CAI* pAI)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::PreUpdate
 //
-//	ROUTINE:	CAIState::PreUpdate
-//
-//	PURPOSE:	PreUpdate of the state
-//
+//	PURPOSE: PreUpdate of the state
 // ----------------------------------------------------------------------- //
 
 void CAIState::PreUpdate()
 {
 	// Increase our elapsed state time
 
-    m_fElapsedTime += g_pLTServer->GetFrameTime();
+	m_fElapsedTime += g_pLTServer->GetFrameTime();
 
 	// Kill any cinematic shit if we don't want it in this state
 
@@ -94,11 +88,9 @@ void CAIState::PreUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::Update
 //
-//	ROUTINE:	CAIState::Update
-//
-//	PURPOSE:	Updates the state
-//
+//	PURPOSE: Updates the state
 // ----------------------------------------------------------------------- //
 
 void CAIState::Update()
@@ -106,11 +98,9 @@ void CAIState::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::UpdateMusic
 //
-//	ROUTINE:	CAIState::UpdateMusic
-//
-//	PURPOSE:	Updates the music
-//
+//	PURPOSE: Updates the music
 // ----------------------------------------------------------------------- //
 
 void CAIState::UpdateMusic()
@@ -119,11 +109,9 @@ void CAIState::UpdateMusic()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::PostUpdate
 //
-//	ROUTINE:	CAIState::PostUpdate
-//
-//	PURPOSE:	PostUpdate of the state
-//
+//	PURPOSE: PostUpdate of the state
 // ----------------------------------------------------------------------- //
 
 void CAIState::PostUpdate()
@@ -133,11 +121,9 @@ void CAIState::PostUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::UpdateSenses
 //
-//	ROUTINE:	CAIState::UpdateSenses
-//
-//	PURPOSE:	Update of the state's senses
-//
+//	PURPOSE: Update of the state's senses
 // ----------------------------------------------------------------------- //
 
 void CAIState::UpdateSenses()
@@ -145,11 +131,9 @@ void CAIState::UpdateSenses()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::Load
 //
-//	ROUTINE:	CAIState::Load
-//
-//	PURPOSE:	Restores the state
-//
+//	PURPOSE: Restores the state
 // ----------------------------------------------------------------------- //
 
 void CAIState::Load(HMESSAGEREAD hRead)
@@ -169,11 +153,9 @@ void CAIState::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::Save
 //
-//	ROUTINE:	CAIState::Save
-//
-//	PURPOSE:	Saves the state
-//
+//	PURPOSE: Saves the state
 // ----------------------------------------------------------------------- //
 
 void CAIState::Save(HMESSAGEREAD hWrite)
@@ -193,11 +175,9 @@ void CAIState::Save(HMESSAGEREAD hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::HandleNameValuePair
 //
-//	ROUTINE:	CAIState::HandleNameValuePair
-//
-//	PURPOSE:	Sets data from name/value pairs
-//
+//	PURPOSE: Sets data from name/value pairs
 // ----------------------------------------------------------------------- //
 
 void CAIState::HandleNameValuePair(char *szName, char *szValue)
@@ -208,7 +188,7 @@ void CAIState::HandleNameValuePair(char *szName, char *szValue)
 	if ( !_stricmp(szName, "RETURN") )
 	{
 		FREE_HSTRING(m_hstrReturn);
-        m_hstrReturn = g_pLTServer->CreateString(szValue);
+		m_hstrReturn = g_pLTServer->CreateString(szValue);
 	}
 	else if ( !_stricmp(szName, "NEXT") )
 	{
@@ -218,12 +198,12 @@ void CAIState::HandleNameValuePair(char *szName, char *szValue)
 			return;
 		}
 
-        m_ahstrNexts[m_cNexts++] = g_pLTServer->CreateString(szValue);
+		m_ahstrNexts[m_cNexts++] = g_pLTServer->CreateString(szValue);
 	}
 	else if ( !_stricmp(szName, "FIRST") )
 	{
-        FREE_HSTRING(m_hstrFirst);
-        m_hstrFirst = g_pLTServer->CreateString(szValue);
+		FREE_HSTRING(m_hstrFirst);
+		m_hstrFirst = g_pLTServer->CreateString(szValue);
 	}
 	else if ( !_stricmp(szName, "FIRSTSOUND") )
 	{
@@ -236,18 +216,16 @@ void CAIState::HandleNameValuePair(char *szName, char *szValue)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::ReturnOr
 //
-//	ROUTINE:	CAIState::ReturnOr
-//
-//	PURPOSE:	Sends us our return string, or uses the default
-//
+//	PURPOSE: Sends us our return string, or uses the default
 // ----------------------------------------------------------------------- //
 
 void CAIState::ReturnOr(const char *szState)
 {
 	if ( m_hstrReturn )
 	{
-        m_pAI->ChangeState(g_pLTServer->GetStringData(m_hstrReturn));
+		m_pAI->ChangeState(g_pLTServer->GetStringData(m_hstrReturn));
 	}
 	else
 	{
@@ -256,11 +234,9 @@ void CAIState::ReturnOr(const char *szState)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIState::NextOr
 //
-//	ROUTINE:	CAIState::NextOr
-//
-//	PURPOSE:	Send us our Next string, or uses the default
-//
+//	PURPOSE: Send us our Next string, or uses the default
 // ----------------------------------------------------------------------- //
 
 void CAIState::NextOr(const char *szState)
@@ -271,7 +247,7 @@ void CAIState::NextOr(const char *szState)
 
 		for ( int iNext = 0 ; iNext < m_cNexts ; iNext++ )
 		{
-            strcat(szBuffer, g_pLTServer->GetStringData(m_ahstrNexts[iNext]));
+			strcat(szBuffer, g_pLTServer->GetStringData(m_ahstrNexts[iNext]));
 			strcat(szBuffer, ";");
 
 			FREE_HSTRING(m_ahstrNexts[iNext]);

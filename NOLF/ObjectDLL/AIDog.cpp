@@ -99,11 +99,9 @@ static STATEMAP s_aStateMaps[] =
 static int s_cStateMaps = sizeof(s_aStateMaps)/sizeof(STATEMAP);
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::AI_Dog()
 //
-//	ROUTINE:	AI_Dog::AI_Dog()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 AI_Dog::AI_Dog() : CAIAnimal()
@@ -111,7 +109,7 @@ AI_Dog::AI_Dog() : CAIAnimal()
 	m_eModelId = g_pModelButeMgr->GetModelId("Dog");
 	m_eModelSkeleton = g_pModelButeMgr->GetModelSkeleton(m_eModelId);
 	m_cc = BAD;
-    m_hstrAttributeTemplate = g_pLTServer->CreateString("Dog");
+	m_hstrAttributeTemplate = g_pLTServer->CreateString("Dog");
 
 	m_fSpeed			= 0.0f;
 
@@ -120,25 +118,23 @@ AI_Dog::AI_Dog() : CAIAnimal()
 	m_fWalkVel			= 0.0f;
 	m_fRunVel			= 0.0f;
 
-    m_bBarked = LTFALSE;
+	m_bBarked = LTFALSE;
 
-    m_pDogState = LTNULL;
+	m_pDogState = LTNULL;
 
 	if ( !m_SteeringMgr.Init(this) )
 	{
-        _ASSERT(LTFALSE);
-        g_pLTServer->CPrint("could not initialize dog's steeringmgr");
+		_ASSERT(LTFALSE);
+		g_pLTServer->CPrint("could not initialize dog's steeringmgr");
 	}
 
 	SetState(CAIDogState::eStateIdle);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::~AI_Dog()
 //
-//	ROUTINE:	AI_Dog::~AI_Dog()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 AI_Dog::~AI_Dog()
@@ -146,23 +142,21 @@ AI_Dog::~AI_Dog()
 	if ( m_pDogState )
 	{
 		FACTORY_DELETE(m_pDogState);
-        m_pDogState = LTNULL;
-        m_pAnimalState = LTNULL;
-        m_pState = LTNULL;
+		m_pDogState = LTNULL;
+		m_pAnimalState = LTNULL;
+		m_pState = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::HandleModelString()
 //
-//	ROUTINE:	AI_Dog::HandleModelString()
-//
-//	PURPOSE:	Handles model keyframe strings
-//
+//	PURPOSE: Handles model keyframe strings
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::HandleModelString(ArgList* pArgList)
 {
-    if (!g_pLTServer || !pArgList || !pArgList->argv || pArgList->argc == 0) return;
+	if (!g_pLTServer || !pArgList || !pArgList->argv || pArgList->argc == 0) return;
 
 	CAIAnimal::HandleModelString(pArgList);
 
@@ -171,15 +165,15 @@ void AI_Dog::HandleModelString(ArgList* pArgList)
 
 	if (stricmp(pKey, c_szKeyBark) == 0)
 	{
-        m_bBarked = LTTRUE;
+		m_bBarked = LTTRUE;
 
 		PlaySound(aisBark);
 	}
 
 	if (stricmp(pKey, c_szKeyBite) == 0)
 	{
-        LTFLOAT fBiteDistance = 100.0f;  // TODO: Bute
-        LTFLOAT fBiteDamage = 10.0f;     // TODO: Bute
+		LTFLOAT fBiteDistance = 100.0f;  // TODO: Bute
+		LTFLOAT fBiteDamage = 10.0f;	 // TODO: Bute
 
 		IntersectQuery IQuery;
 		IntersectInfo IInfo;
@@ -189,13 +183,13 @@ void AI_Dog::HandleModelString(ArgList* pArgList)
 		IQuery.m_Flags	  = INTERSECT_OBJECTS | IGNORE_NONSOLID;
 
 		g_cIntersectSegmentCalls++;
-        if ( g_pLTServer->IntersectSegment(&IQuery, &IInfo) )
+		if ( g_pLTServer->IntersectSegment(&IQuery, &IInfo) )
 		{
 			if ( IInfo.m_hObject )
 			{
 				if ( IsKindOf(IInfo.m_hObject, "CCharacterHitBox") )
 				{
-                    CCharacterHitBox* pHitBox = (CCharacterHitBox*)g_pLTServer->HandleToObject(IInfo.m_hObject);
+					CCharacterHitBox* pHitBox = (CCharacterHitBox*)g_pLTServer->HandleToObject(IInfo.m_hObject);
 					_ASSERT(pHitBox);
 					if ( !pHitBox ) return;
 
@@ -214,28 +208,26 @@ void AI_Dog::HandleModelString(ArgList* pArgList)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::ReadProp
 //
-//	ROUTINE:	AI_Dog::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL AI_Dog::ReadProp(ObjectCreateStruct *pData)
 {
 	GenericProp genProp;
-    if (!g_pLTServer || !pData) return LTFALSE;
+	if (!g_pLTServer || !pData) return LTFALSE;
 
 	// If we have an attribute template, fill in the info
 
 	if ( m_hstrAttributeTemplate )
 	{
-        char *szAttributeTemplate = g_pLTServer->GetStringData(m_hstrAttributeTemplate);
+		char *szAttributeTemplate = g_pLTServer->GetStringData(m_hstrAttributeTemplate);
 		int nTemplateID = g_pAIButeMgr->GetTemplateIDByName(szAttributeTemplate);
 
 		if ( nTemplateID < 0 )
 		{
-            g_pLTServer->CPrint("Bad AI Attribute Template referenced! : %s", szAttributeTemplate);
+			g_pLTServer->CPrint("Bad AI Attribute Template referenced! : %s", szAttributeTemplate);
 		}
 		else
 		{
@@ -247,24 +239,24 @@ LTBOOL AI_Dog::ReadProp(ObjectCreateStruct *pData)
 	}
 	else
 	{
-        g_pLTServer->CPrint("No attribute template specified for AI!");
+		g_pLTServer->CPrint("No attribute template specified for AI!");
 	}
 
 	// Now get the overrides
 
-    if ( g_pLTServer->GetPropGeneric("BarkDistance", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("BarkDistance", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fBarkDistance = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("AttackDistance", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("AttackDistance", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fAttackDistance = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("WalkSpeed", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("WalkSpeed", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fWalkVel = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("RunSpeed", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("RunSpeed", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fRunVel = genProp.m_Float;
 
@@ -272,11 +264,9 @@ LTBOOL AI_Dog::ReadProp(ObjectCreateStruct *pData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::InitialUpdate
 //
-//	ROUTINE:	AI_Dog::InitialUpdate
-//
-//	PURPOSE:	Performs our initial update
-//
+//	PURPOSE: Performs our initial update
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::InitialUpdate()
@@ -285,7 +275,7 @@ void AI_Dog::InitialUpdate()
 
 	// Set all our steerable info
 
-    g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
+	g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
 
 	Steerable_SetMass(10.0f);
 	Steerable_SetMaxForce(100.0f);
@@ -293,11 +283,9 @@ void AI_Dog::InitialUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::ComputeSquares
 //
-//	ROUTINE:	AI_Dog::ComputeSquares
-//
-//	PURPOSE:	Precompute any squares of values we need
-//
+//	PURPOSE: Precompute any squares of values we need
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::ComputeSquares()
@@ -309,18 +297,16 @@ void AI_Dog::ComputeSquares()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::HandleCommand()
 //
-//	ROUTINE:	AI_Dog::HandleCommand()
-//
-//	PURPOSE:	Handles a command
-//
+//	PURPOSE: Handles a command
 // --------------------------------------------------------------------------- //
 
 LTBOOL AI_Dog::HandleCommand(char** pTokens, int nArgs)
 {
 	// Let base class have a whack at it...
 
-    if (CAIAnimal::HandleCommand(pTokens, nArgs)) return LTTRUE;
+	if (CAIAnimal::HandleCommand(pTokens, nArgs)) return LTTRUE;
 
 	// State-changing message
 
@@ -333,33 +319,31 @@ LTBOOL AI_Dog::HandleCommand(char** pTokens, int nArgs)
 			SetState(s_aStateMaps[iState].eState);
 			HandleCommandParameters(pTokens, nArgs);
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::SetState
 //
-//	ROUTINE:	AI_Dog::SetState
-//
-//	PURPOSE:	Changes our current state
-//
+//	PURPOSE: Changes our current state
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::SetState(CAIDogState::AIDogStateType eState)
 {
-    if ( !g_pLTServer ) return;
+	if ( !g_pLTServer ) return;
 
 	// Delete the old state
 
 	if ( m_pDogState )
 	{
 		FACTORY_DELETE(m_pDogState);
-        m_pDogState = LTNULL;
-        m_pAnimalState = LTNULL;
-        m_pState = LTNULL;
+		m_pDogState = LTNULL;
+		m_pAnimalState = LTNULL;
+		m_pState = LTNULL;
 	}
 
 	switch ( eState )
@@ -375,7 +359,7 @@ void AI_Dog::SetState(CAIDogState::AIDogStateType eState)
 
 	if ( !m_pDogState )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return;
 	}
 
@@ -383,18 +367,16 @@ void AI_Dog::SetState(CAIDogState::AIDogStateType eState)
 
 	if ( !m_pDogState->Init(this) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		FACTORY_DELETE(m_pDogState);
-        m_pDogState = LTNULL;
+		m_pDogState = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::UpdateNodes()
 //
-//	ROUTINE:	AI_Dog::UpdateNodes()
-//
-//	PURPOSE:	Update our critical node info
-//
+//	PURPOSE: Update our critical node info
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::UpdateNodes()
@@ -407,7 +389,7 @@ void AI_Dog::UpdateNodes()
 //  LTVector vHeadPos;
 
 	g_pModelLT->GetNode(m_hObject, "jnt5_1", hEyeNode);
-    g_pModelLT->GetNodeTransform(m_hObject, hEyeNode, transform, LTTRUE);
+	g_pModelLT->GetNodeTransform(m_hObject, hEyeNode, transform, LTTRUE);
 	g_pTransLT->GetPos(transform, m_vEyePos);
 
 	m_vEyeForward = m_vForward;
@@ -416,11 +398,9 @@ void AI_Dog::UpdateNodes()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::UpdateMovement()
 //
-//	ROUTINE:	AI_Dog::UpdateMovement()
-//
-//	PURPOSE:	Moves us to a given position
-//
+//	PURPOSE: Moves us to a given position
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::UpdateMovement()
@@ -429,17 +409,15 @@ void AI_Dog::UpdateMovement()
 
 	if ( !m_SteeringMgr.Update() )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::UpdateAnimator
 //
-//	ROUTINE:	AI_Dog::UpdateAnimator
-//
-//	PURPOSE:	Handles any pending Animator changes
-//
+//	PURPOSE: Handles any pending Animator changes
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::UpdateAnimator()
@@ -451,26 +429,22 @@ void AI_Dog::UpdateAnimator()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::PostUpdate
 //
-//	ROUTINE:	AI_Dog::PostUpdate
-//
-//	PURPOSE:	Does our postupdate
-//
+//	PURPOSE: Does our postupdate
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::PostUpdate()
 {
 	CAIAnimal::PostUpdate();
 
-    m_bBarked = LTFALSE;
+	m_bBarked = LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::Steerable_PreUpdate
 //
-//	ROUTINE:	AI_Dog::Steerable_PreUpdate
-//
-//	PURPOSE:	Post update of our steerable
-//
+//	PURPOSE: Post update of our steerable
 // ----------------------------------------------------------------------- //
 
 LTBOOL AI_Dog::Steerable_PreUpdate()
@@ -481,73 +455,69 @@ LTBOOL AI_Dog::Steerable_PreUpdate()
 	Steerable_SetRightVector(GetRightVector());
 	Steerable_SetPosition(GetPosition());
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::Steerable_PostUpdate
 //
-//	ROUTINE:	AI_Dog::Steerable_PostUpdate
-//
-//	PURPOSE:	Post update of our steerable
-//
+//	PURPOSE: Post update of our steerable
 // ----------------------------------------------------------------------- //
 
 LTBOOL AI_Dog::Steerable_PostUpdate()
 {
 	// Set our orientation (forward only)
 
-    LTVector vForward = Steerable_GetForwardVector();
-    LTRotation rRot;
+	LTVector vForward = Steerable_GetForwardVector();
+	LTRotation rRot;
 
-    g_pLTServer->AlignRotation(&rRot, &vForward, NULL);
+	g_pLTServer->AlignRotation(&rRot, &vForward, NULL);
 
-    g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+	g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 
 	// Set our position
 
-    LTVector vPosition = Steerable_GetPosition();
-    g_pLTServer->MoveObject(m_hObject, &vPosition);
+	LTVector vPosition = Steerable_GetPosition();
+	g_pLTServer->MoveObject(m_hObject, &vPosition);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::Steerable_Update
 //
-//	ROUTINE:	AI_Dog::Steerable_Update
-//
-//	PURPOSE:	Update of our steerable
-//
+//	PURPOSE: Update of our steerable
 // ----------------------------------------------------------------------- //
 
 LTBOOL AI_Dog::Steerable_Update(const LTVector& vSteeringDirection)
 {
 	// Get our speed
 
-    LTFLOAT fSpeed = Steerable_GetVelocity().Mag();
-    LTFLOAT fMaxSpeed = Steerable_GetMaxSpeed();
+	LTFLOAT fSpeed = Steerable_GetVelocity().Mag();
+	LTFLOAT fMaxSpeed = Steerable_GetMaxSpeed();
 
 	// See if we're stopped.
 
 	if ( fMaxSpeed == 0.0f )
 	{
-        Steerable_SetVelocity(LTVector(0,0,0));
+		Steerable_SetVelocity(LTVector(0,0,0));
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 	// Get our acceleration relative to our forward and right components
 
-    LTVector vAccel = vSteeringDirection;
-    LTFLOAT fAccelMag = vSteeringDirection.Mag();
+	LTVector vAccel = vSteeringDirection;
+	LTFLOAT fAccelMag = vSteeringDirection.Mag();
 
 	vAccel.Norm();
 
-    LTFLOAT fAccelDotRight = vAccel.Dot(m_vRight);
-    LTFLOAT fAccelDotForward = vAccel.x*m_vForward.x + vAccel.z*m_vForward.z;
+	LTFLOAT fAccelDotRight = vAccel.Dot(m_vRight);
+	LTFLOAT fAccelDotForward = vAccel.x*m_vForward.x + vAccel.z*m_vForward.z;
 
 	// The min accel.forward we can have is based on a cone which grows wider the faster we go
 
-    LTFLOAT fMinAccelDotForward = 1.0f - 1.9f*fSpeed/fMaxSpeed;
+	LTFLOAT fMinAccelDotForward = 1.0f - 1.9f*fSpeed/fMaxSpeed;
 
 	// If accel.forward is not great enough, then raise vAccel to the min
 
@@ -555,23 +525,23 @@ LTBOOL AI_Dog::Steerable_Update(const LTVector& vSteeringDirection)
 	{
 		// change vAccel to whatever the vector at fMinAccelDotForward is
 
-        LTRotation rRot;
-        g_pLTServer->AlignRotation(&rRot, &m_vForward, &m_vUp);
+		LTRotation rRot;
+		g_pLTServer->AlignRotation(&rRot, &m_vForward, &m_vUp);
 		if ( fAccelDotRight > 0.0f )
 		{
 			// Rotate "right"
-            g_pLTServer->RotateAroundAxis(&rRot, &m_vUp, (float)acos(fMinAccelDotForward));
+			g_pLTServer->RotateAroundAxis(&rRot, &m_vUp, (float)acos(fMinAccelDotForward));
 		}
 		else
 		{
 			// Rotate "left"
-            g_pLTServer->RotateAroundAxis(&rRot, &m_vUp, (float)-acos(fMinAccelDotForward));
+			g_pLTServer->RotateAroundAxis(&rRot, &m_vUp, (float)-acos(fMinAccelDotForward));
 		}
 
-        LTVector vNull;
-        LTVector vNewAccel;
+		LTVector vNull;
+		LTVector vNewAccel;
 
-        g_pLTServer->GetRotationVectors(&rRot, &vNull, &vNull, &vNewAccel);
+		g_pLTServer->GetRotationVectors(&rRot, &vNull, &vNull, &vNewAccel);
 		vNewAccel.y = vAccel.y;
 		vNewAccel.Norm();
 		vAccel = vNewAccel;
@@ -581,18 +551,16 @@ LTBOOL AI_Dog::Steerable_Update(const LTVector& vSteeringDirection)
 
 	if ( !CSteerable::Steerable_Update(vAccel*fAccelMag) )
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::Save
 //
-//	ROUTINE:	AI_Dog::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -604,10 +572,10 @@ void AI_Dog::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 	// Save state...
 
-    uint32 dwState = (uint32)-1;
+	uint32 dwState = (uint32)-1;
 	if (m_pDogState)
 	{
-        dwState = (uint32) m_pDogState->GetType();
+		dwState = (uint32) m_pDogState->GetType();
 	}
 
 	SAVE_DWORD(dwState);
@@ -626,11 +594,9 @@ void AI_Dog::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::Load
 //
-//	ROUTINE:	AI_Dog::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -642,7 +608,7 @@ void AI_Dog::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	// Load state...
 
-    uint32 dwState;
+	uint32 dwState;
 	LOAD_DWORD(dwState);
 
 	if (dwState != (DWORD)-1)
@@ -664,11 +630,9 @@ void AI_Dog::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::PreCreateSpecialFX()
 //
-//	ROUTINE:	AI_Dog::PreCreateSpecialFX()
-//
-//	PURPOSE:	Last chance to change our characterfx struct
-//
+//	PURPOSE: Last chance to change our characterfx struct
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::PreCreateSpecialFX(CHARCREATESTRUCT& cs)

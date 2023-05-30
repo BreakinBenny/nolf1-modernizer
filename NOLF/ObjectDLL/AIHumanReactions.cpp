@@ -128,9 +128,7 @@ const char* GetEnemyTargetName(CAISense* pAISense)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // SoundAlarm
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::SoundAlarm(CAISense* pAISense, LTBOOL bIndividual)
@@ -164,9 +162,7 @@ void CAIHuman::SoundAlarm(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // GetBackup
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::GetBackup(CAISense* pAISense, LTBOOL bIndividual)
@@ -200,9 +196,7 @@ void CAIHuman::GetBackup(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // HitSwitch
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::HitSwitch(CAISense* pAISense, LTBOOL bIndividual)
@@ -237,9 +231,7 @@ void CAIHuman::HitSwitch(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // GoForCover
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::GoForCover(CAISense* pAISense, LTBOOL bIndividual)
@@ -265,9 +257,7 @@ void CAIHuman::GoForCover(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // TrainingFailure
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::TrainingFailure(CAISense* pAISense, LTBOOL bIndividual)
@@ -301,9 +291,7 @@ void CAIHuman::TrainingFailure(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // Panic
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::Panic(CAISense* pAISense, LTBOOL bIndividual)
@@ -329,9 +317,7 @@ void CAIHuman::Panic(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // Distress
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::Distress(CAISense* pAISense, LTBOOL bIndividual)
@@ -357,9 +343,7 @@ void CAIHuman::Distress(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // Surrender
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::Surrender(CAISense* pAISense, LTBOOL bIndividual)
@@ -385,9 +369,7 @@ void CAIHuman::Surrender(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // Charge
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::Charge(CAISense* pAISense, LTBOOL bIndividual)
@@ -424,9 +406,7 @@ void CAIHuman::Charge(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // DrawWeaponAndAttack
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::DrawWeaponAndAttack(CAISense* pAISense, LTBOOL bIndividual)
@@ -452,9 +432,7 @@ void CAIHuman::DrawWeaponAndAttack(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // DrawWeaponAndAttackFromCover
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::DrawWeaponAndAttackFromCover(CAISense* pAISense, LTBOOL bIndividual)
@@ -480,9 +458,7 @@ void CAIHuman::DrawWeaponAndAttackFromCover(CAISense* pAISense, LTBOOL bIndividu
 }
 
 // ----------------------------------------------------------------------- //
-//
 // DrawWeaponAndAttackFromVantage
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::DrawWeaponAndAttackFromVantage(CAISense* pAISense, LTBOOL bIndividual)
@@ -508,9 +484,7 @@ void CAIHuman::DrawWeaponAndAttackFromVantage(CAISense* pAISense, LTBOOL bIndivi
 }
 
 // ----------------------------------------------------------------------- //
-//
 // Attack
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::Attack(CAISense* pAISense, LTBOOL bIndividual)
@@ -536,9 +510,7 @@ void CAIHuman::Attack(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // AttackStay
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::AttackStay(CAISense* pAISense, LTBOOL bIndividual)
@@ -564,9 +536,7 @@ void CAIHuman::AttackStay(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // AttackFromCover
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::AttackFromCover(CAISense* pAISense, LTBOOL bIndividual)
@@ -592,9 +562,7 @@ void CAIHuman::AttackFromCover(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // AttackFromCoverStay
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::AttackFromCoverStay(CAISense* pAISense, LTBOOL bIndividual)
@@ -620,9 +588,7 @@ void CAIHuman::AttackFromCoverStay(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // AttackFromCoverAlwaysRetry
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::AttackFromCoverAlwaysRetry(CAISense* pAISense, LTBOOL bIndividual)
@@ -648,9 +614,7 @@ void CAIHuman::AttackFromCoverAlwaysRetry(CAISense* pAISense, LTBOOL bIndividual
 }
 
 // ----------------------------------------------------------------------- //
-//
 // AttackFromCoverRetryOnce
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::AttackFromCoverRetryOnce(CAISense* pAISense, LTBOOL bIndividual)
@@ -678,9 +642,7 @@ void CAIHuman::AttackFromCoverRetryOnce(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // AttackOnSight
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::AttackOnSight(CAISense* pAISense, LTBOOL bIndividual)
@@ -707,9 +669,7 @@ void CAIHuman::AttackOnSight(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // AttackFromVantage
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::AttackFromVantage(CAISense* pAISense, LTBOOL bIndividual)
@@ -736,9 +696,7 @@ void CAIHuman::AttackFromVantage(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // CallOut
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::CallOut(CAISense* pAISense, LTBOOL bIndividual)
@@ -764,9 +722,7 @@ void CAIHuman::CallOut(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // ShineFlashlight
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::ShineFlashlight(CAISense* pAISense, LTBOOL bIndividual)
@@ -792,9 +748,7 @@ void CAIHuman::ShineFlashlight(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // LookAt
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::LookAt(CAISense* pAISense, LTBOOL bIndividual)
@@ -822,9 +776,7 @@ void CAIHuman::LookAt(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // BecomeAlert
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::BecomeAlert(CAISense* pAISense, LTBOOL bIndividual)
@@ -843,7 +795,7 @@ void CAIHuman::BecomeAlert(CAISense* pAISense, LTBOOL bIndividual)
 		case stHearAllyPain:
 		case stHearAllyWeaponFire:
 		{
-	        sprintf(s_szTrigger, "AWARE FIRSTSOUND=%s", bIndividual ? "TRUE" : "FALSE");
+			sprintf(s_szTrigger, "AWARE FIRSTSOUND=%s", bIndividual ? "TRUE" : "FALSE");
 		}
 		break;
 	}
@@ -851,9 +803,7 @@ void CAIHuman::BecomeAlert(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // InvestigateAndSearch
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::InvestigateAndSearch(CAISense* pAISense, LTBOOL bIndividual)
@@ -883,16 +833,14 @@ void CAIHuman::InvestigateAndSearch(CAISense* pAISense, LTBOOL bIndividual)
 
 		case stSeeEnemyFootprint:
 		{
-	        sprintf(s_szTrigger, "TARGET (%s);FOLLOWFOOTPRINT SEARCH=TRUE FIRSTSOUND=%s", ::GetEnemyTargetName(pAISense), bIndividual ? "TRUE" : "FALSE");
+			sprintf(s_szTrigger, "TARGET (%s);FOLLOWFOOTPRINT SEARCH=TRUE FIRSTSOUND=%s", ::GetEnemyTargetName(pAISense), bIndividual ? "TRUE" : "FALSE");
 		}
 		break;
 	}
 }
 
 // ----------------------------------------------------------------------- //
-//
 // InvestigateAndStay
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::InvestigateAndStay(CAISense* pAISense, LTBOOL bIndividual)
@@ -922,7 +870,7 @@ void CAIHuman::InvestigateAndStay(CAISense* pAISense, LTBOOL bIndividual)
 
 		case stSeeEnemyFootprint:
 		{
-	        sprintf(s_szTrigger, "TARGET (%s);FOLLOWFOOTPRINT FIRSTSOUND=%s", ::GetEnemyTargetName(pAISense), bIndividual ? "TRUE" : "FALSE");
+			sprintf(s_szTrigger, "TARGET (%s);FOLLOWFOOTPRINT FIRSTSOUND=%s", ::GetEnemyTargetName(pAISense), bIndividual ? "TRUE" : "FALSE");
 		}
 		break;
 	}
@@ -930,9 +878,7 @@ void CAIHuman::InvestigateAndStay(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // InvestigateAndReturn
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::InvestigateAndReturn(CAISense* pAISense, LTBOOL bIndividual)
@@ -971,9 +917,7 @@ void CAIHuman::InvestigateAndReturn(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // PassOut
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::PassOut(CAISense* pAISense, LTBOOL bIndividual)
@@ -999,9 +943,7 @@ void CAIHuman::PassOut(CAISense* pAISense, LTBOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
-//
 // SoundAlarm
-//
 // ----------------------------------------------------------------------- //
 
 void CAIHuman::AppendReturnString()
@@ -1026,7 +968,7 @@ void CAIHuman::DoReaction(HSTRING hstrReaction, CAISense* pAISense, LTBOOL bIndi
 
 	g_pLTServer->CPrint("%s doing reaction \"%s\" to %s %s", GetName(), g_pLTServer->GetStringData(hstrReaction), pAISense->GetName(), pAISense->GetOutcome() == soFalseStimulation ? "(false alarm)" : "");
 
-    char* szReaction = g_pLTServer->GetStringData(hstrReaction);
+	char* szReaction = g_pLTServer->GetStringData(hstrReaction);
 	_ASSERT(szReaction);
 
 	if ( !_stricmp(szReaction, c_szNoReaction) )
@@ -1117,7 +1059,7 @@ void CAIHuman::DoReaction(HSTRING hstrReaction, CAISense* pAISense, LTBOOL bIndi
 	{
 		// If it doesn't match one of these, it must be a command
 
-        sprintf(s_szTrigger, g_pLTServer->GetStringData(hstrReaction));
+		sprintf(s_szTrigger, g_pLTServer->GetStringData(hstrReaction));
 	}
 
 	DidReaction(pAISense, bIndividual);

@@ -44,7 +44,7 @@ void CAICmdMgr::Init()
 	HOBJECT	hCurObject = LTNULL;
 	while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAICmd))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAICmd))
 		{
 			m_cCmds++;
 		}
@@ -53,7 +53,7 @@ void CAICmdMgr::Init()
 	hCurObject = LTNULL;
 	while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAICmd))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAICmd))
 		{
 			m_cCmds++;
 		}
@@ -71,7 +71,7 @@ void CAICmdMgr::Init()
 	hCurObject = LTNULL;
 	while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAICmd))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAICmd))
 		{
 			m_apCmds[nId] = (AICmd*)g_pLTServer->HandleToObject(hCurObject);
 			m_apCmds[nId]->Verify();
@@ -83,7 +83,7 @@ void CAICmdMgr::Init()
 	hCurObject = LTNULL;
 	while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAICmd))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAICmd))
 		{
 			m_apCmds[nId] = (AICmd*)g_pLTServer->HandleToObject(hCurObject);
 			m_apCmds[nId]->Verify();
@@ -94,7 +94,7 @@ void CAICmdMgr::Init()
 
 	// All done
 
-    g_pLTServer->CPrint("Added %d Cmds", m_cCmds);
+	g_pLTServer->CPrint("Added %d Cmds", m_cCmds);
 
 	m_bInitialized = LTTRUE;
 }

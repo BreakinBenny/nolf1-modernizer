@@ -102,7 +102,7 @@ class AICmdPlugin : public IObjectPlugin
 {
 	public:
 
-        LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
+		LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
 		{
 			if (_strcmpi("Move", szPropName) == 0)
 			{
@@ -163,7 +163,7 @@ uint32 AICmd::EngineMessageFn(uint32 messageID, void *pocs, LTFLOAT fData)
 	{
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = BaseClass::EngineMessageFn(messageID, pocs, fData);
+			uint32 dwRet = BaseClass::EngineMessageFn(messageID, pocs, fData);
 
 			ReadProp((ObjectCreateStruct*)pocs);
 
@@ -177,9 +177,9 @@ uint32 AICmd::EngineMessageFn(uint32 messageID, void *pocs, LTFLOAT fData)
 
 void AICmd::ReadProp(ObjectCreateStruct *pocs)
 {
-    if ( g_pLTServer->GetPropGeneric( "Name", &s_gp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Name", &s_gp ) == LT_OK )
 		if ( s_gp.m_String[0] )
-            m_hstrName = g_pLTServer->CreateString( s_gp.m_String );
+			m_hstrName = g_pLTServer->CreateString( s_gp.m_String );
 }
 
 const char* AICmd::ToString()

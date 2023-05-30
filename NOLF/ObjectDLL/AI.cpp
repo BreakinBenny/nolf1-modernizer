@@ -114,12 +114,12 @@ BEGIN_CLASS(CAI)
 
 		ADD_STRINGPROP_FLAG(SoundRadius,	"", PF_GROUP3|PF_RADIUS)
 		ADD_STRINGPROP_FLAG(HitPoints,		"", PF_GROUP3)
-		ADD_STRINGPROP_FLAG(Armor,			"", PF_GROUP3)
+		ADD_STRINGPROP_FLAG(Armor,		"", PF_GROUP3)
 
 		ADD_STRINGPROP_FLAG(Accuracy,		"", PF_GROUP3)
 		ADD_STRINGPROP_FLAG(Lag,			"", PF_GROUP3)
 
-		ADD_STRINGPROP_FLAG(Awareness,		"", PF_GROUP3)
+		ADD_STRINGPROP_FLAG(Awareness,	"", PF_GROUP3)
 
 		// Sense attributes
 
@@ -128,7 +128,7 @@ BEGIN_CLASS(CAI)
 	PROP_DEFINEGROUP(Commands, PF_GROUP4)
 
 		ADD_STRINGPROP_FLAG(Initial,		"", PF_GROUP4)
-		ADD_STRINGPROP_FLAG(ActivateOn,		"", PF_GROUP4)
+		ADD_STRINGPROP_FLAG(ActivateOn,	"", PF_GROUP4)
 		ADD_STRINGPROP_FLAG(ActivateOff,	"", PF_GROUP4)
 
 	ADD_STRINGPROP_FLAG(ModelStyle, "", PF_STATICLIST)
@@ -141,21 +141,21 @@ HOBJECT s_hFilterAI = LTNULL;
 
 LTBOOL CAI::DefaultFilterFn(HOBJECT hObj, void *pUserData)
 {
-    if ( !hObj ) return LTFALSE;
-    if ( hObj == s_hFilterAI ) return LTFALSE;
+	if ( !hObj ) return LTFALSE;
+	if ( hObj == s_hFilterAI ) return LTFALSE;
 
-    static HCLASS hBody = g_pLTServer->GetClass("Body");
+	static HCLASS hBody = g_pLTServer->GetClass("Body");
 
-    if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hBody))
+	if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hBody))
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    static HCLASS hHitbox = g_pLTServer->GetClass("CCharacterHitBox");
+	static HCLASS hHitbox = g_pLTServer->GetClass("CCharacterHitBox");
 
-    if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hHitbox))
+	if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hHitbox))
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	return LiquidFilterFn(hObj, pUserData);
@@ -163,14 +163,14 @@ LTBOOL CAI::DefaultFilterFn(HOBJECT hObj, void *pUserData)
 
 LTBOOL CAI::BodyFilterFn(HOBJECT hObj, void *pUserData)
 {
-    if (!hObj ) return LTFALSE;
-    if ( hObj == s_hFilterAI ) return LTFALSE;
+	if (!hObj ) return LTFALSE;
+	if ( hObj == s_hFilterAI ) return LTFALSE;
 
-    static HCLASS hHitbox = g_pLTServer->GetClass("CCharacterHitBox");
+	static HCLASS hHitbox = g_pLTServer->GetClass("CCharacterHitBox");
 
-    if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hHitbox))
+	if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hHitbox))
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	return LiquidFilterFn(hObj, pUserData);
@@ -178,26 +178,26 @@ LTBOOL CAI::BodyFilterFn(HOBJECT hObj, void *pUserData)
 
 LTBOOL CAI::ShootThroughFilterFn(HOBJECT hObj, void *pUserData)
 {
-    if ( !hObj ) return LTFALSE;
-    if ( hObj == s_hFilterAI ) return LTFALSE;
+	if ( !hObj ) return LTFALSE;
+	if ( hObj == s_hFilterAI ) return LTFALSE;
 
 	if ( IsMainWorld(hObj) )
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    static HCLASS hBody = g_pLTServer->GetClass("Body");
+	static HCLASS hBody = g_pLTServer->GetClass("Body");
 
-    if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hBody))
+	if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hBody))
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    static HCLASS hHitbox = g_pLTServer->GetClass("CCharacterHitBox");
+	static HCLASS hHitbox = g_pLTServer->GetClass("CCharacterHitBox");
 
-    if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hHitbox))
+	if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hHitbox))
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	return LiquidFilterFn(hObj, pUserData);
@@ -205,7 +205,7 @@ LTBOOL CAI::ShootThroughFilterFn(HOBJECT hObj, void *pUserData)
 
 LTBOOL CAI::ShootThroughPolyFilterFn(HPOLY hPoly, void *pUserData)
 {
-    if ( INVALID_HPOLY == hPoly ) return LTFALSE;
+	if ( INVALID_HPOLY == hPoly ) return LTFALSE;
 
 	SURFACE* pSurf = g_pSurfaceMgr->GetSurface(GetSurfaceType(hPoly));
 	if ( !pSurf )
@@ -214,36 +214,36 @@ LTBOOL CAI::ShootThroughPolyFilterFn(HPOLY hPoly, void *pUserData)
 		return LTFALSE;
 	}
 
-    if ( pSurf->bCanShootThrough )
+	if ( pSurf->bCanShootThrough )
 	{
 		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 LTBOOL CAI::SeeThroughFilterFn(HOBJECT hObj, void *pUserData)
 {
-    if ( !hObj ) return LTFALSE;
-    if ( hObj == s_hFilterAI ) return LTFALSE;
+	if ( !hObj ) return LTFALSE;
+	if ( hObj == s_hFilterAI ) return LTFALSE;
 
 	if ( IsMainWorld(hObj) )
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    static HCLASS hBody = g_pLTServer->GetClass("Body");
+	static HCLASS hBody = g_pLTServer->GetClass("Body");
 
-    if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hBody))
+	if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hBody))
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    static HCLASS hHitbox = g_pLTServer->GetClass("CCharacterHitBox");
+	static HCLASS hHitbox = g_pLTServer->GetClass("CCharacterHitBox");
 
-    if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hHitbox))
+	if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hHitbox))
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	return LiquidFilterFn(hObj, pUserData);
@@ -251,7 +251,7 @@ LTBOOL CAI::SeeThroughFilterFn(HOBJECT hObj, void *pUserData)
 
 LTBOOL CAI::SeeThroughPolyFilterFn(HPOLY hPoly, void *pUserData)
 {
-    if ( INVALID_HPOLY == hPoly ) return LTFALSE;
+	if ( INVALID_HPOLY == hPoly ) return LTFALSE;
 
 	SURFACE* pSurf = g_pSurfaceMgr->GetSurface(GetSurfaceType(hPoly));
 	if ( !pSurf )
@@ -260,38 +260,36 @@ LTBOOL CAI::SeeThroughPolyFilterFn(HPOLY hPoly, void *pUserData)
 		return LTFALSE;
 	}
 
-    if ( pSurf->bCanSeeThrough )
+	if ( pSurf->bCanSeeThrough )
 	{
 		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::CAI()
 //
-//	ROUTINE:	CAI::CAI()
-//
-//	PURPOSE:	Constructor - Initialize
-//
+//	PURPOSE: Constructor - Initialize
 // ----------------------------------------------------------------------- //
 
 CAI::CAI() : CCharacter()
 {
-    m_bCheapMovement = LTFALSE;
+	m_bCheapMovement = LTFALSE;
 
 	m_pTarget = FACTORY_NEW(CAITarget);
 	m_pSenseMgr = FACTORY_NEW(CAISenseMgr);
 	m_pAISenseRecorder = FACTORY_NEW(CAISenseRecorder);
 
-    m_bFirstReaction = LTTRUE;
+	m_bFirstReaction = LTTRUE;
 
-    m_bFirstUpdate = LTTRUE;
+	m_bFirstUpdate = LTTRUE;
 	*m_szQueuedCommands = 0;
 
 	VEC_INIT(m_vPos);
 
-    m_rRot.Init();
+	m_rRot.Init();
 
 	VEC_INIT(m_vRight);
 	VEC_INIT(m_vUp);
@@ -304,11 +302,11 @@ CAI::CAI() : CCharacter()
 	VEC_INIT(m_vDims);
 	m_fRadius = 1.0f;
 
-    m_rTargetRot.Init();
+	m_rTargetRot.Init();
 	VEC_INIT(m_vTargetRight);
 	VEC_INIT(m_vTargetUp);
 	VEC_INIT(m_vTargetForward);
-    m_bRotating = LTFALSE;
+	m_bRotating = LTFALSE;
 	m_fRotationSpeed = 2.0f;
 	m_fRotationTime = -1.0f;
 	m_fRotationTimer = 0.0f;
@@ -346,8 +344,8 @@ CAI::CAI() : CCharacter()
 
 	m_fAwareness	= 0.0f;
 
-    m_bSeeThrough = LTFALSE;
-    m_bShootThrough = LTFALSE;
+	m_bSeeThrough = LTFALSE;
+	m_bShootThrough = LTFALSE;
 
 	m_hstrAttributeTemplate = LTNULL;
 
@@ -355,7 +353,7 @@ CAI::CAI() : CCharacter()
 	m_hstrCmdActivateOn = LTNULL;
 	m_hstrCmdActivateOff = LTNULL;
 
-    m_bActivated = LTFALSE;
+	m_bActivated = LTFALSE;
 	m_bAlwaysActivate = LTFALSE;
 
 	m_pGroup = LTNULL;
@@ -383,16 +381,14 @@ CAI::CAI() : CCharacter()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::~CAI()
 //
-//	ROUTINE:	CAI::~CAI()
-//
-//	PURPOSE:	Deallocate data
-//
+//	PURPOSE: Deallocate data
 // ----------------------------------------------------------------------- //
 
 CAI::~CAI()
 {
-    if (!g_pLTServer) return;
+	if (!g_pLTServer) return;
 
 	if ( m_pState )
 	{
@@ -420,11 +416,9 @@ CAI::~CAI()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::ComputeSquares
 //
-//	ROUTINE:	CAI::ComputeSquares
-//
-//	PURPOSE:	Set all the squared member variables
-//
+//	PURPOSE: Set all the squared member variables
 // ----------------------------------------------------------------------- //
 
 void CAI::ComputeSquares()
@@ -433,11 +427,9 @@ void CAI::ComputeSquares()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::EngineMessageFn
 //
-//	ROUTINE:	CAI::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 CAI::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -519,7 +511,7 @@ uint32 CAI::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = CCharacter::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = CCharacter::EngineMessageFn(messageID, pData, fData);
 
 			int nInfo = (int)fData;
 			if (nInfo == PRECREATE_WORLDFILE || nInfo == PRECREATE_STRINGPROP)
@@ -538,15 +530,15 @@ uint32 CAI::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_SAVEOBJECT:
 		{
-            uint32 dwRet = CCharacter::EngineMessageFn(messageID, pData, fData);
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			uint32 dwRet = CCharacter::EngineMessageFn(messageID, pData, fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 			return dwRet;
 		}
 
 		case MID_LOADOBJECT:
 		{
-            uint32 dwRet = CCharacter::EngineMessageFn(messageID, pData, fData);
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			uint32 dwRet = CCharacter::EngineMessageFn(messageID, pData, fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 			return dwRet;
 		}
 
@@ -560,11 +552,9 @@ uint32 CAI::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::ObjectMessageFn
 //
-//	ROUTINE:	CAI::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 CAI::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -587,7 +577,7 @@ uint32 CAI::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRea
 
 		case MID_TRIGGER:
 		{
-            const char* szMessage = (const char*)g_pLTServer->ReadFromMessageDWord(hRead);
+			const char* szMessage = (const char*)g_pLTServer->ReadFromMessageDWord(hRead);
 			HandleTrigger(hSender, szMessage);
 		}
 		break;
@@ -599,28 +589,26 @@ uint32 CAI::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRea
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::ReadProp
 //
-//	ROUTINE:	CAI::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAI::ReadProp(ObjectCreateStruct *pData)
 {
 	GenericProp genProp;
-    if (!g_pLTServer || !pData) return LTFALSE;
+	if (!g_pLTServer || !pData) return LTFALSE;
 
 	// If we have an attribute template, fill in the info
 
 	if ( m_hstrAttributeTemplate )
 	{
-        char *szAttributeTemplate = g_pLTServer->GetStringData(m_hstrAttributeTemplate);
+		char *szAttributeTemplate = g_pLTServer->GetStringData(m_hstrAttributeTemplate);
 		int nTemplateID = g_pAIButeMgr->GetTemplateIDByName(szAttributeTemplate);
 
 		if ( nTemplateID < 0 )
 		{
-            g_pLTServer->CPrint("Bad AI Attribute Template referenced! : %s", szAttributeTemplate);
+			g_pLTServer->CPrint("Bad AI Attribute Template referenced! : %s", szAttributeTemplate);
 		}
 		else
 		{
@@ -637,7 +625,7 @@ LTBOOL CAI::ReadProp(ObjectCreateStruct *pData)
 			m_fLagIncreaseRate = g_pAIButeMgr->GetTemplate(nTemplateID)->fLagIncreaseRate;
 			m_fLagDecreaseRate = g_pAIButeMgr->GetTemplate(nTemplateID)->fLagDecreaseRate;
 
-            LTFLOAT fSndRadius = g_pAIButeMgr->GetTemplate(nTemplateID)->fSoundRadius;
+			LTFLOAT fSndRadius = g_pAIButeMgr->GetTemplate(nTemplateID)->fSoundRadius;
 			m_fSoundRadius = fSndRadius <= 0.0 ? m_fSoundRadius : fSndRadius;
 
 			m_fAwareness = g_pAIButeMgr->GetTemplate(nTemplateID)->fAwareness;
@@ -649,7 +637,7 @@ LTBOOL CAI::ReadProp(ObjectCreateStruct *pData)
 	}
 	else
 	{
-        g_pLTServer->CPrint("No attribute template specified for AI!");
+		g_pLTServer->CPrint("No attribute template specified for AI!");
 	}
 
 	// Sense Reactions
@@ -659,69 +647,69 @@ LTBOOL CAI::ReadProp(ObjectCreateStruct *pData)
 
 	// Cinematic extension
 
-    if ( g_pLTServer->GetPropGeneric( "CinematicExtension", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "CinematicExtension", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrCinematicExtension = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrCinematicExtension = g_pLTServer->CreateString( genProp.m_String );
 
 	// BodySkin extension
 
-    if ( g_pLTServer->GetPropGeneric( "BodySkinExtension", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "BodySkinExtension", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrBodySkinExtension = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrBodySkinExtension = g_pLTServer->CreateString( genProp.m_String );
 
 	// Commands
 
-    if ( g_pLTServer->GetPropGeneric( "Initial", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "Initial", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrCmdInitial = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrCmdInitial = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "ActivateOn", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "ActivateOn", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrCmdActivateOn = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrCmdActivateOn = g_pLTServer->CreateString( genProp.m_String );
 
-    if ( g_pLTServer->GetPropGeneric( "ActivateOff", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric( "ActivateOff", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
-            m_hstrCmdActivateOff = g_pLTServer->CreateString( genProp.m_String );
+			m_hstrCmdActivateOff = g_pLTServer->CreateString( genProp.m_String );
 
 	// Overrides
 
-    if ( g_pLTServer->GetPropGeneric("Awareness", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("Awareness", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fAwareness = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("SoundRadius", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("SoundRadius", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fSoundRadius = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("HitPoints", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("HitPoints", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fDefaultHitPts = RAISE_BY_DIFFICULTY(genProp.m_Float);
 
-    if ( g_pLTServer->GetPropGeneric("Armor", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("Armor", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fDefaultArmor = RAISE_BY_DIFFICULTY(genProp.m_Float);
 
-    if ( g_pLTServer->GetPropGeneric("Accuracy", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("Accuracy", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fBaseAccuracy = m_fAccuracy = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("Lag", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("Lag", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fBaseLag = m_fLagTimer = m_fLag = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("AccuracyIncreaseRate", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("AccuracyIncreaseRate", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fAccuracyIncreaseRate = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("AccuracyDecreaseRate", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("AccuracyDecreaseRate", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fAccuracyDecreaseRate = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("LagIncreaseRate", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("LagIncreaseRate", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fLagIncreaseRate = genProp.m_Float;
 
-    if ( g_pLTServer->GetPropGeneric("LagDecreaseRate", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("LagDecreaseRate", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_fLagDecreaseRate = genProp.m_Float;
 
@@ -731,7 +719,7 @@ LTBOOL CAI::ReadProp(ObjectCreateStruct *pData)
 
 	// Get our model style
 
-    if ( g_pLTServer->GetPropGeneric("ModelStyle", &genProp ) == LT_OK )
+	if ( g_pLTServer->GetPropGeneric("ModelStyle", &genProp ) == LT_OK )
 		if ( genProp.m_String[0] )
 			m_eModelStyle = g_pModelButeMgr->GetModelStyleFromProperty(genProp.m_String);
 
@@ -739,22 +727,20 @@ LTBOOL CAI::ReadProp(ObjectCreateStruct *pData)
 
 	ComputeSquares();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::PostPropRead()
 //
-//	ROUTINE:	CAI::PostPropRead()
-//
-//	PURPOSE:	Initialize model
-//
+//	PURPOSE: Initialize model
 // ----------------------------------------------------------------------- //
 
 void CAI::PostPropRead(ObjectCreateStruct *pStruct)
 {
-    if (!g_pLTServer || !pStruct) return;
+	if (!g_pLTServer || !pStruct) return;
 
-    const char* pFilename   = g_pModelButeMgr->GetModelFilename(m_eModelId, m_eModelStyle, m_hstrCinematicExtension ? g_pLTServer->GetStringData(m_hstrCinematicExtension) : LTNULL);
+	const char* pFilename   = g_pModelButeMgr->GetModelFilename(m_eModelId, m_eModelStyle, m_hstrCinematicExtension ? g_pLTServer->GetStringData(m_hstrCinematicExtension) : LTNULL);
 
 	if (pFilename && pFilename[0])
 	{
@@ -776,29 +762,27 @@ void CAI::PostPropRead(ObjectCreateStruct *pStruct)
 
 	// Add all our editables
 
-    m_editable.AddFloatProp("SoundRadius",  &m_fSoundRadius);
+	m_editable.AddFloatProp("SoundRadius",  &m_fSoundRadius);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::InitialUpdate()
 //
-//	ROUTINE:	CAI::InitialUpdate()
-//
-//	PURPOSE:	Initialize the AI routines
-//
+//	PURPOSE: Initialize the AI routines
 // ----------------------------------------------------------------------- //
 
 void CAI::InitialUpdate()
 {
-    if (!m_hObject) return;
+	if (!m_hObject) return;
 
 	// Don't rag-doll AI anymore...
 
-    m_damage.SetApplyDamagePhysics(LTFALSE);
+	m_damage.SetApplyDamagePhysics(LTFALSE);
 
 	ObjectCreateStruct createstruct;
 	createstruct.Clear();
 
-    const char* pFilename = g_pModelButeMgr->GetModelFilename(m_eModelId, m_eModelStyle, m_hstrCinematicExtension ? g_pLTServer->GetStringData(m_hstrCinematicExtension) : LTNULL);
+	const char* pFilename = g_pModelButeMgr->GetModelFilename(m_eModelId, m_eModelStyle, m_hstrCinematicExtension ? g_pLTServer->GetStringData(m_hstrCinematicExtension) : LTNULL);
 	SAFE_STRCPY(createstruct.m_Filename, pFilename);
 
 	const char* pSkin = g_pModelButeMgr->GetBodySkinFilename(m_eModelId, m_eModelStyle, m_hstrBodySkinExtension ? g_pLTServer->GetStringData(m_hstrBodySkinExtension) : LTNULL);
@@ -807,22 +791,22 @@ void CAI::InitialUpdate()
 	const char* pSkin2 = GetHeadSkinFilename();
 	SAFE_STRCPY(createstruct.m_SkinNames[1], pSkin2);
 
-    g_pLTServer->Common()->SetObjectFilenames(m_hObject, &createstruct);
+	g_pLTServer->Common()->SetObjectFilenames(m_hObject, &createstruct);
 
-    g_pLTServer->GetObjectRotation(m_hObject, &m_rTargetRot);
+	g_pLTServer->GetObjectRotation(m_hObject, &m_rTargetRot);
 	g_pMathLT->GetRotationVectors(m_rTargetRot, m_vTargetRight, m_vTargetUp, m_vTargetForward);
 
 	if (!g_SenseInfoTrack.IsInitted())
 	{
-        g_SenseInfoTrack.Init(g_pLTServer, "AISenseInfo", LTNULL, 0.0f);
+		g_SenseInfoTrack.Init(g_pLTServer, "AISenseInfo", LTNULL, 0.0f);
 	}
 
 	if (!g_AccuracyInfoTrack.IsInitted())
 	{
-        g_AccuracyInfoTrack.Init(g_pLTServer, "AIAccuracyInfo", LTNULL, 0.0f);
+		g_AccuracyInfoTrack.Init(g_pLTServer, "AIAccuracyInfo", LTNULL, 0.0f);
 	}
 
-    uint32 nFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	uint32 nFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
 	g_pLTServer->SetObjectUserFlags(m_hObject, nFlags | USRFLG_AI_CLIENT_SOLID);
 
 	if ( IsKindOf(m_hObject, "AI_Baroness") )
@@ -838,16 +822,14 @@ void CAI::InitialUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::CacheFiles()
 //
-//	ROUTINE:	CAI::CacheFiles()
-//
-//	PURPOSE:	Cache resources used by this AI
-//
+//	PURPOSE: Cache resources used by this AI
 // ----------------------------------------------------------------------- //
 
 void CAI::CacheFiles()
 {
-    if (!m_hObject) return;
+	if (!m_hObject) return;
 
 	// Cache all other AI sounds...
 
@@ -855,11 +837,9 @@ void CAI::CacheFiles()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::HandleSense()
 //
-//	ROUTINE:	CAI::HandleSense()
-//
-//	PURPOSE:	Handle sense being stimulated
-//
+//	PURPOSE: Handle sense being stimulated
 // ----------------------------------------------------------------------- //
 
 void CAI::HandleSense(CAISense* pAISense)
@@ -879,7 +859,7 @@ void CAI::HandleSense(CAISense* pAISense)
 				else if ( !m_pAISenseRecorder->IsRecorded(pAISense) )
 				{
 					m_pAISenseRecorder->Record(pAISense);
-                    DoReaction(GetIndividualSenseReaction(pAISense), pAISense, LTTRUE);
+					DoReaction(GetIndividualSenseReaction(pAISense), pAISense, LTTRUE);
 				}
 
 				pAISense->Clear();
@@ -906,7 +886,7 @@ void CAI::HandleSense(CAISense* pAISense)
 						else if ( !m_pAISenseRecorder->IsRecorded(pAISense) )
 						{
 							m_pAISenseRecorder->Record(pAISense);
-                            DoReaction(GetIndividualSenseReaction(pAISense), pAISense, LTTRUE);
+							DoReaction(GetIndividualSenseReaction(pAISense), pAISense, LTTRUE);
 						}
 
 						pAISense->Clear();
@@ -922,7 +902,7 @@ void CAI::HandleSense(CAISense* pAISense)
 						else if ( !m_pAISenseRecorder->IsRecorded(pAISense) )
 						{
 							m_pAISenseRecorder->Record(pAISense);
-                            DoReaction(GetIndividualSenseReaction(pAISense), pAISense, LTTRUE);
+							DoReaction(GetIndividualSenseReaction(pAISense), pAISense, LTTRUE);
 						}
 
 						pAISense->Clear();
@@ -955,7 +935,7 @@ void CAI::HandleSense(CAISense* pAISense)
 					else if ( !m_pAISenseRecorder->IsRecorded(pAISense) )
 					{
 						m_pAISenseRecorder->Record(pAISense);
-                        DoReaction(GetIndividualSenseReaction(pAISense), pAISense, LTTRUE);
+						DoReaction(GetIndividualSenseReaction(pAISense), pAISense, LTTRUE);
 					}
 
 					pAISense->Clear();
@@ -971,11 +951,9 @@ void CAI::HandleSense(CAISense* pAISense)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::HandleSenseReaction()
 //
-//	ROUTINE:	CAI::HandleSenseReaction()
-//
-//	PURPOSE:	Handle individual sense being reacted to
-//
+//	PURPOSE: Handle individual sense being reacted to
 // ----------------------------------------------------------------------- //
 
 HSTRING CAI::GetSenseReaction(CAIReactions* pAIReactions, CAISense* pAISense, LTBOOL bFirstReaction)
@@ -1071,13 +1049,13 @@ HSTRING CAI::GetSenseReaction(CAIReactions* pAIReactions, CAISense* pAISense, LT
 		// If we tried to get a first reaction and there wasn't one,
 		// see if we can get a second reaction
 
-        return GetSenseReaction(pAIReactions, pAISense, LTFALSE);
+		return GetSenseReaction(pAIReactions, pAISense, LTFALSE);
 	}
 	else
 	{
 		if ( bFirstReaction )
 		{
-            m_bFirstReaction = LTFALSE;
+			m_bFirstReaction = LTFALSE;
 		}
 
 		return hstrReaction;
@@ -1085,11 +1063,9 @@ HSTRING CAI::GetSenseReaction(CAIReactions* pAIReactions, CAISense* pAISense, LT
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::HandleTouch()
 //
-//	ROUTINE:	CAI::HandleTouch()
-//
-//	PURPOSE:	Handle touch notify message
-//
+//	PURPOSE: Handle touch notify message
 // ----------------------------------------------------------------------- //
 
 void CAI::HandleTouch(HOBJECT hObj)
@@ -1101,11 +1077,9 @@ void CAI::HandleTouch(HOBJECT hObj)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::HandleTrigger()
 //
-//	ROUTINE:	CAI::HandleTrigger()
-//
-//	PURPOSE:	Handle a trigger message
-//
+//	PURPOSE: Handle a trigger message
 // ----------------------------------------------------------------------- //
 
 void CAI::HandleTrigger(HOBJECT hSender, const char* szMessage)
@@ -1143,11 +1117,9 @@ void CAI::HandleTrigger(HOBJECT hSender, const char* szMessage)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::UpdateUserFlagCanActivate()
 //
-//	ROUTINE:	CAI::UpdateUserFlagCanActivate()
-//
-//	PURPOSE:	Updates our CAN_ACTIVATE user flag.
-//
+//	PURPOSE: Updates our CAN_ACTIVATE user flag.
 // ----------------------------------------------------------------------- //
 
 void CAI::UpdateUserFlagCanActivate()
@@ -1167,11 +1139,9 @@ void CAI::UpdateUserFlagCanActivate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::HandleDamage()
 //
-//	ROUTINE:	CAI::HandleDamage()
-//
-//	PURPOSE:	Notification that we are hit by something
-//
+//	PURPOSE: Notification that we are hit by something
 // ----------------------------------------------------------------------- //
 
 void CAI::HandleDamage(const DamageStruct& damage)
@@ -1211,11 +1181,9 @@ void CAI::HandleDamage(const DamageStruct& damage)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::HandleBrokenLink()
 //
-//	ROUTINE:	CAI::HandleBrokenLink()
-//
-//	PURPOSE:	Handle a broken interobject link
-//
+//	PURPOSE: Handle a broken interobject link
 // ----------------------------------------------------------------------- //
 
 void CAI::HandleBrokenLink(HOBJECT hLink)
@@ -1225,7 +1193,7 @@ void CAI::HandleBrokenLink(HOBJECT hLink)
 
 	if ( hLink == m_pTarget->GetObject() )
 	{
-        m_pTarget->SetValid(LTFALSE);
+		m_pTarget->SetValid(LTFALSE);
 	}
 
 	if ( hLink == m_hCinematicTrigger )
@@ -1240,11 +1208,9 @@ void CAI::HandleBrokenLink(HOBJECT hLink)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CAI::ProcessCommand()
 //
-//	ROUTINE:	CAI::ProcessCommand()
-//
-//	PURPOSE:	Stores a command on the command queue
-//
+//	PURPOSE: Stores a command on the command queue
 // --------------------------------------------------------------------------- //
 
 LTBOOL CAI::ProcessTriggerMsg(const char* pMsg)
@@ -1271,11 +1237,9 @@ LTBOOL CAI::ProcessTriggerMsg(const char* pMsg)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CAI::ProcessCommand()
 //
-//	ROUTINE:	CAI::ProcessCommand()
-//
-//	PURPOSE:	Stores a command on the command queue
-//
+//	PURPOSE: Stores a command on the command queue
 // --------------------------------------------------------------------------- //
 
 LTBOOL CAI::ProcessCommand(char** pTokens, int nArgs, char* pNextCommand)
@@ -1289,7 +1253,7 @@ LTBOOL CAI::ProcessCommand(char** pTokens, int nArgs, char* pNextCommand)
 
 	if ( CCharacter::ProcessCommand(pTokens, nArgs, pNextCommand) )
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else
 	{
@@ -1298,11 +1262,9 @@ LTBOOL CAI::ProcessCommand(char** pTokens, int nArgs, char* pNextCommand)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CAI::HandleCommand()
 //
-//	ROUTINE:	CAI::HandleCommand()
-//
-//	PURPOSE:	Handles a command
-//
+//	PURPOSE: Handles a command
 // --------------------------------------------------------------------------- //
 
 LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
@@ -1313,7 +1275,7 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 	{
 		if ( m_pState->HandleCommand(pTokens, nArgs) )
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
@@ -1323,7 +1285,7 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 
 		if ( pTokens[1] && *pTokens[1] )
 		{
-            uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+			uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 
 			if ( IsTrueChar(*pTokens[1]) )
 			{
@@ -1331,15 +1293,15 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 			}
 			else
 			{
-                g_pLTServer->SetVelocity(m_hObject, &LTVector(0,0,0));
+				g_pLTServer->SetVelocity(m_hObject, &LTVector(0,0,0));
 
 				dwFlags &= ~FLAG_GRAVITY;
 			}
 
-            g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
+			g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	if ( !_stricmp(pTokens[0], "ALWAYSACTIVATE") )
 	{
@@ -1359,26 +1321,26 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 			GetSenseMgr()->SetEnabled(IsTrueChar(*pTokens[1]));
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	if ( !_stricmp(pTokens[0], "MOVE") )
 	{
-        LTVector vPos;
+		LTVector vPos;
 		sscanf(pTokens[1], "%f,%f,%f", &vPos.x, &vPos.y, &vPos.z);
 		vPos += m_vPos;
 
-        g_pLTServer->MoveObject(m_hObject, &vPos);
-        return LTTRUE;
+		g_pLTServer->MoveObject(m_hObject, &vPos);
+		return LTTRUE;
 	}
 	if ( !_stricmp(pTokens[0], "TELEPORT") )
 	{
 		if ( IsVector(pTokens[1]) )
 		{
-            LTVector vPos;
+			LTVector vPos;
 			sscanf(pTokens[1], "%f,%f,%f", &vPos.x, &vPos.y, &vPos.z);
 
 			HandleTeleport(vPos);
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 	if ( !_stricmp(pTokens[0], "SHOOTTHROUGH") )
@@ -1389,11 +1351,11 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 		{
 			m_bShootThrough = IsTrueChar(*pTokens[1]);
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		else
 		{
-            g_pLTServer->CPrint("SHOOTTHROUGH missing argument");
+			g_pLTServer->CPrint("SHOOTTHROUGH missing argument");
 		}
 	}
 	if ( !_stricmp(pTokens[0], "SEETHROUGH") )
@@ -1404,11 +1366,11 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 		{
 			m_bSeeThrough = IsTrueChar(*pTokens[1]);
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		else
 		{
-            g_pLTServer->CPrint("SEETHROUGH missing argument");
+			g_pLTServer->CPrint("SEETHROUGH missing argument");
 		}
 	}
 	if ( !_stricmp(pTokens[0], "FOVBIAS") )
@@ -1419,11 +1381,11 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 		{
 			m_fFOVBias = FOV2DP((LTFLOAT)atof(pTokens[1]));
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		else
 		{
-            g_pLTServer->CPrint("FOVBIAS missing argument");
+			g_pLTServer->CPrint("FOVBIAS missing argument");
 		}
 	}
 	if ( !_stricmp(pTokens[0], "PLAYSOUND") )
@@ -1436,15 +1398,15 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 		}
 		else
 		{
-            g_pLTServer->CPrint("PLAYSOUND missing argument");
+			g_pLTServer->CPrint("PLAYSOUND missing argument");
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if ( !_stricmp(pTokens[0], "ATP") )
 	{
-        SendTriggerMsgToObject(this, m_hObject, LTFALSE, "TARGETPLAYER;ATTACK");
-        return LTTRUE;
+		SendTriggerMsgToObject(this, m_hObject, LTFALSE, "TARGETPLAYER;ATTACK");
+		return LTTRUE;
 	}
 	else if ( !_stricmp(pTokens[0], "FACEOBJECT") )
 	{
@@ -1454,36 +1416,36 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 			FaceObject(hObject);
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if ( !_stricmp(pTokens[0], "FACEPOS") )
 	{
-        LTVector vPos;
+		LTVector vPos;
 		sscanf(pTokens[1], "%f,%f,%f", &vPos.x, &vPos.y, &vPos.z);
 		FacePos(vPos);
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if ( !_stricmp(pTokens[0], "FACEDIR") )
 	{
-        LTVector vDir;
+		LTVector vDir;
 		sscanf(pTokens[1], "%f,%f,%f", &vDir.x, &vDir.y, &vDir.z);
 		FaceDir(vDir);
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if ( !_stricmp(pTokens[0], "FACETARGET") )
 	{
 		FaceTarget();
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if ( !_stricmp(pTokens[0], "TARGET") )
 	{
 		_ASSERT(pTokens[1]);
 		if ( !pTokens[1] )
 		{
-            g_pLTServer->CPrint("TARGET missing argument");
+			g_pLTServer->CPrint("TARGET missing argument");
 		}
 		else
 		{
@@ -1494,7 +1456,7 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 			}
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if ( !_stricmp(pTokens[0], "TARGETPLAYER") )
 	{
@@ -1504,7 +1466,7 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 			Target(pPlayer->m_hObject);
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if ( !_stricmp(pTokens[0], "PING") )
 	{
@@ -1519,7 +1481,7 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 		_ASSERT(pTokens[1]);
 		if ( !pTokens[1] )
 		{
-            g_pLTServer->CPrint("DELCMD missing argument");
+			g_pLTServer->CPrint("DELCMD missing argument");
 		}
 		else
 		{
@@ -1535,26 +1497,24 @@ LTBOOL CAI::HandleCommand(char** pTokens, int nArgs)
 			}
 			else
 			{
-	            g_pLTServer->CPrint("DELCMD %s - invalid command to delete", pTokens[1]);
+				g_pLTServer->CPrint("DELCMD %s - invalid command to delete", pTokens[1]);
 			}
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else
 	{
 		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CAI::ProcessCommandParameters()
 //
-//	ROUTINE:	CAI::ProcessCommandParameters()
-//
-//	PURPOSE:	Process command parameters
-//
+//	PURPOSE: Process command parameters
 // --------------------------------------------------------------------------- //
 
 void CAI::HandleCommandParameters(char** pTokens, int nArgs)
@@ -1569,7 +1529,7 @@ void CAI::HandleCommandParameters(char** pTokens, int nArgs)
 
 		if ( !pEqual )
 		{
-            g_pLTServer->CPrint("Garbage name/value pair = %s", pTokens[iToken]);
+			g_pLTServer->CPrint("Garbage name/value pair = %s", pTokens[iToken]);
 			iToken++;
 			continue;
 		}
@@ -1602,11 +1562,9 @@ void CAI::HandleDetach()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::HandleTeleport()
 //
-//	ROUTINE:	CAI::HandleTeleport()
-//
-//	PURPOSE:	Teleport the ai to the specified position
-//
+//	PURPOSE: Teleport the ai to the specified position
 // ----------------------------------------------------------------------- //
 
 void CAI::HandleTeleport(const LTVector& vPos)
@@ -1615,33 +1573,29 @@ void CAI::HandleTeleport(const LTVector& vPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::HandleTeleport()
 //
-//	ROUTINE:	CAI::HandleTeleport()
-//
-//	PURPOSE:	Teleport the ai to the specified point
-//
+//	PURPOSE: Teleport the ai to the specified point
 // ----------------------------------------------------------------------- //
 
 void CAI::HandleTeleport(TeleportPoint* pTeleportPoint)
 {
 	// Set our starting values...
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(pTeleportPoint->m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(pTeleportPoint->m_hObject, &vPos);
 
-    LTRotation rRot;
-    g_pLTServer->GetObjectRotation(pTeleportPoint->m_hObject, &rRot);
+	LTRotation rRot;
+	g_pLTServer->GetObjectRotation(pTeleportPoint->m_hObject, &rRot);
 
-    g_pLTServer->TeleportObject(m_hObject, &vPos);
-    g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+	g_pLTServer->TeleportObject(m_hObject, &vPos);
+	g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::PreUpdate
 //
-//	ROUTINE:	CAI::PreUpdate
-//
-//	PURPOSE:	Does our Preupdate
-//
+//	PURPOSE: Does our Preupdate
 // ----------------------------------------------------------------------- //
 
 void CAI::PreUpdate()
@@ -1650,7 +1604,7 @@ void CAI::PreUpdate()
 
 	if ( !m_bFirstUpdate && *m_szQueuedCommands )
 	{
-        SendMixedTriggerMsgToObject(this, m_hObject, LTTRUE, m_szQueuedCommands);
+		SendMixedTriggerMsgToObject(this, m_hObject, LTTRUE, m_szQueuedCommands);
 		*m_szQueuedCommands = 0;
 	}
 }
@@ -1685,11 +1639,9 @@ void CAI::InitAttachments()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::Update()
 //
-//	ROUTINE:	CAI::Update()
-//
-//	PURPOSE:	Update the AI
-//
+//	PURPOSE: Update the AI
 // ----------------------------------------------------------------------- //
 
 #define TIME(x) x;
@@ -1739,7 +1691,7 @@ void CAI::Update()
 	static int s_cTotalUpdates = 0;
 	s_cTotalCalls += g_cIntersectSegmentCalls;
 	s_cTotalUpdates++;
-    g_pLTServer->CPrint("iseg calls = %3.3d avg = %f", g_cIntersectSegmentCalls, (float)s_cTotalCalls/(float)s_cTotalUpdates);
+	g_pLTServer->CPrint("iseg calls = %3.3d avg = %f", g_cIntersectSegmentCalls, (float)s_cTotalCalls/(float)s_cTotalUpdates);
 	g_cIntersectSegmentCalls = 0;
 */
 
@@ -1750,7 +1702,7 @@ void CAI::Update()
 
 	// Record if we had a target before we update.
 
-    LTBOOL bHadTarget = m_pTarget->IsValid();
+	LTBOOL bHadTarget = m_pTarget->IsValid();
 
 	// Don't do any of this business if we're dead or locked
 
@@ -1764,7 +1716,7 @@ void CAI::Update()
 		}
 		else
 		{
-            m_fLag = Min<LTFLOAT>(LOWER_BY_DIFFICULTY(m_fBaseLag), m_fLag + LOWER_BY_DIFFICULTY(m_fLagIncreaseRate)*g_pLTServer->GetFrameTime());
+			m_fLag = Min<LTFLOAT>(LOWER_BY_DIFFICULTY(m_fBaseLag), m_fLag + LOWER_BY_DIFFICULTY(m_fLagIncreaseRate)*g_pLTServer->GetFrameTime());
 		}
 
 		// Update the state if we have one
@@ -1782,7 +1734,7 @@ void CAI::Update()
 			{
 				if ( GetDebugLevel() > 0 )
 				{
-                    g_pLTServer->CPrint("%s in %s state.", GetName(), m_pState->GetName());
+					g_pLTServer->CPrint("%s in %s state.", GetName(), m_pState->GetName());
 
 					if ( GetDebugLevel() > 1 )
 					{
@@ -1849,26 +1801,22 @@ void CAI::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::PostUpdate
 //
-//	ROUTINE:	CAI::PostUpdate
-//
-//	PURPOSE:	Does our postupdate
-//
+//	PURPOSE: Does our postupdate
 // ----------------------------------------------------------------------- //
 
 void CAI::PostUpdate()
 {
 	// Set first update flag
 
-    m_bFirstUpdate = LTFALSE;
+	m_bFirstUpdate = LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::UpdateOnGround
 //
-//	ROUTINE:	CAI::UpdateOnGround
-//
-//	PURPOSE:	Handles any pending animator changes
-//
+//	PURPOSE: Handles any pending animator changes
 // ----------------------------------------------------------------------- //
 
 void CAI::UpdateAnimation()
@@ -1882,11 +1830,9 @@ void CAI::UpdateAnimation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::UpdateMusic
 //
-//	ROUTINE:	CAI::UpdateMusic
-//
-//	PURPOSE:	Updates the dynamic music
-//
+//	PURPOSE: Updates the dynamic music
 // ----------------------------------------------------------------------- //
 
 void CAI::UpdateMusic()
@@ -1898,11 +1844,9 @@ void CAI::UpdateMusic()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::UpdateOnGround
 //
-//	ROUTINE:	CAI::UpdateOnGround
-//
-//	PURPOSE:	Update AI on ground
-//
+//	PURPOSE: Update AI on ground
 // ----------------------------------------------------------------------- //
 
 void CAI::UpdateOnGround()
@@ -1912,12 +1856,12 @@ void CAI::UpdateOnGround()
 	// Lets see if we are in the ground or in the air.
 
 	CollisionInfo Info;
-    g_pLTServer->GetStandingOn(m_hObject, &Info);
+	g_pLTServer->GetStandingOn(m_hObject, &Info);
 
 	// Reset standing on info
 
 	m_eStandingOnSurface = ST_UNKNOWN;
-    m_bOnGround = LTTRUE;
+	m_bOnGround = LTTRUE;
 
 	if (Info.m_hObject)
 	{
@@ -1925,26 +1869,24 @@ void CAI::UpdateOnGround()
 		{
 			// Get rid of our XZ velocities
 
-            LTVector vVel;
-            g_pLTServer->GetVelocity(m_hObject, &vVel);
+			LTVector vVel;
+			g_pLTServer->GetVelocity(m_hObject, &vVel);
 
 			vVel.x = vVel.z = 0.0f;
-            g_pLTServer->SetVelocity(m_hObject, &vVel);
+			g_pLTServer->SetVelocity(m_hObject, &vVel);
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::UpdateState
 //
-//	ROUTINE:	CAI::UpdateState
-//
-//	PURPOSE:	Handles any pending state changes
-//
+//	PURPOSE: Handles any pending state changes
 // ----------------------------------------------------------------------- //
 
 void CAI::UpdateState()
 {
-    if ( m_hstrNextStateMessage && g_pLTServer->GetTime() >= m_fNextStateTime )
+	if ( m_hstrNextStateMessage && g_pLTServer->GetTime() >= m_fNextStateTime )
 	{
 		SendMixedTriggerMsgToObject(this, m_hObject, m_hstrNextStateMessage);
 		FREE_HSTRING(m_hstrNextStateMessage);
@@ -1952,11 +1894,9 @@ void CAI::UpdateState()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::GetWeaponPosition()
 //
-//	ROUTINE:	CAI::GetWeaponPosition()
-//
-//	PURPOSE:	Is the position of our "Weapon" (could be anything)
-//
+//	PURPOSE: Is the position of our "Weapon" (could be anything)
 // ----------------------------------------------------------------------- //
 
 LTVector CAI::GetWeaponPosition(CWeapon* pWeapon)
@@ -1968,11 +1908,9 @@ LTVector CAI::GetWeaponPosition(CWeapon* pWeapon)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::IsObjectVisible*()
 //
-//	ROUTINE:	CAI::IsObjectVisible*()
-//
-//	PURPOSE:	Is the test object visible
-//
+//	PURPOSE: Is the test object visible
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAI::IsObjectVisibleFromEye(ObjectFilterFn ofn, PolyFilterFn pfn, HOBJECT hObj, LTFLOAT fVisibleDistanceSqr, LTBOOL bFOV, LTFLOAT* pfDistanceSqr /*= LTNULL*/, LTFLOAT* pfDp /*= LTNULL*/, LTVector* pvDir /*= LTNULL*/)
@@ -1987,18 +1925,16 @@ LTBOOL CAI::IsObjectVisibleFromWeapon(ObjectFilterFn ofn, PolyFilterFn pfn, CWea
 
 LTBOOL CAI::IsObjectVisible(ObjectFilterFn ofn, PolyFilterFn pfn, const LTVector& vPosition, HOBJECT hObj, LTFLOAT fVisibleDistanceSqr, LTBOOL bFOV, LTFLOAT* pfDistanceSqr /*= LTNULL*/, LTFLOAT* pfDp /*= LTNULL*/, LTVector* pvDir /*= LTNULL*/)
 {
-    LTVector vObjectPosition;
-    g_pLTServer->GetObjectPos(hObj, &vObjectPosition);
+	LTVector vObjectPosition;
+	g_pLTServer->GetObjectPos(hObj, &vObjectPosition);
 
 	return IsObjectPositionVisible(ofn, pfn, vPosition, hObj, vObjectPosition, fVisibleDistanceSqr, bFOV, pfDistanceSqr, pfDp, pvDir);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::IsObjectPositionVisible*()
 //
-//	ROUTINE:	CAI::IsObjectPositionVisible*()
-//
-//	PURPOSE:	Is a given position on the test object visible
-//
+//	PURPOSE: Is a given position on the test object visible
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAI::IsObjectPositionVisibleFromEye(ObjectFilterFn ofn, PolyFilterFn pfn, HOBJECT hObj, const LTVector& vObjectPosition, LTFLOAT fVisibleDistanceSqr, LTBOOL bFOV, LTFLOAT* pfDistanceSqr /*= LTNULL*/, LTFLOAT* pfDp /*= LTNULL*/, LTVector* pvDir /*= LTNULL*/)
@@ -2013,16 +1949,16 @@ LTBOOL CAI::IsObjectPositionVisibleFromWeapon(ObjectFilterFn ofn, PolyFilterFn p
 
 LTBOOL CAI::IsObjectPositionVisible(ObjectFilterFn ofn, PolyFilterFn pfn, const LTVector& vSourcePosition, HOBJECT hObj, const LTVector& vObjectPosition, LTFLOAT fVisibleDistanceSqr, LTBOOL bFOV, LTFLOAT* pfDistanceSqr /*= LTNULL*/, LTFLOAT* pfDp /*= LTNULL*/, LTVector* pvDir /*= LTNULL*/)
 {
-    if (!g_pLTServer || !m_hObject || !hObj) return LTFALSE;
+	if (!g_pLTServer || !m_hObject || !hObj) return LTFALSE;
 
-    LTVector vObjectDims;
-    g_pLTServer->GetObjectDims(hObj, &vObjectDims);
+	LTVector vObjectDims;
+	g_pLTServer->GetObjectDims(hObj, &vObjectDims);
 
 	// See if the position is inside the object...
 
 	if ( vSourcePosition.x > vObjectPosition.x - vObjectDims.x && vSourcePosition.x < vObjectPosition.x + vObjectDims.x &&
-	     vSourcePosition.y > vObjectPosition.y - vObjectDims.y && vSourcePosition.y < vObjectPosition.y + vObjectDims.y &&
-	     vSourcePosition.z > vObjectPosition.z - vObjectDims.z && vSourcePosition.z < vObjectPosition.z + vObjectDims.z)
+		 vSourcePosition.y > vObjectPosition.y - vObjectDims.y && vSourcePosition.y < vObjectPosition.y + vObjectDims.y &&
+		 vSourcePosition.z > vObjectPosition.z - vObjectDims.z && vSourcePosition.z < vObjectPosition.z + vObjectDims.z)
 	{
 		// Gotta fudge some of these values
 
@@ -2030,25 +1966,25 @@ LTBOOL CAI::IsObjectPositionVisible(ObjectFilterFn ofn, PolyFilterFn pfn, const 
 		if ( pfDistanceSqr ) *pfDistanceSqr = MATH_EPSILON;
 		if ( pvDir ) *pvDir = GetEyeForward();
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    LTVector vDir;
+	LTVector vDir;
 	VEC_SUB(vDir, vObjectPosition, vSourcePosition);
-    LTFLOAT fDistanceSqr = VEC_MAGSQR(vDir);
+	LTFLOAT fDistanceSqr = VEC_MAGSQR(vDir);
 
 	// Make sure it is close enough if we aren't alert
 
 	if (!m_pSenseMgr->IsAlert() && fDistanceSqr >= fVisibleDistanceSqr)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    LTVector vDirNorm = vDir;
+	LTVector vDirNorm = vDir;
 	vDirNorm.Norm();
 
-    LTFLOAT fNoFOVDistanceSqr = g_pAIButeMgr->GetSenses()->fNoFOVDistanceSqr;
-    LTFLOAT fDp;
+	LTFLOAT fNoFOVDistanceSqr = g_pAIButeMgr->GetSenses()->fNoFOVDistanceSqr;
+	LTFLOAT fDp;
 
 	// Make sure it is in our FOV
 
@@ -2062,13 +1998,13 @@ LTBOOL CAI::IsObjectPositionVisible(ObjectFilterFn ofn, PolyFilterFn pfn, const 
 		{
 			// FOV is 180' if we're alert
 
-            if (fDp <= c_fFOV180-m_fFOVBias) return LTFALSE;
+			if (fDp <= c_fFOV180-m_fFOVBias) return LTFALSE;
 		}
 		else
 		{
 			// FOV is 140' if we're not alert
 
-            if (fDp <= c_fFOV140-m_fFOVBias) return LTFALSE;
+			if (fDp <= c_fFOV140-m_fFOVBias) return LTFALSE;
 		}
 
 		// Now check vertical FOV
@@ -2082,13 +2018,13 @@ LTBOOL CAI::IsObjectPositionVisible(ObjectFilterFn ofn, PolyFilterFn pfn, const 
 		{
 			// FOV is 120' if we're not alert
 
-            if (fDp >= c_fFOV120-m_fFOVBias) return LTFALSE;
+			if (fDp >= c_fFOV120-m_fFOVBias) return LTFALSE;
 		}
 	}
 
 	/* HUH??? why was i doing this???
-    LTVector vDims;
-    g_pLTServer->GetObjectDims(hObj, &vDims);
+	LTVector vDims;
+	g_pLTServer->GetObjectDims(hObj, &vDims);
 
 	vObjectPosition.y += vDims.y;
 	*/
@@ -2105,24 +2041,22 @@ LTBOOL CAI::IsObjectPositionVisible(ObjectFilterFn ofn, PolyFilterFn pfn, const 
 	s_hFilterAI = m_hObject;
 
 	g_cIntersectSegmentCalls++;
-    if (g_pLTServer->IntersectSegment(&IQuery, &IInfo) && IInfo.m_hObject == hObj)
+	if (g_pLTServer->IntersectSegment(&IQuery, &IInfo) && IInfo.m_hObject == hObj)
 	{
 		if ( pfDp ) *pfDp = fDp;
 		if ( pfDistanceSqr ) *pfDistanceSqr = fDistanceSqr;
 		if ( pvDir ) *pvDir = vDirNorm;
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::IsPositionVisible*()
 //
-//	ROUTINE:	CAI::IsPositionVisible*()
-//
-//	PURPOSE:	Is the test position visible to us
-//
+//	PURPOSE: Is the test position visible to us
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAI::IsPositionVisibleFromEye(ObjectFilterFn ofn, PolyFilterFn pfn, const LTVector& vPosition, LTFLOAT fVisibleDistanceSqr, LTBOOL bFOV, LTFLOAT* pfDistanceSqr /*= LTNULL*/, LTFLOAT* pfDp /*= LTNULL*/, LTVector* pvDir /*= LTNULL*/)
@@ -2137,24 +2071,24 @@ LTBOOL CAI::IsPositionVisibleFromWeapon(ObjectFilterFn ofn, PolyFilterFn pfn, CW
 
 LTBOOL CAI::IsPositionVisible(ObjectFilterFn ofn, PolyFilterFn pfn, const LTVector& vFrom, const LTVector& vTo, LTFLOAT fVisibleDistanceSqr, LTBOOL bFOV, LTFLOAT* pfDistanceSqr /*= LTNULL*/, LTFLOAT* pfDp /*= LTNULL*/, LTVector* pvDir /*= LTNULL*/)
 {
-    if (!g_pLTServer || !m_hObject) return LTFALSE;
+	if (!g_pLTServer || !m_hObject) return LTFALSE;
 
-    LTVector vDir;
+	LTVector vDir;
 	VEC_SUB(vDir, vTo, vFrom);
-    LTFLOAT fDistanceSqr = VEC_MAGSQR(vDir);
+	LTFLOAT fDistanceSqr = VEC_MAGSQR(vDir);
 
 	// Make sure it is close enough
 
 	if (!m_pSenseMgr->IsAlert() && fDistanceSqr >= fVisibleDistanceSqr)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    LTVector vDirNorm = vDir;
+	LTVector vDirNorm = vDir;
 	vDirNorm.Norm();
 
-    LTFLOAT fNoFOVDistanceSqr = g_pAIButeMgr->GetSenses()->fNoFOVDistanceSqr;
-    LTFLOAT fDp;
+	LTFLOAT fNoFOVDistanceSqr = g_pAIButeMgr->GetSenses()->fNoFOVDistanceSqr;
+	LTFLOAT fDp;
 
 	// Make sure it is in our FOV
 
@@ -2166,13 +2100,13 @@ LTBOOL CAI::IsPositionVisible(ObjectFilterFn ofn, PolyFilterFn pfn, const LTVect
 		{
 			// FOV is 180' if we're alert
 
-            if (fDp <= c_fFOV180-m_fFOVBias) return LTFALSE;
+			if (fDp <= c_fFOV180-m_fFOVBias) return LTFALSE;
 		}
 		else
 		{
 			// FOV is 140' if we're not alert
 
-            if (fDp <= c_fFOV140-m_fFOVBias) return LTFALSE;
+			if (fDp <= c_fFOV140-m_fFOVBias) return LTFALSE;
 		}
 
 		// Now check vertical FOV
@@ -2186,7 +2120,7 @@ LTBOOL CAI::IsPositionVisible(ObjectFilterFn ofn, PolyFilterFn pfn, const LTVect
 		{
 			// FOV is 120' if we're not alert
 
-            if (fDp >= c_fFOV120-m_fFOVBias) return LTFALSE;
+			if (fDp >= c_fFOV120-m_fFOVBias) return LTFALSE;
 		}
 	}
 
@@ -2202,40 +2136,36 @@ LTBOOL CAI::IsPositionVisible(ObjectFilterFn ofn, PolyFilterFn pfn, const LTVect
 	s_hFilterAI = m_hObject;
 
 	g_cIntersectSegmentCalls++;
-    if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
+	if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	if ( pfDp ) *pfDp = fDp;
 	if ( pfDistanceSqr ) *pfDistanceSqr = fDistanceSqr;
 	if ( pvDir ) *pvDir = vDirNorm;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::FaceObject()
 //
-//	ROUTINE:	CAI::FaceObject()
-//
-//	PURPOSE:	Turn to face a specific object
-//
+//	PURPOSE: Turn to face a specific object
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAI::FaceObject(HOBJECT hObj)
 {
-    LTVector vTargetPos;
-    g_pLTServer->GetObjectPos(hObj, &vTargetPos);
+	LTVector vTargetPos;
+	g_pLTServer->GetObjectPos(hObj, &vTargetPos);
 
 	return FacePos(vTargetPos);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::FaceDir()
 //
-//	ROUTINE:	CAI::FaceDir()
-//
-//	PURPOSE:	Turn to face a specific direciton
-//
+//	PURPOSE: Turn to face a specific direciton
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAI::FaceDir(const LTVector& vDir)
@@ -2244,16 +2174,14 @@ LTBOOL CAI::FaceDir(const LTVector& vDir)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::FacePos()
 //
-//	ROUTINE:	CAI::FacePos()
-//
-//	PURPOSE:	Turn to face a specific pos
-//
+//	PURPOSE: Turn to face a specific pos
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAI::FacePos(const LTVector& vTargetPos)
 {
-    LTVector vDir;
+	LTVector vDir;
 	VEC_SUB(vDir, vTargetPos, m_vPos);
 	vDir.y = 0.0f; // Don't look up/down
 
@@ -2262,14 +2190,14 @@ LTBOOL CAI::FacePos(const LTVector& vTargetPos)
 		// Facing the same position... this would be a divide by zero case
 		// when we normalize. So just return.
 
-        //_ASSERT(LTFALSE);
-        return LTTRUE;
+		//_ASSERT(LTFALSE);
+		return LTTRUE;
 	}
 
 	VEC_NORM(vDir);
 
-    LTFLOAT fDpTargetForward = vDir.Dot(m_vTargetForward);
-    LTFLOAT fDpForward = vDir.Dot(m_vForward);
+	LTFLOAT fDpTargetForward = vDir.Dot(m_vTargetForward);
+	LTFLOAT fDpForward = vDir.Dot(m_vForward);
 
 	if ( m_bRotating && (fabs(fDpTargetForward) > c_fFacingThreshhold) )
 	{
@@ -2282,29 +2210,27 @@ LTBOOL CAI::FacePos(const LTVector& vTargetPos)
 		// The time we have to turn is based on how far we have to turn. Turning 0' will take 0
 		// seconds, and turning 180' will take 1 second.
 
-        m_bRotating = LTTRUE;
-        m_fRotationTime = (LTFLOAT)fabs(0.5f - fDpForward/2.0f)/m_fRotationSpeed + 1.0e-5f;
+		m_bRotating = LTTRUE;
+		m_fRotationTime = (LTFLOAT)fabs(0.5f - fDpForward/2.0f)/m_fRotationSpeed + 1.0e-5f;
 		m_fRotationTimer = 0.0f;
-        g_pLTServer->GetObjectRotation(m_hObject, &m_rStartRot);
-        LTVector temp(0,1,0);
-        g_pMathLT->AlignRotation(m_rTargetRot, vDir, temp);
+		g_pLTServer->GetObjectRotation(m_hObject, &m_rStartRot);
+		LTVector temp(0,1,0);
+		g_pMathLT->AlignRotation(m_rTargetRot, vDir, temp);
 		g_pMathLT->GetRotationVectors(m_rTargetRot, m_vTargetRight, m_vTargetUp, m_vTargetForward);
 
-        return LTFALSE;
+		return LTFALSE;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::HandleModelString()
 //
-//	ROUTINE:	CAI::HandleModelString()
-//
-//	PURPOSE:	Handles model keyframe strings
-//
+//	PURPOSE: Handles model keyframe strings
 // ----------------------------------------------------------------------- //
 
 void CAI::HandleModelString(ArgList* pArgList)
 {
-    if (!g_pLTServer || !pArgList || !pArgList->argv || pArgList->argc == 0) return;
+	if (!g_pLTServer || !pArgList || !pArgList->argv || pArgList->argc == 0) return;
 
 	char* pKey = pArgList->argv[0];
 	if (!pKey) return;
@@ -2315,7 +2241,7 @@ void CAI::HandleModelString(ArgList* pArgList)
 
 		SurfaceType eSurface = ST_UNKNOWN;
 		CollisionInfo Info;
-        g_pLTServer->GetStandingOn(m_hObject, &Info);
+		g_pLTServer->GetStandingOn(m_hObject, &Info);
 
 		if (Info.m_hPoly && Info.m_hPoly != INVALID_HPOLY)
 		{
@@ -2328,8 +2254,8 @@ void CAI::HandleModelString(ArgList* pArgList)
 
 		// Play the noise
 
-        LTVector vPos;
-        g_pLTServer->GetObjectPos(m_hObject, &vPos);
+		LTVector vPos;
+		g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 		SURFACE* pSurf = g_pSurfaceMgr->GetSurface(eSurface);
 		_ASSERT(pSurf);
@@ -2346,16 +2272,14 @@ void CAI::HandleModelString(ArgList* pArgList)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::Save
 //
-//	ROUTINE:	CAI::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void CAI::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
-    if (!g_pLTServer || !hWrite) return;
+	if (!g_pLTServer || !hWrite) return;
 
 	SAVE_BOOL(m_bCheapMovement);
 
@@ -2450,16 +2374,14 @@ void CAI::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::Load
 //
-//	ROUTINE:	CAI::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void CAI::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
-    if (!g_pLTServer || !hRead) return;
+	if (!g_pLTServer || !hRead) return;
 
 	g_bAutoSaved = LTTRUE;
 
@@ -2557,11 +2479,9 @@ void CAI::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::*Target
 //
-//	ROUTINE:	CAI::*Target
-//
-//	PURPOSE:	Target methods
-//
+//	PURPOSE: Target methods
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAI::FaceTarget()
@@ -2582,11 +2502,9 @@ LTBOOL CAI::HasTarget()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::Get*Sound
 //
-//	ROUTINE:	CAI::Get*Sound
-//
-//	PURPOSE:	Gets various sounds
-//
+//	PURPOSE: Gets various sounds
 // ----------------------------------------------------------------------- //
 
 char* CAI::GetDeathSound()
@@ -2605,18 +2523,16 @@ char* CAI::GetDamageSound(DamageType eType)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::Target
 //
-//	ROUTINE:	CAI::Target
-//
-//	PURPOSE:	Targets an enemy
-//
+//	PURPOSE: Targets an enemy
 // ----------------------------------------------------------------------- //
 
 void CAI::Target(HOBJECT hObject)
 {
 	if ( !IsCharacter(hObject) )
 	{
-        _ASSERT(LTFALSE);
+		_ASSERT(LTFALSE);
 		return;
 	}
 
@@ -2628,25 +2544,25 @@ void CAI::Target(HOBJECT hObject)
 	if ( !hObject )
 	{
 		m_pTarget->SetObject(LTNULL);
-        m_pTarget->SetValid(LTFALSE);
+		m_pTarget->SetValid(LTFALSE);
 
 		return;
 	}
 
-    LTVector vPosition;
-    g_pLTServer->GetObjectPos(hObject, &vPosition);
-    LTVector vDirection;
+	LTVector vPosition;
+	g_pLTServer->GetObjectPos(hObject, &vPosition);
+	LTVector vDirection;
 	VEC_INIT(vDirection);
 
-    m_pTarget->SetValid(LTTRUE);
+	m_pTarget->SetValid(LTTRUE);
 	m_pTarget->SetObject(hObject);
 	m_pTarget->SetPosition(vPosition);
 	// TODO: UpdateSHootPositioN?
 
-    m_pTarget->SetVisibleFromEye(LTFALSE);
-    m_pTarget->SetVisibleFromWeapon(LTFALSE);
+	m_pTarget->SetVisibleFromEye(LTFALSE);
+	m_pTarget->SetVisibleFromWeapon(LTFALSE);
 
-    m_pTarget->SetAttacking(LTFALSE);
+	m_pTarget->SetAttacking(LTFALSE);
 
 	UpdateTarget();
 
@@ -2654,21 +2570,19 @@ void CAI::Target(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::UpdateTarget
 //
-//	ROUTINE:	CAI::UpdateTarget
-//
-//	PURPOSE:	Updates the target info
-//
+//	PURPOSE: Updates the target info
 // ----------------------------------------------------------------------- //
 
 void CAI::UpdateTarget()
 {
-    if ( !m_pTarget->IsValid() ) { _ASSERT(LTFALSE); return; }
+	if ( !m_pTarget->IsValid() ) { _ASSERT(LTFALSE); return; }
 
 	HOBJECT hObject = m_pTarget->GetObject();
 	_ASSERT(hObject);
 
-    CCharacter *pCharacter = (CCharacter*)g_pLTServer->HandleToObject(m_pTarget->GetObject());
+	CCharacter *pCharacter = (CCharacter*)g_pLTServer->HandleToObject(m_pTarget->GetObject());
 	_ASSERT(pCharacter);
 
 	if ( pCharacter->IsDead() )
@@ -2676,7 +2590,7 @@ void CAI::UpdateTarget()
 		// Our target has died.
 
 		Unlink(hObject);
-        m_pTarget->SetValid(LTFALSE);
+		m_pTarget->SetValid(LTFALSE);
 
 		return;
 	}
@@ -2687,8 +2601,8 @@ void CAI::UpdateTarget()
 	{
 		// Update the shooting position. Queues up this position to be used
 
-        m_fLag = Max<LTFLOAT>(0.0f, m_fLag - RAISE_BY_DIFFICULTY(m_fLagDecreaseRate)*g_pLTServer->GetFrameTime());
-        m_fLagTimer -= g_pLTServer->GetFrameTime();
+		m_fLag = Max<LTFLOAT>(0.0f, m_fLag - RAISE_BY_DIFFICULTY(m_fLagDecreaseRate)*g_pLTServer->GetFrameTime());
+		m_fLagTimer -= g_pLTServer->GetFrameTime();
 
 		if ( m_fLagTimer <= 0.0f )
 		{
@@ -2699,62 +2613,58 @@ void CAI::UpdateTarget()
 	}
 	else
 	{
-        m_fLag = Min<LTFLOAT>(m_fBaseLag, m_fLag + LOWER_BY_DIFFICULTY(m_fLagIncreaseRate)*g_pLTServer->GetFrameTime());
+		m_fLag = Min<LTFLOAT>(m_fBaseLag, m_fLag + LOWER_BY_DIFFICULTY(m_fLagIncreaseRate)*g_pLTServer->GetFrameTime());
 		m_pTarget->UpdateShootPosition(m_pTarget->GetPosition(), m_fLag/(LOWER_BY_DIFFICULTY(m_fBaseLag)+.01f), LTTRUE);
 	}
 
 	// Update the firing information. This is fairly expensive.
 
-    m_pTarget->SetAttacking(LTFALSE);
+	m_pTarget->SetAttacking(LTFALSE);
 
 	CharFireInfo info;
 	pCharacter->GetLastFireInfo(info);
 
 	// If they've shot recently enough
 
-    if ( info.fTime + 0.5f > g_pLTServer->GetTime() && info.nWeaponId != WMGR_INVALID_ID )
+	if ( info.fTime + 0.5f > g_pLTServer->GetTime() && info.nWeaponId != WMGR_INVALID_ID )
 	{
 		// See if the shot passed close to us
 
-        LTVector vFire = info.vImpactPos - info.vFiredPos;
-        LTVector vNearestPoint = info.vImpactPos + vFire*(((m_vPos - info.vImpactPos).Dot(vFire))/vFire.Dot(vFire));
-        const static LTFLOAT fMinDistance = 100.0f*100.0f;
+		LTVector vFire = info.vImpactPos - info.vFiredPos;
+		LTVector vNearestPoint = info.vImpactPos + vFire*(((m_vPos - info.vImpactPos).Dot(vFire))/vFire.Dot(vFire));
+		const static LTFLOAT fMinDistance = 100.0f*100.0f;
 
 		if ( VEC_DISTSQR(vNearestPoint, m_vPos) < fMinDistance )
 		{
-            m_pTarget->SetAttacking(LTTRUE);
+			m_pTarget->SetAttacking(LTTRUE);
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::UpdateAccuracy
 //
-//	ROUTINE:	CAI::UpdateAccuracy
-//
-//	PURPOSE:	Updates any accuracy modifiers on the AI
-//
+//	PURPOSE: Updates any accuracy modifiers on the AI
 // ----------------------------------------------------------------------- //
 
 void CAI::UpdateAccuracy()
 {
 	if ( g_AccuracyInfoTrack.GetFloat(0.0f) == 1.0f )
 	{
-        g_pLTServer->CPrint("l=%f lt=%f am=%f amt=%f a=%f", m_fLag, m_fLagTimer, m_fAccuracyModifier, m_fAccuracyModifierTimer, GetAccuracy());
+		g_pLTServer->CPrint("l=%f lt=%f am=%f amt=%f a=%f", m_fLag, m_fLagTimer, m_fAccuracyModifier, m_fAccuracyModifierTimer, GetAccuracy());
 	}
 
 	// TODO: rate at which accuracy is regained should be affected
 	// by AI's skill somehow
 
-    m_fAccuracyModifierTimer = Max<LTFLOAT>(0.0f, m_fAccuracyModifierTimer - g_pLTServer->GetFrameTime()*RAISE_BY_DIFFICULTY(m_fAccuracyIncreaseRate));
+	m_fAccuracyModifierTimer = Max<LTFLOAT>(0.0f, m_fAccuracyModifierTimer - g_pLTServer->GetFrameTime()*RAISE_BY_DIFFICULTY(m_fAccuracyIncreaseRate));
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::SetAccuracyModifier
 //
-//	ROUTINE:	CAI::SetAccuracyModifier
-//
-//	PURPOSE:	Sets a temporal accuracy modifier
-//
+//	PURPOSE: Sets a temporal accuracy modifier
 // ----------------------------------------------------------------------- //
 
 void CAI::SetAccuracyModifier(LTFLOAT fModifier, LTFLOAT fTime)
@@ -2765,28 +2675,26 @@ void CAI::SetAccuracyModifier(LTFLOAT fModifier, LTFLOAT fTime)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::UpdatePosition
 //
-//	ROUTINE:	CAI::UpdatePosition
-//
-//	PURPOSE:	Updates the position, orientation, etc of our object
-//
+//	PURPOSE: Updates the position, orientation, etc of our object
 // ----------------------------------------------------------------------- //
 
 void CAI::UpdatePosition()
 {
 	// Set the base AI's position
 
-    g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
+	g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
 
 	// Retrieve AI vectors for current frame..
 
-    g_pLTServer->GetObjectRotation(m_hObject, &m_rRot);
+	g_pLTServer->GetObjectRotation(m_hObject, &m_rRot);
 	g_pMathLT->GetRotationVectors(m_rRot, m_vRight, m_vUp, m_vForward);
 
 	// Get our dims+radius
 
-    g_pLTServer->GetObjectDims(m_hObject, &m_vDims);
-    m_fRadius = Max<LTFLOAT>(m_vDims.x, m_vDims.z);
+	g_pLTServer->GetObjectDims(m_hObject, &m_vDims);
+	m_fRadius = Max<LTFLOAT>(m_vDims.x, m_vDims.z);
 
 	// Update the position of important nodes (eye, torso, etc)
 
@@ -2794,12 +2702,12 @@ void CAI::UpdatePosition()
 
 	// Get rid of any acceleration the server is applying to us
 
-    LTVector vAccel;
+	LTVector vAccel;
 	g_pPhysicsLT->GetAcceleration(m_hObject, &vAccel);
 	vAccel.x = vAccel.z = 0.0f;
 	if (vAccel.y > 0.0f) vAccel.y = 0.0f;
 	g_pPhysicsLT->SetAcceleration(m_hObject, &vAccel);
-    LTVector vVelocity;
+	LTVector vVelocity;
 	g_pPhysicsLT->GetVelocity(m_hObject, &vVelocity);
 	vVelocity.x = vVelocity.z = 0.0f;
 	if (vVelocity.y > 0.0f) vVelocity.y = 0.0f;
@@ -2807,19 +2715,19 @@ void CAI::UpdatePosition()
 
 	if ( m_fRotationTimer < m_fRotationTime )
 	{
-        m_fRotationTimer += g_pLTServer->GetFrameTime();
-        m_fRotationTimer = Min<LTFLOAT>(m_fRotationTime, m_fRotationTimer);
+		m_fRotationTimer += g_pLTServer->GetFrameTime();
+		m_fRotationTimer = Min<LTFLOAT>(m_fRotationTime, m_fRotationTimer);
 
-        LTFLOAT fRotationInterpolation = GetRotationInterpolation(m_fRotationTimer/m_fRotationTime);
+		LTFLOAT fRotationInterpolation = GetRotationInterpolation(m_fRotationTimer/m_fRotationTime);
 
 		// Rotate us if our timer is going
 
-        LTRotation rNewRot;
+		LTRotation rNewRot;
 		g_pMathLT->InterpolateRotation(rNewRot, m_rStartRot, m_rTargetRot, fRotationInterpolation);
 
 		// Set our rotation
 
-        g_pLTServer->SetObjectRotation(m_hObject, &rNewRot);
+		g_pLTServer->SetObjectRotation(m_hObject, &rNewRot);
 
 		// Update our rotation vectors
 
@@ -2827,16 +2735,14 @@ void CAI::UpdatePosition()
 	}
 	else
 	{
-        m_bRotating = LTFALSE;
+		m_bRotating = LTFALSE;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::ChangeState
 //
-//	ROUTINE:	CAI::ChangeState
-//
-//	PURPOSE:	Requests a state change
-//
+//	PURPOSE: Requests a state change
 // ----------------------------------------------------------------------- //
 
 void CAI::ChangeState(const char* szFormat, ...)
@@ -2853,16 +2759,14 @@ void CAI::ChangeState(const char* szFormat, ...)
 	va_end(val);
 
 	// $STRING
-    m_hstrNextStateMessage = g_pLTServer->CreateString((char*)szBuffer);
-    m_fNextStateTime = g_pLTServer->GetTime() + 0.0f /* used to be a delay */;
+	m_hstrNextStateMessage = g_pLTServer->CreateString((char*)szBuffer);
+	m_fNextStateTime = g_pLTServer->GetTime() + 0.0f /* used to be a delay */;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::DidReaction
 //
-//	ROUTINE:	CAI::DidReaction
-//
-//	PURPOSE:	Called when the AI did a reaction
-//
+//	PURPOSE: Called when the AI did a reaction
 // ----------------------------------------------------------------------- //
 
 void CAI::DidReaction(CAISense* pAISense, BOOL bIndividual)
@@ -2881,7 +2785,7 @@ void CAI::DidReaction(CAISense* pAISense, BOOL bIndividual)
 	case stHearAllyWeaponFire:
 		if (IsPlayer(hStim))
 		{
-            g_pLTServer->CPrint(">>>>>>>>>>>>>player spotted");
+			g_pLTServer->CPrint(">>>>>>>>>>>>>player spotted");
 			pPlayer->GetPlayerSummaryMgr()->IncNumTimesDetected();
 		}
 		//spotted
@@ -2890,7 +2794,7 @@ void CAI::DidReaction(CAISense* pAISense, BOOL bIndividual)
 	case stHearAllyPain:
 		if (CS_ENEMY == side)
 		{
-            g_pLTServer->CPrint(">>>>>>>>>>>>>player spotted");
+			g_pLTServer->CPrint(">>>>>>>>>>>>>player spotted");
 			pPlayer->GetPlayerSummaryMgr()->IncNumTimesDetected();
 		}
 		//spotted
@@ -2902,7 +2806,7 @@ void CAI::DidReaction(CAISense* pAISense, BOOL bIndividual)
 //	case stHearEnemyDisturbance:
 		if (IsPlayer(hStim))
 		{
-            g_pLTServer->CPrint(">>>>>>>>>>>>>player caused distubance");
+			g_pLTServer->CPrint(">>>>>>>>>>>>>player caused distubance");
 			pPlayer->GetPlayerSummaryMgr()->IncNumDisturbances();
 		}
 		//disturbance
@@ -2911,7 +2815,7 @@ void CAI::DidReaction(CAISense* pAISense, BOOL bIndividual)
 	case stSeeAllyDeath:
 		if (CS_ENEMY == side)
 		{
-            g_pLTServer->CPrint(">>>>>>>>>>>>>body found");
+			g_pLTServer->CPrint(">>>>>>>>>>>>>body found");
 			pPlayer->GetPlayerSummaryMgr()->IncNumBodies();
 		}
 		//body found
@@ -2922,31 +2826,27 @@ void CAI::DidReaction(CAISense* pAISense, BOOL bIndividual)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::ComputeDamageModifier
 //
-//	ROUTINE:	CAI::ComputeDamageModifier
-//
-//	PURPOSE:	Adjust the amount of damage based on the node hit...
-//
+//	PURPOSE: Adjust the amount of damage based on the node hit...
 // ----------------------------------------------------------------------- //
 
 LTFLOAT CAI::ComputeDamageModifier(ModelNode eModelNode)
 {
-    LTFLOAT fModifier = CCharacter::ComputeDamageModifier(eModelNode);
+	LTFLOAT fModifier = CCharacter::ComputeDamageModifier(eModelNode);
 
 	if ( GetSenseMgr()->IsAlert() )
 	{
-        fModifier = Min<LTFLOAT>(2.0f, fModifier);
+		fModifier = Min<LTFLOAT>(2.0f, fModifier);
 	}
 
 	return fModifier;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAI::IsAlert
 //
-//	ROUTINE:	CAI::IsAlert
-//
-//	PURPOSE:	Determines if we are alert or not
-//
+//	PURPOSE: Determines if we are alert or not
 // ----------------------------------------------------------------------- //
 
 LTBOOL CAI::IsAlert() const
@@ -2955,11 +2855,9 @@ LTBOOL CAI::IsAlert() const
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CAI::LinkToCinematicTrigger()
 //
-//	ROUTINE:	CAI::LinkToCinematicTrigger()
-//
-//	PURPOSE:	Links us to a cinematic trigger
-//
+//	PURPOSE: Links us to a cinematic trigger
 // --------------------------------------------------------------------------- //
 
 void CAI::LinkCinematicTrigger(HOBJECT hCinematicTrigger)
@@ -2978,11 +2876,9 @@ void CAI::LinkCinematicTrigger(HOBJECT hCinematicTrigger)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CAI::UnlinkCinematicTrigger()
 //
-//	ROUTINE:	CAI::UnlinkCinematicTrigger()
-//
-//	PURPOSE:	Unlinks us from a cinematic trigger
-//
+//	PURPOSE: Unlinks us from a cinematic trigger
 // --------------------------------------------------------------------------- //
 
 void CAI::UnlinkCinematicTrigger(HOBJECT hCinematicTrigger)
@@ -3001,11 +2897,9 @@ void CAI::UnlinkCinematicTrigger(HOBJECT hCinematicTrigger)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CAI::CanBeDamagedAsAttachment()
 //
-//	ROUTINE:	CAI::CanBeDamagedAsAttachment()
-//
-//	PURPOSE:	Gives a chance to reject damage we receive when we are an attachment
-//
+//	PURPOSE: Gives a chance to reject damage we receive when we are an attachment
 // --------------------------------------------------------------------------- //
 
 LTBOOL CAI::CanBeDamagedAsAttachment()
@@ -3021,11 +2915,9 @@ LTBOOL CAI::CanBeDamagedAsAttachment()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CAIPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Requests a state change
-//
+//	PURPOSE: Requests a state change
 // ----------------------------------------------------------------------- //
 LTRESULT CAIPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {
@@ -3050,7 +2942,6 @@ LTRESULT CAIPlugin::PreHook_EditStringList(const char* szRezPath, const char* sz
 	}
 
 	// See if it's one of our sense reactions
-
 	REACTIONSTRUCT* aReactions = LTNULL;
 	int cReactions = 0;
 
@@ -3077,6 +2968,5 @@ LTRESULT CAIPlugin::PreHook_EditStringList(const char* szRezPath, const char* sz
 	}
 
 	// No one wants it
-
 	return LT_UNSUPPORTED;
 }

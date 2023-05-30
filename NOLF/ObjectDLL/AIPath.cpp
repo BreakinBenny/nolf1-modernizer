@@ -10,20 +10,20 @@ IMPLEMENT_FACTORY(CAIPath, 0)
 
 CAIPathWaypoint::CAIPathWaypoint()
 {
-    m_pAI = LTNULL;
+	m_pAI = LTNULL;
 	m_eInstruction = eInstructionInvalid,
-    m_vVector1 = LTVector(0,0,0);
-    m_hObject1 = LTNULL;
-    m_hObject2 = LTNULL;
+	m_vVector1 = LTVector(0,0,0);
+	m_hObject1 = LTNULL;
+	m_hObject2 = LTNULL;
 }
 
 void CAIPathWaypoint::Constructor()
 {
-    m_pAI = LTNULL;
+	m_pAI = LTNULL;
 	m_eInstruction = eInstructionInvalid,
-    m_vVector1 = LTVector(0,0,0);
-    m_hObject1 = LTNULL;
-    m_hObject2 = LTNULL;
+	m_vVector1 = LTVector(0,0,0);
+	m_hObject1 = LTNULL;
+	m_hObject2 = LTNULL;
 }
 
 void CAIPathWaypoint::Destructor()
@@ -78,12 +78,12 @@ void CAIPathWaypoint::HandleBrokenLink(HOBJECT hObject)
 {
 	if ( m_hObject1 == hObject )
 	{
-        m_hObject1 = LTNULL;
+		m_hObject1 = LTNULL;
 	}
 
 	if ( m_hObject2 == hObject )
 	{
-        m_hObject2 = LTNULL;
+		m_hObject2 = LTNULL;
 	}
 }
 

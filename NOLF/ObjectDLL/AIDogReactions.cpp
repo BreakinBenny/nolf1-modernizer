@@ -27,11 +27,9 @@
 // TODO: Optimize all these fucking strcmps!!!!!!!!!!!!!
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AI_Dog::DoReaction()
 //
-//	ROUTINE:	AI_Dog::DoReaction()
-//
-//	PURPOSE:	Execute a reaction
-//
+//	PURPOSE: Execute a reaction
 // ----------------------------------------------------------------------- //
 
 void AI_Dog::DoReaction(HSTRING hstrReaction, CAISense* pAISense, LTBOOL bIndividual)
@@ -39,7 +37,7 @@ void AI_Dog::DoReaction(HSTRING hstrReaction, CAISense* pAISense, LTBOOL bIndivi
 	if ( !hstrReaction ) return;
 
 	char szTrigger[1024];
-    char* szReaction = g_pLTServer->GetStringData(hstrReaction);
+	char* szReaction = g_pLTServer->GetStringData(hstrReaction);
 	_ASSERT(szReaction);
 
 	if ( !strcmp(szReaction, c_szNoReaction) )
@@ -48,7 +46,7 @@ void AI_Dog::DoReaction(HSTRING hstrReaction, CAISense* pAISense, LTBOOL bIndivi
 	}
 	else if ( !strcmp(szReaction, "Bark") )
 	{
-        sprintf(szTrigger, "TARGET %s;BARK", g_pLTServer->GetObjectName(pAISense->GetStimulus()));
+		sprintf(szTrigger, "TARGET %s;BARK", g_pLTServer->GetObjectName(pAISense->GetStimulus()));
 	}
 	else if ( !strcmp(szReaction, "Excited") )
 	{
@@ -62,7 +60,7 @@ void AI_Dog::DoReaction(HSTRING hstrReaction, CAISense* pAISense, LTBOOL bIndivi
 	{
 		// If it doesn't match one of these, it must be a command
 
-        sprintf(szTrigger, g_pLTServer->GetStringData(hstrReaction));
+		sprintf(szTrigger, g_pLTServer->GetStringData(hstrReaction));
 	}
 
 	DidReaction(pAISense, bIndividual);

@@ -101,8 +101,8 @@ class CAIVolume
 
 		LTBOOL Intersects(const CAIVolume& vol) const;
 		LTBOOL Inside(const LTVector& vPos, LTFLOAT fVerticalThreshhold = 0.0f) const;
-        LTBOOL Inside2d(const LTVector& vPos, LTFLOAT fThreshhold) const;
-        LTBOOL Inside2dLoose(const LTVector& vPos, LTFLOAT fThreshhold) const;
+		LTBOOL Inside2d(const LTVector& vPos, LTFLOAT fThreshhold) const;
+		LTBOOL Inside2dLoose(const LTVector& vPos, LTFLOAT fThreshhold) const;
 
 		// Neighbor methods
 
@@ -143,7 +143,7 @@ class CAIVolume
 
 		// Misc
 
-        const char* GetName() const { return g_pLTServer->GetStringData(m_hstrName); }
+		const char* GetName() const { return g_pLTServer->GetStringData(m_hstrName); }
 
 		const LTVector& GetStairsDir() const { return m_vStairsDir; }
 		const LTVector& GetLedgeDir() const { return m_vLedgeDir; }

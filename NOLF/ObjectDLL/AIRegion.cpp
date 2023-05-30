@@ -178,11 +178,9 @@ BEGIN_CLASS(AIRegion)
 END_CLASS_DEFAULT(AIRegion, BaseClass, NULL, NULL)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIRegion::AIRegion()
 //
-//	ROUTINE:	AIRegion::AIRegion()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 AIRegion::AIRegion() : BaseClass(OT_NORMAL)
@@ -200,11 +198,9 @@ AIRegion::AIRegion() : BaseClass(OT_NORMAL)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIRegion::~AIRegion()
 //
-//	ROUTINE:	AIRegion::~AIRegion()
-//
-//	PURPOSE:	Destroy the object
-//
+//	PURPOSE: Destroy the object
 // ----------------------------------------------------------------------- //
 
 AIRegion::~AIRegion()
@@ -222,16 +218,14 @@ AIRegion::~AIRegion()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIRegion::ReadProp
 //
-//	ROUTINE:	AIRegion::ReadProp
-//
-//	PURPOSE:	Reads properties
-//
+//	PURPOSE: Reads properties
 // ----------------------------------------------------------------------- //
 
 LTBOOL AIRegion::ReadProp(ObjectCreateStruct *pData)
 {
-    if (!g_pLTServer || !pData) return LTFALSE;
+	if (!g_pLTServer || !pData) return LTFALSE;
 
 	GenericProp genProp;
 	
@@ -240,9 +234,9 @@ LTBOOL AIRegion::ReadProp(ObjectCreateStruct *pData)
 		char szBuffer[128];
 		sprintf(szBuffer, "Volume%d", iVolume+1);
 
-        if ( g_pLTServer->GetPropGeneric( szBuffer, &genProp ) == LT_OK )
+		if ( g_pLTServer->GetPropGeneric( szBuffer, &genProp ) == LT_OK )
 			if ( genProp.m_String[0] )
-                m_ahstrVolumes[iVolume] = g_pLTServer->CreateString( genProp.m_String );
+				m_ahstrVolumes[iVolume] = g_pLTServer->CreateString( genProp.m_String );
 
 	}
 
@@ -251,9 +245,9 @@ LTBOOL AIRegion::ReadProp(ObjectCreateStruct *pData)
 		char szBuffer[128];
 		sprintf(szBuffer, "PostSearchMsg%d", iPostSearchMsg+1);
 
-        if ( g_pLTServer->GetPropGeneric( szBuffer, &genProp ) == LT_OK )
+		if ( g_pLTServer->GetPropGeneric( szBuffer, &genProp ) == LT_OK )
 			if ( genProp.m_String[0] )
-                m_ahstrPostSearchMsgs[iPostSearchMsg] = g_pLTServer->CreateString( genProp.m_String );
+				m_ahstrPostSearchMsgs[iPostSearchMsg] = g_pLTServer->CreateString( genProp.m_String );
 
 	}
 
@@ -262,11 +256,9 @@ LTBOOL AIRegion::ReadProp(ObjectCreateStruct *pData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: AIRegion::EngineMessageFn
 //
-//	ROUTINE:	AIRegion::EngineMessageFn
-//
-//	PURPOSE:	Handles engine message functions
-//
+//	PURPOSE: Handles engine message functions
 // ----------------------------------------------------------------------- //
 
 uint32 AIRegion::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -275,7 +267,7 @@ uint32 AIRegion::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 	{
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
 
 			int nInfo = (int)fData;
 			if (nInfo == PRECREATE_WORLDFILE || nInfo == PRECREATE_STRINGPROP)
@@ -293,11 +285,9 @@ uint32 AIRegion::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIRegion::CAIRegion()
 //
-//	ROUTINE:	CAIRegion::CAIRegion()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 CAIRegion::CAIRegion()
@@ -316,11 +306,9 @@ CAIRegion::CAIRegion()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIRegion::~CAIRegion()
 //
-//	ROUTINE:	CAIRegion::~CAIRegion()
-//
-//	PURPOSE:	Destroy the object
-//
+//	PURPOSE: Destroy the object
 // ----------------------------------------------------------------------- //
 
 CAIRegion::~CAIRegion()
@@ -334,17 +322,15 @@ CAIRegion::~CAIRegion()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIRegion::Init()
 //
-//	ROUTINE:	CAIRegion::Init()
-//
-//	PURPOSE:	Initialize us from an engine object AIRegion
-//
+//	PURPOSE: Initialize us from an engine object AIRegion
 // ----------------------------------------------------------------------- //
 
 void CAIRegion::Init(uint32 iRegion, const AIRegion& Region)
 {
 	m_iRegion = iRegion;
-    m_hstrName = g_pLTServer->CreateString(g_pLTServer->GetObjectName(Region.m_hObject));
+	m_hstrName = g_pLTServer->CreateString(g_pLTServer->GetObjectName(Region.m_hObject));
 
 	{for ( uint32 iVolume = 0 ; iVolume < kMaxVolumes ; iVolume++ )
 	{
@@ -377,11 +363,9 @@ void CAIRegion::Init(uint32 iRegion, const AIRegion& Region)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIRegion::Save()
 //
-//	ROUTINE:	CAIRegion::Save()
-//
-//	PURPOSE:	Save the Region
-//
+//	PURPOSE: Save the Region
 // ----------------------------------------------------------------------- //
 
 void CAIRegion::Save(HMESSAGEWRITE hWrite)
@@ -410,11 +394,9 @@ void CAIRegion::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIRegion::Load()
 //
-//	ROUTINE:	CAIRegion::Load()
-//
-//	PURPOSE:	Load the Region
-//
+//	PURPOSE: Load the Region
 // ----------------------------------------------------------------------- //
 
 void CAIRegion::Load(HMESSAGEREAD hRead)
@@ -443,26 +425,24 @@ void CAIRegion::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAINodeMgr::FindNearestSearchNode
 //
-//	ROUTINE:	CAINodeMgr::FindNearestSearchNode
-//
-//	PURPOSE:	Finds the nearest Search node to vPos
-//
+//	PURPOSE: Finds the nearest Search node to vPos
 // ----------------------------------------------------------------------- //
 
 CAINode* CAIRegion::FindNearestSearchNode(const LTVector& vPos, HOBJECT hThreat) const
 {
 	_ASSERT(IsSearchable());
 
-    LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
-    CAINode *pClosestNode = LTNULL;
+	LTFLOAT  fMinDistanceSqr = (float)INT_MAX;
+	CAINode *pClosestNode = LTNULL;
 
-    for ( uint32 iSearchNode = 0 ; iSearchNode < m_cSearchNodes ; iSearchNode++ )
+	for ( uint32 iSearchNode = 0 ; iSearchNode < m_cSearchNodes ; iSearchNode++ )
 	{
 		CAINode* pNode = g_pAINodeMgr->GetNode(m_aiSearchNodes[iSearchNode]);
 		if ( !pNode->IsLocked() && pNode->IsSearchable() )
 		{
-            LTFLOAT fDistanceSqr = VEC_DISTSQR(vPos, pNode->GetPos());
+			LTFLOAT fDistanceSqr = VEC_DISTSQR(vPos, pNode->GetPos());
 
 			if ( fDistanceSqr < fMinDistanceSqr )
 			{
@@ -479,11 +459,9 @@ CAINode* CAIRegion::FindNearestSearchNode(const LTVector& vPos, HOBJECT hThreat)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIRegion::AddSearcher
 //
-//	ROUTINE:	CAIRegion::AddSearcher
-//
-//	PURPOSE:	Adds a searcher to this region
-//
+//	PURPOSE: Adds a searcher to this region
 // ----------------------------------------------------------------------- //
 
 void CAIRegion::AddSearcher(CAI* pAI)
@@ -492,11 +470,9 @@ void CAIRegion::AddSearcher(CAI* pAI)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CAIRegion::RemoveSearcher
 //
-//	ROUTINE:	CAIRegion::RemoveSearcher
-//
-//	PURPOSE:	Removes a searcher from this region
-//
+//	PURPOSE: Removes a searcher from this region
 // ----------------------------------------------------------------------- //
 
 void CAIRegion::RemoveSearcher(CAI* pAI)

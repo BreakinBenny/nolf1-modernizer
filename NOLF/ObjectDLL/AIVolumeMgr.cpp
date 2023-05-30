@@ -43,20 +43,20 @@ void CAIVolumeMgr::Init()
 
 	// First, we count up the number of volumes in the level
 
-    HCLASS  hAIVolume = g_pLTServer->GetClass("AIVolume");
+	HCLASS  hAIVolume = g_pLTServer->GetClass("AIVolume");
 	HOBJECT	hCurObject = LTNULL;
-    while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
+	while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIVolume))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIVolume))
 		{
 			m_cVolumes++;
 		}
 	}
 
 	hCurObject = LTNULL;
-    while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
+	while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIVolume))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIVolume))
 		{
 			m_cVolumes++;
 		}
@@ -71,34 +71,34 @@ void CAIVolumeMgr::Init()
 	// Now we put the Volumes int32o our array
 
 	hCurObject = LTNULL;
-    while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
+	while (hCurObject = g_pLTServer->GetNextObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIVolume))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIVolume))
 		{
 			// Setup the volume
 
-            m_aVolumes[iVolume].Init(iVolume, *(AIVolume*)g_pLTServer->HandleToObject(hCurObject));
+			m_aVolumes[iVolume].Init(iVolume, *(AIVolume*)g_pLTServer->HandleToObject(hCurObject));
 			iVolume++;
 
 			// Remove the object
 
-            g_pLTServer->RemoveObject(hCurObject);
+			g_pLTServer->RemoveObject(hCurObject);
 		}
 	}
 
 	hCurObject = LTNULL;
-    while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
+	while (hCurObject = g_pLTServer->GetNextInactiveObject(hCurObject))
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIVolume))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hCurObject), hAIVolume))
 		{
 			// Setup the volume
 
-            m_aVolumes[iVolume].Init(iVolume, *(AIVolume*)g_pLTServer->HandleToObject(hCurObject));
+			m_aVolumes[iVolume].Init(iVolume, *(AIVolume*)g_pLTServer->HandleToObject(hCurObject));
 			iVolume++;
 
 			// Remove the object
 
-            g_pLTServer->RemoveObject(hCurObject);
+			g_pLTServer->RemoveObject(hCurObject);
 		}
 	}
 
@@ -125,7 +125,7 @@ void CAIVolumeMgr::Init()
 					if ( cNeighbors >= c_nMaxNeighbors )
 					{
 						_ASSERT(!"Max number of neighboring volumes exceeded!!!!");
-                        g_pLTServer->CPrint("Max number of neighboring volumes exceeded!!!!");
+						g_pLTServer->CPrint("Max number of neighboring volumes exceeded!!!!");
 						break;
 					}
 
@@ -137,17 +137,17 @@ void CAIVolumeMgr::Init()
 
 		m_aVolumes[iVolume].InitNeighbors(apVolumeNeighbors, cNeighbors);
 /*
-        g_pLTServer->CPrint("restated: %s has %d neighbors", m_aVolumes[iVolume].GetName(), m_aVolumes[iVolume].GetNumNeighbors());
+		g_pLTServer->CPrint("restated: %s has %d neighbors", m_aVolumes[iVolume].GetName(), m_aVolumes[iVolume].GetNumNeighbors());
 		{for ( int32 iNeighborVolume = 0 ; iNeighborVolume < m_aVolumes[iVolume].GetNumNeighbors() ; iNeighborVolume++ )
 		{
 			int32 iNeighbor = m_aVolumes[iVolume].GetNeighborByIndex(iNeighborVolume)->GetIndex();
-            g_pLTServer->CPrint("           %s", m_aVolumes[iNeighbor].GetName());
+			g_pLTServer->CPrint("		   %s", m_aVolumes[iNeighbor].GetName());
 		}}*/
 	}}
 
 	// All done
 #ifndef _FINAL
-    g_pLTServer->CPrint("Added %d volumes, %d connections", m_cVolumes, cTotalNeighbors);
+	g_pLTServer->CPrint("Added %d volumes, %d connections", m_cVolumes, cTotalNeighbors);
 #endif
 	m_bInitialized = LTTRUE;
 }
@@ -173,7 +173,7 @@ void CAIVolumeMgr::Link(HOBJECT hObject)
 
 	if ( g_pWorldProperties && hObject )
 	{
-        g_pLTServer->CreateInterObjectLink(g_pWorldProperties->m_hObject, hObject);
+		g_pLTServer->CreateInterObjectLink(g_pWorldProperties->m_hObject, hObject);
 	}
 }
 
@@ -183,7 +183,7 @@ void CAIVolumeMgr::Unlink(HOBJECT hObject)
 
 	if ( g_pWorldProperties && hObject )
 	{
-        g_pLTServer->BreakInterObjectLink(g_pWorldProperties->m_hObject, hObject);
+		g_pLTServer->BreakInterObjectLink(g_pWorldProperties->m_hObject, hObject);
 	}
 }
 
