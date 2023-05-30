@@ -65,7 +65,7 @@ END
 /////////////////////////////////////////////////////////////////////////////
 // TEXT
 
-CREDITS	TEXT	"credits.txt"
+CREDITS TEXT	"credits.txt"
 
 INTRO	TEXT	"intro.txt"
 
@@ -73,7 +73,7 @@ INTRO	TEXT	"intro.txt"
 /////////////////////////////////////////////////////////////////////////////
 // Cursor
 
-IDC_POINTER	CURSOR	"arrow.cur"
+IDC_POINTER CURSOR	"arrow.cur"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -84,20 +84,20 @@ IDC_POINTER	CURSOR	"arrow.cur"
 STRINGTABLE
 BEGIN
 	IDS_TITLE_MAINMENU	"NO ONE LIVES FOREVER"
-	IDS_TITLE_GAME		"SINGLE PLAYER"
+	IDS_TITLE_GAME			"SINGLE PLAYER"
 	IDS_TITLE_DIFFICULTY	"DIFFICULTY"
-	IDS_TITLE_OPTIONS	"OPTIONS"
+	IDS_TITLE_OPTIONS		"OPTIONS"
 	IDS_TITLE_NEWGAME	"SELECT MISSION"
 	IDS_TITLE_LOADGAME	"LOAD GAME"
 	IDS_TITLE_SAVEGAME	"SAVE GAME"
 	IDS_TITLE_CUSTOMLEVELS	"CUSTOM LEVELS"
 	IDS_TITLE_DISPLAYOPTIONS	"DISPLAY OPTIONS"
-	IDS_TITLE_TEXTURE	"TEXTURE RESOLUTION"
+	IDS_TITLE_TEXTURE		"TEXTURE RESOLUTION"
 	IDS_TITLE_PERFORMANCE	"PERFORMANCE"
 	IDS_TITLE_SOUND		"SOUND"
 	IDS_TITLE_KEYBOARD	"KEYBOARD"
 	IDS_TITLE_MOUSE		"MOUSE"
-	IDS_TITLE_JOYSTICK	"JOYSTICK"
+	IDS_TITLE_JOYSTICK		"JOYSTICK"
 END
 
 STRINGTABLE
@@ -106,53 +106,53 @@ BEGIN
 	IDS_MULTIPLAYER	"Multiplayer"
 	IDS_OPTIONS	"Options"
 	IDS_CREDITS	"Credits"
-	IDS_EXIT	"Quit"
+	IDS_EXIT		"Quit"
 	IDS_NEWGAME	"Select mission"
 	IDS_LOADGAME	"Load game"
 	IDS_SAVEGAME	"Save game"
-	IDS_WARP	"Extras"
-	IDS_SCREEN	"Display"
-	IDS_SOUND	"Sound"
+	IDS_WARP		"Extras"
+	IDS_SCREEN		"Display"
+	IDS_SOUND		"Sound"
 	IDS_KEYBOARD	"Keyboard"
-	IDS_MOUSE	"Mouse"
+	IDS_MOUSE		"Mouse"
 	IDS_JOYSTICK	"Configure joystick/gamepad"
-	IDS_BACK	"Back"
-	IDS_ERROR	"Error"
+	IDS_BACK		"Back"
+	IDS_ERROR		"Error"
 END
 
 STRINGTABLE
 BEGIN
 	IDS_CUSTOM	"Custom"
-	IDS_ON		"On"
-	IDS_OFF		"Off"
-	IDS_YES		"Yes"
-	IDS_NO		"No"
-	IDS_NONE	"None"
+	IDS_ON			"On"
+	IDS_OFF			"Off"
+	IDS_YES			"Yes"
+	IDS_NO			"No"
+	IDS_NONE		"None"
 	IDS_FEW		"Few"
-	IDS_SOME	"Some"
-	IDS_LOTS	"Lots"
+	IDS_SOME		"Some"
+	IDS_LOTS		"Lots"
 	IDS_NOTSHOWN	"Not shown"
 	IDS_PULLEDBACK	"Pulled back"
-	IDS_FULL	"Full"
-	IDS_HALF	"Half"
-	IDS_ALL		 "All"
-	IDS_CLOSE	"Close"
+	IDS_FULL		"Full"
+	IDS_HALF		"Half"
+	IDS_ALL			 "All"
+	IDS_CLOSE		"Close"
 	IDS_FARTHER	"Medium"
 END
 
 STRINGTABLE
 BEGIN
-	IDS_FURTHEST	"Far"
+	IDS_FURTHEST			"Far"
 	IDS_RESTOREDEFAULTS	"Restore defaults"
-	IDS_SHARP		"Sharp"
-	IDS_SOFT		"Soft"
-	IDS_YESNO		"(Y/N)"
+	IDS_SHARP				"Sharp"
+	IDS_SOFT				"Soft"
+	IDS_YESNO				"(Y/N)"
 	IDS_TITLE_CONTROLS	"CONTROLS"
 	IDS_TITLE_ADVANCEDCONTROLS	"ADVANCED CONTROLS"
 	IDS_TITLE_CUSTOM_CONTROLS	"CONFIGURE CONTROLS"
 	IDS_CUSTOM_CONTROLS		"Configure controls"
 	IDS_ADVANCED_CONTROLS	"Advanced controls"
-	IDS_SPACER		"   -	"
+	IDS_SPACER			"   -	"
 	IDS_BRIEFING		"Briefing:"
 	IDS_DONTDISPLAY_TITLE	"Multiplayer settings"
 	IDS_OBJECTIVES		"Objectives:"
@@ -1992,22 +1992,22 @@ END
 
 STRINGTABLE
 BEGIN
-	IDS_INV_CONTROLS	"Inventory and Weapon Controls"
+	IDS_INV_CONTROLS		"Inventory and Weapon Controls"
 	IDS_VIEW_CONTROLS	"View Controls"
-	IDS_MISC_CONTROLS	"Miscellaneous Controls"
+	IDS_MISC_CONTROLS		"Miscellaneous Controls"
 	IDS_HELP_KEYBOARD	"Set keyboard configuration options."
 	IDS_TITLE_GAME_OPTIONS	"GAME OPTIONS"
-	IDS_GAME_OPTIONS	"Game"
+	IDS_GAME_OPTIONS		"Game"
 	IDS_HELP_GAME_OPTIONS	"Set gameplay and content options."
 	IDS_SKIP_OUTFITTING	"Default equipment"
 	IDS_HELP_SKIP_OUTFITTING "Start mission with basic equipment."
-	IDS_DO_OUTFITTING	"Select equipment"
+	IDS_DO_OUTFITTING		"Select equipment"
 	IDS_HELP_DO_OUTFITTING	"Select the equipment to use for this mission."
-	IDS_NIGHT_SCOPE	"Magnifies view for precision shooting and provides light amplification for night operations."
+	IDS_NIGHT_SCOPE		"Magnifies view for precision shooting and provides light amplification for night operations."
 	IDS_TITLE_INVENTORY	"INVENTORY SUMMARY"
 	IDS_HELP_INVENTORY	"View a summary of the equipment selections."
 	IDS_DISPLAY_SUBTITLES	"Subtitles"
-	IDS_HELP_SUBTITLES	"Toggle use of subtitles."
+	IDS_HELP_SUBTITLES		"Toggle use of subtitles."
 END
 
 STRINGTABLE
@@ -2038,19 +2038,19 @@ END
 
 STRINGTABLE
 BEGIN
-	IDS_WEAPONS_STAY	"Weapons stay"
+	IDS_WEAPONS_STAY		"Weapons stay"
 	IDS_WEAPONS_STAY_HELP	"Toggles whether weapons immediately respawn."
 	IDS_USE_SPAWN_LIMIT	"Use spawn limit"
 	IDS_USE_SPAWN_LIMIT_HELP	"The number of times a player may be killed and return to play."
 	IDS_SPAWN_LIMIT		"Spawn limit"
 	IDS_SPAWN_LIMIT_HELP	"The number of times players may be killed and still return to play."
-	IDS_HIT_LOCATION	"Location based damage"
+	IDS_HIT_LOCATION		"Location based damage"
 	IDS_HIT_LOCATION_HELP	"Modifies damage based on the body part hit."
 	IDS_SCORE_LIMIT		"Winning score"
 	IDS_HELP_SCORE_LIMIT	"Sets the score required to end a map."
-	IDS_NGE_SCORE		"Score reached"
+	IDS_NGE_SCORE			"Score reached"
 	IDS_NGE_SCORE_AND_TIME	"Score or time limit reached"
-	IDS_END_SCORE	"Winning score reached."
+	IDS_END_SCORE		"Winning score reached."
 	IDS_INTEL_SCORE	"Intelligence score"
 	IDS_HELP_INTEL_SCORE	"Points earned for gathering intelligence."
 	IDS_FRAG_SCORE	"Frag scoring"

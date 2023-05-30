@@ -3,5 +3,5 @@
 extern "C"
 BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID )
 {
-    return 1;
+	return 1;
 }
