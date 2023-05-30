@@ -16,10 +16,10 @@ namespace
 
 CBitmapCtrl::CBitmapCtrl()
 {
-    m_sNormalSurface[0] = LTNULL;
-    m_sSelectedSurface[0] = LTNULL;
-    m_sDisabledSurface[0] = LTNULL;
-    m_bFreeSurfaces = LTFALSE;
+	m_sNormalSurface[0] = LTNULL;
+	m_sSelectedSurface[0] = LTNULL;
+	m_sDisabledSurface[0] = LTNULL;
+	m_bFreeSurfaces = LTFALSE;
 }
 
 CBitmapCtrl::~CBitmapCtrl()
@@ -47,8 +47,8 @@ LTBOOL CBitmapCtrl::Create(ILTClient *pClientDE,  char *lpszNormalBmp,char *lpsz
 
 LTBOOL CBitmapCtrl::SetBitmap(char *lpszNormalBmp,char *lpszSelectedBmp,char *lpszDisabledBmp)
 {
-    uint32 dwWidth=0;
-    uint32 dwHeight=0;
+	uint32 dwWidth=0;
+	uint32 dwHeight=0;
 	if (m_bFreeSurfaces)
 		FreeSurfaces();
 	HSURFACE hNormalSurface = g_pInterfaceResMgr->GetSharedSurface(lpszNormalBmp);
@@ -86,7 +86,7 @@ LTBOOL CBitmapCtrl::SetBitmap(char *lpszNormalBmp,char *lpszSelectedBmp,char *lp
 		m_nDisabledHeight = (int)dwHeight;
 
 	}
-    return LTTRUE;
+	return LTTRUE;
 }
 
 void CBitmapCtrl::FreeSurfaces()
@@ -133,29 +133,29 @@ void CBitmapCtrl::Render ( HSURFACE hDestSurf )
 	{
 //		if (state == LGCS_SELECTED)
 //		{
-//          LTRect rect = {m_pos.x-2,m_pos.y-2,m_pos.x+m_nNormalWidth+2,m_pos.y+m_nNormalHeight+2};
-//          g_pLTClient->FillRect(hDestSurf,&rect,SETRGB(255,255,255));
+//			LTRect rect = {m_pos.x-2,m_pos.y-2,m_pos.x+m_nNormalWidth+2,m_pos.y+m_nNormalHeight+2};
+//			g_pLTClient->FillRect(hDestSurf,&rect,SETRGB(255,255,255));
 //		}
-        m_pClientDE->DrawSurfaceToSurfaceTransparent(hDestSurf, g_pInterfaceResMgr->GetSharedSurface(m_sNormalSurface), LTNULL, m_pos.x, m_pos.y, m_hTrans);
+		m_pClientDE->DrawSurfaceToSurfaceTransparent(hDestSurf, g_pInterfaceResMgr->GetSharedSurface(m_sNormalSurface), LTNULL, m_pos.x, m_pos.y, m_hTrans);
 
 		if (state == LGCS_SELECTED)
 		{
 			//left
-            LTRect rectL(m_pos.x,m_pos.y,m_pos.x+kHighlightWidth,m_pos.y+m_nNormalHeight);
+			LTRect rectL(m_pos.x,m_pos.y,m_pos.x+kHighlightWidth,m_pos.y+m_nNormalHeight);
 
 			//top
-            LTRect rectT(m_pos.x,m_pos.y,m_pos.x+m_nNormalWidth,m_pos.y+kHighlightWidth);
+			LTRect rectT(m_pos.x,m_pos.y,m_pos.x+m_nNormalWidth,m_pos.y+kHighlightWidth);
 
 			//right
-            LTRect rectR(m_pos.x+m_nNormalWidth-kHighlightWidth,m_pos.y,m_pos.x+m_nNormalWidth,m_pos.y+m_nNormalHeight);
+			LTRect rectR(m_pos.x+m_nNormalWidth-kHighlightWidth,m_pos.y,m_pos.x+m_nNormalWidth,m_pos.y+m_nNormalHeight);
 
 			//bottom
-            LTRect rectB(m_pos.x,m_pos.y+m_nNormalHeight-kHighlightWidth,m_pos.x+m_nNormalWidth,m_pos.y+m_nNormalHeight);
+			LTRect rectB(m_pos.x,m_pos.y+m_nNormalHeight-kHighlightWidth,m_pos.x+m_nNormalWidth,m_pos.y+m_nNormalHeight);
 
-            g_pOptimizedRenderer->FillRect(hDestSurf,&rectL,kWhite);
-            g_pOptimizedRenderer->FillRect(hDestSurf,&rectT,kWhite);
-            g_pOptimizedRenderer->FillRect(hDestSurf,&rectR,kWhite);
-            g_pOptimizedRenderer->FillRect(hDestSurf,&rectB,kWhite);
+			g_pOptimizedRenderer->FillRect(hDestSurf,&rectL,kWhite);
+			g_pOptimizedRenderer->FillRect(hDestSurf,&rectT,kWhite);
+			g_pOptimizedRenderer->FillRect(hDestSurf,&rectR,kWhite);
+			g_pOptimizedRenderer->FillRect(hDestSurf,&rectB,kWhite);
 		}
 	}
 

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: BodyFX.cpp
 //
-// MODULE  : BodyFX.cpp
+// PURPOSE: Body special FX - Implementation
 //
-// PURPOSE : Body special FX - Implementation
-//
-// CREATED : 8/24/98
+// CREATED: 8/24/98
 //
 // (c) 1998-1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -23,11 +21,9 @@ extern CGameClientShell* g_pGameClientShell;
 extern VarTrack g_vtBigHeadMode;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBodyFX::CBodyFX()
 //
-//	ROUTINE:	CBodyFX::CBodyFX()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CBodyFX::CBodyFX()
@@ -39,11 +35,9 @@ CBodyFX::CBodyFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBodyFX::~CBodyFX()
 //
-//	ROUTINE:	CBodyFX::~CBodyFX()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CBodyFX::~CBodyFX()
@@ -57,77 +51,69 @@ CBodyFX::~CBodyFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBodyFX::Init
 //
-//	ROUTINE:	CBodyFX::Init
-//
-//	PURPOSE:	Init the Body fx
-//
+//	PURPOSE: Init the Body fx
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBodyFX::Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage)
 {
-    if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
-    if (!hMessage) return LTFALSE;
+	if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
+	if (!hMessage) return LTFALSE;
 
 	BODYCREATESTRUCT bcs;
 
 	bcs.hServerObj = hServObj;
-    bcs.Read(g_pLTClient, hMessage);
+	bcs.Read(g_pLTClient, hMessage);
 
 	return Init(&bcs);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBodyFX::Init
 //
-//	ROUTINE:	CBodyFX::Init
-//
-//	PURPOSE:	Init the Body fx
-//
+//	PURPOSE: Init the Body fx
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBodyFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	m_bs = *((BODYCREATESTRUCT*)psfxCreateStruct);
 
 	g_pModelLT->AddTracker(m_bs.hServerObj, &m_TwitchTracker);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBodyFX::CreateObject
 //
-//	ROUTINE:	CBodyFX::CreateObject
-//
-//	PURPOSE:	Create the various fx
-//
+//	PURPOSE: Create the various fx
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBodyFX::CreateObject(ILTClient* pClientDE)
 {
-    if (!CSpecialFX::CreateObject(pClientDE) || !m_hServerObject) return LTFALSE;
+	if (!CSpecialFX::CreateObject(pClientDE) || !m_hServerObject) return LTFALSE;
 
-    uint32 dwCFlags = m_pClientDE->GetObjectClientFlags(m_hServerObject);
+	uint32 dwCFlags = m_pClientDE->GetObjectClientFlags(m_hServerObject);
 	m_pClientDE->SetObjectClientFlags(m_hServerObject, dwCFlags | CF_NOTIFYMODELKEYS | CF_INSIDERADIUS);
 
-//  uint32 dwCFlags = m_pClientDE->GetObjectClientFlags(m_hServerObject);
+//	uint32 dwCFlags = m_pClientDE->GetObjectClientFlags(m_hServerObject);
 //	m_pClientDE->SetObjectClientFlags(m_hServerObject, dwCFlags | CF_NOTIFYMODELKEYS);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBodyFX::Update
 //
-//	ROUTINE:	CBodyFX::Update
-//
-//	PURPOSE:	Update the fx
-//
+//	PURPOSE: Update the fx
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBodyFX::Update()
 {
-    if (!m_pClientDE || !m_hServerObject || m_bWantRemove) return LTFALSE;
+	if (!m_pClientDE || !m_hServerObject || m_bWantRemove) return LTFALSE;
 
 	// Only register/deregister once
 	if (!m_bHasNodeControl && g_vtBigHeadMode.GetFloat()) {
@@ -148,29 +134,27 @@ LTBOOL CBodyFX::Update()
 			break;
 	}
 
-    if (g_pGameClientShell->GetGameType() != SINGLE && m_bs.nClientId != (uint8)-1)
+	if (g_pGameClientShell->GetGameType() != SINGLE && m_bs.nClientId != (uint8)-1)
 	{
 		UpdateMarker();
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBodyFX::UpdateFade
 //
-//	ROUTINE:	CBodyFX::UpdateFade
-//
-//	PURPOSE:	Update the fx
-//
+//	PURPOSE: Update the fx
 // ----------------------------------------------------------------------- //
 
 void CBodyFX::UpdateFade()
 {
 	HLOCALOBJ attachList[20];
-    uint32 dwListSize = 0;
-    uint32 dwNumAttach = 0;
+	uint32 dwListSize = 0;
+	uint32 dwNumAttach = 0;
 
-    g_pLTClient->GetAttachments(m_hServerObject, attachList, 20, &dwListSize, &dwNumAttach);
+	g_pLTClient->GetAttachments(m_hServerObject, attachList, 20, &dwListSize, &dwNumAttach);
 	int nNum = dwNumAttach <= dwListSize ? dwNumAttach : dwListSize;
 
 	m_fFaderTime = Max<LTFLOAT>(0.0f, m_fFaderTime - g_pGameClientShell->GetFrameTime());
@@ -184,18 +168,16 @@ void CBodyFX::UpdateFade()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBodyFX::OnServerMessage
 //
-//	ROUTINE:	CBodyFX::OnServerMessage
-//
-//	PURPOSE:	Handle any messages from our server object...
-//
+//	PURPOSE: Handle any messages from our server object...
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBodyFX::OnServerMessage(HMESSAGEREAD hMessage)
 {
-    if (!CSpecialFX::OnServerMessage(hMessage)) return LTFALSE;
+	if (!CSpecialFX::OnServerMessage(hMessage)) return LTFALSE;
 
-    uint8 nMsgId = g_pLTClient->ReadFromMessageByte(hMessage);
+	uint8 nMsgId = g_pLTClient->ReadFromMessageByte(hMessage);
 
 	switch(nMsgId)
 	{
@@ -207,7 +189,7 @@ LTBOOL CBodyFX::OnServerMessage(HMESSAGEREAD hMessage)
 
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 LTBOOL GroundFilterFn(HOBJECT hObj, void *pUserData)
@@ -228,7 +210,7 @@ void CBodyFX::OnModelKey(HLOCALOBJ hObj, ArgList *pArgs)
 	if ( bSlump || bLand )
 	{
 		LTVector vPos;
-        g_pLTClient->GetObjectPos(m_hServerObject, &vPos);
+		g_pLTClient->GetObjectPos(m_hServerObject, &vPos);
 
 		IntersectQuery IQuery;
 		IntersectInfo IInfo;
@@ -240,7 +222,7 @@ void CBodyFX::OnModelKey(HLOCALOBJ hObj, ArgList *pArgs)
 
 		SurfaceType eSurface;
 
-        if (g_pLTClient->IntersectSegment(&IQuery, &IInfo))
+		if (g_pLTClient->IntersectSegment(&IQuery, &IInfo))
 		{
 			if (IInfo.m_hPoly && IInfo.m_hPoly != INVALID_HPOLY)
 			{
@@ -279,11 +261,9 @@ void CBodyFX::OnModelKey(HLOCALOBJ hObj, ArgList *pArgs)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBodyFX::UpdateMarker
 //
-//	ROUTINE:	CBodyFX::UpdateMarker
-//
-//	PURPOSE:	Update the marker fx
-//
+//	PURPOSE: Update the marker fx
 // ----------------------------------------------------------------------- //
 
 void CBodyFX::UpdateMarker()
@@ -305,7 +285,7 @@ void CBodyFX::UpdateMarker()
 		return;
 	}
 
-    uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hServerObject);
+	uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hServerObject);
 	if (!(dwFlags & FLAG_VISIBLE))
 	{
 		RemoveMarker();
@@ -313,10 +293,10 @@ void CBodyFX::UpdateMarker()
 	}
 
 
-    LTVector vU, vR, vF, vTemp, vDims, vPos;
-    LTRotation rRot;
+	LTVector vU, vR, vF, vTemp, vDims, vPos;
+	LTRotation rRot;
 
-    ILTPhysics* pPhysics = m_pClientDE->Physics();
+	ILTPhysics* pPhysics = m_pClientDE->Physics();
 
 	m_pClientDE->GetObjectPos(m_hServerObject, &vPos);
 	pPhysics->GetObjectDims(m_hServerObject, &vDims);
@@ -334,11 +314,9 @@ void CBodyFX::UpdateMarker()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBodyFX::CreateMarker
 //
-//	ROUTINE:	CBodyFX::CreateMarker
-//
-//	PURPOSE:	Create marker special fx
-//
+//	PURPOSE: Create marker special fx
 // ----------------------------------------------------------------------- //
 
 void CBodyFX::CreateMarker(LTVector & vPos, LTBOOL bSame)
@@ -369,7 +347,7 @@ void CBodyFX::CreateMarker(LTVector & vPos, LTBOOL bSame)
 
 	m_pClientDE->SetObjectScale(m_hMarker, &vScale);
 
-    LTFLOAT r, g, b, a;
+	LTFLOAT r, g, b, a;
 	m_pClientDE->GetObjectColor(m_hServerObject, &r, &g, &b, &a);
 
 	m_pClientDE->SetObjectColor(m_hObject, r, g, b, (fAlpha * a));
@@ -378,11 +356,9 @@ void CBodyFX::CreateMarker(LTVector & vPos, LTBOOL bSame)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBodyFX::RemoveMarker
 //
-//	ROUTINE:	CBodyFX::RemoveMarker
-//
-//	PURPOSE:	Remove the marker fx
-//
+//	PURPOSE: Remove the marker fx
 // ----------------------------------------------------------------------- //
 
 void CBodyFX::RemoveMarker()
@@ -391,5 +367,4 @@ void CBodyFX::RemoveMarker()
 
 	g_pLTClient->DeleteObject(m_hMarker);
 	m_hMarker = LTNULL;
-
 }

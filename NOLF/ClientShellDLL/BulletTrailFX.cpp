@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: BulletTrailFX.cpp
 //
-// MODULE  : BulletTrailFX.cpp
+// PURPOSE: SmokeTrail segment special FX - Implementation
 //
-// PURPOSE : SmokeTrail segment special FX - Implementation
-//
-// CREATED : 3/6/98
-//
+// CREATED: 3/6/98
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -18,11 +16,9 @@
 #define MAX_TRAIL_LENGTH 3000.0f
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBulletTrailFX::Init
 //
-//	ROUTINE:	CBulletTrailFX::Init
-//
-//	PURPOSE:	Init the bullet trail
-//
+//	PURPOSE: Init the bullet trail
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBulletTrailFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
@@ -43,25 +39,23 @@ LTBOOL CBulletTrailFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 
 	m_pTextureName	= DEFAULT_BUBBLE_TEXTURE;
 
-	m_fDistance				= MAX_TRAIL_LENGTH;
-	m_fDistTraveled			= 0.0f;
+	m_fDistance		= MAX_TRAIL_LENGTH;
+	m_fDistTraveled	= 0.0f;
 
     return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBulletTrailFX::Update
 //
-//	ROUTINE:	CBulletTrailFX::Update
-//
-//	PURPOSE:	Update the bullet trail (add bubbles)
-//
+//	PURPOSE: Update the bullet trail (add bubbles)
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBulletTrailFX::Update()
 {
-    if (!m_hObject || !m_pClientDE) return LTFALSE;
+	if (!m_hObject || !m_pClientDE) return LTFALSE;
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
 	if (m_bFirstUpdate)
 	{
@@ -69,16 +63,16 @@ LTBOOL CBulletTrailFX::Update()
 		// container we start in...
 
 		HLOCALOBJ objList[1];
-        uint32 dwNum = m_pClientDE->GetPointContainers(&m_vStartPos, objList, 1);
+		uint32 dwNum = m_pClientDE->GetPointContainers(&m_vStartPos, objList, 1);
 
 		if (dwNum > 0 && objList[0])
 		{
-            uint32 dwUserFlags;
+			uint32 dwUserFlags;
 			m_pClientDE->GetObjectUserFlags(objList[0], &dwUserFlags);
 
 			if (dwUserFlags & USRFLG_VISIBLE)
 			{
-                uint16 dwCode;
+				uint16 dwCode;
 				if (m_pClientDE->GetContainerCode(objList[0], &dwCode))
 				{
 					GetLiquidColorRange((ContainerCode)dwCode, &m_vColor1, &m_vColor2);
@@ -88,12 +82,11 @@ LTBOOL CBulletTrailFX::Update()
 
 
 		// Move the particle system to the correct position...
-
 		m_pClientDE->SetObjectPos(m_hObject, &m_vStartPos);
 
-        m_bFirstUpdate = LTFALSE;
-		m_fStartTime   = fTime;
-		m_fLastTime	   = fTime;
+		m_bFirstUpdate = LTFALSE;
+		m_fStartTime	= fTime;
+		m_fLastTime	= fTime;
 
 		VEC_INIT(m_vLastPos);
 
@@ -102,7 +95,7 @@ LTBOOL CBulletTrailFX::Update()
 		ClientIntersectQuery iQuery;
 		ClientIntersectInfo  iInfo;
 
-        LTVector vTemp, vEndPoint;
+		LTVector vTemp, vEndPoint;
 
 		VEC_MULSCALAR(vTemp, m_vDir, MAX_TRAIL_LENGTH);
 		VEC_ADD(vEndPoint, m_vStartPos, vTemp);
@@ -116,30 +109,27 @@ LTBOOL CBulletTrailFX::Update()
 			m_fDistance = VEC_MAG(vEndPoint);
 		}
 
-        if (m_fDistance <= 0.0f || m_fFadeTime <= 0.0f) return LTFALSE;
+		if (m_fDistance <= 0.0f || m_fFadeTime <= 0.0f) return LTFALSE;
 
 		// Calculate the trail velocity...
-
 		m_fTrailVel = m_fDistance / m_fFadeTime;
 
 		VEC_MULSCALAR(m_vDir, m_vDir, m_fTrailVel);
 	}
 
 
-
 	// Check to see if we should just wait for last bubble to go away...
-
 	if (fTime > m_fStartTime + m_fFadeTime)
 	{
 		if (fTime > m_fLastTime + m_fLifeTime)
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 
-        LTFLOAT fScale = (m_fLifeTime - (fTime - m_fLastTime)) / m_fLifeTime;
+		LTFLOAT fScale = (m_fLifeTime - (fTime - m_fLastTime)) / m_fLifeTime;
 
 		// m_pClientDE->SetParticleSystemColorScale(m_hObject, fScale);
-        LTFLOAT r, g, b, a;
+		LTFLOAT r, g, b, a;
 		m_pClientDE->GetObjectColor(m_hObject, &r, &g, &b, &a);
 		m_pClientDE->SetObjectColor(m_hObject, r, g, b, fScale);
 
@@ -150,39 +140,36 @@ LTBOOL CBulletTrailFX::Update()
 	// Create the necessary particles...
 
 
-    LTFLOAT fTimeOffset = g_pGameClientShell->GetFrameTime();
+	LTFLOAT fTimeOffset = g_pGameClientShell->GetFrameTime();
 
 
 
 	// Calculate distance traveled this frame...
 
-    LTFLOAT fDist = m_fTrailVel * fTimeOffset;
+	LTFLOAT fDist = m_fTrailVel * fTimeOffset;
 	if (fDist > m_fDistance) fDist = m_fDistance;
 
 	m_fDistTraveled += fDist;
 	if (m_fDistTraveled > m_fDistance)
 	{
 		fDist = m_fDistance - (m_fDistTraveled - fDist);
-        if (fDist <= 0.0f) return LTTRUE;
+		if (fDist <= 0.0f) return LTTRUE;
 	}
 
 
 	// Calculate number of particles to create...
-
-    LTFLOAT fNumParticles = fDist * m_fNumParticles / m_fDistance;
+	LTFLOAT fNumParticles = fDist * m_fNumParticles / m_fDistance;
 
 
 	// Calculate starting bubble position...
-
-    LTVector vCurPos, vPos, vDelta, vTemp, vDriftVel, vColor;
+	LTVector vCurPos, vPos, vDelta, vTemp, vDriftVel, vColor;
 
 	VEC_MULSCALAR(vTemp, m_vDir, fTimeOffset);
 	VEC_ADD(vCurPos, m_vLastPos, vTemp);
 
 
 	// What is the range of colors?
-
-    LTFLOAT fRange = m_vColor2.x - m_vColor1.x;
+	LTFLOAT fRange = m_vColor2.x - m_vColor1.x;
 
 
 	// Fill the distance between the last projectile position, and it's
@@ -193,10 +180,10 @@ LTBOOL CBulletTrailFX::Update()
 
 	VEC_COPY(vPos, m_vLastPos);
 
-    LTFLOAT fLifeTime = 100.0f;
+	LTFLOAT fLifeTime = 100.0f;
 
-    LTFLOAT fOffset = 0.0f;
-    LTVector vDriftOffset;
+	LTFLOAT fOffset = 0.0f;
+	LTVector vDriftOffset;
 	VEC_SET(vDriftOffset, 0.0f, 0.0f, 0.0f);
 
 	int nNumParticles = GetNumParticles((int)fNumParticles);
@@ -226,5 +213,5 @@ LTBOOL CBulletTrailFX::Update()
 	VEC_COPY(m_vLastPos, vCurPos);
 	m_fLastTime = fTime;
 
-    return LTTRUE;
+	return LTTRUE;
 }

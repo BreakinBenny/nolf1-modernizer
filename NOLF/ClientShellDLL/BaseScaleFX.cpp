@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: BaseScaleFX.cpp
 //
-// MODULE  : BaseScaleFX.cpp
+// PURPOSE: BaseScale special FX - Implementation
 //
-// PURPOSE : BaseScale special FX - Implementation
-//
-// CREATED : 5/27/98
+// CREATED: 5/27/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -25,61 +23,57 @@ static VarTrack	g_vtRotateLeft;
 static VarTrack	g_vtFaceCamera;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseScaleFX::Init
 //
-//	ROUTINE:	CBaseScaleFX::Init
-//
-//	PURPOSE:	Init the fx
-//
+//	PURPOSE: Init the fx
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseScaleFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!psfxCreateStruct) return LTFALSE;
+	if (!psfxCreateStruct) return LTFALSE;
 
 	CSpecialFX::Init(psfxCreateStruct);
 
 	BSCREATESTRUCT* pBaseScale = (BSCREATESTRUCT*)psfxCreateStruct;
 
-	m_rRot				= pBaseScale->rRot;
-	m_vPos				= pBaseScale->vPos;
-	m_vVel				= pBaseScale->vVel;
+	m_rRot			= pBaseScale->rRot;
+	m_vPos			= pBaseScale->vPos;
+	m_vVel			= pBaseScale->vVel;
 	m_vInitialScale		= pBaseScale->vInitialScale;
 	m_vFinalScale		= pBaseScale->vFinalScale;
 	m_vInitialColor		= pBaseScale->vInitialColor;
 	m_vFinalColor		= pBaseScale->vFinalColor;
 	m_bUseUserColors	= pBaseScale->bUseUserColors;
-	m_dwFlags			= pBaseScale->dwFlags;
-	m_fLifeTime			= pBaseScale->fLifeTime;
+	m_dwFlags		= pBaseScale->dwFlags;
+	m_fLifeTime		= pBaseScale->fLifeTime;
 	m_fDelayTime		= pBaseScale->fDelayTime;
 	m_fInitialAlpha		= pBaseScale->fInitialAlpha;
 	m_fFinalAlpha		= pBaseScale->fFinalAlpha;
-	m_pFilename			= pBaseScale->pFilename;
-	m_pSkin				= pBaseScale->pSkin;
+	m_pFilename		= pBaseScale->pFilename;
+	m_pSkin			= pBaseScale->pSkin;
 	m_pSkin2			= pBaseScale->pSkin2;
-	m_bLoop				= pBaseScale->bLoop;
-	m_bAdditive			= pBaseScale->bAdditive;
-	m_bMultiply			= pBaseScale->bMultiply;
-	m_bChromakey		= pBaseScale->bChromakey;
-	m_nType				= pBaseScale->nType;
-	m_bRotate			= pBaseScale->bRotate;
-	m_bFaceCamera		= pBaseScale->bFaceCamera;
+	m_bLoop			= pBaseScale->bLoop;
+	m_bAdditive		= pBaseScale->bAdditive;
+	m_bMultiply		= pBaseScale->bMultiply;
+	m_bChromakey	= pBaseScale->bChromakey;
+	m_nType			= pBaseScale->nType;
+	m_bRotate		= pBaseScale->bRotate;
+	m_bFaceCamera	= pBaseScale->bFaceCamera;
 	m_fRotateVel		= GetRandom(pBaseScale->fMinRotateVel, pBaseScale->fMaxRotateVel);
-	m_nRotationAxis		= pBaseScale->nRotationAxis;
+	m_nRotationAxis	= pBaseScale->nRotationAxis;
 
     return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseScaleFX::CreateObject
 //
-//	ROUTINE:	CBaseScaleFX::CreateObject
-//
-//	PURPOSE:	Create object associated with the BaseScale
-//
+//	PURPOSE: Create object associated with the BaseScale
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseScaleFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!CSpecialFX::CreateObject(pClientDE) || !m_pFilename) return LTFALSE;
+	if (!CSpecialFX::CreateObject(pClientDE) || !m_pFilename) return LTFALSE;
 
 	// Setup the BaseScale...
 
@@ -111,7 +105,7 @@ LTBOOL CBaseScaleFX::CreateObject(ILTClient *pClientDE)
 			// Shit, need to re-create object...
 
 			pClientDE->DeleteObject(m_hObject);
-            m_hObject = LTNULL;
+			m_hObject = LTNULL;
 		}
 		else  // Cool, can re-use object...
 		{
@@ -139,14 +133,14 @@ LTBOOL CBaseScaleFX::CreateObject(ILTClient *pClientDE)
 
 	// Set blend modes if applicable...
 
-    uint32 dwFlags;
-    g_pLTClient->Common()->GetObjectFlags(m_hObject, OFT_Flags2, dwFlags);
+	uint32 dwFlags;
+	g_pLTClient->Common()->GetObjectFlags(m_hObject, OFT_Flags2, dwFlags);
 
 	// Clear flags...
 	dwFlags &= ~FLAG2_ADDITIVE;
 	dwFlags &= ~FLAG2_MULTIPLY;
 
-    LTBOOL bFog = LTTRUE;
+	LTBOOL bFog = LTTRUE;
 	if (m_bAdditive)
 	{
 		dwFlags |= FLAG2_ADDITIVE;
@@ -157,7 +151,7 @@ LTBOOL CBaseScaleFX::CreateObject(ILTClient *pClientDE)
 	{
 		dwFlags |= FLAG2_MULTIPLY;
 		dwFlags &= ~FLAG2_ADDITIVE;
-        bFog = LTFALSE;
+		bFog = LTFALSE;
 	}
 
 	if (!m_bAdditive)
@@ -179,12 +173,12 @@ LTBOOL CBaseScaleFX::CreateObject(ILTClient *pClientDE)
 		dwFlags &= ~FLAG2_CHROMAKEY;
 	}
 
-    g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags2, dwFlags);
+	g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags2, dwFlags);
 
 
 	// Enable/Disable fog as appropriate...
 
-    g_pLTClient->Common()->GetObjectFlags(m_hObject, OFT_Flags, dwFlags);
+	g_pLTClient->Common()->GetObjectFlags(m_hObject, OFT_Flags, dwFlags);
 	if (bFog)
 	{
 		dwFlags &= ~FLAG_FOGDISABLE;
@@ -194,25 +188,23 @@ LTBOOL CBaseScaleFX::CreateObject(ILTClient *pClientDE)
 		dwFlags |= FLAG_FOGDISABLE;
 	}
 
-    g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags, dwFlags);
+	g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags, dwFlags);
 
 	return Reset();
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseScaleFX::Reset
 //
-//	ROUTINE:	CBaseScaleFX::Reset
-//
-//	PURPOSE:	Reset the object
-//
+//	PURPOSE: Reset the object
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseScaleFX::Reset()
 {
-    if (!m_hObject) return LTFALSE;
+	if (!m_hObject) return LTFALSE;
 
-    LTFLOAT r, g, b, a;
+	LTFLOAT r, g, b, a;
 	if (m_bUseUserColors)
 	{
 		r = m_vInitialColor.x;
@@ -242,23 +234,20 @@ LTBOOL CBaseScaleFX::Reset()
 		m_pClientDE->SetModelLooping(m_hObject, m_bLoop);
 	}
 
-
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseScaleFX::Update
 //
-//	ROUTINE:	CBaseScaleFX::Update
-//
-//	PURPOSE:	Update the BaseScale
-//
+//	PURPOSE: Update the BaseScale
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseScaleFX::Update()
 {
-    if(!m_hObject || !m_pClientDE) return LTFALSE;
+	if(!m_hObject || !m_pClientDE) return LTFALSE;
 
-    LTFLOAT fTime = CWinUtil::GetTime();
+	LTFLOAT fTime = CWinUtil::GetTime();
 
 	if (fTime > m_fEndTime)
 	{
@@ -266,17 +255,17 @@ LTBOOL CBaseScaleFX::Update()
 	}
 	else if (fTime < m_fStartTime)
 	{
-        uint32 dwFlags = m_pClientDE->GetObjectFlags(m_hObject);
+		uint32 dwFlags = m_pClientDE->GetObjectFlags(m_hObject);
 		m_pClientDE->SetObjectFlags(m_hObject, dwFlags & ~FLAG_VISIBLE);
         return LTTRUE;  // not yet...
 	}
 	else
 	{
-        uint32 dwFlags = m_pClientDE->GetObjectFlags(m_hObject);
+		uint32 dwFlags = m_pClientDE->GetObjectFlags(m_hObject);
 		m_pClientDE->SetObjectFlags(m_hObject, dwFlags | FLAG_VISIBLE);
 	}
 
-    LTFLOAT fTimeDelta = fTime - m_fStartTime;
+	LTFLOAT fTimeDelta = fTime - m_fStartTime;
 
 	if (m_fFinalAlpha != m_fInitialAlpha || m_vInitialColor.x != m_vFinalColor.x ||
 		m_vInitialColor.y != m_vFinalColor.y || m_vInitialColor.z != m_vFinalColor.z)
@@ -301,24 +290,22 @@ LTBOOL CBaseScaleFX::Update()
 	// Update the "previous time" value
 	m_fLastTime = fTime;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseScaleFX::UpdateAlpha
 //
-//	ROUTINE:	CBaseScaleFX::UpdateAlpha
-//
-//	PURPOSE:	Update the BaseScale alpha
-//
+//	PURPOSE: Update the BaseScale alpha
 // ----------------------------------------------------------------------- //
 
 void CBaseScaleFX::UpdateAlpha(LTFLOAT fTimeDelta)
 {
 	if(!m_hObject || !m_pClientDE) return;
 
-    LTFLOAT fAlpha = m_fInitialAlpha + (fTimeDelta * (m_fFinalAlpha - m_fInitialAlpha) / m_fLifeTime);
+	LTFLOAT fAlpha = m_fInitialAlpha + (fTimeDelta * (m_fFinalAlpha - m_fInitialAlpha) / m_fLifeTime);
 
-    LTVector vColor;
+	LTVector vColor;
 	if (m_bUseUserColors)
 	{
 		vColor.x = m_vInitialColor.x + (fTimeDelta * (m_vFinalColor.x - m_vInitialColor.x) / m_fLifeTime);
@@ -329,7 +316,7 @@ void CBaseScaleFX::UpdateAlpha(LTFLOAT fTimeDelta)
 	}
 	else
 	{
-        LTFLOAT a;
+		LTFLOAT a;
 		m_pClientDE->GetObjectColor(m_hObject, &(vColor.x), &(vColor.y), &(vColor.z), &a);
 	}
 
@@ -337,18 +324,16 @@ void CBaseScaleFX::UpdateAlpha(LTFLOAT fTimeDelta)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseScaleFX::UpdateScale
 //
-//	ROUTINE:	CBaseScaleFX::UpdateScale
-//
-//	PURPOSE:	Update the BaseScale alpha
-//
+//	PURPOSE: Update the BaseScale alpha
 // ----------------------------------------------------------------------- //
 
 void CBaseScaleFX::UpdateScale(LTFLOAT fTimeDelta)
 {
 	if(!m_hObject || !m_pClientDE) return;
 
-    LTVector vScale;
+	LTVector vScale;
 	vScale.Init();
 
 	vScale.x = m_vInitialScale.x + (fTimeDelta * (m_vFinalScale.x - m_vInitialScale.x) / m_fLifeTime);
@@ -359,11 +344,9 @@ void CBaseScaleFX::UpdateScale(LTFLOAT fTimeDelta)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseScaleFX::UpdatePos
 //
-//	ROUTINE:	CBaseScaleFX::UpdatePos
-//
-//	PURPOSE:	Update the BaseScale's pos
-//
+//	PURPOSE: Update the BaseScale's pos
 // ----------------------------------------------------------------------- //
 
 void CBaseScaleFX::UpdatePos(LTFLOAT fTimeDelta)
@@ -372,8 +355,8 @@ void CBaseScaleFX::UpdatePos(LTFLOAT fTimeDelta)
 
 	if (m_movingObj.m_dwPhysicsFlags & MO_RESTING) return;
 
-    LTVector vNewPos;
-    if (UpdateMovingObject(LTNULL, &m_movingObj, &vNewPos))
+	LTVector vNewPos;
+	if (UpdateMovingObject(LTNULL, &m_movingObj, &vNewPos))
 	{
 		m_movingObj.m_vLastPos = m_movingObj.m_vPos;
 		m_movingObj.m_vPos = vNewPos;
@@ -383,27 +366,25 @@ void CBaseScaleFX::UpdatePos(LTFLOAT fTimeDelta)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseScaleFX::UpdateRot
 //
-//	ROUTINE:	CBaseScaleFX::UpdateRot
-//
-//	PURPOSE:	Update the BaseScale's rotation
-//
+//	PURPOSE: Update the BaseScale's rotation
 // ----------------------------------------------------------------------- //
 
 void CBaseScaleFX::UpdateRot(LTFLOAT fTimeDelta)
 {
 	if (!m_bRotate || !m_hObject) return;
 
-    LTVector vU, vR, vF, vAxis;
-    LTRotation rRot;
-    g_pLTClient->GetObjectRotation(m_hObject, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTVector vU, vR, vF, vAxis;
+	LTRotation rRot;
+	g_pLTClient->GetObjectRotation(m_hObject, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	// See if this is a rotatable sprite and we want it to face the
 	// camera...
 	if (m_bFaceCamera)
 	{
-        uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject);
+		uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject);
 		if (dwFlags & FLAG_ROTATEABLESPRITE)
 		{
 			// Okay, make sure we're facing the camera...
@@ -411,13 +392,13 @@ void CBaseScaleFX::UpdateRot(LTFLOAT fTimeDelta)
 			HOBJECT hCamera = g_pGameClientShell->GetCamera();
 			if (hCamera)
 			{
-                LTVector vCamPos, vPos;
-                g_pLTClient->GetObjectPos(hCamera, &vCamPos);
-                g_pLTClient->GetObjectPos(m_hObject, &vPos);
+				LTVector vCamPos, vPos;
+				g_pLTClient->GetObjectPos(hCamera, &vCamPos);
+				g_pLTClient->GetObjectPos(m_hObject, &vPos);
 
 				vF = vCamPos - vPos;
 				vF.Norm();
-                g_pLTClient->AlignRotation(&rRot, &vF, &vU);
+				g_pLTClient->AlignRotation(&rRot, &vF, &vU);
 			}
 		}
 	}
@@ -433,8 +414,8 @@ void CBaseScaleFX::UpdateRot(LTFLOAT fTimeDelta)
 	else
 		VEC_COPY(vAxis,vF);
 
-    g_pLTClient->RotateAroundAxis(&rRot, &vAxis, m_fRotateVel * (fTimeDelta - (m_fLastTime - m_fStartTime)));
-    g_pLTClient->SetObjectRotation(m_hObject, &rRot);
+	g_pLTClient->RotateAroundAxis(&rRot, &vAxis, m_fRotateVel * (fTimeDelta - (m_fLastTime - m_fStartTime)));
+	g_pLTClient->SetObjectRotation(m_hObject, &rRot);
 }
 
 void CBaseScaleFX::AdjustScale(LTFLOAT fScaleMultiplier)
@@ -443,5 +424,4 @@ void CBaseScaleFX::AdjustScale(LTFLOAT fScaleMultiplier)
 	VEC_MULSCALAR(m_vFinalScale, m_vFinalScale, fScaleMultiplier);
 
 	m_pClientDE->SetObjectScale(m_hObject, &m_vInitialScale);
-
 }

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: DynamicLightFX.h
 //
-// MODULE  : DynamicLightFX.h
+// PURPOSE: Dynamic Light special fx class - Definition
 //
-// PURPOSE : Dynamic Light special fx class - Definition
-//
-// CREATED : 2/25/98
+// CREATED: 2/25/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __DYNAMIC_LIGHT_FX_H__
@@ -18,30 +16,30 @@
 
 struct DLCREATESTRUCT : public SFXCREATESTRUCT
 {
-    DLCREATESTRUCT();
+	DLCREATESTRUCT();
 
-    LTVector vColor;
-    LTVector vPos;
-    LTFLOAT  fMinRadius;
-    LTFLOAT  fMaxRadius;
-    LTFLOAT  fRampUpTime;
-    LTFLOAT  fMaxTime;
-    LTFLOAT  fMinTime;
-    LTFLOAT  fRampDownTime;
-    uint32  dwFlags;
+	LTVector	vColor;
+	LTVector	vPos;
+	LTFLOAT fMinRadius;
+	LTFLOAT fMaxRadius;
+	LTFLOAT fRampUpTime;
+	LTFLOAT fMaxTime;
+	LTFLOAT fMinTime;
+	LTFLOAT fRampDownTime;
+	uint32	dwFlags;
 };
 
 inline DLCREATESTRUCT::DLCREATESTRUCT()
 {
 	vColor.Init();
 	vPos.Init();
-	fMinRadius		= 0.0f;
-	fMaxRadius		= 0.0f;
-	fRampUpTime		= 0.0f;
-	fMaxTime		= 0.0f;
+	fMinRadius	= 0.0f;
+	fMaxRadius	= 0.0f;
+	fRampUpTime	= 0.0f;
+	fMaxTime	= 0.0f;
 	fMinTime		= 0.0f;
 	fRampDownTime	= 0.0f;
-	dwFlags			= 0;
+	dwFlags		= 0;
 }
 
 
@@ -82,7 +80,7 @@ class CDynamicLightFX : public CSpecialFX
         LTFLOAT  m_fRampDownTime;
         uint32  m_dwFlags;
 
-        LTFLOAT  m_fStartTime;       // When did we start
+        LTFLOAT  m_fStartTime;	// When did we start
 };
 
 #endif // __DYNAMIC_LIGHT_FX_H__

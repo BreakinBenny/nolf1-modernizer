@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: BaseParticleSystemFX.cpp
 //
-// MODULE  : BaseParticleSystemFX.cpp
+// PURPOSE: BaseParticleSystem special FX - Implementation
 //
-// PURPOSE : BaseParticleSystem special FX - Implementation
-//
-// CREATED : 10/21/97
+// CREATED: 10/21/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -20,22 +18,20 @@
 extern CGameClientShell* g_pGameClientShell;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseParticleSystemFX::Init
 //
-//	ROUTINE:	CBaseParticleSystemFX::Init
-//
-//	PURPOSE:	Init the base particle system
-//
+//	PURPOSE: Init the base particle system
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseParticleSystemFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
     if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
 
-	m_basecs		= *((BPSCREATESTRUCT*)psfxCreateStruct);
+	m_basecs	= *((BPSCREATESTRUCT*)psfxCreateStruct);
 
-	m_fGravity		= PSFX_DEFAULT_GRAVITY;
-	m_fRadius		= PSFX_DEFAULT_RADIUS;
-	m_dwFlags		= 0;
+	m_fGravity	= PSFX_DEFAULT_GRAVITY;
+	m_fRadius	= PSFX_DEFAULT_RADIUS;
+	m_dwFlags	= 0;
 	m_pTextureName	= "SFX\\Particle\\particle.dtx";
 
 	VEC_INIT(m_vPos);
@@ -48,34 +44,32 @@ LTBOOL CBaseParticleSystemFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseParticleSystemFX::CreateObject
 //
-//	ROUTINE:	CBaseParticleSystemFX::CreateObject
-//
-//	PURPOSE:	Create object associated the particle system.
-//
+//	PURPOSE: Create object associated the particle system.
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseParticleSystemFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
+	if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
 
-    LTVector vPos = m_vPos;
-    LTRotation rRot;
+	LTVector vPos = m_vPos;
+	LTRotation rRot;
 	rRot.Init();
 
 	// Use server object position if a position wasn't specified...
 
 	if (m_hServerObject)
 	{
-        LTVector vZero(0, 0, 0), vServObjPos;
-        if (vPos.Equals(vZero))
-        {
+		LTVector vZero(0, 0, 0), vServObjPos;
+		if (vPos.Equals(vZero))
+		{
 			pClientDE->GetObjectPos(m_hServerObject, &vServObjPos);
 			vPos = vServObjPos;
 		}
 		else
 		{
-            m_basecs.bClientControlsPos = LTTRUE;
+			m_basecs.bClientControlsPos = LTTRUE;
 		}
 
 		// Calculate our offset from the server object...
@@ -107,31 +101,29 @@ LTBOOL CBaseParticleSystemFX::CreateObject(ILTClient *pClientDE)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseParticleSystemFX::SetupSystem
 //
-//	ROUTINE:	CBaseParticleSystemFX::SetupSystem
-//
-//	PURPOSE:	Setup the particle system...
-//
+//	PURPOSE: Setup the particle system...
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseParticleSystemFX::SetupSystem()
 {
-    if (!m_hObject || !m_pClientDE) return LTFALSE;
+	if (!m_hObject || !m_pClientDE) return LTFALSE;
 
-    uint32 dwWidth, dwHeight;
+	uint32 dwWidth, dwHeight;
 	HSURFACE hScreen = m_pClientDE->GetScreenSurface();
 	m_pClientDE->GetSurfaceDims (hScreen, &dwWidth, &dwHeight);
-    if (dwWidth < 1) return LTFALSE;
+	if (dwWidth < 1) return LTFALSE;
 
-    m_fRadius /= ((LTFLOAT)dwWidth);
+	m_fRadius /= ((LTFLOAT)dwWidth);
 
 	m_pClientDE->SetupParticleSystem(m_hObject, m_pTextureName,
 									 m_fGravity, m_dwFlags, m_fRadius);
 
 	// Set blend modes if applicable...
 
-    uint32 dwFlags2;
-    g_pLTClient->Common()->GetObjectFlags(m_hObject, OFT_Flags2, dwFlags2);
+	uint32 dwFlags2;
+	g_pLTClient->Common()->GetObjectFlags(m_hObject, OFT_Flags2, dwFlags2);
 
 	if (m_basecs.bAdditive)
 	{
@@ -141,7 +133,7 @@ LTBOOL CBaseParticleSystemFX::SetupSystem()
 	{
 		dwFlags2 |= FLAG2_MULTIPLY;
 	}
-    g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags2, dwFlags2);
+	g_pLTClient->Common()->SetObjectFlags(m_hObject, OFT_Flags2, dwFlags2);
 
 
 	VEC_SET(m_vColorRange, m_vColor2.x - m_vColor1.x,
@@ -152,33 +144,31 @@ LTBOOL CBaseParticleSystemFX::SetupSystem()
 	if (m_vColorRange.y < 0.0f) m_vColorRange.y = 0.0f;
 	if (m_vColorRange.z < 0.0f) m_vColorRange.z = 0.0f;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseParticleSystemFX::Update
 //
-//	ROUTINE:	CBaseParticleSystemFX::Update
-//
-//	PURPOSE:	Update the particle system
-//
+//	PURPOSE: Update the particle system
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBaseParticleSystemFX::Update()
 {
-    if (!CSpecialFX::Update() || !m_hObject || !m_pClientDE) return LTFALSE;
+	if (!CSpecialFX::Update() || !m_hObject || !m_pClientDE) return LTFALSE;
 
 
 	// See if we should rotate this bad-boy...
 
 	if (m_vRotVel.x != 0.0f || m_vRotVel.y != 0.0f || m_vRotVel.z != 0.0f)
 	{
-        LTFLOAT fDelta = g_pGameClientShell->GetFrameTime();
+		LTFLOAT fDelta = g_pGameClientShell->GetFrameTime();
 
-        LTRotation rRot;
+		LTRotation rRot;
 		m_pClientDE->GetObjectRotation(m_hObject, &rRot);
 
-        LTVector vTemp;
+		LTVector vTemp;
 		VEC_MULSCALAR(vTemp, m_vRotVel, fDelta);
 		VEC_ADD(m_vRotAmount, m_vRotAmount, vTemp);
 
@@ -192,16 +182,16 @@ LTBOOL CBaseParticleSystemFX::Update()
 
 	// Update each particles scale / alpha if necessary...
 
-    LTParticle *pCur, *pTail;
+	LTParticle *pCur, *pTail;
 
 	if (m_basecs.bAdjustParticleScale || m_basecs.bAdjustParticleAlpha)
 	{
 		if (m_pClientDE->GetParticles(m_hObject, &pCur, &pTail))
 		{
-            LTFLOAT fLifetime = 0.0f, fTotalLifetime = 0.0f;
-            LTFLOAT fAlphaRange = m_basecs.fEndParticleAlpha - m_basecs.fStartParticleAlpha;
-            LTFLOAT fScaleRange = m_basecs.fEndParticleScale - m_basecs.fStartParticleScale;
-            LTVector vColorRange = m_vColor2 - m_vColor1;
+			LTFLOAT fLifetime = 0.0f, fTotalLifetime = 0.0f;
+			LTFLOAT fAlphaRange = m_basecs.fEndParticleAlpha - m_basecs.fStartParticleAlpha;
+			LTFLOAT fScaleRange = m_basecs.fEndParticleScale - m_basecs.fStartParticleScale;
+			LTVector vColorRange = m_vColor2 - m_vColor1;
 
 			while (pCur && pCur != pTail)
 			{
@@ -210,17 +200,15 @@ LTBOOL CBaseParticleSystemFX::Update()
 
 				if (fLifetime > 0.0f && fTotalLifetime > 0.0f)
 				{
-                    LTFLOAT fLifePercent = 1.0f - (fLifetime / fTotalLifetime);
+					LTFLOAT fLifePercent = 1.0f - (fLifetime / fTotalLifetime);
 
 					// Adjust scale...
-
 					if (m_basecs.bAdjustParticleScale)
 					{
 						pCur->m_Size = m_fRadius * (m_basecs.fStartParticleScale + (fScaleRange * fLifePercent));
 					}
 
 					// Adjust alpha...
-
 					if (m_basecs.bAdjustParticleAlpha)
 					{
 						pCur->m_Alpha = m_basecs.fStartParticleAlpha + (fAlphaRange * fLifePercent);
@@ -239,28 +227,26 @@ LTBOOL CBaseParticleSystemFX::Update()
 
 	if (m_hServerObject && !m_basecs.bClientControlsPos)
 	{
-        LTVector vNewPos;
+		LTVector vNewPos;
 		m_pClientDE->GetObjectPos(m_hServerObject, &vNewPos);
 		vNewPos += m_vPosOffset;
 
 		m_pClientDE->SetObjectPos(m_hObject, &vNewPos);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseParticleSystemFX::GetRandomColorInRange
 //
-//	ROUTINE:	CBaseParticleSystemFX::GetRandomColorInRange
-//
-//	PURPOSE:	Get a random color in our color range
-//
+//	PURPOSE: Get a random color in our color range
 // ----------------------------------------------------------------------- //
 
 void CBaseParticleSystemFX::GetRandomColorInRange(LTVector & vColor)
 {
-    LTFLOAT fColorR = GetRandom(m_vColor1.x, m_vColor2.x);
+	LTFLOAT fColorR = GetRandom(m_vColor1.x, m_vColor2.x);
 
 	if (m_vColorRange.x <= 0.0f)
 	{
@@ -277,14 +263,10 @@ void CBaseParticleSystemFX::GetRandomColorInRange(LTVector & vColor)
 }
 
 
-
-
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseParticleSystemFX::GetNumParticles
 //
-//	ROUTINE:	CBaseParticleSystemFX::GetNumParticles
-//
-//	PURPOSE:	Get num particles to add based on the camera pos
-//
+//	PURPOSE: Get num particles to add based on the camera pos
 // ----------------------------------------------------------------------- //
 
 int CBaseParticleSystemFX::GetNumParticles(int nDefaultNum)
@@ -296,19 +278,19 @@ int CBaseParticleSystemFX::GetNumParticles(int nDefaultNum)
 		HLOCALOBJ hCamera = g_pGameClientShell->GetCamera();
 		if (hCamera)
 		{
-            LTVector vCamPos, vDist, vPos;
+			LTVector vCamPos, vDist, vPos;
 			m_pClientDE->GetObjectPos(m_hObject, &vPos);
 			m_pClientDE->GetObjectPos(hCamera, &vCamPos);
 			vDist = vCamPos - vPos;
 
-            LTFLOAT fInnerSqr = m_basecs.fInnerCamRadius*m_basecs.fInnerCamRadius;
-            LTFLOAT fOuterSqr = m_basecs.fOuterCamRadius*m_basecs.fOuterCamRadius;
-            LTFLOAT fDistSqr  = vDist.MagSqr();
+			LTFLOAT fInnerSqr = m_basecs.fInnerCamRadius*m_basecs.fInnerCamRadius;
+			LTFLOAT fOuterSqr = m_basecs.fOuterCamRadius*m_basecs.fOuterCamRadius;
+			LTFLOAT fDistSqr  = vDist.MagSqr();
 
 			if (fDistSqr > fInnerSqr)
 			{
-                LTFLOAT  fDistFromInnerSqr = fDistSqr - fInnerSqr;
-                LTFLOAT  fRangeSqr = fOuterSqr - fInnerSqr;
+				LTFLOAT  fDistFromInnerSqr = fDistSqr - fInnerSqr;
+				LTFLOAT  fRangeSqr = fOuterSqr - fInnerSqr;
 				fNum *= (1.0f - (fDistFromInnerSqr / fRangeSqr));
 				fNum = fNum < 1.0f ? 1.0f : fNum;
 			}
@@ -319,20 +301,17 @@ int CBaseParticleSystemFX::GetNumParticles(int nDefaultNum)
 }
 
 
-
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBaseParticleSystemFX::RemoveAllParticles
 //
-//	ROUTINE:	CBaseParticleSystemFX::RemoveAllParticles
-//
-//	PURPOSE:	Remove all the particles in system
-//
+//	PURPOSE: Remove all the particles in system
 // ----------------------------------------------------------------------- //
 
 void CBaseParticleSystemFX::RemoveAllParticles()
 {
 	if (!m_hObject || !m_pClientDE) return;
 
-    LTParticle *pCur, *pTail, *pNext;
+	LTParticle *pCur, *pTail, *pNext;
 
 	if (m_pClientDE->GetParticles(m_hObject, &pCur, &pTail))
 	{

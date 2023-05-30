@@ -153,11 +153,11 @@ TEAM_INFO::~TEAM_INFO()
 
 CClientInfoMgr::CClientInfoMgr()
 {
-    m_pClients = LTNULL;
+	m_pClients = LTNULL;
 
-    m_hFragString = LTNULL;
-    m_hTeamScore = LTNULL;
-    m_hOppScore = LTNULL;
+	m_hFragString = LTNULL;
+	m_hTeamScore = LTNULL;
+	m_hOppScore = LTNULL;
 
 	m_Teams[0].nScore = 0;
 	m_Teams[1].nScore = 0;
@@ -165,13 +165,11 @@ CClientInfoMgr::CClientInfoMgr()
 
 	m_hTeamColor = kWhite;
 	m_hOppColor = kWhite;
-
-
 }
 
 CClientInfoMgr::~CClientInfoMgr()
 {
-    CLIENT_INFO* ptr = LTNULL;
+	CLIENT_INFO* ptr = LTNULL;
 	while (m_pClients)
 	{
 		ptr = m_pClients->pNext;
@@ -183,28 +181,28 @@ CClientInfoMgr::~CClientInfoMgr()
 	if (m_hFragString)
 	{
 		g_pLTClient->FreeString(m_hFragString);
-	    m_hFragString = LTNULL;
+		m_hFragString = LTNULL;
 	}
 	if (m_hTeamScore)
 	{
 		g_pLTClient->FreeString(m_hTeamScore);
-	    m_hTeamScore = LTNULL;
+		m_hTeamScore = LTNULL;
 	}
 	if (m_hOppScore)
 	{
 		g_pLTClient->FreeString(m_hOppScore);
-	    m_hOppScore = LTNULL;
+		m_hOppScore = LTNULL;
 	}
 
 }
 
 void CClientInfoMgr::Init()
 {
-    g_pLTClient->RegisterConsoleProgram("AddClient", AddClientFn);
-    g_pLTClient->RegisterConsoleProgram("AddABunch", AddABunchFn);
-    g_pLTClient->RegisterConsoleProgram("ListClients", ListClientFn);
-    g_pLTClient->RegisterConsoleProgram("RemoveClient", RemoveClientFn);
-    g_pLTClient->RegisterConsoleProgram("AddFrag", AddFragFn);
+	g_pLTClient->RegisterConsoleProgram("AddClient", AddClientFn);
+	g_pLTClient->RegisterConsoleProgram("AddABunch", AddABunchFn);
+	g_pLTClient->RegisterConsoleProgram("ListClients", ListClientFn);
+	g_pLTClient->RegisterConsoleProgram("RemoveClient", RemoveClientFn);
+	g_pLTClient->RegisterConsoleProgram("AddFrag", AddFragFn);
 
 	HSTRING hTeam = g_pLTClient->FormatString(IDS_PLAYER_UNITY);
 	SAFE_STRCPY(m_Teams[0].szName,g_pLTClient->GetStringData(hTeam));
@@ -221,7 +219,7 @@ void CClientInfoMgr::Init()
 	m_Teams[0].hColor = g_pLayoutMgr->GetTeam1Color();
 	m_Teams[1].hColor = g_pLayoutMgr->GetTeam2Color();
 
-    LTRect rect(0,0,2,2);
+	LTRect rect(0,0,2,2);
 	for (int i = 0; i < 2; i++)
 	{
 		m_Teams[i].hBanner = g_pLTClient->CreateSurface(2,2);
@@ -231,7 +229,6 @@ void CClientInfoMgr::Init()
 
 		m_Teams[i].nScore = 0;
 	}
-
 
 	m_nLocalID = 0;
 	m_bIsTeamGame = LTFALSE;
@@ -364,8 +361,7 @@ void CClientInfoMgr::RemoveClient (uint32 nID)
 
 void CClientInfoMgr::RemoveAllClients()
 {
-
-    CLIENT_INFO* ptr = LTNULL;
+	CLIENT_INFO* ptr = LTNULL;
 	while (m_pClients)
 	{
 		ptr = m_pClients->pNext;
@@ -517,8 +513,6 @@ void CClientInfoMgr::UpdateClientSort(CLIENT_INFO* pCur)
 			m_pClients = pCur;
 		pTmp->pPrev = pCur;
 	}
-
-
 }
 
 
@@ -584,7 +578,7 @@ uint32 CClientInfoMgr::GetNumClients()
 
 	CLIENT_INFO* ptr = m_pClients;
 
-    uint32 nCount = 0;
+	uint32 nCount = 0;
 	while (ptr)
 	{
 		nCount++;
@@ -596,7 +590,7 @@ uint32 CClientInfoMgr::GetNumClients()
 
 char* CClientInfoMgr::GetPlayerName (uint32 nID)
 {
-    if (!m_pClients) return szUnknownPlayer;
+	if (!m_pClients) return szUnknownPlayer;
 
 	CLIENT_INFO* ptr = m_pClients;
 	while (ptr)
@@ -616,17 +610,17 @@ void CClientInfoMgr::UpdateFragDisplay ()
 	if (m_hFragString)
 	{
 		g_pLTClient->FreeString(m_hFragString);
-	    m_hFragString = LTNULL;
+		m_hFragString = LTNULL;
 	}
 	if (m_hTeamScore)
 	{
 		g_pLTClient->FreeString(m_hTeamScore);
-	    m_hTeamScore = LTNULL;
+		m_hTeamScore = LTNULL;
 	}
 	if (m_hOppScore)
 	{
 		g_pLTClient->FreeString(m_hOppScore);
-	    m_hOppScore = LTNULL;
+		m_hOppScore = LTNULL;
 	}
 
 	// get our local id
@@ -702,8 +696,8 @@ void CClientInfoMgr::Draw (LTBOOL bDrawSingleFragCount, LTBOOL bDrawAllFragCount
 	if (!hScreen)
 		return;
 
-    uint32 nScreenWidth = 0;
-    uint32 nScreenHeight = 0;
+	uint32 nScreenWidth = 0;
+	uint32 nScreenHeight = 0;
 	g_pLTClient->GetSurfaceDims (hScreen, &nScreenWidth, &nScreenHeight);
 
 	CLTGUIFont *pFont = g_pInterfaceResMgr->GetMsgForeFont();
@@ -765,10 +759,10 @@ void CClientInfoMgr::Draw (LTBOOL bDrawSingleFragCount, LTBOOL bDrawAllFragCount
 		if (nY < 0) nY = 0;
 		int nY2 = nY;
 
-		int nX  = 64;
-		int nX2 = 32 + (int)nScreenWidth / 2;
-		int nTab = ((int)nScreenWidth / 2) - 32;
-		int nTab2 = (int)nScreenWidth - 64;
+		int nX	= 64;
+		int nX2	= 32 + (int)nScreenWidth / 2;
+		int nTab	= ((int)nScreenWidth / 2) - 32;
+		int nTab2	= (int)nScreenWidth - 64;
 
 		
 		if (g_pGameClientShell->GetGameType() == COOPERATIVE_ASSAULT)
@@ -782,7 +776,7 @@ void CClientInfoMgr::Draw (LTBOOL bDrawSingleFragCount, LTBOOL bDrawAllFragCount
 				g_pLTClient->ScaleSurfaceToSurface(hScreen, m_Teams[1].hBanner, &rcBanner, LTNULL);
 		}
 
-        LTBOOL filled[2] = {LTFALSE, LTFALSE};
+		LTBOOL filled[2] = {LTFALSE, LTFALSE};
 		
 		pClient = m_pClients;
 		while (pClient)
@@ -810,7 +804,7 @@ void CClientInfoMgr::Draw (LTBOOL bDrawSingleFragCount, LTBOOL bDrawAllFragCount
 					nY2 += nLineHeight;
 					if (nY2 + nLineHeight > (int)nMaxHeight)
 					{
-                        filled[1] = LTTRUE;
+						filled[1] = LTTRUE;
 					}
 
 				}
@@ -826,7 +820,7 @@ void CClientInfoMgr::Draw (LTBOOL bDrawSingleFragCount, LTBOOL bDrawAllFragCount
 				nY += nLineHeight;
 				if (nY + nLineHeight > (int)nMaxHeight)
 				{
-                    filled[0] = LTTRUE;
+					filled[0] = LTTRUE;
 				}
 
 			}
@@ -853,5 +847,5 @@ CLIENT_INFO* CClientInfoMgr::GetClientByID(uint32 nID)
 		ptr = ptr->pNext;
 	}
 	g_pInterfaceMgr->UpdateClientList();
-    return LTNULL;
+	return LTNULL;
 }

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: BasePolyDrawFX.cpp
 //
-// MODULE  : BasePolyDrawFX.cpp
+// PURPOSE: BasePolyDraw (Canvas) special FX - Implementation
 //
-// PURPOSE : BasePolyDraw (Canvas) special FX - Implementation
-//
-// CREATED : 4/15/99
+// CREATED: 4/15/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -29,18 +27,16 @@ HOBJECT CBasePolyDrawFX::s_hCanvasObj = LTNULL;
 PolyDrawFXList CBasePolyDrawFX::s_PolyDrawFXList;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBasePolyDrawFX::CreateObject
 //
-//	ROUTINE:	CBasePolyDrawFX::CreateObject
-//
-//	PURPOSE:	Create object associated the object
-//
+//	PURPOSE: Create object associated the object
 // ----------------------------------------------------------------------- //
 
 LTBOOL CBasePolyDrawFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
+	if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
 
-    LTVector vPos = m_vPos;
+	LTVector vPos = m_vPos;
 
 	if (vPos.x == 0.0f && vPos.y == 0.0f && vPos.z == 0.0f)
 	{
@@ -71,16 +67,14 @@ LTBOOL CBasePolyDrawFX::CreateObject(ILTClient *pClientDE)
 
 	m_Flags = FLAG_VISIBLE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CBasePolyDrawFX::DrawAll
 //
-//	ROUTINE:	CBasePolyDrawFX::DrawAll
-//
-//	PURPOSE:	Draw all the BasePolyDrawFX objects...
-//
+//	PURPOSE: Draw all the BasePolyDrawFX objects...
 // ----------------------------------------------------------------------- //
 
 void CBasePolyDrawFX::DrawAll(ILTCustomDraw *pDraw)
@@ -98,12 +92,12 @@ void CBasePolyDrawFX::DrawAll(ILTCustomDraw *pDraw)
 			// Check for special flags that need to be set on the static
 			// canvas object for this fx...
 
-            uint32 dwFlags2;
-            g_pLTClient->Common()->GetObjectFlags(s_hCanvasObj, OFT_Flags2, dwFlags2);
+			uint32 dwFlags2;
+			g_pLTClient->Common()->GetObjectFlags(s_hCanvasObj, OFT_Flags2, dwFlags2);
 
 			if ((*pFX)->m_Flags2 & FLAG2_PORTALINVISIBLE)
 			{
-                g_pLTClient->Common()->SetObjectFlags(s_hCanvasObj, OFT_Flags2,
+				g_pLTClient->Common()->SetObjectFlags(s_hCanvasObj, OFT_Flags2,
 					dwFlags2 | FLAG2_PORTALINVISIBLE);
 			}
 
@@ -111,7 +105,7 @@ void CBasePolyDrawFX::DrawAll(ILTCustomDraw *pDraw)
 
 			// Reset old flags...
 
-            g_pLTClient->Common()->SetObjectFlags(s_hCanvasObj, OFT_Flags2, dwFlags2);
+			g_pLTClient->Common()->SetObjectFlags(s_hCanvasObj, OFT_Flags2, dwFlags2);
 		}
 
 		pFX = s_PolyDrawFXList.GetItem(TLIT_NEXT);

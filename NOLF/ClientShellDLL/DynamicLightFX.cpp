@@ -1,5 +1,4 @@
 // ----------------------------------------------------------------------- //
-//
 // MODULE  : DynamicLightFX.cpp
 //
 // PURPOSE : Dynamic light special FX - Implementation
@@ -7,7 +6,6 @@
 // CREATED : 2/25/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -20,11 +18,9 @@ static VarTrack g_vtDLightOffsetY;
 static VarTrack g_vtDLightOffsetZ;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDynamicLightFX::Init
 //
-//	ROUTINE:	CDynamicLightFX::Init
-//
-//	PURPOSE:	Init the dynamic light
-//
+//	PURPOSE: Init the dynamic light
 // ----------------------------------------------------------------------- //
 
 LTBOOL CDynamicLightFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
@@ -33,31 +29,29 @@ LTBOOL CDynamicLightFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 
 	DLCREATESTRUCT* pDL = (DLCREATESTRUCT*)psfxCreateStruct;
 
-	m_vColor		 = pDL->vColor;
-	m_vPos			 = pDL->vPos;
-	m_fMinRadius     = pDL->fMinRadius;
-	m_fMaxRadius	 = pDL->fMaxRadius;
-	m_fRampUpTime	 = pDL->fRampUpTime;
-	m_fMaxTime		 = pDL->fMaxTime;
-	m_fMinTime		 = pDL->fMinTime;
-	m_fRampDownTime  = pDL->fRampDownTime;
-	m_dwFlags		 = pDL->dwFlags;
+	m_vColor			= pDL->vColor;
+	m_vPos			= pDL->vPos;
+	m_fMinRadius		= pDL->fMinRadius;
+	m_fMaxRadius		= pDL->fMaxRadius;
+	m_fRampUpTime	= pDL->fRampUpTime;
+	m_fMaxTime		= pDL->fMaxTime;
+	m_fMinTime		= pDL->fMinTime;
+	m_fRampDownTime	= pDL->fRampDownTime;
+	m_dwFlags		= pDL->dwFlags;
 
     return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDynamicLightFX::CreateObject
 //
-//	ROUTINE:	CDynamicLightFX::CreateObject
-//
-//	PURPOSE:	Create object associated the dynamic light.
-//
+//	PURPOSE: Create object associated the dynamic light.
 // ----------------------------------------------------------------------- //
 
 LTBOOL CDynamicLightFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
+	if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
 
 	if (!g_vtDLightOffsetX.IsInitted())
 	{
@@ -110,30 +104,28 @@ LTBOOL CDynamicLightFX::CreateObject(ILTClient *pClientDE)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDynamicLightFX::Update
 //
-//	ROUTINE:	CDynamicLightFX::Update
-//
-//	PURPOSE:	Update the light
-//
+//	PURPOSE: Update the light
 // ----------------------------------------------------------------------- //
 
 LTBOOL CDynamicLightFX::Update()
 {
-    if(!m_hObject || !m_pClientDE) return LTFALSE;
+	if(!m_hObject || !m_pClientDE) return LTFALSE;
 
-    LTFLOAT fTime   = m_pClientDE->GetTime();
-    LTFLOAT fRadius = m_fMinRadius;
+	LTFLOAT fTime   = m_pClientDE->GetTime();
+	LTFLOAT fRadius = m_fMinRadius;
 
 	if (fTime < m_fStartTime + m_fMinTime)
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if (fTime < m_fStartTime + m_fMinTime + m_fRampUpTime)
 	{
 		if (m_fRampUpTime > 0.0f)
 		{
-            LTFLOAT fDelta  = fTime - (m_fStartTime + m_fMinTime);
-            LTFLOAT fOffset = fDelta * (m_fMaxRadius - m_fMinRadius)/m_fRampUpTime;
+			LTFLOAT fDelta  = fTime - (m_fStartTime + m_fMinTime);
+			LTFLOAT fOffset = fDelta * (m_fMaxRadius - m_fMinRadius)/m_fRampUpTime;
 			fRadius += fOffset;
 		}
 	}
@@ -145,8 +137,8 @@ LTBOOL CDynamicLightFX::Update()
 	{
 		if (m_fRampDownTime > 0.0f)
 		{
-            LTFLOAT fDelta  = fTime - (m_fStartTime + m_fMinTime + m_fRampUpTime + m_fMaxTime);
-            LTFLOAT fOffset = fDelta * m_fMaxRadius/m_fRampDownTime;
+			LTFLOAT fDelta  = fTime - (m_fStartTime + m_fMinTime + m_fRampUpTime + m_fMaxTime);
+			LTFLOAT fOffset = fDelta * m_fMaxRadius/m_fRampDownTime;
 			fRadius = m_fMaxRadius - fOffset;
 		}
 	}
@@ -157,5 +149,5 @@ LTBOOL CDynamicLightFX::Update()
 
 	m_pClientDE->SetLightRadius(m_hObject, fRadius);
 
-    return LTTRUE;
+	return LTTRUE;
 }

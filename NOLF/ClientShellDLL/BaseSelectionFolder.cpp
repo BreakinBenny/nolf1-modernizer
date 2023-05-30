@@ -11,11 +11,9 @@
 extern CGameClientShell* g_pGameClientShell;
 
 
-
-
 namespace
 {
-    LTBOOL   bFinishedSetup = LTFALSE;
+	LTBOOL bFinishedSetup = LTFALSE;
 }
 	LTIntPt  g_UpArrowOffset;
 	LTIntPt  g_DownArrowOffset;
@@ -36,7 +34,6 @@ const int CBaseSelectionFolder::kEmptySlot = 9999;
 
 CBaseSelectionFolder::CBaseSelectionFolder()
 {
-
 	m_nNumSlots = 0;
 	m_nFirstSlot = 0;
 	m_nSlotsFilled = 0;
@@ -45,15 +42,13 @@ CBaseSelectionFolder::CBaseSelectionFolder()
 	m_nLastListItem = kNoSelection;
 	m_hPhotoSurf = LTNULL;
 
-    m_bReadLayout = LTFALSE;
+	m_bReadLayout = LTFALSE;
 
 	m_szModel[0] = NULL;
 	m_szSkin[0] = NULL;
 	m_fSFXRot = 0.0f;
 	m_vOffset = LTVector(0.0f,0.0f,0.0f);
 	m_fScale = 1.0f;
-
-
 }
 
 CBaseSelectionFolder::~CBaseSelectionFolder()
@@ -66,20 +61,20 @@ LTBOOL CBaseSelectionFolder::Build()
 {
 	if (!m_bReadLayout)
 	{
-        m_bReadLayout       = LTTRUE;
+		m_bReadLayout	= LTTRUE;
 		m_SlotOffset		= g_pLayoutMgr->GetSlotOffset((eFolderID)m_nFolderID);
-		m_ListRect			= g_pLayoutMgr->GetListRect((eFolderID)m_nFolderID);
-		m_NameRect 			= g_pLayoutMgr->GetNameRect((eFolderID)m_nFolderID);
-		m_PhotoPos	 		= g_pLayoutMgr->GetPhotoPos((eFolderID)m_nFolderID);
+		m_ListRect		= g_pLayoutMgr->GetListRect((eFolderID)m_nFolderID);
+		m_NameRect 		= g_pLayoutMgr->GetNameRect((eFolderID)m_nFolderID);
+		m_PhotoPos	 	= g_pLayoutMgr->GetPhotoPos((eFolderID)m_nFolderID);
 		m_DescriptionRect 	= g_pLayoutMgr->GetDescriptionRect((eFolderID)m_nFolderID);
-		g_UpArrowOffset		= g_pLayoutMgr->GetUpArrowOffset((eFolderID)m_nFolderID);
-		g_DownArrowOffset	= g_pLayoutMgr->GetDownArrowOffset((eFolderID)m_nFolderID);
+		g_UpArrowOffset	= g_pLayoutMgr->GetUpArrowOffset((eFolderID)m_nFolderID);
+		g_DownArrowOffset = g_pLayoutMgr->GetDownArrowOffset((eFolderID)m_nFolderID);
 	}
 
 	CLTGUIFont *pFont;
 
 	//name control
-    LTIntPt NamePos(m_NameRect.left,m_NameRect.top);
+	LTIntPt NamePos(m_NameRect.left,m_NameRect.top);
 	if (g_pLayoutMgr->GetNameFontSize((eFolderID)m_nFolderID) == 0)
 		pFont = GetSmallFont();
 	else if (g_pLayoutMgr->GetNameFontSize((eFolderID)m_nFolderID) == 1)
@@ -87,57 +82,56 @@ LTBOOL CBaseSelectionFolder::Build()
 	else
 		pFont = GetLargeFont();
 
-    m_pName = CreateTextItem(IDS_SPACER,LTNULL,LTNULL,LTTRUE,pFont);
-    m_pName->Enable(LTFALSE);
+	m_pName = CreateTextItem(IDS_SPACER,LTNULL,LTNULL,LTTRUE,pFont);
+	m_pName->Enable(LTFALSE);
 	m_pName->SetFixedWidth(m_NameRect.right - m_NameRect.left);
-    AddFixedControl(m_pName,NamePos,LTFALSE);
+	AddFixedControl(m_pName,NamePos,LTFALSE);
 
 
 	//description control
-    LTIntPt DescriptionPos(m_DescriptionRect.left,m_DescriptionRect.top);
+	LTIntPt DescriptionPos(m_DescriptionRect.left,m_DescriptionRect.top);
 	if (g_pLayoutMgr->GetDescriptionFontSize((eFolderID)m_nFolderID) == 0)
 		pFont = GetSmallFont();
 	else if (g_pLayoutMgr->GetDescriptionFontSize((eFolderID)m_nFolderID) == 1)
 		pFont = GetMediumFont();
 	else
 		pFont = GetLargeFont();
-    m_pDescription = CreateStaticTextItem(IDS_SPACER,LTNULL,LTNULL,(m_DescriptionRect.right - m_DescriptionRect.left),0,LTTRUE,pFont);
-    m_pDescription->Enable(LTFALSE);
-    AddFixedControl(m_pDescription,DescriptionPos,LTFALSE);
+	m_pDescription = CreateStaticTextItem(IDS_SPACER,LTNULL,LTNULL,(m_DescriptionRect.right - m_DescriptionRect.left),0,LTTRUE,pFont);
+	m_pDescription->Enable(LTFALSE);
+	AddFixedControl(m_pDescription,DescriptionPos,LTFALSE);
 
 
 	if (strlen(m_sSelectStr) == 0)
 	{
-        HSTRING hTemp = g_pLTClient->FormatString(IDS_SELECT);
-        char *pTemp = g_pLTClient->GetStringData(hTemp);
+		HSTRING hTemp = g_pLTClient->FormatString(IDS_SELECT);
+		char *pTemp = g_pLTClient->GetStringData(hTemp);
 		strncpy(m_sSelectStr,pTemp,ARRAY_LEN(m_sSelectStr));
-        g_pLTClient->FreeString(hTemp);
+		g_pLTClient->FreeString(hTemp);
 
-        hTemp = g_pLTClient->FormatString(IDS_UNSELECT);
-        pTemp = g_pLTClient->GetStringData(hTemp);
+		hTemp = g_pLTClient->FormatString(IDS_UNSELECT);
+		pTemp = g_pLTClient->GetStringData(hTemp);
 		strncpy(m_sUnselectStr,pTemp,ARRAY_LEN(m_sUnselectStr));
-        g_pLTClient->FreeString(hTemp);
+		g_pLTClient->FreeString(hTemp);
 
-        hTemp = g_pLTClient->FormatString(IDS_REQUIRED);
-        pTemp = g_pLTClient->GetStringData(hTemp);
+		hTemp = g_pLTClient->FormatString(IDS_REQUIRED);
+		pTemp = g_pLTClient->GetStringData(hTemp);
 		strncpy(m_sRequiredStr,pTemp,ARRAY_LEN(m_sRequiredStr));
-        g_pLTClient->FreeString(hTemp);
+		g_pLTClient->FreeString(hTemp);
 
-        hTemp = g_pLTClient->FormatString(IDS_EQUIPPED);
-        pTemp = g_pLTClient->GetStringData(hTemp);
+		hTemp = g_pLTClient->FormatString(IDS_EQUIPPED);
+		pTemp = g_pLTClient->GetStringData(hTemp);
 		strncpy(m_sEquippedStr,pTemp,ARRAY_LEN(m_sEquippedStr));
-        g_pLTClient->FreeString(hTemp);
+		g_pLTClient->FreeString(hTemp);
 
-        hTemp = g_pLTClient->FormatString(IDS_UNEQUIPPED);
-        pTemp = g_pLTClient->GetStringData(hTemp);
+		hTemp = g_pLTClient->FormatString(IDS_UNEQUIPPED);
+		pTemp = g_pLTClient->GetStringData(hTemp);
 		strncpy(m_sUnequippedStr,pTemp,ARRAY_LEN(m_sUnequippedStr));
-        g_pLTClient->FreeString(hTemp);
-
+		g_pLTClient->FreeString(hTemp);
 	}
 
-    UseArrows(LTTRUE);
+	UseArrows(LTTRUE);
 
-    LTBOOL bSuccess = CBaseFolder::Build();
+	LTBOOL bSuccess = CBaseFolder::Build();
 
 	m_PageRect = m_ListRect;
 
@@ -155,13 +149,12 @@ LTBOOL CBaseSelectionFolder::Build()
 
 void CBaseSelectionFolder::Escape()
 {
-    m_bSaveSelection = LTFALSE;
+	m_bSaveSelection = LTFALSE;
 	CBaseFolder::Escape();
 }
 
 void CBaseSelectionFolder::Term()
 {
-
 	CBaseFolder::Term();
 }
 
@@ -191,9 +184,8 @@ LTBOOL CBaseSelectionFolder::Render(HSURFACE hDestSurf)
 
 	if (!CBaseFolder::Render(hDestSurf))
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
-
 
 
 	if (m_hPhotoSurf) {
@@ -218,8 +210,7 @@ LTBOOL CBaseSelectionFolder::Render(HSURFACE hDestSurf)
 	}
 
 */
-    return LTTRUE;
-
+	return LTTRUE;
 }
 
 // This is called when the folder gets or loses focus
@@ -228,12 +219,10 @@ void CBaseSelectionFolder::OnFocus(LTBOOL bFocus)
 	if (bFocus)
 	{
 
-        m_bSaveSelection = LTTRUE;
+		m_bSaveSelection = LTTRUE;
 		ClearSelection();
 
-
 		LTBOOL bAlreadySelected = (m_nSelection != kNoSelection);
-
 
 		if (!bAlreadySelected)
 		{
@@ -246,7 +235,7 @@ void CBaseSelectionFolder::OnFocus(LTBOOL bFocus)
 		}
 
 		UpdateSelection();
-        bFinishedSetup = LTTRUE;
+		bFinishedSetup = LTTRUE;
 
 		if (!bAlreadySelected)
 			SetSelection(GetIndex(m_pContinue));
@@ -258,7 +247,7 @@ void CBaseSelectionFolder::OnFocus(LTBOOL bFocus)
 		SetSelection(kNoSelection);
 		m_pDescription->Purge();
 		ClearSlots();
-        bFinishedSetup = LTFALSE;
+		bFinishedSetup = LTFALSE;
 
 		while (m_sharedSurfaceArray.GetSize() > 0)
 		{
@@ -277,7 +266,7 @@ LTBOOL CBaseSelectionFolder::HandleKeyDown(int key, int rep)
 	if (CBaseFolder::HandleKeyDown(key,rep))
 	{
 		UpdateSelection();
-        return LTTRUE;
+		return LTTRUE;
 	}
     return LTFALSE;
 
@@ -285,24 +274,23 @@ LTBOOL CBaseSelectionFolder::HandleKeyDown(int key, int rep)
 
 uint32 CBaseSelectionFolder::OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2)
 {
-    LTBOOL bHandled = LTFALSE;
+	LTBOOL bHandled = LTFALSE;
 	switch(dwCommand)
 	{
-	case FOLDER_CMD_LEFT_ARROW:
+		case FOLDER_CMD_LEFT_ARROW:
 		{
 			PreviousPage();
 			SetSelection(m_nFirstDrawn);
 			UpdateSelection();
-            bHandled = LTTRUE;
+			bHandled = LTTRUE;
 		} break;
-	case FOLDER_CMD_RIGHT_ARROW:
+		case FOLDER_CMD_RIGHT_ARROW:
 		{
 			NextPage();
 			SetSelection(m_nFirstDrawn);
 			UpdateSelection();
-            bHandled = LTTRUE;
+			bHandled = LTTRUE;
 		} break;
-
 	}
 
 	if (bHandled)
@@ -317,7 +305,6 @@ LTBOOL CBaseSelectionFolder::OnLButtonDown(int x, int y)
 {
 	return CBaseFolder::OnLButtonDown(x, y);
 }
-
 LTBOOL CBaseSelectionFolder::OnLButtonUp(int x, int y)
 {
 	return CBaseFolder::OnLButtonUp(x, y);
@@ -348,15 +335,15 @@ LTBOOL CBaseSelectionFolder::OnMouseMove(int x, int y)
 	if (CBaseFolder::OnMouseMove(x,y))
 	{
 		UpdateSelection();
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 	// Handle input
 LTBOOL CBaseSelectionFolder::OnUp()
 {
-    LTBOOL bHandled = CBaseFolder::OnUp();
+	LTBOOL bHandled = CBaseFolder::OnUp();
 	if (bHandled)
 		UpdateSelection();
 	return bHandled;
@@ -364,7 +351,7 @@ LTBOOL CBaseSelectionFolder::OnUp()
 
 LTBOOL CBaseSelectionFolder::OnDown()
 {
-    LTBOOL bHandled = CBaseFolder::OnDown();
+	LTBOOL bHandled = CBaseFolder::OnDown();
 	if (bHandled)
 		UpdateSelection();
 	return bHandled;
@@ -387,7 +374,7 @@ LTBOOL CBaseSelectionFolder::OnEnter()
 
 LTBOOL CBaseSelectionFolder::OnPageUp()
 {
-    LTBOOL bHandled = CBaseFolder::OnPageUp();
+	LTBOOL bHandled = CBaseFolder::OnPageUp();
 	if (bHandled)
 		UpdateSelection();
 	return bHandled;
@@ -426,7 +413,7 @@ void CBaseSelectionFolder::ClearSelection()
 
 	m_pDescription->RemoveString();
 
-    SetPhotoBitmap(LTNULL);
+	SetPhotoBitmap(LTNULL);
 
 }
 
@@ -457,7 +444,7 @@ eFolderID GetNextSelectionFolder(eFolderID eCurrent,int *pnHelpID)
 {
 	_ASSERT(pnHelpID);
 
-	eFolderID folder[]	=
+	eFolderID folder[] =
 	{
 		FOLDER_ID_OBJECTIVES,
 		FOLDER_ID_WEAPONS,
@@ -475,7 +462,7 @@ eFolderID GetNextSelectionFolder(eFolderID eCurrent,int *pnHelpID)
 		IDS_HELP_MODS,
 		IDS_HELP_GEAR,
 		IDS_HELP_INVENTORY,
-        LTNULL
+		LTNULL
 	};
 
     CBaseFolder* pFolder = LTNULL;
@@ -489,14 +476,14 @@ eFolderID GetNextSelectionFolder(eFolderID eCurrent,int *pnHelpID)
 		return FOLDER_ID_NONE;
 	}
 
-    LTBOOL bFound = LTFALSE;
+	LTBOOL bFound = LTFALSE;
 	f++;
 	while (folder[f] != FOLDER_ID_NONE && !bFound)
 	{
 		pFolder = g_pInterfaceMgr->GetFolderMgr()->GetFolderFromID(folder[f]);
 		if (pFolder && pFolder->IsAvailable())
 		{
-            bFound = LTTRUE;
+			bFound = LTTRUE;
 			*pnHelpID = help[f];
 		}
 		else
@@ -508,7 +495,7 @@ eFolderID GetNextSelectionFolder(eFolderID eCurrent,int *pnHelpID)
 eFolderID GetPreviousSelectionFolder(eFolderID eCurrent)
 {
 
-	eFolderID folder[]	=
+	eFolderID folder[] =
 	{
 		FOLDER_ID_OBJECTIVES,
 		FOLDER_ID_WEAPONS,
@@ -549,7 +536,7 @@ void CBaseSelectionFolder::SetPhotoBitmap(char *pszPhoto)
 {
 	if (!pszPhoto || !strlen(pszPhoto) )
 	{
-        m_hPhotoSurf = LTNULL;
+		m_hPhotoSurf = LTNULL;
 		return;
 	}
 	m_hPhotoSurf = g_pInterfaceResMgr->GetSharedSurface(pszPhoto);
@@ -723,8 +710,6 @@ int CBaseSelectionFolder::AddToSlot(int nItemId, int nNameId, LTBOOL bRequired)
 		return nSlotIndex;
 
 	}
-
-
 }
 
 
@@ -740,7 +725,7 @@ int CBaseSelectionFolder::AddEmptySlot()
 
 	CLTGUITextItemCtrl* pCtrl = CreateTextItem(IDS_EMPTY_SLOT,LTNULL,LTNULL,LTFALSE,pFont);
 	CBitmapCtrl *pBmp = debug_new(CBitmapCtrl);
-    pBmp->Create(g_pLTClient,"interface\\slot_empty.pcx");
+	pBmp->Create(g_pLTClient,"interface\\slot_empty.pcx");
 		
 
 	LTIntPt offset(0,0);
@@ -772,10 +757,7 @@ int CBaseSelectionFolder::AddEmptySlot()
 	int nNewIndex = AddFixedControl(pGroup,slotPos);
 	if (m_nFirstSlot == 0) m_nFirstSlot = nNewIndex;
 	return nNewIndex;
-
-
 }
-
 
 
 void CBaseSelectionFolder::RemoveFromSlot(int nItemId)
@@ -794,7 +776,7 @@ void CBaseSelectionFolder::RemoveFromSlot(int nItemId)
 
 	CLTGUITextItemCtrl* pCtrl = CreateTextItem(IDS_EMPTY_SLOT,LTNULL,LTNULL,LTFALSE,pFont);
 	CBitmapCtrl *pBmp = debug_new(CBitmapCtrl);
-    pBmp->Create(g_pLTClient,"interface\\slot_empty.pcx");
+	pBmp->Create(g_pLTClient,"interface\\slot_empty.pcx");
 		
 
 	LTIntPt offset(0,0);
@@ -852,10 +834,7 @@ void CBaseSelectionFolder::RemoveFromSlot(int nItemId)
 	pGroup->SetPos(slotPos);
 	m_fixedControlArray.SetAt(nFixedIndex,pGroup);
 	m_nSlotsFilled--;
-
-
 }
-
 
 
 int CBaseSelectionFolder::AddItem(int nItemId, int nNameId)
@@ -935,4 +914,3 @@ void CBaseSelectionFolder::SlotToItem(int nItemId, int nNameId)
 	UpdateSelection();
 	CheckArrows();
 }
-

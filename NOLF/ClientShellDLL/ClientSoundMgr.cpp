@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ClientSoundMgr.cpp
 //
-// MODULE  : ClientSoundMgr.cpp
+// PURPOSE: ClientSoundMgr implementation - Controls sound on the client
 //
-// PURPOSE : ClientSoundMgr implementation - Controls sound on the client
-//
-// CREATED : 7/10/00
+// CREATED: 7/10/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -17,18 +15,16 @@
 
 // Global pointer to client sound mgr...
 
-CClientSoundMgr*  g_pClientSoundMgr = LTNULL;
+CClientSoundMgr*	g_pClientSoundMgr = LTNULL;
 
-SOUNDFILTER* g_pUnfilteredFilter = LTNULL;
+SOUNDFILTER*	g_pUnfilteredFilter = LTNULL;
 
 VarTrack	g_vtSoundPlayOnlyIfHeard;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerSoundMgr::CServerSoundMgr
 //
-//	ROUTINE:	CServerSoundMgr::CServerSoundMgr
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CClientSoundMgr::CClientSoundMgr()
@@ -36,11 +32,9 @@ CClientSoundMgr::CClientSoundMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CServerSoundMgr::~CServerSoundMgr
 //
-//	ROUTINE:	CServerSoundMgr::~CServerSoundMgr
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CClientSoundMgr::~CClientSoundMgr()
@@ -49,11 +43,9 @@ CClientSoundMgr::~CClientSoundMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CClientSoundMgr::Init()
 //
-//	ROUTINE:	CClientSoundMgr::Init()
-//
-//	PURPOSE:	Init mgr
-//
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CClientSoundMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
@@ -66,24 +58,20 @@ LTBOOL CClientSoundMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CClientSoundMgr::Term()
 //
-//	ROUTINE:	CClientSoundMgr::Term()
-//
-//	PURPOSE:	Clean up.
-//
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CClientSoundMgr::Term()
 {
-    g_pClientSoundMgr = LTNULL;
+	g_pClientSoundMgr = LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CClientSoundMgr::PlaySoundLocal
 //
-//	ROUTINE:	CClientSoundMgr::PlaySoundLocal
-//
-//	PURPOSE:	Plays an unfiltered interface sound.
-//
+//	PURPOSE: Plays an unfiltered interface sound.
 // ----------------------------------------------------------------------- //
 
 HLTSOUND CClientSoundMgr::PlayInterfaceSound(char *pName, uint32 dwFlags)
@@ -108,22 +96,20 @@ HLTSOUND CClientSoundMgr::PlayInterfaceSound(char *pName, uint32 dwFlags)
 	}
 
 	psi.m_UserData = g_pUnfilteredFilter->nId;
-    
-    return PlaySound(psi);
+
+	return PlaySound(psi);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CClientSoundMgr::PlaySoundLocal
 //
-//	ROUTINE:	CClientSoundMgr::PlaySoundLocal
-//
-//	PURPOSE:	Plays sound inside the player's head
-//
+//	PURPOSE: Plays sound inside the player's head
 // ----------------------------------------------------------------------- //
 
 HLTSOUND CClientSoundMgr::PlaySoundLocal(char *pName, SoundPriority ePriority,
 	uint32 dwFlags, uint8 nVolume, float fPitchShift)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 	if (!GetConsoleInt("SoundEnable",1)) return LTNULL;
 
 	PlaySoundInfo psi;
@@ -142,15 +128,13 @@ HLTSOUND CClientSoundMgr::PlaySoundLocal(char *pName, SoundPriority ePriority,
 	psi.m_nVolume		= nVolume;
 	psi.m_fPitchShift	= fPitchShift;
 
-    return PlaySound(psi);
+	return PlaySound(psi);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CClientSoundMgr::PlaySound()
 //
-//	ROUTINE:	CClientSoundMgr::PlaySound()
-//
-//	PURPOSE:	Play the sound associated with the sound info
-//
+//	PURPOSE: Play the sound associated with the sound info
 // ----------------------------------------------------------------------- //
 
 HLTSOUND CClientSoundMgr::PlaySound(PlaySoundInfo & psi)
