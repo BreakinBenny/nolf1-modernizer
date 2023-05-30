@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: InterfaceTimer.cpp
 //
-// MODULE  : InterfaceTimer.cpp
+// PURPOSE: Implementation of InterfaceTimer class
 //
-// PURPOSE : Implementation of InterfaceTimer class
-//
-// CREATED : 10/18/99
+// CREATED: 10/18/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include <stdio.h>
 #include "InterfaceTimer.h"
@@ -21,22 +18,19 @@
 static void BuildTimeString(char* aBuffer, int nTime);
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceTimer::Draw()
 //
-//	ROUTINE:	CInterfaceTimer::Draw()
-//
-//	PURPOSE:	Handle drawing the stats
-//
+//	PURPOSE: Handle drawing the stats
 // ----------------------------------------------------------------------- //
-
 void CInterfaceTimer::Draw(HSURFACE hScreen)
 {
 	if (!hScreen) return;
 
 	// Get the screen size
 
-    uint32 nWidth = 0;
-    uint32 nHeight = 0;
-    g_pLTClient->GetSurfaceDims(hScreen, &nWidth, &nHeight);
+	uint32 nWidth = 0;
+	uint32 nHeight = 0;
+	g_pLTClient->GetSurfaceDims(hScreen, &nWidth, &nHeight);
 
 	// Update/Draw the timer if there is anytime left...
 
@@ -57,14 +51,14 @@ void CInterfaceTimer::Draw(HSURFACE hScreen)
 		BuildTimeString(aSeconds, nSeconds);
 
 		sprintf(aBuffer, "%s:%s", aMinutes, aSeconds);
-        HSTRING hStr = g_pLTClient->CreateString(aBuffer);
+		HSTRING hStr = g_pLTClient->CreateString(aBuffer);
 
 		CLTGUIFont* pFont = g_pInterfaceResMgr->GetTitleFont();
-        LTIntPt size = pFont->GetTextExtents(hStr);
+		LTIntPt size = pFont->GetTextExtents(hStr);
 		pFont->Draw(hStr, hScreen, x - (size.x/2)+2, y - (size.y/2)+2, LTF_JUSTIFY_LEFT,kBlack);
 		pFont->Draw(hStr, hScreen, x - (size.x/2), y - (size.y/2), LTF_JUSTIFY_LEFT,kWhite);
 
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 	}
 
 	if (!m_bPause)

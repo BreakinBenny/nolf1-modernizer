@@ -14,7 +14,7 @@
 
 CInterfaceSurfMgr::CInterfaceSurfMgr()
 {
-    m_pClientDE=LTNULL;
+	m_pClientDE=LTNULL;
 }
 
 CInterfaceSurfMgr::~CInterfaceSurfMgr()
@@ -27,12 +27,12 @@ LTBOOL CInterfaceSurfMgr::Init(ILTClient *pClientDE)
 {
 	m_pClientDE=pClientDE;
 
-    if (m_pClientDE == LTNULL)
+	if (m_pClientDE == LTNULL)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // Termination
@@ -63,7 +63,7 @@ HSURFACE CInterfaceSurfMgr::GetSurface(char *lpszSurface)
 {
 	if (!lpszSurface)
 	{
-        return LTNULL;
+		return LTNULL;
 	}
 
 	// Search for the surface to see if it has been loaded yet
@@ -77,18 +77,18 @@ HSURFACE CInterfaceSurfMgr::GetSurface(char *lpszSurface)
 
 	// Load the surface
 	HSURFACE hSurface=m_pClientDE->CreateSurfaceFromBitmap(lpszSurface);
-    if (hSurface == LTNULL)
+	if (hSurface == LTNULL)
 	{
-        return LTNULL;
+		return LTNULL;
 	}
 
 	// Create the new resource class
 	CSharedSurface *pSharedSurface=debug_new(CSharedSurface);
 
 	// Copy the filename
-    int nBufferSize=_mbstrlen(lpszSurface)+1;
+	int nBufferSize=_mbstrlen(lpszSurface)+1;
 	pSharedSurface->m_lpszPathName=debug_newa(char, nBufferSize);
-    _mbsncpy((unsigned char*)pSharedSurface->m_lpszPathName, (const unsigned char*)lpszSurface, nBufferSize);
+	_mbsncpy((unsigned char*)pSharedSurface->m_lpszPathName, (const unsigned char*)lpszSurface, nBufferSize);
 
 	pSharedSurface->m_hSurface=hSurface;		// Copy the surface handle
 	m_sharedSurfaceArray.Add(pSharedSurface);	// Add the class to the array
@@ -143,8 +143,8 @@ int CInterfaceSurfMgr::FindSurfaceIndex(char *lpszSurface)
 	unsigned int i;
 	for (i=0; i < m_sharedSurfaceArray.GetSize(); i++)
 	{
-        if (_mbsicmp((const unsigned char*)m_sharedSurfaceArray[i]->m_lpszPathName, (const unsigned char*)lpszSurface) == 0)
-        {
+		if (_mbsicmp((const unsigned char*)m_sharedSurfaceArray[i]->m_lpszPathName, (const unsigned char*)lpszSurface) == 0)
+		{
 			return i;
 		}
 	}

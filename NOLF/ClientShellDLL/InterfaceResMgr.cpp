@@ -28,21 +28,21 @@ CInterfaceResMgr::CInterfaceResMgr()
 {
 	g_pInterfaceResMgr = this;
 
-	m_hSurfLoading	 = NULL;
-	m_hSurfCursor = NULL;
-	m_hTransColor = SETRGB(255,0,255);
+	m_hSurfLoading	= NULL;
+	m_hSurfCursor	= NULL;
+	m_hTransColor	= SETRGB(255,0,255);
 
-    m_pTitleFont = LTNULL;
-    m_pLargeFont = LTNULL;
+	m_pTitleFont = LTNULL;
+	m_pLargeFont = LTNULL;
 	m_pLargeHDFont = LTNULL;
-    m_pMediumFont = LTNULL;
-    m_pSmallFont = LTNULL;
-    m_pHelpFont = LTNULL;
+	m_pMediumFont = LTNULL;
+	m_pSmallFont = LTNULL;
+	m_pHelpFont = LTNULL;
 
-    m_pMsgForeFont = LTNULL;
-    m_pHUDForeFont = LTNULL;
-    m_pAirFont = LTNULL;
-    m_pChooserFont = LTNULL;
+	m_pMsgForeFont = LTNULL;
+	m_pHUDForeFont = LTNULL;
+	m_pAirFont = LTNULL;
+	m_pChooserFont = LTNULL;
 
 	m_Offset.x =  -1;
 	m_Offset.y =  -1;
@@ -57,78 +57,78 @@ CInterfaceResMgr::CInterfaceResMgr()
 
 CInterfaceResMgr::~CInterfaceResMgr()
 {
-    g_pInterfaceResMgr = LTNULL;
+	g_pInterfaceResMgr = LTNULL;
 }
 
 //////////////////////////////////////////////////////////////////////
-// Function name	: CInterfaceResMgr::Init
-// Description	    :
-// Return type      : LTBOOL
-// Argument         : ILTClient* pClientDE
-// Argument         : CGameClientShell* pClientShell
+// Function name: CInterfaceResMgr::Init
+// Description:
+// Return type:	LTBOOL
+// Argument:	ILTClient* pClientDE
+// Argument:	CGameClientShell* pClientShell
 //////////////////////////////////////////////////////////////////////
 LTBOOL CInterfaceResMgr::Init(ILTClient* pClientDE, CGameClientShell* pClientShell)
 {
 	if (!pClientDE)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    HSTRING hString;
+	HSTRING hString;
 
 	// Set the English flag
-    hString = g_pLTClient->FormatString(IDS_GAME_LANGUAGE);
-    if (hString && _mbsicmp((const unsigned char*)"english", (const unsigned char*)g_pLTClient->GetStringData(hString)) != 0)
-    {
-        m_bEnglish=LTFALSE;
+	hString = g_pLTClient->FormatString(IDS_GAME_LANGUAGE);
+	if (hString && _mbsicmp((const unsigned char*)"english", (const unsigned char*)g_pLTClient->GetStringData(hString)) != 0)
+	{
+		m_bEnglish=LTFALSE;
 	}
 	else
-    {
-        m_bEnglish=LTTRUE;
+	{
+		m_bEnglish=LTTRUE;
 	}
-    g_pLTClient->FreeString(hString);
-    hString=LTNULL;
+	g_pLTClient->FreeString(hString);
+	hString=LTNULL;
 
 	// Load the virtual key codes for yes responses
-    hString=g_pLTClient->FormatString(IDS_MENU_VKEY_YES);
+	hString=g_pLTClient->FormatString(IDS_MENU_VKEY_YES);
 	if (hString)
 	{
-        m_nYesVKeyCode=atoi(g_pLTClient->GetStringData(hString));
-        g_pLTClient->FreeString(hString);
-        hString=LTNULL;
+		m_nYesVKeyCode=atoi(g_pLTClient->GetStringData(hString));
+		g_pLTClient->FreeString(hString);
+		hString=LTNULL;
 	}
 
 	// Load the virtual key codes for no responses
-    hString=g_pLTClient->FormatString(IDS_MENU_VKEY_NO);
+	hString=g_pLTClient->FormatString(IDS_MENU_VKEY_NO);
 	if (hString)
 	{
-        m_nNoVKeyCode=atoi(g_pLTClient->GetStringData(hString));
-        g_pLTClient->FreeString(hString);
-        hString=LTNULL;
+		m_nNoVKeyCode=atoi(g_pLTClient->GetStringData(hString));
+		g_pLTClient->FreeString(hString);
+		hString=LTNULL;
 	}
 
 	// Init the InterfaceSurfMgr class
-    m_InterfaceSurfMgr.Init(g_pLTClient);
+	m_InterfaceSurfMgr.Init(g_pLTClient);
 
 	// set resolution dependant variables
 	ScreenDimsChanged();
 
 
 	// Initialize the fonts
-    if (!InitFonts())
+	if (!InitFonts())
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	g_pConsoleMgr->Init();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 //////////////////////////////////////////////////////////////////////
-// Function name	: CInterfaceResMgr::Term
-// Description	    :
-// Return type		: void
+// Function name: CInterfaceResMgr::Term
+// Description:
+// Return type: void
 //////////////////////////////////////////////////////////////////////
 
 void CInterfaceResMgr::Term()
@@ -140,7 +140,7 @@ void CInterfaceResMgr::Term()
 
 	if (m_hSurfCursor)
 	{
-        g_pLTClient->DeleteSurface(m_hSurfCursor);
+		g_pLTClient->DeleteSurface(m_hSurfCursor);
 		m_hSurfCursor = NULL;
 	}
 
@@ -148,91 +148,91 @@ void CInterfaceResMgr::Term()
 	{
 		m_pHelpFont->Term();
 		debug_delete(m_pHelpFont);
-        m_pHelpFont=LTNULL;
+		m_pHelpFont=LTNULL;
 	}
 	if ( m_pSmallFont )
 	{
 		m_pSmallFont->Term();
 		debug_delete(m_pSmallFont);
-        m_pSmallFont=LTNULL;
+		m_pSmallFont=LTNULL;
 	}
 	if ( m_pMediumFont )
 	{
 		m_pMediumFont->Term();
 		debug_delete(m_pMediumFont);
-        m_pMediumFont=LTNULL;
+		m_pMediumFont=LTNULL;
 	}
 	if ( m_pLargeFont )
 	{
 		m_pLargeFont->Term();
 		debug_delete(m_pLargeFont);
-        m_pLargeFont=LTNULL;
+		m_pLargeFont=LTNULL;
 	}
 	if ( m_pLargeHDFont )
 	{
 		m_pLargeHDFont->Term();
 		debug_delete(m_pLargeHDFont);
-        m_pLargeHDFont=LTNULL;
+		m_pLargeHDFont=LTNULL;
 	}
 	if ( m_pTitleFont )
 	{
 		m_pTitleFont->Term();
 		debug_delete(m_pTitleFont);
-        m_pTitleFont=LTNULL;
+		m_pTitleFont=LTNULL;
 	}
 	if ( m_pMsgForeFont )
 	{
 		m_pMsgForeFont->Term();
 		debug_delete(m_pMsgForeFont);
-        m_pMsgForeFont=LTNULL;
+		m_pMsgForeFont=LTNULL;
 	}
 	if ( m_pHUDForeFont )
 	{
 		m_pHUDForeFont->Term();
 		debug_delete(m_pHUDForeFont);
-        m_pHUDForeFont=LTNULL;
+		m_pHUDForeFont=LTNULL;
 	}
 	if ( m_pAirFont )
 	{
 		m_pAirFont->Term();
 		debug_delete(m_pAirFont);
-        m_pAirFont=LTNULL;
+		m_pAirFont=LTNULL;
 	}
 	if ( m_pChooserFont )
 	{
 		m_pChooserFont->Term();
 		debug_delete(m_pChooserFont);
-        m_pChooserFont=LTNULL;
+		m_pChooserFont=LTNULL;
 	}
 
 }
 
 //////////////////////////////////////////////////////////////////////
-// Function name	: CInterfaceResMgr::Setup
-// Description	    :
-// Return type      : LTBOOL
+// Function name: CInterfaceResMgr::Setup
+// Description:
+// Return type: LTBOOL
 //////////////////////////////////////////////////////////////////////
 
 LTBOOL CInterfaceResMgr::Setup()
 {
 	//preload common surfaces
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 //////////////////////////////////////////////////////////////////////
-// Function name	: CInterfaceResMgr::Clean
-// Description	    :
-// Return type		: void
+// Function name: CInterfaceResMgr::Clean
+// Description:
+// Return type: void
 //////////////////////////////////////////////////////////////////////
 
 void CInterfaceResMgr::Clean()
 {
-    if (g_pLTClient)
+	if (g_pLTClient)
 	{
 		if (m_hSurfLoading)
 		{
-            g_pLTClient->DeleteSurface(m_hSurfLoading);
+			g_pLTClient->DeleteSurface(m_hSurfLoading);
 			m_hSurfLoading = NULL;
 		}
 
@@ -244,20 +244,20 @@ void CInterfaceResMgr::Clean()
 }
 
 //////////////////////////////////////////////////////////////////////
-// Function name	: CInterfaceResMgr::DrawFolder
-// Description	    :
-// Return type		: void
+// Function name: CInterfaceResMgr::DrawFolder
+// Description:
+// Return type: void
 //////////////////////////////////////////////////////////////////////
 void CInterfaceResMgr::DrawFolder()
 {
-    _ASSERT(g_pLTClient);
-    if (!g_pLTClient) return;
+	_ASSERT(g_pLTClient);
+	if (!g_pLTClient) return;
 
 	if (m_Offset.x < 0)
 		ScreenDimsChanged();
 
 	// The screen surface
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
 
 	// Render the current folder
 	g_pInterfaceMgr->GetFolderMgr()->Render(hScreen);
@@ -267,28 +267,28 @@ void CInterfaceResMgr::DrawFolder()
 
 void CInterfaceResMgr::DrawLoadScreen()
 {
-    _ASSERT(g_pLTClient);
-    if (!g_pLTClient) return;
+	_ASSERT(g_pLTClient);
+	if (!g_pLTClient) return;
 
 	// The screen surface
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
 	HSURFACE hLoad   = GetSurfaceLoading();
-    uint32 dwScreenWidth=0;
-    uint32 dwScreenHeight=0;
-    uint32 dwLoadWidth=0;
-    uint32 dwLoadHeight=0;
+	uint32 dwScreenWidth=0;
+	uint32 dwScreenHeight=0;
+	uint32 dwLoadWidth=0;
+	uint32 dwLoadHeight=0;
 
 	_ASSERT(hLoad && hScreen);
 	if (!hLoad || !hScreen) return;
 
 	// Get the dims of the screen and the working surface
-    g_pLTClient->GetSurfaceDims(hScreen, &dwScreenWidth, &dwScreenHeight);
-    g_pLTClient->GetSurfaceDims(hLoad, &dwLoadWidth, &dwLoadHeight);
+	g_pLTClient->GetSurfaceDims(hScreen, &dwScreenWidth, &dwScreenHeight);
+	g_pLTClient->GetSurfaceDims(hLoad, &dwLoadWidth, &dwLoadHeight);
 
 	// Center the image and blit it to the screen
 	int nLeft=(dwScreenWidth/2)-(dwLoadWidth/2);
 	int nTop=(dwScreenHeight/2)-(dwLoadHeight/2);
-    g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, hLoad, NULL, nLeft, nTop,m_hTransColor);
+	g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, hLoad, NULL, nLeft, nTop,m_hTransColor);
 
 
 	return;
@@ -340,46 +340,46 @@ LTFLOAT CInterfaceResMgr::GetUIScale()
 
 void CInterfaceResMgr::DrawMessage(CLTGUIFont* pFont, int nMessageId)
 {
-    _ASSERT(g_pLTClient && pFont);
-    if (!g_pLTClient || !pFont) return;
+	_ASSERT(g_pLTClient && pFont);
+	if (!g_pLTClient || !pFont) return;
 
 	// The screen surface
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
 	HSURFACE hBlank  = CreateSurfaceBlank();
 	uint32 dwScreenWidth=0;
-    uint32 dwScreenHeight=0;
-    uint32 dwWidth=0;
-    uint32 dwHeight=0;
+	uint32 dwScreenHeight=0;
+	uint32 dwWidth=0;
+	uint32 dwHeight=0;
 
 	_ASSERT(hBlank);
 	if (!hBlank) return;
 
 	// Get the string...
-    HSTRING hStr = g_pLTClient->FormatString(nMessageId);
+	HSTRING hStr = g_pLTClient->FormatString(nMessageId);
 
 	_ASSERT(hStr);
 	if (!hStr)
 	{
-        g_pLTClient->DeleteSurface(hBlank);
+		g_pLTClient->DeleteSurface(hBlank);
 		return;
 	}
 
 	// Get the dims of the screen and the working surface
 	g_pLTClient->GetSurfaceDims(hScreen, &dwScreenWidth, &dwScreenHeight);
-    g_pLTClient->GetSurfaceDims(hBlank, &dwWidth, &dwHeight);
+	g_pLTClient->GetSurfaceDims(hBlank, &dwWidth, &dwHeight);
 
 
 	// Center the image and blit it to the screen
 	int nLeft=(dwScreenWidth/2)-(dwWidth/2);
 	int nTop=(dwScreenHeight/2)-(dwHeight/2);
-    g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, hBlank, NULL, nLeft, nTop, m_hTransColor);
+	g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, hBlank, NULL, nLeft, nTop, m_hTransColor);
 
-    g_pLTClient->DeleteSurface(hBlank);
+	g_pLTClient->DeleteSurface(hBlank);
 
 	// Center the string on the surface...
-    LTIntPt size = pFont->GetTextExtents(hStr);
+	LTIntPt size = pFont->GetTextExtents(hStr);
 	pFont->Draw(hStr, hScreen, dwScreenWidth/2, (dwScreenHeight - size.y)/2, LTF_JUSTIFY_CENTER,kWhite);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	return;
 }
@@ -420,7 +420,6 @@ void CInterfaceResMgr::HandleBorderlessWindowed()
 LTBOOL CInterfaceResMgr::InitFonts()
 {
 
-
 	m_pSmallFont = debug_new(CLTGUIFont);
 	m_pMediumFont = debug_new(CLTGUIFont);
 	m_pLargeFont = debug_new(CLTGUIFont);
@@ -438,51 +437,51 @@ LTBOOL CInterfaceResMgr::InitFonts()
 	// Initialize the bitmap fonts if we are in english
 	if (IsEnglish())
 	{
-        // ************* help font
+		// ************* help font
 		g_pLayoutMgr->GetHelpFont(g_szFontName,sizeof(g_szFontName));
 		if (!SetupFont(m_pHelpFont))
 		{
 			debug_delete(m_pHelpFont);
-            m_pHelpFont=LTNULL;
-            return LTFALSE;
+			m_pHelpFont=LTNULL;
+			return LTFALSE;
 		}
-        // *********** small font
+		// *********** small font
 		g_pLayoutMgr->GetSmallFontBase(g_szFontName,sizeof(g_szFontName));
-        if (!SetupFont(m_pSmallFont))
+		if (!SetupFont(m_pSmallFont))
 		{
 			debug_delete(m_pSmallFont);
-            m_pSmallFont=LTNULL;
-            return LTFALSE;
+			m_pSmallFont=LTNULL;
+			return LTFALSE;
 		}
 
-        // *********** medium font
+		// *********** medium font
 		g_pLayoutMgr->GetMediumFontBase(g_szFontName,sizeof(g_szFontName));
-        if (!SetupFont(m_pMediumFont))
+		if (!SetupFont(m_pMediumFont))
 		{
 			debug_delete(m_pMediumFont);
-            m_pMediumFont=LTNULL;
-            return LTFALSE;
+			m_pMediumFont=LTNULL;
+			return LTFALSE;
 		}
 
-        // *********** Large font
+		// *********** Large font
 		g_pLayoutMgr->GetLargeFontBase(g_szFontName,sizeof(g_szFontName));
-        if (!SetupFont(m_pLargeFont))
+		if (!SetupFont(m_pLargeFont))
 		{
 			debug_delete(m_pLargeFont);
-            m_pLargeFont=LTNULL;
-            return LTFALSE;
+			m_pLargeFont=LTNULL;
+			return LTFALSE;
 		}
 
 		//g_pLayoutMgr->GetLargeFontBase(g_szFontName,sizeof(g_szFontName));
 		LTStrCpy(g_szFontName, "interface\\fonts\\font_large_0_hd.pcx", sizeof(g_szFontName));
-        if (!SetupFont(m_pLargeHDFont))
+		if (!SetupFont(m_pLargeHDFont))
 		{
 			debug_delete(m_pLargeHDFont);
-            m_pLargeHDFont=LTNULL;
-            return LTFALSE;
+			m_pLargeHDFont=LTNULL;
+			return LTFALSE;
 		}
 
-        // ************* Title font
+		// ************* Title font
 		g_pLayoutMgr->GetTitleFont(g_szFontName,sizeof(g_szFontName));
 		if (!SetupFont(m_pTitleFont))
 		{
@@ -495,82 +494,82 @@ LTBOOL CInterfaceResMgr::InitFonts()
 		}
 
 
-        // ************* Foreground HUD (i.e. white) HUD font
+		// ************* Foreground HUD (i.e. white) HUD font
 		g_pLayoutMgr->GetMsgForeFont(g_szFontName,sizeof(g_szFontName));
-        if (!SetupFont(m_pMsgForeFont))
+		if (!SetupFont(m_pMsgForeFont))
 		{
 			debug_delete(m_pMsgForeFont);
-            m_pMsgForeFont=LTNULL;
-            return LTFALSE;
+			m_pMsgForeFont=LTNULL;
+			return LTFALSE;
 		}
 
 
-        uint32 dwFlags = LTF_INCLUDE_SYMBOLS_1 | LTF_INCLUDE_NUMBERS | LTF_INCLUDE_SYMBOLS_2;
-        // ************* Foreground HUD (i.e. white) HUD font
+		uint32 dwFlags = LTF_INCLUDE_SYMBOLS_1 | LTF_INCLUDE_NUMBERS | LTF_INCLUDE_SYMBOLS_2;
+		// ************* Foreground HUD (i.e. white) HUD font
 		g_pLayoutMgr->GetHUDForeFont(g_szFontName,sizeof(g_szFontName));
-        if (!SetupFont(m_pHUDForeFont,LTTRUE,dwFlags))
+		if (!SetupFont(m_pHUDForeFont,LTTRUE,dwFlags))
 		{
 			debug_delete(m_pHUDForeFont);
-            m_pHUDForeFont=LTNULL;
-            return LTFALSE;
+			m_pHUDForeFont=LTNULL;
+			return LTFALSE;
 		}
 
-        // ************* Air font
+		// ************* Air font
 		g_pLayoutMgr->GetAirFont(g_szFontName,sizeof(g_szFontName));
-        if (!SetupFont(m_pAirFont,LTTRUE,dwFlags)) // This is actually not used?
+		if (!SetupFont(m_pAirFont,LTTRUE,dwFlags)) // This is actually not used?
 		{
 			debug_delete(m_pAirFont);
-            m_pAirFont=LTNULL;
-            return LTFALSE;
+			m_pAirFont=LTNULL;
+			return LTFALSE;
 		}
 
-        // ************* Weapon Chooser font
+		// ************* Weapon Chooser font
 		g_pLayoutMgr->GetChooserFont(g_szFontName,sizeof(g_szFontName));
 		if (!SetupFont(m_pChooserFont))
 		{
 			debug_delete(m_pChooserFont);
-            m_pChooserFont=LTNULL;
-            return LTFALSE;
+			m_pChooserFont=LTNULL;
+			return LTFALSE;
 		}
 	}
 	else
 	{
-        // TODO: put these into string table for localization
+		// TODO: put these into string table for localization
 		// Initialize the engine fonts for non-english resource files
 		if (!InitEngineFont(m_pSmallFont, IDS_SMALL_FONT_NAME, IDS_SMALL_FONT_WIDTH, IDS_SMALL_FONT_HEIGHT, LTFALSE))
-            return LTFALSE;
+			return LTFALSE;
 		if (!InitEngineFont(m_pHelpFont, IDS_SMALL_FONT_NAME, IDS_SMALL_FONT_WIDTH, IDS_SMALL_FONT_HEIGHT, LTFALSE))
-            return LTFALSE;
+			return LTFALSE;
 		if (!InitEngineFont(m_pMediumFont, IDS_MEDIUM_FONT_NAME, IDS_MEDIUM_FONT_WIDTH, IDS_MEDIUM_FONT_HEIGHT, LTTRUE))
-            return LTFALSE;
+			return LTFALSE;
 		if (!InitEngineFont(m_pLargeFont, IDS_LARGE_FONT_NAME, IDS_LARGE_FONT_WIDTH, IDS_LARGE_FONT_HEIGHT, LTTRUE))
-            return LTFALSE;
+			return LTFALSE;
 		if (!InitEngineFont(m_pTitleFont, IDS_TITLE_FONT_NAME, IDS_TITLE_FONT_WIDTH, IDS_TITLE_FONT_HEIGHT, LTTRUE))
-            return LTFALSE;
+			return LTFALSE;
 		if (!InitEngineFont(m_pMsgForeFont, IDS_MEDIUM_FONT_NAME, IDS_MEDIUM_FONT_WIDTH, IDS_MEDIUM_FONT_HEIGHT, LTTRUE))
-            return LTFALSE;
+			return LTFALSE;
 		if (!InitEngineFont(m_pHUDForeFont, IDS_LARGE_FONT_NAME, IDS_LARGE_FONT_WIDTH, IDS_LARGE_FONT_HEIGHT, LTTRUE))
-            return LTFALSE;
+			return LTFALSE;
 		if (!InitEngineFont(m_pAirFont, IDS_LARGE_FONT_NAME, IDS_LARGE_FONT_WIDTH, IDS_LARGE_FONT_HEIGHT, LTTRUE))
-            return LTFALSE;
+			return LTFALSE;
 		if (!InitEngineFont(m_pChooserFont, IDS_SMALL_FONT_NAME, IDS_SMALL_FONT_WIDTH, IDS_SMALL_FONT_HEIGHT, LTFALSE))
-            return LTFALSE;
+			return LTFALSE;
 
 	}
 
-    // TODO: reimplement this stuff
+	// TODO: reimplement this stuff
 	// Set the wrapping method
 //  HSTRING hString=g_pLTClient->FormatString(IDS_FONT_WRAP_USE_SPACES);
 //  if (_mbsicmp((const unsigned char*)g_pLTClient->GetStringData(hString), (const unsigned char*)"1") == 0)
 //	{
-        CLTGUIFont::SetWrapMethod(LTTRUE);
+		CLTGUIFont::SetWrapMethod(LTTRUE);
 //	}
 //	else
 //	{
-//      CLTGUIFont::SetWrapMethod(LTFALSE);
+//	  CLTGUIFont::SetWrapMethod(LTFALSE);
 //	}
 
-    return LTTRUE;
+	return LTTRUE;
 
 }
 
@@ -581,36 +580,36 @@ LTBOOL CInterfaceResMgr::InitEngineFont(CLTGUIFont *pFont, int nNameID, int nWid
 {
 	if (!pFont)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	// Get the font name, width, and height
-    HSTRING hName=g_pLTClient->FormatString(nNameID);
-    HSTRING hWidth=g_pLTClient->FormatString(nWidthID);
-    HSTRING hHeight=g_pLTClient->FormatString(nHeightID);
+	HSTRING hName=g_pLTClient->FormatString(nNameID);
+	HSTRING hWidth=g_pLTClient->FormatString(nWidthID);
+	HSTRING hHeight=g_pLTClient->FormatString(nHeightID);
 
 	LITHFONTCREATESTRUCT lfCS;
 	char szFontName[256] = "";
-    strncpy(szFontName,g_pLTClient->GetStringData(hName),sizeof(szFontName));
+	strncpy(szFontName,g_pLTClient->GetStringData(hName),sizeof(szFontName));
 
 	lfCS.szFontName	= szFontName;
-    lfCS.nWidth     = atoi(g_pLTClient->GetStringData(hWidth));
-    lfCS.nHeight    = atoi(g_pLTClient->GetStringData(hHeight));
-    lfCS.bItalic    = LTFALSE;
-    lfCS.bBold      = bBold;
-    lfCS.bUnderline = LTFALSE;
+	lfCS.nWidth		= atoi(g_pLTClient->GetStringData(hWidth));
+	lfCS.nHeight		= atoi(g_pLTClient->GetStringData(hHeight));
+	lfCS.bItalic		= LTFALSE;
+	lfCS.bBold		= bBold;
+	lfCS.bUnderline	= LTFALSE;
 
 	// Initialize the font
-    LTBOOL bResult;
+	LTBOOL bResult;
 
-    bResult=pFont->Init(g_pLTClient, &lfCS);
+	bResult=pFont->Init(g_pLTClient, &lfCS);
 	
 
 	if (!bResult)
 	{
 		char szString[1024];
-        sprintf(szString, "Cannot initialize font: %s", g_pLTClient->GetStringData(hName));
-        g_pLTClient->CPrint(szString);
+		sprintf(szString, "Cannot initialize font: %s", g_pLTClient->GetStringData(hName));
+		g_pLTClient->CPrint(szString);
 		SDL_Log(szString);
 	} else {
 		SDL_Log("Initialized Font %s",lfCS.szFontName);
@@ -618,9 +617,9 @@ LTBOOL CInterfaceResMgr::InitEngineFont(CLTGUIFont *pFont, int nNameID, int nWid
 
 
 	// Free the strings
-    g_pLTClient->FreeString(hName);
-    g_pLTClient->FreeString(hWidth);
-    g_pLTClient->FreeString(hHeight);
+	g_pLTClient->FreeString(hName);
+	g_pLTClient->FreeString(hWidth);
+	g_pLTClient->FreeString(hHeight);
 
 	return bResult;
 }
@@ -629,7 +628,7 @@ LTBOOL CInterfaceResMgr::InitEngineFont(CLTGUIFont *pFont, char *lpszName, int n
 {
 	if (!pFont)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	LITHFONTCREATESTRUCT lfCS;
@@ -638,33 +637,33 @@ LTBOOL CInterfaceResMgr::InitEngineFont(CLTGUIFont *pFont, char *lpszName, int n
 
 	lfCS.szFontName	= szFontName;
 	lfCS.nWidth		= nWidth;
-	lfCS.nHeight	= nHeight;
-    lfCS.bItalic    = LTFALSE;
-    lfCS.bBold      = bBold;
-    lfCS.bUnderline = LTFALSE;
+	lfCS.nHeight		= nHeight;
+	lfCS.bItalic		= LTFALSE;
+	lfCS.bBold		= bBold;
+	lfCS.bUnderline	= LTFALSE;
 
 	// Initialize the font
-    LTBOOL bResult;
-    bResult=pFont->Init(g_pLTClient, &lfCS);
+	LTBOOL bResult;
+	bResult=pFont->Init(g_pLTClient, &lfCS);
 
 	if (!bResult)
 	{
-        g_pLTClient->CPrint("Cannot initialize font: %s", lpszName);
+		g_pLTClient->CPrint("Cannot initialize font: %s", lpszName);
 	}
 
 
 	return bResult;
 }
 
-#define USABLE_HEIGHT_I 480
-#define USABLE_HEIGHT_F 480.0f
+#define USABLE_HEIGHT_I	480
+#define USABLE_HEIGHT_F	480.0f
 
 void CInterfaceResMgr::ScreenDimsChanged()
 {
-    if (!g_pLTClient) return;
+	if (!g_pLTClient) return;
 
 	RMode currentMode;
-    g_pLTClient->GetRenderMode(&currentMode);
+	g_pLTClient->GetRenderMode(&currentMode);
 
 	m_Offset.x = (int)(currentMode.m_Width - 640) / 2;
 	m_Offset.y = (int)(currentMode.m_Height - USABLE_HEIGHT_I) / 2;
@@ -686,21 +685,21 @@ HSURFACE CInterfaceResMgr::GetSurfaceLoading()
 {
 	// The loading image
 	if (!m_hSurfLoading)
-        m_hSurfLoading = g_pLTClient->CreateSurfaceFromBitmap("menu\\art\\loading.pcx");
+		m_hSurfLoading = g_pLTClient->CreateSurfaceFromBitmap("menu\\art\\loading.pcx");
 	_ASSERT(m_hSurfLoading);
 	return m_hSurfLoading;
 };
 
 HSURFACE CInterfaceResMgr::CreateSurfaceBlank()
 {
-    return g_pLTClient->CreateSurfaceFromBitmap("menu\\art\\blanktag.pcx");
+	return g_pLTClient->CreateSurfaceFromBitmap("menu\\art\\blanktag.pcx");
 };
 
 
 HSURFACE CInterfaceResMgr::GetSurfaceCursor()
 {
 	if (!m_hSurfCursor)
-        m_hSurfCursor = g_pLTClient->CreateSurfaceFromBitmap("interface\\cursor0.pcx");
+		m_hSurfCursor = g_pLTClient->CreateSurfaceFromBitmap("interface\\cursor0.pcx");
 	_ASSERT(m_hSurfCursor);
 	return m_hSurfCursor;
 };
@@ -824,20 +823,20 @@ const char *CInterfaceResMgr::GetObjectiveCompletedSound()
 HSURFACE CInterfaceResMgr::CreateSurfaceFromString(CLTGUIFont *pFont, HSTRING hString, HLTCOLOR hBackColor,
 												int extraPixelsX, int extraPixelsY, int nWidth)
 {
-    LTIntPt sz;
+	LTIntPt sz;
 	if (nWidth > 0)
 		sz = pFont->GetTextExtentsFormat(hString,nWidth);
 	else
 		sz = pFont->GetTextExtents(hString);
 
-    LTRect rect;
+	LTRect rect;
 	rect.left = 0;
 	rect.top = 0;
 	rect.right = sz.x+extraPixelsX;
 	rect.bottom = sz.y+extraPixelsY;
 
-    HSURFACE hSurf  = g_pLTClient->CreateSurface(sz.x+extraPixelsX,sz.y+extraPixelsY);
-    g_pOptimizedRenderer->FillRect(hSurf,&rect,hBackColor);
+	HSURFACE hSurf  = g_pLTClient->CreateSurface(sz.x+extraPixelsX,sz.y+extraPixelsY);
+	g_pOptimizedRenderer->FillRect(hSurf,&rect,hBackColor);
 	if (nWidth > 0)
 		pFont->DrawFormat(hString, hSurf,extraPixelsX/2,extraPixelsY/2,nWidth,kWhite);
 	else
@@ -850,17 +849,17 @@ HSURFACE CInterfaceResMgr::CreateSurfaceFromString(CLTGUIFont *pFont, HSTRING hS
 HSURFACE CInterfaceResMgr::CreateSurfaceFromString(CLTGUIFont *pFont, int nStringId, HLTCOLOR hBackColor,
 												int extraPixelsX, int extraPixelsY, int nWidth)
 {
-    HSTRING hString = g_pLTClient->FormatString(nStringId);
+	HSTRING hString = g_pLTClient->FormatString(nStringId);
 	return CreateSurfaceFromString(pFont, hString, hBackColor, extraPixelsX, extraPixelsY, nWidth);
-    g_pLTClient->FreeString(hString);
+	g_pLTClient->FreeString(hString);
 }
 
 HSURFACE CInterfaceResMgr::CreateSurfaceFromString(CLTGUIFont *pFont, char *lpszString, HLTCOLOR hBackColor,
 												int extraPixelsX, int extraPixelsY, int nWidth)
 {
-    HSTRING hString = g_pLTClient->CreateString(lpszString);
+	HSTRING hString = g_pLTClient->CreateString(lpszString);
 	return CreateSurfaceFromString(pFont, hString, hBackColor, extraPixelsX, extraPixelsY, nWidth);
-    g_pLTClient->FreeString(hString);
+	g_pLTClient->FreeString(hString);
 }
 
 
@@ -882,19 +881,19 @@ LTBOOL CInterfaceResMgr::SetupFont(CLTGUIFont *pFont, LTBOOL bBlend, uint32 dwFl
 		lithFont.hTransColor = SETRGB(255,0,255);
 	}
 
-    if ( !pFont->Init(g_pLTClient, &lithFont) )
+	if ( !pFont->Init(g_pLTClient, &lithFont) )
 	{
 		char szString[512];
 		sprintf(szString, "Cannot load font: %s", lithFont.szFontBitmap);
-        g_pLTClient->CPrint(szString);
+		g_pLTClient->CPrint(szString);
 		SDL_Log(szString);
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	
 	SDL_Log("Initialized %s",lithFont.szFontBitmap);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 CLTGUIFont* CInterfaceResMgr::GetLargeFont()

@@ -34,30 +34,30 @@ public:
 private:
 	void	ClearSurface();
 
-	int					m_nLineHeight;
-	int					m_nCursorPos;
-	HSURFACE			m_hForeSurf;
-    uint32              m_dwWidth;
-    uint32              m_dwHeight;
+	int			m_nLineHeight;
+	int			m_nCursorPos;
+	HSURFACE	m_hForeSurf;
+	uint32		m_dwWidth;
+	uint32		m_dwHeight;
 
-	HSTRING				m_hText;
+	HSTRING	m_hText;
 
-    LTFLOAT              m_fDelay;
-    LTFLOAT              m_fFadeTime;
-    LTFLOAT              m_fTimeRemaining;
-    LTFLOAT              m_fAlpha;
+	LTFLOAT	m_fDelay;
+	LTFLOAT	m_fFadeTime;
+	LTFLOAT	m_fTimeRemaining;
+	LTFLOAT	m_fAlpha;
 
-    HLTSOUND            m_hSound;
-	LITHFONTDRAWDATA	m_lfDrawData;
+	HLTSOUND			m_hSound;
+	LITHFONTDRAWDATA m_lfDrawData;
 	LITHFONTSAVEDATA	m_lfSaveData;
 
-    LTIntPt              m_pos;
+	LTIntPt	m_pos;
 
-    LTBOOL               m_bScrolling;
-    LTBOOL               m_bPause;
+	LTBOOL	m_bScrolling;
+	LTBOOL	m_bPause;
 
-	char				m_TypeSound[128];
-	char				m_ScrollSound[128];
+	char	m_TypeSound[128];
+	char	m_ScrollSound[128];
 
 };
 

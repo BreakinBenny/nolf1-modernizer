@@ -21,25 +21,25 @@ public:
 	virtual ~CFolderViewInventory();
 
 	// Build the folder
-    LTBOOL	Build();
+	LTBOOL	Build();
 
 	// This is called when the folder gets or loses focus
-    virtual void    OnFocus(LTBOOL bFocus);
+	virtual void	OnFocus(LTBOOL bFocus);
 	virtual void	UpdateInterfaceSFX();
 
-    virtual uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
-    virtual LTBOOL	HandleKeyDown(int key, int rep);
-    virtual LTBOOL	HandleKeyUp(int key);
+	virtual uint32	OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	virtual LTBOOL HandleKeyDown(int key, int rep);
+	virtual LTBOOL HandleKeyUp(int key);
 
 
-    HSTRING         GetHelpString(uint32 dwHelpId, int nControlIndex);
+	HSTRING	 GetHelpString(uint32 dwHelpId, int nControlIndex);
 
-	virtual	LTBOOL	UpdateSelection();
-    virtual LTBOOL	IsAvailable() {return LTTRUE;}
+	virtual LTBOOL UpdateSelection();
+	virtual LTBOOL IsAvailable() {return LTTRUE;}
 
 protected:
 
-    void			BuildInventoryList();
+	void			BuildInventoryList();
 	void			SaveInventoryData();
 	void			ClearInventoryList();
 
@@ -56,14 +56,14 @@ protected:
 	CBaseScaleFX	m_Inventory;
 	char			m_szModel[WMGR_MAX_FILE_PATH];
 	char			m_szSkin[WMGR_MAX_FILE_PATH];
-	LTFLOAT			m_fSFXRot;
+	LTFLOAT	m_fSFXRot;
 
-	int				*m_nAmmo;
+	int			*m_nAmmo;
 	CMissionData	*m_pData;
-	CLTGUIFont		*m_pFont;
+	CLTGUIFont	*m_pFont;
 
-	int				m_nLastWeapon;
-	int				m_nKey;
+	int			m_nLastWeapon;
+	int			m_nKey;
 
 };
 

@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: LeashFX.h
 //
-// MODULE  : LeashFX.h
+// PURPOSE: Leash special fx class - Definition
 //
-// PURPOSE : Leash special fx class - Definition
-//
-// CREATED : 4/15/99
+// CREATED: 4/15/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #ifndef __Leash_FX_H__
 #define __Leash_FX_H__
 
@@ -21,13 +18,13 @@
 
 struct LEASHFXCREATESTRUCT : public SFXCREATESTRUCT
 {
-    LEASHFXCREATESTRUCT();
+	LEASHFXCREATESTRUCT();
 
-    LTVector vStartPos;
-    LTVector vEndPos;
-    LTVector vLeashColor;
-    LTFLOAT  fLeashSize;
-    uint8   cSegments;
+	LTVector vStartPos;
+	LTVector vEndPos;
+	LTVector vLeashColor;
+	LTFLOAT  fLeashSize;
+	uint8   cSegments;
 };
 
 inline LEASHFXCREATESTRUCT::LEASHFXCREATESTRUCT()
@@ -41,12 +38,12 @@ inline LEASHFXCREATESTRUCT::LEASHFXCREATESTRUCT()
 
 struct LeashVerts
 {
-    LeashVerts()
+	LeashVerts()
 	{
 		vPos.Init();
 	}
 
-    LTVector vPos;
+	LTVector vPos;
 };
 
 class CLeashFX : public CBasePolyDrawFX
@@ -55,8 +52,8 @@ class CLeashFX : public CBasePolyDrawFX
 
 		CLeashFX() : CBasePolyDrawFX()
 		{
-            m_pVerts            = LTNULL;
-            m_bFirstTime        = LTTRUE;
+			m_pVerts		= LTNULL;
+			m_bFirstTime	= LTTRUE;
 		}
 
 		~CLeashFX()
@@ -67,20 +64,20 @@ class CLeashFX : public CBasePolyDrawFX
 			}
 		}
 
-        virtual LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hRead);
-        virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
-        virtual LTBOOL Update();
-        virtual LTBOOL CreateObject(ILTClient* pClientDE);
+		virtual LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hRead);
+		virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
+		virtual LTBOOL Update();
+		virtual LTBOOL CreateObject(ILTClient* pClientDE);
 
 	protected :
 
-        virtual LTBOOL Draw(ILTCustomDraw *pDraw);
+		virtual LTBOOL Draw(ILTCustomDraw *pDraw);
 
 		LEASHFXCREATESTRUCT	m_cs;
-		LeashVerts*			m_pVerts;
-        LTBOOL               m_bFirstTime;
+		LeashVerts*	m_pVerts;
+		LTBOOL		m_bFirstTime;
 
-        LTBOOL   SetupLeash();
+		LTBOOL	SetupLeash();
 
 		void	HandleFirstTime();
 };

@@ -20,22 +20,22 @@ const int CListCtrl::kNoSelection = 99999;
 
 CListCtrl::CListCtrl()
 {
-	m_nCurrentIndex				= kNoSelection;
+	m_nCurrentIndex			= kNoSelection;
 	m_nFirstDisplayedItem		= 0;
 	m_nLastDisplayedItem		= -1;
-	m_nHeight					= 100;
-	m_nItemSpacing				= 10;
-	m_nMouseDownItemSel			= kNoSelection;
-    m_bEnableMouseMoveSelect    = LTFALSE;
-    m_bEnableMouseClickSelect   = LTFALSE;
+	m_nHeight				= 100;
+	m_nItemSpacing			= 10;
+	m_nMouseDownItemSel		= kNoSelection;
+	m_bEnableMouseMoveSelect	= LTFALSE;
+	m_bEnableMouseClickSelect	= LTFALSE;
 	m_nAlign					= LTF_JUSTIFY_LEFT;
-    m_bArrows                   = LTFALSE;
-	m_nArrowOffset				= 0;
+	m_bArrows				= LTFALSE;
+	m_nArrowOffset			= 0;
 	m_fScrollFirstDelay			= 1.0f;
 	m_fScrollDelay				= 0.5f;
 	m_fNextScrollTime			= -1.0f;
-	m_pUp						= LTNULL;
-	m_pDown						= LTNULL;
+	m_pUp					= LTNULL;
+	m_pDown				= LTNULL;
 
 }
 
@@ -48,30 +48,30 @@ CListCtrl::~CListCtrl()
 LTBOOL CListCtrl::Create ( int nHeight, LTBOOL bUseArrows, int nArrowOffset)
 {
 	m_nHeight=nHeight;
-    m_bCreated=LTTRUE;
+	m_bCreated=LTTRUE;
 
 	if (bUseArrows)
 	{
-        m_bArrows       = LTTRUE;
+		m_bArrows	= LTTRUE;
 		m_nArrowOffset	= nArrowOffset;
 		//Add Server Arrows
 		m_pUp = debug_new(CBitmapCtrl);
-        if (!m_pUp->Create(g_pLTClient,"interface\\ListArrowUp.pcx","interface\\ListArrowUpH.pcx","interface\\ListArrowUpD.pcx"))
+		if (!m_pUp->Create(g_pLTClient,"interface\\ListArrowUp.pcx","interface\\ListArrowUpH.pcx","interface\\ListArrowUpD.pcx"))
 		{
 			debug_delete(m_pUp);
-            m_pUp = LTNULL;
+			m_pUp = LTNULL;
 		}
 
 		m_pDown = debug_new(CBitmapCtrl);
-        if (!m_pDown->Create(g_pLTClient,"interface\\ListArrowDn.pcx","interface\\ListArrowDnH.pcx","interface\\ListArrowDnD.pcx"))
+		if (!m_pDown->Create(g_pLTClient,"interface\\ListArrowDn.pcx","interface\\ListArrowDnH.pcx","interface\\ListArrowDnD.pcx"))
 		{
 			debug_delete(m_pDown);
-            m_pDown = LTNULL;
+			m_pDown = LTNULL;
 		}
 
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // Destroy the control
@@ -82,14 +82,14 @@ void CListCtrl::Destroy ( )
 	if (m_pUp)
 	{
 		debug_delete(m_pUp);
-        m_pUp = LTNULL;
+		m_pUp = LTNULL;
 	}
 	if (m_pDown)
 	{
 		debug_delete(m_pDown);
-        m_pDown = LTNULL;
+		m_pDown = LTNULL;
 	}
-    m_bCreated=LTFALSE;
+	m_bCreated=LTFALSE;
 }
 
 // Render the control
@@ -97,7 +97,7 @@ void CListCtrl::Render ( HSURFACE hDestSurf )
 {
 	if ((m_pUp && m_pUp->IsSelected()) || (m_pDown && m_pDown->IsSelected()))
 	{
-        LTIntPt cpos = g_pInterfaceMgr->GetCursorPos();
+		LTIntPt cpos = g_pInterfaceMgr->GetCursorPos();
 		//cpos.x += g_pInterfaceResMgr->GetXOffset();
 		//cpos.y += g_pInterfaceResMgr->GetYOffset();
 		int nLeft=m_pos.x;
@@ -106,33 +106,33 @@ void CListCtrl::Render ( HSURFACE hDestSurf )
 		int nBottom=nTop+GetHeight();
 		if ( cpos.x < nLeft || cpos.x > nRight || cpos.y < nTop || cpos.y > nBottom)
 		{
-            if (m_pUp && m_pUp->IsSelected()) 
+			if (m_pUp && m_pUp->IsSelected()) 
 				m_pUp->Select(LTFALSE);
-            if (m_pDown && m_pDown->IsSelected()) 
+			if (m_pDown && m_pDown->IsSelected()) 
 				m_pDown->Select(LTFALSE);
 		}
 
 	}
 
-    if (m_fNextScrollTime > 0.0f && m_fNextScrollTime < g_pLTClient->GetTime())
+	if (m_fNextScrollTime > 0.0f && m_fNextScrollTime < g_pLTClient->GetTime())
 	{
 		m_fNextScrollTime = -1.0f;
 		if (m_nMouseDownItemSel == kUpSel && CanScrollUp())
 		{
 			ScrollUp();
 			if (CanScrollUp() && IsKeyDown(VK_LBUTTON))
-                m_fNextScrollTime = g_pLTClient->GetTime()+m_fScrollDelay;
+				m_fNextScrollTime = g_pLTClient->GetTime()+m_fScrollDelay;
 		}
 		if (m_nMouseDownItemSel == kDownSel && CanScrollDown())
 		{
 			ScrollDown();
 			if (CanScrollDown() && IsKeyDown(VK_LBUTTON))
-                m_fNextScrollTime = g_pLTClient->GetTime()+m_fScrollDelay;
+				m_fNextScrollTime = g_pLTClient->GetTime()+m_fScrollDelay;
 		}
 	}
 
 	// Render the items unless they are off the control
-    LTIntPt size;
+	LTIntPt size;
 	int y=m_pos.y;
 
 	unsigned int i;
@@ -189,7 +189,7 @@ int CListCtrl::GetWidth ( )
 	int x = 0;
 	int y = 0;
 
-    LTIntPt size;
+	LTIntPt size;
 
 	if (m_bArrows)
 	{
@@ -241,7 +241,7 @@ LTBOOL CListCtrl::HandleKeyDown(int key, int rep)
 {
 	if (CLTGUICtrl::HandleKeyDown(key, rep))
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else
 	{
@@ -251,7 +251,7 @@ LTBOOL CListCtrl::HandleKeyDown(int key, int rep)
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CListCtrl::OnUp ( )
@@ -259,7 +259,7 @@ LTBOOL CListCtrl::OnUp ( )
 	unsigned int nIndex=m_nCurrentIndex;
 
 	if (nIndex == kNoSelection)
-        return LTFALSE;
+		return LTFALSE;
 
 	// Find the next non-disabled index
 	int i=m_nCurrentIndex-1;
@@ -267,7 +267,7 @@ LTBOOL CListCtrl::OnUp ( )
 	{
 		if ( i < 0 )
 		{
-//            i = (int)m_controlArray-1;
+//			i = (int)m_controlArray-1;
 			return LTFALSE;
 		}
 
@@ -285,9 +285,9 @@ LTBOOL CListCtrl::OnUp ( )
 	if ((int)nIndex != m_nCurrentIndex)
 	{
 		SelectItem ( nIndex );
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CListCtrl::OnDown ( )
@@ -295,7 +295,7 @@ LTBOOL CListCtrl::OnDown ( )
 	unsigned int nIndex=m_nCurrentIndex;
 
 	if (nIndex == kNoSelection)
-        return LTFALSE;
+		return LTFALSE;
 
 	// Find the next non-disabled index
 	int i=m_nCurrentIndex+1;
@@ -303,7 +303,7 @@ LTBOOL CListCtrl::OnDown ( )
 	{
 		if ( i >= (int)m_controlArray.GetSize() )
 		{
-//            i = 0;
+//			i = 0;
 			return LTFALSE;
 		}
 
@@ -321,27 +321,27 @@ LTBOOL CListCtrl::OnDown ( )
 	if ((int)nIndex != m_nCurrentIndex)
 	{
 		SelectItem ( nIndex );
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CListCtrl::ScrollUp ()
 {
 	if (!CanScrollUp())
-        return LTFALSE;
+		return LTFALSE;
 	m_nFirstDisplayedItem--;
 	m_nLastDisplayedItem = CalculateLastDisplayedIndex(m_nFirstDisplayedItem);
-    return LTTRUE;
+	return LTTRUE;
 }
 
 LTBOOL CListCtrl::ScrollDown ()
 {
 	if (!CanScrollDown())
-        return LTFALSE;
+		return LTFALSE;
 	m_nFirstDisplayedItem++;
 	m_nLastDisplayedItem = CalculateLastDisplayedIndex(m_nFirstDisplayedItem);
-    return LTTRUE;
+	return LTTRUE;
 }
 
 LTBOOL  CListCtrl::OnLeft ( )
@@ -350,7 +350,7 @@ LTBOOL  CListCtrl::OnLeft ( )
 	{
 		return m_controlArray[m_nCurrentIndex]->OnLeft();
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL  CListCtrl::OnRight ( )
@@ -359,7 +359,7 @@ LTBOOL  CListCtrl::OnRight ( )
 	{
 		return m_controlArray[m_nCurrentIndex]->OnRight();
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL  CListCtrl::OnEnter ( )
@@ -368,7 +368,7 @@ LTBOOL  CListCtrl::OnEnter ( )
 	{
 		return m_controlArray[m_nCurrentIndex]->OnEnter();
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // Handles the left button down message
@@ -384,7 +384,7 @@ LTBOOL CListCtrl::OnLButtonDown(int x, int y)
 	{
 		// Make sure we're enabled
 		if(!pCtrl->IsEnabled())
-            return LTFALSE;
+			return LTFALSE;
 
 		if (nControlIndex >= 0 && m_bEnableMouseClickSelect)
 		{
@@ -393,20 +393,20 @@ LTBOOL CListCtrl::OnLButtonDown(int x, int y)
 		}
 
 		if ((nControlIndex == kUpSel && CanScrollUp())|| (nControlIndex == kDownSel && CanScrollDown()))
-            m_fNextScrollTime = g_pLTClient->GetTime()+m_fScrollFirstDelay;
+			m_fNextScrollTime = g_pLTClient->GetTime()+m_fScrollFirstDelay;
 
 		// Record this control as the one being selected from the mouse click.
 		// If the mouse is still over it on the UP message, then the "enter" message will be sent.
 		m_nMouseDownItemSel=nControlIndex;
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else
 	{
 		// This clears the index for what item was selected from a mouse down message
 		m_nMouseDownItemSel=kNoSelection;
 
-        return LTFALSE;
+		return LTFALSE;
 	}
 }
 
@@ -423,7 +423,7 @@ LTBOOL CListCtrl::OnLButtonUp(int x, int y)
 	{
 		// Make sure we're enabled
 		if(!pCtrl->IsEnabled())
-            return LTFALSE;
+			return LTFALSE;
 
 
 		// If the mouse is over the same control now as it was when the down message was called
@@ -448,7 +448,7 @@ LTBOOL CListCtrl::OnLButtonUp(int x, int y)
 	{
 		m_nMouseDownItemSel=kNoSelection;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // Handles the mouse move message
@@ -470,13 +470,13 @@ LTBOOL CListCtrl::OnMouseMove(int x, int y)
 		{
 			// Make sure we're enabled
 			if(!pCtrl->IsEnabled())
-                return LTFALSE;
+				return LTFALSE;
 
 			if (GetSelectedItem() != nControlUnderPoint)
 			{
 				SelectItem(nControlUnderPoint);
 
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 		else
@@ -492,7 +492,7 @@ LTBOOL CListCtrl::OnMouseMove(int x, int y)
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 
 }
 
@@ -558,7 +558,7 @@ void CListCtrl::RemoveAllControls ( )
 // Return a control at a specific index
 CLTGUICtrl *CListCtrl::GetControl ( int nIndex )
 {
-    if (nIndex >= (int)m_controlArray.GetSize()) return LTNULL;
+	if (nIndex >= (int)m_controlArray.GetSize()) return LTNULL;
 	return m_controlArray[nIndex];
 }
 
@@ -610,7 +610,7 @@ void CListCtrl::SelectItem ( int nIndex )
 // Return the last displayed index
 int	CListCtrl::CalculateLastDisplayedIndex ( int nStartIndex )
 {
-    LTIntPt size;
+	LTIntPt size;
 	int y=m_pos.y;
 	if (nStartIndex < 0)
 		nStartIndex = 0;
@@ -699,7 +699,7 @@ CLTGUICtrl *CListCtrl::GetControlUnderPoint(int xPos, int yPos, int *pnIndex)
 		}
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 
@@ -743,7 +743,7 @@ LTBOOL CListCtrl::OnLButtonDblClick(int x, int y)
 	{
 		// Make sure we're enabled
 		if(!pCtrl->IsEnabled())
-            return LTFALSE;
+			return LTFALSE;
 
 
 		// If the mouse is over the same control now as it was when the down message was called
@@ -768,6 +768,5 @@ LTBOOL CListCtrl::OnLButtonDblClick(int x, int y)
 	{
 		m_nMouseDownItemSel=kNoSelection;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
-

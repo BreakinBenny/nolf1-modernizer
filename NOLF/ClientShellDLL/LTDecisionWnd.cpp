@@ -1,13 +1,11 @@
 /****************************************************************************
+;	 MODULE: CLTDecisionWnd (.cpp)
 ;
-;	 MODULE:		CLTDecisionWnd (.cpp)
+;	PURPOSE: Class for a decision window
 ;
-;	PURPOSE:		Class for a decision window
+;	HISTORY: 04/16/99 [kml] This file was created
 ;
-;	HISTORY:		04/16/99 [kml] This file was created
-;
-;	COMMENT:		Copyright (c) 1998, Monolith Productions, Inc.
-;
+;	COMMENT: Copyright (c) 1998, Monolith Productions, Inc.
 ****************************************************************************/
 #include "StdAfx.h"
 #include "LTDecisionWnd.h"
@@ -53,11 +51,9 @@ BOOL CLTDecisionWnd::Init(DECISIONWNDCREATESTRUCT *pcs)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDecisionWnd::Term
 //
-//	ROUTINE:	CLTDecisionWnd::Term
-//
-//	PURPOSE:	Termination
-//
+//	PURPOSE: Termination
 // ----------------------------------------------------------------------- //
 void CLTDecisionWnd::Term()
 {
@@ -72,11 +68,9 @@ void CLTDecisionWnd::Term()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDecisionWnd::DrawToSurface
 //
-//	ROUTINE:	CLTDecisionWnd::DrawToSurface
-//
-//	PURPOSE:	Draws the window
-//
+//	PURPOSE: Draws the window
 // ----------------------------------------------------------------------- //
 BOOL CLTDecisionWnd::DrawToSurface(HSURFACE hSurfDest)
 {
@@ -85,51 +79,49 @@ BOOL CLTDecisionWnd::DrawToSurface(HSURFACE hSurfDest)
 	// Draw the alpha window
 	if(m_hSurf)
 	{
-        LTRect rcDest;
+		LTRect rcDest;
 		rcDest.left = GetWindowLeft();
 		rcDest.top = GetWindowTop();
 		rcDest.right = rcDest.left + m_nWidth;
 		rcDest.bottom = rcDest.top + m_nHeight;
-        g_pLTClient->ScaleSurfaceToSurface(hSurfDest,m_hSurf,&rcDest,NULL);
+		g_pLTClient->ScaleSurfaceToSurface(hSurfDest,m_hSurf,&rcDest,NULL);
 	}
 
 	// Draw the frame
 	if(m_bFrame && (m_pcollFrames->GetSize() == 8))
 	{
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_TOPLEFTFRAME),NULL,m_xPos,m_yPos,g_hColorTransparent);
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_TOPRIGHTFRAME),NULL,m_xPos+m_nWidth-m_prcTotal->right,m_yPos,g_hColorTransparent);
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_BOTTOMRIGHTFRAME),NULL,m_xPos+m_nWidth-m_prcTotal->right,m_yPos+m_nHeight-m_prcTotal->bottom,g_hColorTransparent);
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_BOTTOMLEFTFRAME),NULL,m_xPos,m_yPos+m_nHeight-m_prcTotal->bottom,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_TOPLEFTFRAME),NULL,m_xPos,m_yPos,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_TOPRIGHTFRAME),NULL,m_xPos+m_nWidth-m_prcTotal->right,m_yPos,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_BOTTOMRIGHTFRAME),NULL,m_xPos+m_nWidth-m_prcTotal->right,m_yPos+m_nHeight-m_prcTotal->bottom,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_BOTTOMLEFTFRAME),NULL,m_xPos,m_yPos+m_nHeight-m_prcTotal->bottom,g_hColorTransparent);
 
 		// Draw the four scaleable sides
-        LTRect rcDest;
+		LTRect rcDest;
 		rcDest.left = m_xPos;
 		rcDest.top = m_yPos+m_prcTotal->top;
 		rcDest.right = m_xPos+m_prcFrame->left;
 		rcDest.bottom = m_yPos+m_nHeight-m_prcTotal->bottom;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_LEFTFRAME),&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_LEFTFRAME),&rcDest,NULL,g_hColorTransparent);
 		rcDest.left = m_xPos + m_nWidth - m_prcFrame->right;
 		rcDest.right = m_xPos + m_nWidth;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_RIGHTFRAME),&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_RIGHTFRAME),&rcDest,NULL,g_hColorTransparent);
 		rcDest.left = m_xPos+m_prcTotal->left;
 		rcDest.top = m_yPos;
 		rcDest.right = m_xPos+m_nWidth-m_prcTotal->right;
 		rcDest.bottom = m_yPos+m_prcFrame->top;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_TOPFRAME),&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_TOPFRAME),&rcDest,NULL,g_hColorTransparent);
 		rcDest.top = m_yPos + m_nHeight - m_prcFrame->bottom;
 		rcDest.bottom = m_yPos + m_nHeight;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_BOTTOMFRAME),&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_pcollFrames->GetAt(DLG_BOTTOMFRAME),&rcDest,NULL,g_hColorTransparent);
 	}
 
 	return TRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDecisionWnd::ShowWindow
 //
-//	ROUTINE:	CLTDecisionWnd::ShowWindow
-//
-//	PURPOSE:	Shows (or hides) the window
-//
+//	PURPOSE: Shows (or hides) the window
 // ----------------------------------------------------------------------- //
 BOOL CLTDecisionWnd::ShowWindow(BOOL bShow, BOOL bPlaySound, BOOL bAnimate)
 {
@@ -164,11 +156,9 @@ BOOL CLTDecisionWnd::ShowWindow(BOOL bShow, BOOL bPlaySound, BOOL bAnimate)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDecisionWnd::Update
 //
-//	ROUTINE:	CLTDecisionWnd::Update
-//
-//	PURPOSE:	Updates the window
-//
+//	PURPOSE: Updates the window
 // ----------------------------------------------------------------------- //
 BOOL CLTDecisionWnd::Update(float fTimeDelta)
 {
@@ -215,11 +205,9 @@ BOOL CLTDecisionWnd::Update(float fTimeDelta)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDecisionWnd::OnRButtonDown
 //
-//	ROUTINE:	CLTDecisionWnd::OnRButtonDown
-//
-//	PURPOSE:	Right mouse button down handler
-//
+//	PURPOSE: Right mouse button down handler
 // ----------------------------------------------------------------------- //
 BOOL CLTDecisionWnd::OnRButtonDown(int xPos, int yPos)
 {
@@ -231,11 +219,9 @@ BOOL CLTDecisionWnd::OnRButtonDown(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDecisionWnd::OnLButtonDown
 //
-//	ROUTINE:	CLTDecisionWnd::OnLButtonDown
-//
-//	PURPOSE:	Left mouse button down handler
-//
+//	PURPOSE: Left mouse button down handler
 // ----------------------------------------------------------------------- //
 BOOL CLTDecisionWnd::OnLButtonDown(int xPos, int yPos)
 {
@@ -248,11 +234,9 @@ BOOL CLTDecisionWnd::OnLButtonDown(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDecisionWnd::DisplayText
 //
-//	ROUTINE:	CLTDecisionWnd::DisplayText
-//
-//	PURPOSE:	Sets up the decisions
-//
+//	PURPOSE: Sets up the decisions
 // ----------------------------------------------------------------------- //
 BOOL CLTDecisionWnd::DisplayText(CStringArray *pcollDecisions, CLTWnd* pWnd, BOOL bBelow)
 {
@@ -276,14 +260,14 @@ BOOL CLTDecisionWnd::DisplayText(CStringArray *pcollDecisions, CLTWnd* pWnd, BOO
 	}
 
 	// Set the decisions
-    LTIntPt ptMax;
-    LTIntPt ptCur; 
+	LTIntPt ptMax;
+	LTIntPt ptCur; 
 	ptMax.x = 0;
 	ptMax.y = 0;
 	m_byActivatedSelection = 0;
 
 
-    LTIntPt ptPos = g_pLayoutMgr->GetDecisionTextOffset();
+	LTIntPt ptPos = g_pLayoutMgr->GetDecisionTextOffset();
 	for(i=0;((i<pcollDecisions->GetSize()) && (i<MAX_DECISIONS));i++)
 	{
 		if(pcollDecisions->GetAt(i).IsEmpty())
@@ -345,11 +329,9 @@ BOOL CLTDecisionWnd::DisplayText(CStringArray *pcollDecisions, CLTWnd* pWnd, BOO
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDecisionWnd::SendMessage
 //
-//	ROUTINE:	CLTDecisionWnd::SendMessage
-//
-//	PURPOSE:	Handles a sent message
-//
+//	PURPOSE: Handles a sent message
 // ----------------------------------------------------------------------- //
 BOOL CLTDecisionWnd::SendMessage(CLTWnd* pSender, int nMsg, int nParam1,int nParam2)
 {
@@ -395,19 +377,19 @@ BOOL CLTDecisionWnd::SendMessage(CLTWnd* pSender, int nMsg, int nParam1,int nPar
 
 	// Get the frame thicknesses
 	DWORD x,y;
-    g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_LEFTFRAME],&x,&y);
+	g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_LEFTFRAME],&x,&y);
 	m_rcFrame.left = x;
-    g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_TOPFRAME],&x,&y);
+	g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_TOPFRAME],&x,&y);
 	m_rcFrame.top = y;
-    g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_RIGHTFRAME],&x,&y);
+	g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_RIGHTFRAME],&x,&y);
 	m_rcFrame.right = x;
-    g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_BOTTOMFRAME],&x,&y);
+	g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_BOTTOMFRAME],&x,&y);
 	m_rcFrame.bottom = y;
 
-    g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_TOPLEFTFRAME],&x,&y);
+	g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_TOPLEFTFRAME],&x,&y);
 	m_rcTotal.left = x;
 	m_rcTotal.top = y;
-    g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_BOTTOMRIGHTFRAME],&x,&y);
+	g_pLTClient->GetSurfaceDims(m_collFrames[DECISIONWND_BOTTOMRIGHTFRAME],&x,&y);
 	m_rcTotal.right = x;
 	m_rcTotal.bottom = y;
 
@@ -415,26 +397,24 @@ BOOL CLTDecisionWnd::SendMessage(CLTWnd* pSender, int nMsg, int nParam1,int nPar
 }*/
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDecisionWnd::SetAlpha
 //
-//	ROUTINE:	CLTDecisionWnd::SetAlpha
-//
-//	PURPOSE:	Sets the alpha value for the window
-//
+//	PURPOSE: Sets the alpha value for the window
 // ----------------------------------------------------------------------- //
 void CLTDecisionWnd::SetAlpha(LTFLOAT fAlpha)
 {
 	if (m_hSurf)
 	{
-        g_pLTClient->OptimizeSurface(m_hSurf, g_hColorTransparent);
-        g_pLTClient->SetSurfaceAlpha(m_hSurf, fAlpha);
+		g_pLTClient->OptimizeSurface(m_hSurf, g_hColorTransparent);
+		g_pLTClient->SetSurfaceAlpha(m_hSurf, fAlpha);
 	}
 
 	for(int i=0;i<m_pcollFrames->GetSize();i++)
 	{
 		if (m_pcollFrames->GetAt(i))
 		{
-            g_pLTClient->OptimizeSurface(m_pcollFrames->GetAt(i), g_hColorTransparent);
-            g_pLTClient->SetSurfaceAlpha(m_pcollFrames->GetAt(i), fAlpha);
+			g_pLTClient->OptimizeSurface(m_pcollFrames->GetAt(i), g_hColorTransparent);
+			g_pLTClient->SetSurfaceAlpha(m_pcollFrames->GetAt(i), fAlpha);
 		}
 	}
 
@@ -455,11 +435,9 @@ void CLTDecisionWnd::SetCurSelection(int nSelection)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDecisionWnd::OnKeyDown
 //
-//	ROUTINE:	CLTDecisionWnd::OnKeyDown
-//
-//	PURPOSE:	key down handler
-//
+//	PURPOSE: key down handler
 // ----------------------------------------------------------------------- //
 BOOL CLTDecisionWnd::OnKeyDown(int nKey, int nRep)
 {
@@ -490,4 +468,3 @@ BOOL CLTDecisionWnd::OnKeyDown(int nKey, int nRep)
 
 	return FALSE;
 }
-

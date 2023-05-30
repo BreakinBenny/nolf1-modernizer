@@ -1,13 +1,11 @@
 /****************************************************************************
+;	 MODULE: CLTMaskedWnd (.h)
 ;
-;	 MODULE:		CLTMaskedWnd (.h)
+;	PURPOSE: Class for a window with an irregular shape (like a bitmap)
 ;
-;	PURPOSE:		Class for a window with an irregular shape (like a bitmap)
+;	HISTORY: 12/10/98 [kml] This file was created
 ;
-;	HISTORY:		12/10/98 [kml] This file was created
-;
-;	COMMENT:		Copyright (c) 1998, Monolith Productions, Inc.
-;
+;	COMMENT: Copyright (c) 1998, Monolith Productions, Inc.
 ****************************************************************************/
 #ifndef _LTMASKEDWND_H_
 #define _LTMASKEDWND_H_
@@ -25,7 +23,7 @@ public:
 	virtual void Term();
 
 	void EnableSurfaceTest(BOOL bEnable) { m_bSurfaceTest = bEnable; }
-	virtual BOOL PtInWnd(int x, int y);  // x,y are screen coords
+	virtual BOOL PtInWnd(int x, int y);	// x,y are screen coords
 
 protected:
 	BOOL m_bSurfaceTest;

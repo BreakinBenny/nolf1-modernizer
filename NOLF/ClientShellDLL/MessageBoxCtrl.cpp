@@ -15,22 +15,22 @@
 
 CMessageBoxCtrl::CMessageBoxCtrl()
 {
-    m_pFont                     = LTNULL;
-    m_hText                     = LTNULL;
-    m_pClientDE                 = LTNULL;
-    m_pCommandHandler           = LTNULL;
-    m_hBackgroundSurf           = LTNULL;
-	m_hTransColor				= kBlack;
-	m_textColor					= kBlack;
-	m_textButtonColor			= SETRGB(255,255,0);
-	m_textButtonHighlightColor	= SETRGB(255,255,145);
-	m_nTextButtonHorzSpace		= 5;
-	m_nTextButtonVertSpace		= 5;
-	m_nMouseDownItemSel			= MB_NOSELECT;
-	m_screenPos.x				= 0;
-	m_screenPos.y				= 0;
-	m_nSelection				= MB_NOSELECT;
-	m_fScale					= 1.0f;
+	m_pFont				 = LTNULL;
+	m_hText				 = LTNULL;
+	m_pClientDE			 = LTNULL;
+	m_pCommandHandler	= LTNULL;
+	m_hBackgroundSurf		= LTNULL;
+	m_hTransColor			= kBlack;
+	m_textColor			= kBlack;
+	m_textButtonColor		= SETRGB(255,255,0);
+	m_textButtonHighlightColor = SETRGB(255,255,145);
+	m_nTextButtonHorzSpace	= 5;
+	m_nTextButtonVertSpace	= 5;
+	m_nMouseDownItemSel	= MB_NOSELECT;
+	m_screenPos.x			= 0;
+	m_screenPos.y			= 0;
+	m_nSelection			= MB_NOSELECT;
+	m_fScale				= 1.0f;
 }
 
 CMessageBoxCtrl::~CMessageBoxCtrl()
@@ -40,39 +40,39 @@ CMessageBoxCtrl::~CMessageBoxCtrl()
 
 /*************************************************************************************/
 // Create the message box
-// pClientDE	   - Pointer to the client interface
+// pClientDE	- Pointer to the client interface
 // lpszBackground  - Pathname to the pcx file for the background
-// pFont		   - Font which is used to display text in the message box.
-// hText		   - Text to be displayed in the message box
+// pFont		- Font which is used to display text in the message box.
+// hText		- Text to be displayed in the message box
 // pCommandHandler - Command handler which recieves a message when a key (call AddKey first) is pressed
 LTBOOL CMessageBoxCtrl::Create(ILTClient *pClientDE, char *lpszBackground, CLTGUIFont *pFont,
-                               HSTRING hText, CLTGUICommandHandler *pCommandHandler)
+							HSTRING hText, CLTGUICommandHandler *pCommandHandler)
 {
 	//Sanity check...
 	if (!pClientDE || !lpszBackground || !pFont)
-        return LTFALSE;
+		return LTFALSE;
 
 	// Load the background
 	HSURFACE hSurf = pClientDE->CreateSurfaceFromBitmap(lpszBackground);
 	if (!hSurf)
-        return LTFALSE;
+		return LTFALSE;
 
 	return Create(pClientDE,hSurf,pFont,hText,pCommandHandler);
 }
 
 /*************************************************************************************/
 // Create the message box
-// pClientDE	   - Pointer to the client interface
-// hBack		   - Surface to use for the background
-// pFont		   - Font which is used to display text in the message box.
-// hText		   - Text to be displayed in the message box
+// pClientDE	- Pointer to the client interface
+// hBack		- Surface to use for the background
+// pFont		- Font which is used to display text in the message box.
+// hText		- Text to be displayed in the message box
 // pCommandHandler - Command handler which recieves a message when a key (call AddKey first) is pressed
 LTBOOL CMessageBoxCtrl::Create(ILTClient *pClientDE, HSURFACE hBack, CLTGUIFont *pFont,
-                               HSTRING hText, CLTGUICommandHandler *pCommandHandler)
+							HSTRING hText, CLTGUICommandHandler *pCommandHandler)
 {
 	//Sanity check...
 	if (!pClientDE || !hBack || !pFont)
-        return LTFALSE;
+		return LTFALSE;
 
 	//Copy engine pointer
 	m_pClientDE = pClientDE;
@@ -89,9 +89,9 @@ LTBOOL CMessageBoxCtrl::Create(ILTClient *pClientDE, HSURFACE hBack, CLTGUIFont 
 	// Set the command handler
 	m_pCommandHandler = pCommandHandler;
 
-	m_nSelection				= MB_NOSELECT;
+	m_nSelection	= MB_NOSELECT;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 /*************************************************************************************/
@@ -101,22 +101,22 @@ void CMessageBoxCtrl::Destroy()
 	if (m_pClientDE && m_hBackgroundSurf)
 	{
 		m_pClientDE->DeleteSurface(m_hBackgroundSurf);
-        m_hBackgroundSurf = LTNULL;
+		m_hBackgroundSurf = LTNULL;
 	}
 
 	if (m_hText && m_pClientDE)
 	{
 		m_pClientDE->FreeString(m_hText);
-        m_hText=LTNULL;
+		m_hText=LTNULL;
 	}
 
-    m_pCommandHandler   = LTNULL;
-    m_pFont             = LTNULL;
+	m_pCommandHandler = LTNULL;
+	m_pFont			= LTNULL;
 
 	RemoveKeys();
 	RemoveMessageButtons();
 
-    m_pClientDE = LTNULL;
+	m_pClientDE = LTNULL;
 }
 
 /*************************************************************************************/
@@ -149,7 +149,7 @@ void CMessageBoxCtrl::Render(HSURFACE hDestSurf)
 
 	// Center the text in the box
 	int nWidth=nMBWidth-(MB_EDGESPACE*2);
-    LTIntPt size=m_pFont->GetTextExtentsFormat(m_hText, nWidth);
+	LTIntPt size=m_pFont->GetTextExtentsFormat(m_hText, nWidth);
 
 	int x,y;
 	x=(m_screenPos.x+(nMBWidth/2))-(size.x/2);
@@ -166,11 +166,11 @@ void CMessageBoxCtrl::Render(HSURFACE hDestSurf)
 		for (i=0; i < m_textButtonArray.GetSize(); i++)
 		{
 			// The bounding rectangle for the text relative to the left side of the message box
-            LTRect rcText=GetTextButtonRect(i);
+			LTRect rcText=GetTextButtonRect(i);
 			int x = m_screenPos.x+rcText.left;
 			int y = m_screenPos.y+rcText.top;
 			// Render the text
-            HLTCOLOR hColor = m_textButtonColor;;
+			HLTCOLOR hColor = m_textButtonColor;;
 			if ((int)i == m_nSelection)
 				hColor = m_textButtonHighlightColor;
 			m_pFont->Draw(m_textButtonArray[i].m_hString, hDestSurf, x, y, LTF_JUSTIFY_LEFT, hColor);
@@ -187,7 +187,7 @@ void CMessageBoxCtrl::SetPos(int xPos, int yPos, HSURFACE hDestSurf)
 	{
 		if (!m_pClientDE)
 		{
-            ASSERT(LTFALSE);
+			ASSERT(LTFALSE);
 			return;
 		}
 
@@ -245,7 +245,7 @@ LTRect CMessageBoxCtrl::GetTextButtonRect(int nIndex)
 	int i;
 	for (i=0; i < (int)m_textButtonArray.GetSize(); i++)
 	{
-        LTIntPt size=m_pFont->GetTextExtents(m_textButtonArray[i].m_hString);
+		LTIntPt size=m_pFont->GetTextExtents(m_textButtonArray[i].m_hString);
 		nTotalWidth+=size.x;
 
 		// If there are more buttons, add the spacing
@@ -262,7 +262,7 @@ LTRect CMessageBoxCtrl::GetTextButtonRect(int nIndex)
 	for (i=0; i < nIndex; i++)
 	{
 		// Get the text dimentions for this index
-        LTIntPt size=m_pFont->GetTextExtents(m_textButtonArray[i].m_hString);
+		LTIntPt size=m_pFont->GetTextExtents(m_textButtonArray[i].m_hString);
 
 		// Add the text width
 		nLeft+=size.x;
@@ -272,10 +272,10 @@ LTRect CMessageBoxCtrl::GetTextButtonRect(int nIndex)
 	}
 
 	// Get the text dimentions for the specified index
-    LTIntPt size=m_pFont->GetTextExtents(m_textButtonArray[nIndex].m_hString);
+	LTIntPt size=m_pFont->GetTextExtents(m_textButtonArray[nIndex].m_hString);
 
 	// Build the bounding box
-    LTRect rcBounding;
+	LTRect rcBounding;
 	rcBounding.top=nTop;
 	rcBounding.left=nLeft;
 	rcBounding.right=rcBounding.left+size.x;
@@ -290,7 +290,7 @@ void CMessageBoxCtrl::SetText(HSTRING hText)
 {
 	if (!m_pClientDE)
 	{
-        assert(LTFALSE);
+		assert(LTFALSE);
 		return;
 	}
 	m_fScale = 1.0f;
@@ -298,7 +298,7 @@ void CMessageBoxCtrl::SetText(HSTRING hText)
 	if (m_hText)
 	{
 		m_pClientDE->FreeString(m_hText);
-        m_hText=LTNULL;
+		m_hText=LTNULL;
 
 	}
 
@@ -476,7 +476,7 @@ LTBOOL CMessageBoxCtrl::HandleKeyDown(int key, int rep)
 		}
 	} break;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 /*************************************************************************************/
@@ -486,7 +486,7 @@ LTBOOL CMessageBoxCtrl::OnLButtonDown(int x, int y)
 	// Check to see if we have text buttons
 	if (m_textButtonArray.GetSize() <= 0)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 
@@ -505,7 +505,7 @@ LTBOOL CMessageBoxCtrl::OnLButtonUp(int x, int y)
 	// Check to see if we have text buttons
 	if (m_textButtonArray.GetSize() <= 0)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	// Check to see if the mouse is over the same button as it was clicked on
@@ -519,14 +519,14 @@ LTBOOL CMessageBoxCtrl::OnLButtonUp(int x, int y)
 			m_nMouseDownItemSel=MB_NOSELECT;
 			g_pInterfaceMgr->RequestInterfaceSound(IS_SELECT);
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
 	// Reset the selected item
 	m_nMouseDownItemSel=MB_NOSELECT;
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 /*************************************************************************************/
@@ -539,7 +539,7 @@ LTBOOL CMessageBoxCtrl::OnMouseMove(int x, int y)
 		g_pInterfaceMgr->RequestInterfaceSound(IS_CHANGE);
 		m_nSelection = ndx;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 int	CMessageBoxCtrl::GetButtonFromPoint(int x, int y)
@@ -549,7 +549,7 @@ int	CMessageBoxCtrl::GetButtonFromPoint(int x, int y)
 	for (i=0; i < (int)m_textButtonArray.GetSize(); i++)
 	{
 		// The bounding rectangle for the text relative to the left side of the message box
-        LTRect rcText=GetTextButtonRect(i);
+		LTRect rcText=GetTextButtonRect(i);
 
 		// Check to see if the mouse click is in the button
 		if (x >= m_screenPos.x+rcText.left && y >= m_screenPos.y+rcText.top &&

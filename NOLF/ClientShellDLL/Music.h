@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Music.h
 //
-// MODULE  : Music.h
+// PURPOSE: LithTech DirectMusic helper class.  Handles all music commands for game.
 //
-// PURPOSE : LithTech DirectMusic helper class.  Handles all music commands for game.
-//
-// CREATED : Apr-13-2000
-//
+// CREATED: Apr-13-2000
 // ----------------------------------------------------------------------- //
-
 #ifndef __MUSIC_H__
 #define __MUSIC_H__
 
@@ -21,34 +18,34 @@ class CPlayerObj;
 
 struct CMusicState
 {
-    CMusicState()
+	CMusicState()
 	{
 		Clear();
 	}
 
 	void Clear()
 	{
-		nIntensity			= 0;
-		nIntensityEnact		= LTDMEnactDefault;
-		szSecondary[0]		= '\0';
-		nSecondaryEnact		= LTDMEnactDefault;
-		szMotifStyle[0]		= '\0';
-		szMotifName[0]		= '\0';
-		nMotifEnact			= LTDMEnactDefault;
-		szDirectory[0]		= '\0';
+		nIntensity		= 0;
+		nIntensityEnact	= LTDMEnactDefault;
+		szSecondary[0]	= '\0';
+		nSecondaryEnact = LTDMEnactDefault;
+		szMotifStyle[0]	= '\0';
+		szMotifName[0] = '\0';
+		nMotifEnact	= LTDMEnactDefault;
+		szDirectory[0]	= '\0';
 		szControlFile[0]	= '\0';
-		bPlaying			= LTFALSE;
-		bPaused				= LTFALSE;
+		bPlaying		= LTFALSE;
+		bPaused		= LTFALSE;
 	}
 
 	void Copy(const CMusicState & fromState)
 	{
 		nIntensity		= fromState.nIntensity;
-		nIntensityEnact = fromState.nIntensityEnact;
+		nIntensityEnact	= fromState.nIntensityEnact;
 		nSecondaryEnact = fromState.nSecondaryEnact;
-		nMotifEnact		= fromState.nMotifEnact;
+		nMotifEnact	= fromState.nMotifEnact;
 		bPlaying		= fromState.bPlaying;
-		bPaused			= fromState.bPaused;
+		bPaused		= fromState.bPaused;
 		strcpy(szSecondary, fromState.szSecondary);
 		strcpy(szMotifStyle, fromState.szMotifStyle);
 		strcpy(szMotifName, fromState.szMotifName);
@@ -58,13 +55,13 @@ struct CMusicState
 
 	int				nIntensity;
 	LTDMEnactTypes	nIntensityEnact;
-	char			szSecondary[64];
+	char				szSecondary[64];
 	LTDMEnactTypes	nSecondaryEnact;
-	char			szMotifStyle[64];
-	char			szMotifName[64];
+	char				szMotifStyle[64];
+	char				szMotifName[64];
 	LTDMEnactTypes	nMotifEnact;
-	char			szDirectory[64];
-	char			szControlFile[32];
+	char				szDirectory[64];
+	char				szControlFile[32];
 	LTBOOL			bPlaying;
 	LTBOOL			bPaused;
 };
@@ -84,7 +81,7 @@ class CMusic
 		~CMusic() { Term(); }
 
 		// Initialize mgr
-        LTBOOL Init(ILTClient *pClientDE);
+		LTBOOL Init(ILTClient *pClientDE);
 
 		// Terminate mgr
 		void Term();
@@ -129,7 +126,7 @@ class CMusic
 
 		void ChangeIntensity(const int nIntensity, const LTDMEnactTypes nStart = LTDMEnactDefault);
 
-        LTBOOL RestoreMusicState(const CMusicState & newState);
+		LTBOOL RestoreMusicState(const CMusicState & newState);
 
 		CMusicState* GetMusicState() { return &m_State; }
 
@@ -146,30 +143,29 @@ class CMusic
 		// Member variables...
 
 		// pointer to the ClientDE interface for LithTech
-        ILTClient *                 m_pClientDE;
+		ILTClient *	m_pClientDE;
 
 		// pointer to the LithTech DirectMusic interface
-		ILTDirectMusicMgr*			m_pMusicMgr;
+		ILTDirectMusicMgr*	m_pMusicMgr;
 
 		// set to TRUE if music is enabled
-		LTBOOL						m_bMusicEnabled;
+		LTBOOL	m_bMusicEnabled;
 
 		// set to TRUE if we are currently in an initialized music game level
-		LTBOOL						m_bLevelInitialized;
+		LTBOOL	m_bLevelInitialized;
 
 
 		// Current state of the music...
-
-		CMusicState		m_State;
+		CMusicState	m_State;
 
 		// The current volume as set by the control file initial volume or any game triggers
-		long				m_nTriggerVolume;
+		long	m_nTriggerVolume;
 
 		// The current volume as set by the game menu
-		long				m_nMenuVolume;
+		long	m_nMenuVolume;
 
 		// Playing?
-		LTBOOL				m_bPlaying;
+		LTBOOL	m_bPlaying;
 };
 
 #endif // __MUSIC_H__

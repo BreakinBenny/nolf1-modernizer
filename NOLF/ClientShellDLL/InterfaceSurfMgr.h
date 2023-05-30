@@ -16,8 +16,8 @@ public:
 	// Constructor
 	CSharedSurface()
 	{
-        m_lpszPathName=LTNULL;
-        m_hSurface=LTNULL;
+		m_lpszPathName=LTNULL;
+		m_hSurface=LTNULL;
 	}
 
 	// Destructor
@@ -26,7 +26,7 @@ public:
 		if (m_lpszPathName)
 		{
 			debug_deletea(m_lpszPathName);
-            m_lpszPathName=LTNULL;
+			m_lpszPathName=LTNULL;
 		}
 	}
 
@@ -42,28 +42,28 @@ public:
 	virtual ~CInterfaceSurfMgr();
 
 	// Intialization/Termination
-    LTBOOL       Init(ILTClient *pClientDE);
-	void		Term();
+	LTBOOL	Init(ILTClient *pClientDE);
+	void	Term();
 
 	// Returns a handle to a surface from its bitmap filename.
 	HSURFACE	GetSurface(char *lpszSurface);
 
 	// Frees a surface.
-	void		FreeSurface(char *lpszSurface);
-	void		FreeSurface(HSURFACE hSurface);
+	void	FreeSurface(char *lpszSurface);
+	void	FreeSurface(HSURFACE hSurface);
 
-	void		FreeAllSurfaces();
+	void	FreeAllSurfaces();
 
 protected:
 	// Frees a surface based on its index into the surface array
-	void		FreeSurface(int nIndex);
+	void	FreeSurface(int nIndex);
 
 	// Finds a surface index into the surface array.  -1 is returned if it cannot be found
-	int			FindSurfaceIndex(char *lpszSurface);
-	int			FindSurfaceIndex(HSURFACE hSurface);
+	int	FindSurfaceIndex(char *lpszSurface);
+	int	FindSurfaceIndex(HSURFACE hSurface);
 
 protected:
-    ILTClient       *m_pClientDE;       // Pointer to client interface
+	ILTClient	*m_pClientDE;	// Pointer to client interface
 
 	// Array of shared surfaces
 	CMoArray<CSharedSurface *>	m_sharedSurfaceArray;

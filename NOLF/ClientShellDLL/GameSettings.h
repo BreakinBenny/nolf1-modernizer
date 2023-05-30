@@ -6,7 +6,7 @@
 // Values for 3 position options..
 
 #define RS_LOW	0
-#define	RS_MED	1
+#define RS_MED	1
 #define RS_HIGH	2
 
 
@@ -40,14 +40,14 @@ public:
 	// control access functions
 
 	LTBOOL	MouseLook()			{ return GetBoolVar("MouseLook"); }
-	LTBOOL	MouseInvertY()			{ return GetBoolVar("MouseInvertY");}
+	LTBOOL	MouseInvertY()		{ return GetBoolVar("MouseInvertY");}
 	void	SetMouseLook(LTBOOL bVal)	{ SetBoolVar("MouseLook",bVal); }
 	void	SetMouseInvertY(LTBOOL bVal)	{ SetBoolVar("MouseInvertY",bVal); }
 
 	float	MouseSensitivity()	{ return GetFloatVar("MouseSensitivity");}
-	LTBOOL	UseJoystick()		{ return GetBoolVar("UseJoystick"); }
-	LTBOOL	Lookspring()		{ return GetBoolVar("LookSpring"); }
-	LTBOOL	RunLock()		{ return GetBoolVar("RunLock"); }
+	LTBOOL	UseJoystick()	{ return GetBoolVar("UseJoystick"); }
+	LTBOOL	Lookspring()	{ return GetBoolVar("LookSpring"); }
+	LTBOOL	RunLock()	{ return GetBoolVar("RunLock"); }
 
 	void	SetRunLock (LTBOOL bRunLock) { SetBoolVar("RunLock",bRunLock); }
 
@@ -70,13 +70,13 @@ public:
 	float	ModelLOD()			{ return GetFloatVar("ModelLOD");}
 	uint8	Shadows()			{ return GetByteVar("MaxModelShadows"); }
 	float	NumBulletHoles()		{ return GetFloatVar("BulletHoles");}
-	float	TextureDetailSetting()		{ return GetFloatVar("TextureDetail");}
-	float	DynamicLightSetting()		{ return GetFloatVar("DynamicLightSetting");}
-	LTBOOL	LightMap()			{ return GetBoolVar("LightMap");}
+	float	TextureDetailSetting()	{ return GetFloatVar("TextureDetail");}
+	float	DynamicLightSetting()	{ return GetFloatVar("DynamicLightSetting");}
+	LTBOOL	LightMap()		{ return GetBoolVar("LightMap");}
 	uint8	SpecialFXSetting()		{ return GetConsoleInt("PerformanceLevel",1); }
-	LTBOOL	EnvironmentMapping()		{ return GetBoolVar("EnvMapEnable"); }
+	LTBOOL	EnvironmentMapping()	{ return GetBoolVar("EnvMapEnable"); }
 	LTBOOL	ModelFullBrights()		{ return GetBoolVar("ModelFullbrite"); }
-	LTBOOL	CloudMapLight()			{ return GetBoolVar("CloudMapLight"); }
+	LTBOOL	CloudMapLight()		{ return GetBoolVar("CloudMapLight"); }
 	uint8	PlayerViewWeaponSetting()	{ return GetByteVar("PVWeapons"); }
 	LTBOOL	PolyGrids()			{ return GetBoolVar("PolyGrids"); }
 	LTBOOL	DrawSky()			{ return GetBoolVar("DrawSky"); }

@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: InterfaceMgr.cpp
 //
-// MODULE  : InterfaceMgr.cpp
+// PURPOSE: Manage all interface related functionality
 //
-// PURPOSE : Manage all interface related functionality
-//
-// CREATED : 4/6/99
+// CREATED: 4/6/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "InterfaceMgr.h"
 #include "GameClientShell.h"
@@ -49,34 +46,34 @@ extern CGameClientShell* g_pGameClientShell;
 
 CInterfaceMgr*  g_pInterfaceMgr = LTNULL;
 
-#define IM_SPLASH_SOUND		"Menu\\Snd\\theme_mp3.wav"
+#define IM_SPLASH_SOUND	"Menu\\Snd\\theme_mp3.wav"
 #define IM_SPLASH_SCREEN	"Menu\\Art\\splash.pcx"
 
 #define MAX_INTERFACE_SFX	50
-#define MAX_FRAME_DELTA		0.1f
+#define MAX_FRAME_DELTA	0.1f
 #define INVALID_ANI			((HMODELANIM)-1)
 
 #define MOVIE_FOX_LOGO		0
 #define MOVIE_MONOLITH_LOGO	1
 #define MOVIE_LITHTECH_LOGO	2
 
-LTFLOAT      g_fSplashSndDuration = 0.0f;
-LTFLOAT      g_fFailScreenDuration = 0.0f;
+LTFLOAT	g_fSplashSndDuration = 0.0f;
+LTFLOAT	g_fFailScreenDuration = 0.0f;
 
-LTFLOAT      g_fFovXTan = 0.0f;
-LTFLOAT      g_fFovYTan = 0.0f;
+LTFLOAT	g_fFovXTan = 0.0f;
+LTFLOAT	g_fFovYTan = 0.0f;
 
-LTVector     g_vOverlaySpriteScale(0.02f, 0.02f, 1.0f);
-LTVector     g_vOverlayModelScale(1.0f, 1.0f, 1.0f);
-LTFLOAT      g_fOverlaySpriteDist = 10.0f;
-LTFLOAT      g_fOverlayModelDist = 0.25f;
+LTVector		g_vOverlaySpriteScale(0.02f, 0.02f, 1.0f);
+LTVector		g_vOverlayModelScale(1.0f, 1.0f, 1.0f);
+LTFLOAT	g_fOverlaySpriteDist = 10.0f;
+LTFLOAT	g_fOverlayModelDist = 0.25f;
 
-LTVector     g_vBaseBackScale(0.8f, 0.6f, 1.0f);
-LTFLOAT      g_fBackDist = 200.0f;
+LTVector		g_vBaseBackScale(0.8f, 0.6f, 1.0f);
+LTFLOAT	g_fBackDist = 200.0f;
 
 #define NUM_DEMO_SCREENS 2
-HSURFACE    g_hSplash = LTNULL;
-HSURFACE    g_hDemo = LTNULL;
+HSURFACE	g_hSplash = LTNULL;
+HSURFACE	g_hDemo = LTNULL;
 int			g_nDemo = 0;
 char  g_szDemoScreens[NUM_DEMO_SCREENS][32] =
 {
@@ -84,7 +81,7 @@ char  g_szDemoScreens[NUM_DEMO_SCREENS][32] =
 	"Interface\\Marketing2.pcx",
 };
 
-HLTCOLOR    hDefaultTransColor = SETRGB_T(255,0,255);
+HLTCOLOR	hDefaultTransColor = SETRGB_T(255,0,255);
 
 VarTrack	g_vtDrawInterface;
 VarTrack	g_vtModelApplySun;
@@ -130,87 +127,84 @@ namespace
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::CInterfaceMgr
 //
-//	ROUTINE:	CInterfaceMgr::CInterfaceMgr
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
-
 CInterfaceMgr::CInterfaceMgr()
 {
 	g_pInterfaceMgr	= this;
 
-	m_eGameState			= GS_UNDEFINED;
+	m_eGameState		= GS_UNDEFINED;
 
-    m_eCurrOverlay          = OVM_NONE;
+	m_eCurrOverlay	= OVM_NONE;
 
-	m_dwAdvancedOptions		= AO_DEFAULT_ENABLED;
+	m_dwAdvancedOptions	= AO_DEFAULT_ENABLED;
 	m_dwOrignallyEnabled	= 0;
 
-	m_nClearScreenCount		= 0;
-    m_bClearScreenAlways    = LTFALSE;
+	m_nClearScreenCount	= 0;
+	m_bClearScreenAlways	= LTFALSE;
 
-	m_fMenuSaveFOVx			= 0.0f;
-	m_fMenuSaveFOVy			= 0.0f;
+	m_fMenuSaveFOVx		= 0.0f;
+	m_fMenuSaveFOVy		= 0.0f;
 
-    m_bDrawPlayerStats      = LTTRUE;
-    m_bDrawFragCount        = LTFALSE;
-    m_bDrawInterface        = LTTRUE;
-    m_bSwitchingModes       = LTFALSE;
+	m_bDrawPlayerStats = LTTRUE;
+	m_bDrawFragCount	= LTFALSE;
+	m_bDrawInterface	= LTTRUE;
+	m_bSwitchingModes	= LTFALSE;
 
-    m_hSplashSound          = LTNULL;
-	g_fSplashSndDuration	= 0.0f;
+	m_hSplashSound	= LTNULL;
+	g_fSplashSndDuration = 0.0f;
 
-    m_nFailStringId         = LTNULL;
-    m_hFailBack             = LTNULL;
+	m_nFailStringId		= LTNULL;
+	m_hFailBack		= LTNULL;
 
-    m_bMenuRectRestore      = LTTRUE;
+	m_bMenuRectRestore	= LTTRUE;
 	memset(&m_rcMenuRestoreCamera, 0, sizeof(m_rcMenuRestoreCamera));
 
 	m_bUseInterfaceCamera	= LTTRUE;
 
 	for (int i =0; i < NUM_OVERLAY_MASKS; i++)
 	{
-        m_hOverlays[i] = LTNULL;
+		m_hOverlays[i] = LTNULL;
 		m_fOverlayScaleMult[i] = 1.0f;
 	}
 	m_nOverlayCount = 0;
 
-    m_hScubaSound		= LTNULL;
-	m_hSound			= LTNULL;
+	m_hScubaSound	= LTNULL;
+	m_hSound		= LTNULL;
 
-    m_hFadeSurface      = LTNULL;
-    m_hLetterBoxSurface = LTNULL;
+	m_hFadeSurface	= LTNULL;
+	m_hLetterBoxSurface = LTNULL;
 	m_fLetterBoxAlpha	= 0.0f;
 	m_bLetterBox		= LTFALSE;
-	m_bWasLetterBox		= LTFALSE;
+	m_bWasLetterBox	= LTFALSE;
 	m_fLetterBoxFadeEndTime = 0.0f;
 
-    m_bScreenFade       = LTFALSE;
-    m_bFadeInitialized  = LTFALSE;
+	m_bScreenFade	= LTFALSE;
+	m_bFadeInitialized	= LTFALSE;
 	m_fTotalFadeTime	= 0.0f;
-	m_fCurFadeTime		= 0.0f;
-    m_bFadeIn           = LTTRUE;
-    m_bExitAfterFade    = LTFALSE;
+	m_fCurFadeTime	= 0.0f;
+	m_bFadeIn		= LTTRUE;
+	m_bExitAfterFade	= LTFALSE;
 
-    m_bUseCursor         = LTFALSE;
-    m_bUseHardwareCursor = LTFALSE;
+	m_bUseCursor		= LTFALSE;
+	m_bUseHardwareCursor = LTFALSE;
 
-	m_eSunglassMode		= SUN_NONE;
+	m_eSunglassMode	= SUN_NONE;
 
-    m_bSavedGameMusic   = LTFALSE;
+	m_bSavedGameMusic = LTFALSE;
 
 	m_eNextSound		= IS_NONE;
 
 	m_bQuitAfterDemoScreens = LTFALSE;
 	m_bSeenDemoScreens = LTFALSE;
 
-	m_hMovie			= LTNULL;
-	m_nCurMovie			= 0;
+	m_hMovie		= LTNULL;
+	m_nCurMovie		= 0;
 
 	m_bLoadFailed		= LTFALSE;
-	m_bStartedNew		= LTFALSE;
+	m_bStartedNew	= LTFALSE;
 
 	m_hGamePausedSurface = LTNULL;
 
@@ -229,126 +223,121 @@ CInterfaceMgr::CInterfaceMgr()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::~CInterfaceMgr
 //
-//	ROUTINE:	CInterfaceMgr::~CInterfaceMgr
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
-
 CInterfaceMgr::~CInterfaceMgr()
 {
 	if (m_hSplashSound)
 	{
-        g_pLTClient->KillSound(m_hSplashSound);
+		g_pLTClient->KillSound(m_hSplashSound);
 	}
 
 	if (m_hScubaSound)
 	{
-        g_pLTClient->KillSound(m_hScubaSound);
+		g_pLTClient->KillSound(m_hScubaSound);
 	}
 
 	if (m_hSound)
 	{
-        g_pLTClient->KillSound(m_hSound);
+		g_pLTClient->KillSound(m_hSound);
 	}
 
 	if (m_hFailBack)
 	{
-        g_pLTClient->DeleteSurface(m_hFailBack);
+		g_pLTClient->DeleteSurface(m_hFailBack);
 	}
 
 	if (m_hFadeSurface)
 	{
-        g_pLTClient->DeleteSurface(m_hFadeSurface);
+		g_pLTClient->DeleteSurface(m_hFadeSurface);
 	}
 
 	if (m_hLetterBoxSurface)
 	{
-        g_pLTClient->DeleteSurface(m_hLetterBoxSurface);
+		g_pLTClient->DeleteSurface(m_hLetterBoxSurface);
 	}
 
-    g_pInterfaceMgr = LTNULL;
+	g_pInterfaceMgr = LTNULL;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::Init
 //
-//	ROUTINE:	CInterfaceMgr::Init
-//
-//	PURPOSE:	Init the mgr
-//
+//	PURPOSE: Init the mgr
 // ----------------------------------------------------------------------- //
 LTBOOL CInterfaceMgr::Init()
 {
 
-    if (!InitCursor())
+	if (!InitCursor())
 	{
-        g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize Cursor!");
-        return LTFALSE;
+		g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize Cursor!");
+		return LTFALSE;
 	}
 
 
 
 	UseHardwareCursor( GetConsoleInt("HardwareCursor",0) > 0 && GetConsoleInt("DisableHardwareCursor",0) == 0);
 
-    g_vtDrawInterface.Init(g_pLTClient, "DrawInterface", NULL, 1.0f);
-    g_vtModelApplySun.Init(g_pLTClient, "ModelApplySun", NULL, 1.0f);
+	g_vtDrawInterface.Init(g_pLTClient, "DrawInterface", NULL, 1.0f);
+	g_vtModelApplySun.Init(g_pLTClient, "ModelApplySun", NULL, 1.0f);
 
 	g_vtChooserAutoSwitchTime.Init(g_pLTClient, "ChooserAutoSwitchTime", NULL, 0.25f);
 	g_vtChooserAutoSwitchFreq.Init(g_pLTClient, "ChooserAutoSwitchFreq", NULL, 0.175f);
 
-    g_vtCursorHack.Init(g_pLTClient, "CursorHack", NULL, 0.0f);
+	g_vtCursorHack.Init(g_pLTClient, "CursorHack", NULL, 0.0f);
 
 	g_vtLetterBox.Init(g_pLTClient, "LetterBox", NULL, 0.0f);
-    g_vtLetterBoxFadeInTime.Init(g_pLTClient, "LetterBoxFadeInTime", NULL, 0.5f);
-    g_vtLetterBoxFadeOutTime.Init(g_pLTClient, "LetterBoxFadeOutTime", NULL, 1.0f);
-    g_vtDisableMovies.Init(g_pLTClient, "NoMovies", NULL, 0.0f);
+	g_vtLetterBoxFadeInTime.Init(g_pLTClient, "LetterBoxFadeInTime", NULL, 0.5f);
+	g_vtLetterBoxFadeOutTime.Init(g_pLTClient, "LetterBoxFadeOutTime", NULL, 1.0f);
+	g_vtDisableMovies.Init(g_pLTClient, "NoMovies", NULL, 0.0f);
 
 	ProcessAdvancedOptions();
 
-    if (!m_ServerOptionMgr.Init(g_pLTClient))
+	if (!m_ServerOptionMgr.Init(g_pLTClient))
 	{
-        g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize ServerOptionMgr!");
-        return LTFALSE;
+		g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize ServerOptionMgr!");
+		return LTFALSE;
 	}
 
 	// read in the settings
-    m_Settings.Init (g_pLTClient, g_pGameClientShell);
+	m_Settings.Init (g_pLTClient, g_pGameClientShell);
 
 
-    if (!m_LayoutMgr.Init(g_pLTClient))
+	if (!m_LayoutMgr.Init(g_pLTClient))
 	{
-        g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize LayoutMgr!");
-        return LTFALSE;
+		g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize LayoutMgr!");
+		return LTFALSE;
 	}
 	hShadeColor =  m_LayoutMgr.GetShadeColor();
 
-    if (!m_InterfaceResMgr.Init(g_pLTClient, g_pGameClientShell))
+	if (!m_InterfaceResMgr.Init(g_pLTClient, g_pGameClientShell))
 	{
 		// If we couldn't init, something critical must have happened (like no render dlls)
 
-        g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize InterfaceResMgr!");
-        return LTFALSE;
+		g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize InterfaceResMgr!");
+		return LTFALSE;
 	}
 
-    if (!m_FolderMgr.Init(g_pLTClient, g_pGameClientShell))
+	if (!m_FolderMgr.Init(g_pLTClient, g_pGameClientShell))
 	{
 		// If we couldn't init, something critical must have happened
-        g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize FolderMgr!");
-        return LTFALSE;
+		g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize FolderMgr!");
+		return LTFALSE;
 	}
 
 
 	m_messageMgr.Init();
-    m_messageMgr.Enable(LTTRUE);
+	m_messageMgr.Enable(LTTRUE);
 
-    m_ClientInfo.Init();
+	m_ClientInfo.Init();
 
 	if (!m_stats.Init())
 	{
-        g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize Player Stats!");
-        return LTFALSE;
+		g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize Player Stats!");
+		return LTFALSE;
 	}
 
 	m_MissionText.Init();
@@ -357,10 +346,10 @@ LTBOOL CInterfaceMgr::Init()
 
 	// Create the main wnd (this is necessary to use the dialog wnd below)...
 
-    if (!m_MainWnd.Init(0,"Main Window",LTNULL,g_pLTClient->GetScreenSurface()))
+	if (!m_MainWnd.Init(0,"Main Window",LTNULL,g_pLTClient->GetScreenSurface()))
 	{
-        g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize Main Wnd!");
-        return LTFALSE;
+		g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize Main Wnd!");
+		return LTFALSE;
 	}
 
 	// Dialogue Window
@@ -373,7 +362,7 @@ LTBOOL CInterfaceMgr::Init()
 	int dlgPos = g_pLayoutMgr->GetDialoguePosition();
 	dwcs.yPos = dlgPos;
 
-    LTIntPt dlgSz = g_pLayoutMgr->GetDialogueSize();
+	LTIntPt dlgSz = g_pLayoutMgr->GetDialogueSize();
 	dwcs.nWidth = dlgSz.x;
 	dwcs.nHeight = dlgSz.y;
 
@@ -399,10 +388,10 @@ LTBOOL CInterfaceMgr::Init()
 
 	if(!m_DialogueWnd.Init(&dwcs))
 	{
-        g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize Dialog Wnd!");
-        return LTFALSE;
+		g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize Dialog Wnd!");
+		return LTFALSE;
 	}
-    m_DialogueWnd.SetImmediateDecisions(LTTRUE);
+	m_DialogueWnd.SetImmediateDecisions(LTTRUE);
 
 	char szOpenSnd[256]= "";
 	char szCloseSnd[256]= "";
@@ -433,8 +422,8 @@ LTBOOL CInterfaceMgr::Init()
 
 	if(!m_MenuWnd.Init(&mwcs))
 	{
-        g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize Menu Wnd!");
-        return LTFALSE;
+		g_pLTClient->ShutdownWithMessage("ERROR in CInterfaceMgr::Init():  Could not initialize Menu Wnd!");
+		return LTFALSE;
 	}
 	g_pLayoutMgr->GetMenuOpenSound(szOpenSnd,sizeof(szOpenSnd));
 	g_pLayoutMgr->GetMenuCloseSound(szCloseSnd,sizeof(szCloseSnd));
@@ -454,15 +443,15 @@ LTBOOL CInterfaceMgr::Init()
 	m_InterfaceMeter.Init();
 
 	// Create the surface used for making letterboxed cinematics...
-    LTRect rcSrc;
+	LTRect rcSrc;
 	rcSrc.Init(0, 0, 2, 2);
-    HLTCOLOR hTransColor = g_pLTClient->SetupColor1(1.0f, 1.0f, 1.0f, LTTRUE);
+	HLTCOLOR hTransColor = g_pLTClient->SetupColor1(1.0f, 1.0f, 1.0f, LTTRUE);
 
 	m_hLetterBoxSurface = g_pLTClient->CreateSurface(2, 2);
 
 	g_pLTClient->SetSurfaceAlpha(m_hLetterBoxSurface, 0.0f);
-    g_pOptimizedRenderer->FillRect(m_hLetterBoxSurface, &rcSrc, kBlack);
-    g_pLTClient->OptimizeSurface(m_hLetterBoxSurface, hTransColor);
+	g_pOptimizedRenderer->FillRect(m_hLetterBoxSurface, &rcSrc, kBlack);
+	g_pLTClient->OptimizeSurface(m_hLetterBoxSurface, hTransColor);
 
 	int nLevel = GetConsoleInt("PerformanceLevel",1);
 	if (nLevel < 3)
@@ -486,16 +475,14 @@ LTBOOL CInterfaceMgr::Init()
 
 	UpdateConfigSettings();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::InitCursor
 //
-//	ROUTINE:	CInterfaceMgr::InitCursor
-//
-//	PURPOSE:	Init the cursor
-//
+//	PURPOSE: Init the cursor
 // ----------------------------------------------------------------------- //
 LTBOOL CInterfaceMgr::InitCursor()
 {
@@ -503,13 +490,13 @@ LTBOOL CInterfaceMgr::InitCursor()
 	if (g_pLTClient->Cursor()->LoadCursorBitmapResource(MAKEINTRESOURCE(IDC_POINTER), m_hCursor) != LT_OK)
 	{
 		g_pLTClient->CPrint("can't load cursor resource.");
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    if (g_pLTClient->Cursor()->SetCursor(m_hCursor) != LT_OK)
+	if (g_pLTClient->Cursor()->SetCursor(m_hCursor) != LT_OK)
 	{
 		g_pLTClient->CPrint("can't set cursor.");
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 
@@ -517,13 +504,10 @@ LTBOOL CInterfaceMgr::InitCursor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::Term()
 //
-//	ROUTINE:	CInterfaceMgr::Term()
-//
-//	PURPOSE:	Term the mgr
-//
+//	PURPOSE: Term the mgr
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::Term()
 {
 	if (m_hGamePausedSurface)
@@ -534,8 +518,8 @@ void CInterfaceMgr::Term()
 
 	m_FolderMgr.Term();
 	m_LayoutMgr.Term();
-    m_ServerOptionMgr.Term();
-    m_messageMgr.Term();
+	m_ServerOptionMgr.Term();
+	m_messageMgr.Term();
 	m_stats.Term();
 	m_WeaponChooser.Term();
 	m_AmmoChooser.Term();
@@ -551,38 +535,33 @@ void CInterfaceMgr::Term()
 
 	if ((m_dwOrignallyEnabled & AO_SOUND) && !(m_dwAdvancedOptions & AO_SOUND))
 	{
-        g_pLTClient->RunConsoleString("SoundEnable 1");
+		g_pLTClient->RunConsoleString("SoundEnable 1");
 	}
 
 	if ((m_dwOrignallyEnabled & AO_MUSIC) && !(m_dwAdvancedOptions & AO_MUSIC))
 	{
-        g_pLTClient->RunConsoleString("MusicEnable 1");
+		g_pLTClient->RunConsoleString("MusicEnable 1");
 	}
 
 	if (m_hScubaSound)
 	{
-        g_pLTClient->KillSound(m_hScubaSound);
+		g_pLTClient->KillSound(m_hScubaSound);
 		m_hScubaSound = LTNULL;
 	}
 
 	if (m_hSound)
 	{
-        g_pLTClient->KillSound(m_hSound);
+		g_pLTClient->KillSound(m_hSound);
 		m_hSound = LTNULL;
 	}
-
-
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::OnEnterWorld()
 //
-//	ROUTINE:	CInterfaceMgr::OnEnterWorld()
-//
-//	PURPOSE:	Handle entering new world
-//
+//	PURPOSE: Handle entering new world
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::OnEnterWorld(LTBOOL bRestoringGame)
 {
 	m_stats.OnEnterWorld(bRestoringGame);
@@ -591,13 +570,10 @@ void CInterfaceMgr::OnEnterWorld(LTBOOL bRestoringGame)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::OnExitWorld()
 //
-//	ROUTINE:	CInterfaceMgr::OnExitWorld()
-//
-//	PURPOSE:	Handle exiting a world
-//
+//	PURPOSE: Handle exiting a world
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::OnExitWorld()
 {
 	m_stats.OnExitWorld();
@@ -636,12 +612,12 @@ void CInterfaceMgr::OnExitWorld()
 	for (int i =0; i < NUM_OVERLAY_MASKS; i++)
 	{
 		if (m_hOverlays[i])
-            g_pLTClient->DeleteObject(m_hOverlays[i]);
+			g_pLTClient->DeleteObject(m_hOverlays[i]);
 
-        m_hOverlays[i] = LTNULL;
+		m_hOverlays[i] = LTNULL;
 	}
 
-    m_bFadeInitialized = LTFALSE;
+	m_bFadeInitialized = LTFALSE;
 	m_bExitAfterFade = LTFALSE;
 }
 
@@ -664,13 +640,10 @@ void CInterfaceMgr::UpdateConfigSettings()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PreUpdate()
 //
-//	ROUTINE:	CInterfaceMgr::PreUpdate()
-//
-//	PURPOSE:	Handle pre-updates
-//
+//	PURPOSE: Handle pre-updates
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PreUpdate()
 {
 	// Don't clear the screen if the loading screen's up
@@ -679,34 +652,31 @@ LTBOOL CInterfaceMgr::PreUpdate()
 
 	if (m_bClearScreenAlways)
 	{
-        g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN | CLEARSCREEN_RENDER);
+		g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN | CLEARSCREEN_RENDER);
 	}
 	else if (m_nClearScreenCount)
 	{
-        g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN | CLEARSCREEN_RENDER);
+		g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN | CLEARSCREEN_RENDER);
 		m_nClearScreenCount--;
 	}
 	else
 	{
-        g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_RENDER);
+		g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_RENDER);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostUpdate()
 //
-//	ROUTINE:	CInterfaceMgr::PostUpdate()
-//
-//  PURPOSE:    Handle post-updates (return LTTRUE to FLIP
-//
+//  PURPOSE: Handle post-updates (return LTTRUE to FLIP
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostUpdate()
 {
 	if (/*m_eGameState != GS_SPLASHSCREEN &&*/ m_eGameState != GS_LOADINGLEVEL)
 	{
-        g_pLTClient->FlipScreen(FLIPSCREEN_CANDRAWCONSOLE);
+		g_pLTClient->FlipScreen(FLIPSCREEN_CANDRAWCONSOLE);
 	}
 
 	// because of driver bugs, we need to wait a frame after reinitializing the renderer and
@@ -719,22 +689,19 @@ LTBOOL CInterfaceMgr::PostUpdate()
 		if (nCursorHackFrameDelay == 1)
 			InitCursor();
 	}
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::Update()
 //
-//	ROUTINE:	CInterfaceMgr::Update()
-//
-//	PURPOSE:	Handle updating the interface
-//
+//	PURPOSE: Handle updating the interface
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::Update()
 {
 	// Update based on the game state...
-    LTBOOL bHandled = LTFALSE;
+	LTBOOL bHandled = LTFALSE;
 	switch (m_eGameState)
 	{
 		case GS_PLAYING:
@@ -754,23 +721,23 @@ LTBOOL CInterfaceMgr::Update()
 					g_bLockInv = LTFALSE;
 				if (g_bLockFolder && !IsKeyDown(VK_ESCAPE))
 					g_bLockFolder = LTFALSE;
-            }
+			}
 			UpdatePlayingState();
-            bHandled = LTFALSE;  // Allow further processing
+			bHandled = LTFALSE;	// Allow further processing
 		}
 		break;
 
 		case GS_DIALOGUE:
 		{
 			UpdateDialogueState();
-            bHandled = LTFALSE;  // Allow further processing
+			bHandled = LTFALSE;	// Allow further processing
 		}
 		break;
 
 		case GS_MENU:
 		{
 			UpdateMenuState();
-            bHandled = LTFALSE;  // Allow further processing
+			bHandled = LTFALSE;	// Allow further processing
 		}
 		break;
 
@@ -782,14 +749,14 @@ LTBOOL CInterfaceMgr::Update()
 			}
 
 			UpdatePopupState();
-            bHandled = LTFALSE;  // Allow further processing
+			bHandled = LTFALSE;	// Allow further processing
 		}
 		break;
 
 		case GS_LOADINGLEVEL:
 		{
 			UpdateLoadingLevelState();
-            bHandled = LTTRUE;
+			bHandled = LTTRUE;
 		}
 		break;
 
@@ -804,44 +771,44 @@ LTBOOL CInterfaceMgr::Update()
 			{
 				if (g_bLockFolder && !IsKeyDown(VK_ESCAPE))
 					g_bLockFolder = LTFALSE;
-            }
+			}
 			UpdateFolderState();
-            bHandled = LTTRUE;
+			bHandled = LTTRUE;
 		}
 		break;
 
 		case GS_PAUSED:
 		{
 			UpdatePausedState();
-            bHandled = LTTRUE;
+			bHandled = LTTRUE;
 		}
 		break;
 
 		case GS_SPLASHSCREEN:
 		{
 			UpdateSplashScreenState();
-            bHandled = LTTRUE;
+			bHandled = LTTRUE;
 		}
 		break;
 
 		case GS_MOVIE:
 		{
 			UpdateMovieState();
-            bHandled = LTTRUE;
+			bHandled = LTTRUE;
 		}
 		break;
 
 		case GS_DEMOSCREEN:
 		{
 			UpdateDemoScreenState();
-            bHandled = LTTRUE;
+			bHandled = LTTRUE;
 		}
 		break;
 
 		case GS_FAILURE:
 		{
 			UpdateFailureState();
-            bHandled = LTTRUE;
+			bHandled = LTTRUE;
 		}
 		break;
 
@@ -884,13 +851,10 @@ LTBOOL CInterfaceMgr::Update()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateWeaponStats()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateWeaponStats()
-//
-//	PURPOSE:	Update the player's weapon stats display
-//
+//	PURPOSE: Update the player's weapon stats display
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateWeaponStats(uint8 nWeaponId, uint8 nAmmoId, uint32 dwAmmo)
 {
 	m_stats.UpdateAmmo(nWeaponId, nAmmoId, dwAmmo);
@@ -900,16 +864,13 @@ void CInterfaceMgr::UpdateWeaponStats(uint8 nWeaponId, uint8 nAmmoId, uint32 dwA
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::DrawSFX()
 //
-//	ROUTINE:	CInterfaceMgr::DrawSFX()
-//
-//	PURPOSE:	Renders the currently active special effects
-//
+//	PURPOSE: Renders the currently active special effects
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::DrawSFX()
 {
-    LTFLOAT fApplySun = g_vtModelApplySun.GetFloat();
+	LTFLOAT fApplySun = g_vtModelApplySun.GetFloat();
 	g_vtModelApplySun.SetFloat(0.0f);
 	UpdateInterfaceSFX();
 	g_vtModelApplySun.SetFloat(fApplySun);
@@ -918,37 +879,31 @@ LTBOOL CInterfaceMgr::DrawSFX()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateFolderState()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateFolderState()
-//
-//	PURPOSE:	Update folder state
-//
+//	PURPOSE: Update folder state
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateFolderState()
 {
 	if (m_FolderMgr.GetCurrentFolderID() == FOLDER_ID_NONE)
 		SwitchToFolder(GetMainFolder());
 	m_FolderMgr.UpdateInterfaceSFX();
-    g_pLTClient->Start3D();
+	g_pLTClient->Start3D();
 
 	DrawSFX();
 
-    g_pLTClient->StartOptimized2D();
+	g_pLTClient->StartOptimized2D();
 	m_InterfaceResMgr.DrawFolder();
 	UpdateScreenFade();
 	g_pLTClient->EndOptimized2D();
-    g_pLTClient->End3D();
+	g_pLTClient->End3D();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdatePlayingState()
 //
-//	ROUTINE:	CInterfaceMgr::UpdatePlayingState()
-//
-//	PURPOSE:	Update playing state
-//
+//	PURPOSE: Update playing state
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdatePlayingState()
 {
 	// Update the player stats...
@@ -966,13 +921,10 @@ void CInterfaceMgr::UpdatePlayingState()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateChooserAutoSwitch()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateChooserAutoSwitch()
-//
-//	PURPOSE:	Update auto switching the choosers
-//
+//	PURPOSE: Update auto switching the choosers
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateChooserAutoSwitch()
 {
 	// If Weapon chooser is being drawn, see if we want to change weapons...
@@ -1035,13 +987,10 @@ void CInterfaceMgr::UpdateChooserAutoSwitch()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateDialogueState()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateDialogueState()
-//
-//	PURPOSE:	Update dialogue state
-//
+//	PURPOSE: Update dialogue state
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateDialogueState()
 {
 	// Update the main window...
@@ -1049,19 +998,16 @@ void CInterfaceMgr::UpdateDialogueState()
 	{
 		ChangeState(GS_PLAYING);
 	}
-    m_MainWnd.Update(g_pGameClientShell->GetFrameTime());
+	m_MainWnd.Update(g_pGameClientShell->GetFrameTime());
 
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateMenuState()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateMenuState()
-//
-//	PURPOSE:	Update dialogue state
-//
+//	PURPOSE: Update dialogue state
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateMenuState()
 {
 	// Update the main window...
@@ -1071,17 +1017,14 @@ void CInterfaceMgr::UpdateMenuState()
 		ChangeState(GS_PLAYING);
 	}
 
-    m_MainWnd.Update(g_pGameClientShell->GetFrameTime());
+	m_MainWnd.Update(g_pGameClientShell->GetFrameTime());
 
 }
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdatePopupState()
 //
-//	ROUTINE:	CInterfaceMgr::UpdatePopupState()
-//
-//	PURPOSE:	Update dialogue state
-//
+//	PURPOSE: Update dialogue state
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdatePopupState()
 {
 	if (m_PopupText.IsVisible())
@@ -1095,16 +1038,13 @@ void CInterfaceMgr::UpdatePopupState()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateLoadingLevelState()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateLoadingLevelState()
-//
-//	PURPOSE:	Update loading level state
-//
+//	PURPOSE: Update loading level state
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateLoadingLevelState()
 {
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if ((g_pGameClientShell->IsInWorld() && (m_nOldLoadWorldCount != m_nLoadWorldCount)) &&
 		hPlayerObj)
 	{
@@ -1125,11 +1065,9 @@ void CInterfaceMgr::UpdateLoadingLevelState()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::HideLoadScreen()
 //
-//	ROUTINE:	CInterfaceMgr::HideLoadScreen()
-//
-//	PURPOSE:	Called externally to hide the loading screen
-//
+//	PURPOSE: Called externally to hide the loading screen
 // ----------------------------------------------------------------------- //
 void CInterfaceMgr::HideLoadScreen()
 {
@@ -1138,11 +1076,9 @@ void CInterfaceMgr::HideLoadScreen()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::SetLoadLevelString()
 //
-//	ROUTINE:	CInterfaceMgr::SetLoadLevelString()
-//
-//	PURPOSE:	Sets the name of the world to be displayed on the loading screen
-//
+//	PURPOSE: Sets the name of the world to be displayed on the loading screen
 // ----------------------------------------------------------------------- //
 void CInterfaceMgr::SetLoadLevelString(HSTRING hWorld)
 {
@@ -1150,11 +1086,9 @@ void CInterfaceMgr::SetLoadLevelString(HSTRING hWorld)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::SetLoadLevelPhoto()
 //
-//	ROUTINE:	CInterfaceMgr::SetLoadLevelPhoto()
-//
-//	PURPOSE:	Sets the photo of the world to be displayed on the loading screen
-//
+//	PURPOSE: Sets the photo of the world to be displayed on the loading screen
 // ----------------------------------------------------------------------- //
 void CInterfaceMgr::SetLoadLevelPhoto(char *pszPhoto)
 {
@@ -1163,20 +1097,17 @@ void CInterfaceMgr::SetLoadLevelPhoto(char *pszPhoto)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdatePausedState()
 //
-//	ROUTINE:	CInterfaceMgr::UpdatePausedState()
-//
-//	PURPOSE:	Update paused state
-//
+//	PURPOSE: Update paused state
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdatePausedState()
 {
-    g_pLTClient->Start3D();
+	g_pLTClient->Start3D();
 
 	UpdateInterfaceSFX();
 
-    g_pLTClient->StartOptimized2D();
+	g_pLTClient->StartOptimized2D();
 
 	LTRect rcFull(0,0,g_pInterfaceResMgr->GetScreenWidth()-1,g_pInterfaceResMgr->GetScreenHeight()-1);
 	g_pOptimizedRenderer->FillRect(g_pLTClient->GetScreenSurface(),&rcFull,hShadeColor);
@@ -1187,66 +1118,63 @@ void CInterfaceMgr::UpdatePausedState()
 		int xo = g_pInterfaceResMgr->GetXOffset();
 		int yo = g_pInterfaceResMgr->GetYOffset();
 
-        g_pLTClient->DrawSurfaceToSurface(g_pLTClient->GetScreenSurface(), m_hGamePausedSurface, LTNULL, xo,yo);
+		g_pLTClient->DrawSurfaceToSurface(g_pLTClient->GetScreenSurface(), m_hGamePausedSurface, LTNULL, xo,yo);
 	}
 
-    g_pLTClient->EndOptimized2D();
-    g_pLTClient->End3D();
+	g_pLTClient->EndOptimized2D();
+	g_pLTClient->End3D();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateSplashScreenState()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateSplashScreenState()
-//
-//	PURPOSE:	Update splash screen state
-//
+//	PURPOSE: Update splash screen state
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateSplashScreenState()
 {
-    //g_fSplashSndDuration -= g_pGameClientShell->GetFrameTime();
+	//g_fSplashSndDuration -= g_pGameClientShell->GetFrameTime();
 
 	//if (!m_hSplashSound || g_fSplashSndDuration <= 0.0f
-    //  /* || g_pLTClient->IsDone(m_hSplashSound*/)
+	//  /* || g_pLTClient->IsDone(m_hSplashSound*/)
 	//{
-    //  g_pLTClient->CPrint("Current Time: %.4f", g_pLTClient->GetTime());
-    //  g_pLTClient->CPrint("Splash sound done playing...");
+	//  g_pLTClient->CPrint("Current Time: %.4f", g_pLTClient->GetTime());
+	//  g_pLTClient->CPrint("Splash sound done playing...");
 
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
-    uint32 nWidth = 0;
-    uint32 nHeight = 0;
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	uint32 nWidth = 0;
+	uint32 nHeight = 0;
 	int nXOffset = g_pInterfaceResMgr->GetXOffset();
 
-    g_pLTClient->GetSurfaceDims(hScreen, &nWidth, &nHeight);
+	g_pLTClient->GetSurfaceDims(hScreen, &nWidth, &nHeight);
 
-    LTRect rcDst;
+	LTRect rcDst;
 	rcDst.Init(nXOffset, 0, nWidth - nXOffset, nHeight);
 
-    g_pLTClient->GetSurfaceDims(g_hSplash, &nWidth, &nHeight);
+	g_pLTClient->GetSurfaceDims(g_hSplash, &nWidth, &nHeight);
 
-    LTRect rcSrc;
+	LTRect rcSrc;
 	rcSrc.Init(0, 0, nWidth, nHeight);
 
-    g_pLTClient->Start3D();
-    g_pLTClient->StartOptimized2D();
+	g_pLTClient->Start3D();
+	g_pLTClient->StartOptimized2D();
 
 	g_pInterfaceResMgr->DrawFolderBars();
 
-    g_pLTClient->ScaleSurfaceToSurface(hScreen, g_hSplash, &rcDst, &rcSrc);
+	g_pLTClient->ScaleSurfaceToSurface(hScreen, g_hSplash, &rcDst, &rcSrc);
 
 	UpdateScreenFade();
 
-    g_pLTClient->EndOptimized2D();
-    g_pLTClient->End3D();
+	g_pLTClient->EndOptimized2D();
+	g_pLTClient->End3D();
 
-    static LTBOOL bDidFadeOut = LTFALSE;
+	static LTBOOL bDidFadeOut = LTFALSE;
 
 	if (!m_bScreenFade)
 	{
 		if (!bDidFadeOut)
 		{
 			StartScreenFadeOut(3.0);
-            bDidFadeOut = LTTRUE;
+			bDidFadeOut = LTTRUE;
 		}
 	}
 	else if (bDidFadeOut && m_fCurFadeTime <= 0.0f)
@@ -1259,13 +1187,10 @@ void CInterfaceMgr::UpdateSplashScreenState()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateMovieState()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateMovieState()
-//
-//	PURPOSE:	Update movie state
-//
+//	PURPOSE: Update movie state
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateMovieState()
 {
 
@@ -1286,13 +1211,10 @@ void CInterfaceMgr::UpdateMovieState()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateDemoScreenState()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateDemoScreenState()
-//
-//	PURPOSE:	Update demo screen state
-//
+//	PURPOSE: Update demo screen state
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateDemoScreenState()
 {
 
@@ -1306,61 +1228,58 @@ void CInterfaceMgr::UpdateDemoScreenState()
 	}
 
 
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
-    uint32 nWidth = 0;
-    uint32 nHeight = 0;
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	uint32 nWidth = 0;
+	uint32 nHeight = 0;
 
-    g_pLTClient->GetSurfaceDims(hScreen, &nWidth, &nHeight);
+	g_pLTClient->GetSurfaceDims(hScreen, &nWidth, &nHeight);
 
-    LTRect rcDst;
+	LTRect rcDst;
 	rcDst.Init(0, 0, nWidth, nHeight);
 
-    g_pLTClient->GetSurfaceDims(g_hDemo, &nWidth, &nHeight);
+	g_pLTClient->GetSurfaceDims(g_hDemo, &nWidth, &nHeight);
 
-    LTRect rcSrc;
+	LTRect rcSrc;
 	rcSrc.Init(0, 0, nWidth, nHeight);
 
-    g_pLTClient->Start3D();
-    g_pLTClient->StartOptimized2D();
+	g_pLTClient->Start3D();
+	g_pLTClient->StartOptimized2D();
 
-    g_pLTClient->ScaleSurfaceToSurface(hScreen, g_hDemo, &rcDst, &rcSrc);
+	g_pLTClient->ScaleSurfaceToSurface(hScreen, g_hDemo, &rcDst, &rcSrc);
 
 
-    g_pLTClient->EndOptimized2D();
-    g_pLTClient->End3D();
+	g_pLTClient->EndOptimized2D();
+	g_pLTClient->End3D();
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateFailureState()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateFailureState()
-//
-//	PURPOSE:	Update failure state
-//
+//	PURPOSE: Update failure state
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateFailureState()
 {
-    g_fFailScreenDuration += g_pGameClientShell->GetFrameTime();
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
-    uint32 nScrnWidth = g_pInterfaceResMgr->GetScreenWidth();
-    uint32 nScrnHeight = g_pInterfaceResMgr->GetScreenHeight();
+	g_fFailScreenDuration += g_pGameClientShell->GetFrameTime();
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	uint32 nScrnWidth = g_pInterfaceResMgr->GetScreenWidth();
+	uint32 nScrnHeight = g_pInterfaceResMgr->GetScreenHeight();
 
 	int xo = g_pInterfaceResMgr->GetXOffset();
 	int yo = g_pInterfaceResMgr->GetYOffset();
 
 
 
-    HSTRING hStr = g_pLTClient->FormatString(m_nFailStringId);
+	HSTRING hStr = g_pLTClient->FormatString(m_nFailStringId);
 
 	LTRect rcDst;
 	rcDst.left = rcDst.top = 0;
 	rcDst.right = nScrnWidth;
 	rcDst.bottom = nScrnHeight;
-    g_pOptimizedRenderer->FillRect(hScreen, &rcDst, hShadeColor);
+	g_pOptimizedRenderer->FillRect(hScreen, &rcDst, hShadeColor);
 
-    g_pLTClient->Start3D();
-    g_pLTClient->StartOptimized2D();
+	g_pLTClient->Start3D();
+	g_pLTClient->StartOptimized2D();
 
 	if (m_hFailBack) {
 		rcDst.left = xo;
@@ -1369,7 +1288,7 @@ void CInterfaceMgr::UpdateFailureState()
 	}
 
 	int nStringWidth = (int)(0.8f * (LTFLOAT)nScrnWidth);
-    LTIntPt failPos = g_pLayoutMgr->GetFailStringPos();
+	LTIntPt failPos = g_pLayoutMgr->GetFailStringPos();
 	LTIntPt sz = m_InterfaceResMgr.GetTitleFont()->GetTextExtentsFormat(hStr,nStringWidth);
 	failPos.x = (int)( (float)failPos.x * m_InterfaceResMgr.GetXRatio() );
 	failPos.y = (int)( (float)failPos.y * m_InterfaceResMgr.GetYRatio() );
@@ -1378,10 +1297,10 @@ void CInterfaceMgr::UpdateFailureState()
 	m_InterfaceResMgr.GetTitleFont()->DrawFormat(hStr,hScreen,failPos.x+2,failPos.y+2,nStringWidth,kBlack);
 	m_InterfaceResMgr.GetTitleFont()->DrawFormat(hStr,hScreen,failPos.x,failPos.y,nStringWidth,kWhite);
 
-    g_pLTClient->EndOptimized2D();
-    g_pLTClient->End3D();
+	g_pLTClient->EndOptimized2D();
+	g_pLTClient->End3D();
 
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
 	if (g_fFailScreenDuration >= g_pLayoutMgr->GetFailScreenDelay())
 	{
@@ -1394,17 +1313,14 @@ void CInterfaceMgr::UpdateFailureState()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::SetMenuMusic()
 //
-//	ROUTINE:	CInterfaceMgr::SetMenuMusic()
-//
-//	PURPOSE:	Turns menu / load level music on or off
-//
+//	PURPOSE: Turns menu / load level music on or off
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::SetMenuMusic(LTBOOL bMusicOn)
 {
 	CMusic* pMusic = g_pGameClientShell->GetMusic();
-    if (!pMusic) return LTFALSE;
+	if (!pMusic) return LTFALSE;
 
 	{ // BL 09/26/00
 		// If we're playing, DON'T SET THE MENU MUSIC!!!
@@ -1421,14 +1337,14 @@ LTBOOL CInterfaceMgr::SetMenuMusic(LTBOOL bMusicOn)
 	if (bMusicOn)
 	{
 		CString strFile = g_pClientButeMgr->GetInterfaceAttributeString("MenuMusicCtrlFile");
-        if (strFile.IsEmpty()) return LTFALSE;
+		if (strFile.IsEmpty()) return LTFALSE;
 
 		CMusicState* pMState = pMusic->GetMusicState();
-        if (!pMState) return LTFALSE;
+		if (!pMState) return LTFALSE;
 
 		if (!m_bSavedGameMusic)
 		{
-            m_bSavedGameMusic = LTTRUE;
+			m_bSavedGameMusic = LTTRUE;
 			m_GameMusicState.Copy(*pMState);
 		}
 
@@ -1445,19 +1361,19 @@ LTBOOL CInterfaceMgr::SetMenuMusic(LTBOOL bMusicOn)
 				//{
 				//	pMusic->ChangeIntensity(nIntensity);
 				//}
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 
 		if (!pMusic->IsInitialized())
 		{
-            if (!pMusic->Init(g_pLTClient))
+			if (!pMusic->Init(g_pLTClient))
 			{
-                return LTFALSE;
+				return LTFALSE;
 			}
 		}
 
-        LTBOOL bLevelInited = pMusic->IsLevelInitialized();
+		LTBOOL bLevelInited = pMusic->IsLevelInitialized();
 
 		if (!bLevelInited)
 		{
@@ -1465,7 +1381,7 @@ LTBOOL CInterfaceMgr::SetMenuMusic(LTBOOL bMusicOn)
 
 			if (strDir.IsEmpty())
 			{
-                return LTFALSE;
+				return LTFALSE;
 			}
 
 			CMusicState MusicState;
@@ -1496,95 +1412,89 @@ LTBOOL CInterfaceMgr::SetMenuMusic(LTBOOL bMusicOn)
 		pMusic->Stop();
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::RestoreGameMusic()
 //
-//	ROUTINE:	CInterfaceMgr::RestoreGameMusic()
-//
-//	PURPOSE:	Restore to the game music
-//
+//	PURPOSE: Restore to the game music
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::RestoreGameMusic()
 {
 	// kls 9/19/00 - Music doesn't change so don't restore it...
 	return LTTRUE;
 
 	CMusic* pMusic = g_pGameClientShell->GetMusic();
-    if (!pMusic || !pMusic->MusicEnabled()) return LTFALSE;
+	if (!pMusic || !pMusic->MusicEnabled()) return LTFALSE;
 
 	if (m_bSavedGameMusic)
 	{
-        m_bSavedGameMusic = LTFALSE;
+		m_bSavedGameMusic = LTFALSE;
 		pMusic->RestoreMusicState(m_GameMusicState);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::OnMessage()
 //
-//	ROUTINE:	CInterfaceMgr::OnMessage()
-//
-//	PURPOSE:	Handle interface messages
-//
+//	PURPOSE: Handle interface messages
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 {
 	switch(messageID)
 	{
 		case MID_PLAYER_INFOCHANGE :
 		{
-            uint8 nThing    = g_pLTClient->ReadFromMessageByte(hMessage);
-            uint8 nType1    = g_pLTClient->ReadFromMessageByte(hMessage);
-            uint8 nType2    = g_pLTClient->ReadFromMessageByte(hMessage);
-            LTFLOAT fAmount  = g_pLTClient->ReadFromMessageFloat(hMessage);
+			uint8 nThing	= g_pLTClient->ReadFromMessageByte(hMessage);
+			uint8 nType1	= g_pLTClient->ReadFromMessageByte(hMessage);
+			uint8 nType2	= g_pLTClient->ReadFromMessageByte(hMessage);
+			LTFLOAT fAmount  = g_pLTClient->ReadFromMessageFloat(hMessage);
 
 			UpdatePlayerStats(nThing, nType1, nType2, fAmount);
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
 		case MID_GEAR_PICKEDUP :
 		{
-            uint8 nGearId = g_pLTClient->ReadFromMessageByte(hMessage);
+			uint8 nGearId = g_pLTClient->ReadFromMessageByte(hMessage);
 			g_pGameClientShell->HandleGearPickup(nGearId);
 			m_stats.UpdateGear(nGearId);
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
 		case MID_DISPLAY_TIMER :
 		{
-            LTFLOAT fTime = g_pLTClient->ReadFromMessageFloat(hMessage);
+			LTFLOAT fTime = g_pLTClient->ReadFromMessageFloat(hMessage);
 			LTBOOL  bPaused = (LTBOOL)g_pLTClient->ReadFromMessageByte(hMessage);
 			m_InterfaceTimer.SetTime(fTime,bPaused);
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
 		case MID_DISPLAY_METER :
 		{
-            uint8 val = g_pLTClient->ReadFromMessageByte(hMessage);
+			uint8 val = g_pLTClient->ReadFromMessageByte(hMessage);
 			m_InterfaceMeter.SetValue(val);
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
 		case MID_PLAYER_CONNECTED:
 		{
-            HSTRING hstrName = g_pLTClient->ReadFromMessageHString (hMessage);
-            uint32 nID = (uint32) g_pLTClient->ReadFromMessageFloat (hMessage);
-            uint8 teamId = g_pLTClient->ReadFromMessageByte(hMessage);
+			HSTRING hstrName = g_pLTClient->ReadFromMessageHString (hMessage);
+			uint32 nID = (uint32) g_pLTClient->ReadFromMessageFloat (hMessage);
+			uint8 teamId = g_pLTClient->ReadFromMessageByte(hMessage);
 			int nTeam1Score = (int) g_pLTClient->ReadFromMessageFloat (hMessage);
 			int nTeam2Score = (int) g_pLTClient->ReadFromMessageFloat (hMessage);
 			m_ClientInfo.AddClient(hstrName, nID, 0, teamId);
 			m_ClientInfo.SetScores(nTeam1Score,nTeam2Score);
-            return LTTRUE;
+			return LTTRUE;
 
 		}
 		break;
@@ -1595,16 +1505,16 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 
 			if (!g_pGameClientShell->IsMultiplayerGame()) break;
 
-            HSTRING hstrName = g_pLTClient->ReadFromMessageHString (hMessage);
-            uint32 nID = (uint32) g_pLTClient->ReadFromMessageFloat (hMessage);
+			HSTRING hstrName = g_pLTClient->ReadFromMessageHString (hMessage);
+			uint32 nID = (uint32) g_pLTClient->ReadFromMessageFloat (hMessage);
 			HOBJECT	hObj = g_pLTClient->ReadFromMessageObject(hMessage);
-            int nFrags = (int) g_pLTClient->ReadFromMessageFloat (hMessage);
-            uint8 teamId = g_pLTClient->ReadFromMessageByte(hMessage);
+			int nFrags = (int) g_pLTClient->ReadFromMessageFloat (hMessage);
+			uint8 teamId = g_pLTClient->ReadFromMessageByte(hMessage);
 			uint8 nLives = g_pLTClient->ReadFromMessageByte(hMessage);
-            LTBOOL bJoining = (LTBOOL)g_pLTClient->ReadFromMessageByte(hMessage);
+			LTBOOL bJoining = (LTBOOL)g_pLTClient->ReadFromMessageByte(hMessage);
 			m_ClientInfo.AddClient(hstrName, nID, nFrags, teamId);
-            uint32 nLocalID = 0;
-            g_pLTClient->GetLocalClientID (&nLocalID);
+			uint32 nLocalID = 0;
+			g_pLTClient->GetLocalClientID (&nLocalID);
 			if (nID == nLocalID && nLives != 255)
 				m_ClientInfo.SetLives(nID, nLives);
 
@@ -1613,27 +1523,27 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 			{
 				if (teamId == 0)
 				{
-                    HSTRING hStr = g_pLTClient->FormatString(IDS_JOINEDGAME, g_pLTClient->GetStringData(hstrName));
+					HSTRING hStr = g_pLTClient->FormatString(IDS_JOINEDGAME, g_pLTClient->GetStringData(hstrName));
 					g_pGameClientShell->CSPrint(g_pLTClient->GetStringData (hStr));
-                    g_pLTClient->FreeString(hStr);
+					g_pLTClient->FreeString(hStr);
 				}
 				else
 				{
-                    HSTRING hStr = g_pLTClient->FormatString(IDS_JOINEDTEAM, g_pLTClient->GetStringData(hstrName), teamId);
+					HSTRING hStr = g_pLTClient->FormatString(IDS_JOINEDTEAM, g_pLTClient->GetStringData(hstrName), teamId);
 					g_pGameClientShell->CSPrint(g_pLTClient->GetStringData (hStr));
-                    g_pLTClient->FreeString(hStr);
+					g_pLTClient->FreeString(hStr);
 				}
 			}
 
 			CSFXMgr* psfxMgr = g_pGameClientShell->GetSFXMgr();
-	        if (psfxMgr)
+			if (psfxMgr)
 			{
 				CCharacterFX* pCFX = (CCharacterFX*)psfxMgr->FindSpecialFX(SFX_CHARACTER_ID, hObj);
 				if (pCFX) pCFX->ResetMarkerState();
 			}
 
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -1643,7 +1553,7 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 
 			if (!g_pGameClientShell->IsMultiplayerGame()) break;
 
-            uint32 nID = (uint32) g_pLTClient->ReadFromMessageFloat(hMessage);
+			uint32 nID = (uint32) g_pLTClient->ReadFromMessageFloat(hMessage);
 
 			if (m_ClientInfo.GetClientByID(nID))
 			{
@@ -1654,7 +1564,7 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 				m_ClientInfo.RemoveClient(nID);
 			}
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -1662,19 +1572,19 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 		{
 			while(1)
 			{
-                uint16 id, ping;
+				uint16 id, ping;
 				CLIENT_INFO *pClient;
 
-                id = g_pLTClient->ReadFromMessageWord(hMessage);
+				id = g_pLTClient->ReadFromMessageWord(hMessage);
 				if(id == 0xFFFF)
 					break;
 
-                ping = g_pLTClient->ReadFromMessageWord(hMessage);
+				ping = g_pLTClient->ReadFromMessageWord(hMessage);
 				if(pClient = m_ClientInfo.GetClientByID(id))
 					pClient->m_Ping = ping;
 			}
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -1684,12 +1594,12 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 
 			if (!g_pGameClientShell->IsMultiplayerGame()) break;
 
-            uint32 nLocalID = 0;
-            g_pLTClient->GetLocalClientID (&nLocalID);
+			uint32 nLocalID = 0;
+			g_pLTClient->GetLocalClientID (&nLocalID);
 
-            uint32 nVictim = (uint32) g_pLTClient->ReadFromMessageFloat (hMessage);
-            uint32 nKiller = (uint32) g_pLTClient->ReadFromMessageFloat (hMessage);
-            uint8  nLives =  g_pLTClient->ReadFromMessageByte (hMessage);
+			uint32 nVictim = (uint32) g_pLTClient->ReadFromMessageFloat (hMessage);
+			uint32 nKiller = (uint32) g_pLTClient->ReadFromMessageFloat (hMessage);
+			uint8  nLives =  g_pLTClient->ReadFromMessageByte (hMessage);
 
 			CLIENT_INFO *pVictim = m_ClientInfo.GetClientByID(nVictim);
 			CLIENT_INFO *pKiller = m_ClientInfo.GetClientByID(nKiller);
@@ -1721,16 +1631,16 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 
 			if (nVictim == nLocalID)
 			{
-                HSTRING hStr = LTNULL;
+				HSTRING hStr = LTNULL;
 
 				if (nVictim == nKiller)
 				{
-                    hStr = g_pLTClient->FormatString(IDS_KILLEDMYSELF);
+					hStr = g_pLTClient->FormatString(IDS_KILLEDMYSELF);
 				}
 				else
 				{
 
-                    hStr = g_pLTClient->FormatString(IDS_HEKILLEDME, m_ClientInfo.GetPlayerName (nKiller));
+					hStr = g_pLTClient->FormatString(IDS_HEKILLEDME, m_ClientInfo.GetPlayerName (nKiller));
 					if (pKiller)
 					{
 						if (pKiller->team == 1)
@@ -1741,33 +1651,33 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 				}
 
 				m_messageMgr.AddLine(hStr,eType);
-                g_pLTClient->CPrint(g_pLTClient->GetStringData(hStr));
+				g_pLTClient->CPrint(g_pLTClient->GetStringData(hStr));
 				if (nLives != 255)
 				{
-	                g_pGameClientShell->CSPrint("%d lives left.",nLives);
+					g_pGameClientShell->CSPrint("%d lives left.",nLives);
 					m_ClientInfo.SetLives(nLocalID, nLives);
 				}
-                g_pLTClient->FreeString (hStr);
+				g_pLTClient->FreeString (hStr);
 			}
 			else if (nKiller == nLocalID)
 			{
-                HSTRING hStr = LTNULL;
-                hStr = g_pLTClient->FormatString(IDS_IKILLEDHIM, m_ClientInfo.GetPlayerName (nVictim));
-                g_pLTClient->CPrint(g_pLTClient->GetStringData (hStr));
+				HSTRING hStr = LTNULL;
+				hStr = g_pLTClient->FormatString(IDS_IKILLEDHIM, m_ClientInfo.GetPlayerName (nVictim));
+				g_pLTClient->CPrint(g_pLTClient->GetStringData (hStr));
 				m_messageMgr.AddLine(hStr,eType);
-                g_pLTClient->FreeString(hStr);
+				g_pLTClient->FreeString(hStr);
 			}
 			else
 			{
-                HSTRING hStr = LTNULL;
+				HSTRING hStr = LTNULL;
 
 				if (nVictim == nKiller)
 				{
-                    hStr = g_pLTClient->FormatString(IDS_HEKILLEDHIMSELF, m_ClientInfo.GetPlayerName(nKiller));
+					hStr = g_pLTClient->FormatString(IDS_HEKILLEDHIMSELF, m_ClientInfo.GetPlayerName(nKiller));
 				}
 				else
 				{
-                    hStr = g_pLTClient->FormatString(IDS_HEKILLEDHIM, m_ClientInfo.GetPlayerName (nKiller), m_ClientInfo.GetPlayerName (nVictim));
+					hStr = g_pLTClient->FormatString(IDS_HEKILLEDHIM, m_ClientInfo.GetPlayerName (nKiller), m_ClientInfo.GetPlayerName (nVictim));
 					if (pKiller)
 					{
 						if (pKiller->team == 1)
@@ -1777,12 +1687,12 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 					}
 				}
 
-                g_pLTClient->CPrint(g_pLTClient->GetStringData (hStr));
+				g_pLTClient->CPrint(g_pLTClient->GetStringData (hStr));
 				m_messageMgr.AddLine(hStr,eType);
-                g_pLTClient->FreeString(hStr);
+				g_pLTClient->FreeString(hStr);
 			}
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -1792,12 +1702,12 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 
 			if (!g_pGameClientShell->IsMultiplayerGame()) break;
 
-            uint32 nLocalID = 0;
-            g_pLTClient->GetLocalClientID (&nLocalID);
+			uint32 nLocalID = 0;
+			g_pLTClient->GetLocalClientID (&nLocalID);
 
-            uint32 nPlayerID =  g_pLTClient->ReadFromMessageDWord(hMessage);
-            uint8  nTeamID =  g_pLTClient->ReadFromMessageByte(hMessage);
-            uint8  nScore =  g_pLTClient->ReadFromMessageByte(hMessage);
+			uint32 nPlayerID =  g_pLTClient->ReadFromMessageDWord(hMessage);
+			uint8  nTeamID =  g_pLTClient->ReadFromMessageByte(hMessage);
+			uint8  nScore =  g_pLTClient->ReadFromMessageByte(hMessage);
 
 			uint8 nLocalTeam = 0;
 			CLIENT_INFO* pInfo = m_ClientInfo.GetLocalClient();
@@ -1813,28 +1723,28 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 				eType = MMGR_TEAM_2;
 			if (nLocalID == nPlayerID)
 			{
-                HSTRING hStr = g_pLTClient->FormatString(IDS_ISCORED, nScore);
-                g_pLTClient->CPrint(g_pLTClient->GetStringData (hStr));
+				HSTRING hStr = g_pLTClient->FormatString(IDS_ISCORED, nScore);
+				g_pLTClient->CPrint(g_pLTClient->GetStringData (hStr));
 				m_messageMgr.AddLine(hStr,eType);
-                g_pLTClient->FreeString(hStr);
+				g_pLTClient->FreeString(hStr);
 				g_pClientSoundMgr->PlayInterfaceSound("interface\\snd\\mp_youscore.wav");
 			}
 			else if (nTeamID == nLocalTeam)
 			{
 
-                HSTRING hStr = g_pLTClient->FormatString(IDS_HESCORED_US, m_ClientInfo.GetPlayerName (nPlayerID), nScore);
-                g_pLTClient->CPrint(g_pLTClient->GetStringData (hStr));
+				HSTRING hStr = g_pLTClient->FormatString(IDS_HESCORED_US, m_ClientInfo.GetPlayerName (nPlayerID), nScore);
+				g_pLTClient->CPrint(g_pLTClient->GetStringData (hStr));
 				m_messageMgr.AddLine(hStr,eType);
-                g_pLTClient->FreeString(hStr);
+				g_pLTClient->FreeString(hStr);
 				g_pClientSoundMgr->PlayInterfaceSound("interface\\snd\\mp_youscore.wav");
 			}
 			else
 			{
 
-                HSTRING hStr = g_pLTClient->FormatString(IDS_HESCORED_THEM, m_ClientInfo.GetPlayerName (nPlayerID), nScore);
-                g_pLTClient->CPrint(g_pLTClient->GetStringData (hStr));
+				HSTRING hStr = g_pLTClient->FormatString(IDS_HESCORED_THEM, m_ClientInfo.GetPlayerName (nPlayerID), nScore);
+				g_pLTClient->CPrint(g_pLTClient->GetStringData (hStr));
 				m_messageMgr.AddLine(hStr,eType);
-                g_pLTClient->FreeString(hStr);
+				g_pLTClient->FreeString(hStr);
 				g_pClientSoundMgr->PlayInterfaceSound("interface\\snd\\mp_otherscore.wav");
 			}
 
@@ -1858,7 +1768,7 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 			m_DialogueWnd.DisplayText(dwID,szAvatar,bStayOpen,szDecisions);
 
 			ChangeState(GS_DIALOGUE);
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -1887,7 +1797,7 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 				m_stats.GetObjectives()->Clear();
 				m_stats.GetCompletedObjectives()->Clear();
 			}
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -1900,19 +1810,19 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 			char szMessage[100];
 			hMessage->ReadStringFL(szMessage, sizeof(szMessage));
 
-            g_pClientSoundMgr->PlayInterfaceSound("Interface\\Snd\\chat.wav");
+			g_pClientSoundMgr->PlayInterfaceSound("Interface\\Snd\\chat.wav");
 
 			if (messageID == MID_PLAYER_TEAMMESSAGE)
 				m_messageMgr.AddLine(szMessage,MMGR_TEAMCHAT);
 			else
 				m_messageMgr.AddLine(szMessage,MMGR_CHAT);
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
 		case MID_PLAYER_CREDITS :
 		{
-            uint8 nMsg = g_pLTClient->ReadFromMessageByte(hMessage);
+			uint8 nMsg = g_pLTClient->ReadFromMessageByte(hMessage);
 			switch (nMsg)
 			{
 			case 0:
@@ -1932,9 +1842,9 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 		{
 			// retrieve the string from the message, play the chat sound, and display the message
 
-            uint32 dwId = g_pLTClient->ReadFromMessageDWord(hMessage);
-            uint8 nTeam = g_pLTClient->ReadFromMessageByte(hMessage);
-            uint32 nSound = g_pLTClient->ReadFromMessageDWord(hMessage);
+			uint32 dwId = g_pLTClient->ReadFromMessageDWord(hMessage);
+			uint8 nTeam = g_pLTClient->ReadFromMessageByte(hMessage);
+			uint32 nSound = g_pLTClient->ReadFromMessageDWord(hMessage);
 			if (g_pGameClientShell->GetGameType() == COOPERATIVE_ASSAULT && nTeam != 0)
 			{
 				CLIENT_INFO* pInfo = g_pInterfaceMgr->GetClientInfoMgr()->GetLocalClient();
@@ -1956,11 +1866,11 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 				g_pClientSoundMgr->PlayInterfaceSound("Interface\\Snd\\chat.wav");
 			}
 
-            HSTRING hStr = g_pLTClient->FormatString(dwId);
+			HSTRING hStr = g_pLTClient->FormatString(dwId);
 			m_messageMgr.AddLine(hStr,MMGR_TEAMCHAT);
-            g_pLTClient->FreeString(hStr);
+			g_pLTClient->FreeString(hStr);
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -1976,18 +1886,15 @@ LTBOOL CInterfaceMgr::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 		default : break;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::OnEvent()
 //
-//	ROUTINE:	CInterfaceMgr::OnEvent()
-//
-//	PURPOSE:	Called for asynchronous errors that cause the server
+//	PURPOSE: Called for asynchronous errors that cause the server
 //				to shut down
-//
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::OnEvent(uint32 dwEventID, uint32 dwParam)
 {
 
@@ -2003,15 +1910,15 @@ LTBOOL CInterfaceMgr::OnEvent(uint32 dwEventID, uint32 dwParam)
 			{
 				ClearAllScreenBuffers();
 
-                g_pLTClient->Start3D();
-                g_pLTClient->StartOptimized2D();
+				g_pLTClient->Start3D();
+				g_pLTClient->StartOptimized2D();
 
 				m_InterfaceResMgr.DrawMessage(m_InterfaceResMgr.GetSmallFont(),
 					IDS_REINITIALIZING_RENDERER);
 
-                g_pLTClient->EndOptimized2D();
-                g_pLTClient->End3D();
-                g_pLTClient->FlipScreen(0);
+				g_pLTClient->EndOptimized2D();
+				g_pLTClient->End3D();
+				g_pLTClient->FlipScreen(0);
 
 				// because of driver bugs, we need to wait a frame after reinitializing the renderer and
 				// reinitialize the cursor
@@ -2064,44 +1971,41 @@ LTBOOL CInterfaceMgr::OnEvent(uint32 dwEventID, uint32 dwParam)
 		}
 		break;
 
-        case LTEVENT_LOSTFOCUS:
+		case LTEVENT_LOSTFOCUS:
 		case LTEVENT_GAINEDFOCUS:
 		break;
 
 		default :
 		{
-            uint32 nStringID = IDS_UNSPECIFIEDERROR;
+			uint32 nStringID = IDS_UNSPECIFIEDERROR;
 			SwitchToFolder(GetMainFolder());
 			//DoMessageBox(nStringID, TH_ALIGN_CENTER);
 		}
 		break;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdatePlayerStats()
 //
-//	ROUTINE:	CInterfaceMgr::UpdatePlayerStats()
-//
-//	PURPOSE:	Update the player's stats
-//
+//	PURPOSE: Update the player's stats
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdatePlayerStats(uint8 nThing, uint8 nType1,
-                                      uint8 nType2, LTFLOAT fAmount)
+									  uint8 nType2, LTFLOAT fAmount)
 {
 	switch (nThing)
 	{
 		case IC_WEAPON_OBTAIN_ID :
 		{
-            m_stats.UpdateAmmo(nType1, nType2, (uint32)fAmount, LTTRUE, LTFALSE);
+			m_stats.UpdateAmmo(nType1, nType2, (uint32)fAmount, LTTRUE, LTFALSE);
 		}
 		break;
 
 		case IC_WEAPON_PICKUP_ID :
 		{
-            m_stats.UpdateAmmo(nType1, nType2, (uint32)fAmount, LTTRUE);
+			m_stats.UpdateAmmo(nType1, nType2, (uint32)fAmount, LTTRUE);
 		}
 		break;
 
@@ -2114,37 +2018,37 @@ void CInterfaceMgr::UpdatePlayerStats(uint8 nThing, uint8 nType1,
 
 		case IC_WEAPON_ID :
 		{
-            m_stats.UpdateAmmo(nType1, nType2, (uint32)fAmount);
+			m_stats.UpdateAmmo(nType1, nType2, (uint32)fAmount);
 		}
 		break;
 
 		case IC_AMMO_ID :
 		{
-            m_stats.UpdateAmmo(nType1, nType2, (uint32)fAmount);
+			m_stats.UpdateAmmo(nType1, nType2, (uint32)fAmount);
 		}
 		break;
 
 		case IC_MAX_HEALTH_ID :
 		{
-            m_stats.UpdateMaxHealth((uint32)fAmount);
+			m_stats.UpdateMaxHealth((uint32)fAmount);
 		}
 		break;
 
 		case IC_MAX_ARMOR_ID :
 		{
-            m_stats.UpdateMaxArmor((uint32)fAmount);
+			m_stats.UpdateMaxArmor((uint32)fAmount);
 		}
 		break;
 
 		case IC_HEALTH_ID :
 		{
-            m_stats.UpdateHealth((uint32)fAmount);
+			m_stats.UpdateHealth((uint32)fAmount);
 		}
 		break;
 
 		case IC_ARMOR_ID :
 		{
-            m_stats.UpdateArmor((uint32)fAmount);
+			m_stats.UpdateArmor((uint32)fAmount);
 		}
 		break;
 
@@ -2156,15 +2060,15 @@ void CInterfaceMgr::UpdatePlayerStats(uint8 nThing, uint8 nType1,
 
 		case IC_OUTOFAMMO_ID :
 		{
-            HSTRING hStr = g_pLTClient->FormatString(IDS_OUTOFAMMO, GetWeaponString(nType1));
+			HSTRING hStr = g_pLTClient->FormatString(IDS_OUTOFAMMO, GetWeaponString(nType1));
 			m_messageMgr.AddLine(hStr);
-            g_pLTClient->FreeString(hStr);
+			g_pLTClient->FreeString(hStr);
 		}
 		break;
 
 		case IC_OBJECTIVE_ID :
 		{
-            m_stats.UpdateObjectives(nType1, nType2, (uint32)fAmount);
+			m_stats.UpdateObjectives(nType1, nType2, (uint32)fAmount);
 
 		}
 		break;
@@ -2186,12 +2090,12 @@ void CInterfaceMgr::UpdatePlayerStats(uint8 nThing, uint8 nType1,
 				StartScreenFadeOut(fAmount);
 			}
 
-            m_bExitAfterFade = (LTBOOL) !!nType2;
+			m_bExitAfterFade = (LTBOOL) !!nType2;
 
 			if (m_bExitAfterFade)
 			{
 				// Pause the server until the fade is done...
-                //g_pGameClientShell->PauseGame(LTTRUE);
+				//g_pGameClientShell->PauseGame(LTTRUE);
 			}
 		}
 		break;
@@ -2237,20 +2141,17 @@ void CInterfaceMgr::UpdatePlayerStats(uint8 nThing, uint8 nType1,
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::OnCommandOn()
 //
-//	ROUTINE:	CInterfaceMgr::OnCommandOn()
-//
-//	PURPOSE:	Handle command on
-//
+//	PURPOSE: Handle command on
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::OnCommandOn(int command)
 {
 	if (FadingToExit()) return LTTRUE;
 
-    LTBOOL bMultiplayer = g_pGameClientShell->IsMultiplayerGame();
+	LTBOOL bMultiplayer = g_pGameClientShell->IsMultiplayerGame();
 
-    if (m_messageMgr.GetEditingState()) return LTTRUE;
+	if (m_messageMgr.GetEditingState()) return LTTRUE;
 
 	// Take appropriate action
 
@@ -2280,7 +2181,7 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 			{
 				SwitchToFolder(FOLDER_ID_VIEW_INV);
 			}
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -2288,14 +2189,14 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 		{
 			if (bMultiplayer)
 			{
-                m_bDrawFragCount = LTTRUE;
+				m_bDrawFragCount = LTTRUE;
 			}
 			else if (m_eGameState == GS_PLAYING && !g_bLockStats)
 			{
 				SwitchToFolder(FOLDER_ID_STATS);
 			}
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -2304,7 +2205,7 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 			if (m_eGameState == GS_PLAYING)
 			{
 //				m_stats.ShowObjectives();
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 		break;
@@ -2322,11 +2223,11 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 					m_WeaponChooser.Close();
 				}
 
-                m_messageMgr.SetEditingState(LTTRUE);
-                g_pGameClientShell->SetInputState(LTFALSE);
+				m_messageMgr.SetEditingState(LTTRUE);
+				g_pGameClientShell->SetInputState(LTFALSE);
 			}
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -2344,16 +2245,16 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 				}
 
 				m_messageMgr.SetEditingState(LTTRUE,LTTRUE);
-                g_pGameClientShell->SetInputState(LTFALSE);
+				g_pGameClientShell->SetInputState(LTFALSE);
 			}
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
 		case COMMAND_ID_HOLSTER :
 		{
-            if (g_pGameClientShell->GetWeaponModel()->IsDisabled()) return LTTRUE;
+			if (g_pGameClientShell->GetWeaponModel()->IsDisabled()) return LTTRUE;
 
 			if (m_AmmoChooser.IsOpen())
 			{
@@ -2363,14 +2264,14 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 			{
 				m_WeaponChooser.Close();
 			}
-            return LTTRUE;
+			return LTTRUE;
 
 		}
 		break;
 
 		case COMMAND_ID_PREV_WEAPON :
 		{
-            if (g_pGameClientShell->GetWeaponModel()->IsDisabled()) return LTTRUE;
+			if (g_pGameClientShell->GetWeaponModel()->IsDisabled()) return LTTRUE;
 
 			m_PrevWeaponKeyDownTimer.Start(g_vtChooserAutoSwitchTime.GetFloat());
 
@@ -2389,14 +2290,14 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 					g_pGameClientShell->GetWeaponModel()->ChangeWeapon(g_pWeaponMgr->GetCommandId(nCurrWeapon), LTTRUE, LTTRUE);
 				}
 			}
-            return LTTRUE;
+			return LTTRUE;
 
 		}
 		break;
 
 		case COMMAND_ID_NEXT_WEAPON :
 		{
-            if (g_pGameClientShell->GetWeaponModel()->IsDisabled()) return LTTRUE;
+			if (g_pGameClientShell->GetWeaponModel()->IsDisabled()) return LTTRUE;
 
 			m_NextWeaponKeyDownTimer.Start(g_vtChooserAutoSwitchTime.GetFloat());
 
@@ -2416,13 +2317,13 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 				}
 
 			}
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
 		case COMMAND_ID_NEXT_AMMO :
 		{
-            if (g_pGameClientShell->GetWeaponModel()->IsDisabled()) return LTTRUE;
+			if (g_pGameClientShell->GetWeaponModel()->IsDisabled()) return LTTRUE;
 
 			m_NextAmmoKeyDownTimer.Start(g_vtChooserAutoSwitchTime.GetFloat());
 
@@ -2434,7 +2335,7 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 			{
 				m_AmmoChooser.NextAmmo();
 			}
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -2442,7 +2343,7 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 		{
 			if (IsChoosingWeapon() || IsChoosingAmmo())
 			{
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 		break;
@@ -2451,7 +2352,7 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 		{
 			if (m_eGameState == GS_PLAYING)
 				m_stats.NextLayout();
-            return LTTRUE;
+			return LTTRUE;
 
 		}
 		break;
@@ -2459,7 +2360,7 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 		{
 			if (m_eGameState == GS_PLAYING)
 				m_stats.PrevLayout();
-            return LTTRUE;
+			return LTTRUE;
 
 		}
 		break;
@@ -2468,17 +2369,14 @@ LTBOOL CInterfaceMgr::OnCommandOn(int command)
 		break;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::OnCommandOff()
 //
-//	ROUTINE:	CInterfaceMgr::OnCommandOff()
-//
-//	PURPOSE:	Handle command off
-//
+//	PURPOSE: Handle command off
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::OnCommandOff(int command)
 {
 	switch (command)
@@ -2486,14 +2384,14 @@ LTBOOL CInterfaceMgr::OnCommandOff(int command)
 		case COMMAND_ID_INVENTORY :
 		{
 			g_bLockInv = LTFALSE;
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 		case COMMAND_ID_FRAGCOUNT :
 		{
-            m_bDrawFragCount = LTFALSE;
+			m_bDrawFragCount = LTFALSE;
 			g_bLockStats = LTFALSE;
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 		case COMMAND_ID_MISSION :
@@ -2501,7 +2399,7 @@ LTBOOL CInterfaceMgr::OnCommandOff(int command)
 			if (m_eGameState == GS_PLAYING)
 			{
 //				m_stats.HideObjectives();
-                return LTTRUE;
+				return LTTRUE;
 			}
 
 		} break;
@@ -2510,20 +2408,20 @@ LTBOOL CInterfaceMgr::OnCommandOff(int command)
 		{
 			if (IsChoosingWeapon() && !g_vtQuickSwitch.GetFloat())
 			{
-                uint8 nCurrWeapon = m_WeaponChooser.GetCurrentSelection();
+				uint8 nCurrWeapon = m_WeaponChooser.GetCurrentSelection();
 				m_WeaponChooser.Close();
 				g_pGameClientShell->GetWeaponModel()->ChangeWeapon(g_pWeaponMgr->GetCommandId(nCurrWeapon));
 
-                return LTTRUE;
+				return LTTRUE;
 
 			}
 			else if (IsChoosingAmmo())// && !g_vtQuickSwitch.GetFloat())
 			{
-                uint8 nCurrAmmo = m_AmmoChooser.GetCurrentSelection();
+				uint8 nCurrAmmo = m_AmmoChooser.GetCurrentSelection();
 				m_AmmoChooser.Close();
 				g_pGameClientShell->GetWeaponModel()->ChangeAmmo(nCurrAmmo);
 
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 		break;
@@ -2562,17 +2460,14 @@ LTBOOL CInterfaceMgr::OnCommandOff(int command)
 		default : break;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::OnKeyDown()
 //
-//	ROUTINE:	CInterfaceMgr::OnKeyDown()
-//
-//	PURPOSE:	Handle OnKeyDown messages
-//
+//	PURPOSE: Handle OnKeyDown messages
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::OnKeyDown(int key, int rep)
 {
 	if (FadingToExit()) return LTTRUE;
@@ -2589,7 +2484,7 @@ LTBOOL CInterfaceMgr::OnKeyDown(int key, int rep)
 	{
 		case GS_LOADINGLEVEL :
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -2597,7 +2492,7 @@ LTBOOL CInterfaceMgr::OnKeyDown(int key, int rep)
 		{
 			if (key != VK_ESCAPE || !g_bLockFolder)
 				m_FolderMgr.HandleKeyDown(key,rep);
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -2606,7 +2501,7 @@ LTBOOL CInterfaceMgr::OnKeyDown(int key, int rep)
 			// They pressed a key - unpause the game
 
 			ChangeState(GS_PLAYING);
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -2624,7 +2519,7 @@ LTBOOL CInterfaceMgr::OnKeyDown(int key, int rep)
 			// They pressed a key - end splash screen...
 
 			NextMovie();
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -2632,7 +2527,7 @@ LTBOOL CInterfaceMgr::OnKeyDown(int key, int rep)
 		{
 			// They pressed a key - go to next screen...
 			NextDemoScreen();
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -2650,7 +2545,7 @@ LTBOOL CInterfaceMgr::OnKeyDown(int key, int rep)
 				else
 					SwitchToFolder(FOLDER_ID_FAILURE);
 			}
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
@@ -2690,22 +2585,22 @@ LTBOOL CInterfaceMgr::OnKeyDown(int key, int rep)
 	if (m_messageMgr.GetEditingState())
 	{
 		m_messageMgr.HandleKeyDown(key, rep);
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 	switch (key)
 	{
 		case VK_PAUSE:
 		{
-            if (g_pGameClientShell->IsMultiplayerGame() || m_eGameState != GS_PLAYING) return LTFALSE;
+			if (g_pGameClientShell->IsMultiplayerGame() || m_eGameState != GS_PLAYING) return LTFALSE;
 
 			if (!g_pGameClientShell->IsGamePaused())
 			{
 				ChangeState(GS_PAUSED);
 			}
 
-            g_pGameClientShell->PauseGame(!g_pGameClientShell->IsGamePaused(), LTTRUE);
-            return LTTRUE;
+			g_pGameClientShell->PauseGame(!g_pGameClientShell->IsGamePaused(), LTTRUE);
+			return LTTRUE;
 		}
 		break;
 
@@ -2732,7 +2627,7 @@ LTBOOL CInterfaceMgr::OnKeyDown(int key, int rep)
 
 					if (g_pGameClientShell->IsMultiplayerGame())
 					{
-                        m_MultiplayerMenu.Show(LTTRUE);
+						m_MultiplayerMenu.Show(LTTRUE);
 						ChangeState(GS_MENU);
 					}
 					else if (!g_bLockFolder && !bPlayerDead)
@@ -2746,25 +2641,22 @@ LTBOOL CInterfaceMgr::OnKeyDown(int key, int rep)
 				m_MenuWnd.Close();
 			}
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		break;
 
 		default : break;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::OnKeyUp(int key)
 //
-//	ROUTINE:	CInterfaceMgr::OnKeyUp(int key)
-//
-//	PURPOSE:	Handle key up notification
-//
+//	PURPOSE: Handle key up notification
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::OnKeyUp(int key)
 {
 	// if it's the tilde (~) key then the console has been turned off
@@ -2775,32 +2667,29 @@ LTBOOL CInterfaceMgr::OnKeyUp(int key)
 	if (key == VK_TILDE)
 	{
 		AddToClearScreenCount();
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 	if (m_messageMgr.GetEditingState())
 	{
 		m_messageMgr.HandleKeyUp(key);
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 	if (m_eGameState == GS_FOLDER)
 	{
 		m_FolderMgr.HandleKeyUp(key);
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::OnChar()
 //
-//	ROUTINE:	CInterfaceMgr::OnChar()
-//
-//	PURPOSE:	Handle OnChar messages
-//
+//	PURPOSE: Handle OnChar messages
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::OnChar(char c)
 {
 	if (c < ' ') return;
@@ -2824,13 +2713,10 @@ void CInterfaceMgr::OnChar(char c)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::Draw()
 //
-//	ROUTINE:	CInterfaceMgr::Draw()
-//
-//	PURPOSE:	Draws any interface stuff that may need to be drawn
-//
+//	PURPOSE: Draws any interface stuff that may need to be drawn
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::Draw()
 {
 
@@ -2844,7 +2730,7 @@ LTBOOL CInterfaceMgr::Draw()
 
 		// Find out if we're in multiplayer...
 
-        LTBOOL bMultiplayer = g_pGameClientShell->IsMultiplayerGame();
+		LTBOOL bMultiplayer = g_pGameClientShell->IsMultiplayerGame();
 		PlayerState ePlayerState = g_pGameClientShell->GetPlayerState();
 
 
@@ -2920,7 +2806,7 @@ LTBOOL CInterfaceMgr::Draw()
 
 		// Handle drawing the main window...
 
-        m_MainWnd.Draw(g_pLTClient->GetScreenSurface());
+		m_MainWnd.Draw(g_pLTClient->GetScreenSurface());
 
 		if (GetGameState() == GS_POPUP)
 		{
@@ -2934,34 +2820,31 @@ LTBOOL CInterfaceMgr::Draw()
 
 	if (m_MessageBox.IsVisible())
 	{
-        g_pLTClient->Start3D();
-        g_pLTClient->StartOptimized2D();
-        m_MessageBox.Draw(g_pLTClient->GetScreenSurface());
-        g_pLTClient->EndOptimized2D();
-        g_pLTClient->End3D();
+		g_pLTClient->Start3D();
+		g_pLTClient->StartOptimized2D();
+		m_MessageBox.Draw(g_pLTClient->GetScreenSurface());
+		g_pLTClient->EndOptimized2D();
+		g_pLTClient->End3D();
 	}
 
 	UpdateCursor();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PreFolderState()
 //
-//	ROUTINE:	CInterfaceMgr::PreFolderState()
-//
-//	PURPOSE:	Initialize the Folder state
-//
+//	PURPOSE: Initialize the Folder state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PreFolderState(GameState eCurState)
 {
-    if (eCurState == GS_FOLDER) return LTFALSE;
+	if (eCurState == GS_FOLDER) return LTFALSE;
 
 	m_InterfaceResMgr.Setup();
 
 	// Pause the game...
-    g_pGameClientShell->PauseGame(LTTRUE, LTTRUE);
+	g_pGameClientShell->PauseGame(LTTRUE, LTTRUE);
 
 	// Stop DamageFX when not in the playing state...
 	g_pGameClientShell->GetDamageFXMgr()->Clear();
@@ -2972,65 +2855,62 @@ LTBOOL CInterfaceMgr::PreFolderState(GameState eCurState)
 
 	CreateInterfaceBackground();
 
-    SetDrawInterface(LTFALSE);
+	SetDrawInterface(LTFALSE);
 	ClearScreenAlways();
 
-    UseCursor(LTTRUE);
+	UseCursor(LTTRUE);
 
 	// No fog in the menus...
 	g_bInGameFogEnabled = (LTBOOL) GetConsoleInt("FogEnable", 1);
 	WriteConsoleInt("FogEnable", 0);
 
 	// Make sure menus and folders are full screen...
-    memset(&m_rcMenuRestoreCamera, 0, sizeof (LTRect));
+	memset(&m_rcMenuRestoreCamera, 0, sizeof (LTRect));
 
-    uint32 nWidth, nHeight;
-    g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &nWidth, &nHeight);
+	uint32 nWidth, nHeight;
+	g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &nWidth, &nHeight);
 
 	HOBJECT hCamera = g_pGameClientShell->GetCamera();
 	if (hCamera)
 	{
-        g_pLTClient->GetCameraRect(hCamera, &m_bMenuRectRestore, &m_rcMenuRestoreCamera.left, &m_rcMenuRestoreCamera.top, &m_rcMenuRestoreCamera.right, &m_rcMenuRestoreCamera.bottom);
-        g_pLTClient->SetCameraRect(hCamera, LTTRUE, 0, 0, (int)nWidth, (int)nHeight);
+		g_pLTClient->GetCameraRect(hCamera, &m_bMenuRectRestore, &m_rcMenuRestoreCamera.left, &m_rcMenuRestoreCamera.top, &m_rcMenuRestoreCamera.right, &m_rcMenuRestoreCamera.bottom);
+		g_pLTClient->SetCameraRect(hCamera, LTTRUE, 0, 0, (int)nWidth, (int)nHeight);
 	}
 	m_bUseInterfaceCamera = LTTRUE;
 	g_bFirstStateUpdate = LTTRUE;
 
 	ForceScreenFadeIn(g_vtScreenFadeInTime.GetFloat());
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostFolderState()
 //
-//	ROUTINE:	CInterfaceMgr::PostFolderState()
-//
-//	PURPOSE:	Handle leaving the Folder state
-//
+//	PURPOSE: Handle leaving the Folder state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostFolderState(GameState eNewState)
 {
-    if (eNewState == GS_FOLDER) return LTFALSE;
+	if (eNewState == GS_FOLDER) return LTFALSE;
 
 	m_FolderMgr.ExitFolders();
 
 	if (eNewState != GS_LOADINGLEVEL && eNewState != GS_DEMOSCREEN)
 	{
 		int nGameMode = GAMEMODE_NONE;
-        g_pLTClient->GetGameMode(&nGameMode);
-        if (nGameMode == GAMEMODE_NONE) return LTFALSE;
+		g_pLTClient->GetGameMode(&nGameMode);
+		if (nGameMode == GAMEMODE_NONE) return LTFALSE;
 
 		HOBJECT hCamera = g_pGameClientShell->GetCamera();
 		if (hCamera && (m_rcMenuRestoreCamera.left != 0 || m_rcMenuRestoreCamera.top != 0 || m_rcMenuRestoreCamera.right != 0 || m_rcMenuRestoreCamera.bottom != 0))
 		{
-            g_pLTClient->SetCameraRect(hCamera, m_bMenuRectRestore, m_rcMenuRestoreCamera.left, m_rcMenuRestoreCamera.top, m_rcMenuRestoreCamera.right, m_rcMenuRestoreCamera.bottom);
+			g_pLTClient->SetCameraRect(hCamera, m_bMenuRectRestore, m_rcMenuRestoreCamera.left, m_rcMenuRestoreCamera.top, m_rcMenuRestoreCamera.right, m_rcMenuRestoreCamera.bottom);
 		}
 	}
 
-    ClearScreenAlways(LTFALSE);
+	ClearScreenAlways(LTFALSE);
 	AddToClearScreenCount();
 
 
@@ -3041,32 +2921,29 @@ LTBOOL CInterfaceMgr::PostFolderState(GameState eNewState)
 		SetDrawInterface(LTTRUE);
 	}
 
-    UseCursor(LTFALSE);
+	UseCursor(LTFALSE);
 
 	// m_InterfaceResMgr.Clean();
 
-    g_pLTClient->ClearInput();
+	g_pLTClient->ClearInput();
 
 	g_bFirstStateUpdate = LTTRUE;
 
 	// Reset fog value...
 	WriteConsoleInt("FogEnable", (int) g_bInGameFogEnabled);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PrePauseState()
 //
-//	ROUTINE:	CInterfaceMgr::PrePauseState()
-//
-//	PURPOSE:	Initialize the Pause state
-//
+//	PURPOSE: Initialize the Pause state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PrePauseState(GameState eCurState)
 {
-    if (eCurState == GS_PAUSED) return LTFALSE;
+	if (eCurState == GS_PAUSED) return LTFALSE;
 
 	CreateInterfaceBackground();
 
@@ -3075,20 +2952,17 @@ LTBOOL CInterfaceMgr::PrePauseState(GameState eCurState)
 
 	m_bUseInterfaceCamera = LTTRUE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostPauseState()
 //
-//	ROUTINE:	CInterfaceMgr::PostPauseState()
-//
-//	PURPOSE:	Handle leaving the Pause state
-//
+//	PURPOSE: Handle leaving the Pause state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostPauseState(GameState eNewState)
 {
-    if (eNewState == GS_PAUSED) return LTFALSE;
+	if (eNewState == GS_PAUSED) return LTFALSE;
 
 	RemoveAllInterfaceSFX();
 
@@ -3101,26 +2975,23 @@ LTBOOL CInterfaceMgr::PostPauseState(GameState eNewState)
 
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PrePlayingState()
 //
-//	ROUTINE:	CInterfaceMgr::PrePlayingState()
-//
-//	PURPOSE:	Initialize the Playing state
-//
+//	PURPOSE: Initialize the Playing state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PrePlayingState(GameState eCurState)
 {
-    if (eCurState == GS_PLAYING) return LTFALSE;
+	if (eCurState == GS_PLAYING) return LTFALSE;
 
 	if (eCurState != GS_DIALOGUE && eCurState != GS_MENU)
 	{
 		// Unpause the game...
 
-        g_pGameClientShell->PauseGame(LTFALSE);
+		g_pGameClientShell->PauseGame(LTFALSE);
 	}
 
 	// Eanble light scaling...
@@ -3131,24 +3002,21 @@ LTBOOL CInterfaceMgr::PrePlayingState(GameState eCurState)
 
 	UseCursor(LTFALSE);
 
-    m_bUseInterfaceCamera = LTFALSE;
+	m_bUseInterfaceCamera = LTFALSE;
 
 	RestoreGameMusic();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostPlayingState()
 //
-//	ROUTINE:	CInterfaceMgr::PostPlayingState()
-//
-//	PURPOSE:	Handle leaving the Playing state
-//
+//	PURPOSE: Handle leaving the Playing state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostPlayingState(GameState eNewState)
 {
-    if (eNewState == GS_PLAYING) return LTFALSE;
+	if (eNewState == GS_PLAYING) return LTFALSE;
 
 	// Stop DamageFX when not in the playing state...
 	g_pGameClientShell->GetDamageFXMgr()->Clear();
@@ -3158,123 +3026,105 @@ LTBOOL CInterfaceMgr::PostPlayingState(GameState eNewState)
 
 	m_MissionText.Pause(LTTRUE);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PreDialogueState()
 //
-//	ROUTINE:	CInterfaceMgr::PreDialogueState()
-//
-//	PURPOSE:	Initialize the Dialogue state
-//
+//	PURPOSE: Initialize the Dialogue state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PreDialogueState(GameState eCurState)
 {
-    if (eCurState == GS_DIALOGUE) return LTFALSE;
+	if (eCurState == GS_DIALOGUE) return LTFALSE;
 
 	// Pause game (client only)...
 
-    // g_pGameClientShell->PauseGame(LTTRUE);
-    UseCursor(LTTRUE);
+	// g_pGameClientShell->PauseGame(LTTRUE);
+	UseCursor(LTTRUE);
 	m_bUseInterfaceCamera = LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostDialogueState()
 //
-//	ROUTINE:	CInterfaceMgr::PostDialogueState()
-//
-//	PURPOSE:	Handle leaving the Dialogue state
-//
+//	PURPOSE: Handle leaving the Dialogue state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostDialogueState(GameState eNewState)
 {
-    if (eNewState == GS_DIALOGUE) return LTFALSE;
+	if (eNewState == GS_DIALOGUE) return LTFALSE;
 
 	// Unpause the game...
 
-    // g_pGameClientShell->PauseGame(LTFALSE);
-    UseCursor(LTFALSE);
+	// g_pGameClientShell->PauseGame(LTFALSE);
+	UseCursor(LTFALSE);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PreMenuState()
 //
-//	ROUTINE:	CInterfaceMgr::PreMenuState()
-//
-//	PURPOSE:	Initialize the menu state
-//
+//	PURPOSE: Initialize the menu state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PreMenuState(GameState eCurState)
 {
-    if (eCurState == GS_MENU) return LTFALSE;
+	if (eCurState == GS_MENU) return LTFALSE;
 
-    UseCursor(LTTRUE);
+	UseCursor(LTTRUE);
 	m_bUseInterfaceCamera = LTFALSE;
 
 	ForceScreenFadeIn(g_vtScreenFadeInTime.GetFloat());
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostMenuState()
 //
-//	ROUTINE:	CInterfaceMgr::PostMenuState()
-//
-//	PURPOSE:	Handle leaving the menu state
-//
+//	PURPOSE: Handle leaving the menu state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostMenuState(GameState eNewState)
 {
-    if (eNewState == GS_MENU) return LTFALSE;
+	if (eNewState == GS_MENU) return LTFALSE;
 
-    UseCursor(LTFALSE);
-    return LTTRUE;
+	UseCursor(LTFALSE);
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PrePopupState()
 //
-//	ROUTINE:	CInterfaceMgr::PrePopupState()
-//
-//	PURPOSE:	Initialize the Popup state
-//
+//	PURPOSE: Initialize the Popup state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PrePopupState(GameState eCurState)
 {
-    if (eCurState == GS_POPUP) return LTFALSE;
+	if (eCurState == GS_POPUP) return LTFALSE;
 
 	// Jake: Uncommented this, we'll see if it causes any issues?
 	// I just like reading stuff uninterupted!
 	// Pause the game...
-    g_pGameClientShell->PauseGame(LTTRUE);
+	g_pGameClientShell->PauseGame(LTTRUE);
 	g_pGameClientShell->AllowPlayerMovement(LTFALSE);
 
 	g_bLockPopup = LTTRUE;
 	// Enable cursor, so I can read with it...
-    UseCursor(LTTRUE);
+	UseCursor(LTTRUE);
 	m_bUseInterfaceCamera = LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostPopupState()
 //
-//	ROUTINE:	CInterfaceMgr::PostPopupState()
-//
-//	PURPOSE:	Handle leaving the Popup state
-//
+//	PURPOSE: Handle leaving the Popup state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostPopupState(GameState eNewState)
 {
-    if (eNewState == GS_POPUP) return LTFALSE;
+	if (eNewState == GS_POPUP) return LTFALSE;
 	g_pGameClientShell->PauseGame(LTFALSE);
 	g_pGameClientShell->AllowPlayerMovement(LTTRUE);
 
@@ -3282,20 +3132,17 @@ LTBOOL CInterfaceMgr::PostPopupState(GameState eNewState)
 
 	g_pLTClient->ClearInput();
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PreLoadingLevelState()
 //
-//	ROUTINE:	CInterfaceMgr::PreLoadingLevelState()
-//
-//	PURPOSE:	Initialize the LoadingLevel state
-//
+//	PURPOSE: Initialize the LoadingLevel state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PreLoadingLevelState(GameState eCurState)
 {
-    if (eCurState == GS_LOADINGLEVEL) return LTFALSE;
+	if (eCurState == GS_LOADINGLEVEL) return LTFALSE;
 
 	// Disable light scaling when not in the playing state...
 	g_pGameClientShell->GetLightScaleMgr()->ClearAllLightScales();
@@ -3309,25 +3156,22 @@ LTBOOL CInterfaceMgr::PreLoadingLevelState(GameState eCurState)
 	// Turn off the music (this will be turned on when we start the
 	// next level...
 	CMusic* pMusic = g_pGameClientShell->GetMusic();
-    if (pMusic)
+	if (pMusic)
 	{
 		pMusic->Stop();
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostLoadingLevelState()
 //
-//	ROUTINE:	CInterfaceMgr::PostLoadingLevelState()
-//
-//	PURPOSE:	Handle leaving the LoadingLevel state
-//
+//	PURPOSE: Handle leaving the LoadingLevel state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostLoadingLevelState(GameState eNewState)
 {
-    if (eNewState == GS_LOADINGLEVEL) return LTFALSE;
+	if (eNewState == GS_LOADINGLEVEL) return LTFALSE;
 
 	// Don't allow the loading state to go away until the loading screen has been hidden
 	if (m_LoadingScreen.IsVisible())
@@ -3335,20 +3179,17 @@ LTBOOL CInterfaceMgr::PostLoadingLevelState(GameState eNewState)
 
 	ClearAllScreenBuffers();
 	m_bLoadFailed = LTFALSE;
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PreSplashScreenState()
 //
-//	ROUTINE:	CInterfaceMgr::PreSplashScreenState()
-//
-//	PURPOSE:	Initialize the SplashScreen state
-//
+//	PURPOSE: Initialize the SplashScreen state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PreSplashScreenState(GameState eCurState)
 {
-    if (eCurState == GS_SPLASHSCREEN) return LTFALSE;
+	if (eCurState == GS_SPLASHSCREEN) return LTFALSE;
 
 	// Since we're going to always go to the menu state next, load the
 	// surfaces here...
@@ -3358,68 +3199,62 @@ LTBOOL CInterfaceMgr::PreSplashScreenState(GameState eCurState)
 
 	// Play splash screen sound...
 
-    //uint32 dwFlags = PLAYSOUND_GETHANDLE | PLAYSOUND_CLIENT;
+	//uint32 dwFlags = PLAYSOUND_GETHANDLE | PLAYSOUND_CLIENT;
 	//m_hSplashSound = g_pClientSoundMgr->PlayInterfaceSound(IM_SPLASH_SOUND);
-    //g_pLTClient->GetSoundDuration(m_hSplashSound, &g_fSplashSndDuration);
-    //g_pLTClient->CPrint("Splash sound duration: %.4f", g_fSplashSndDuration);
-    //g_pLTClient->CPrint("Current Time: %.4f", g_pLTClient->GetTime());
+	//g_pLTClient->GetSoundDuration(m_hSplashSound, &g_fSplashSndDuration);
+	//g_pLTClient->CPrint("Splash sound duration: %.4f", g_fSplashSndDuration);
+	//g_pLTClient->CPrint("Current Time: %.4f", g_pLTClient->GetTime());
 
 
 	// Create the splash screen...
 // Image too large on PS2, skip for now
-    g_hSplash = g_pLTClient->CreateSurfaceFromBitmap(IM_SPLASH_SCREEN);
-    if (!g_hSplash) return LTFALSE;
+	g_hSplash = g_pLTClient->CreateSurfaceFromBitmap(IM_SPLASH_SCREEN);
+	if (!g_hSplash) return LTFALSE;
 
-    g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN);
+	g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN);
 
 	// Fade into the splash screen...
 
 	StartScreenFadeIn(3.0f);
 	m_bUseInterfaceCamera = LTTRUE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostSplashScreenState()
 //
-//	ROUTINE:	CInterfaceMgr::PostSplashScreenState()
-//
-//	PURPOSE:	Handle leaving the SplashScreen state
-//
+//	PURPOSE: Handle leaving the SplashScreen state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostSplashScreenState(GameState eNewState)
 {
-    if (eNewState == GS_SPLASHSCREEN) return LTFALSE;
+	if (eNewState == GS_SPLASHSCREEN) return LTFALSE;
 
 	if (g_hSplash)
 	{
-        g_pLTClient->DeleteSurface(g_hSplash);
-        g_hSplash = LTNULL;
+		g_pLTClient->DeleteSurface(g_hSplash);
+		g_hSplash = LTNULL;
 	}
 
 	// Stop splash screen sound (if playing)...
 
 	if (m_hSplashSound)
 	{
-        g_pLTClient->KillSound(m_hSplashSound);
-        m_hSplashSound = LTNULL;
+		g_pLTClient->KillSound(m_hSplashSound);
+		m_hSplashSound = LTNULL;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PreMovieState()
 //
-//	ROUTINE:	CInterfaceMgr::PreMovieState()
-//
-//	PURPOSE:	Initialize the movie state
-//
+//	PURPOSE: Initialize the movie state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PreMovieState(GameState eCurState)
 {
-    if (eCurState == GS_MOVIE) return LTFALSE;
+	if (eCurState == GS_MOVIE) return LTFALSE;
 
 	g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN);
 	m_bUseInterfaceCamera = LTTRUE;
@@ -3428,83 +3263,71 @@ LTBOOL CInterfaceMgr::PreMovieState(GameState eCurState)
 	NextMovie();
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostMovieState()
 //
-//	ROUTINE:	CInterfaceMgr::PostMovieState()
-//
-//	PURPOSE:	Handle leaving the movie state
-//
+//	PURPOSE: Handle leaving the movie state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostMovieState(GameState eNewState)
 {
-    if (eNewState == GS_MOVIE) return LTFALSE;
+	if (eNewState == GS_MOVIE) return LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PreDemoScreenState()
 //
-//	ROUTINE:	CInterfaceMgr::PreDemoScreenState()
-//
-//	PURPOSE:	Initialize the DemoScreen state
-//
+//	PURPOSE: Initialize the DemoScreen state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PreDemoScreenState(GameState eCurState)
 {
-    if (eCurState == GS_DEMOSCREEN) return LTFALSE;
+	if (eCurState == GS_DEMOSCREEN) return LTFALSE;
 
 
 	g_nDemo = -1;
 	NextDemoScreen();
 
-    g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN);
+	g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN);
 
 	m_bUseInterfaceCamera = LTTRUE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostDemoScreenState()
 //
-//	ROUTINE:	CInterfaceMgr::PostDemoScreenState()
-//
-//	PURPOSE:	Handle leaving the DemoScreen state
-//
+//	PURPOSE: Handle leaving the DemoScreen state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostDemoScreenState(GameState eNewState)
 {
-    if (eNewState == GS_DEMOSCREEN) return LTFALSE;
+	if (eNewState == GS_DEMOSCREEN) return LTFALSE;
 
 	if (g_hDemo)
 	{
-        g_pLTClient->DeleteSurface(g_hDemo);
-        g_hDemo = LTNULL;
+		g_pLTClient->DeleteSurface(g_hDemo);
+		g_hDemo = LTNULL;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PreFailureState()
 //
-//	ROUTINE:	CInterfaceMgr::PreFailureState()
-//
-//	PURPOSE:	Initialize the failure state
-//
+//	PURPOSE: Initialize the failure state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PreFailureState(GameState eCurState)
 {
-    if (eCurState == GS_FAILURE) return LTFALSE;
+	if (eCurState == GS_FAILURE) return LTFALSE;
 
 	// Pause the game...
-    g_pGameClientShell->PauseGame(LTTRUE, LTTRUE);
+	g_pGameClientShell->PauseGame(LTTRUE, LTTRUE);
 
 	g_fFailScreenDuration = 0.0f;
 
@@ -3512,7 +3335,7 @@ LTBOOL CInterfaceMgr::PreFailureState(GameState eCurState)
 	g_pLayoutMgr->GetFailScreenBackground(szStr,ARRAY_LEN(szStr));
 	if (!m_hFailBack)
 	{
-        m_hFailBack = g_pLTClient->CreateSurfaceFromBitmap(szStr);
+		m_hFailBack = g_pLTClient->CreateSurfaceFromBitmap(szStr);
 	}
 
 	// Since we're going to always go to the menu state next, load the
@@ -3520,27 +3343,24 @@ LTBOOL CInterfaceMgr::PreFailureState(GameState eCurState)
 
 	m_InterfaceResMgr.Setup();
 
-    g_pLTClient->ClearInput();
+	g_pLTClient->ClearInput();
 	m_bUseInterfaceCamera = LTTRUE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PostFailureState()
 //
-//	ROUTINE:	CInterfaceMgr::PostFailureState()
-//
-//	PURPOSE:	Handle leaving the failure state
-//
+//	PURPOSE: Handle leaving the failure state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PostFailureState(GameState eNewState)
 {
-    if (eNewState == GS_FAILURE) return LTFALSE;
-    g_pLTClient->DeleteSurface(m_hFailBack);
-    m_hFailBack = LTNULL;
+	if (eNewState == GS_FAILURE) return LTFALSE;
+	g_pLTClient->DeleteSurface(m_hFailBack);
+	m_hFailBack = LTNULL;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
@@ -3548,13 +3368,10 @@ LTBOOL CInterfaceMgr::PostFailureState(GameState eNewState)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::SetLoadGameMenu()
 //
-//	ROUTINE:	CInterfaceMgr::SetLoadGameMenu()
-//
-//	PURPOSE:	Turn the load game menu on
-//
+//	PURPOSE: Turn the load game menu on
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::SetLoadGameMenu()
 {
 	SwitchToFolder(FOLDER_ID_LOAD);
@@ -3562,125 +3379,119 @@ void CInterfaceMgr::SetLoadGameMenu()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::ProcessAdvancedOptions
 //
-//	ROUTINE:	CInterfaceMgr::ProcessAdvancedOptions
-//
-//	PURPOSE:	Process the advanced options
-//
+//	PURPOSE: Process the advanced options
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::ProcessAdvancedOptions()
 {
 	// Check advanced options...
 
-    HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("DisableMusic");
-    if (hVar && g_pLTClient->GetVarValueFloat(hVar))
+	HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("DisableMusic");
+	if (hVar && g_pLTClient->GetVarValueFloat(hVar))
 	{
 		m_dwAdvancedOptions &= ~AO_MUSIC;
 	}
 
-    hVar = g_pLTClient->GetConsoleVar("DisableSound");
-    if (hVar && g_pLTClient->GetVarValueFloat(hVar))
+	hVar = g_pLTClient->GetConsoleVar("DisableSound");
+	if (hVar && g_pLTClient->GetVarValueFloat(hVar))
 	{
 		m_dwAdvancedOptions &= ~AO_SOUND;
 	}
 
-    hVar = g_pLTClient->GetConsoleVar("DisableMovies");
-    if (hVar && g_pLTClient->GetVarValueFloat(hVar))
+	hVar = g_pLTClient->GetConsoleVar("DisableMovies");
+	if (hVar && g_pLTClient->GetVarValueFloat(hVar))
 	{
 		m_dwAdvancedOptions &= ~AO_MOVIES;
 	}
 
-    hVar = g_pLTClient->GetConsoleVar("DisableFog");
-    if (hVar && g_pLTClient->GetVarValueFloat(hVar))
+	hVar = g_pLTClient->GetConsoleVar("DisableFog");
+	if (hVar && g_pLTClient->GetVarValueFloat(hVar))
 	{
 		m_dwAdvancedOptions &= ~AO_FOG;
 	}
 
-    hVar = g_pLTClient->GetConsoleVar("DisableLines");
-    if (hVar && g_pLTClient->GetVarValueFloat(hVar))
+	hVar = g_pLTClient->GetConsoleVar("DisableLines");
+	if (hVar && g_pLTClient->GetVarValueFloat(hVar))
 	{
 		m_dwAdvancedOptions &= ~AO_LINES;
 	}
 
-    hVar = g_pLTClient->GetConsoleVar("DisableJoystick");
-    if (hVar && g_pLTClient->GetVarValueFloat(hVar))
+	hVar = g_pLTClient->GetConsoleVar("DisableJoystick");
+	if (hVar && g_pLTClient->GetVarValueFloat(hVar))
 	{
 		m_dwAdvancedOptions &= ~AO_JOYSTICK;
 	}
 
-    hVar = g_pLTClient->GetConsoleVar("DisableTripBuf");
-    if (hVar && g_pLTClient->GetVarValueFloat(hVar))
+	hVar = g_pLTClient->GetConsoleVar("DisableTripBuf");
+	if (hVar && g_pLTClient->GetVarValueFloat(hVar))
 	{
 		m_dwAdvancedOptions &= ~AO_TRIPLEBUFFER;
 	}
 
-    hVar = g_pLTClient->GetConsoleVar("DisableTJuncs");
-    if (hVar && g_pLTClient->GetVarValueFloat(hVar))
+	hVar = g_pLTClient->GetConsoleVar("DisableTJuncs");
+	if (hVar && g_pLTClient->GetVarValueFloat(hVar))
 	{
 		m_dwAdvancedOptions &= ~AO_TJUNCTIONS;
 	}
 
 	// Record the original state of sound and music
 
-    hVar = g_pLTClient->GetConsoleVar("SoundEnable");
-    if (hVar && g_pLTClient->GetVarValueFloat(hVar))
+	hVar = g_pLTClient->GetConsoleVar("SoundEnable");
+	if (hVar && g_pLTClient->GetVarValueFloat(hVar))
 	{
 		m_dwOrignallyEnabled |= AO_SOUND;
 	}
 
-    hVar = g_pLTClient->GetConsoleVar("MusicEnable");
-    if (hVar && g_pLTClient->GetVarValueFloat(hVar))
+	hVar = g_pLTClient->GetConsoleVar("MusicEnable");
+	if (hVar && g_pLTClient->GetVarValueFloat(hVar))
 	{
 		m_dwOrignallyEnabled |= AO_MUSIC;
 	}
 
 	// Implement any advanced options here (before renderer is started)
 
-    hVar = g_pLTClient->GetConsoleVar("SoundEnable");
+	hVar = g_pLTClient->GetConsoleVar("SoundEnable");
 	if (!hVar && (m_dwAdvancedOptions & AO_SOUND))
 	{
-        g_pLTClient->RunConsoleString("SoundEnable 1");
+		g_pLTClient->RunConsoleString("SoundEnable 1");
 	}
 
-    hVar = g_pLTClient->GetConsoleVar("MusicEnable");
+	hVar = g_pLTClient->GetConsoleVar("MusicEnable");
 	if (!hVar && (m_dwAdvancedOptions & AO_MUSIC))
 	{
-        g_pLTClient->RunConsoleString("MusicEnable 1");
+		g_pLTClient->RunConsoleString("MusicEnable 1");
 	}
 
 
 	if (!(m_dwAdvancedOptions & AO_TRIPLEBUFFER))
 	{
-        g_pLTClient->RunConsoleString("TripleBuffer 0");
+		g_pLTClient->RunConsoleString("TripleBuffer 0");
 	}
 
 	if (!(m_dwAdvancedOptions & AO_FOG))
 	{
-        g_pLTClient->RunConsoleString("FogEnable 0");
+		g_pLTClient->RunConsoleString("FogEnable 0");
 	}
 
 	if (!(m_dwAdvancedOptions & AO_JOYSTICK))
 	{
-        g_pLTClient->RunConsoleString("JoystickDisable 1");
+		g_pLTClient->RunConsoleString("JoystickDisable 1");
 	}
 
 	if (!(m_dwAdvancedOptions & AO_CURSOR))
 	{
-        g_pLTClient->RunConsoleString("HardwareCursor 0");
+		g_pLTClient->RunConsoleString("HardwareCursor 0");
 	}
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::ChangeState
 //
-//	ROUTINE:	CInterfaceMgr::ChangeState
-//
-//	PURPOSE:	Change the game state.  This allows us to do pre/post state
+//	PURPOSE: Change the game state.  This allows us to do pre/post state
 //				change handling
-//
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::ChangeState(GameState eNewState)
 {
 	DebugChangeState(eNewState);
@@ -3703,7 +3514,7 @@ LTBOOL CInterfaceMgr::ChangeState(GameState eNewState)
 			{
 				// State changed successfully...
 
-                return LTTRUE;
+				return LTTRUE;
 			}
 
 			// State NOT Changed!
@@ -3712,39 +3523,33 @@ LTBOOL CInterfaceMgr::ChangeState(GameState eNewState)
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::DebugChangeState
 //
-//	ROUTINE:	CInterfaceMgr::DebugChangeState
-//
-//	PURPOSE:	Print out debugging info about changing states
-//
+//	PURPOSE: Print out debugging info about changing states
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMgr::DebugChangeState(GameState eNewState)
 {
 #ifdef _DEBUG
 //#define _DEBUG_INTERFACE_MGR
 #ifdef _DEBUG_INTERFACE_MGR
-    g_pLTClient->CPrint("CInterfaceMgr::ChangeState() :");
-    g_pLTClient->CPrint("  Old State: %s", c_GameStateNames[m_eGameState]);
-    g_pLTClient->CPrint("  New State: %s", c_GameStateNames[eNewState]);
+	g_pLTClient->CPrint("CInterfaceMgr::ChangeState() :");
+	g_pLTClient->CPrint("  Old State: %s", c_GameStateNames[m_eGameState]);
+	g_pLTClient->CPrint("  New State: %s", c_GameStateNames[eNewState]);
 #endif
 #endif
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::PreChangeState
 //
-//	ROUTINE:	CInterfaceMgr::PreChangeState
-//
-//	PURPOSE:	Handle pre setting of game state
-//
+//	PURPOSE: Handle pre setting of game state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::PreChangeState(GameState eCurState, GameState eNewState)
 {
 	// Do any clean up of the old (current) state...
@@ -3753,67 +3558,67 @@ LTBOOL CInterfaceMgr::PreChangeState(GameState eCurState, GameState eNewState)
 	{
 		case GS_PLAYING :
 		{
-            if (!PostPlayingState(eNewState)) return LTFALSE;
+			if (!PostPlayingState(eNewState)) return LTFALSE;
 		}
 		break;
 
 		case GS_DIALOGUE :
 		{
-            if (!PostDialogueState(eNewState)) return LTFALSE;
+			if (!PostDialogueState(eNewState)) return LTFALSE;
 		}
 		break;
 
 		case GS_MENU :
 		{
-            if (!PostMenuState(eNewState)) return LTFALSE;
+			if (!PostMenuState(eNewState)) return LTFALSE;
 		}
 		break;
 
 		case GS_POPUP :
 		{
-            if (!PostPopupState(eNewState)) return LTFALSE;
+			if (!PostPopupState(eNewState)) return LTFALSE;
 		}
 		break;
 
 		case GS_LOADINGLEVEL:
 		{
-            if (!PostLoadingLevelState(eNewState)) return LTFALSE;
+			if (!PostLoadingLevelState(eNewState)) return LTFALSE;
 		}
 		break;
 
 		case GS_FOLDER :
 		{
-            if (!PostFolderState(eNewState)) return LTFALSE;
+			if (!PostFolderState(eNewState)) return LTFALSE;
 		}
 		break;
 
 		case GS_PAUSED :
 		{
-            if (!PostPauseState(eNewState)) return LTFALSE;
+			if (!PostPauseState(eNewState)) return LTFALSE;
 		}
 		break;
 
 		case GS_SPLASHSCREEN :
 		{
-            if (!PostSplashScreenState(eNewState)) return LTFALSE;
+			if (!PostSplashScreenState(eNewState)) return LTFALSE;
 		}
 		break;
 
 		case GS_MOVIE :
 		{
-            if (!PostMovieState(eNewState)) return LTFALSE;
+			if (!PostMovieState(eNewState)) return LTFALSE;
 		}
 		break;
 
 		case GS_DEMOSCREEN :
 		{
-            if (!PostDemoScreenState(eNewState)) return LTFALSE;
+			if (!PostDemoScreenState(eNewState)) return LTFALSE;
 		}
 		break;
 
 		case GS_FAILURE :
 		{
-            if (!PostFailureState(eNewState)) return LTFALSE;
+			if (!PostFailureState(eNewState)) return LTFALSE;
 		}
 		break;
 
@@ -3893,45 +3698,36 @@ LTBOOL CInterfaceMgr::PreChangeState(GameState eCurState, GameState eNewState)
 		default : break;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::Save
 //
-//	ROUTINE:	CInterfaceMgr::Save
-//
-//	PURPOSE:	Save the interface info
-//
+//	PURPOSE: Save the interface info
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::Save(HMESSAGEWRITE hWrite)
 {
 	m_stats.Save(hWrite);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::Load
 //
-//	ROUTINE:	CInterfaceMgr::Load
-//
-//	PURPOSE:	Load the interface info
-//
+//	PURPOSE: Load the interface info
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::Load(HMESSAGEREAD hRead)
 {
 	m_stats.Load(hRead);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::GetMainFolder()
 //
-//	ROUTINE:	CInterfaceMgr::GetMainFolder()
-//
-//	PURPOSE:	Returns the main folder
-//
+//	PURPOSE: Returns the main folder
 // --------------------------------------------------------------------------- //
-
 eFolderID CInterfaceMgr::GetMainFolder()
 {
 	// If we have one cached, let's use that.
@@ -3988,14 +3784,11 @@ eFolderID CInterfaceMgr::GetMainFolder()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::GetCurrentFolder()
 //
-//	ROUTINE:	CInterfaceMgr::GetCurrentFolder()
-//
-//	PURPOSE:	Finds out what the current folder is
+//	PURPOSE: Finds out what the current folder is
 //				- returns FOLDER_ID_NONE if not in a folder state
-//
 // --------------------------------------------------------------------------- //
-
 eFolderID CInterfaceMgr::GetCurrentFolder()
 {
 	if (m_eGameState != GS_FOLDER)
@@ -4007,13 +3800,10 @@ eFolderID CInterfaceMgr::GetCurrentFolder()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::SwitchToFolder
 //
-//	ROUTINE:	CInterfaceMgr::SwitchToFolder
-//
-//	PURPOSE:	Go to the specified folder
-//
+//	PURPOSE: Go to the specified folder
 // --------------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::SwitchToFolder(eFolderID folderID)
 {
 	if (m_eGameState != GS_FOLDER)
@@ -4023,37 +3813,31 @@ LTBOOL CInterfaceMgr::SwitchToFolder(eFolderID folderID)
 			StartScreenFadeIn(3.0);
 		}
 
-        if (!ChangeState(GS_FOLDER)) return LTFALSE;
+		if (!ChangeState(GS_FOLDER)) return LTFALSE;
 	}
 
 	m_FolderMgr.SetCurrentFolder(folderID);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::ForceFolderUpdate
 //
-//	ROUTINE:	CInterfaceMgr::ForceFolderUpdate
-//
-//	PURPOSE:	Force the current folder to update
-//
+//	PURPOSE: Force the current folder to update
 // --------------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::ForceFolderUpdate(eFolderID folderID)
 {
-    if (m_eGameState != GS_FOLDER) return LTFALSE;
+	if (m_eGameState != GS_FOLDER) return LTFALSE;
 
 	return m_FolderMgr.ForceFolderUpdate(folderID);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::MissionFailed
 //
-//	ROUTINE:	CInterfaceMgr::MissionFailed
-//
-//	PURPOSE:	Go to the mission failure state
-//
+//	PURPOSE: Go to the mission failure state
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::MissionFailed(int nFailStringId)
 {
 	if (m_eGameState == GS_FAILURE) return;
@@ -4067,26 +3851,23 @@ void CInterfaceMgr::MissionFailed(int nFailStringId)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::ScreenDimsChanged
 //
-//	ROUTINE:	CInterfaceMgr::ScreenDimsChanged
-//
-//	PURPOSE:	Handle the screen dims changing
-//
+//	PURPOSE: Handle the screen dims changing
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::ScreenDimsChanged()
 {
 	m_InterfaceResMgr.ScreenDimsChanged();
 
 	// Update the camera rect...
-    uint32 dwWidth = 640, dwHeight = 480;
+	uint32 dwWidth = 640, dwHeight = 480;
 
-    g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &dwWidth, &dwHeight);
+	g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &dwWidth, &dwHeight);
 
 	// This may need to be changed to support in-game cinematics...
 
 	ResetMenuRestoreCamera(0, 0, dwWidth, dwHeight);
-    g_pLTClient->SetCameraRect (g_pGameClientShell->GetInterfaceCamera(), LTTRUE, 0, 0, dwWidth, dwHeight);
+	g_pLTClient->SetCameraRect (g_pGameClientShell->GetInterfaceCamera(), LTTRUE, 0, 0, dwWidth, dwHeight);
 
 	UpdateInterfaceBackground();
 
@@ -4099,21 +3880,18 @@ void CInterfaceMgr::ScreenDimsChanged()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::SendMissionDataToServer
 //
-//	ROUTINE:	CInterfaceMgr::SendMissionDataToServer
-//
-//	PURPOSE:	Send mission data to the server
-//
+//	PURPOSE: Send mission data to the server
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::SendMissionDataToServer(LTBOOL bUpdatePlayer)
 {
 	// Update the server...
 
-    HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_MISSION_INFO);
-    m_MissionData.WriteToMessage(g_pLTClient, hMessage);
-    g_pLTClient->WriteToMessageByte(hMessage, (uint8)bUpdatePlayer);
-    g_pLTClient->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_MISSION_INFO);
+	m_MissionData.WriteToMessage(g_pLTClient, hMessage);
+	g_pLTClient->WriteToMessageByte(hMessage, (uint8)bUpdatePlayer);
+	g_pLTClient->EndMessage(hMessage);
 
 
 	// Update the client to reflect this info...
@@ -4123,13 +3901,10 @@ void CInterfaceMgr::SendMissionDataToServer(LTBOOL bUpdatePlayer)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::DoMissionOutfitCheat
 //
-//	ROUTINE:	CInterfaceMgr::DoMissionOutfitCheat
-//
-//	PURPOSE:	Give the player all the defaults for this mission
-//
+//	PURPOSE: Give the player all the defaults for this mission
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::DoMissionOutfitCheat()
 {
 	// Setup m_MissionData with the defaults for this mission...
@@ -4395,7 +4170,7 @@ void CInterfaceMgr::UseCursor(LTBOOL bUseCursor)
 			// Similar to CursorCenter mode, but not as fudged up
 			SDL_SetRelativeMouseMode(SDL_TRUE);
 		}
-        g_pLTClient->Cursor()->SetCursorMode(CM_None);
+		g_pLTClient->Cursor()->SetCursorMode(CM_None);
 
 	}
 }
@@ -4423,42 +4198,39 @@ void CInterfaceMgr::UseHardwareCursor(LTBOOL bUseHardwareCursor)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateOverlays()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateOverlays()
-//
-//	PURPOSE:	Update the overlay used as a scope crosshair
-//
+//	PURPOSE: Update the overlay used as a scope crosshair
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateOverlays()
 {
 	m_eCurrOverlay = OVM_NONE;
 	if (!m_nOverlayCount) return;
 
 
-    LTVector vPos(0, 0, 0), vU, vR, vF, vTemp;
-    LTRotation rRot;
+	LTVector vPos(0, 0, 0), vU, vR, vF, vTemp;
+	LTRotation rRot;
 	rRot.Init();
 
 	HOBJECT hCamera = g_pGameClientShell->GetCamera();
 	if (!hCamera) return;
 
 	// Updated to use camera-relative pos/rot...
-    // g_pLTClient->GetObjectPos(hCamera, &vPos);
-    // g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	// g_pLTClient->GetObjectPos(hCamera, &vPos);
+	// g_pLTClient->GetObjectRotation(hCamera, &rRot);
 
-//    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+//	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 //	VEC_MULSCALAR(vTemp, vF, g_fOverlayDist);
 //	VEC_ADD(vPos, vPos, vTemp);
 
-    LTFLOAT fFovX = DEG2RAD(g_vtFOVXNormal.GetFloat());
-    LTFLOAT fFovY = DEG2RAD(g_vtFOVYNormal.GetFloat());
-    g_pLTClient->GetCameraFOV(hCamera, &fFovX, &fFovY);
-    LTFLOAT ratioX = (float)tan(fFovX/2) / g_fFovXTan;
-    LTFLOAT ratioY = (float)tan(fFovY/2) / g_fFovYTan;
+	LTFLOAT fFovX = DEG2RAD(g_vtFOVXNormal.GetFloat());
+	LTFLOAT fFovY = DEG2RAD(g_vtFOVYNormal.GetFloat());
+	g_pLTClient->GetCameraFOV(hCamera, &fFovX, &fFovY);
+	LTFLOAT ratioX = (float)tan(fFovX/2) / g_fFovXTan;
+	LTFLOAT ratioY = (float)tan(fFovY/2) / g_fFovYTan;
 
 
-    LTBOOL bDrawnOne = LTFALSE;
+	LTBOOL bDrawnOne = LTFALSE;
 	for (int i = 0; i < NUM_OVERLAY_MASKS; i++)
 	{
 		if (m_hOverlays[i])
@@ -4468,7 +4240,7 @@ void CInterfaceMgr::UpdateOverlays()
 				if (i < OVM_NON_EXCLUSIVE)
 				{
 					m_eCurrOverlay = (eOverlayMask)i;
-                    bDrawnOne = LTTRUE;
+					bDrawnOne = LTTRUE;
 				}
 
 				if (g_pLayoutMgr->IsMaskSprite((eOverlayMask)i))
@@ -4515,8 +4287,8 @@ void CInterfaceMgr::UpdateOverlays()
 			}
 			else
 			{
-                uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hOverlays[i]);
-                g_pLTClient->SetObjectFlags(m_hOverlays[i], dwFlags & ~FLAG_VISIBLE);
+				uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hOverlays[i]);
+				g_pLTClient->SetObjectFlags(m_hOverlays[i], dwFlags & ~FLAG_VISIBLE);
 			}
 		}
 	}
@@ -4538,13 +4310,13 @@ void CInterfaceMgr::CreateOverlay(eOverlayMask eMask)
 
 	createStruct.m_ObjectType = OT_SPRITE;
 
-    LTVector vPos(0,0,0), vU, vR, vF, vTemp;
-    LTRotation rRot;
+	LTVector vPos(0,0,0), vU, vR, vF, vTemp;
+	LTRotation rRot;
 	rRot.Init();
 
-//    g_pLTClient->GetObjectPos(hCamera, &vPos);
-//    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+//	g_pLTClient->GetObjectPos(hCamera, &vPos);
+//	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	if (g_pLayoutMgr->IsMaskSprite(eMask))
 	{
@@ -4587,7 +4359,7 @@ void CInterfaceMgr::CreateOverlay(eOverlayMask eMask)
 			SAFE_STRCPY(createStruct.m_SkinName, skinName);
 			m_hOverlays[eMask] = g_pLTClient->CreateObject(&createStruct);
 /*
-		    LTVector vColor;
+			LTVector vColor;
 			LTFLOAT a;
 			g_pLTClient->GetObjectColor(m_hOverlays[eMask], &(vColor.x), &(vColor.y), &(vColor.z), &a);
 			g_pLTClient->SetObjectColor(m_hOverlays[eMask], vColor.x, vColor.y, vColor.z, 0.999f);
@@ -4608,8 +4380,8 @@ void CInterfaceMgr::RemoveOverlay(eOverlayMask eMask)
 	if (m_hOverlays[eMask])
 	{
 		m_nOverlayCount--;
-        g_pLTClient->DeleteObject(m_hOverlays[eMask]);
-        m_hOverlays[eMask] = LTNULL;
+		g_pLTClient->DeleteObject(m_hOverlays[eMask]);
+		m_hOverlays[eMask] = LTNULL;
 	}
 }
 
@@ -4620,7 +4392,7 @@ void CInterfaceMgr::BeginScope(LTBOOL bNightVision)
 	if (bNightVision)
 		CreateOverlay(OVM_STATIC);
 	CreateOverlay(OVM_SCOPE);
-//    DrawPlayerStats(LTFALSE);
+//	DrawPlayerStats(LTFALSE);
 }
 
 
@@ -4653,7 +4425,7 @@ void CInterfaceMgr::BeginUnderwater()
 		CreateOverlay(OVM_SCUBA);
 		if (!m_hScubaSound)
 		{
-            uint32 dwFlags = PLAYSOUND_GETHANDLE | PLAYSOUND_LOOP;
+			uint32 dwFlags = PLAYSOUND_GETHANDLE | PLAYSOUND_LOOP;
 			m_hScubaSound = g_pClientSoundMgr->PlaySoundLocal("Chars\\Snd\\Player\\breathscuba.wav", SOUNDPRIORITY_PLAYER_LOW, dwFlags);
 		}
 	}
@@ -4727,25 +4499,22 @@ void CInterfaceMgr::SetSunglassMode(eSunglassMode mode)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateScreenFade()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateScreenFade()
-//
-//	PURPOSE:	Update the screen fade
-//
+//	PURPOSE: Update the screen fade
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateScreenFade()
 {
 	if (!m_bScreenFade || m_fTotalFadeTime < 0.1f) return;
 
-    LTRect rcSrc;
+	LTRect rcSrc;
 	rcSrc.Init(0, 0, 2, 2);
 
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
-    uint32 dwWidth = 640, dwHeight = 480;
-    g_pLTClient->GetSurfaceDims(hScreen, &dwWidth, &dwHeight);
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	uint32 dwWidth = 640, dwHeight = 480;
+	g_pLTClient->GetSurfaceDims(hScreen, &dwWidth, &dwHeight);
 
-    HLTCOLOR hTransColor = g_pLTClient->SetupColor1(1.0f, 1.0f, 1.0f, LTTRUE);
+	HLTCOLOR hTransColor = g_pLTClient->SetupColor1(1.0f, 1.0f, 1.0f, LTTRUE);
 
 
 	// Initialize the surface if necessary...
@@ -4754,18 +4523,18 @@ void CInterfaceMgr::UpdateScreenFade()
 	{
 		if (m_hFadeSurface)
 		{
-            g_pLTClient->DeleteSurface(m_hFadeSurface);
+			g_pLTClient->DeleteSurface(m_hFadeSurface);
 		}
 
-        m_hFadeSurface = g_pLTClient->CreateSurface(2, 2);
+		m_hFadeSurface = g_pLTClient->CreateSurface(2, 2);
 		if (!m_hFadeSurface) return;
 
-        g_pLTClient->SetSurfaceAlpha(m_hFadeSurface, 1.0f);
-        g_pOptimizedRenderer->FillRect(m_hFadeSurface, &rcSrc, kBlack);
-        g_pLTClient->OptimizeSurface(m_hFadeSurface, hTransColor);
+		g_pLTClient->SetSurfaceAlpha(m_hFadeSurface, 1.0f);
+		g_pOptimizedRenderer->FillRect(m_hFadeSurface, &rcSrc, kBlack);
+		g_pLTClient->OptimizeSurface(m_hFadeSurface, hTransColor);
 
 		m_fCurFadeTime = m_fTotalFadeTime;
-        m_bFadeInitialized = LTTRUE;
+		m_bFadeInitialized = LTTRUE;
 	}
 
 
@@ -4773,22 +4542,22 @@ void CInterfaceMgr::UpdateScreenFade()
 
 	if (m_hFadeSurface)
 	{
-        LTFLOAT fTimeDelta = m_bFadeIn ? m_fCurFadeTime : (m_fTotalFadeTime - m_fCurFadeTime);
+		LTFLOAT fTimeDelta = m_bFadeIn ? m_fCurFadeTime : (m_fTotalFadeTime - m_fCurFadeTime);
 
-        LTFLOAT fLinearAlpha = (fTimeDelta / m_fTotalFadeTime);
+		LTFLOAT fLinearAlpha = (fTimeDelta / m_fTotalFadeTime);
 		fLinearAlpha = fLinearAlpha < 0.0f ? 0.0f : (fLinearAlpha > 1.0f ? 1.0f : fLinearAlpha);
 
-        LTFLOAT fAlpha = 1.0f - WaveFn_SlowOn(1.0f - fLinearAlpha);
+		LTFLOAT fAlpha = 1.0f - WaveFn_SlowOn(1.0f - fLinearAlpha);
 		fAlpha = fAlpha < 0.0f ? 0.0f : (fAlpha > 1.0f ? 1.0f : fAlpha);
 
-        g_pLTClient->SetSurfaceAlpha(m_hFadeSurface, fAlpha);
+		g_pLTClient->SetSurfaceAlpha(m_hFadeSurface, fAlpha);
 
-        LTRect rcDest;
+		LTRect rcDest;
 		rcDest.Init(0, 0, dwWidth, dwHeight);
 
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hScreen, m_hFadeSurface, &rcDest, &rcSrc, hTransColor);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hScreen, m_hFadeSurface, &rcDest, &rcSrc, hTransColor);
 
-        m_fCurFadeTime -= (g_pGameClientShell->GetFrameTime() < MAX_FRAME_DELTA ? g_pGameClientShell->GetFrameTime() : MAX_FRAME_DELTA);
+		m_fCurFadeTime -= (g_pGameClientShell->GetFrameTime() < MAX_FRAME_DELTA ? g_pGameClientShell->GetFrameTime() : MAX_FRAME_DELTA);
 	}
 
 	// See if we're done...
@@ -4797,16 +4566,16 @@ void CInterfaceMgr::UpdateScreenFade()
 	{
 		if (m_hFadeSurface)
 		{
-            g_pLTClient->DeleteSurface(m_hFadeSurface);
-            m_hFadeSurface = LTNULL;
+			g_pLTClient->DeleteSurface(m_hFadeSurface);
+			m_hFadeSurface = LTNULL;
 		}
 
 		// If we faded in we're done...
 
 		if (m_bFadeIn)
 		{
-            m_bFadeInitialized  = LTFALSE;
-            m_bScreenFade       = LTFALSE;
+			m_bFadeInitialized  = LTFALSE;
+			m_bScreenFade	= LTFALSE;
 		}
 		else
 		{
@@ -4815,15 +4584,15 @@ void CInterfaceMgr::UpdateScreenFade()
 			// (and not set m_bScreenFade so we'll be called to
 			// clear the screen every frame until we fade back in)...
 
-            g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN);
+			g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN);
 
 
 			// Exit the level if necessary...
 
 			if (m_bExitAfterFade)
 			{
-                m_bFadeIn = LTTRUE;
-                m_bExitAfterFade = LTFALSE;
+				m_bFadeIn = LTTRUE;
+				m_bExitAfterFade = LTFALSE;
 				g_pGameClientShell->ExitLevel();
 			}
 		}
@@ -4833,13 +4602,10 @@ void CInterfaceMgr::UpdateScreenFade()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateLetterBox()
 //
-//	ROUTINE:	CInterfaceMgr::UpdateLetterBox()
-//
-//	PURPOSE:	Update the letterbox
-//
+//	PURPOSE: Update the letterbox
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateLetterBox()
 {
 	LTBOOL bOn = (m_bLetterBox || g_vtLetterBox.GetFloat());
@@ -4917,9 +4683,9 @@ void CInterfaceMgr::UpdateLetterBox()
 	{
 		fBorderPercent = (1.0f - fLetterBoxPercent) / 2.0f;
 	}
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
-    uint32 dwWidth = 640, dwHeight = 480;
-    g_pLTClient->GetSurfaceDims(hScreen, &dwWidth, &dwHeight);
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	uint32 dwWidth = 640, dwHeight = 480;
+	g_pLTClient->GetSurfaceDims(hScreen, &dwWidth, &dwHeight);
 
 	g_pLTClient->SetSurfaceAlpha(m_hLetterBoxSurface, m_fLetterBoxAlpha);
 
@@ -4936,13 +4702,13 @@ void CInterfaceMgr::UpdateLetterBox()
 	// Cover top of screen...
 
 	g_pLTClient->ScaleSurfaceToSurfaceTransparent(hScreen, m_hLetterBoxSurface,
-	   &rcDest, &rcSrc, hTransColor);
+	&rcDest, &rcSrc, hTransColor);
 
 	// Cover bottom of screen...
 
 	rcDest.Init(0, dwHeight - nBorderSize, dwWidth, dwHeight);
  	g_pLTClient->ScaleSurfaceToSurfaceTransparent(hScreen, m_hLetterBoxSurface,
-	   &rcDest, &rcSrc, hTransColor);
+	&rcDest, &rcSrc, hTransColor);
 
 	if (g_vtLockCinematicAspectRatio.GetFloat())
 	{
@@ -4961,13 +4727,10 @@ void CInterfaceMgr::UpdateLetterBox()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::AllowCameraMovement
 //
-//	ROUTINE:	CInterfaceMgr::AllowCameraMovement
-//
-//	PURPOSE:	Can the camera move (while in this state)
-//
+//	PURPOSE: Can the camera move (while in this state)
 // --------------------------------------------------------------------------- //
-
 LTBOOL CInterfaceMgr::AllowCameraMovement()
 {
 	if (g_pConsoleMgr->IsVisible()) {
@@ -4979,23 +4742,21 @@ LTBOOL CInterfaceMgr::AllowCameraMovement()
 		case GS_DIALOGUE :
 		case GS_MENU :
 		case GS_POPUP :
-            return LTFALSE;
+			return LTFALSE;
 		break;
 
 		default :
 		break;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::ChooseTeam
 //
-//	ROUTINE:	CInterfaceMgr::ChooseTeam
-//
-//	PURPOSE:	Display the choose team menu
-//
+//	PURPOSE: Display the choose team menu
 // --------------------------------------------------------------------------- //
 void CInterfaceMgr::ChooseTeam()
 {
@@ -5008,11 +4769,9 @@ void CInterfaceMgr::ChooseTeam()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::ViewOptions
 //
-//	ROUTINE:	CInterfaceMgr::ViewOptions
-//
-//	PURPOSE:	Display the choose team menu
-//
+//	PURPOSE: Display the choose team menu
 // --------------------------------------------------------------------------- //
 void CInterfaceMgr::ViewOptions()
 {
@@ -5020,13 +4779,10 @@ void CInterfaceMgr::ViewOptions()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::CreateInterfaceBackground
 //
-//	ROUTINE:	CInterfaceMgr::CreateInterfaceBackground
-//
-//	PURPOSE:	Create the sprite used as a background for the menu
-//
+//	PURPOSE: Create the sprite used as a background for the menu
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::CreateInterfaceBackground()
 {
 	HOBJECT hCamera = g_pGameClientShell->GetInterfaceCamera();
@@ -5036,12 +4792,12 @@ void CInterfaceMgr::CreateInterfaceBackground()
 
 	BSCREATESTRUCT bcs;
 
-    LTVector vPos, vU, vR, vF, vTemp, vScale;
-    LTRotation rRot;
+	LTVector vPos, vU, vR, vF, vTemp, vScale;
+	LTRotation rRot;
 
-    g_pLTClient->GetObjectPos(hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetObjectPos(hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	vScale = g_vBaseBackScale * g_pLayoutMgr->GetBackSpriteScale();
 
@@ -5051,7 +4807,7 @@ void CInterfaceMgr::CreateInterfaceBackground()
 	VEC_ADD(vPos, vPos, vTemp);
 
 	VEC_COPY(bcs.vPos, vPos);
-    bcs.rRot = rRot;
+	bcs.rRot = rRot;
 	VEC_COPY(bcs.vInitialScale, vScale);
 	VEC_COPY(bcs.vFinalScale, vScale);
 
@@ -5066,7 +4822,7 @@ void CInterfaceMgr::CreateInterfaceBackground()
 
 	if (m_BackSprite.Init(&bcs))
 	{
-        m_BackSprite.CreateObject(g_pLTClient);
+		m_BackSprite.CreateObject(g_pLTClient);
 	}
 
 	// TESTING - ADD A LIGHT TO LIGHT UP MODELS IN THE INTERFACE...
@@ -5079,16 +4835,16 @@ void CInterfaceMgr::CreateInterfaceBackground()
 		createStruct.m_ObjectType	= OT_LIGHT;
 		createStruct.m_Flags		= FLAG_VISIBLE;
 
-        g_pLTClient->GetObjectPos(hCamera, &createStruct.m_Pos);
+		g_pLTClient->GetObjectPos(hCamera, &createStruct.m_Pos);
 		//vPos -= (vF * (g_fBackDist / 2.0f));
 		//createStruct.m_Pos = vPos;
 
 		createStruct.m_Pos.y += 30.0f;
 
-        g_hLight = g_pLTClient->CreateObject(&createStruct);
+		g_hLight = g_pLTClient->CreateObject(&createStruct);
 
-        g_pLTClient->SetLightColor(g_hLight, 0.5f, 0.5f, 0.5f);
-        g_pLTClient->SetLightRadius(g_hLight, 500.0f);
+		g_pLTClient->SetLightColor(g_hLight, 0.5f, 0.5f, 0.5f);
+		g_pLTClient->SetLightRadius(g_hLight, 500.0f);
 	}
 */
 	// END TEST!!!
@@ -5100,18 +4856,18 @@ void CInterfaceMgr::UpdateInterfaceBackground()
 	if (!hCamera) return;
 
 
-    LTVector vPos, vU, vR, vF, vTemp, vScale;
-    LTRotation rRot;
+	LTVector vPos, vU, vR, vF, vTemp, vScale;
+	LTRotation rRot;
 
-    g_pLTClient->GetObjectPos(hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetObjectPos(hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	VEC_MULSCALAR(vTemp, vF, g_fBackDist);
 	VEC_MULSCALAR(vTemp, vTemp, 1);
 	VEC_ADD(vPos, vPos, vTemp);
 
-    g_pLTClient->SetObjectPos(m_BackSprite.GetObject(), &vPos);
+	g_pLTClient->SetObjectPos(m_BackSprite.GetObject(), &vPos);
 }
 
 void CInterfaceMgr::RemoveInterfaceBackground()
@@ -5120,17 +4876,15 @@ void CInterfaceMgr::RemoveInterfaceBackground()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::AddInterfaceSFX
 //
-//	ROUTINE:	CInterfaceMgr::AddInterfaceSFX
-//
-//	PURPOSE:	Add a SFX object to the interface
-//
+//	PURPOSE: Add a SFX object to the interface
 // --------------------------------------------------------------------------- //
 void CInterfaceMgr::AddInterfaceSFX(CSpecialFX* pSFX, ISFXType eType)
 {
 	if (!pSFX) return;
 
-    uint32 index = m_InterfaceSFX.FindElement(pSFX);
+	uint32 index = m_InterfaceSFX.FindElement(pSFX);
 	if (index >= m_InterfaceSFX.GetSize())
 	{
 		if (m_InterfaceSFX.GetSize() < MAX_INTERFACE_SFX)
@@ -5171,30 +4925,25 @@ void CInterfaceMgr::AddInterfaceSFX(CSpecialFX* pSFX, ISFXType eType)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::RemoveInterfaceSFX
 //
-//	ROUTINE:	CInterfaceMgr::RemoveInterfaceSFX
-//
-//	PURPOSE:	Remove a SFX object from the interface
-//
+//	PURPOSE: Remove a SFX object from the interface
 // --------------------------------------------------------------------------- //
 void CInterfaceMgr::RemoveInterfaceSFX(CSpecialFX* pSFX)
 {
-    uint32 index = m_InterfaceSFX.FindElement(pSFX);
+	uint32 index = m_InterfaceSFX.FindElement(pSFX);
 	if (index < m_InterfaceSFX.GetSize())
 	{
-//      g_pLTClient->CPrint("removing SFX[%d]",index);
+//	  g_pLTClient->CPrint("removing SFX[%d]",index);
 		m_InterfaceSFX.Remove(index);
 	}
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: RemoveAllInterfaceSFX
 //
-//	ROUTINE:	RemoveAllInterfaceSFX
-//
-//	PURPOSE:	Remove the 3D objects used as a background for the menu
-//
+//	PURPOSE: Remove the 3D objects used as a background for the menu
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::RemoveAllInterfaceSFX()
 {
 	while (m_InterfaceSFX.GetSize() > 0)
@@ -5208,7 +4957,7 @@ void CInterfaceMgr::RemoveAllInterfaceSFX()
 
 void CInterfaceMgr::UpdateModelAnimations(LTFLOAT fCurFrameDelta)
 {
-    for (uint32 i = 0; i < m_InterfaceSFX.GetSize(); i++)
+	for (uint32 i = 0; i < m_InterfaceSFX.GetSize(); i++)
 	{
 		if (g_pLTClient->GetObjectType(m_InterfaceSFX[i]->GetObject()) == OT_MODEL)
 			g_pModelLT->UpdateMainTracker(m_InterfaceSFX[i]->GetObject(), fCurFrameDelta);
@@ -5216,19 +4965,16 @@ void CInterfaceMgr::UpdateModelAnimations(LTFLOAT fCurFrameDelta)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::UpdateInterfaceSFX
 //
-//	ROUTINE:	CInterfaceMgr::UpdateInterfaceSFX
-//
-//	PURPOSE:	Update the 3D Objects used as a background for the menu
-//
+//	PURPOSE: Update the 3D Objects used as a background for the menu
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::UpdateInterfaceSFX()
 {
 	HOBJECT hCamera = g_pGameClientShell->GetInterfaceCamera();
 	if (!hCamera) return;
 
-    uint32 numSfx = m_InterfaceSFX.GetSize();
+	uint32 numSfx = m_InterfaceSFX.GetSize();
 	HLOCALOBJ objs[MAX_INTERFACE_SFX + 2];
 	//HLOCALOBJ objs[MAX_INTERFACE_SFX + 1];
 
@@ -5236,7 +4982,7 @@ void CInterfaceMgr::UpdateInterfaceSFX()
 	objs[0] = m_BackSprite.GetObject();
 
 	int next = 1;
-    for (uint32 i = 0; i < numSfx && next < MAX_INTERFACE_SFX; i++)
+	for (uint32 i = 0; i < numSfx && next < MAX_INTERFACE_SFX; i++)
 	{
 		if (m_InterfaceSFX[i]->Update())
 		{
@@ -5245,18 +4991,18 @@ void CInterfaceMgr::UpdateInterfaceSFX()
 			next++;
 		}
 	}
-    g_pLTClient->RenderObjects(hCamera, objs, next);
+	g_pLTClient->RenderObjects(hCamera, objs, next);
 
 	// TESTING DYNAMIC LIGHT IN INTERFACE
 	/*
 	if (g_hLight)
 	{
 		objs[i+1] = g_hLight;
-        g_pLTClient->RenderObjects(hCamera, objs, numSfx + 2);
+		g_pLTClient->RenderObjects(hCamera, objs, numSfx + 2);
 	}
 	else
 	{
-        g_pLTClient->RenderObjects(hCamera, objs, numSfx + 1);
+		g_pLTClient->RenderObjects(hCamera, objs, numSfx + 1);
 	}
 	*/
 	// END TEST
@@ -5282,7 +5028,7 @@ void CInterfaceMgr::ClearInterfaceSound()
 
 	if (m_hSound)
 	{
-        g_pLTClient->KillSound(m_hSound);
+		g_pLTClient->KillSound(m_hSound);
 		m_hSound = LTNULL;
 	}
 }
@@ -5326,13 +5072,10 @@ HLTSOUND CInterfaceMgr::UpdateInterfaceSound()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::NextMovie
 //
-//	ROUTINE:	CInterfaceMgr::NextMovie
-//
-//	PURPOSE:	Go to the next movie, if there is one
-//
+//	PURPOSE: Go to the next movie, if there is one
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::NextMovie()
 {
 	// I feel slightly bad for disabling all these movies by default, 
@@ -5371,13 +5114,10 @@ void CInterfaceMgr::NextMovie()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::GetCurrentMovie
 //
-//	ROUTINE:	CInterfaceMgr::GetCurrentMovie
-//
-//	PURPOSE:	Get the name of the current movie to play...
-//
+//	PURPOSE: Get the name of the current movie to play...
 // --------------------------------------------------------------------------- //
-
 char* CInterfaceMgr::GetCurrentMovie()
 {
 	char* pMovie = LTNULL;
@@ -5403,13 +5143,10 @@ char* CInterfaceMgr::GetCurrentMovie()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMgr::NextDemoScreen
 //
-//	ROUTINE:	CInterfaceMgr::NextDemoScreen
-//
-//	PURPOSE:	Go to the next marketing screen, if there is one
-//
+//	PURPOSE: Go to the next marketing screen, if there is one
 // --------------------------------------------------------------------------- //
-
 void CInterfaceMgr::NextDemoScreen()
 {
 
@@ -5451,7 +5188,7 @@ void CInterfaceMgr::UpdateCursor()
 		int curY = m_CursorPos.y;
 
 		g_pLTClient->DrawSurfaceToSurfaceTransparent(g_pLTClient->GetScreenSurface(), m_InterfaceResMgr.GetSurfaceCursor(), LTNULL,
-												   curX, curY, hDefaultTransColor);
+												curX, curY, hDefaultTransColor);
 
 		g_pLTClient->EndOptimized2D();
 		g_pLTClient->End3D();
@@ -5591,7 +5328,6 @@ void CInterfaceMgr::UpdateCursorState()
 }
 
 
-
 void CInterfaceMgr::UpdateClientList()
 {
 	if (IsMultiplayerGame())
@@ -5605,4 +5341,3 @@ void CInterfaceMgr::UpdateClientList()
 		}
 	}
 }
-

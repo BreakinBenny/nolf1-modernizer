@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: GibFX.cpp
 //
-// MODULE  : GibFX.cpp
+// PURPOSE: Gib - Implementation
 //
-// PURPOSE : Gib - Implementation
-//
-// CREATED : 6/15/98
-//
+// CREATED: 6/15/98
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "GibFX.h"
 #include "iltclient.h"
@@ -28,32 +25,29 @@
 extern CGameClientShell* g_pGameClientShell;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::Init
 //
-//	ROUTINE:	CGibFX::Init
-//
-//	PURPOSE:	Init the fx
-//
+//	PURPOSE: Init the fx
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGibFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	GIBCREATESTRUCT* pGib = (GIBCREATESTRUCT*)psfxCreateStruct;
-    m_rRot = pGib->rRot;
+	m_rRot = pGib->rRot;
 	VEC_COPY(m_vPos, pGib->vPos);
 	VEC_COPY(m_vMinVel, pGib->vMinVel);
 	VEC_COPY(m_vMaxVel, pGib->vMaxVel);
-	m_fLifeTime			= pGib->fLifeTime;
-	m_fFadeTime			= pGib->fFadeTime;
-	m_nGibFlags			= pGib->nGibFlags;
-	m_bRotate			= pGib->bRotate;
-	m_eCode				= (ContainerCode) pGib->nCode;
-	m_eModelId			= pGib->eModelId;
+	m_fLifeTime		= pGib->fLifeTime;
+	m_fFadeTime		= pGib->fFadeTime;
+	m_nGibFlags		= pGib->nGibFlags;
+	m_bRotate		= pGib->bRotate;
+	m_eCode			= (ContainerCode) pGib->nCode;
+	m_eModelId		= pGib->eModelId;
 	m_eModelStyle		= pGib->eModelStyle;
-	m_nNumGibs			= pGib->nNumGibs;
-	m_bSubGibs			= pGib->bSubGibs;
-	m_bBloodSplats		= pGib->bBloodSplats;
+	m_nNumGibs		= pGib->nNumGibs;
+	m_bSubGibs		= pGib->bSubGibs;
+	m_bBloodSplats	= pGib->bBloodSplats;
 
 	for (int i=0; i < m_nNumGibs; i++)
 	{
@@ -67,33 +61,30 @@ LTBOOL CGibFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 
 	if (m_bRotate)
 	{
-        LTFLOAT fVal = GetRandom(MATH_CIRCLE/4.0f, MATH_CIRCLE/2.0f);
-		m_fPitchVel = GetRandom(-fVal, fVal);
+		LTFLOAT fVal = GetRandom(MATH_CIRCLE/4.0f, MATH_CIRCLE/2.0f);
+		m_fPitchVel	= GetRandom(-fVal, fVal);
 		m_fYawVel	= GetRandom(-fVal, fVal);
 		m_fRollVel	= GetRandom(-fVal, fVal);
 	}
 
 	m_eModelType = g_pModelButeMgr->GetModelType(m_eModelId);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::CreateObject
 //
-//	ROUTINE:	CGibFX::CreateObject
-//
-//	PURPOSE:	Create object associated the fx
-//
+//	PURPOSE: Create object associated the fx
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGibFX::CreateObject(ILTClient *pClientDE)
 {
-    LTBOOL bRet = CSpecialFX::CreateObject(pClientDE);
+	LTBOOL bRet = CSpecialFX::CreateObject(pClientDE);
 	if (!bRet) return bRet;
 
 	// Initialize the Gib velocity ranges based on our rotation...
 
-    LTVector vVelMin, vVelMax, vTemp, vU, vR, vF;
+	LTVector vVelMin, vVelMax, vTemp, vU, vR, vF;
 	VEC_SET(vVelMin, 1.0f, 1.0f, 1.0f);
 	VEC_SET(vVelMax, 1.0f, 1.0f, 1.0f);
 
@@ -136,7 +127,7 @@ LTBOOL CGibFX::CreateObject(ILTClient *pClientDE)
 
 	// Initialize our emitters...
 
-    LTVector vVel;
+	LTVector vVel;
 	for (int i=0; i < m_nNumGibs; i++)
 	{
 		if (i < m_nNumGibs - m_nNumRandomGibs)
@@ -152,7 +143,7 @@ LTBOOL CGibFX::CreateObject(ILTClient *pClientDE)
 
 		m_pGibTrail[i] = CreateGibTrail(m_hGib[i]);
 
-        m_ActiveEmitters[i] = LTTRUE;
+		m_ActiveEmitters[i] = LTTRUE;
 		m_BounceCount[i]	 = GetRandom(2, 5);
 
 		VEC_SET(vVel, GetRandom(vVelMin.x, vVelMax.x),
@@ -186,24 +177,21 @@ LTBOOL CGibFX::CreateObject(ILTClient *pClientDE)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::Update
 //
-//	ROUTINE:	CGibFX::Update
-//
-//	PURPOSE:	Update the Gib
-//
+//	PURPOSE: Update the Gib
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGibFX::Update()
 {
-    if (!m_pClientDE) return LTFALSE;
+	if (!m_pClientDE) return LTFALSE;
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
 	if (m_bFirstUpdate)
 	{
-        m_bFirstUpdate = LTFALSE;
+		m_bFirstUpdate = LTFALSE;
 		m_fStartTime   = fTime;
-		m_fLastTime	   = fTime;
+		m_fLastTime	= fTime;
 	}
 
 
@@ -211,10 +199,10 @@ LTBOOL CGibFX::Update()
 
 	if (fTime > m_fStartTime + m_fFadeTime)
 	{
-        int i;
-        for (i=0; i < m_nNumGibs; i++)
+		int i;
+		for (i=0; i < m_nNumGibs; i++)
 		{
-            LTFLOAT fEndTime = m_fStartTime + m_fGibLife[i];
+			LTFLOAT fEndTime = m_fStartTime + m_fGibLife[i];
 
 			if (fTime > fEndTime)
 			{
@@ -223,7 +211,7 @@ LTBOOL CGibFX::Update()
 					if (m_hGib[i])
 					{
 						m_pClientDE->DeleteObject(m_hGib[i]);
-                        m_hGib[i] = LTNULL;
+						m_hGib[i] = LTNULL;
 					}
 				}
 			}
@@ -241,14 +229,14 @@ LTBOOL CGibFX::Update()
 		if (i == m_nNumGibs)
 		{
 			RemoveAllFX();
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 // #define FADING_GIBS
 #ifdef FADING_GIBS
-        LTFLOAT fScale = (fEndTime - fTime) / (m_fLifeTime - m_fFadeTime);
+		LTFLOAT fScale = (fEndTime - fTime) / (m_fLifeTime - m_fFadeTime);
 
-        LTFLOAT r, g, b, a;
+		LTFLOAT r, g, b, a;
 
 		for (int i=0; i < m_nNumGibs; i++)
 		{
@@ -268,7 +256,7 @@ LTBOOL CGibFX::Update()
 	{
 		if (m_ActiveEmitters[i])
 		{
-            LTBOOL bBounced = LTFALSE;
+			LTBOOL bBounced = LTFALSE;
 			if (bBounced = UpdateEmitter(&m_Emitters[i]))
 			{
 				HandleBounce(i);
@@ -278,37 +266,34 @@ LTBOOL CGibFX::Update()
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::UpdateEmitter
 //
-//	ROUTINE:	CGibFX::UpdateEmitter
-//
-//	PURPOSE:	Update emitter position
-//
+//	PURPOSE: Update emitter position
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGibFX::UpdateEmitter(MovingObject* pObject)
 {
-    if (!m_pClientDE || !pObject || pObject->m_dwPhysicsFlags & MO_RESTING) return LTFALSE;
+	if (!m_pClientDE || !pObject || pObject->m_dwPhysicsFlags & MO_RESTING) return LTFALSE;
 
-    LTBOOL bRet = LTFALSE;
+	LTBOOL bRet = LTFALSE;
 
-    LTVector vNewPos;
-    if (UpdateMovingObject(LTNULL, pObject, &vNewPos))
+	LTVector vNewPos;
+	if (UpdateMovingObject(LTNULL, pObject, &vNewPos))
 	{
 		LTBOOL bBouncedOnGround = LTFALSE;
-        uint32 dwFlags = (INTERSECT_HPOLY | INTERSECT_OBJECTS | IGNORE_NONSOLID);
-       
+		uint32 dwFlags = (INTERSECT_HPOLY | INTERSECT_OBJECTS | IGNORE_NONSOLID);
+	
 		bRet = BounceMovingObject(LTNULL, pObject, &vNewPos, &m_info, 
 			dwFlags, bBouncedOnGround);
 
 		pObject->m_vLastPos = pObject->m_vPos;
 		pObject->m_vPos = vNewPos;
 
-        if (m_pClientDE->GetPointStatus(&vNewPos) == LT_OUTSIDE)
+		if (m_pClientDE->GetPointStatus(&vNewPos) == LT_OUTSIDE)
 		{
 			pObject->m_dwPhysicsFlags |= MO_RESTING;
 			pObject->m_vPos = pObject->m_vLastPos;
@@ -319,31 +304,28 @@ LTBOOL CGibFX::UpdateEmitter(MovingObject* pObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::UpdateGib
 //
-//	ROUTINE:	CGibFX::UpdateGib
-//
-//	PURPOSE:	Update gib pos/rot
-//
+//	PURPOSE: Update gib pos/rot
 // ----------------------------------------------------------------------- //
-
 void CGibFX::UpdateGib(int nIndex, LTBOOL bBounced)
 {
 	if (nIndex < 0 || nIndex >= m_nNumGibs) return;
 
 	if (m_Emitters[nIndex].m_dwPhysicsFlags & MO_RESTING)
 	{
-        m_ActiveEmitters[nIndex] = LTFALSE;
+		m_ActiveEmitters[nIndex] = LTFALSE;
 		if (m_pGibTrail[nIndex])
 		{
 			debug_delete(m_pGibTrail[nIndex]);
-            m_pGibTrail[nIndex] = LTNULL;
+			m_pGibTrail[nIndex] = LTNULL;
 		}
 
 		if (m_hGib[nIndex])
 		{
 			if (m_bRotate)
 			{
-                LTRotation rRot;
+				LTRotation rRot;
 				m_pClientDE->SetupEuler(&rRot, 0.0f, m_fYaw, m_fRoll);
 				m_pClientDE->SetObjectRotation(m_hGib[nIndex], &rRot);
 			}
@@ -360,22 +342,21 @@ void CGibFX::UpdateGib(int nIndex, LTBOOL bBounced)
 			if (bBounced)
 			{
 				// Adjust due to the bounce...
-
-                LTFLOAT fVal = GetRandom(MATH_CIRCLE/4.0f, MATH_CIRCLE/2.0f);
-				m_fPitchVel = GetRandom(-fVal, fVal);
+				LTFLOAT fVal = GetRandom(MATH_CIRCLE/4.0f, MATH_CIRCLE/2.0f);
+				m_fPitchVel	= GetRandom(-fVal, fVal);
 				m_fYawVel	= GetRandom(-fVal, fVal);
 				m_fRollVel	= GetRandom(-fVal, fVal);
 			}
 
 			if (m_fPitchVel != 0 || m_fYawVel != 0 || m_fRollVel)
 			{
-                LTFLOAT fDeltaTime = g_pGameClientShell->GetFrameTime();
+				LTFLOAT fDeltaTime = g_pGameClientShell->GetFrameTime();
 
-				m_fPitch += m_fPitchVel * fDeltaTime;
-				m_fYaw   += m_fYawVel * fDeltaTime;
-				m_fRoll  += m_fRollVel * fDeltaTime;
+				m_fPitch	+= m_fPitchVel * fDeltaTime;
+				m_fYaw	+= m_fYawVel * fDeltaTime;
+				m_fRoll	+= m_fRollVel * fDeltaTime;
 
-                LTRotation rRot;
+				LTRotation rRot;
 				m_pClientDE->SetupEuler(&rRot, m_fPitch, m_fYaw, m_fRoll);
 				m_pClientDE->SetObjectRotation(m_hGib[nIndex], &rRot);
 			}
@@ -389,21 +370,18 @@ void CGibFX::UpdateGib(int nIndex, LTBOOL bBounced)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::CreateGib
 //
-//	ROUTINE:	CGibFX::CreateGib
-//
-//	PURPOSE:	Create a Gib model
-//
+//	PURPOSE: Create a Gib model
 // ----------------------------------------------------------------------- //
-
 HLOCALOBJ CGibFX::CreateGib(GibType eType)
 {
 	// TODO: REIMPLEMENT GIB LOOKUP IN MODELBUTEMGR
 
-    char* pFilename = LTNULL;//GetGibModel(m_eModel, m_eModelStyle, eType);
-    char* pSkin     = LTNULL;//GetGibSkin(m_eModel, m_eModelStyle, eType);
+	char* pFilename = LTNULL;//GetGibModel(m_eModel, m_eModelStyle, eType);
+	char* pSkin	= LTNULL;//GetGibSkin(m_eModel, m_eModelStyle, eType);
 
-    if (!pFilename) return LTNULL;
+	if (!pFilename) return LTNULL;
 
 	ObjectCreateStruct createStruct;
 	INIT_OBJECTCREATESTRUCT(createStruct);
@@ -426,16 +404,13 @@ HLOCALOBJ CGibFX::CreateGib(GibType eType)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::CreateRandomGib
 //
-//	ROUTINE:	CGibFX::CreateRandomGib
-//
-//	PURPOSE:	Create a random gib model
-//
+//	PURPOSE: Create a random gib model
 // ----------------------------------------------------------------------- //
-
 HLOCALOBJ CGibFX::CreateRandomGib()
 {
-    return LTNULL;
+	return LTNULL;
 /*
 	DebrisType eType = DBT_GENERIC;
 	switch (g_pModelButeMgr->GetModelType(m_eModelId))
@@ -449,11 +424,11 @@ HLOCALOBJ CGibFX::CreateRandomGib()
 		default : break;
 	}
 
-    LTVector vScale(1.0f, 1.0f, 1.0f);
+	LTVector vScale(1.0f, 1.0f, 1.0f);
 
 	char* pFilename = GetDebrisModel(eType, vScale);
-	char* pSkin     = GetDebrisSkin(eType);
-    if (!pFilename) return LTNULL;
+	char* pSkin	 = GetDebrisSkin(eType);
+	if (!pFilename) return LTNULL;
 
 	ObjectCreateStruct createStruct;
 	INIT_OBJECTCREATESTRUCT(createStruct);
@@ -477,30 +452,27 @@ HLOCALOBJ CGibFX::CreateRandomGib()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::CreateGibTrail
 //
-//	ROUTINE:	CGibFX::CreateGibTrail
-//
-//	PURPOSE:	Create a blood/smoke gib trail fx
-//
+//	PURPOSE: Create a blood/smoke gib trail fx
 // ----------------------------------------------------------------------- //
-
 CSpecialFX* CGibFX::CreateGibTrail(HLOCALOBJ hObj)
 {
-    if (!hObj || !m_pClientDE) return LTNULL;
+	if (!hObj || !m_pClientDE) return LTNULL;
 
 	CGameSettings* pSettings = g_pInterfaceMgr->GetSettings();
-    if (!pSettings) return LTNULL;
+	if (!pSettings) return LTNULL;
 
-    uint8 nDetailLevel = pSettings->SpecialFXSetting();
-    if (nDetailLevel == RS_LOW) return LTNULL;
+	uint8 nDetailLevel = pSettings->SpecialFXSetting();
+	if (nDetailLevel == RS_LOW) return LTNULL;
 
 
 	PTCREATESTRUCT pt;
 	pt.hServerObj = hObj;
-    pt.nType      = (uint8) (m_eModelType == eModelTypeHuman ? PT_BLOOD : PT_GIBSMOKE);
+	pt.nType	  = (uint8) (m_eModelType == eModelTypeHuman ? PT_BLOOD : PT_GIBSMOKE);
 
 	CSpecialFX*	pSFX = debug_new(CParticleTrailFX);
-    if (!pSFX) return LTNULL;
+	if (!pSFX) return LTNULL;
 
 	pSFX->Init(&pt);
 	pSFX->CreateObject(m_pClientDE);
@@ -510,16 +482,13 @@ CSpecialFX* CGibFX::CreateGibTrail(HLOCALOBJ hObj)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::GetBounceSound
 //
-//	ROUTINE:	CGibFX::GetBounceSound
-//
-//	PURPOSE:	Get a gib bounce sound
-//
+//	PURPOSE: Get a gib bounce sound
 // ----------------------------------------------------------------------- //
-
 char* CGibFX::GetBounceSound()
 {
-    char* pSound = LTNULL;
+	char* pSound = LTNULL;
 
 /*
 	switch (m_eModelType)
@@ -549,16 +518,13 @@ char* CGibFX::GetBounceSound()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::GetGibDieSound
 //
-//	ROUTINE:	CGibFX::GetGibDieSound
-//
-//	PURPOSE:	Get the sound when a gib dies
-//
+//	PURPOSE: Get the sound when a gib dies
 // ----------------------------------------------------------------------- //
-
 char* CGibFX::GetGibDieSound()
 {
-    char* pSound = LTNULL;
+	char* pSound = LTNULL;
 
 /*
 	switch (m_eModelType)
@@ -588,13 +554,10 @@ char* CGibFX::GetGibDieSound()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::HandleBounce
 //
-//	ROUTINE:	CGibFX::HandleBounce
-//
-//	PURPOSE:	Handle gib bouncing
-//
+//	PURPOSE: Handle gib bouncing
 // ----------------------------------------------------------------------- //
-
 void CGibFX::HandleBounce(int nIndex)
 {
 	if (nIndex < 0 || nIndex >= m_nNumGibs) return;
@@ -619,7 +582,6 @@ void CGibFX::HandleBounce(int nIndex)
 
 
 	// See if we're resting...
-
 	m_BounceCount[nIndex]--;
 	if (m_BounceCount[nIndex] <= 0)
 	{
@@ -629,12 +591,10 @@ void CGibFX::HandleBounce(int nIndex)
 
 
 	// Add a blood splat...
-
 	if (m_bBloodSplats)
 	{
 		// Don't add blood splats on the sky...
-
-        uint32 dwTextureFlags;
+		uint32 dwTextureFlags;
 		m_pClientDE->GetPolyTextureFlags(m_info.m_hPoly, &dwTextureFlags);
 		SurfaceType eType = (SurfaceType)dwTextureFlags;
 		if (eType == ST_SKY) return;
@@ -645,20 +605,20 @@ void CGibFX::HandleBounce(int nIndex)
 
 		BSCREATESTRUCT sc;
 
-        m_pClientDE->AlignRotation(&(sc.rRot), &(m_info.m_Plane.m_Normal), LTNULL    );
+		m_pClientDE->AlignRotation(&(sc.rRot), &(m_info.m_Plane.m_Normal), LTNULL	);
 
-        LTVector vTemp;
+		LTVector vTemp;
 		VEC_MULSCALAR(vTemp, m_info.m_Plane.m_Normal, 2.0f);
-		VEC_ADD(sc.vPos, m_info.m_Point, vTemp);  // Off the wall/floor a bit
+		VEC_ADD(sc.vPos, m_info.m_Point, vTemp);	// Off the wall/floor a bit
 		VEC_SET(sc.vVel, 0.0f, 0.0f, 0.0f);
 		VEC_SET(sc.vInitialScale, GetRandom(0.3f, 0.5f), GetRandom(0.3f, 0.5f), 1.0f);
 		VEC_SET(sc.vFinalScale, GetRandom(0.8f, 1.0f), GetRandom(0.8f, 1.0f), 1.0f);
 
-		sc.dwFlags			= FLAG_VISIBLE | FLAG_ROTATEABLESPRITE | FLAG_NOLIGHT;
-		sc.fLifeTime		= m_fLifeTime + 10.0f;
+		sc.dwFlags	= FLAG_VISIBLE | FLAG_ROTATEABLESPRITE | FLAG_NOLIGHT;
+		sc.fLifeTime	= m_fLifeTime + 10.0f;
 		sc.fInitialAlpha	= 1.0f;
-		sc.fFinalAlpha		= 0.0f;
-		sc.nType			= OT_SPRITE;
+		sc.fFinalAlpha	= 0.0f;
+		sc.nType		= OT_SPRITE;
 
 		char* pBloodFiles[] =
 		{
@@ -678,13 +638,10 @@ void CGibFX::HandleBounce(int nIndex)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::HandleDoneBouncing
 //
-//	ROUTINE:	CGibFX::HandleDoneBouncing
-//
-//	PURPOSE:	Handle gib done bouncing
-//
+//	PURPOSE: Handle gib done bouncing
 // ----------------------------------------------------------------------- //
-
 void CGibFX::HandleDoneBouncing(int nIndex)
 {
 	if (nIndex < 0 || nIndex >= m_nNumGibs) return;
@@ -704,13 +661,10 @@ void CGibFX::HandleDoneBouncing(int nIndex)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::CreateLingeringSmoke
 //
-//	ROUTINE:	CGibFX::CreateLingeringSmoke
-//
-//	PURPOSE:	Create a bit o smoke...
-//
+//	PURPOSE: Create a bit o smoke...
 // ----------------------------------------------------------------------- //
-
 void CGibFX::CreateLingeringSmoke(int nIndex)
 {
 	CSFXMgr* psfxMgr = g_pGameClientShell->GetSFXMgr();
@@ -719,7 +673,7 @@ void CGibFX::CreateLingeringSmoke(int nIndex)
 	CGameSettings* pSettings = g_pInterfaceMgr->GetSettings();
 	if (!pSettings) return;
 
-    uint8 nDetailLevel = pSettings->SpecialFXSetting();
+	uint8 nDetailLevel = pSettings->SpecialFXSetting();
 	if (nDetailLevel == RS_LOW) return;
 
 	SMCREATESTRUCT sm;
@@ -731,35 +685,35 @@ void CGibFX::CreateLingeringSmoke(int nIndex)
 	VEC_SET(sm.vMinDriftVel, -10.0f, 25.0f, -10.0f);
 	VEC_SET(sm.vMaxDriftVel, 10.0f, 50.0f, 10.0f);
 
-    LTFLOAT fVolumeRadius        = 10.0f;
-    LTFLOAT fLifeTime            = GetRandom(m_fLifeTime * 0.75f, m_fLifeTime);
-    LTFLOAT fRadius              = 1500;
-    LTFLOAT fParticleCreateDelta = 0.1f;
-    LTFLOAT fMinParticleLife     = 1.0f;
-    LTFLOAT fMaxParticleLife     = 5.0f;
-    uint8  nNumParticles        = 3;
-    LTBOOL  bIgnoreWind          = LTFALSE;
+	LTFLOAT fVolumeRadius	= 10.0f;
+	LTFLOAT fLifeTime		= GetRandom(m_fLifeTime * 0.75f, m_fLifeTime);
+	LTFLOAT fRadius			= 1500;
+	LTFLOAT fParticleCreateDelta = 0.1f;
+	LTFLOAT fMinParticleLife	= 1.0f;
+	LTFLOAT fMaxParticleLife	= 5.0f;
+	uint8  nNumParticles		= 3;
+	LTBOOL  bIgnoreWind	= LTFALSE;
 
 	if (IsLiquid(m_eCode))
 	{
 		GetLiquidColorRange(m_eCode, &sm.vColor1, &sm.vColor2);
 		pTexture			= DEFAULT_BUBBLE_TEXTURE;
-		fRadius				= 750.0f;
-        bIgnoreWind         = LTTRUE;
+		fRadius			= 750.0f;
+		bIgnoreWind		= LTTRUE;
 		fMinParticleLife	= 1.0f;
 		fMaxParticleLife	= 1.5f;
 	}
 
-	sm.vPos					= m_Emitters[nIndex].m_vPos;
-	sm.hServerObj 		    = m_hGib[nIndex];
+	sm.vPos				= m_Emitters[nIndex].m_vPos;
+	sm.hServerObj 			= m_hGib[nIndex];
 	sm.fVolumeRadius		= fVolumeRadius;
 	sm.fLifeTime			= fLifeTime;
-	sm.fRadius				= fRadius;
+	sm.fRadius			= fRadius;
 	sm.fParticleCreateDelta	= fParticleCreateDelta;
 	sm.fMinParticleLife		= fMinParticleLife;
 	sm.fMaxParticleLife		= fMaxParticleLife;
 	sm.nNumParticles		= nNumParticles;
-	sm.bIgnoreWind			= bIgnoreWind;
+	sm.bIgnoreWind		= bIgnoreWind;
 	sm.hstrTexture			= m_pClientDE->CreateString(pTexture);
 
 	psfxMgr->CreateSFX(SFX_SMOKE_ID, &sm);
@@ -769,13 +723,10 @@ void CGibFX::CreateLingeringSmoke(int nIndex)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::CreateMiniBloodExplosion
 //
-//	ROUTINE:	CGibFX::CreateMiniBloodExplosion
-//
-//	PURPOSE:	Crate a mini blood explosion effect
-//
+//	PURPOSE: Crate a mini blood explosion effect
 // ----------------------------------------------------------------------- //
-
 void CGibFX::CreateMiniBloodExplosion(int nIndex)
 {
 	// Add a mini blood explosion...
@@ -786,11 +737,11 @@ void CGibFX::CreateMiniBloodExplosion(int nIndex)
 	CGameSettings* pSettings = g_pInterfaceMgr->GetSettings();
 	if (!pSettings) return;
 
-    uint8 nDetailLevel = pSettings->SpecialFXSetting();
+	uint8 nDetailLevel = pSettings->SpecialFXSetting();
 	if (nDetailLevel == RS_LOW) return;
 
 	char* szBlood[2] = { "SpecialFX\\ParticleTextures\\Blood_1.dtx",
-					     "SpecialFX\\ParticleTextures\\Blood_2.dtx" };
+						 "SpecialFX\\ParticleTextures\\Blood_2.dtx" };
 
 	PARTICLESHOWERCREATESTRUCT ps;
 
@@ -800,18 +751,18 @@ void CGibFX::CreateMiniBloodExplosion(int nIndex)
 	ps.vDir.Init(0, 100, 0);
 	VEC_SET(ps.vColor1, 200.0f, 200.0f, 200.0f);
 	VEC_SET(ps.vColor2, 255.0f, 255.0f, 255.0f);
-	ps.pTexture			= szBlood[GetRandom(0,1)];;
+	ps.pTexture		= szBlood[GetRandom(0,1)];;
 	ps.nParticles		= 50;
 	ps.fDuration		= 1.0f;
 	ps.fEmissionRadius	= 0.3f;
-	ps.fRadius			= 800.0f;
-	ps.fGravity			= PSFX_DEFAULT_GRAVITY;
+	ps.fRadius		= 800.0f;
+	ps.fGravity		= PSFX_DEFAULT_GRAVITY;
 
 	if (IsLiquid(m_eCode))
 	{
 		ps.vDir	*= 3.0f;
 		ps.fEmissionRadius	= 0.2f;
-		ps.fRadius			= 700.0f;
+		ps.fRadius		= 700.0f;
 	}
 
 	psfxMgr->CreateSFX(SFX_PARTICLESHOWER_ID, &ps);
@@ -829,13 +780,10 @@ void CGibFX::CreateMiniBloodExplosion(int nIndex)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::CreateBloodSpray
 //
-//	ROUTINE:	CGibFX::CreateBloodSpray
-//
-//	PURPOSE:	Create a spray of blood
-//
+//	PURPOSE: Create a spray of blood
 // ----------------------------------------------------------------------- //
-
 void CGibFX::CreateBloodSpray()
 {
 	CSFXMgr* psfxMgr = g_pGameClientShell->GetSFXMgr();
@@ -849,11 +797,11 @@ void CGibFX::CreateBloodSpray()
 	VEC_SET(sc.vInitialScale, GetRandom(2.0f, 4.0f), GetRandom(2.0f, 4.0f), 1.0f);
 	VEC_SET(sc.vFinalScale, GetRandom(0.5f, 0.8f), GetRandom(0.5f, 0.8f), 1.0f);
 
-	sc.dwFlags			= FLAG_VISIBLE | FLAG_SPRITEBIAS | FLAG_NOLIGHT;
-	sc.fLifeTime		= 0.5f;
+	sc.dwFlags	= FLAG_VISIBLE | FLAG_SPRITEBIAS | FLAG_NOLIGHT;
+	sc.fLifeTime	= 0.5f;
 	sc.fInitialAlpha	= 1.0f;
-	sc.fFinalAlpha		= 0.0f;
-	sc.nType			= OT_SPRITE;
+	sc.fFinalAlpha	= 0.0f;
+	sc.nType		= OT_SPRITE;
 
 	char* pBloodFiles[] =
 	{
@@ -872,13 +820,10 @@ void CGibFX::CreateBloodSpray()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::RemoveAllFX
 //
-//	ROUTINE:	CGibFX::RemoveAllFX
-//
-//	PURPOSE:	Remove all the fx
-//
+//	PURPOSE: Remove all the fx
 // ----------------------------------------------------------------------- //
-
 void CGibFX::RemoveAllFX()
 {
 	if (!m_pClientDE) return;
@@ -888,12 +833,12 @@ void CGibFX::RemoveAllFX()
 		if (m_hGib[i])
 		{
 			m_pClientDE->DeleteObject(m_hGib[i]);
-            m_hGib[i] = LTNULL;
+			m_hGib[i] = LTNULL;
 		}
 		if (m_pGibTrail[i])
 		{
 			debug_delete(m_pGibTrail[i]);
-            m_pGibTrail[i] = LTNULL;
+			m_pGibTrail[i] = LTNULL;
 		}
 	}
 }
@@ -901,46 +846,40 @@ void CGibFX::RemoveAllFX()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGibFX::OkToRemoveGib
 //
-//	ROUTINE:	CGibFX::OkToRemoveGib
-//
-//	PURPOSE:	See if this particular model can be removed.
-//
+//	PURPOSE: See if this particular model can be removed.
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGibFX::OkToRemoveGib(HLOCALOBJ hGib)
 {
-    if (!m_pClientDE || !g_pGameClientShell || !hGib) return LTTRUE;
+	if (!m_pClientDE || !g_pGameClientShell || !hGib) return LTTRUE;
 
 
 	// The only constraint is that the client isn't currently looking
 	// at the model...
-
 	HLOCALOBJ hCamera = g_pGameClientShell->GetCamera();
-    if (!hCamera) return LTTRUE;
+	if (!hCamera) return LTTRUE;
 
-    LTVector vPos, vCamPos;
+	LTVector vPos, vCamPos;
 	m_pClientDE->GetObjectPos(hGib, &vPos);
 	m_pClientDE->GetObjectPos(hCamera, &vCamPos);
 
 
 	// Determine if the client can see us...
-
-    LTVector vDir;
+	LTVector vDir;
 	VEC_SUB(vDir, vPos, vCamPos);
 
-    LTRotation rRot;
-    LTVector vU, vR, vF;
+	LTRotation rRot;
+	LTVector vU, vR, vF;
 	m_pClientDE->GetObjectRotation(hCamera, &rRot);
 	m_pClientDE->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	VEC_NORM(vDir);
 	VEC_NORM(vF);
-    LTFLOAT fMul = VEC_DOT(vDir, vF);
-    if (fMul <= 0.0f) return LTTRUE;
+	LTFLOAT fMul = VEC_DOT(vDir, vF);
+	if (fMul <= 0.0f) return LTTRUE;
 
 
 	// Client is looking our way, don't remove it yet...
-
-    return LTFALSE;
+	return LTFALSE;
 }

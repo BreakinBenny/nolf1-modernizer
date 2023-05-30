@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: LineSystemFX.cpp
 //
-// MODULE  : LineSystemFX.cpp
+// PURPOSE: LineSystem special FX - Implementation
 //
-// PURPOSE : LineSystem special FX - Implementation
-//
-// CREATED : 4/12/99
-//
+// CREATED: 4/12/99
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "LineSystemFX.h"
 #include "iltclient.h"
@@ -29,40 +26,34 @@ static VarTrack s_cvarTweak;
 int CLineSystemFX::m_snTotalLines = 0;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLineSystemFX::CLineSystemFX
 //
-//	ROUTINE:	CLineSystemFX::CLineSystemFX
-//
-//	PURPOSE:	Construct
-//
+//	PURPOSE: Construct
 // ----------------------------------------------------------------------- //
-
 CLineSystemFX::CLineSystemFX() : CBaseLineSystemFX()
 {
-    m_bFirstUpdate  = LTTRUE;
-    m_bContinuous   = LTFALSE;
+	m_bFirstUpdate  = LTTRUE;
+	m_bContinuous   = LTFALSE;
 
 	m_fLastTime		= 0.0f;
 	m_fNextUpdate	= 0.01f;
 
-    m_RemoveLineFn  = LTNULL;
-    m_pUserData     = LTNULL;
+	m_RemoveLineFn  = LTNULL;
+	m_pUserData	 = LTNULL;
 
 	m_fMaxViewDistSqr = 1000.0f*1000.0f;
 	m_nTotalNumLines  = 0;
-    m_pLines          = LTNULL;
+	m_pLines		  = LTNULL;
 
 	m_vStartOffset.Init();
 	m_vEndOffset.Init();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLineSystemFX::~CLineSystemFX
 //
-//	ROUTINE:	CLineSystemFX::~CLineSystemFX
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
-
 CLineSystemFX::~CLineSystemFX()
 {
 	if (m_pLines)
@@ -73,21 +64,18 @@ CLineSystemFX::~CLineSystemFX()
 		}
 
 		debug_deletea(m_pLines);
-        m_pLines = LTNULL;
+		m_pLines = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLineSystemFX::Init
 //
-//	ROUTINE:	CLineSystemFX::Init
-//
-//	PURPOSE:	Init the line system
-//
+//	PURPOSE: Init the line system
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLineSystemFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CBaseLineSystemFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CBaseLineSystemFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	// Set up our creation struct...
 
@@ -131,31 +119,28 @@ LTBOOL CLineSystemFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 
 	m_bContinuous = (m_cs.fBurstWait <= 0.001f);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLineSystemFX::CreateObject
 //
-//	ROUTINE:	CLineSystemFX::CreateObject
-//
-//	PURPOSE:	Create object associated the particle system.
-//
+//	PURPOSE: Create object associated the particle system.
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLineSystemFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!pClientDE ) return LTFALSE;
+	if (!pClientDE ) return LTFALSE;
 
-    LTBOOL bRet = CBaseLineSystemFX::CreateObject(pClientDE);
+	LTBOOL bRet = CBaseLineSystemFX::CreateObject(pClientDE);
 
 	if (bRet && m_hObject && m_hServerObject)
 	{
-        uint32 dwUserFlags;
+		uint32 dwUserFlags;
 		pClientDE->GetObjectUserFlags(m_hServerObject, &dwUserFlags);
 		if (!(dwUserFlags & USRFLG_VISIBLE))
 		{
-            uint32 dwFlags = pClientDE->GetObjectFlags(m_hObject);
+			uint32 dwFlags = pClientDE->GetObjectFlags(m_hObject);
 			pClientDE->SetObjectFlags(m_hObject, dwFlags & ~FLAG_VISIBLE);
 		}
 	}
@@ -173,40 +158,37 @@ LTBOOL CLineSystemFX::CreateObject(ILTClient *pClientDE)
 
 	SetupSystem();
 
-    s_cvarTweak.Init(g_pLTClient, "TweakLines", NULL, 0.0f);
+	s_cvarTweak.Init(g_pLTClient, "TweakLines", NULL, 0.0f);
 
 	return bRet;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLineSystemFX::Update
 //
-//	ROUTINE:	CLineSystemFX::Update
-//
-//	PURPOSE:	Update the particle system
-//
+//	PURPOSE: Update the particle system
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLineSystemFX::Update()
 {
-    if (!m_hObject || !m_pClientDE || m_bWantRemove) return LTFALSE;
+	if (!m_hObject || !m_pClientDE || m_bWantRemove) return LTFALSE;
 
-    LTFLOAT fTime = m_pClientDE->GetTime();
+	LTFLOAT fTime = m_pClientDE->GetTime();
 
 	// Hide/show the line system if necessary...
 
 	if (m_hServerObject)
 	{
-        uint32 dwUserFlags;
+		uint32 dwUserFlags;
 		m_pClientDE->GetObjectUserFlags(m_hServerObject, &dwUserFlags);
 
-        uint32 dwFlags = m_pClientDE->GetObjectFlags(m_hObject);
+		uint32 dwFlags = m_pClientDE->GetObjectFlags(m_hObject);
 
 		if (!(dwUserFlags & USRFLG_VISIBLE))
 		{
 			m_pClientDE->SetObjectFlags(m_hObject, dwFlags & ~FLAG_VISIBLE);
 			m_fLastTime = fTime;
-            return LTTRUE;
+			return LTTRUE;
 		}
 		else
 		{
@@ -225,7 +207,7 @@ LTBOOL CLineSystemFX::Update()
 	if (m_bFirstUpdate)
 	{
 		m_fLastTime = fTime;
-        m_bFirstUpdate = LTFALSE;
+		m_bFirstUpdate = LTFALSE;
 	}
 	else
 	{
@@ -236,7 +218,7 @@ LTBOOL CLineSystemFX::Update()
 
 	if (fTime < m_fLastTime + m_fNextUpdate)
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 
@@ -253,7 +235,7 @@ LTBOOL CLineSystemFX::Update()
 	}
 
 	int nToAdd = (int) floor(m_cs.fLinesPerSecond * fTimeDelta);
-    nToAdd = LTMIN(nToAdd, (int)(MAX_LINES_PER_SECOND * fTimeDelta));
+	nToAdd = LTMIN(nToAdd, (int)(MAX_LINES_PER_SECOND * fTimeDelta));
 
 
 	// Add new lines...
@@ -274,40 +256,37 @@ LTBOOL CLineSystemFX::Update()
 
 	m_fLastTime = fTime;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLineSystemFX::UpdateSystem
 //
-//	ROUTINE:	CLineSystemFX::UpdateSystem
-//
-//	PURPOSE:	Update the lines in the system
-//
+//	PURPOSE: Update the lines in the system
 // ----------------------------------------------------------------------- //
-
 void CLineSystemFX::UpdateSystem()
 {
 	if (!m_pLines) return;
 
 	// Make sure delta time is no less than 15 frames/sec...
 
-    LTFLOAT fDeltaTime = g_pGameClientShell->GetFrameTime();
+	LTFLOAT fDeltaTime = g_pGameClientShell->GetFrameTime();
 	fDeltaTime = fDeltaTime > 0.0666f ? 0.0666f : fDeltaTime;
 
 	// Update all the lines...
 
-    LTLine line;
+	LTLine line;
 
 	for (int i=0; i < m_nTotalNumLines; i++)
 	{
-        if (m_pLines[i].hLTLine)
+		if (m_pLines[i].hLTLine)
 		{
-            m_pClientDE->GetLineInfo(m_pLines[i].hLTLine, &line);
+			m_pClientDE->GetLineInfo(m_pLines[i].hLTLine, &line);
 
 			line.m_Points[0].m_Pos += (m_pLines[i].vVel * fDeltaTime);
 			line.m_Points[1].m_Pos += (m_pLines[i].vVel * fDeltaTime);
 
-            m_pClientDE->SetLineInfo(m_pLines[i].hLTLine, &line);
+			m_pClientDE->SetLineInfo(m_pLines[i].hLTLine, &line);
 			m_pLines[i].fLifetime -= fDeltaTime;
 
 			// Remove dead lines...
@@ -327,13 +306,10 @@ void CLineSystemFX::UpdateSystem()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLineSystemFX::SetupSystem
 //
-//	ROUTINE:	CLineSystemFX::SetupSystem
-//
-//	PURPOSE:	Setup the system (add ALL possible lines)
-//
+//	PURPOSE: Setup the system (add ALL possible lines)
 // ----------------------------------------------------------------------- //
-
 void CLineSystemFX::SetupSystem()
 {
 	if (!m_hServerObject) return;
@@ -344,7 +320,7 @@ void CLineSystemFX::SetupSystem()
 		{
 			if (m_snTotalLines < MAX_TOTAL_LINES)
 			{
-                AddLine(i, LTTRUE);
+				AddLine(i, LTTRUE);
 			}
 			else
 			{
@@ -356,13 +332,10 @@ void CLineSystemFX::SetupSystem()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLineSystemFX::AddLines
 //
-//	ROUTINE:	CLineSystemFX::AddLines
-//
-//	PURPOSE:	Add lines to the system
-//
+//	PURPOSE: Add lines to the system
 // ----------------------------------------------------------------------- //
-
 void CLineSystemFX::AddLines(int nToAdd)
 {
 	if (!m_hServerObject || !m_pLines) return;
@@ -371,7 +344,7 @@ void CLineSystemFX::AddLines(int nToAdd)
 
 	for (int i=0; nNumAdded < nToAdd && i < m_nTotalNumLines; i++)
 	{
-        if (!m_pLines[i].hLTLine || m_pLines[i].fLifetime <= 0.0f)
+		if (!m_pLines[i].hLTLine || m_pLines[i].fLifetime <= 0.0f)
 		{
 			if (m_snTotalLines < MAX_TOTAL_LINES)
 			{
@@ -388,19 +361,16 @@ void CLineSystemFX::AddLines(int nToAdd)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLineSystemFX::AddLine
 //
-//	ROUTINE:	CLineSystemFX::AddLine
-//
-//	PURPOSE:	Add a line to the system
-//
+//	PURPOSE: Add a line to the system
 // ----------------------------------------------------------------------- //
-
 void CLineSystemFX::AddLine(int nIndex, LTBOOL bSetInitialPos)
 {
 	if (!m_hServerObject || !m_pLines || nIndex < 0 || nIndex >= m_nTotalNumLines) return;
 
-    LTVector vPos, vCamPos, vObjPos, vDist, vVel;
-    LTLine line;
+	LTVector vPos, vCamPos, vObjPos, vDist, vVel;
+	LTLine line;
 
 	m_pClientDE->GetObjectPos(m_hServerObject, &vObjPos);
 
@@ -411,13 +381,13 @@ void CLineSystemFX::AddLine(int nIndex, LTBOOL bSetInitialPos)
 	if (!hCamera) return;
 
 	m_pClientDE->GetObjectPos(hCamera, &vCamPos);
-	vCamPos.y = 0.0f;  // Only take x/z into account...
+	vCamPos.y = 0.0f;	// Only take x/z into account...
 
 	vPos.x = GetRandom(-m_cs.vDims.x, m_cs.vDims.x);
 	vPos.y = GetRandom(-m_cs.vDims.y, m_cs.vDims.y);
 	vPos.z = GetRandom(-m_cs.vDims.z, m_cs.vDims.z);
 
-    LTFLOAT fLifetime = m_cs.fLineLifetime;
+	LTFLOAT fLifetime = m_cs.fLineLifetime;
 
 	vVel.x = GetRandom(m_cs.vMinVel.x, m_cs.vMaxVel.x);
 	vVel.y = GetRandom(m_cs.vMinVel.y, m_cs.vMaxVel.y);
@@ -449,24 +419,24 @@ void CLineSystemFX::AddLine(int nIndex, LTBOOL bSetInitialPos)
 	if (vDist.MagSqr() < m_fMaxViewDistSqr || bSetInitialPos)
 	{
 		line.m_Points[0].m_Pos = vPos + m_vStartOffset;
-		line.m_Points[0].r	   = m_cs.vStartColor.x;
-		line.m_Points[0].g	   = m_cs.vStartColor.y;
-		line.m_Points[0].b	   = m_cs.vStartColor.z;
-		line.m_Points[0].a	   = m_cs.fStartAlpha;
+		line.m_Points[0].r	= m_cs.vStartColor.x;
+		line.m_Points[0].g	= m_cs.vStartColor.y;
+		line.m_Points[0].b	= m_cs.vStartColor.z;
+		line.m_Points[0].a	= m_cs.fStartAlpha;
 
 		line.m_Points[1].m_Pos = vPos + m_vEndOffset;
-		line.m_Points[1].r	   = m_cs.vEndColor.x;
-		line.m_Points[1].g	   = m_cs.vEndColor.y;
-		line.m_Points[1].b	   = m_cs.vEndColor.z;
-		line.m_Points[1].a	   = m_cs.fEndAlpha;
+		line.m_Points[1].r	= m_cs.vEndColor.x;
+		line.m_Points[1].g	= m_cs.vEndColor.y;
+		line.m_Points[1].b	= m_cs.vEndColor.z;
+		line.m_Points[1].a	= m_cs.fEndAlpha;
 
-        if (m_pLines[nIndex].hLTLine)
+		if (m_pLines[nIndex].hLTLine)
 		{
-            m_pClientDE->SetLineInfo(m_pLines[nIndex].hLTLine, &line);
+			m_pClientDE->SetLineInfo(m_pLines[nIndex].hLTLine, &line);
 		}
 		else
 		{
-            m_pLines[nIndex].hLTLine = m_pClientDE->AddLine(m_hObject, &line);
+			m_pLines[nIndex].hLTLine = m_pClientDE->AddLine(m_hObject, &line);
 
 			m_snTotalLines++;
 		}
@@ -482,43 +452,37 @@ void CLineSystemFX::AddLine(int nIndex, LTBOOL bSetInitialPos)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLineSystemFX::RemoveLine
 //
-//	ROUTINE:	CLineSystemFX::RemoveLine
-//
-//	PURPOSE:	Remove the line from the system
-//
+//	PURPOSE: Remove the line from the system
 // ----------------------------------------------------------------------- //
-
 void CLineSystemFX::RemoveLine(int nIndex)
 {
 	if (!m_pLines || nIndex < 0 || nIndex >= m_nTotalNumLines) return;
 
-    if (m_pLines[nIndex].hLTLine)
+	if (m_pLines[nIndex].hLTLine)
 	{
-        m_pClientDE->RemoveLine(m_hObject, m_pLines[nIndex].hLTLine);
-        m_pLines[nIndex].hLTLine = LTNULL;
+		m_pClientDE->RemoveLine(m_hObject, m_pLines[nIndex].hLTLine);
+		m_pLines[nIndex].hLTLine = LTNULL;
 		m_snTotalLines--;
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLineSystemFX::TweakSystem
 //
-//	ROUTINE:	CLineSystemFX::TweakSystem
-//
-//	PURPOSE:	Tweak the particle system
-//
+//	PURPOSE: Tweak the particle system
 // ----------------------------------------------------------------------- //
-
 void CLineSystemFX::TweakSystem()
 {
-    LTFLOAT fIncValue = 0.01f;
-    LTBOOL bChanged = LTFALSE;
+	LTFLOAT fIncValue = 0.01f;
+	LTBOOL bChanged = LTFALSE;
 
-    LTVector vScale;
+	LTVector vScale;
 	vScale.Init();
 
-    uint32 dwPlayerFlags = g_pGameClientShell->GetPlayerFlags();
+	uint32 dwPlayerFlags = g_pGameClientShell->GetPlayerFlags();
 
 	// Move faster if running...
 
@@ -533,12 +497,12 @@ void CLineSystemFX::TweakSystem()
 	{
 		fIncValue = dwPlayerFlags & BC_CFLG_FORWARD ? fIncValue : -fIncValue;
 
-        m_cs.vMinVel.y += (LTFLOAT)(fIncValue * 101.0);
-        m_cs.vMaxVel.y += (LTFLOAT)(fIncValue * 101.0);
+		m_cs.vMinVel.y += (LTFLOAT)(fIncValue * 101.0);
+		m_cs.vMaxVel.y += (LTFLOAT)(fIncValue * 101.0);
 		//m_cs.vColor1
 		//m_cs.vColor2
 
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -547,12 +511,12 @@ void CLineSystemFX::TweakSystem()
 	if ((dwPlayerFlags & BC_CFLG_STRAFE_RIGHT) || (dwPlayerFlags & BC_CFLG_STRAFE_LEFT))
 	{
 		fIncValue = dwPlayerFlags & BC_CFLG_STRAFE_RIGHT ? fIncValue : -fIncValue;
-        m_cs.fLinesPerSecond += (LTFLOAT)(fIncValue * 101.0);
+		m_cs.fLinesPerSecond += (LTFLOAT)(fIncValue * 101.0);
 
 		m_cs.fLinesPerSecond = m_cs.fLinesPerSecond < 0.0f ? 0.0f :
 			(m_cs.fLinesPerSecond > MAX_LINES_PER_SECOND ? MAX_LINES_PER_SECOND : m_cs.fLinesPerSecond);
 
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -581,7 +545,7 @@ void CLineSystemFX::TweakSystem()
 			m_vEndOffset.z = (m_cs.fLineLength * (g_vWorldWindVel.z / fVal));
 		}
 
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 

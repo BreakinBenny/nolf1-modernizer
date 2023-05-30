@@ -1,13 +1,11 @@
 /****************************************************************************
+;	 MODULE: CLTDecisionWnd (.h)
 ;
-;	 MODULE:		CLTDecisionWnd (.h)
+;	PURPOSE: Class for a decision window
 ;
-;	PURPOSE:		Class for a decision window
+;	HISTORY: 04/16/99 [kml] This file was created
 ;
-;	HISTORY:		04/16/99 [kml] This file was created
-;
-;	COMMENT:		Copyright (c) 1998, Monolith Productions, Inc.
-;
+;	COMMENT: Copyright (c) 1998, Monolith Productions, Inc.
 ****************************************************************************/
 #ifndef _LTDECISIONWND_H_
 #define _LTDECISIONWND_H_
@@ -24,11 +22,11 @@
 class DECISIONWNDCREATESTRUCT : public LTWNDCREATESTRUCT
 {
 public:
-    DECISIONWNDCREATESTRUCT();
+	DECISIONWNDCREATESTRUCT();
 
-    LTFLOAT          fAlpha;
+	LTFLOAT		fAlpha;
 	BOOL			bFrame;
-	CLTSurfaceArray *pcollFrames;
+	CLTSurfaceArray	*pcollFrames;
 	CLTGUIFont		*pFont;
 	CRect*			prcFrame;
 	CRect*			prcTotal;
@@ -69,18 +67,18 @@ public:
 	void	SetCurSelection(int nSelection);
 
 protected:
-    void    SetAlpha(LTFLOAT fAlpha);
+	void	SetAlpha(LTFLOAT fAlpha);
 
 	CLTGUIFont		*m_pFont;
 	BOOL			m_bOpening;
 	BOOL			m_bClosing;
 	CTimer			m_tmrClose;
-	float			m_fStartPos;
+	float				m_fStartPos;
 	CRect			*m_prcFrame;
 	CRect			*m_prcTotal;
 	CLTTextWnd		m_DecisionWnds[MAX_DECISIONS];
-	uint8			m_byActivatedSelection;
-	CLTSurfaceArray *m_pcollFrames;
+	uint8				m_byActivatedSelection;
+	CLTSurfaceArray	*m_pcollFrames;
 	int				m_nNumDecisions;
 	int				m_nCurSelection;
 	BOOL			m_bFrame;

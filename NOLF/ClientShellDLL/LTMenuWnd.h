@@ -1,13 +1,11 @@
 /****************************************************************************
+;	 MODULE: CLTMenuWnd (.h)
 ;
-;	 MODULE:		CLTMenuWnd (.h)
+;	PURPOSE: Class for a menu window
 ;
-;	PURPOSE:		Class for a menu window
+;	HISTORY: 03/20/00 [jrg] This file was created
 ;
-;	HISTORY:		03/20/00 [jrg] This file was created
-;
-;	COMMENT:		Copyright (c) 2000, Monolith Productions, Inc.
-;
+;	COMMENT: Copyright (c) 2000, Monolith Productions, Inc.
 ****************************************************************************/
 #ifndef _LTMENUWND_H_
 #define _LTMENUWND_H_
@@ -19,18 +17,18 @@
 #include "BaseMenu.h"
 
 #define MAX_ITEMS			20
-#define MENUWND_MAX_WIDTH	540
+#define MENUWND_MAX_WIDTH 540
 
 
 class MENUWNDCREATESTRUCT : public LTWNDCREATESTRUCT
 {
 public:
-    MENUWNDCREATESTRUCT();
+	MENUWNDCREATESTRUCT();
 
-    LTFLOAT          fAlpha;
-	BOOL			bFrame;
+	LTFLOAT	fAlpha;
+	BOOL		bFrame;
 	const char		*szFrame;
-	CLTGUIFont		*pFont;
+	CLTGUIFont	*pFont;
 };
 
 inline MENUWNDCREATESTRUCT::MENUWNDCREATESTRUCT()
@@ -68,9 +66,9 @@ public:
 
 	void	SetMenu( CBaseMenu *pMenu) {m_pMenu = pMenu;}
 
-    void    AddItem(uint32 nTextID, uint8 byCommand);
-    void    AddItem(HSTRING hText, uint8 byCommand);
-    void    AddItem(const char *szText, uint8 byCommand);
+	void	AddItem(uint32 nTextID, uint8 byCommand);
+	void	AddItem(HSTRING hText, uint8 byCommand);
+	void	AddItem(const char *szText, uint8 byCommand);
 
 	void	ClearItems();
 	BOOL	Open();
@@ -79,25 +77,25 @@ public:
 	void	SetCurSelection(int nSelection);
 
 protected:
-    void    SetAlpha(LTFLOAT fAlpha);
+	void	SetAlpha(LTFLOAT fAlpha);
 
-	CLTGUIFont		*m_pFont;
-	BOOL			m_bOpening;
-	BOOL			m_bClosing;
-	CTimer			m_tmrClose;
+	CLTGUIFont	*m_pFont;
+	BOOL		m_bOpening;
+	BOOL		m_bClosing;
+	CTimer		m_tmrClose;
 	float			m_fStartPos;
-	CRect			m_rcFrame;
-	CRect			m_rcTotal;
-	CLTTextWnd		m_ItemWnds[MAX_ITEMS];
-    uint8           m_ItemCmds[MAX_ITEMS];
-	BYTE			m_byActivatedSelection;
-	CLTSurfaceArray m_collFrames;
+	CRect		m_rcFrame;
+	CRect		m_rcTotal;
+	CLTTextWnd	m_ItemWnds[MAX_ITEMS];
+	uint8			m_ItemCmds[MAX_ITEMS];
+	BYTE		m_byActivatedSelection;
+	CLTSurfaceArray	m_collFrames;
 	int				m_nNumItems;
 	BOOL			m_bFrame;
 	CBaseMenu		*m_pMenu;
 
-    LTIntPt         m_curSz;
-	int				m_nCurSelection;
+	LTIntPt		m_curSz;
+	int			m_nCurSelection;
 
 };
 
@@ -109,7 +107,7 @@ inline CLTMenuWnd::CLTMenuWnd()
 	m_pFont = NULL;
 	m_nNumItems = 0;
 	m_bFrame = FALSE;
-    m_pMenu = LTNULL;
+	m_pMenu = LTNULL;
 	m_byActivatedSelection = 0;
 }
 

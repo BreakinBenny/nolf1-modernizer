@@ -1,13 +1,11 @@
 /****************************************************************************
+;	 MODULE: LTWnd (.cpp)
 ;
-;	 MODULE:		LTWnd (.cpp)
+;	PURPOSE: LithTech Window class
 ;
-;	PURPOSE:		LithTech Window class
+;	HISTORY: 11/30/98 [kml] This file was created
 ;
-;	HISTORY:		11/30/98 [kml] This file was created
-;
-;	COMMENT:		Copyright (c) 1998, Monolith Productions, Inc.
-;
+;	COMMENT: Copyright (c) 1998, Monolith Productions, Inc.
 ****************************************************************************/
 
 #include "StdAfx.h"
@@ -32,11 +30,9 @@ CLTWnd* CLTWnd::s_pWndCapture = NULL;
 CLTWnd* CLTWnd::s_pLastMouseWnd = NULL;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::InitFromBitmap
 //
-//	ROUTINE:	CLTWnd::InitFromBitmap
-//
-//	PURPOSE:	Initialization
-//
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::InitFromBitmap(int nControlID, char* szWndName, CLTWnd* pParentWnd, char* szBitmap, int xPos, int yPos, DWORD dwFlags, DWORD dwState)
 {
@@ -67,11 +63,9 @@ BOOL CLTWnd::InitFromBitmap(int nControlID, char* szWndName, CLTWnd* pParentWnd,
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::Init
 //
-//	ROUTINE:	CLTWnd::Init
-//
-//	PURPOSE:	Initialization
-//
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::Init(int nControlID, char* szWndName, CLTWnd* pParentWnd, HSURFACE hSurf, int xPos, int yPos, DWORD dwFlags, DWORD dwState)
 {
@@ -123,7 +117,7 @@ BOOL CLTWnd::Init(int nControlID, char* szWndName, CLTWnd* pParentWnd, HSURFACE 
 	if (hSurf)
 	{
 		DWORD x, y;
-        g_pLTClient->GetSurfaceDims(hSurf, &x, &y);
+		g_pLTClient->GetSurfaceDims(hSurf, &x, &y);
 		m_nSurfWidth = m_nWidth = (int)x;
 		m_nSurfHeight = m_nHeight = (int)y;
 
@@ -133,7 +127,7 @@ BOOL CLTWnd::Init(int nControlID, char* szWndName, CLTWnd* pParentWnd, HSURFACE 
 			if(m_pParentWnd)
 			{
 				DWORD xParent, yParent;
-                g_pLTClient->GetSurfaceDims(m_pParentWnd->GetSurface(),&xParent,&yParent);
+				g_pLTClient->GetSurfaceDims(m_pParentWnd->GetSurface(),&xParent,&yParent);
 				m_xPos = (xParent-x)/2;
 				m_yPos = (yParent-y)/2;
 			}
@@ -158,11 +152,9 @@ BOOL CLTWnd::Init(int nControlID, char* szWndName, CLTWnd* pParentWnd, HSURFACE 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::Term
 //
-//	ROUTINE:	CLTWnd::Term
-//
-//	PURPOSE:	Termination
-//
+//	PURPOSE: Termination
 // ----------------------------------------------------------------------- //
 void CLTWnd::Term()
 {
@@ -193,11 +185,9 @@ void CLTWnd::Term()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::RemoveAllChildren
 //
-//	ROUTINE:	CLTWnd::RemoveAllChildren
-//
-//	PURPOSE:	Deletes and removes all of our child windows
-//
+//	PURPOSE: Deletes and removes all of our child windows
 // ----------------------------------------------------------------------- //
 void CLTWnd::RemoveAllChildren()
 {
@@ -207,11 +197,11 @@ void CLTWnd::RemoveAllChildren()
 		CLTWnd* pWnd = (CLTWnd*)m_lstChildren.GetNext(pos);
 
 		// Terming the window will take care of removing all of it's children
-        if (pWnd)
-        {
-            debug_delete(pWnd);
-            pWnd = NULL;
-        }
+		if (pWnd)
+		{
+			debug_delete(pWnd);
+			pWnd = NULL;
+		}
 	}
 
 	m_lstChildren.RemoveAll();
@@ -221,11 +211,9 @@ void CLTWnd::RemoveAllChildren()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::ShowAllChildren
 //
-//	ROUTINE:	CLTWnd::ShowAllChildren
-//
-//	PURPOSE:	Shows or hides all child windows
-//
+//	PURPOSE: Shows or hides all child windows
 // ----------------------------------------------------------------------- //
 void CLTWnd::ShowAllChildren(BOOL bShow)
 {
@@ -244,11 +232,9 @@ void CLTWnd::ShowAllChildren(BOOL bShow)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::SetSurface
 //
-//	ROUTINE:	CLTWnd::SetSurface
-//
-//	PURPOSE:	Changes the main surface
-//
+//	PURPOSE: Changes the main surface
 // ----------------------------------------------------------------------- //
 HSURFACE CLTWnd::SetSurface(HSURFACE hSurf, BOOL bDeleteSurf)
 {
@@ -259,7 +245,7 @@ HSURFACE CLTWnd::SetSurface(HSURFACE hSurf, BOOL bDeleteSurf)
 	HSURFACE hSurfTemp = m_hSurf;
 	m_hSurf = hSurf;
 	DWORD x, y;
-    g_pLTClient->GetSurfaceDims(hSurf, &x, &y);
+	g_pLTClient->GetSurfaceDims(hSurf, &x, &y);
 
 /*#ifdef _DEBUG
 	if(((int)x != m_nSurfWidth) || ((int)y != m_nSurfHeight))
@@ -281,35 +267,29 @@ HSURFACE CLTWnd::SetSurface(HSURFACE hSurf, BOOL bDeleteSurf)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::SetTransparentColor
 //
-//	ROUTINE:	CLTWnd::SetTransparentColor
-//
-//	PURPOSE:	Sets the transparent color of the window
-//
+//	PURPOSE: Sets the transparent color of the window
 // ----------------------------------------------------------------------- //
 void CLTWnd::SetTransparentColor(float r, float g, float b)
 {
-    m_hColorTransparent = g_pLTClient->CreateColor(r, g, b, FALSE);
+	m_hColorTransparent = g_pLTClient->CreateColor(r, g, b, FALSE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::DeleteTransparentColor
 //
-//	ROUTINE:	CLTWnd::DeleteTransparentColor
-//
-//	PURPOSE:	Frees the transparent color of the window
-//
+//	PURPOSE: Frees the transparent color of the window
 // ----------------------------------------------------------------------- //
 void CLTWnd::DeleteTransparentColor()
 {
-    g_pLTClient->DeleteColor(m_hColorTransparent);
+	g_pLTClient->DeleteColor(m_hColorTransparent);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::EnableWindow
 //
-//	ROUTINE:	CLTWnd::EnableWindow
-//
-//	PURPOSE:	Enables/disables a window to receive input
-//
+//	PURPOSE: Enables/disables a window to receive input
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::EnableWindow(BOOL bEnable)
 {
@@ -345,11 +325,9 @@ BOOL CLTWnd::EnableWindow(BOOL bEnable)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::ShowWindow
 //
-//	ROUTINE:	CLTWnd::ShowWindow
-//
-//	PURPOSE:	Shows or hides the window
-//
+//	PURPOSE: Shows or hides the window
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::ShowWindow(BOOL bShow, BOOL bPlaySound, BOOL bAnimate)
 {
@@ -397,11 +375,9 @@ BOOL CLTWnd::ShowWindow(BOOL bShow, BOOL bPlaySound, BOOL bAnimate)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: SetWindowPos
 //
-//	ROUTINE:	SetWindowPos
-//
-//	PURPOSE:	Sets the window position
-//
+//	PURPOSE: Sets the window position
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::SetWindowPos(CLTWnd* pInsertAfter, int xPos, int yPos, int nWidth, int nHeight, DWORD dwFlags)
 {
@@ -428,11 +404,9 @@ BOOL CLTWnd::SetWindowPos(CLTWnd* pInsertAfter, int xPos, int yPos, int nWidth, 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::MoveWindow
 //
-//	ROUTINE:	CLTWnd::MoveWindow
-//
-//	PURPOSE:	Moves the window
-//
+//	PURPOSE: Moves the window
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::MoveWindow(int xPos, int yPos, int nWidth, int nHeight, BOOL bReDraw)
 {
@@ -450,11 +424,9 @@ BOOL CLTWnd::MoveWindow(int xPos, int yPos, int nWidth, int nHeight, BOOL bReDra
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::MoveWindow
 //
-//	ROUTINE:	CLTWnd::MoveWindow
-//
-//	PURPOSE:	Moves the window
-//
+//	PURPOSE: Moves the window
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::MoveWindow(CRect& rcPos, BOOL bReDraw)
 {
@@ -462,15 +434,13 @@ BOOL CLTWnd::MoveWindow(CRect& rcPos, BOOL bReDraw)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::GetWindowRect
 //
-//	ROUTINE:	CLTWnd::GetWindowRect
-//
-//	PURPOSE:	Gets the window rectangle in screen coordinates
+//	PURPOSE: Gets the window rectangle in screen coordinates
 //
 //	NOTE:		The values don't necessarily have to be on the screen
 //				For example, you might have (-5,-5,645,485) for a window
 //				that is larger than the 640x480 screen
-//
 // ----------------------------------------------------------------------- //
 void CLTWnd::GetWindowRect(CRect *pRect)
 {
@@ -481,11 +451,9 @@ void CLTWnd::GetWindowRect(CRect *pRect)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::GetSurfaceRect
 //
-//	ROUTINE:	CLTWnd::GetSurfaceRect
-//
-//	PURPOSE:	Gets the surface rectangle in screen coordinates
-//
+//	PURPOSE: Gets the surface rectangle in screen coordinates
 // ----------------------------------------------------------------------- //
 void CLTWnd::GetSurfaceRect(CRect *pRect)
 {
@@ -495,11 +463,9 @@ void CLTWnd::GetSurfaceRect(CRect *pRect)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::SetFocus
 //
-//	ROUTINE:	CLTWnd::SetFocus
-//
-//	PURPOSE:	Makes this window the active window
-//
+//	PURPOSE: Makes this window the active window
 // ----------------------------------------------------------------------- //
 CLTWnd* CLTWnd::SetFocus()
 {
@@ -525,13 +491,11 @@ CLTWnd* CLTWnd::SetFocus()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::PtInWnd
 //
-//	ROUTINE:	CLTWnd::PtInWnd
-//
-//	PURPOSE:	Tests a point in a window
+//	PURPOSE: Tests a point in a window
 //
 //	NOTE:		The window needs to be visible, but not necessarily enabled
-//
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::PtInWnd(int x, int y)
 {
@@ -546,11 +510,9 @@ BOOL CLTWnd::PtInWnd(int x, int y)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::Draw
 //
-//	ROUTINE:	CLTWnd::Draw
-//
-//	PURPOSE:	Draws the window (and all its child windows to a surface)
-//
+//	PURPOSE: Draws the window (and all its child windows to a surface)
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::Draw(HSURFACE hSurf)
 {
@@ -573,11 +535,9 @@ BOOL CLTWnd::Draw(HSURFACE hSurf)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::DrawToSurface
 //
-//	ROUTINE:	CLTWnd::DrawToSurface
-//
-//	PURPOSE:	Does the dirty work for drawing a single window to a surface
-//
+//	PURPOSE: Does the dirty work for drawing a single window to a surface
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::DrawToSurface(HSURFACE hSurfDest)
 {
@@ -602,7 +562,7 @@ BOOL CLTWnd::DrawToSurface(HSURFACE hSurfDest)
 			rcSource -= rcSurf.TopLeft();
 
 			// create a lithtech-compatible rect
-            LTRect   drcSource;
+			LTRect   drcSource;
 
 			drcSource.left = rcSource.left;
 			drcSource.top = rcSource.top;
@@ -614,12 +574,12 @@ BOOL CLTWnd::DrawToSurface(HSURFACE hSurfDest)
 			{
 				if (IsFlagSet(LTWF_TRANSPARENT))
 				{
-                    if(g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_hSurf, &drcSource, ptIntersect.x, ptIntersect.y, m_hColorTransparent) != LT_OK)
+					if(g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_hSurf, &drcSource, ptIntersect.x, ptIntersect.y, m_hColorTransparent) != LT_OK)
 						return FALSE;
 				}
 				else
 				{
-                    if(g_pLTClient->DrawSurfaceToSurface(hSurfDest, m_hSurf, &drcSource, ptIntersect.x, ptIntersect.y) != LT_OK)
+					if(g_pLTClient->DrawSurfaceToSurface(hSurfDest, m_hSurf, &drcSource, ptIntersect.x, ptIntersect.y) != LT_OK)
 						return FALSE;
 				}
 			}
@@ -629,11 +589,9 @@ BOOL CLTWnd::DrawToSurface(HSURFACE hSurfDest)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::GetWndFromPt
 //
-//	ROUTINE:	CLTWnd::GetWndFromPt
-//
-//	PURPOSE:	Gets the topmost visible window that the given point is in
-//
+//	PURPOSE: Gets the topmost visible window that the given point is in
 // ----------------------------------------------------------------------- //
 CLTWnd* CLTWnd::GetWndFromPt(int x, int y)
 {
@@ -654,11 +612,9 @@ CLTWnd* CLTWnd::GetWndFromPt(int x, int y)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::HandleMouseMove
 //
-//	ROUTINE:	CLTWnd::HandleMouseMove
-//
-//	PURPOSE:	Passes a mouse move message on to the appropriate window
-//
+//	PURPOSE: Passes a mouse move message on to the appropriate window
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::HandleMouseMove(int xPos, int yPos)
 {
@@ -683,11 +639,9 @@ BOOL CLTWnd::HandleMouseMove(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::HandleLButtonDown
 //
-//	ROUTINE:	CLTWnd::HandleLButtonDown
-//
-//	PURPOSE:	Passes a left button down message on to the appropriate window
-//
+//	PURPOSE: Passes a left button down message on to the appropriate window
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::HandleLButtonDown(int xPos, int yPos)
 {
@@ -704,11 +658,9 @@ BOOL CLTWnd::HandleLButtonDown(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::HandleLButtonUp
 //
-//	ROUTINE:	CLTWnd::HandleLButtonUp
-//
-//	PURPOSE:	Passes a left button up message on to the appropriate window
-//
+//	PURPOSE: Passes a left button up message on to the appropriate window
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::HandleLButtonUp(int xPos, int yPos)
 {
@@ -725,11 +677,9 @@ BOOL CLTWnd::HandleLButtonUp(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::HandleLButtonDblClick
 //
-//	ROUTINE:	CLTWnd::HandleLButtonDblClick
-//
-//	PURPOSE:	Passes a left button double click message on to the appropriate window
-//
+//	PURPOSE: Passes a left button double click message on to the appropriate window
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::HandleLButtonDblClick(int xPos, int yPos)
 {
@@ -746,11 +696,9 @@ BOOL CLTWnd::HandleLButtonDblClick(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::HandleRButtonDown
 //
-//	ROUTINE:	CLTWnd::HandleRButtonDown
-//
-//	PURPOSE:	Passes a right button down message on to the appropriate window
-//
+//	PURPOSE: Passes a right button down message on to the appropriate window
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::HandleRButtonDown(int xPos, int yPos)
 {
@@ -767,11 +715,9 @@ BOOL CLTWnd::HandleRButtonDown(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::HandleRButtonUp
 //
-//	ROUTINE:	CLTWnd::HandleRButtonUp
-//
-//	PURPOSE:	Passes a right button up message on to the appropriate window
-//
+//	PURPOSE: Passes a right button up message on to the appropriate window
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::HandleRButtonUp(int xPos, int yPos)
 {
@@ -788,11 +734,9 @@ BOOL CLTWnd::HandleRButtonUp(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::OnLButtonDown
 //
-//	ROUTINE:	CLTWnd::OnLButtonDown
-//
-//	PURPOSE:	This is the actual left button down handler
-//
+//	PURPOSE: This is the actual left button down handler
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::OnLButtonDown(int xPos, int yPos)
 {
@@ -853,11 +797,9 @@ BOOL CLTWnd::OnLButtonDown(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::OnLButtonUp
 //
-//	ROUTINE:	CLTWnd::OnLButtonUp
-//
-//	PURPOSE:	This is the actual left button up handler
-//
+//	PURPOSE: This is the actual left button up handler
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::OnLButtonUp(int xPos, int yPos)
 {
@@ -871,11 +813,9 @@ BOOL CLTWnd::OnLButtonUp(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::OnRButtonDown
 //
-//	ROUTINE:	CLTWnd::OnRButtonDown
-//
-//	PURPOSE:	This is the actual right button down handler
-//
+//	PURPOSE: This is the actual right button down handler
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::OnRButtonDown(int xPos, int yPos)
 {
@@ -902,11 +842,9 @@ BOOL CLTWnd::OnRButtonDown(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::OnMouseMove
 //
-//	ROUTINE:	CLTWnd::OnMouseMove
-//
-//	PURPOSE:	This is the actual mouse move handler
-//
+//	PURPOSE: This is the actual mouse move handler
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::OnMouseMove(int xPos, int yPos)
 {
@@ -941,11 +879,9 @@ BOOL CLTWnd::OnMouseMove(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::OnDrag
 //
-//	ROUTINE:	CLTWnd::OnDrag
-//
-//	PURPOSE:	Window draggage
-//
+//	PURPOSE: Window draggage
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::OnDrag(int xPos, int yPos)
 {
@@ -956,12 +892,10 @@ BOOL CLTWnd::OnDrag(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::GetClipRect
 //
-//	ROUTINE:	CLTWnd::GetClipRect
-//
-//	PURPOSE:	Gets the clip rect relative to the
+//	PURPOSE: Gets the clip rect relative to the
 //				parent window's client area
-//
 // ----------------------------------------------------------------------- //
 void CLTWnd::GetClipRect(CRect *pRect)
 {
@@ -982,11 +916,9 @@ void CLTWnd::GetClipRect(CRect *pRect)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::FreeAllSurfaces
 //
-//	ROUTINE:	CLTWnd::FreeAllSurfaces
-//
-//	PURPOSE:	Frees all the surfaces
-//
+//	PURPOSE: Frees all the surfaces
 // ----------------------------------------------------------------------- //
 void CLTWnd::FreeAllSurfaces(CLTSurfaceArray* pcollSurfs)
 {
@@ -997,13 +929,11 @@ void CLTWnd::FreeAllSurfaces(CLTSurfaceArray* pcollSurfs)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::ArrangeAllChildren
 //
-//	ROUTINE:	CLTWnd::ArrangeAllChildren
-//
-//	PURPOSE:	Makes sure that all child windows keep their respective
+//	PURPOSE: Makes sure that all child windows keep their respective
 //				distance from the right and bottom of the screen
 //				when the resolution changes
-//
 // ----------------------------------------------------------------------- //
 void CLTWnd::ArrangeAllChildren(DWORD dwWidth, DWORD dwHeight, DWORD dwOldWidth, DWORD dwOldHeight)
 {
@@ -1031,11 +961,9 @@ void CLTWnd::ArrangeAllChildren(DWORD dwWidth, DWORD dwHeight, DWORD dwOldWidth,
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTWnd::Update
 //
-//	ROUTINE:	CLTWnd::Update
-//
-//	PURPOSE:	Updates all child windows
-//
+//	PURPOSE: Updates all child windows
 // ----------------------------------------------------------------------- //
 BOOL CLTWnd::Update(float fTimeDelta)
 {

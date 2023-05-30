@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: MultiplayerMenu.cpp
 //
-// MODULE  : MultiplayerMenu.cpp
+// PURPOSE: In-game Multiplayer Menu
 //
-// PURPOSE : In-game Multiplayer Menu
-//
-// CREATED : 3/20/00
-//
+// CREATED: 3/20/00
 // ----------------------------------------------------------------------- //
-
 
 #include "stdafx.h"
 #include "MultiplayerMenu.h"
@@ -121,9 +118,9 @@ void CTeamMenu::Select(uint8 byItem)
 
 	if (byItem == 1 || byItem == 2)
 	{
-        HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_PLAYER_CHANGETEAM);
-        g_pLTClient->WriteToMessageByte(hWrite, byItem);
-        g_pLTClient->EndMessage(hWrite);
+		HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_PLAYER_CHANGETEAM);
+		g_pLTClient->WriteToMessageByte(hWrite, byItem);
+		g_pLTClient->EndMessage(hWrite);
 	}
 
 }
@@ -218,7 +215,5 @@ void COptionMenu::Select(uint8 byItem)
 {
 	//act on selection
 	m_pMenuWnd->Close();
-
 }
-
 

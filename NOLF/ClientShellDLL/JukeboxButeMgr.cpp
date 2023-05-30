@@ -34,14 +34,12 @@ LTBOOL CJukeboxButeMgr::Init(ILTCSBase* pInterface, const char* szAttributeFile)
 	m_nSongIDCount = 0;
 
 	// Set up global pointer
-
 	g_pJukeboxButeMgr = this;
 
 	// This is nicer than c-string-ing.
 	std::string sTagName = "";
 
 	// See how many attribute templates there are
-
 	m_nThemeIDCount = 0;
 	sTagName = JBM_THEME + std::to_string(m_nThemeIDCount);
 	while (m_buteMgr.Exist(sTagName.c_str()))

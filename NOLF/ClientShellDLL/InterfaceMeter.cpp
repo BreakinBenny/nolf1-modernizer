@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: InterfaceMeter.cpp
 //
-// MODULE  : InterfaceMeter.cpp
+// PURPOSE: Implementation of InterfaceMeter class
 //
-// PURPOSE : Implementation of InterfaceMeter class
-//
-// CREATED : 10/18/99
+// CREATED: 10/18/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "InterfaceMeter.h"
 #include "GameClientShell.h"
@@ -31,13 +28,10 @@ CInterfaceMeter::~CInterfaceMeter()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMeter::Init()
 //
-//	ROUTINE:	CInterfaceMeter::Init()
-//
-//	PURPOSE:	prepare meter for display
-//
+//	PURPOSE: prepare meter for display
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMeter::Init()
 {
 	char szFullBar[64] = "statbar\\art\\boss_full.pcx";
@@ -52,13 +46,10 @@ void CInterfaceMeter::Init()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMeter::Term()
 //
-//	ROUTINE:	CInterfaceMeter::Term()
-//
-//	PURPOSE:	clean up meter
-//
+//	PURPOSE: clean up meter
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMeter::Term()
 {
 	if (m_hEmptySurf)
@@ -71,19 +62,13 @@ void CInterfaceMeter::Term()
 		g_pLTClient->DeleteSurface(m_hFullSurf);
 		m_hFullSurf = LTNULL;
 	}
-	
 }
 
-
-
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInterfaceMeter::Draw()
 //
-//	ROUTINE:	CInterfaceMeter::Draw()
-//
-//	PURPOSE:	Handle drawing the stats
-//
+//	PURPOSE: Handle drawing the stats
 // ----------------------------------------------------------------------- //
-
 void CInterfaceMeter::Draw(HSURFACE hScreen)
 {
 	if (!hScreen) return;
@@ -91,7 +76,6 @@ void CInterfaceMeter::Draw(HSURFACE hScreen)
 	if (m_nValue > 100) m_nValue = 100;
 
 	// Update/Draw the meter if there is anything left...
-
 	if (m_nValue > 0)
 	{
 		LTRect rcTemp;
@@ -139,9 +123,5 @@ void CInterfaceMeter::Draw(HSURFACE hScreen)
 			rcTemp.right = rcTemp.left + 1;
 			g_pOptimizedRenderer->FillRect(hScreen,&rcTemp,LTNULL);
 		}
-
 	}
-
 }
-
-

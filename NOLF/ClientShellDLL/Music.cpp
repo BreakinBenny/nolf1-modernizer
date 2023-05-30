@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Music.cpp
 //
-// MODULE  : Music.cpp
+// PURPOSE: LithTech DirectMusic helper class.  Handles all music commands for game.
 //
-// PURPOSE : LithTech DirectMusic helper class.  Handles all music commands for game.
-//
-// CREATED : Apr-13-2000
-//
+// CREATED: Apr-13-2000
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "iltdirectmusic.h"
 #include "iltclient.h"
@@ -20,48 +17,44 @@
 extern CGameClientShell* g_pGameClientShell;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::CMusic
 //
-//	ROUTINE:	CMusic::CMusic
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 CMusic::CMusic( )
 {
-    m_pClientDE = LTNULL;
-	m_pMusicMgr = NULL;
-	m_bMusicEnabled = TRUE;
-	m_bLevelInitialized = FALSE;
+	m_pClientDE		= LTNULL;
+	m_pMusicMgr		= NULL;
+	m_bMusicEnabled	= TRUE;
+	m_bLevelInitialized	= FALSE;
 
 	m_nMenuVolume	= 0;
 	m_nTriggerVolume	= 0;
-	m_bPlaying = LTFALSE;
+	m_bPlaying		= LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::Init
 //
-//	ROUTINE:	CMusic::Init
-//
-//	PURPOSE:	Initialize the music
-//
+//	PURPOSE: Initialize the music
 // ----------------------------------------------------------------------- //
 LTBOOL CMusic::Init( ILTClient *pClientDE)
 {
 	// make sure we are not already initialized
-    if (IsInitialized()) return LTTRUE;
+	if (IsInitialized()) return LTTRUE;
 
 	m_pClientDE = pClientDE;
 
-	m_bMusicEnabled = TRUE;
-	m_bLevelInitialized = FALSE;
-	m_pMusicMgr = NULL;
+	m_bMusicEnabled	= TRUE;
+	m_bLevelInitialized	= FALSE;
+	m_pMusicMgr		= NULL;
 
 	// get the musicenable console var
-    HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("disablemusic");
+	HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("disablemusic");
 	if (hVar)
 	{
 		// check if music is disabled
-        if (((int)g_pLTClient->GetVarValueFloat(hVar)) != 0)
+		if (((int)g_pLTClient->GetVarValueFloat(hVar)) != 0)
 		{
 			m_bMusicEnabled = FALSE;
 		}
@@ -71,7 +64,7 @@ LTBOOL CMusic::Init( ILTClient *pClientDE)
 	if (MusicEnabled())
 	{
 		// get a pointer to the music mgr
-        m_pMusicMgr = g_pLTClient->GetDirectMusicMgr();
+		m_pMusicMgr = g_pLTClient->GetDirectMusicMgr();
 
 		// make sure directmusic mgr was available
 		if (m_pMusicMgr != NULL)
@@ -81,15 +74,13 @@ LTBOOL CMusic::Init( ILTClient *pClientDE)
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::Term
 //
-//	ROUTINE:	CMusic::Term
-//
-//	PURPOSE:	Terminate the music
-//
+//	PURPOSE: Terminate the music
 // ----------------------------------------------------------------------- //
 void CMusic::Term( )
 {
@@ -104,13 +95,10 @@ void CMusic::Term( )
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::InitMusicLevel
 //
-//	ROUTINE:	CMusic::InitMusicLevel
-//
-//	PURPOSE:	Initialize Music for Current Game Level
-//
+//	PURPOSE: Initialize Music for Current Game Level
 // ----------------------------------------------------------------------- //
-
 LTBOOL CMusic::InitLevel(char* pDirectory, char* pControlFile)
 {
 	// make sure mgrs are initialized
@@ -145,11 +133,9 @@ LTBOOL CMusic::InitLevel(char* pDirectory, char* pControlFile)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::TermMusicLevel
 //
-//	ROUTINE:	CMusic::TermMusicLevel
-//
-//	PURPOSE:	Terminate Music for Current Game Level
-//
+//	PURPOSE: Terminate Music for Current Game Level
 // ----------------------------------------------------------------------- //
 void CMusic::TermLevel()
 {
@@ -175,13 +161,10 @@ void CMusic::TermLevel()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::ProcessMusicMessage
 //
-//	ROUTINE:	CMusic::ProcessMusicMessage
-//
-//	PURPOSE:	Process a music trigger message from the server.
-//
+//	PURPOSE: Process a music trigger message from the server.
 // ----------------------------------------------------------------------- //
-
 void CMusic::ProcessMusicMessage(HMESSAGEREAD hMessage)
 {
 	// make sure mgrs are initialized
@@ -190,23 +173,20 @@ void CMusic::ProcessMusicMessage(HMESSAGEREAD hMessage)
 	if (m_pMusicMgr == NULL) return;
 
 	// get the data from the message
-    HSTRING hStr = g_pLTClient->ReadFromMessageHString(hMessage);
+	HSTRING hStr = g_pLTClient->ReadFromMessageHString(hMessage);
 
 	// get the message string data
-    char *pMessage = g_pLTClient->GetStringData(hStr);
+	char *pMessage = g_pLTClient->GetStringData(hStr);
 	ProcessMusicMessage(pMessage);
 
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::ProcessMusicMessage
 //
-//	ROUTINE:	CMusic::ProcessMusicMessage
-//
-//	PURPOSE:	Process a music trigger message from the server.
-//
+//	PURPOSE: Process a music trigger message from the server.
 // ----------------------------------------------------------------------- //
-
 void CMusic::ProcessMusicMessage(char* pMessage)
 {
 	// Make sure mgrs are initialized
@@ -215,7 +195,7 @@ void CMusic::ProcessMusicMessage(char* pMessage)
 	if (!IsLevelInitialized()) return;
 	if (m_pMusicMgr == NULL) return;
 
-    ILTCommon* pCommon = g_pLTClient->Common();
+	ILTCommon* pCommon = g_pLTClient->Common();
 	ConParse parse;
 	parse.Init(pMessage);
 
@@ -397,11 +377,9 @@ void CMusic::ProcessMusicMessage(char* pMessage)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::StringToEnactType
 //
-//	ROUTINE:	CMusic::StringToEnactType
-//
-//	PURPOSE:	Converts a string to an enact type for LithTech DirectMusic.
-//
+//	PURPOSE: Converts a string to an enact type for LithTech DirectMusic.
 // ----------------------------------------------------------------------- //
 LTDMEnactTypes CMusic::StringToEnactType(const char* sName)
 {
@@ -424,13 +402,11 @@ LTDMEnactTypes CMusic::StringToEnactType(const char* sName)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::Play
 //
-//	ROUTINE:	CMusic::Play
-//
-//	PURPOSE:	Begin playing music
-//
+//	PURPOSE: Begin playing music
 // ----------------------------------------------------------------------- //
-// Begin playing music
+ Begin playing music
 void CMusic::Play(int32 nIntensity /* = -1 */, int32 nStart /* = LTDMEnactDefault */)
 {
 	// make sure mgrs are initialized
@@ -458,11 +434,9 @@ void CMusic::Play(int32 nIntensity /* = -1 */, int32 nStart /* = LTDMEnactDefaul
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::Stop
 //
-//	ROUTINE:	CMusic::Stop
-//
-//	PURPOSE:	Stop playing music
-//
+//	PURPOSE: Stop playing music
 // ----------------------------------------------------------------------- //
 void CMusic::Stop(const LTDMEnactTypes nStart)
 {
@@ -474,18 +448,16 @@ void CMusic::Stop(const LTDMEnactTypes nStart)
 
 	// Stop playing music
 	m_pMusicMgr->Stop(nStart);
-    m_State.bPlaying = LTFALSE;
+	m_State.bPlaying = LTFALSE;
 
 	m_bPlaying = LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::Pause
 //
-//	ROUTINE:	CMusic::Pause
-//
-//	PURPOSE:	Pause playing music
-//
+//	PURPOSE: Pause playing music
 // ----------------------------------------------------------------------- //
 void CMusic::Pause(const LTDMEnactTypes nStart)
 {
@@ -496,16 +468,14 @@ void CMusic::Pause(const LTDMEnactTypes nStart)
 
 	// Pause music playing
 	m_pMusicMgr->Pause();
-    m_State.bPaused = LTTRUE;
+	m_State.bPaused = LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::UnPause
 //
-//	ROUTINE:	CMusic::UnPause
-//
-//	PURPOSE:	Un pause the music
-//
+//	PURPOSE: Un pause the music
 // ----------------------------------------------------------------------- //
 void CMusic::UnPause()
 {
@@ -516,16 +486,14 @@ void CMusic::UnPause()
 
 	// UnPause music playing
 	m_pMusicMgr->UnPause();
-    m_State.bPaused = LTFALSE;
+	m_State.bPaused = LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::SetMenuVolume
 //
-//	ROUTINE:	CMusic::SetMenuVolume
-//
-//	PURPOSE:	Adjust music volume
-//
+//	PURPOSE: Adjust music volume
 // ----------------------------------------------------------------------- //
 void CMusic::SetMenuVolume(const long nVolume)
 {
@@ -540,11 +508,9 @@ void CMusic::SetMenuVolume(const long nVolume)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::SetTriggerVolume
 //
-//	ROUTINE:	CMusic::SetTriggerVolume
-//
-//	PURPOSE:	Adjust music volume
-//
+//	PURPOSE: Adjust music volume
 // ----------------------------------------------------------------------- //
 void CMusic::SetTriggerVolume(const long nVolume)
 {
@@ -559,11 +525,9 @@ void CMusic::SetTriggerVolume(const long nVolume)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::ChangeIntensity
 //
-//	ROUTINE:	CMusic::ChangeIntensity
-//
-//	PURPOSE:	Set the music intensity
-//
+//	PURPOSE: Set the music intensity
 // ----------------------------------------------------------------------- //
 void CMusic::ChangeIntensity(const int nIntensity, const LTDMEnactTypes nStart)
 {
@@ -579,21 +543,18 @@ void CMusic::ChangeIntensity(const int nIntensity, const LTDMEnactTypes nStart)
 	m_pMusicMgr->ChangeIntensity(nIntensity, nStart);
 */
 	m_State.nIntensity		= nIntensity;
-	m_State.nIntensityEnact = nStart;
+	m_State.nIntensityEnact	= nStart;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMusic::RestoreMusicState
 //
-//	ROUTINE:	CMusic::RestoreMusicState
-//
-//	PURPOSE:	Restore the music to the given state
-//
+//	PURPOSE: Restore the music to the given state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CMusic::RestoreMusicState(const CMusicState & newState)
 {
-    if (!IsInitialized()) return LTFALSE;
+	if (!IsInitialized()) return LTFALSE;
 
 	// See if the new state is valid...
 
@@ -609,9 +570,9 @@ LTBOOL CMusic::RestoreMusicState(const CMusicState & newState)
 	{
 		if (!InitLevel((char*)newState.szDirectory, (char*)newState.szControlFile))
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }

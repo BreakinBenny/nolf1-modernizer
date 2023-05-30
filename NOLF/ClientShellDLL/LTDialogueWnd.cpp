@@ -1,13 +1,11 @@
 /****************************************************************************
+;	 MODULE: CLTDialogueWnd (.cpp)
 ;
-;	 MODULE:		CLTDialogueWnd (.cpp)
+;	PURPOSE: Class for a dialogue window
 ;
-;	PURPOSE:		Class for a dialogue window
+;	HISTORY: 12/10/98 [kml] This file was created
 ;
-;	HISTORY:		12/10/98 [kml] This file was created
-;
-;	COMMENT:		Copyright (c) 1998, Monolith Productions, Inc.
-;
+;	COMMENT: Copyright (c) 1998, Monolith Productions, Inc.
 ****************************************************************************/
 #include "StdAfx.h"
 #include "LTDialogueWnd.h"
@@ -21,11 +19,9 @@ extern CGameClientShell* g_pGameClientShell;
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::Init
 //
-//	ROUTINE:	CLTDialogueWnd::Init
-//
-//	PURPOSE:	Initialization
-//
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::Init(DIALOGUEWNDCREATESTRUCT* pcs)
 {
@@ -90,11 +86,9 @@ BOOL CLTDialogueWnd::Init(DIALOGUEWNDCREATESTRUCT* pcs)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::Term
 //
-//	ROUTINE:	CLTDialogueWnd::Term
-//
-//	PURPOSE:	Termination
-//
+//	PURPOSE: Termination
 // ----------------------------------------------------------------------- //
 void CLTDialogueWnd::Term()
 {
@@ -112,18 +106,16 @@ void CLTDialogueWnd::Term()
 	m_Pic.Term();
 
 	// Free extra stuff
-    m_lfsd.szPrevString = NULL;
+	m_lfsd.szPrevString = NULL;
 
 	// Base class
 	CLTMaskedWnd::Term();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::DrawToSurface
 //
-//	ROUTINE:	CLTDialogueWnd::DrawToSurface
-//
-//	PURPOSE:	Does the dirty work for drawing a single window to a surface
-//
+//	PURPOSE: Does the dirty work for drawing a single window to a surface
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::DrawToSurface(HSURFACE hSurfDest)
 {
@@ -131,46 +123,46 @@ BOOL CLTDialogueWnd::DrawToSurface(HSURFACE hSurfDest)
 
 	if(m_hSurf)
 	{
-        LTRect rcDest;
+		LTRect rcDest;
 		rcDest.left = GetWindowLeft();
 		rcDest.top = GetWindowTop();
 		rcDest.right = rcDest.left + m_nWidth;
 		rcDest.bottom = rcDest.top + m_nHeight;
-        g_pLTClient->ScaleSurfaceToSurface(hSurfDest,m_hSurf,&rcDest,NULL);
+		g_pLTClient->ScaleSurfaceToSurface(hSurfDest,m_hSurf,&rcDest,NULL);
 	}
 
 	// Draw the frame
 	if(m_bFrame && (m_collFrames.GetSize() == 8))
 	{
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_TOPLEFTFRAME],NULL,m_xPos,m_yPos,g_hColorTransparent);
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_TOPRIGHTFRAME],NULL,m_xPos+m_nWidth-m_rcTotal.right,m_yPos,g_hColorTransparent);
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_BOTTOMRIGHTFRAME],NULL,m_xPos+m_nWidth-m_rcTotal.right,m_yPos+m_nHeight-m_rcTotal.bottom,g_hColorTransparent);
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_BOTTOMLEFTFRAME],NULL,m_xPos,m_yPos+m_nHeight-m_rcTotal.bottom,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_TOPLEFTFRAME],NULL,m_xPos,m_yPos,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_TOPRIGHTFRAME],NULL,m_xPos+m_nWidth-m_rcTotal.right,m_yPos,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_BOTTOMRIGHTFRAME],NULL,m_xPos+m_nWidth-m_rcTotal.right,m_yPos+m_nHeight-m_rcTotal.bottom,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_BOTTOMLEFTFRAME],NULL,m_xPos,m_yPos+m_nHeight-m_rcTotal.bottom,g_hColorTransparent);
 
 		// Draw the four scaleable sides
-        LTRect rcDest;
+		LTRect rcDest;
 		rcDest.left = m_xPos;
 		rcDest.top = m_yPos+m_rcTotal.top;
 		rcDest.right = m_xPos+m_rcFrame.left;
 		rcDest.bottom = m_yPos+m_nHeight-m_rcTotal.bottom;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_LEFTFRAME],&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_LEFTFRAME],&rcDest,NULL,g_hColorTransparent);
 		rcDest.left = m_xPos + m_nWidth - m_rcFrame.right;
 		rcDest.right = m_xPos + m_nWidth;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_RIGHTFRAME],&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_RIGHTFRAME],&rcDest,NULL,g_hColorTransparent);
 		rcDest.left = m_xPos+m_rcTotal.left;
 		rcDest.top = m_yPos;
 		rcDest.right = m_xPos+m_nWidth-m_rcTotal.right;
 		rcDest.bottom = m_yPos+m_rcFrame.top;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_TOPFRAME],&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_TOPFRAME],&rcDest,NULL,g_hColorTransparent);
 		rcDest.top = m_yPos + m_nHeight - m_rcFrame.bottom;
 		rcDest.bottom = m_yPos + m_nHeight;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_BOTTOMFRAME],&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames[DLG_BOTTOMFRAME],&rcDest,NULL,g_hColorTransparent);
 	}
 
 	// Draw the font & clip it
 	if(!m_bClosing && !m_bOpening)
 	{
-        LTIntPt ptPos = g_pLayoutMgr->GetDialogueTextOffset();
+		LTIntPt ptPos = g_pLayoutMgr->GetDialogueTextOffset();
 		int nTop;
 		if(m_lfdd.dwFlags & LTF_TIMED_SCROLL)
 			nTop = GetWindowTop() + m_nHeight - ptPos.y - m_pFont->GetHeight();
@@ -186,11 +178,9 @@ BOOL CLTDialogueWnd::DrawToSurface(HSURFACE hSurfDest)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::SetPic
 //
-//	ROUTINE:	CLTDialogueWnd::SetPic
-//
-//	PURPOSE:	Sets the picture
-//
+//	PURPOSE: Sets the picture
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::SetPic(char *szBitmap)
 {
@@ -208,11 +198,9 @@ BOOL CLTDialogueWnd::SetPic(char *szBitmap)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::ShowWindow
 //
-//	ROUTINE:	CLTDialogueWnd::ShowWindow
-//
-//	PURPOSE:	Shows (or hides) the window
-//
+//	PURPOSE: Shows (or hides) the window
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::ShowWindow(BOOL bShow, BOOL bPlaySound, BOOL bAnimate)
 {
@@ -272,11 +260,9 @@ BOOL CLTDialogueWnd::ShowWindow(BOOL bShow, BOOL bPlaySound, BOOL bAnimate)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::Update
 //
-//	ROUTINE:	CLTDialogueWnd::Update
-//
-//	PURPOSE:	Main update function
-//
+//	PURPOSE: Main update function
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::Update(float fTimeDelta)
 {
@@ -320,18 +306,16 @@ BOOL CLTDialogueWnd::Update(float fTimeDelta)
 				nDecision = m_collDialogueIDs.GetSize();
 
 			DoneShowing(nDecision,m_collDialogueIDs[nDecision-1]);
-            g_pLTClient->ClearInput();
+			g_pLTClient->ClearInput();
 		}
 	}
 	return TRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::OnLButtonDown
 //
-//	ROUTINE:	CLTDialogueWnd::OnLButtonDown
-//
-//	PURPOSE:	Left mouse button handler
-//
+//	PURPOSE: Left mouse button handler
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::OnLButtonDown(int xPos, int yPos)
 {
@@ -350,24 +334,22 @@ BOOL CLTDialogueWnd::OnLButtonDown(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::DisplayText
 //
-//	ROUTINE:	CLTDialogueWnd::DisplayText
-//
-//	PURPOSE:	Sets up the dialogue text
-//
+//	PURPOSE: Sets up the dialogue text
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::DisplayText(DWORD dwID, char *szAvatar, BOOL bStayOpen, char *szDecisions)
 {
 	//if(m_bOpening || m_bClosing)
 		//return FALSE;
 
-    HSTRING hString=g_pLTClient->FormatString(dwID);
+	HSTRING hString=g_pLTClient->FormatString(dwID);
 	CString csText;
 	char *szText;
 
 	if(hString)
 	{
-        szText = g_pLTClient->GetStringData(hString);
+		szText = g_pLTClient->GetStringData(hString);
 	}
 	else
 	{
@@ -380,7 +362,7 @@ BOOL CLTDialogueWnd::DisplayText(DWORD dwID, char *szAvatar, BOOL bStayOpen, cha
 	}
 
 	BOOL bRet = DisplayText(szText,szAvatar,bStayOpen,szDecisions);
-    g_pLTClient->FreeString(hString);
+	g_pLTClient->FreeString(hString);
 
 	if(bRet && m_bImmediateDecisions)
 		ShowDecisions();
@@ -389,11 +371,9 @@ BOOL CLTDialogueWnd::DisplayText(DWORD dwID, char *szAvatar, BOOL bStayOpen, cha
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::DisplayText
 //
-//	ROUTINE:	CLTDialogueWnd::DisplayText
-//
-//	PURPOSE:	Sets up the dialogue text
-//
+//	PURPOSE: Sets up the dialogue text
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::DisplayText(char *szText, char *szAvatar, BOOL bStayOpen, char *szDecisions)
 {
@@ -409,7 +389,7 @@ BOOL CLTDialogueWnd::DisplayText(char *szText, char *szAvatar, BOOL bStayOpen, c
 	ShowAllChildren();
 
 	// Set the format width
-    LTIntPt ptPos = g_pLayoutMgr->GetDialogueTextOffset();
+	LTIntPt ptPos = g_pLayoutMgr->GetDialogueTextOffset();
 	m_lfdd.dwFormatWidth = m_nWidth - (ptPos.x * 2);
 	m_lfdd.dwFlags = LTF_DRAW_FORMATTED;
 
@@ -432,10 +412,10 @@ BOOL CLTDialogueWnd::DisplayText(char *szText, char *szAvatar, BOOL bStayOpen, c
 		m_lfdd.rcClip.bottom = rcClip.bottom - m_rcTotal.bottom;
 
 		// See if it's larger than our height
-        HSTRING hStr = g_pLTClient->CreateString((char *)(LPCSTR)m_csText);
-        LTIntPt pt = m_pFont->GetTextExtentsFormat(hStr,m_lfdd.dwFormatWidth);
-        g_pLTClient->FreeString(hStr);
-        hStr = NULL;
+		HSTRING hStr = g_pLTClient->CreateString((char *)(LPCSTR)m_csText);
+		LTIntPt pt = m_pFont->GetTextExtentsFormat(hStr,m_lfdd.dwFormatWidth);
+		g_pLTClient->FreeString(hStr);
+		hStr = NULL;
 		if(pt.y > (m_nHeight - (ptPos.y * 2)))
 		{
 			// It's more than we can display all at once so scroll it.
@@ -448,7 +428,7 @@ BOOL CLTDialogueWnd::DisplayText(char *szText, char *szAvatar, BOOL bStayOpen, c
 	}
 
 	// Term the prev string just in case we drew this string last time timed...
-    m_lfsd.szPrevString = NULL;
+	m_lfsd.szPrevString = NULL;
 
 	// If we weren't visible, reset our command parameters to the default
 	m_bCanClose = FALSE;
@@ -480,11 +460,9 @@ BOOL CLTDialogueWnd::DisplayText(char *szText, char *szAvatar, BOOL bStayOpen, c
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::ParseText
 //
-//	ROUTINE:	CLTDialogueWnd::ParseText
-//
-//	PURPOSE:	Parse the text for commands
-//
+//	PURPOSE: Parse the text for commands
 // ----------------------------------------------------------------------- //
 /*BOOL CLTDialogueWnd::ParseText()
 {
@@ -534,11 +512,9 @@ BOOL CLTDialogueWnd::DisplayText(char *szText, char *szAvatar, BOOL bStayOpen, c
 }*/
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::OnRButtonDown
 //
-//	ROUTINE:	CLTDialogueWnd::OnRButtonDown
-//
-//	PURPOSE:	Right mouse button handler
-//
+//	PURPOSE: Right mouse button handler
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::OnRButtonDown(int xPos, int yPos)
 {
@@ -552,12 +528,10 @@ BOOL CLTDialogueWnd::OnRButtonDown(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::Skip
 //
-//	ROUTINE:	CLTDialogueWnd::Skip
-//
-//	PURPOSE:	Skips dialogue playing or skips to the next dialogue
+//	PURPOSE: Skips dialogue playing or skips to the next dialogue
 //				if we're done reading.
-//
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::Skip()
 {
@@ -576,11 +550,9 @@ BOOL CLTDialogueWnd::Skip()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::InitFrame
 //
-//	ROUTINE:	CLTDialogueWnd::InitFrame
-//
-//	PURPOSE:	Initializes the frame
-//
+//	PURPOSE: Initializes the frame
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::InitFrame(const char *szFrame)
 {
@@ -592,7 +564,7 @@ BOOL CLTDialogueWnd::InitFrame(const char *szFrame)
 		CString csFrame;
 		csFrame.Format("%stopleft.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTDialogueWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -602,7 +574,7 @@ BOOL CLTDialogueWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%stop.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTDialogueWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -612,7 +584,7 @@ BOOL CLTDialogueWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%stopright.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTDialogueWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -622,7 +594,7 @@ BOOL CLTDialogueWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%sright.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTDialogueWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -632,7 +604,7 @@ BOOL CLTDialogueWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%sbottomright.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTDialogueWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -642,7 +614,7 @@ BOOL CLTDialogueWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%sbottom.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTDialogueWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -652,7 +624,7 @@ BOOL CLTDialogueWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%sbottomleft.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTDialogueWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -662,7 +634,7 @@ BOOL CLTDialogueWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%sleft.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTDialogueWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -673,19 +645,19 @@ BOOL CLTDialogueWnd::InitFrame(const char *szFrame)
 
 		// Get the frame thicknesses
 		DWORD x,y;
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_LEFTFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_LEFTFRAME],&x,&y);
 		m_rcFrame.left = x;
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_TOPFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_TOPFRAME],&x,&y);
 		m_rcFrame.top = y;
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_RIGHTFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_RIGHTFRAME],&x,&y);
 		m_rcFrame.right = x;
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_BOTTOMFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_BOTTOMFRAME],&x,&y);
 		m_rcFrame.bottom = y;
 
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_TOPLEFTFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_TOPLEFTFRAME],&x,&y);
 		m_rcTotal.left = x;
 		m_rcTotal.top = y;
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_BOTTOMRIGHTFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_BOTTOMRIGHTFRAME],&x,&y);
 		m_rcTotal.right = x;
 		m_rcTotal.bottom = y;
 		return TRUE;
@@ -695,11 +667,9 @@ BOOL CLTDialogueWnd::InitFrame(const char *szFrame)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::ShowDecisions
 //
-//	ROUTINE:	CLTDialogueWnd::ShowDecisions
-//
-//	PURPOSE:	Shows the decisions
-//
+//	PURPOSE: Shows the decisions
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::ShowDecisions()
 {
@@ -707,7 +677,7 @@ BOOL CLTDialogueWnd::ShowDecisions()
 	m_bDecisions = FALSE;
 	if(!m_csDecisions.IsEmpty())
 	{
-        ILTCommon* pCommon = g_pLTClient->Common();
+		ILTCommon* pCommon = g_pLTClient->Common();
 		if (!pCommon)
 		{
 			return FALSE;
@@ -725,14 +695,14 @@ BOOL CLTDialogueWnd::ShowDecisions()
 			{
 				dwID = atoi(parse.m_Args[0]);
 				DWORD dwTranslatedID = dwID;
-                HSTRING hString=g_pLTClient->FormatString(dwTranslatedID);
+				HSTRING hString=g_pLTClient->FormatString(dwTranslatedID);
 				if(!hString)
 				{
 					return FALSE;
 				}
 				m_collDialogueIDs.Add(dwID);
-                collDecisions.Add(g_pLTClient->GetStringData(hString));
-                g_pLTClient->FreeString(hString);
+				collDecisions.Add(g_pLTClient->GetStringData(hString));
+				g_pLTClient->FreeString(hString);
 			}
 		}
 
@@ -750,8 +720,8 @@ BOOL CLTDialogueWnd::ShowDecisions()
 			{
 				// Tell the server to stop speaking
 				HMESSAGEWRITE hMessage;
-                hMessage = g_pLTClient->StartMessage(CSM_DIALOGUE_STOP);
-                g_pLTClient->EndMessage(hMessage);
+				hMessage = g_pLTClient->StartMessage(CSM_DIALOGUE_STOP);
+				g_pLTClient->EndMessage(hMessage);
 			}
 
 			m_bEnabled = FALSE;
@@ -763,11 +733,9 @@ BOOL CLTDialogueWnd::ShowDecisions()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::DisplayTempText
 //
-//	ROUTINE:	CLTDialogueWnd::DisplayTempText
-//
-//	PURPOSE:	Sets up the dialogue text
-//
+//	PURPOSE: Sets up the dialogue text
 // ----------------------------------------------------------------------- //
 BOOL CLTDialogueWnd::DisplayTempText(char *szText)
 {
@@ -823,26 +791,24 @@ BOOL CLTDialogueWnd::DisplayTempText(char *szText)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTDialogueWnd::SetAlpha
 //
-//	ROUTINE:	CLTDialogueWnd::SetAlpha
-//
-//	PURPOSE:	Sets the alpha value for the window
-//
+//	PURPOSE: Sets the alpha value for the window
 // ----------------------------------------------------------------------- //
 void CLTDialogueWnd::SetAlpha(LTFLOAT fAlpha)
 {
 	if (m_hSurf)
 	{
-        g_pLTClient->OptimizeSurface(m_hSurf, g_hColorTransparent);
-        g_pLTClient->SetSurfaceAlpha(m_hSurf, fAlpha);
+		g_pLTClient->OptimizeSurface(m_hSurf, g_hColorTransparent);
+		g_pLTClient->SetSurfaceAlpha(m_hSurf, fAlpha);
 	}
 
 	for(int i=0;i<m_collFrames.GetSize();i++)
 	{
 		if (m_collFrames[i])
 		{
-            g_pLTClient->OptimizeSurface(m_collFrames[i], g_hColorTransparent);
-            g_pLTClient->SetSurfaceAlpha(m_collFrames[i], fAlpha);
+			g_pLTClient->OptimizeSurface(m_collFrames[i], g_hColorTransparent);
+			g_pLTClient->SetSurfaceAlpha(m_collFrames[i], fAlpha);
 		}
 	}
 

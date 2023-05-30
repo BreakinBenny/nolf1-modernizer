@@ -1,15 +1,12 @@
  // ----------------------------------------------------------------------- //
+// MODULE: LaserBeam.cpp
 //
-// MODULE  : LaserBeam.cpp
+// PURPOSE: LaserBeam class - Implementation
 //
-// PURPOSE : LaserBeam class - Implementation
-//
-// CREATED : 11/16/99
+// CREATED: 11/16/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "LaserBeam.h"
 #include "GameClientShell.h"
@@ -28,96 +25,78 @@ VarTrack	g_cvarLaserBeamNumSegments;
 VarTrack	g_cvarLaserBeamDebug;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLaserBeam::CLaserBeam()
 //
-//	ROUTINE:	CLaserBeam::CLaserBeam()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
-
 CLaserBeam::CLaserBeam()
 {
-    m_bOn = LTFALSE;
+	m_bOn = LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLaserBeam::~CLaserBeam()
 //
-//	ROUTINE:	CLaserBeam::~CLaserBeam()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
-
 CLaserBeam::~CLaserBeam()
 {
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLaserBeam::TurnOn()
 //
-//	ROUTINE:	CLaserBeam::TurnOn()
-//
-//	PURPOSE:	Turn light on
-//
+//	PURPOSE: Turn light on
 // ----------------------------------------------------------------------- //
-
 void CLaserBeam::TurnOn()
 {
 	Init();
 
-    uint32 dwFlags = m_LightBeam.GetFlags();
+	uint32 dwFlags = m_LightBeam.GetFlags();
 	m_LightBeam.SetFlags(dwFlags | FLAG_VISIBLE);
 
-    m_bOn = LTTRUE;
+	m_bOn = LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLaserBeam::TurnOff()
 //
-//	ROUTINE:	CLaserBeam::TurnOff()
-//
-//	PURPOSE:	Turn light off
-//
+//	PURPOSE: Turn light off
 // ----------------------------------------------------------------------- //
-
 void CLaserBeam::TurnOff()
 {
-    uint32 dwFlags = m_LightBeam.GetFlags();
+	uint32 dwFlags = m_LightBeam.GetFlags();
 	m_LightBeam.SetFlags(dwFlags & ~FLAG_VISIBLE);
 
-    m_bOn = LTFALSE;
+	m_bOn = LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLaserBeam::Init()
 //
-//	ROUTINE:	CLaserBeam::Init()
-//
-//	PURPOSE:	Init stuff
-//
+//	PURPOSE: Init stuff
 // ----------------------------------------------------------------------- //
-
 void CLaserBeam::Init()
 {
-    g_cvarLaserBeamThickness.Init(g_pLTClient, "LaserBeamThickness", NULL, 1.0f);
-    g_cvarLaserBeamAlpha.Init(g_pLTClient, "LaserBeamAlpha", NULL, 0.5f);
-    g_cvarLaserBeamUOffset.Init(g_pLTClient, "LaserBeamUOffset", NULL, 0.0f);
-    g_cvarLaserBeamROffset.Init(g_pLTClient, "LaserBeamROffset", NULL, 0.0f);
-    g_cvarLaserBeamFOffset.Init(g_pLTClient, "LaserBeamFOffset", NULL, 0.0f);
-    g_cvarLaserBeamNumSegments.Init(g_pLTClient, "LaserBeamNumSegments", NULL, 2.0f);
+	g_cvarLaserBeamThickness.Init(g_pLTClient, "LaserBeamThickness", NULL, 1.0f);
+	g_cvarLaserBeamAlpha.Init(g_pLTClient, "LaserBeamAlpha", NULL, 0.5f);
+	g_cvarLaserBeamUOffset.Init(g_pLTClient, "LaserBeamUOffset", NULL, 0.0f);
+	g_cvarLaserBeamROffset.Init(g_pLTClient, "LaserBeamROffset", NULL, 0.0f);
+	g_cvarLaserBeamFOffset.Init(g_pLTClient, "LaserBeamFOffset", NULL, 0.0f);
+	g_cvarLaserBeamNumSegments.Init(g_pLTClient, "LaserBeamNumSegments", NULL, 2.0f);
 
-    g_cvarLaserBeamDebug.Init(g_pLTClient, "LaserBeamDebug", NULL, 2.0f);
+	g_cvarLaserBeamDebug.Init(g_pLTClient, "LaserBeamDebug", NULL, 2.0f);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLaserBeam::Update()
 //
-//	ROUTINE:	CLaserBeam::Update()
-//
-//	PURPOSE:	Update the flash light
-//
+//	PURPOSE: Update the flash light
 // ----------------------------------------------------------------------- //
-
 void CLaserBeam::Update(LTVector vBeamStartPos, LTRotation* pRDirRot,
-                        LTBOOL b3rdPerson, LTBOOL bDetect)
+						LTBOOL b3rdPerson, LTBOOL bDetect)
 {
 	if (!m_bOn) return;
 
@@ -126,32 +105,32 @@ void CLaserBeam::Update(LTVector vBeamStartPos, LTRotation* pRDirRot,
 	HOBJECT hCamera = g_pGameClientShell->GetCamera();
 	if (!hCamera) return;
 
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (!hPlayerObj) return;
 
-    HOBJECT hFilterList[] = {hPlayerObj, g_pGameClientShell->GetMoveMgr()->GetObject(), LTNULL};
+	HOBJECT hFilterList[] = {hPlayerObj, g_pGameClientShell->GetMoveMgr()->GetObject(), LTNULL};
 
 	IntersectQuery qInfo;
 	IntersectInfo iInfo;
 
-    LTVector vPos(0, 0, 0);
-    LTRotation rRot;
+	LTVector vPos(0, 0, 0);
+	LTRotation rRot;
 	rRot.Init();
 
-    LTVector vU, vR, vF;
+	LTVector vU, vR, vF;
 
 	if (pRDirRot && b3rdPerson)
 	{
 		vPos = vBeamStartPos;
 
-        g_pLTClient->GetRotationVectors(pRDirRot, &vU, &vR, &vF);
+		g_pLTClient->GetRotationVectors(pRDirRot, &vU, &vR, &vF);
 	}
 	else
 	{
-        g_pLTClient->GetObjectRotation(hCamera, &rRot);
-        g_pLTClient->GetObjectPos(hCamera, &vPos);
+		g_pLTClient->GetObjectRotation(hCamera, &rRot);
+		g_pLTClient->GetObjectPos(hCamera, &vPos);
 
-        g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 		if (g_cvarLaserBeamDebug.GetFloat() == 0.0f)
 		{
@@ -163,14 +142,14 @@ void CLaserBeam::Update(LTVector vBeamStartPos, LTRotation* pRDirRot,
 		}
 		else
 		{
-            g_pLTClient->GetRotationVectors(pRDirRot, &vU, &vR, &vF);
+			g_pLTClient->GetRotationVectors(pRDirRot, &vU, &vR, &vF);
 			vBeamStartPos = vBeamStartPos;
 		}
 
 	}
 
 
-    LTVector vEndPos = vPos + (vF * 10000.0f);
+	LTVector vEndPos = vPos + (vF * 10000.0f);
 
 	qInfo.m_From = vPos;
 	qInfo.m_To   = vEndPos;
@@ -179,7 +158,7 @@ void CLaserBeam::Update(LTVector vBeamStartPos, LTRotation* pRDirRot,
 	qInfo.m_FilterFn = ObjListFilterFn;
 	qInfo.m_pUserData = hFilterList;
 
-    if (g_pLTClient->IntersectSegment(&qInfo, &iInfo))
+	if (g_pLTClient->IntersectSegment(&qInfo, &iInfo))
 	{
 		vEndPos = iInfo.m_Point;
 	}
@@ -187,14 +166,14 @@ void CLaserBeam::Update(LTVector vBeamStartPos, LTRotation* pRDirRot,
 
 	// Show the light beam...
 
-    LTVector vColor = LTVector(GetRandom(235.0f, 255.0f), GetRandom(35.0f, 55.0f), GetRandom(35.0f, 55.0f));;
+	LTVector vColor = LTVector(GetRandom(235.0f, 255.0f), GetRandom(35.0f, 55.0f), GetRandom(35.0f, 55.0f));;
 
-    LTFLOAT fAlpha = g_cvarLaserBeamAlpha.GetFloat();
+	LTFLOAT fAlpha = g_cvarLaserBeamAlpha.GetFloat();
 
 	if (iInfo.m_hObject && bDetect)
 	{
-        uint32 dwUsrFlgs = 0;
-        g_pLTClient->GetObjectUserFlags(iInfo.m_hObject, &dwUsrFlgs);
+		uint32 dwUsrFlgs = 0;
+		g_pLTClient->GetObjectUserFlags(iInfo.m_hObject, &dwUsrFlgs);
 
 		if (dwUsrFlgs & USRFLG_CHARACTER)
 		{
@@ -203,7 +182,7 @@ void CLaserBeam::Update(LTVector vBeamStartPos, LTRotation* pRDirRot,
 		}
 	}
 
-    LTFLOAT fWidth = g_cvarLaserBeamThickness.GetFloat();
+	LTFLOAT fWidth = g_cvarLaserBeamThickness.GetFloat();
 	fWidth = b3rdPerson ? fWidth*2.0f : fWidth;
 
 	vBeamStartPos += (vF * g_cvarLaserBeamFOffset.GetFloat());
@@ -214,40 +193,39 @@ void CLaserBeam::Update(LTVector vBeamStartPos, LTRotation* pRDirRot,
 
 	if (g_cvarLaserBeamDebug.GetFloat() >= 0.0f)
 	{
-        // g_pLTClient->CPrint("StartPos = %.2f, %.2f, %.2f", VEC_EXPAND(vBeamStartPos));
-        // g_pLTClient->CPrint("EndPos = %.2f, %.2f, %.2f", VEC_EXPAND(vEndPos));
+		// g_pLTClient->CPrint("StartPos = %.2f, %.2f, %.2f", VEC_EXPAND(vBeamStartPos));
+		// g_pLTClient->CPrint("EndPos = %.2f, %.2f, %.2f", VEC_EXPAND(vEndPos));
 	}
 
-	pls.vStartPos			= vBeamStartPos;
-	pls.vEndPos				= vEndPos;
+	pls.vStartPos		= vBeamStartPos;
+	pls.vEndPos		= vEndPos;
 	pls.vInnerColorStart	= vColor;
-	pls.vInnerColorEnd		= pls.vInnerColorStart;
-    pls.vOuterColorStart    = LTVector(0, 0, 0);
-    pls.vOuterColorEnd      = LTVector(0, 0, 0);
-	pls.fAlphaStart			= fAlpha;
-	pls.fAlphaEnd			= fAlpha;
-	pls.fMinWidth			= 0;
-	pls.fMaxWidth			= fWidth;
-	pls.fMinDistMult		= 1.0f;
-	pls.fMaxDistMult		= 1.0f;
-	pls.fLifeTime			= 1.0f;
-	pls.fAlphaLifeTime		= 1.0f;
-	pls.fPerturb			= 0.0f;
-    pls.bAdditive           = LTTRUE;
-    pls.bAlignFlat          = b3rdPerson ? LTFALSE : LTTRUE;
-	pls.nWidthStyle			= PLWS_CONSTANT;
-	pls.nNumSegments		= (int)g_cvarLaserBeamNumSegments.GetFloat();
+	pls.vInnerColorEnd	= pls.vInnerColorStart;
+	pls.vOuterColorStart	= LTVector(0, 0, 0);
+	pls.vOuterColorEnd	= LTVector(0, 0, 0);
+	pls.fAlphaStart		= fAlpha;
+	pls.fAlphaEnd		= fAlpha;
+	pls.fMinWidth		= 0;
+	pls.fMaxWidth		= fWidth;
+	pls.fMinDistMult	= 1.0f;
+	pls.fMaxDistMult	= 1.0f;
+	pls.fLifeTime		= 1.0f;
+	pls.fAlphaLifeTime	= 1.0f;
+	pls.fPerturb		= 0.0f;
+	pls.bAdditive		= LTTRUE;
+	pls.bAlignFlat		= b3rdPerson ? LTFALSE : LTTRUE;
+	pls.nWidthStyle		= PLWS_CONSTANT;
+	pls.nNumSegments	= (int)g_cvarLaserBeamNumSegments.GetFloat();
 
 	if (m_LightBeam.HasBeenDrawn())
 	{
 		// Keep the light beam in the vis list...
-
 		m_LightBeam.SetPos(vBeamStartPos);
 
 		// Hide the beam in portals if 1st person...Also set flag really
 		// close to true...
 
-        uint32 dwFlags2, dwFlags;
+		uint32 dwFlags2, dwFlags;
 
 		dwFlags = m_LightBeam.GetFlags();
 		dwFlags2 = m_LightBeam.GetFlags2();
@@ -262,7 +240,7 @@ void CLaserBeam::Update(LTVector vBeamStartPos, LTRotation* pRDirRot,
 			if (g_cvarLaserBeamDebug.GetFloat() > 1.0f)
 			{
 				dwFlags |= FLAG_REALLYCLOSE;
-                pls.bUseObjectRotation = LTTRUE;
+				pls.bUseObjectRotation = LTTRUE;
 			}
 			dwFlags2 |= FLAG2_PORTALINVISIBLE;
 		}
@@ -275,7 +253,7 @@ void CLaserBeam::Update(LTVector vBeamStartPos, LTRotation* pRDirRot,
 	else
 	{
 		m_LightBeam.Init(&pls);
-        m_LightBeam.CreateObject(g_pLTClient);
+		m_LightBeam.CreateObject(g_pLTClient);
 	}
 
 

@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: MuzzleFlashParticleFX.h
 //
-// MODULE  : MuzzleFlashParticleFX.h
+// PURPOSE: MuzzleFlash particle special fx class - Definition
 //
-// PURPOSE : MuzzleFlash particle special fx class - Definition
-//
-// CREATED : 1/17/98
+// CREATED: 1/17/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #ifndef __MUZZLEFLASH_PARTICLE_FX_H__
 #define __MUZZLEFLASH_PARTICLE_FX_H__
 
@@ -18,22 +15,22 @@
 
 struct MFPCREATESTRUCT : public BPSCREATESTRUCT
 {
-    MFPCREATESTRUCT();
+	MFPCREATESTRUCT();
 
-	HOBJECT				hFiredFrom;
-    LTVector             vPos;
-    LTRotation           rRot;
+	HOBJECT		hFiredFrom;
+	LTVector			 vPos;
+	LTRotation		rRot;
 	CParticleMuzzleFX*	pPMuzzleFX;
-    LTBOOL               bPlayerView;
+	LTBOOL			bPlayerView;
 };
 
 inline MFPCREATESTRUCT::MFPCREATESTRUCT()
 {
 	rRot.Init();
 	vPos.Init();
-    hFiredFrom  = LTNULL;
-    pPMuzzleFX  = LTNULL;
-    bPlayerView = LTFALSE;
+	hFiredFrom	= LTNULL;
+	pPMuzzleFX	= LTNULL;
+	bPlayerView	= LTFALSE;
 }
 
 
@@ -46,19 +43,19 @@ class CMuzzleFlashParticleFX : public CBaseParticleSystemFX
 			m_fStartTime = 0.0f;
 		}
 
-        LTBOOL Reset(MFPCREATESTRUCT & mfcs);
+		LTBOOL Reset(MFPCREATESTRUCT & mfcs);
 
-        virtual LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hRead);
-        virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
-        virtual LTBOOL CreateObject(ILTClient* pClientDE);
-        virtual LTBOOL Update();
+		virtual LTBOOL Init(HLOCALOBJ hServObj, HMESSAGEREAD hRead);
+		virtual LTBOOL Init(SFXCREATESTRUCT* psfxCreateStruct);
+		virtual LTBOOL CreateObject(ILTClient* pClientDE);
+		virtual LTBOOL Update();
 
 	private :
 
-        LTBOOL   AddMuzzleFlash();
+		LTBOOL   AddMuzzleFlash();
 
-		MFPCREATESTRUCT m_cs;			// Our data
-        LTFLOAT          m_fStartTime;   // When did we start
+		MFPCREATESTRUCT m_cs;	// Our data
+		LTFLOAT	m_fStartTime;	// When did we start
 };
 
 #endif // __MUZZLEFLASH_PARTICLE_FX_H__

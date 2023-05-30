@@ -1,14 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: LightFX.cpp
 //
-// MODULE  : LightFX.cpp
+// PURPOSE: Glowing Light
 //
-// PURPOSE : Glowing Light
-//
-// CREATED : 02/04/98
+// CREATED: 02/04/98
 //			  7/17/98 - Converted to client SFX.
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include <stdio.h>
 #include "iltclient.h"
@@ -21,11 +18,11 @@
 // Defines....
 
 
-#define DOWNSOUND               0
-#define UPSOUND                 1
+#define DOWNSOUND	0
+#define UPSOUND		1
 
-#define PI              (LTFLOAT)3.14159
-#define PIx2            (LTFLOAT)PI*2
+#define PI			  (LTFLOAT)3.14159
+#define PIx2			(LTFLOAT)PI*2
 
 // Waveform values taken from Blood
 
@@ -75,9 +72,9 @@ static LTFLOAT strobe[] = {
 //static int GetWaveValue( int nWave, int theta, int amplitude )
 static LTFLOAT GetWaveValue(uint8 nWaveform, LTFLOAT fMin, LTFLOAT fMax, LTFLOAT fTheta )
 {
-    LTFLOAT fReturn = fMax;
+	LTFLOAT fReturn = fMax;
 
-    fTheta = (LTFLOAT)fmod(fTheta, PIx2);
+	fTheta = (LTFLOAT)fmod(fTheta, PIx2);
 
 	switch (nWaveform)
 	{
@@ -103,7 +100,7 @@ static LTFLOAT GetWaveValue(uint8 nWaveform, LTFLOAT fMin, LTFLOAT fMax, LTFLOAT
 			break;
 
 		case WAVE_SINE:
-            fReturn = fMin + (fMax - fMin) * ((LTFLOAT)sin(fTheta)/2.0f + 0.5f);
+			fReturn = fMin + (fMax - fMin) * ((LTFLOAT)sin(fTheta)/2.0f + 0.5f);
 			break;
 
 		case WAVE_FLICKER1:
@@ -147,7 +144,7 @@ static LTFLOAT GetWaveValue(uint8 nWaveform, LTFLOAT fMin, LTFLOAT fMax, LTFLOAT
 			if ( fTheta > PIx2 )
 				fReturn = fMin;
 			else
-                fReturn = fMin + (fMax - fMin) * ((LTFLOAT)-cos(fTheta)/2.0f + 0.5f);
+				fReturn = fMin + (fMax - fMin) * ((LTFLOAT)-cos(fTheta)/2.0f + 0.5f);
 			break;
 		}
 	}
@@ -164,19 +161,19 @@ CLightFX::CLightFX() : CSpecialFX()
 	m_vOffset.Init();
 
 	m_fStartTime		= -1.0f;
-	m_fIntensityMin		= 0.5f;
-	m_fIntensityMax		= 1.0f;
+	m_fIntensityMin	= 0.5f;
+	m_fIntensityMax	= 1.0f;
 	m_fRadiusMin		= 500.0f;
 	m_fRadiusMax		= 0.0f;
-	m_fLifeTime			= -1.0f;
+	m_fLifeTime		= -1.0f;
 	m_fCurrentRadius	= 0.0f;
 	m_fIntensityTime	= 0.0f;
-	m_fRadiusTime		= 0.0f;
+	m_fRadiusTime	= 0.0f;
 	m_fStartTime		= 0.0f;
 
-    m_bUseServerPos     = LTFALSE;
-    m_hstrRampUpSound   = LTNULL;
-    m_hstrRampDownSound = LTNULL;
+	m_bUseServerPos	 = LTFALSE;
+	m_hstrRampUpSound   = LTNULL;
+	m_hstrRampDownSound = LTNULL;
 
 	m_hLightAnim = INVALID_LIGHT_ANIM;
 }
@@ -197,7 +194,7 @@ CLightFX::~CLightFX()
 
 		if (m_hLightAnim != INVALID_LIGHT_ANIM)
 		{
-		    ILTLightAnim *pLightAnimLT;
+			ILTLightAnim *pLightAnimLT;
 			pLightAnimLT = m_pClientDE->GetLightAnimLT();
 			if (pLightAnimLT)
 			{
@@ -213,77 +210,69 @@ CLightFX::~CLightFX()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Init()
 //
-//	ROUTINE:	Init()
-//
-//	PURPOSE:	Initialize data members
-//
+//	PURPOSE: Initialize data members
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLightFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
 	if (!CSpecialFX::Init(psfxCreateStruct))
-        return LTFALSE;
+		return LTFALSE;
 
 	LIGHTCREATESTRUCT* pLight = (LIGHTCREATESTRUCT*)psfxCreateStruct;
 
 	VEC_COPY(m_vColor, pLight->vColor);
-	m_dwLightFlags =		pLight->dwLightFlags;
-	m_fIntensityMin = 		pLight->fIntensityMin;
-	m_fIntensityMax = 		pLight->fIntensityMax;
-	m_nIntensityWaveform =	pLight->nIntensityWaveform;
-	m_fIntensityFreq =		pLight->fIntensityFreq;
-	m_fIntensityPhase =		pLight->fIntensityPhase;
-	m_fRadiusMin = 			pLight->fRadiusMin;
-	m_fRadiusMax = 			pLight->fRadiusMax;
-	m_nRadiusWaveform =		pLight->nRadiusWaveform;
-	m_fRadiusFreq =			pLight->fRadiusFreq;
-	m_fRadiusPhase =		pLight->fRadiusPhase;
-	m_hstrRampUpSound =		pLight->hstrRampUpSound;
-	m_hstrRampDownSound =	pLight->hstrRampDownSound;
-	m_vOffset =				pLight->vOffset;
-	m_hLightAnim =			pLight->m_hLightAnim;
+	m_dwLightFlags	=	pLight->dwLightFlags;
+	m_fIntensityMin	= 	pLight->fIntensityMin;
+	m_fIntensityMax	= 	pLight->fIntensityMax;
+	m_nIntensityWaveform = pLight->nIntensityWaveform;
+	m_fIntensityFreq	=	pLight->fIntensityFreq;
+	m_fIntensityPhase	=	pLight->fIntensityPhase;
+	m_fRadiusMin		= 	pLight->fRadiusMin;
+	m_fRadiusMax		= 	pLight->fRadiusMax;
+	m_nRadiusWaveform =	pLight->nRadiusWaveform;
+	m_fRadiusFreq		=	pLight->fRadiusFreq;
+	m_fRadiusPhase	=	pLight->fRadiusPhase;
+	m_hstrRampUpSound =	pLight->hstrRampUpSound;
+	m_hstrRampDownSound = pLight->hstrRampDownSound;
+	m_vOffset		=	pLight->vOffset;
+	m_hLightAnim		=	pLight->m_hLightAnim;
 
-	m_fCurrentRadius		= m_fRadius = m_fRadiusMin;
+	m_fCurrentRadius	=	m_fRadius = m_fRadiusMin;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
-
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLightFX::CreateObject
 //
-//	ROUTINE:	CLightFX::CreateObject
-//
-//	PURPOSE:	Create object associated with the light
-//
+//	PURPOSE: Create object associated with the light
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLightFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
+	if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
 
-    LTVector vZero, vPos;
+	LTVector vZero, vPos;
 	LAInfo info;
 	vZero.Init();
 
-    LTRotation rRot;
-    rRot.Init();
+	LTRotation rRot;
+	rRot.Init();
 
 	if (m_hServerObject)
 	{
-        g_pLTClient->GetObjectPos(m_hServerObject, &vPos);
+		g_pLTClient->GetObjectPos(m_hServerObject, &vPos);
 		vPos += m_vOffset;
 
 		pClientDE->GetObjectRotation(m_hServerObject, &rRot);
 	}
 	else
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	// Setup the light...
-
 	ObjectCreateStruct createStruct;
 	INIT_OBJECTCREATESTRUCT(createStruct);
 
@@ -306,39 +295,37 @@ LTBOOL CLightFX::CreateObject(ILTClient *pClientDE)
 		m_pClientDE->GetLightAnimLT()->SetLightAnimInfo(m_hLightAnim, info);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
-//
-//	ROUTINE:	CLightFX::Update
+//	ROUTINE: CLightFX::Update
 //
 //	PURPOSE:
-//
 // ----------------------------------------------------------------------- //
 LTBOOL CLightFX::Update()
 {
-    ILTLightAnim *pLightAnimLT;
+	ILTLightAnim *pLightAnimLT;
 	LAInfo info;
 
-    if (!m_pClientDE) return LTFALSE;
+	if (!m_pClientDE) return LTFALSE;
 
 	if (m_hServerObject)
 	{
-        LTVector vPos;
+		LTVector vPos;
 		m_pClientDE->GetObjectPos(m_hServerObject, &vPos);
 		vPos += m_vOffset;
 		m_pClientDE->SetObjectPos(m_hObject, &vPos);
 	}
 	else
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    uint32 dwFlags;
+	uint32 dwFlags;
 	m_pClientDE->GetObjectUserFlags(m_hServerObject, &dwFlags);
-    LTBOOL bOn = ((dwFlags & USRFLG_VISIBLE) != 0);
+	LTBOOL bOn = ((dwFlags & USRFLG_VISIBLE) != 0);
 
 	dwFlags = m_pClientDE->GetObjectFlags(m_hObject);
 
@@ -362,11 +349,11 @@ LTBOOL CLightFX::Update()
 	}
 	else
 	{
-        // Its NOT turned on, so reset the start time
-        // So if there is a duration, then it will start timing when the switch is turned on
-    	m_fStartTime = m_pClientDE->GetTime();
+		// Its NOT turned on, so reset the start time
+		// So if there is a duration, then it will start timing when the switch is turned on
+		m_fStartTime = m_pClientDE->GetTime();
 
-		m_fRadius = m_fRadiusMin;  // Effectively turn light off
+		m_fRadius = m_fRadiusMin;	// Effectively turn light off
 		SetRadius(m_fRadius, info);
 
 		// Disable..
@@ -378,7 +365,7 @@ LTBOOL CLightFX::Update()
 	pLightAnimLT->SetLightAnimInfo(m_hLightAnim, info);
 
 	m_pClientDE->SetObjectFlags(m_hObject, dwFlags);
-    return LTTRUE;
+	return LTTRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -389,18 +376,16 @@ LTBOOL CLightFX::Update()
 // The following are Light Radius related methods /////////////////////////////
 
 // ----------------------------------------------------------------------- //
-//
-//	ROUTINE:	CLightFX::
+//	ROUTINE: CLightFX::
 //
 //	PURPOSE:
-//
 // ----------------------------------------------------------------------- //
 void CLightFX::UpdateLightRadius(LAInfo &info)
 {
 	// Determine a theta between 0 and 2PI
-    LTFLOAT fTheta = m_pClientDE->GetTime() * m_fRadiusFreq + m_fRadiusPhase;
+	LTFLOAT fTheta = m_pClientDE->GetTime() * m_fRadiusFreq + m_fRadiusPhase;
 
-    LTFLOAT fValue = GetWaveValue(m_nRadiusWaveform, m_fRadiusMin, m_fRadiusMax, fTheta);
+	LTFLOAT fValue = GetWaveValue(m_nRadiusWaveform, m_fRadiusMin, m_fRadiusMax, fTheta);
 
 	SetRadius(fValue, info);
 }
@@ -408,18 +393,16 @@ void CLightFX::UpdateLightRadius(LAInfo &info)
 
 
 // ----------------------------------------------------------------------- //
-//
-//	ROUTINE:	CLightFX::
+//	ROUTINE: CLightFX::
 //
 //	PURPOSE:
-//
 // ----------------------------------------------------------------------- //
 void CLightFX::UpdateLightIntensity(LAInfo &info)
 {
 	// Determine a theta between 0 and 2PI
-    LTFLOAT fTheta = m_pClientDE->GetTime() * m_fIntensityFreq + m_fIntensityPhase;
+	LTFLOAT fTheta = m_pClientDE->GetTime() * m_fIntensityFreq + m_fIntensityPhase;
 
-    LTFLOAT fValue = GetWaveValue(m_nIntensityWaveform, m_fIntensityMin, m_fIntensityMax, fTheta);
+	LTFLOAT fValue = GetWaveValue(m_nIntensityWaveform, m_fIntensityMin, m_fIntensityMax, fTheta);
 
 	info.m_fBlendPercent = (fValue - m_fIntensityMin) / (m_fIntensityMax - m_fIntensityMin);
 
@@ -430,17 +413,15 @@ void CLightFX::UpdateLightIntensity(LAInfo &info)
 
 
 // ----------------------------------------------------------------------- //
-//
-//	ROUTINE:	CLightFX::
+//	ROUTINE: CLightFX::
 //
 //	PURPOSE:
-//
 // ----------------------------------------------------------------------- //
 void CLightFX::PlayRampSound(int nDirection)
 {
-    char *sound = LTNULL;
+	char *sound = LTNULL;
 
-    // Set the char pointer
+	// Set the char pointer
 	if (nDirection == 1 && m_hstrRampUpSound)
 	{
 		sound = m_pClientDE->GetStringData(m_hstrRampUpSound);
@@ -450,10 +431,10 @@ void CLightFX::PlayRampSound(int nDirection)
 		sound = m_pClientDE->GetStringData(m_hstrRampDownSound);
 	}
 
-    // Play the sound if valid pointer
+	// Play the sound if valid pointer
 	if (sound && strlen(sound) > 0)
 	{
-        LTFLOAT Radius = 1000.0f;
+		LTFLOAT Radius = 1000.0f;
 		g_pClientSoundMgr->PlaySoundFromObject(m_hObject, sound, Radius, SOUNDPRIORITY_MISC_HIGH);
 	}
 
@@ -461,16 +442,14 @@ void CLightFX::PlayRampSound(int nDirection)
 
 
 // ----------------------------------------------------------------------- //
-//
-//	ROUTINE:	CLightFX::
+//	ROUTINE: CLightFX::
 //
 //	PURPOSE:
-//
 // ----------------------------------------------------------------------- //
 void CLightFX::SetRadius(LTFLOAT fRadius, LAInfo &info)
 {
 	if (fRadius > 10000.0f) fRadius = 10000.0f;
-    if (fRadius < 0.0f)     fRadius = 0.0f;
+	if (fRadius < 0.0f)	 fRadius = 0.0f;
 
 	info.m_fLightRadius = fRadius;
 
@@ -482,22 +461,20 @@ void CLightFX::SetRadius(LTFLOAT fRadius, LAInfo &info)
 
 
 // ----------------------------------------------------------------------- //
-//
-//	ROUTINE:	CLightFX::
+//	ROUTINE: CLightFX::
 //
 //	PURPOSE:
-//
 // ----------------------------------------------------------------------- //
 void CLightFX::SetColor(LTFLOAT fRedValue, LTFLOAT fGreenValue, LTFLOAT fBlueValue, LAInfo &info)
 {
-	if (fRedValue > 1.0f)       fRedValue = 1.0f;
-    if (fRedValue < 0.0f)       fRedValue = 0.0f;
+	if (fRedValue > 1.0f)	fRedValue = 1.0f;
+	if (fRedValue < 0.0f)	fRedValue = 0.0f;
 
-    if (fGreenValue > 1.0f)     fGreenValue = 1.0f;
-    if (fGreenValue < 0.0f)     fGreenValue = 0.0f;
+	if (fGreenValue > 1.0f)	 fGreenValue = 1.0f;
+	if (fGreenValue < 0.0f)	 fGreenValue = 0.0f;
 
-    if (fBlueValue > 1.0f)      fBlueValue = 1.0f;
-    if (fBlueValue < 0.0f)      fBlueValue = 0.0f;
+	if (fBlueValue > 1.0f)	  fBlueValue = 1.0f;
+	if (fBlueValue < 0.0f)	  fBlueValue = 0.0f;
 
    	m_pClientDE->SetLightColor(m_hObject, fRedValue, fGreenValue, fBlueValue);
 

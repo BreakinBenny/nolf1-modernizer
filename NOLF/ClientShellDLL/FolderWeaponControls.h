@@ -18,8 +18,8 @@ public:
 	virtual ~CFolderWeaponControls();
 
 	// Build the folder
-    LTBOOL   Build();
-    void OnFocus(LTBOOL bFocus);
+	LTBOOL   Build();
+	void OnFocus(LTBOOL bFocus);
 
 	LTBOOL	OnLeft();
 	LTBOOL	OnRight();
@@ -38,14 +38,14 @@ protected:
 
 	void	UpdateSelection();
 
-	int		GetNextCommand(int nCommand);
-	int		GetPreviousCommand(int nCommand);
+	int	GetNextCommand(int nCommand);
+	int	GetPreviousCommand(int nCommand);
 
-    uint32  OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
+	uint32 OnCommand(uint32 dwCommand, uint32 dwParam1, uint32 dwParam2);
 
 
-	virtual void	CreateModelSFX();
-	virtual void	RemoveInterfaceSFX();
+	virtual void CreateModelSFX();
+	virtual void RemoveInterfaceSFX();
 
 
 	int		m_nActions[10];
@@ -57,8 +57,8 @@ protected:
 	CBaseScaleFX	m_ModelSFX;
 	char			m_szModel[WMGR_MAX_FILE_PATH];
 	char			m_szSkin[WMGR_MAX_FILE_PATH];
-	LTFLOAT			m_fSFXRot;
-	LTFLOAT			m_fScale;
+	LTFLOAT	m_fSFXRot;
+	LTFLOAT	m_fScale;
 	LTVector		m_vOffset;
 
 

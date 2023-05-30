@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: HeadBobMgr.h
 //
-// MODULE  : HeadBobMgr.h
+// PURPOSE: Head Bob Mgr - Definition
 //
-// PURPOSE : Head Bob Mgr - Definition
-//
-// CREATED : 01/09/00
+// CREATED: 01/09/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #ifndef __HEAD_BOB_MGR__
 #define __HEAD_BOB_MGR__
 
@@ -22,22 +19,22 @@ class CHeadBobMgr
 
 		CHeadBobMgr();
 
-        LTBOOL   Init();
+		LTBOOL Init();
 		void	Update();
 
 		void	OnEnterWorld();
 
-        void    DemoLoad(ILTStream *pStream);
-        void    DemoSave(ILTStream *pStream);
+		void	DemoLoad(ILTStream *pStream);
+		void	DemoSave(ILTStream *pStream);
 
-        void AdjustCameraPos(LTVector &vPos);
+		void AdjustCameraPos(LTVector &vPos);
 
 	private :
 
-        LTFLOAT  m_fBobHeight;
-        LTFLOAT  m_fBobAmp;
-        LTFLOAT  m_fBobPhase;
-        LTFLOAT  m_fSwayPhase;
+		LTFLOAT m_fBobHeight;
+		LTFLOAT m_fBobAmp;
+		LTFLOAT m_fBobPhase;
+		LTFLOAT m_fSwayPhase;
 
 		void	UpdateHeadBob();
 		void	UpdateHeadCant();

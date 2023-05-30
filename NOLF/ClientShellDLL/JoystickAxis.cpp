@@ -69,17 +69,17 @@ CJoystickAxisBase::CJoystickAxisBase()
 	m_fDeadZone = 0.10f;
 
 	// set to TRUE if bindings were read in successfully
-    m_bBindingsRead = LTFALSE;
+	m_bBindingsRead = LTFALSE;
 
-    m_bAddDigitalBindingsToAnalog = LTFALSE;
+	m_bAddDigitalBindingsToAnalog = LTFALSE;
 
 	// Data members
 	m_nAxis=JOYSTICK_AXIS_NONE;
 	m_nSensitivity=1;
 	m_nDeadZone=1;
-    m_bAnalog=LTFALSE;
-    m_bInvertAxis=LTFALSE;
-    m_bCenterOffset=LTFALSE;
+	m_bAnalog=LTFALSE;
+	m_bInvertAxis=LTFALSE;
+	m_bCenterOffset=LTFALSE;
 
 	// Stores original value of data members
 	m_nOrigAxis=m_nAxis;
@@ -101,12 +101,12 @@ CJoystickAxisBase::CJoystickAxisBase()
 	m_nCenterOffsetID=IDS_JOYSTICK_CENTERCORRECTION;
 
 	// The controls
-    m_pAxisCtrl=LTNULL;
-    m_pSensitivityCtrl=LTNULL;
-    m_pAnalogCtrl=LTNULL;
-    m_pDeadZoneCtrl=LTNULL;
-    m_pInvertAxisCtrl=LTNULL;
-    m_pCenterOffsetCtrl=LTNULL;
+	m_pAxisCtrl=LTNULL;
+	m_pSensitivityCtrl=LTNULL;
+	m_pAnalogCtrl=LTNULL;
+	m_pDeadZoneCtrl=LTNULL;
+	m_pInvertAxisCtrl=LTNULL;
+	m_pCenterOffsetCtrl=LTNULL;
 }
 
 // Build the  items for this class
@@ -143,7 +143,7 @@ void CJoystickAxisBase::Build(ILTClient *pClientDE, CBaseFolder *pDestFolder)
 
 	// The dead zone control
 	m_pDeadZoneCtrl=pDestFolder->AddSlider(m_nDeadZoneID, IDS_HELP_DEADZONE, kGap, kWidth,
-											   &m_nDeadZone, LTFALSE, g_pInterfaceResMgr->GetSmallFont());
+											&m_nDeadZone, LTFALSE, g_pInterfaceResMgr->GetSmallFont());
 	if (m_pDeadZoneCtrl)
 	{
 		m_pDeadZoneCtrl->SetSliderRange(DEADZONESLIDERLOW, DEADZONESLIDERHIGH);
@@ -178,7 +178,7 @@ void CJoystickAxisBase::UpdateEnable(LTBOOL bJoystickOn)
 {
 	// If the joystick is on the enable all of the controls.
 	// The analog status is checked down below which may disable some of the controls.
-    LTBOOL bEnable=bJoystickOn;
+	LTBOOL bEnable=bJoystickOn;
 
 	if (m_pAxisCtrl)			m_pAxisCtrl->Enable(bEnable);
 	if (m_pInvertAxisCtrl)		m_pInvertAxisCtrl->Enable(bEnable);
@@ -196,11 +196,11 @@ void CJoystickAxisBase::UpdateEnable(LTBOOL bJoystickOn)
 	// If the axis is set to none then disable the rest of the controls
 	if (m_nAxis == JOYSTICK_AXIS_NONE)
 	{
-        bEnable=LTFALSE;
-		if (m_pInvertAxisCtrl)		m_pInvertAxisCtrl->Enable(bEnable);
-		if (m_pDeadZoneCtrl)		m_pDeadZoneCtrl->Enable(bEnable);
-		if (m_pAnalogCtrl)			m_pAnalogCtrl->Enable(bEnable);
-		if (m_pSensitivityCtrl)		m_pSensitivityCtrl->Enable(bEnable);
+		bEnable=LTFALSE;
+		if (m_pInvertAxisCtrl)	m_pInvertAxisCtrl->Enable(bEnable);
+		if (m_pDeadZoneCtrl)	m_pDeadZoneCtrl->Enable(bEnable);
+		if (m_pAnalogCtrl)		m_pAnalogCtrl->Enable(bEnable);
+		if (m_pSensitivityCtrl)	m_pSensitivityCtrl->Enable(bEnable);
 		if (m_pCenterOffsetCtrl)	m_pCenterOffsetCtrl->Enable(bEnable);
 
 		return;
@@ -209,8 +209,8 @@ void CJoystickAxisBase::UpdateEnable(LTBOOL bJoystickOn)
 	// Disable the sensitivity and center off controls if in analog mode
 	if (!m_bAnalog)
 	{
-        if (m_pSensitivityCtrl)     m_pSensitivityCtrl->Enable(LTFALSE);
-        if (m_pCenterOffsetCtrl)    m_pCenterOffsetCtrl->Enable(LTFALSE);
+		if (m_pSensitivityCtrl)	m_pSensitivityCtrl->Enable(LTFALSE);
+		if (m_pCenterOffsetCtrl)	m_pCenterOffsetCtrl->Enable(LTFALSE);
 	}
 }
 
@@ -222,7 +222,7 @@ CCycleCtrl *CJoystickAxisBase::BuildAxisOption(ILTClient *pClientDE, CBaseFolder
 	HSTRING hDisplayString=pClientDE->FormatString(nMessageID);
 	if (!hDisplayString)
 	{
-        return LTNULL;
+		return LTNULL;
 	}
 
 	// Create the control
@@ -273,7 +273,7 @@ BOOL CJoystickAxisBase::SetDeviceName(ILTClient *pClientDE)
 	// verify that this device name exists
 	DeviceObject* pObjects = pClientDE->GetDeviceObjects(DEVICETYPE_JOYSTICK);
 	DeviceObject* pObj = pObjects;
-    LTBOOL bFoundIt = LTFALSE;
+	LTBOOL bFoundIt = LTFALSE;
 	while ((pObj != NULL) && (bDeviceNameFound == FALSE))
 	{
 		if ((pObj->m_ObjectName != NULL) && (pObj->m_DeviceName != NULL) && (pObj->m_DeviceType == DEVICETYPE_JOYSTICK))
@@ -310,7 +310,7 @@ void CJoystickAxisBase::CreateAxisArray(ILTClient *pClientDE)
 {
 	DeviceObject* pObjects = pClientDE->GetDeviceObjects(DEVICETYPE_JOYSTICK);
 	DeviceObject* pObj = pObjects;
-    LTBOOL bFoundIt = LTFALSE;
+	LTBOOL bFoundIt = LTFALSE;
 
 	// the first axis is always the none axis
 	HSTRING hAxisName = pClientDE->FormatString(IDS_JOYSTICK_AXISNONE);
@@ -372,7 +372,7 @@ void CJoystickAxisBase::GetJoystickBindingInfo(ILTClient *pClientDE)
 		{
 //			pClientDE->CPrint("Checking device = %s trigger = %s", pCurrentBinding->strDeviceName, pCurrentBinding->strTriggerName ); // BLB TEMP
 
-            LTBOOL       bFound = LTFALSE;
+			LTBOOL	bFound = LTFALSE;
 			GameAction* pDigitalLowAction = NULL;
 			GameAction* pDigitalHighAction = NULL;
 			GameAction* pAnalogAction = NULL;
@@ -402,7 +402,7 @@ void CJoystickAxisBase::GetJoystickBindingInfo(ILTClient *pClientDE)
 				m_fRangeHigh = pAnalogAction->nRangeHigh;
 
 				m_bAnalog = TRUE;
-                bFound = LTTRUE;
+				bFound = LTTRUE;
 
 //				pClientDE->CPrint("Digital binding read Device = %s Trigger = %s Action1 = %s", m_sDeviceName, pCurrentBinding->strTriggerName, m_sActionName ); // BLB TEMP
 			}
@@ -421,7 +421,7 @@ void CJoystickAxisBase::GetJoystickBindingInfo(ILTClient *pClientDE)
 				m_fRangeHigh2 = pDigitalHighAction->nRangeHigh;
 
 				m_bAnalog = FALSE;
-                bFound = LTTRUE;
+				bFound = LTTRUE;
 
 //				pClientDE->CPrint("Digital binding read Device = %s Trigger = %s Action1 = %s Action2 = %s", m_sDeviceName, pCurrentBinding->strTriggerName, m_sActionName, m_sActionName2 ); // BLB TEMP
 			}
@@ -440,7 +440,7 @@ void CJoystickAxisBase::GetJoystickBindingInfo(ILTClient *pClientDE)
 				m_fRangeScaleMin = pCurrentBinding->nRangeScaleMin;
 				m_fRangeScaleMax = pCurrentBinding->nRangeScaleMax;
 				m_fRangeScalePreCenterOffset = pCurrentBinding->nRangeScalePreCenterOffset;
-                m_bBindingsRead = LTTRUE;
+				m_bBindingsRead = LTTRUE;
 			}
 		}
 		pCurrentBinding = pCurrentBinding->pNext;
@@ -590,26 +590,26 @@ void CJoystickAxisBase::LoadFromConsole(ILTClient *pClientDE)
 		// figure out if the bindings that were read in had inverted axis
 		if (m_bAnalog)
 		{
-            if (m_fRangeScaleMin > m_fRangeScaleMax) m_bInvertAxis = LTTRUE;
-            else m_bInvertAxis = LTFALSE;
+			if (m_fRangeScaleMin > m_fRangeScaleMax) m_bInvertAxis = LTTRUE;
+			else m_bInvertAxis = LTFALSE;
 		}
 		else
 		{
 			if (stricmp(m_sActionName, m_sActionDigitalLow) == 0)
 			{
-                if (m_fRangeLow < m_fRangeLow2) m_bInvertAxis = LTFALSE;
-                else m_bInvertAxis = LTTRUE;
+				if (m_fRangeLow < m_fRangeLow2) m_bInvertAxis = LTFALSE;
+				else m_bInvertAxis = LTTRUE;
 			}
 			else
 			{
-                if (m_fRangeLow <= m_fRangeLow2) m_bInvertAxis = LTTRUE;
-                else m_bInvertAxis = LTFALSE;
+				if (m_fRangeLow <= m_fRangeLow2) m_bInvertAxis = LTTRUE;
+				else m_bInvertAxis = LTFALSE;
 			}
 		}
 
 		// figure out the correct value of the center offset flag from the data read in
-        if ((long)m_fRangeScalePreCenterOffset != 100) m_bCenterOffset = LTFALSE;
-        else m_bCenterOffset = LTTRUE;
+		if ((long)m_fRangeScalePreCenterOffset != 100) m_bCenterOffset = LTFALSE;
+		else m_bCenterOffset = LTTRUE;
 	}
 
 	// save off the original values
@@ -799,9 +799,9 @@ void CJoystickAxisBase::SaveToConsole(ILTClient *pClientDE)
 // Load from the console
 void CJoystickAxisTurn::LoadFromConsole(ILTClient *pClientDE)
 {
-//    m_bBindingsRead = LTFALSE;
+//	m_bBindingsRead = LTFALSE;
 
-    m_bAddDigitalBindingsToAnalog = LTFALSE;
+	m_bAddDigitalBindingsToAnalog = LTFALSE;
 
 	// set up range of sensitivity scaling
 	m_fScaleCenter = 0.51f;
@@ -815,11 +815,11 @@ void CJoystickAxisTurn::LoadFromConsole(ILTClient *pClientDE)
 		m_fRangeScaleMin = -1.0f;
 		m_fRangeScaleMax = 1.0f;
 		m_nAxis = GetAxisIndex(pClientDE, m_sTriggerName);
-        m_bInvertAxis = LTFALSE;
+		m_bInvertAxis = LTFALSE;
 		m_nDeadZone = 2;
-        m_bAnalog = LTFALSE;
+		m_bAnalog = LTFALSE;
 		m_nSensitivity = 10;
-        m_bCenterOffset = LTFALSE;
+		m_bCenterOffset = LTFALSE;
 	}
 
 	// set the string names for this axis
@@ -856,13 +856,13 @@ CJoystickAxisLook::CJoystickAxisLook()
 	CJoystickAxisBase::CJoystickAxisBase();
 
 	// Members
-    m_bFixedPosition=LTTRUE;
+	m_bFixedPosition=LTTRUE;
 
 	// String IDs
 	m_nFixedPositionID=IDS_JOYSTICK_LOOKUPDOWNFIXEDBYPOSITION;
 
 	// Controls
-    m_pFixedPositionCtrl=LTNULL;
+	m_pFixedPositionCtrl=LTNULL;
 
 }
 
@@ -876,7 +876,7 @@ void CJoystickAxisLook::Build(ILTClient *pClientDE, CBaseFolder *pDestFolder)
 
 	// The center offset axis control
 	m_pFixedPositionCtrl=pDestFolder->AddToggle(m_nFixedPositionID, 0, kGap,
-												   &m_bFixedPosition, LTFALSE, g_pInterfaceResMgr->GetSmallFont());
+												&m_bFixedPosition, LTFALSE, g_pInterfaceResMgr->GetSmallFont());
 	m_pFixedPositionCtrl->SetOnString(IDS_ON);
 	m_pFixedPositionCtrl->SetOffString(IDS_OFF);
 	m_pFixedPositionCtrl->SetHelpID(IDS_HELP_FIXEDPOSITION);
@@ -889,14 +889,14 @@ void CJoystickAxisLook::UpdateEnable(LTBOOL bJoystickOn)
 	// Call the base class
 	CJoystickAxisBase::UpdateEnable(bJoystickOn);
 
-    LTBOOL bEnable=LTTRUE;
+	LTBOOL bEnable=LTTRUE;
 	if (bJoystickOn && m_bAnalog)
 	{
-        bEnable=LTTRUE;
+		bEnable=LTTRUE;
 	}
 	else
 	{
-        bEnable=LTFALSE;
+		bEnable=LTFALSE;
 	}
 
 	if (m_pFixedPositionCtrl)
@@ -908,9 +908,9 @@ void CJoystickAxisLook::UpdateEnable(LTBOOL bJoystickOn)
 // Load from the console
 void CJoystickAxisLook::LoadFromConsole(ILTClient *pClientDE)
 {
-    m_bBindingsRead = LTFALSE;
+	m_bBindingsRead = LTFALSE;
 
-    m_bAddDigitalBindingsToAnalog = LTFALSE;
+	m_bAddDigitalBindingsToAnalog = LTFALSE;
 
 	// read in and set up the fixed position variable
 	HCONSOLEVAR hVar = pClientDE->GetConsoleVar( "FixedAxisPitch");
@@ -934,11 +934,11 @@ void CJoystickAxisLook::LoadFromConsole(ILTClient *pClientDE)
 		m_fRangeScaleMin = -1.0f;
 		m_fRangeScaleMax = 1.0f;
 		m_nAxis = GetAxisIndex(pClientDE, m_sTriggerName);
-        m_bInvertAxis = LTFALSE;
+		m_bInvertAxis = LTFALSE;
 		m_nDeadZone = 2;
-        m_bAnalog = LTFALSE;
+		m_bAnalog = LTFALSE;
 		m_nSensitivity = 10;
-        m_bCenterOffset = LTFALSE;
+		m_bCenterOffset = LTFALSE;
 	}
 
 	// set the string names for this axis
@@ -996,9 +996,9 @@ CJoystickAxisMove::CJoystickAxisMove()
 // Load from the console
 void CJoystickAxisMove::LoadFromConsole(ILTClient *pClientDE)
 {
-    m_bBindingsRead = LTFALSE;
+	m_bBindingsRead = LTFALSE;
 
-    m_bAddDigitalBindingsToAnalog = LTTRUE;
+	m_bAddDigitalBindingsToAnalog = LTTRUE;
 
 	// set up range of sensitivity scaling
 	m_fScaleCenter = 1.0f;
@@ -1012,11 +1012,11 @@ void CJoystickAxisMove::LoadFromConsole(ILTClient *pClientDE)
 		m_fRangeScaleMin = -1.0f;
 		m_fRangeScaleMax = 1.0f;
 		m_nAxis = GetAxisIndex(pClientDE, m_sTriggerName);
-        m_bInvertAxis = LTFALSE;
+		m_bInvertAxis = LTFALSE;
 		m_nDeadZone = 2;
-        m_bAnalog = LTFALSE;
+		m_bAnalog = LTFALSE;
 		m_nSensitivity = 10;
-        m_bCenterOffset = LTFALSE;
+		m_bCenterOffset = LTFALSE;
 	}
 
 	// set the string names for this axis
@@ -1049,9 +1049,9 @@ void CJoystickAxisMove::SaveToConsole(ILTClient *pClientDE)
 
 void CJoystickAxisStrafe::LoadFromConsole(ILTClient *pClientDE)
 {
-    m_bBindingsRead = LTFALSE;
+	m_bBindingsRead = LTFALSE;
 
-    m_bAddDigitalBindingsToAnalog = LTTRUE;
+	m_bAddDigitalBindingsToAnalog = LTTRUE;
 
 	// set up range of sensitivity scaling
 	m_fScaleCenter = 1.0f;
@@ -1065,11 +1065,11 @@ void CJoystickAxisStrafe::LoadFromConsole(ILTClient *pClientDE)
 		m_fRangeScaleMin = -1.0f;
 		m_fRangeScaleMax = 1.0f;
 		m_nAxis = GetAxisIndex(pClientDE, m_sTriggerName);
-        m_bInvertAxis = LTFALSE;
+		m_bInvertAxis = LTFALSE;
 		m_nDeadZone = 2;
-        m_bAnalog = LTFALSE;
+		m_bAnalog = LTFALSE;
 		m_nSensitivity = 10;
-        m_bCenterOffset = LTFALSE;
+		m_bCenterOffset = LTFALSE;
 	}
 
 	// set the string names for this axis

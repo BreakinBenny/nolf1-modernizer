@@ -18,27 +18,25 @@ public:
 	CJukeboxButeMgr();
 	~CJukeboxButeMgr();
 
-	LTBOOL       Init(ILTCSBase* pInterface, const char* szAttributeFile = "Attributes\\Jukebox.txt");
-	void		Term();
+	LTBOOL	Init(ILTCSBase* pInterface, const char* szAttributeFile = "Attributes\\Jukebox.txt");
+	void	Term();
 
-	int			GetNumThemes() { return m_nThemeIDCount; }
-	int			GetNumSongs() { return m_nSongIDCount; }
+	int	GetNumThemes() { return m_nThemeIDCount; }
+	int	GetNumSongs() { return m_nSongIDCount; }
 
 	// Themes
-	CString		GetThemeName(int nThemeID);
-	CString		GetThemeDirectory(int nThemeID);
-	CString		GetThemeControlFile(int nThemeID);
+	CString	GetThemeName(int nThemeID);
+	CString	GetThemeDirectory(int nThemeID);
+	CString	GetThemeControlFile(int nThemeID);
 	bool		GetThemeRequiresGOTY(int nThemeID);
 
 	// Songs
-	CString		GetSongName(int nSongID);
-	int			GetSongIntensityLevel(int nSongID);
-	int			GetSongThemeID(int nSongID);
+	CString	GetSongName(int nSongID);
+	int		GetSongIntensityLevel(int nSongID);
+	int		GetSongThemeID(int nSongID);
 
 private:
 
 	int m_nThemeIDCount;
 	int m_nSongIDCount;
-
 };
-

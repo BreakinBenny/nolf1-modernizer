@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: LightningFX.cpp
 //
-// MODULE  : LightningFX.cpp
+// PURPOSE: Lightning special FX - Implementation
 //
-// PURPOSE : Lightning special FX - Implementation
-//
-// CREATED : 4/15/99
+// CREATED: 4/15/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "LightningFX.h"
 #include "iltclient.h"
@@ -21,17 +18,14 @@
 #include "VarTrack.h"
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLightningFX::Init
 //
-//	ROUTINE:	CLightningFX::Init
-//
-//	PURPOSE:	Init the lightning fx
-//
+//	PURPOSE: Init the lightning fx
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLightningFX::Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage)
 {
-    if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
-    if (!hMessage) return LTFALSE;
+	if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
+	if (!hMessage) return LTFALSE;
 
 	// Read in the init info from the message...
 
@@ -39,52 +33,49 @@ LTBOOL CLightningFX::Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage)
 
 	lcs.hServerObj = hServObj;
 	lcs.lfx.hServerObj = hServObj;
-    g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vStartPos));
-    g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vEndPos));
-    g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.vLightColor));
+	g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vStartPos));
+	g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vEndPos));
+	g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.vLightColor));
 
-    g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vInnerColorStart));
-    g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vInnerColorEnd));
-    g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vOuterColorStart));
-    g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vOuterColorEnd));
+	g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vInnerColorStart));
+	g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vInnerColorEnd));
+	g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vOuterColorStart));
+	g_pLTClient->ReadFromMessageVector(hMessage, &(lcs.lfx.vOuterColorEnd));
 
-    lcs.lfx.fAlphaStart     = g_pLTClient->ReadFromMessageFloat(hMessage);
-    lcs.lfx.fAlphaEnd       = g_pLTClient->ReadFromMessageFloat(hMessage);
+	lcs.lfx.fAlphaStart	= g_pLTClient->ReadFromMessageFloat(hMessage);
+	lcs.lfx.fAlphaEnd	= g_pLTClient->ReadFromMessageFloat(hMessage);
 
-    lcs.lfx.fMinWidth       = g_pLTClient->ReadFromMessageFloat(hMessage);
-    lcs.lfx.fMaxWidth       = g_pLTClient->ReadFromMessageFloat(hMessage);
-    lcs.lfx.fLifeTime       = g_pLTClient->ReadFromMessageFloat(hMessage);
-    lcs.lfx.fAlphaLifeTime  = g_pLTClient->ReadFromMessageFloat(hMessage);
-    lcs.fMinDelayTime		= g_pLTClient->ReadFromMessageFloat(hMessage);
-    lcs.fMaxDelayTime		= g_pLTClient->ReadFromMessageFloat(hMessage);
-    lcs.lfx.fPerturb        = g_pLTClient->ReadFromMessageFloat(hMessage);
-    lcs.fLightRadius        = g_pLTClient->ReadFromMessageFloat(hMessage);
-    lcs.fSoundRadius        = g_pLTClient->ReadFromMessageFloat(hMessage);
-    lcs.lfx.nWidthStyle     = g_pLTClient->ReadFromMessageByte(hMessage);
-    lcs.lfx.nNumSegments    = g_pLTClient->ReadFromMessageByte(hMessage);
-    lcs.bOneTimeOnly        = (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
-    lcs.bDynamicLight       = (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
-    lcs.bPlaySound          = (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
-    lcs.lfx.bAdditive       = (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
-    lcs.lfx.bMultiply       = (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
+	lcs.lfx.fMinWidth	= g_pLTClient->ReadFromMessageFloat(hMessage);
+	lcs.lfx.fMaxWidth	= g_pLTClient->ReadFromMessageFloat(hMessage);
+	lcs.lfx.fLifeTime	= g_pLTClient->ReadFromMessageFloat(hMessage);
+	lcs.lfx.fAlphaLifeTime = g_pLTClient->ReadFromMessageFloat(hMessage);
+	lcs.fMinDelayTime	= g_pLTClient->ReadFromMessageFloat(hMessage);
+	lcs.fMaxDelayTime	= g_pLTClient->ReadFromMessageFloat(hMessage);
+	lcs.lfx.fPerturb		= g_pLTClient->ReadFromMessageFloat(hMessage);
+	lcs.fLightRadius	= g_pLTClient->ReadFromMessageFloat(hMessage);
+	lcs.fSoundRadius	= g_pLTClient->ReadFromMessageFloat(hMessage);
+	lcs.lfx.nWidthStyle	= g_pLTClient->ReadFromMessageByte(hMessage);
+	lcs.lfx.nNumSegments = g_pLTClient->ReadFromMessageByte(hMessage);
+	lcs.bOneTimeOnly	= (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
+	lcs.bDynamicLight	= (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
+	lcs.bPlaySound		= (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
+	lcs.lfx.bAdditive	= (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
+	lcs.lfx.bMultiply		= (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
 
-	m_hstrTexture			= g_pLTClient->ReadFromMessageHString(hMessage);
+	m_hstrTexture		= g_pLTClient->ReadFromMessageHString(hMessage);
 
 	return Init(&lcs);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLightningFX::Init
 //
-//	ROUTINE:	CLightningFX::Init
-//
-//	PURPOSE:	Init the lightning fx
-//
+//	PURPOSE: Init the lightning fx
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLightningFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	LFXCREATESTRUCT* pLFX = (LFXCREATESTRUCT*)psfxCreateStruct;
 
@@ -95,28 +86,23 @@ LTBOOL CLightningFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 		m_cs.lfx.pTexture = g_pLTClient->GetStringData(m_hstrTexture);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLightningFX::CreateObject
 //
-//	ROUTINE:	CLightningFX::CreateObject
-//
-//	PURPOSE:	Create object associated the object
-//
+//	PURPOSE: Create object associated the object
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLightningFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
+	if (!CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
 
 	// Validate our init info...
-
-    if (m_cs.lfx.nNumSegments < 1) return LTFALSE;
+	if (m_cs.lfx.nNumSegments < 1) return LTFALSE;
 
 
 	// Get the thunder sound path if we need to play the sound...
-
 	if (m_cs.bPlaySound)
 	{
 		m_csThunderStr = g_pClientButeMgr->GetWeatherAttributeString(WEATHER_BUTE_THUNDERSOUND);
@@ -124,19 +110,15 @@ LTBOOL CLightningFX::CreateObject(ILTClient *pClientDE)
 
 
 	// Set up the lightning...
-
 	return Setup();
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLightningFX::Setup
 //
-//	ROUTINE:	CLightningFX::Setup
-//
-//	PURPOSE:	Setup the line used to draw lightning
-//
+//	PURPOSE: Setup the line used to draw lightning
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLightningFX::Setup()
 {
 	// Figure out the position based on the object's current pos...
@@ -150,7 +132,6 @@ LTBOOL CLightningFX::Setup()
 	}
 
 	// Create our poly-line for the lightning...
-
 	if (m_Line.HasBeenDrawn())
 	{
 		m_Line.ReInit(&m_cs.lfx);
@@ -162,15 +143,13 @@ LTBOOL CLightningFX::Setup()
 	}
 
 	// Figure out when to start/stop...
-
-    LTFLOAT fTime = g_pLTClient->GetTime();
+	LTFLOAT fTime = g_pLTClient->GetTime();
 	m_fStartTime = fTime + GetRandom(m_cs.fMinDelayTime, m_cs.fMaxDelayTime);
 	m_fEndTime	 = m_fStartTime + m_cs.lfx.fLifeTime;
 
 	// Calculate our mid point...
-
-    LTVector vPos = m_cs.lfx.vStartPos;
-    LTVector vDir = (m_cs.lfx.vEndPos - m_cs.lfx.vStartPos);
+	LTVector vPos = m_cs.lfx.vStartPos;
+	LTVector vDir = (m_cs.lfx.vEndPos - m_cs.lfx.vStartPos);
 	float fDist  = vDir.Mag();
 	float fTotalDist = fDist;
 
@@ -179,7 +158,6 @@ LTBOOL CLightningFX::Setup()
 	m_vMidPos = (m_cs.lfx.vStartPos + (vDir * fDist/2.0f));
 
  	// Create the dynamic light if necessary...
-
 	if (m_cs.bDynamicLight && !m_hLight)
 	{
 		ObjectCreateStruct createStruct;
@@ -190,7 +168,7 @@ LTBOOL CLightningFX::Setup()
 		createStruct.m_Pos = m_vMidPos;
 
 		m_hLight = m_pClientDE->CreateObject(&createStruct);
-        if (!m_hLight) return LTFALSE;
+		if (!m_hLight) return LTFALSE;
 
 		m_pClientDE->SetLightColor(m_hLight, m_cs.vLightColor.x/255.0f,
 			m_cs.vLightColor.y/255.0f, m_cs.vLightColor.z/255.0f);
@@ -198,50 +176,44 @@ LTBOOL CLightningFX::Setup()
 	}
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLightningFX::HandleFirstTime
 //
-//	ROUTINE:	CLightningFX::HandleFirstTime
-//
-//	PURPOSE:	Handle the first time drawing...
-//
+//	PURPOSE: Handle the first time drawing...
 // ----------------------------------------------------------------------- //
-
 void CLightningFX::HandleFirstTime()
 {
 	if (m_hLight)
 	{
-        uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hLight);
-        g_pLTClient->SetObjectFlags(m_hLight, dwFlags | FLAG_VISIBLE);
+		uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hLight);
+		g_pLTClient->SetObjectFlags(m_hLight, dwFlags | FLAG_VISIBLE);
 	}
 
 	if (m_cs.bPlaySound)
 	{
 		float fWaitTime = 0.0f;
-        m_fPlaySoundTime = g_pLTClient->GetTime() + fWaitTime;
-        m_bPlayedSound = LTFALSE;
+		m_fPlaySoundTime = g_pLTClient->GetTime() + fWaitTime;
+		m_bPlayedSound = LTFALSE;
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLightningFX::UpdateSound
 //
-//	ROUTINE:	CLightningFX::UpdateSound
-//
-//	PURPOSE:	Handle playing the sound
-//
+//	PURPOSE: Handle playing the sound
 // ----------------------------------------------------------------------- //
-
 void CLightningFX::UpdateSound()
 {
 	if (m_bPlayedSound || !m_cs.bPlaySound || (m_csThunderStr.GetLength() < 1)) return;
 
-    if (m_fPlaySoundTime <= g_pLTClient->GetTime())
+	if (m_fPlaySoundTime <= g_pLTClient->GetTime())
 	{
-        m_bPlayedSound = LTTRUE;
+		m_bPlayedSound = LTTRUE;
 
 		g_pClientSoundMgr->PlaySoundFromPos(m_vMidPos, (char *)(LPCSTR)m_csThunderStr,
 			m_cs.fSoundRadius, SOUNDPRIORITY_MISC_MEDIUM);
@@ -250,25 +222,21 @@ void CLightningFX::UpdateSound()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLightningFX::Update
 //
-//	ROUTINE:	CLightningFX::Update
-//
-//	PURPOSE:	Update the lightning
-//
+//	PURPOSE: Update the lightning
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLightningFX::Update()
 {
-    if (m_bWantRemove) return LTFALSE;
+	if (m_bWantRemove) return LTFALSE;
 
-    LTFLOAT fTime = g_pLTClient->GetTime();
+	LTFLOAT fTime = g_pLTClient->GetTime();
 
 	// Hide/show lightning if necessary...
-
 	if (m_hServerObject)
 	{
-        uint32 dwUserFlags;
-        g_pLTClient->GetObjectUserFlags(m_hServerObject, &dwUserFlags);
+		uint32 dwUserFlags;
+		g_pLTClient->GetObjectUserFlags(m_hServerObject, &dwUserFlags);
 
 		if (!(dwUserFlags & USRFLG_VISIBLE))
 		{
@@ -280,7 +248,7 @@ LTBOOL CLightningFX::Update()
 				g_pLTClient->SetObjectFlags(m_hLight, dwFlags & ~FLAG_VISIBLE);
 			}
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 		else
 		{
@@ -291,17 +259,16 @@ LTBOOL CLightningFX::Update()
 	m_Line.Update();
 
 	// See if it is time to act...
-
 	if (fTime > m_fEndTime)
 	{
 		if (m_cs.bOneTimeOnly)
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 		else
 		{
 			Setup();
-            m_bFirstTime = LTTRUE;
+			m_bFirstTime = LTTRUE;
 		}
 	}
 
@@ -311,11 +278,11 @@ LTBOOL CLightningFX::Update()
 
 		if (m_hLight)
 		{
-            uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hLight);
-            g_pLTClient->SetObjectFlags(m_hLight, dwFlags & ~FLAG_VISIBLE);
+			uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hLight);
+			g_pLTClient->SetObjectFlags(m_hLight, dwFlags & ~FLAG_VISIBLE);
 		}
 
-        return LTTRUE;  // not yet...
+		return LTTRUE;	// not yet...
 	}
 	else
 	{
@@ -324,25 +291,22 @@ LTBOOL CLightningFX::Update()
 
 
 	// Do first time stuff...
-
 	if (m_bFirstTime)
 	{
-        m_bFirstTime = LTFALSE;
+		m_bFirstTime = LTFALSE;
 		HandleFirstTime();
 	}
 	else
 	{
 		if (m_hLight)
 		{
-            uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hLight);
-            g_pLTClient->SetObjectFlags(m_hLight, dwFlags & ~FLAG_VISIBLE);
+			uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hLight);
+			g_pLTClient->SetObjectFlags(m_hLight, dwFlags & ~FLAG_VISIBLE);
 		}
 	}
 
 	// Update playing the sound...
-
 	UpdateSound();
 
-    return LTTRUE;
+	return LTTRUE;
 }
-

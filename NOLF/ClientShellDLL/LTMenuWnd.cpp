@@ -1,13 +1,11 @@
 /****************************************************************************
+;	 MODULE: CLTMenuWnd (.cpp)
 ;
-;	 MODULE:		CLTMenuWnd (.cpp)
+;	PURPOSE: Class for a menu window
 ;
-;	PURPOSE:		Class for a menu window
+;	HISTORY: 03/20/00 [jrg] This file was created
 ;
-;	HISTORY:		03/20/00 [jrg] This file was created
-;
-;	COMMENT:		Copyright (c) 2000, Monolith Productions, Inc.
-;
+;	COMMENT: Copyright (c) 2000, Monolith Productions, Inc.
 ****************************************************************************/
 #include "StdAfx.h"
 #include "LTMenuWnd.h"
@@ -60,11 +58,9 @@ BOOL CLTMenuWnd::Init(MENUWNDCREATESTRUCT *pcs)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::Term
 //
-//	ROUTINE:	CLTMenuWnd::Term
-//
-//	PURPOSE:	Termination
-//
+//	PURPOSE: Termination
 // ----------------------------------------------------------------------- //
 void CLTMenuWnd::Term()
 {
@@ -79,11 +75,9 @@ void CLTMenuWnd::Term()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::DrawToSurface
 //
-//	ROUTINE:	CLTMenuWnd::DrawToSurface
-//
-//	PURPOSE:	Draws the window
-//
+//	PURPOSE: Draws the window
 // ----------------------------------------------------------------------- //
 BOOL CLTMenuWnd::DrawToSurface(HSURFACE hSurfDest)
 {
@@ -92,51 +86,49 @@ BOOL CLTMenuWnd::DrawToSurface(HSURFACE hSurfDest)
 	// Draw the alpha window
 	if(m_hSurf)
 	{
-        LTRect rcDest;
+		LTRect rcDest;
 		rcDest.left = GetWindowLeft();
 		rcDest.top = GetWindowTop();
 		rcDest.right = rcDest.left + m_nWidth;
 		rcDest.bottom = rcDest.top + m_nHeight;
-        g_pLTClient->ScaleSurfaceToSurface(hSurfDest,m_hSurf,&rcDest,NULL);
+		g_pLTClient->ScaleSurfaceToSurface(hSurfDest,m_hSurf,&rcDest,NULL);
 	}
 
 	// Draw the frame
 	if(m_bFrame && (m_collFrames.GetSize() == 8))
 	{
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_TOPLEFTFRAME),NULL,m_xPos,m_yPos,g_hColorTransparent);
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_TOPRIGHTFRAME),NULL,m_xPos+m_nWidth-m_rcTotal.right,m_yPos,g_hColorTransparent);
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_BOTTOMRIGHTFRAME),NULL,m_xPos+m_nWidth-m_rcTotal.right,m_yPos+m_nHeight-m_rcTotal.bottom,g_hColorTransparent);
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_BOTTOMLEFTFRAME),NULL,m_xPos,m_yPos+m_nHeight-m_rcTotal.bottom,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_TOPLEFTFRAME),NULL,m_xPos,m_yPos,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_TOPRIGHTFRAME),NULL,m_xPos+m_nWidth-m_rcTotal.right,m_yPos,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_BOTTOMRIGHTFRAME),NULL,m_xPos+m_nWidth-m_rcTotal.right,m_yPos+m_nHeight-m_rcTotal.bottom,g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_BOTTOMLEFTFRAME),NULL,m_xPos,m_yPos+m_nHeight-m_rcTotal.bottom,g_hColorTransparent);
 
 		// Draw the four scaleable sides
-        LTRect rcDest;
+		LTRect rcDest;
 		rcDest.left = m_xPos;
 		rcDest.top = m_yPos+m_rcTotal.top;
 		rcDest.right = m_xPos+m_rcFrame.left;
 		rcDest.bottom = m_yPos+m_nHeight-m_rcTotal.bottom;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_LEFTFRAME),&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_LEFTFRAME),&rcDest,NULL,g_hColorTransparent);
 		rcDest.left = m_xPos + m_nWidth - m_rcFrame.right;
 		rcDest.right = m_xPos + m_nWidth;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_RIGHTFRAME),&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_RIGHTFRAME),&rcDest,NULL,g_hColorTransparent);
 		rcDest.left = m_xPos+m_rcTotal.left;
 		rcDest.top = m_yPos;
 		rcDest.right = m_xPos+m_nWidth-m_rcTotal.right;
 		rcDest.bottom = m_yPos+m_rcFrame.top;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_TOPFRAME),&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_TOPFRAME),&rcDest,NULL,g_hColorTransparent);
 		rcDest.top = m_yPos + m_nHeight - m_rcFrame.bottom;
 		rcDest.bottom = m_yPos + m_nHeight;
-        g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_BOTTOMFRAME),&rcDest,NULL,g_hColorTransparent);
+		g_pLTClient->ScaleSurfaceToSurfaceTransparent(hSurfDest,m_collFrames.GetAt(DLG_BOTTOMFRAME),&rcDest,NULL,g_hColorTransparent);
 	}
 
 	return TRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::ShowWindow
 //
-//	ROUTINE:	CLTMenuWnd::ShowWindow
-//
-//	PURPOSE:	Shows (or hides) the window
-//
+//	PURPOSE: Shows (or hides) the window
 // ----------------------------------------------------------------------- //
 BOOL CLTMenuWnd::ShowWindow(BOOL bShow, BOOL bPlaySound, BOOL bAnimate)
 {
@@ -161,7 +153,7 @@ BOOL CLTMenuWnd::ShowWindow(BOOL bShow, BOOL bPlaySound, BOOL bAnimate)
 			m_bClosing = TRUE;
 			m_tmrClose.Start(g_pLayoutMgr->GetMenuCloseTime());
 			m_fStartPos = (float)m_nHeight;
-            m_pMenu = LTNULL;
+			m_pMenu = LTNULL;
 			m_byActivatedSelection = 0;
 		}
 	}
@@ -170,11 +162,9 @@ BOOL CLTMenuWnd::ShowWindow(BOOL bShow, BOOL bPlaySound, BOOL bAnimate)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::Update
 //
-//	ROUTINE:	CLTMenuWnd::Update
-//
-//	PURPOSE:	Updates the window
-//
+//	PURPOSE: Updates the window
 // ----------------------------------------------------------------------- //
 BOOL CLTMenuWnd::Update(float fTimeDelta)
 {
@@ -215,17 +205,15 @@ BOOL CLTMenuWnd::Update(float fTimeDelta)
 	{
 		m_pMenu->Select(m_ItemCmds[m_byActivatedSelection-1]);
 		m_byActivatedSelection = 0;
-        g_pLTClient->ClearInput();
+		g_pLTClient->ClearInput();
 	}
 	return TRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::OnRButtonDown
 //
-//	ROUTINE:	CLTMenuWnd::OnRButtonDown
-//
-//	PURPOSE:	Right mouse button down handler
-//
+//	PURPOSE: Right mouse button down handler
 // ----------------------------------------------------------------------- //
 BOOL CLTMenuWnd::OnRButtonDown(int xPos, int yPos)
 {
@@ -237,11 +225,9 @@ BOOL CLTMenuWnd::OnRButtonDown(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::OnLButtonDown
 //
-//	ROUTINE:	CLTMenuWnd::OnLButtonDown
-//
-//	PURPOSE:	Left mouse button down handler
-//
+//	PURPOSE: Left mouse button down handler
 // ----------------------------------------------------------------------- //
 BOOL CLTMenuWnd::OnLButtonDown(int xPos, int yPos)
 {
@@ -257,37 +243,31 @@ BOOL CLTMenuWnd::OnLButtonDown(int xPos, int yPos)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::AddItem
 //
-//	ROUTINE:	CLTMenuWnd::AddItem
-//
-//	PURPOSE:	Adds an item
-//
+//	PURPOSE: Adds an item
 // ----------------------------------------------------------------------- //
 void CLTMenuWnd::AddItem(HSTRING hText, uint8 byCommand)
 {
-    AddItem(g_pLTClient->GetStringData(hText),byCommand);
+	AddItem(g_pLTClient->GetStringData(hText),byCommand);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::AddItem
 //
-//	ROUTINE:	CLTMenuWnd::AddItem
-//
-//	PURPOSE:	Adds an item
-//
+//	PURPOSE: Adds an item
 // ----------------------------------------------------------------------- //
 void CLTMenuWnd::AddItem(uint32 nTextID, uint8 byCommand)
 {
-    HSTRING hStr = g_pLTClient->FormatString(nTextID);
-    AddItem(g_pLTClient->GetStringData(hStr),byCommand);
-    g_pLTClient->FreeString(hStr);
+	HSTRING hStr = g_pLTClient->FormatString(nTextID);
+	AddItem(g_pLTClient->GetStringData(hStr),byCommand);
+	g_pLTClient->FreeString(hStr);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::AddItem
 //
-//	ROUTINE:	CLTMenuWnd::AddItem
-//
-//	PURPOSE:	Adds an item
-//
+//	PURPOSE: Adds an item
 // ----------------------------------------------------------------------- //
 void CLTMenuWnd::AddItem(const char *szText, uint8 byCommand)
 {
@@ -295,13 +275,13 @@ void CLTMenuWnd::AddItem(const char *szText, uint8 byCommand)
 		return;
 
 
-    LTIntPt ptPos = g_pLayoutMgr->GetMenuTextOffset();
+	LTIntPt ptPos = g_pLayoutMgr->GetMenuTextOffset();
 
 	if (m_nNumItems > 0)
 		m_curSz.y += g_pLayoutMgr->GetMenuSpacing();
 
 	// Set the window position
-    LTIntPt ptCur = m_ItemWnds[m_nNumItems].SetText(szText,MENUWND_MAX_WIDTH);
+	LTIntPt ptCur = m_ItemWnds[m_nNumItems].SetText(szText,MENUWND_MAX_WIDTH);
 	m_ItemWnds[m_nNumItems].SetSelectable(TRUE);
 	m_ItemWnds[m_nNumItems].MoveWindow(ptPos.x,ptPos.y+m_curSz.y);
 	m_curSz.x = Max(m_curSz.x,ptCur.x);
@@ -316,7 +296,7 @@ void CLTMenuWnd::AddItem(const char *szText, uint8 byCommand)
 void CLTMenuWnd::ClearItems()
 {
 	m_nNumItems = 0;
-    m_curSz = LTIntPt(0,0);
+	m_curSz = LTIntPt(0,0);
 
 	// Term the decision windows
 	for(int i=0;i<MAX_ITEMS;i++)
@@ -331,11 +311,9 @@ void CLTMenuWnd::ClearItems()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::Open
 //
-//	ROUTINE:	CLTMenuWnd::Open
-//
-//	PURPOSE:	Opens the menu
-//
+//	PURPOSE: Opens the menu
 // ----------------------------------------------------------------------- //
 BOOL CLTMenuWnd::Open()
 {
@@ -346,7 +324,7 @@ BOOL CLTMenuWnd::Open()
 	m_byActivatedSelection = 0;
 
 
-    LTIntPt ptPos = g_pLayoutMgr->GetMenuTextOffset();
+	LTIntPt ptPos = g_pLayoutMgr->GetMenuTextOffset();
 
 	// Set our size based on the extents of the text
 	int nWidth = m_curSz.x + ptPos.x + ptPos.x;
@@ -381,25 +359,21 @@ BOOL CLTMenuWnd::Open()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::Close
 //
-//	ROUTINE:	CLTMenuWnd::Close
-//
-//	PURPOSE:	Closess the menu
-//
+//	PURPOSE: Closess the menu
 // ----------------------------------------------------------------------- //
 void CLTMenuWnd::Close()
 {
-    ShowWindow(LTFALSE,LTTRUE,LTFALSE);
+	ShowWindow(LTFALSE,LTTRUE,LTFALSE);
 	ClearItems();
-    SetMenu(LTNULL);
+	SetMenu(LTNULL);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::SendMessage
 //
-//	ROUTINE:	CLTMenuWnd::SendMessage
-//
-//	PURPOSE:	Handles a sent message
-//
+//	PURPOSE: Handles a sent message
 // ----------------------------------------------------------------------- //
 BOOL CLTMenuWnd::SendMessage(CLTWnd* pSender, int nMsg, int nParam1,int nParam2)
 {
@@ -435,37 +409,33 @@ BOOL CLTMenuWnd::SendMessage(CLTWnd* pSender, int nMsg, int nParam1,int nParam2)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::SetAlpha
 //
-//	ROUTINE:	CLTMenuWnd::SetAlpha
-//
-//	PURPOSE:	Sets the alpha value for the window
-//
+//	PURPOSE: Sets the alpha value for the window
 // ----------------------------------------------------------------------- //
 void CLTMenuWnd::SetAlpha(LTFLOAT fAlpha)
 {
 	if (m_hSurf)
 	{
-        g_pLTClient->OptimizeSurface(m_hSurf, g_hColorTransparent);
-        g_pLTClient->SetSurfaceAlpha(m_hSurf, fAlpha);
+		g_pLTClient->OptimizeSurface(m_hSurf, g_hColorTransparent);
+		g_pLTClient->SetSurfaceAlpha(m_hSurf, fAlpha);
 	}
 
 	for(int i=0;i<m_collFrames.GetSize();i++)
 	{
 		if (m_collFrames.GetAt(i))
 		{
-            g_pLTClient->OptimizeSurface(m_collFrames.GetAt(i), g_hColorTransparent);
-            g_pLTClient->SetSurfaceAlpha(m_collFrames.GetAt(i), fAlpha);
+			g_pLTClient->OptimizeSurface(m_collFrames.GetAt(i), g_hColorTransparent);
+			g_pLTClient->SetSurfaceAlpha(m_collFrames.GetAt(i), fAlpha);
 		}
 	}
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::InitFrame
 //
-//	ROUTINE:	CLTMenuWnd::InitFrame
-//
-//	PURPOSE:	Initializes the frame
-//
+//	PURPOSE: Initializes the frame
 // ----------------------------------------------------------------------- //
 BOOL CLTMenuWnd::InitFrame(const char *szFrame)
 {
@@ -477,7 +447,7 @@ BOOL CLTMenuWnd::InitFrame(const char *szFrame)
 		CString csFrame;
 		csFrame.Format("%stopleft.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTMenuWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -487,7 +457,7 @@ BOOL CLTMenuWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%stop.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTMenuWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -497,7 +467,7 @@ BOOL CLTMenuWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%stopright.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTMenuWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -507,7 +477,7 @@ BOOL CLTMenuWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%sright.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTMenuWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -517,7 +487,7 @@ BOOL CLTMenuWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%sbottomright.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTMenuWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -527,7 +497,7 @@ BOOL CLTMenuWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%sbottom.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTMenuWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -537,7 +507,7 @@ BOOL CLTMenuWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%sbottomleft.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTMenuWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -547,7 +517,7 @@ BOOL CLTMenuWnd::InitFrame(const char *szFrame)
 		m_collFrames.Add(hSurf);
 		csFrame.Format("%sleft.pcx",szFrame);
 		hSurf = g_pInterfaceResMgr->GetSharedSurface((char *)(LPCSTR)csFrame);
-        //hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
+		//hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)csFrame);
 		if(!hSurf)
 		{
 			TRACE("CLTMenuWnd::Init - ERROR - Could not create the surface: ""%s""\n",csFrame);
@@ -558,19 +528,19 @@ BOOL CLTMenuWnd::InitFrame(const char *szFrame)
 
 		// Get the frame thicknesses
 		DWORD x,y;
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_LEFTFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_LEFTFRAME],&x,&y);
 		m_rcFrame.left = x;
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_TOPFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_TOPFRAME],&x,&y);
 		m_rcFrame.top = y;
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_RIGHTFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_RIGHTFRAME],&x,&y);
 		m_rcFrame.right = x;
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_BOTTOMFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_BOTTOMFRAME],&x,&y);
 		m_rcFrame.bottom = y;
 
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_TOPLEFTFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_TOPLEFTFRAME],&x,&y);
 		m_rcTotal.left = x;
 		m_rcTotal.top = y;
-        g_pLTClient->GetSurfaceDims(m_collFrames[DLG_BOTTOMRIGHTFRAME],&x,&y);
+		g_pLTClient->GetSurfaceDims(m_collFrames[DLG_BOTTOMRIGHTFRAME],&x,&y);
 		m_rcTotal.right = x;
 		m_rcTotal.bottom = y;
 		return TRUE;
@@ -594,11 +564,9 @@ void CLTMenuWnd::SetCurSelection(int nSelection)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMenuWnd::OnKeyDown
 //
-//	ROUTINE:	CLTMenuWnd::OnKeyDown
-//
-//	PURPOSE:	key down handler
-//
+//	PURPOSE: key down handler
 // ----------------------------------------------------------------------- //
 BOOL CLTMenuWnd::OnKeyDown(int nKey, int nRep)
 {

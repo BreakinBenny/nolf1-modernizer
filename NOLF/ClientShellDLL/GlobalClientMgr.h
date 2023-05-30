@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: GlobalClientMgr.h
 //
-// MODULE  : GlobalClientMgr.h
+// PURPOSE: Definition of client global definitions
 //
-// PURPOSE : Definition of client global definitions
-//
-// CREATED : 7/07/99
+// CREATED: 7/07/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #ifndef __GLOBAL_CLIENT_MGR_H__
 #define __GLOBAL_CLIENT_MGR_H__
 
@@ -23,7 +20,7 @@ class CGlobalClientMgr : public CGlobalMgr
 
 		~CGlobalClientMgr();
 
-        LTBOOL Init();
+		LTBOOL Init();
 
 	protected :
 

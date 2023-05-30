@@ -13,7 +13,7 @@ public:
 	~CMouseMgr() { }
 
 	bool Init(int xPosInit = 320, int yPosInit = 240,
-		      int xMin = 0, int yMin = 0,
+			  int xMin = 0, int yMin = 0,
 			  int xMax = 639, int yMax = 479
 			 );
 

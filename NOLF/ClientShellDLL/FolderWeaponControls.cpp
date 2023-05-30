@@ -91,14 +91,14 @@ uint32 CFolderWeaponControls::OnCommand(uint32 dwCommand, uint32 dwParam1, uint3
 
 void CFolderWeaponControls::ReadBindings()
 {
-    DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (DEVICETYPE_KEYBOARD);
+	DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (DEVICETYPE_KEYBOARD);
 	if (!pBindings)
 	{
 		return;
 	}
 	for (int i = 0; i < 10; i++)
 	{
-        LTBOOL bFound = LTFALSE;
+		LTBOOL bFound = LTFALSE;
 		DeviceBinding* ptr = pBindings;
 		while (!bFound && ptr)
 		{
@@ -119,16 +119,16 @@ void CFolderWeaponControls::ReadBindings()
 			m_nActions[i] = kFirstCommand;
 
 	}
-    g_pLTClient->FreeDeviceBindings (pBindings);
+	g_pLTClient->FreeDeviceBindings (pBindings);
 
 }
 
 
 void CFolderWeaponControls::WriteBindings()
 {
-    if (!g_pLTClient) return;
+	if (!g_pLTClient) return;
 
-    DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (DEVICETYPE_KEYBOARD);
+	DeviceBinding* pBindings = g_pLTClient->GetDeviceBindings (DEVICETYPE_KEYBOARD);
 	if (!pBindings)
 	{
 		return;
@@ -139,7 +139,7 @@ void CFolderWeaponControls::WriteBindings()
 	for (int i = 0; i < 10; i++)
 	{
 //		sprintf(str, "rangebind \"%s\" \"%s\" 0 0 \"\"", ptr->strDeviceName, szTrigger[i]);
-//      g_pLTClient->RunConsoleString(str);
+//	  g_pLTClient->RunConsoleString(str);
 		int nWpnNum = 1+m_nActions[i]-kFirstCommand;
 		if (nWpnNum == 10) nWpnNum = 0;
 
@@ -149,7 +149,7 @@ void CFolderWeaponControls::WriteBindings()
 		else
 			sprintf(str, "rangebind \"%s\" \"##11\" 0 0 \"%s\"", ptr->strDeviceName, action);
 			
-        g_pLTClient->RunConsoleString(str);
+		g_pLTClient->RunConsoleString(str);
 	}
 }
 
@@ -214,7 +214,7 @@ void CFolderWeaponControls::OnFocus(LTBOOL bFocus)
 		pToggle->SetOffString(IDS_NO);
 
 
-        UpdateData(LTFALSE);
+		UpdateData(LTFALSE);
 
 	}
 	else
@@ -229,7 +229,7 @@ void CFolderWeaponControls::OnFocus(LTBOOL bFocus)
 		g_pInterfaceMgr->GetPlayerStats()->UpdateWeaponBindings();
 
 		// Just to be safe save the config incase anything changed...
-        g_pLTClient->WriteConfigFile("autoexec.cfg");
+		g_pLTClient->WriteConfigFile("autoexec.cfg");
 		RemoveFree();
 
 	}
@@ -375,9 +375,9 @@ LTBOOL CFolderWeaponControls::HandleKeyDown(int key, int rep)
 	if (CBaseFolder::HandleKeyDown(key,rep))
 	{
 		UpdateSelection();
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return LTFALSE;
+	return LTFALSE;
 
 }
 
@@ -421,19 +421,19 @@ void CFolderWeaponControls::CreateModelSFX()
 
 	BSCREATESTRUCT bcs;
 
-    LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
-    LTRotation rRot;
+	LTVector vPos, vU, vR, vF, vTemp, vScale(1.0f,1.0f,1.0f);
+	LTRotation rRot;
 
-    g_pLTClient->GetObjectPos(hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	g_pLTClient->GetObjectPos(hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-    g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
-    g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
+	g_pLTClient->RotateAroundAxis(&rRot, &vU, MATH_HALFPI);
+	g_pLTClient->RotateAroundAxis(&rRot, &vR, -0.3f);
 
 	VEC_MULSCALAR(vScale, vScale, m_fScale);
 
-    LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
+	LTVector vModPos = g_pLayoutMgr->GetFolderCustomVector((eFolderID)m_nFolderID,"ModelPos");
 	VEC_ADD(vModPos,vModPos,m_vOffset);
 
 	VEC_MULSCALAR(vTemp, vF, vModPos.z);
@@ -448,12 +448,12 @@ void CFolderWeaponControls::CreateModelSFX()
 
 
 	VEC_COPY(bcs.vPos, vPos);
-    bcs.rRot = rRot;
+	bcs.rRot = rRot;
 	VEC_COPY(bcs.vInitialScale, vScale);
 	VEC_COPY(bcs.vFinalScale, vScale);
 	VEC_SET(bcs.vInitialColor, 1.0f, 1.0f, 1.0f);
 	VEC_SET(bcs.vFinalColor, 1.0f, 1.0f, 1.0f);
-    bcs.bUseUserColors = LTTRUE;
+	bcs.bUseUserColors = LTTRUE;
 
 	bcs.pFilename = m_szModel;
 	bcs.pSkin = m_szSkin;
@@ -465,7 +465,7 @@ void CFolderWeaponControls::CreateModelSFX()
 
 	if (m_ModelSFX.Init(&bcs))
 	{
-        m_ModelSFX.CreateObject(g_pLTClient);
+		m_ModelSFX.CreateObject(g_pLTClient);
 		g_pInterfaceMgr->AddInterfaceSFX(&m_ModelSFX, IFX_NORMAL);
 		m_fSFXRot = g_pLayoutMgr->GetFolderCustomFloat((eFolderID)m_nFolderID,"ModelRotSpeed");
 	}
@@ -487,13 +487,13 @@ void CFolderWeaponControls::UpdateInterfaceSFX()
 	CBaseFolder::UpdateInterfaceSFX();
 	if (m_ModelSFX.GetObject())
 	{
-        LTFLOAT spin = g_pGameClientShell->GetFrameTime() * m_fSFXRot;
-        LTVector vU, vR, vF;
-        LTRotation rRot;
-        g_pLTClient->GetObjectRotation(m_ModelSFX.GetObject(), &rRot);
-        g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
-        g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
-        g_pLTClient->SetObjectRotation(m_ModelSFX.GetObject(),&rRot);
+		LTFLOAT spin = g_pGameClientShell->GetFrameTime() * m_fSFXRot;
+		LTVector vU, vR, vF;
+		LTRotation rRot;
+		g_pLTClient->GetObjectRotation(m_ModelSFX.GetObject(), &rRot);
+		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		g_pLTClient->RotateAroundAxis(&rRot, &vU, spin);
+		g_pLTClient->SetObjectRotation(m_ModelSFX.GetObject(),&rRot);
 	}
 }
 
@@ -502,7 +502,7 @@ LTBOOL CFolderWeaponControls::OnMouseMove(int x, int y)
 	if (CBaseFolder::OnMouseMove(x,y))
 	{
 		UpdateSelection();
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }

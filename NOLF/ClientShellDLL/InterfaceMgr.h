@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: InterfaceMgr.h
 //
-// MODULE  : InterfaceMgr.h
+// PURPOSE: Manage all interface related functionality
 //
-// PURPOSE : Manage all interface related functionality
-//
-// CREATED : 4/6/99
+// CREATED: 4/6/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #ifndef __INTERFACE_MGR_H__
 #define __INTERFACE_MGR_H__
 
@@ -46,17 +43,17 @@
 
 #include "Timer.h"
 
-#define AO_MUSIC				(1<<0)
-#define AO_SOUND				(1<<1)
-#define AO_MOVIES				(1<<2)
-#define AO_CURSOR				(1<<3)
-#define AO_FOG					(1<<4)
-#define AO_LINES				(1<<5)
-#define AO_JOYSTICK				(1<<7)
-#define AO_TRIPLEBUFFER			(1<<9)
-#define AO_TJUNCTIONS			(1<<10)
+#define AO_MUSIC			(1<<0)
+#define AO_SOUND		(1<<1)
+#define AO_MOVIES		(1<<2)
+#define AO_CURSOR		(1<<3)
+#define AO_FOG			(1<<4)
+#define AO_LINES			(1<<5)
+#define AO_JOYSTICK		(1<<7)
+#define AO_TRIPLEBUFFER	(1<<9)
+#define AO_TJUNCTIONS	(1<<10)
 
-#define AO_DEFAULT_ENABLED		(AO_MUSIC | AO_SOUND | AO_MOVIES | AO_CURSOR | AO_FOG | AO_LINES | AO_TRIPLEBUFFER | AO_TJUNCTIONS | AO_JOYSTICK)
+#define AO_DEFAULT_ENABLED	(AO_MUSIC | AO_SOUND | AO_MOVIES | AO_CURSOR | AO_FOG | AO_LINES | AO_TRIPLEBUFFER | AO_TJUNCTIONS | AO_JOYSTICK)
 
 // Game states
 
@@ -98,10 +95,10 @@ enum ISFXType
 };
 
 
-const HLTCOLOR kWhite		= SETRGB(255,255,255);
+const HLTCOLOR kWhite	= SETRGB(255,255,255);
 const HLTCOLOR kGray		= SETRGB(96,96,96);
-const HLTCOLOR kBlack		= SETRGB(0,0,0);
-const HLTCOLOR kTransBlack	= SETRGB_T(0,0,0);
+const HLTCOLOR kBlack	= SETRGB(0,0,0);
+const HLTCOLOR kTransBlack = SETRGB_T(0,0,0);
 
 
 class CInterfaceMgr;
@@ -114,27 +111,27 @@ class CInterfaceMgr
 		CInterfaceMgr();
 		virtual ~CInterfaceMgr();
 
-        LTBOOL  Init();
+		LTBOOL  Init();
 		LTBOOL	InitCursor();
 		void	Term();
 
-        void    OnEnterWorld(LTBOOL bRestoringGame=LTFALSE);
+		void	OnEnterWorld(LTBOOL bRestoringGame=LTFALSE);
 		void	OnExitWorld();
 
 		void UpdateConfigSettings();
 
-        LTBOOL	OnCommandOn(int command);
-        LTBOOL	OnCommandOff(int command);
-        LTBOOL	OnKeyDown(int key, int rep);
-        LTBOOL	OnKeyUp(int nKey);
-        LTBOOL	OnMessage(uint8 messageID, HMESSAGEREAD hMessage);
-        LTBOOL	OnEvent(uint32 dwEventID, uint32 dwParam);
+		LTBOOL	OnCommandOn(int command);
+		LTBOOL	OnCommandOff(int command);
+		LTBOOL	OnKeyDown(int key, int rep);
+		LTBOOL	OnKeyUp(int nKey);
+		LTBOOL	OnMessage(uint8 messageID, HMESSAGEREAD hMessage);
+		LTBOOL	OnEvent(uint32 dwEventID, uint32 dwParam);
 
 		void	SetLetterBox(LTBOOL b) { m_bLetterBox = b; }
 		void	ClosePopup() { m_PopupText.Clear(); }
 
 		// Screen Fade functions
-        void	StartScreenFadeIn(LTFLOAT fFadeTime)
+		void	StartScreenFadeIn(LTFLOAT fFadeTime)
 		{
 			if (!m_bExitAfterFade)
 			{
@@ -144,7 +141,7 @@ class CInterfaceMgr
 				m_bFadeIn = LTTRUE;
 			}
 		}
-        void    StartScreenFadeOut(LTFLOAT fFadeTime)
+		void	StartScreenFadeOut(LTFLOAT fFadeTime)
 		{
 			if (!m_bExitAfterFade)
 			{
@@ -171,10 +168,10 @@ class CInterfaceMgr
 		LTBOOL	FadingScreenIn()	const { return (m_bScreenFade && m_bFadeIn); }
 		LTBOOL	FadingScreenOut()	const { return (m_bScreenFade && !m_bFadeIn); }
 
-		LTBOOL  FadingToExit()	const { return (m_bScreenFade && !m_bFadeIn && m_bExitAfterFade); }
+		LTBOOL  FadingToExit()		const { return (m_bScreenFade && !m_bFadeIn && m_bExitAfterFade); }
 
 		LTBOOL	ScreenFadedOut()	const { return (FadingScreenOut() && ScreenFadeDone()); }
-		LTBOOL	ScreenFadedIn()		const { return !m_bScreenFade; }
+		LTBOOL	ScreenFadedIn()	const { return !m_bScreenFade; }
 
 		LTBOOL	ScreenFadeDone() const
 		{
@@ -188,7 +185,7 @@ class CInterfaceMgr
 		}
 
 		//mouse messages
-        void OnLButtonUp(int x, int y);
+		void OnLButtonUp(int x, int y);
 		void OnLButtonDown(int x, int y);
 		void OnLButtonDblClick(int x, int y);
 		void OnRButtonUp(int x, int y);
@@ -197,24 +194,24 @@ class CInterfaceMgr
 		void OnMouseMove(int x, int y);
 		void OnChar(char c);
 
-        LTBOOL   PreUpdate();
-        LTBOOL   Update();
-        LTBOOL   PostUpdate();
+		LTBOOL	PreUpdate();
+		LTBOOL	Update();
+		LTBOOL	PostUpdate();
 
-        LTBOOL   Draw();
+		LTBOOL	Draw();
 
-		LTBOOL	 DrawSFX();
+		LTBOOL	DrawSFX();
 
-        LTBOOL       ChangeState(GameState eNewState);
+		LTBOOL	ChangeState(GameState eNewState);
 		void		DebugChangeState(GameState eNewState);
-		GameState	GetGameState() const { return m_eGameState; }
+		GameState GetGameState() const { return m_eGameState; }
 
-		LTBOOL		UseInterfaceCamera() {return m_bUseInterfaceCamera;}
+		LTBOOL	UseInterfaceCamera() {return m_bUseInterfaceCamera;}
 
-		eFolderID   GetMainFolder();
+		eFolderID	GetMainFolder();
 		eFolderID	GetCurrentFolder();
-        LTBOOL       SwitchToFolder(eFolderID folderID);
-        LTBOOL       ForceFolderUpdate(eFolderID folderID);
+		LTBOOL	SwitchToFolder(eFolderID folderID);
+		LTBOOL	ForceFolderUpdate(eFolderID folderID);
 
 		void	MissionFailed(int nFailStringId);
 		void	StartMissionText(int nMissionTextId) {m_MissionText.Start(nMissionTextId); }
@@ -234,13 +231,13 @@ class CInterfaceMgr
 		void	Save(HMESSAGEWRITE hWrite);
 		void	Load(HMESSAGEREAD hRead);
 
-        void    SetDrawInterface(LTBOOL bDraw)           { m_bDrawInterface = bDraw; }
-        void    SetSwitchingRenderModes(LTBOOL bSwitch)  { m_bSwitchingModes = bSwitch; }
+		void	SetDrawInterface(LTBOOL bDraw)			{ m_bDrawInterface = bDraw; }
+		void	SetSwitchingRenderModes(LTBOOL bSwitch)	{ m_bSwitchingModes = bSwitch; }
 
 		void	ResetMenuRestoreCamera(int nLeft, int nTop, int nRight, int nBottom);
 
-        void    ClearScreenAlways(LTBOOL bYes = LTTRUE)   { m_bClearScreenAlways = bYes; }
-		void	AddToClearScreenCount()					{ m_nClearScreenCount = 3; }
+		void	ClearScreenAlways(LTBOOL bYes = LTTRUE)	{ m_bClearScreenAlways = bYes; }
+		void	AddToClearScreenCount()				{ m_nClearScreenCount = 3; }
 		void	ZeroClearScreenCount()					{ m_nClearScreenCount = 0; }
 		void	ClearAllScreenBuffers();
 
@@ -249,62 +246,62 @@ class CInterfaceMgr
 
 		void	DoMissionOutfitCheat();
 
-        LTBOOL   SetMenuMusic(LTBOOL bMusicOn);
-        LTBOOL   RestoreGameMusic();
+		LTBOOL   SetMenuMusic(LTBOOL bMusicOn);
+		LTBOOL   RestoreGameMusic();
 
-		CGameSettings*	GetSettings()		{ return &m_Settings; }
+		CGameSettings* GetSettings()		{ return &m_Settings; }
 		CPlayerStats*	GetPlayerStats()	{ return &m_stats; }
-		CMessageMgr*	GetMessageMgr()		{ return &m_messageMgr; }
-        CClientInfoMgr* GetClientInfoMgr()  { return &m_ClientInfo; }
-		CFolderMgr*		GetFolderMgr()		{ return &m_FolderMgr; }
+		CMessageMgr* GetMessageMgr()	{ return &m_messageMgr; }
+		CClientInfoMgr* GetClientInfoMgr()	{ return &m_ClientInfo; }
+		CFolderMgr*	GetFolderMgr()		{ return &m_FolderMgr; }
 		CMissionData*	GetMissionData()	{ return &m_MissionData; }
 
-        uint32          GetAdvancedOptions() const { return m_dwAdvancedOptions; }
+		uint32	GetAdvancedOptions() const { return m_dwAdvancedOptions; }
 
-        void        EnableCrosshair(LTBOOL bOn)       { m_stats.EnableCrosshair(bOn); }
-        LTBOOL      IsCrosshairEnabled()             { return m_stats.CrosshairEnabled(); }
-        LTBOOL      IsCrosshairOn()                  { return m_stats.CrosshairOn(); }
+		void	EnableCrosshair(LTBOOL bOn)	{ m_stats.EnableCrosshair(bOn); }
+		LTBOOL	IsCrosshairEnabled()			{ return m_stats.CrosshairEnabled(); }
+		LTBOOL	IsCrosshairOn()			{ return m_stats.CrosshairOn(); }
 
-        void        DrawPlayerStats(LTBOOL bOn=LTTRUE)  { m_bDrawPlayerStats = bOn; }
-        void        DrawFragCount(LTBOOL bOn=LTTRUE)	{ m_bDrawFragCount = bOn; }
-		LTBOOL		IsFragCountDrawn()					{ return m_bDrawFragCount; }
+		void	DrawPlayerStats(LTBOOL bOn=LTTRUE)	{ m_bDrawPlayerStats = bOn; }
+		void	DrawFragCount(LTBOOL bOn=LTTRUE)	{ m_bDrawFragCount = bOn; }
+		LTBOOL	IsFragCountDrawn()					{ return m_bDrawFragCount; }
 
-        LTBOOL      IsChoosingWeapon()				{ return m_WeaponChooser.IsOpen();}
-        LTBOOL      IsChoosingAmmo()                { return m_AmmoChooser.IsOpen();}
-		void		CloseChoosers()					{ m_WeaponChooser.Close();m_AmmoChooser.Close();}
+		LTBOOL	IsChoosingWeapon()	{ return m_WeaponChooser.IsOpen();}
+		LTBOOL	IsChoosingAmmo()	{ return m_AmmoChooser.IsOpen();}
+		void	CloseChoosers()		{ m_WeaponChooser.Close();m_AmmoChooser.Close();}
 
-        LTBOOL      AllowCameraMovement();
+		LTBOOL AllowCameraMovement();
 
-        void        UpdatePlayerStats(uint8 nThing, uint8 nType1, uint8 nType2, LTFLOAT fAmount);
-        void        UpdateWeaponStats(uint8 nWeaponId, uint8 nAmmoId, uint32 dwAmmo);
+		void	UpdatePlayerStats(uint8 nThing, uint8 nType1, uint8 nType2, LTFLOAT fAmount);
+		void	UpdateWeaponStats(uint8 nWeaponId, uint8 nAmmoId, uint32 dwAmmo);
 
-		void		ScreenDimsChanged();
+		void	ScreenDimsChanged();
 
-        LTIntPt     GetCursorPos() {return m_CursorPos;}
-        LTBOOL		IsCursorUsed() {return m_bUseCursor;}
-        void        UseCursor(LTBOOL bUseCursor);
-        void        UseHardwareCursor(LTBOOL bUseHardwareCursor);
-		void		UpdateCursorState(); // hides or shows cursor based on current game state
+		LTIntPt	GetCursorPos() {return m_CursorPos;}
+		LTBOOL	IsCursorUsed() {return m_bUseCursor;}
+		void		UseCursor(LTBOOL bUseCursor);
+		void		UseHardwareCursor(LTBOOL bUseHardwareCursor);
+		void		UpdateCursorState();	// hides or shows cursor based on current game state
 
-		void			UpdateOverlays();
-		eOverlayMask	GetCurrentOverlay()			 { return m_eCurrOverlay; }
+		void		UpdateOverlays();
+		eOverlayMask	GetCurrentOverlay()	{ return m_eCurrOverlay; }
 
-        void            BeginScope(LTBOOL bNightVision = LTFALSE);
-		void			EndScope();
+		void		BeginScope(LTBOOL bNightVision = LTFALSE);
+		void		EndScope();
 
-        void            BeginZoom(LTBOOL bIn = LTTRUE);
-		void			EndZoom();
+		void		BeginZoom(LTBOOL bIn = LTTRUE);
+		void		EndZoom();
 
-		void			BeginUnderwater();
-		void			EndUnderwater();
+		void		BeginUnderwater();
+		void		EndUnderwater();
 
-		void			BeginSpacesuit();
-		void			EndSpacesuit();
+		void		BeginSpacesuit();
+		void		EndSpacesuit();
 
-		void			SetSunglassMode(eSunglassMode mode);
+		void		SetSunglassMode(eSunglassMode mode);
 		eSunglassMode	GetSunglassMode() {return m_eSunglassMode;}
 
-        void        ShowMessageBox(HSTRING hString, eMBType eType, MBCallBackFn pFn, void *pData = LTNULL, LTBOOL bLargeFont = LTTRUE, LTBOOL bDefaultReturn = LTTRUE)
+		void		ShowMessageBox(HSTRING hString, eMBType eType, MBCallBackFn pFn, void *pData = LTNULL, LTBOOL bLargeFont = LTTRUE, LTBOOL bDefaultReturn = LTTRUE)
 								{m_MessageBox.Show(hString, eType, pFn, pData, bLargeFont, bDefaultReturn);}
 
 		void		ChooseTeam();
@@ -335,158 +332,158 @@ class CInterfaceMgr
 		void	UpdateClientList();
 
 	private :
-		CInterfaceResMgr	m_InterfaceResMgr;		// manages shared resources
-		CFolderMgr			m_FolderMgr;
-		CLayoutMgr			m_LayoutMgr;			// bute mgr for layout info
-        CServerOptionMgr    m_ServerOptionMgr;      // bute mgr for server options
+		CInterfaceResMgr	m_InterfaceResMgr;	// manages shared resources
+		CFolderMgr		m_FolderMgr;
+		CLayoutMgr		m_LayoutMgr;			// bute mgr for layout info
+		CServerOptionMgr	m_ServerOptionMgr;	// bute mgr for server options
 		CMissionData		m_MissionData;
 
-		CLTWnd			m_MainWnd;				// Main window
-		CLTDialogueWnd	m_DialogueWnd;			// Dialogue window
+		CLTWnd			m_MainWnd;			// Main window
+		CLTDialogueWnd	m_DialogueWnd;		// Dialogue window
 
-		CLTMenuWnd		m_MenuWnd;				// Menu window
-        CClientInfoMgr  m_ClientInfo;           // Client info mgr
+		CLTMenuWnd		m_MenuWnd;	// Menu window
+		CClientInfoMgr  m_ClientInfo;		// Client info mgr
 
-		CPlayerStats	m_stats;				// Player statistics (health, ammo, armor, etc.)
-		CMessageMgr		m_messageMgr;			// Message display/sending mgr
-		CGameSettings	m_Settings;
-		CWeaponChooser	m_WeaponChooser;		// Next/previous weapon interface
-		CAmmoChooser	m_AmmoChooser;			// Next ammo interface
-		CInterfaceTimer m_InterfaceTimer;		// Main interface timer
-		CInterfaceMeter m_InterfaceMeter;		// Meter used for Boss levels
-		CMissionText	m_MissionText;			// Display timed text
-		CSubtitle		m_Subtitle;				// Display subtitle
-		CCredits		m_Credits;				// Display credits
-		CPopupText		m_PopupText;			// Display in game text
-		CMessageBox		m_MessageBox;			// Used for simple dialog boxes
+		CPlayerStats		m_stats;			// Player statistics (health, ammo, armor, etc.)
+		CMessageMgr		m_messageMgr;	// Message display/sending mgr
+		CGameSettings		m_Settings;
+		CWeaponChooser	m_WeaponChooser;	// Next/previous weapon interface
+		CAmmoChooser	m_AmmoChooser;	// Next ammo interface
+		CInterfaceTimer	m_InterfaceTimer;	// Main interface timer
+		CInterfaceMeter	m_InterfaceMeter;	// Meter used for Boss levels
+		CMissionText		m_MissionText;	// Display timed text
+		CSubtitle			m_Subtitle;		// Display subtitle
+		CCredits			m_Credits;		// Display credits
+		CPopupText		m_PopupText;		// Display in game text
+		CMessageBox		m_MessageBox;	// Used for simple dialog boxes
 
 		CMultiplayerMenu	m_MultiplayerMenu;	// In-game Multiplayer menu
-		CTeamMenu			m_TeamMenu;			// In-game Team menu
-		COptionMenu			m_OptionMenu;		// In-game Option menu
-		GameState		m_eGameState;			// Current game state
+		CTeamMenu		m_TeamMenu;		// In-game Team menu
+		COptionMenu		m_OptionMenu;	// In-game Option menu
+		GameState		m_eGameState;	// Current game state
 
-		eOverlayMask	m_eCurrOverlay;			// Currently displayed overlay
+		eOverlayMask	m_eCurrOverlay;		// Currently displayed overlay
 
-        uint32      m_dwAdvancedOptions;        // Advanced options
-        uint32      m_dwOrignallyEnabled;       // Advanced options that were originally enabled
+		uint32	  m_dwAdvancedOptions;	// Advanced options
+		uint32	  m_dwOrignallyEnabled;	// Advanced options that were originally enabled
 
-        uint8       m_nClearScreenCount;        // How many frames to clear the screen
-        LTBOOL      m_bClearScreenAlways;       // Should we always clear the screen?
+		uint8		m_nClearScreenCount;	// How many frames to clear the screen
+		LTBOOL	m_bClearScreenAlways;	// Should we always clear the screen?
 
-        LTBOOL      m_bDrawPlayerStats;         // Draw the player stats display?
-        LTBOOL      m_bDrawFragCount;           // Draw the frag count?
-        LTBOOL      m_bDrawInterface;           // Draw the interface?
+		LTBOOL	m_bDrawPlayerStats;	// Draw the player stats display?
+		LTBOOL	m_bDrawFragCount;	// Draw the frag count?
+		LTBOOL	m_bDrawInterface;		// Draw the interface?
 
-        HLTSOUND    m_hSplashSound;             // Handle to sound played when splash screen is up
+		HLTSOUND	m_hSplashSound;	 // Handle to sound played when splash screen is up
 
-		HSURFACE	m_hGamePausedSurface;		// "Game Paused" message
+		HSURFACE	m_hGamePausedSurface;	// "Game Paused" message
 
-        LTRect      m_rcMenuRestoreCamera;      // Camera rect to restore after leaving menus
-        LTBOOL      m_bMenuRectRestore;         // Was the camera rect full-screen before going to the menus?
+		LTRect	m_rcMenuRestoreCamera;	// Camera rect to restore after leaving menus
+		LTBOOL	m_bMenuRectRestore;		// Was the camera rect full-screen before going to the menus?
 
-		LTBOOL		m_bUseInterfaceCamera;
+		LTBOOL	m_bUseInterfaceCamera;
 
-        LTFLOAT     m_fMenuSaveFOVx;            // Fov before entering menu
-        LTFLOAT     m_fMenuSaveFOVy;            // Fov before entering menu
+		LTFLOAT m_fMenuSaveFOVx;	// Fov before entering menu
+		LTFLOAT m_fMenuSaveFOVy;	// Fov before entering menu
 
-        LTBOOL      m_bSwitchingModes;          // Switching render modes?
+		LTBOOL	m_bSwitchingModes;	// Switching render modes?
 
-        LTIntPt     m_CursorPos;
+		LTIntPt	m_CursorPos;
 
-		int			m_nFailStringId;			// id of the string to display on the mission failed screen
-		HSURFACE	m_hFailBack;				// background of Mission Failure screen
+		int			m_nFailStringId;	// id of the string to display on the mission failed screen
+		HSURFACE	m_hFailBack;		// background of Mission Failure screen
 
-        HLTSOUND    m_hScubaSound;              // sound looping while scuba gear is on
+		HLTSOUND	m_hScubaSound;	 // sound looping while scuba gear is on
 
-		HLTSOUND	m_hSound;					// current interface snd
-		HSURFACE	m_hFadeSurface;				// Used to do screen fading
-		HSURFACE	m_hLetterBoxSurface;		// Used for letter box border
-        LTBOOL      m_bFadeInitialized;         // Have we initialized everything
-        LTBOOL      m_bScreenFade;              // Should we fade the screen
-        LTFLOAT     m_fTotalFadeTime;           // How long to do the fade
-        LTFLOAT     m_fCurFadeTime;             // Current fade time
-        LTBOOL      m_bFadeIn;                  // Should we fade in (or out)
-        LTBOOL      m_bExitAfterFade;           // Exit the level after the fade
+		HLTSOUND	m_hSound;			// current interface snd
+		HSURFACE	m_hFadeSurface;		// Used to do screen fading
+		HSURFACE	m_hLetterBoxSurface;	// Used for letter box border
+		LTBOOL		m_bFadeInitialized;		// Have we initialized everything
+		LTBOOL		m_bScreenFade;		// Should we fade the screen
+		LTFLOAT	m_fTotalFadeTime;		// How long to do the fade
+		LTFLOAT	m_fCurFadeTime;		// Current fade time
+		LTBOOL		m_bFadeIn;			// Should we fade in (or out)
+		LTBOOL		m_bExitAfterFade;		// Exit the level after the fade
 
-        LTBOOL      m_bLetterBox;               // Letter box mode?
-		LTBOOL		m_bWasLetterBox;			// Was letter box last frame?
-		LTFLOAT		m_fLetterBoxFadeEndTime;	// When do we stop fading the letter box in/out
-		LTFLOAT		m_fLetterBoxAlpha;			// The current letter box border alpha
+		LTBOOL	m_bLetterBox;			// Letter box mode?
+		LTBOOL	m_bWasLetterBox;			// Was letter box last frame?
+		LTFLOAT m_fLetterBoxFadeEndTime;	// When do we stop fading the letter box in/out
+		LTFLOAT m_fLetterBoxAlpha;		// The current letter box border alpha
 
 
 		HLTCURSOR	m_hCursor;
-        LTBOOL      m_bUseCursor;
-        LTBOOL      m_bUseHardwareCursor;
+		LTBOOL	  m_bUseCursor;
+		LTBOOL	  m_bUseHardwareCursor;
 
-        uint8       m_nOverlayCount;
-		HOBJECT		m_hOverlays[NUM_OVERLAY_MASKS];
-        LTFLOAT     m_fOverlayScaleMult[NUM_OVERLAY_MASKS];
+		uint8	m_nOverlayCount;
+		HOBJECT	m_hOverlays[NUM_OVERLAY_MASKS];
+		LTFLOAT	m_fOverlayScaleMult[NUM_OVERLAY_MASKS];
 
-		CTimer		m_NextWeaponKeyDownTimer;
-		CTimer		m_PrevWeaponKeyDownTimer;
-		CTimer		m_NextAmmoKeyDownTimer;
-		CTimer		m_AutoSwitchTimer;
+		CTimer	m_NextWeaponKeyDownTimer;
+		CTimer	m_PrevWeaponKeyDownTimer;
+		CTimer	m_NextAmmoKeyDownTimer;
+		CTimer	m_AutoSwitchTimer;
 
 
 		CMoArray<CSpecialFX *> m_InterfaceSFX;
 
 		CBaseScaleFX m_BackSprite;
 
-        LTBOOL      m_bSavedGameMusic;          // Did we save the game music state?
-		CMusicState	m_GameMusicState;			// State of the game music
+		LTBOOL	  m_bSavedGameMusic;	// Did we save the game music state?
+		CMusicState	m_GameMusicState;	// State of the game music
 
-		CLoadingScreen m_LoadingScreen;			// The loading screen object/thread
-		LTBOOL		m_bLoadFailed;
+		CLoadingScreen m_LoadingScreen;	// The loading screen object/thread
+		LTBOOL	m_bLoadFailed;
 
 		eSunglassMode m_eSunglassMode;
 
 		InterfaceSound	m_eNextSound;
 
-        LTBOOL  PreChangeState(GameState eCurState, GameState eNewState);
+		LTBOOL  PreChangeState(GameState eCurState, GameState eNewState);
 
-        LTBOOL	PrePlayingState(GameState eCurState);
+		LTBOOL	PrePlayingState(GameState eCurState);
 		void	UpdatePlayingState();
-        LTBOOL  PostPlayingState(GameState eNewState);
+		LTBOOL  PostPlayingState(GameState eNewState);
 
-        LTBOOL  PreDialogueState(GameState eCurState);
+		LTBOOL  PreDialogueState(GameState eCurState);
 		void	UpdateDialogueState();
-        LTBOOL  PostDialogueState(GameState eNewState);
+		LTBOOL  PostDialogueState(GameState eNewState);
 
-        LTBOOL  PreMenuState(GameState eCurState);
+		LTBOOL  PreMenuState(GameState eCurState);
 		void	UpdateMenuState();
-        LTBOOL  PostMenuState(GameState eNewState);
+		LTBOOL  PostMenuState(GameState eNewState);
 
-        LTBOOL  PrePopupState(GameState eCurState);
+		LTBOOL  PrePopupState(GameState eCurState);
 		void	UpdatePopupState();
-        LTBOOL  PostPopupState(GameState eNewState);
+		LTBOOL  PostPopupState(GameState eNewState);
 
-        LTBOOL  PreLoadingLevelState(GameState eCurState);
+		LTBOOL  PreLoadingLevelState(GameState eCurState);
 		void	UpdateLoadingLevelState();
-        LTBOOL  PostLoadingLevelState(GameState eNewState);
+		LTBOOL  PostLoadingLevelState(GameState eNewState);
 
-        LTBOOL  PrePauseState(GameState eCurState);
+		LTBOOL  PrePauseState(GameState eCurState);
 		void	UpdatePausedState();
-        LTBOOL  PostPauseState(GameState eNewState);
+		LTBOOL  PostPauseState(GameState eNewState);
 
-        LTBOOL  PreSplashScreenState(GameState eCurState);
+		LTBOOL  PreSplashScreenState(GameState eCurState);
 		void	UpdateSplashScreenState();
-        LTBOOL  PostSplashScreenState(GameState eNewState);
+		LTBOOL  PostSplashScreenState(GameState eNewState);
 
-        LTBOOL  PreFolderState(GameState eCurState);
+		LTBOOL  PreFolderState(GameState eCurState);
 		void	UpdateFolderState();
-        LTBOOL  PostFolderState(GameState eNewState);
+		LTBOOL  PostFolderState(GameState eNewState);
 
-        LTBOOL  PreFailureState(GameState eCurState);
+		LTBOOL  PreFailureState(GameState eCurState);
 		void	UpdateFailureState();
-        LTBOOL  PostFailureState(GameState eNewState);
+		LTBOOL  PostFailureState(GameState eNewState);
 
-        LTBOOL  PreDemoScreenState(GameState eCurState);
+		LTBOOL  PreDemoScreenState(GameState eCurState);
 		void	UpdateDemoScreenState();
-        LTBOOL  PostDemoScreenState(GameState eNewState);
+		LTBOOL  PostDemoScreenState(GameState eNewState);
 
-        LTBOOL  PreMovieState(GameState eCurState);
+		LTBOOL  PreMovieState(GameState eCurState);
 		void	UpdateMovieState();
-        LTBOOL  PostMovieState(GameState eNewState);
+		LTBOOL  PostMovieState(GameState eNewState);
 
 		void	ProcessAdvancedOptions();
 
@@ -520,16 +517,16 @@ class CInterfaceMgr
 		float	m_fLastUpdateRequestTime;
 
 		// Used for tracking when a new level is loaded..
-		uint32	m_nLoadWorldCount;
-		uint32	m_nOldLoadWorldCount;
+		uint32 m_nLoadWorldCount;
+		uint32 m_nOldLoadWorldCount;
 
 		eFolderID m_eMainFolderID;
 
-		LTBOOL		m_bOldMouseLook; // If the user wants to use the old mouselook.
-		LTBOOL		m_bNoFunMenus;
-		LTBOOL		m_bQuickSwitch;
-		LTBOOL		m_bRestrictAspectRatio; // For cinematics
-		LTBOOL		m_bUseGOTYMenu;
+		LTBOOL	m_bOldMouseLook;	// If the user wants to use the old mouselook.
+		LTBOOL	m_bNoFunMenus;
+		LTBOOL	m_bQuickSwitch;
+		LTBOOL	m_bRestrictAspectRatio;	// For cinematics
+		LTBOOL	m_bUseGOTYMenu;
 
 		LTFLOAT m_fLastFrameTime;
 		LTFLOAT m_fWeaponChooserTimer;
@@ -548,14 +545,14 @@ inline void CInterfaceMgr::ResetMenuRestoreCamera(int nLeft, int nTop, int nRigh
 }
 
 // ----------------------------------------------------------------------- //
-// Clears the screen a few times so the backbuffer(s) get cleared.
+ Clears the screen a few times so the backbuffer(s) get cleared.
 // ----------------------------------------------------------------------- //
 inline void CInterfaceMgr::ClearAllScreenBuffers()
 {
 	for (int i=0; i < 4; i++)
 	{
-        g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN | CLEARSCREEN_RENDER);
-        g_pLTClient->FlipScreen(0);
+		g_pLTClient->ClearScreen(LTNULL, CLEARSCREEN_SCREEN | CLEARSCREEN_RENDER);
+		g_pLTClient->FlipScreen(0);
 	}
 }
 

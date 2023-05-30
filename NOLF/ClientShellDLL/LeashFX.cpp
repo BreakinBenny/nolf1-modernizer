@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: LeashFX.cpp
 //
-// MODULE  : LeashFX.cpp
+// PURPOSE: Leash special FX - Implementation
 //
-// PURPOSE : Leash special FX - Implementation
-//
-// CREATED : 4/15/99
+// CREATED: 4/15/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "LeashFX.h"
 #include "iltclient.h"
@@ -26,7 +23,7 @@ void LeashDrawFn(CustomDrawLT *pDraw, HLOCALOBJ hObj, void *pUser)
 {
 	if (!hObj) return;
 
-    if (g_pLTClient->GetObjectFlags(hObj) & FLAG_VISIBLE)
+	if (g_pLTClient->GetObjectFlags(hObj) & FLAG_VISIBLE)
 	{
 		CLeashFX* pFX = (CLeashFX*)pUser;
 		if (pFX)
@@ -38,17 +35,14 @@ void LeashDrawFn(CustomDrawLT *pDraw, HLOCALOBJ hObj, void *pUser)
 */
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLeashFX::Init
 //
-//	ROUTINE:	CLeashFX::Init
-//
-//	PURPOSE:	Init the Leash fx
-//
+//	PURPOSE: Init the Leash fx
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLeashFX::Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage)
 {
-    if (!CBasePolyDrawFX::Init(hServObj, hMessage)) return LTFALSE;
-    if (!hMessage) return LTFALSE;
+	if (!CBasePolyDrawFX::Init(hServObj, hMessage)) return LTFALSE;
+	if (!hMessage) return LTFALSE;
 
 	// Read in the init info from the message...
 
@@ -56,53 +50,47 @@ LTBOOL CLeashFX::Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage)
 
 	lfx.hServerObj = hServObj;
 
-    g_pLTClient->ReadFromMessageVector(hMessage, &(lfx.vStartPos));
-    g_pLTClient->ReadFromMessageVector(hMessage, &(lfx.vEndPos));
-    g_pLTClient->ReadFromMessageVector(hMessage, &(lfx.vLeashColor));
+	g_pLTClient->ReadFromMessageVector(hMessage, &(lfx.vStartPos));
+	g_pLTClient->ReadFromMessageVector(hMessage, &(lfx.vEndPos));
+	g_pLTClient->ReadFromMessageVector(hMessage, &(lfx.vLeashColor));
 
-    lfx.fLeashSize      = g_pLTClient->ReadFromMessageFloat(hMessage);
-    lfx.cSegments       = g_pLTClient->ReadFromMessageByte(hMessage);
+	lfx.fLeashSize	  = g_pLTClient->ReadFromMessageFloat(hMessage);
+	lfx.cSegments	= g_pLTClient->ReadFromMessageByte(hMessage);
 
 	return Init(&lfx);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLeashFX::Init
 //
-//	ROUTINE:	CLeashFX::Init
-//
-//	PURPOSE:	Init the Leash fx
-//
+//	PURPOSE: Init the Leash fx
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLeashFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CBasePolyDrawFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CBasePolyDrawFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	LEASHFXCREATESTRUCT* pLEASHFX = (LEASHFXCREATESTRUCT*)psfxCreateStruct;
 
 	m_cs   = *pLEASHFX;
 	m_vPos = m_cs.vStartPos;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLeashFX::CreateObject
 //
-//	ROUTINE:	CLeashFX::CreateObject
-//
-//	PURPOSE:	Create object associated the object
-//
+//	PURPOSE: Create object associated the object
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLeashFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!CBasePolyDrawFX::CreateObject(pClientDE)) return LTFALSE;
+	if (!CBasePolyDrawFX::CreateObject(pClientDE)) return LTFALSE;
 
 	// Validate our init info...
 
-    if (m_cs.cSegments < 1) return LTFALSE;
+	if (m_cs.cSegments < 1) return LTFALSE;
 
 	// Set up the Leash...
 
@@ -111,13 +99,10 @@ LTBOOL CLeashFX::CreateObject(ILTClient *pClientDE)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLeashFX::SetupLeash
 //
-//	ROUTINE:	CLeashFX::SetupLeash
-//
-//	PURPOSE:	Setup the line used to draw Leash
-//
+//	PURPOSE: Setup the line used to draw Leash
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLeashFX::SetupLeash()
 {
 	// Allocate our verts if necessary...
@@ -127,7 +112,7 @@ LTBOOL CLeashFX::SetupLeash()
 		m_pVerts = debug_newa(LeashVerts, m_cs.cSegments+1);
 	}
 
-    if (!m_pVerts) return LTFALSE;
+	if (!m_pVerts) return LTFALSE;
 
 //  LTVector vPos = m_cs.vStartPos;
 //  LTVector vDir = (m_cs.vEndPos - m_cs.vStartPos);
@@ -138,74 +123,65 @@ LTBOOL CLeashFX::SetupLeash()
 	{
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLeashFX::Draw
 //
-//	ROUTINE:	CLeashFX::Draw
-//
-//	PURPOSE:	Draw the Leash
-//
+//	PURPOSE: Draw the Leash
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLeashFX::Draw(ILTCustomDraw *pDraw)
 {
-    if (!pDraw || !m_pVerts) return LTFALSE;
+	if (!pDraw || !m_pVerts) return LTFALSE;
 
 	HLOCALOBJ hCamera = g_pGameClientShell->GetCamera();
-    if (!hCamera) return LTFALSE;
+	if (!hCamera) return LTFALSE;
 
-    LTRotation rRot;
-    g_pLTClient->GetObjectRotation(hCamera, &rRot);
+	LTRotation rRot;
+	g_pLTClient->GetObjectRotation(hCamera, &rRot);
 
-    LTVector vU, vR, vF;
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTVector vU, vR, vF;
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
-    LTVertex verts[4];
+	LTVertex verts[4];
 
 	for (int i=0; i < m_cs.cSegments; i++)
 	{
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLeashFX::HandleFirstTime
 //
-//	ROUTINE:	CLeashFX::HandleFirstTime
-//
-//	PURPOSE:	Handle the first time drawing...
-//
+//	PURPOSE: Handle the first time drawing...
 // ----------------------------------------------------------------------- //
-
 void CLeashFX::HandleFirstTime()
 {
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLeashFX::Update
 //
-//	ROUTINE:	CLeashFX::Update
-//
-//	PURPOSE:	Update the Leash
-//
+//	PURPOSE: Update the Leash
 // ----------------------------------------------------------------------- //
-
 LTBOOL CLeashFX::Update()
 {
-    LTFLOAT fTime = g_pLTClient->GetTime();
+	LTFLOAT fTime = g_pLTClient->GetTime();
 
 	// Hide/show Leash if necessary...
 
 	if (m_hServerObject)
 	{
-        uint32 dwUserFlags;
-        g_pLTClient->GetObjectUserFlags(m_hServerObject, &dwUserFlags);
+		uint32 dwUserFlags;
+		g_pLTClient->GetObjectUserFlags(m_hServerObject, &dwUserFlags);
 
 		if (!(dwUserFlags & USRFLG_VISIBLE))
 		{
 			m_Flags &= ~FLAG_VISIBLE;
-            return LTTRUE;
+			return LTTRUE;
 		}
 		else
 		{
@@ -217,9 +193,9 @@ LTBOOL CLeashFX::Update()
 
 	if (m_bFirstTime)
 	{
-        m_bFirstTime = LTFALSE;
+		m_bFirstTime = LTFALSE;
 		HandleFirstTime();
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }

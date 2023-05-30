@@ -1,10 +1,10 @@
 //-------------------------------------------------------------------------
 //
-// MODULE  : MessageMgr.h
+// MODULE: MessageMgr.h
 //
-// PURPOSE : Messaging system - ruthlessly stolen from Greg Kettell (B2)
+// PURPOSE: Messaging system - ruthlessly stolen from Greg Kettell (B2)
 //
-// CREATED : 10/22/97
+// CREATED: 10/22/97
 //
 // REVISED : 10/27/99 - jrg
 //
@@ -34,7 +34,7 @@ enum eMessageType
 };
 
 
-#define	NUM_RECENT_LINES			16
+#define NUM_RECENT_LINES	16
 
 class CGameClientShell;
 
@@ -47,22 +47,22 @@ class CInputLine
 		{
 			m_nTextLen = 0;
 			*m_zText = '\0';
-            m_bShift = LTFALSE;
+			m_bShift = LTFALSE;
 			memset (m_pRecentLines, 0, NUM_RECENT_LINES * (kMaxInputLine + 2));
-            memset (m_bRecentLineUsed, 0, NUM_RECENT_LINES * sizeof (LTBOOL));
+			memset (m_bRecentLineUsed, 0, NUM_RECENT_LINES * sizeof (LTBOOL));
 			m_nBaseRecentLine = 0;
 			m_nCurrentRecentLine = -1;
 		}
 
-        LTBOOL       Init ();
+		LTBOOL	Init ();
 		void		Clear( void );
 		void		Term( void );
 		void		Draw(HSURFACE hDest,long x, long y);
-        LTBOOL       AddChar( uint8 ch );
+		LTBOOL	AddChar( uint8 ch );
 		void		DelChar( void );
 		void		Set( char *pzText );
 		void		Send( void );
-        LTBOOL       HandleKeyDown(int key, int rep);
+		LTBOOL	HandleKeyDown(int key, int rep);
 		void		HandleKeyUp(int key);
 		void		HandleChar(char c);
 
@@ -70,16 +70,16 @@ class CInputLine
 
 		enum { kMaxInputLine = 80 };
 
-		void				AddToRecentList();		// adds current string to recent-string list
+		void			AddToRecentList();		// adds current string to recent-string list
 
-		HSURFACE			m_hSurface;				// The surface to draw to
-        LTBOOL               m_bShift;               // Shift is active
-		int					m_nTextLen;				// Current length of input string
-		char				m_zText[ kMaxInputLine + 2 ]; // The buffer
-		char				m_pRecentLines[ NUM_RECENT_LINES ][ kMaxInputLine + 2 ];	// recent lines (for doskey effect)
-        LTBOOL               m_bRecentLineUsed[ NUM_RECENT_LINES ];                      // has this recent line been used?
-		int					m_nBaseRecentLine;		// current most-recent-line
-		int					m_nCurrentRecentLine;	// selected recent line
+		HSURFACE	m_hSurface;			// The surface to draw to
+		LTBOOL		m_bShift;				// Shift is active
+		int			m_nTextLen;				// Current length of input string
+		char			m_zText[ kMaxInputLine + 2 ];	// The buffer
+		char			m_pRecentLines[ NUM_RECENT_LINES ][ kMaxInputLine + 2 ];	// recent lines (for doskey effect)
+		LTBOOL		m_bRecentLineUsed[ NUM_RECENT_LINES ];				// has this recent line been used?
+		int			m_nBaseRecentLine;	// current most-recent-line
+		int			m_nCurrentRecentLine;	// selected recent line
 };
 
 // Message structure
@@ -87,17 +87,17 @@ struct Message
 {
 	Message()
 	{
-        hForeText = LTNULL;
-        hSurface = LTNULL;
+		hForeText = LTNULL;
+		hSurface = LTNULL;
 		eType = MMGR_DEFAULT;
 		nHeight = 0;
 	}
-    LTFLOAT         fExpiration;
-	HSURFACE		hForeText;
-	HSURFACE		hSurface;
+	LTFLOAT	 fExpiration;
+	HSURFACE	hForeText;
+	HSURFACE	hSurface;
 	eMessageType	eType;
-	int				nHeight;
-	LTIntPt			textOffset;
+	int			nHeight;
+	LTIntPt		textOffset;
 };
 
 
@@ -110,62 +110,62 @@ class CMessageMgr
 		enum
 		{
 			kMaxMessages		= 20,
-			kMaxMessageSize		= 128,
+			kMaxMessageSize	= 128,
 		};
 
 	public:
 
 		CMessageMgr();
 
-        LTBOOL       Init ();
+		LTBOOL	Init ();
 		void		Term ()  { Clear();  }
 
-        void        Enable( LTBOOL bEnabled );
+		void		Enable( LTBOOL bEnabled );
 
-        void        AddLine( char *szMsg, eMessageType eType = MMGR_DEFAULT, HSURFACE hSurf = LTNULL);
-        void        AddLine( HSTRING hMsg, eMessageType eType = MMGR_DEFAULT, HSURFACE hSurf = LTNULL);
-        void        AddLine( int nStringId, eMessageType eType = MMGR_DEFAULT, HSURFACE hSurf = LTNULL);
+		void		AddLine( char *szMsg, eMessageType eType = MMGR_DEFAULT, HSURFACE hSurf = LTNULL);
+		void		AddLine( HSTRING hMsg, eMessageType eType = MMGR_DEFAULT, HSURFACE hSurf = LTNULL);
+		void		AddLine( int nStringId, eMessageType eType = MMGR_DEFAULT, HSURFACE hSurf = LTNULL);
 		void		Clear( void );
 		void		Draw( void );
-        LTBOOL       HandleKeyDown(int key, int rep);
+		LTBOOL	HandleKeyDown(int key, int rep);
 		void		HandleKeyUp(int key) { m_InputLine.HandleKeyUp(key); }
 		void		HandleChar(char c);
 
 		void		SetCoordinates( int x, int y );
 		void		SetMaxMessages( int nMaxMessages );
-        void        SetMessageTime( LTFLOAT fSeconds );
-        void        SetEditingState(LTBOOL bEditing, LTBOOL bTeamMsg = LTFALSE);
+		void		SetMessageTime( LTFLOAT fSeconds );
+		void		SetEditingState(LTBOOL bEditing, LTBOOL bTeamMsg = LTFALSE);
 
-        LTBOOL       IsTeamMsg()     {return m_bEditing && m_bTeamMsg; }
+		LTBOOL	IsTeamMsg()	 {return m_bEditing && m_bTeamMsg; }
 
-        LTBOOL       GetState( void )        { return m_bEnabled; }
+		LTBOOL	GetState( void )		{ return m_bEnabled; }
 		int			GetMaxMessages( void )	{ return m_nMaxMessages; }
-        LTFLOAT      GetMessageTime( void )  { return m_fMessageTime; }
-        LTBOOL       GetEditingState() { return m_bEditing; }
+		LTFLOAT	GetMessageTime( void )  { return m_fMessageTime; }
+		LTBOOL	GetEditingState() { return m_bEditing; }
 
 	private:
 
-		void				DeleteMessageData(Message *pMsg);
+		void			DeleteMessageData(Message *pMsg);
 
-		CInputLine			m_InputLine;	// Current input message
-		CLTGUIFont*			m_pForeFont;		// menu font
+		CInputLine	m_InputLine;	// Current input message
+		CLTGUIFont*	m_pForeFont;		// menu font
 
-        LTBOOL               m_bEnabled;
-        LTBOOL               m_bEditing;
-        LTBOOL               m_bTeamMsg;
+		LTBOOL		m_bEnabled;
+		LTBOOL		m_bEditing;
+		LTBOOL		m_bTeamMsg;
 
-		int					m_x;
-		int					m_y;
+		int			m_x;
+		int			m_y;
 
-		int					m_nMaxMessages;
-        LTFLOAT              m_fMessageTime;
-        LTFLOAT              m_fMessageFade;
+		int			m_nMaxMessages;
+		LTFLOAT	m_fMessageTime;
+		LTFLOAT	m_fMessageFade;
 
-		int					m_nMessageCount;
-		int					m_nFirstMessage;
-		int					m_nNextMessage;
+		int			m_nMessageCount;
+		int			m_nFirstMessage;
+		int			m_nNextMessage;
 
-		Message				m_Messages[ kMaxMessages ];
+		Message		m_Messages[ kMaxMessages ];
 };
 
 
@@ -175,13 +175,13 @@ inline void CMessageMgr::DeleteMessageData(Message *pMsg)
 	{
 		if (pMsg->hSurface)
 		{
-            g_pLTClient->DeleteSurface(pMsg->hSurface);
-            pMsg->hSurface = LTNULL;
+			g_pLTClient->DeleteSurface(pMsg->hSurface);
+			pMsg->hSurface = LTNULL;
 		}
 		if (pMsg->hForeText)
 		{
-            g_pLTClient->DeleteSurface(pMsg->hForeText);
-            pMsg->hForeText = LTNULL;
+			g_pLTClient->DeleteSurface(pMsg->hForeText);
+			pMsg->hForeText = LTNULL;
 		}
 	}
 }
@@ -195,9 +195,9 @@ class CCheatMgr
 
 		void	Init();
 
-        LTBOOL   Check( char *pzText );
-        void    ClearCheater() { m_bPlayerCheated = LTFALSE; }
-        LTBOOL   IsCheater() { return m_bPlayerCheated; }
+		LTBOOL   Check( char *pzText );
+		void	ClearCheater() { m_bPlayerCheated = LTFALSE; }
+		LTBOOL   IsCheater() { return m_bPlayerCheated; }
 
 		struct CheatList
 		{
@@ -210,57 +210,56 @@ class CCheatMgr
 
 	private:
 
-        void    SendCheatMessage( CheatCode nCheatCode, uint8 nData );
+		void	SendCheatMessage( CheatCode nCheatCode, uint8 nData );
 
 
 		struct CheatInfo
 		{
-			char			*pzText;
-            LTBOOL           bActive;
+			char		*pzText;
+			LTBOOL	bActive;
 		};
 
 		static CheatInfo s_CheatInfo[];
 
-        static LTBOOL m_bPlayerCheated;
+		static LTBOOL m_bPlayerCheated;
 
 		// Helper functions
-        void    SetGodMode(LTBOOL bMode);
+		void	SetGodMode(LTBOOL bMode);
 		void	SetAmmo();
 		void	SetArmor();
 		void	SetHealth(LTBOOL bPlaySound=LTTRUE);
-        void    SetClipMode(LTBOOL bMode);
+		void	SetClipMode(LTBOOL bMode);
 		void	Teleport();
-        void    SetPos(LTBOOL bMode);
-        void    SetCamPosRot(LTBOOL bMode);
+		void	SetPos(LTBOOL bMode);
+		void	SetCamPosRot(LTBOOL bMode);
 		void	SetMissionInventory();
 		void	SetFullWeapons();
 		void	SetKFA();
 		void	ModSquad();
 		void	FullGear();
-        void    PosWeapon(LTBOOL bMode);
-        void    PosWeaponMuzzle(LTBOOL bMode);
-        void    LightScale(LTBOOL bMode);
-        void    LightAdd(LTBOOL bMode);
-        void    FOV(LTBOOL bMode);
-        void    InterfaceAdjust(LTBOOL bMode);
-        void    HeadBob(LTBOOL bMode);
-        void    Tears(LTBOOL bMode);
-        void    RemoveAI(LTBOOL bMode);
-        void    TriggerBox(LTBOOL bMode);
-        void    Breach(LTBOOL bMode);
-        void    Pos1stCam(LTBOOL bMode);
-        void    Motorcycle(LTBOOL bMode);
-        void    Snowmobile(LTBOOL bMode);
-        void    GolfCart(LTBOOL bMode);
+		void	PosWeapon(LTBOOL bMode);
+		void	PosWeaponMuzzle(LTBOOL bMode);
+		void	LightScale(LTBOOL bMode);
+		void	LightAdd(LTBOOL bMode);
+		void	FOV(LTBOOL bMode);
+		void	InterfaceAdjust(LTBOOL bMode);
+		void	HeadBob(LTBOOL bMode);
+		void	Tears(LTBOOL bMode);
+		void	RemoveAI(LTBOOL bMode);
+		void	TriggerBox(LTBOOL bMode);
+		void	Breach(LTBOOL bMode);
+		void	Pos1stCam(LTBOOL bMode);
+		void	Motorcycle(LTBOOL bMode);
+		void	Snowmobile(LTBOOL bMode);
+		void	GolfCart(LTBOOL bMode);
 		void	ChaseToggle();
-        void    AllowAllMissions(LTBOOL bMode);
+		void	AllowAllMissions(LTBOOL bMode);
 		void	ResetHistory();
 		void	SetExitLevel();
 		void	Version();
 		void	MikeD();
 		void	BigBlood(LTBOOL bMode);
 };
-
 
 
 #endif	// __MESSAGE_MGR_H__

@@ -2,9 +2,7 @@
 #include "MouseMgr.h"
 //#include "ClientShell.h"
 
-
 CMouseMgr g_mouseMgr;
-
 
 
 CMouseMgr::CMouseMgr()
@@ -79,5 +77,5 @@ void CMouseMgr::SetMousePos(int x, int y)
 
 void CMouseMgr::Draw(HSURFACE hSurf, int xOffset, int yOffset)
 {
-    //g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurf, g_pPrClientShell->GetCursorSurf(), NULL, m_xPos + xOffset, m_yPos + yOffset, g_hColorTransparent);
+	//g_pLTClient->DrawSurfaceToSurfaceTransparent(hSurf, g_pPrClientShell->GetCursorSurf(), NULL, m_xPos + xOffset, m_yPos + yOffset, g_hColorTransparent);
 }

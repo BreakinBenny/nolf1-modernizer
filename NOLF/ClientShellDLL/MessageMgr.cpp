@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------
 //
-// MODULE  : MessageMgr.cpp
+// MODULE: MessageMgr.cpp
 //
-// PURPOSE : Messaging system - ruthlessly stolen from Greg Kettell (B2)
+// PURPOSE: Messaging system - ruthlessly stolen from Greg Kettell (B2)
 //
-// CREATED : 10/22/97
+// CREATED: 10/22/97
 //
 // REVISED : 10/27/99 - jrg
 //
@@ -24,13 +24,13 @@
 #include "VarTrack.h"
 #include "ConsoleMgr.h"
 
-VarTrack		g_vtMaxNumMessages;
+VarTrack	g_vtMaxNumMessages;
 
 
-CMessageMgr*    g_pMessageMgr   = LTNULL;
-CCheatMgr*      g_pCheatMgr     = LTNULL;
-LTBOOL           g_bInfiniteAmmo = LTFALSE;
-LTBOOL           g_bAllowAllMissions = LTFALSE;
+CMessageMgr*	g_pMessageMgr	= LTNULL;
+CCheatMgr*		g_pCheatMgr		= LTNULL;
+LTBOOL			g_bInfiniteAmmo	= LTFALSE;
+LTBOOL			g_bAllowAllMissions	= LTFALSE;
 
 extern CGameClientShell*	g_pGameClientShell;
 extern ConsoleMgr* g_pConsoleMgr;
@@ -48,40 +48,40 @@ void MikeDCallBack(LTBOOL bReturn, void *pData)
 }
 
 CCheatMgr::CheatInfo CCheatMgr::s_CheatInfo[] = {
-    { "LPVIdI^\\OW[^Hf",    LTFALSE },	// GOD:    mpimyourfather
-    { "LPTABI_NLW[^fXRd",	LTFALSE },	// AMMO:   mpwegotdeathstar
-    { "LPTKK@N\\KZV",       LTFALSE },	// ARMOR:  mpwonderbra
-    { "LPCPAOI^c",			LTFALSE },	// HEALTH: mpdrdentz
-    { "LP@JT\\",			LTFALSE },	// mpclip
-    { "LPSAIO[W[\\",		LTFALSE },	// mpteleport
-    { "LP_K^",				LTFALSE },	// mppos
-    { "LPPMKPJ",			LTFALSE },	// KFA:			mpsanta
-    { "LPJUHSVQ",			LTFALSE },	// mpmimimi		- all weapons
-    { "LPT^J]",				LTFALSE },  // mpwpos       - toggle position weapon adjustment
-    { "LPTI]I\\",			LTFALSE },  // mpwmpos      - toggle position weapon muzzle adjustment
-    { "LP@MHO]I",			LTFALSE },  // mpcamera     - toggle camera offset adjustment
-    { "LPKUBT_[JWSI",		LTFALSE },  // mplightscale - toggle light scale adjustment
-    { "LPKUBT_IML",			LTFALSE },  // mplightadd   - toggle light add adjustment
-    { "LPEKS",				LTFALSE },  // mpfov        - toggle fov adjustment
-    { "LP_KIc",				LTFALSE },  // mppoly       - toggle menu polygrid adjustment
-    { "LPHUKAH@]K_QRRdfPb`",LTFALSE },  // mpkingoftehmonstars  - All weapons, infinite ammo
-    { "LPAKdS\\]JQ",		LTFALSE },  // mpboyisuck   - Remove all AI in the level
-    { "LPSPTA@M[Y",			LTFALSE },  // mptriggers   - Toggle trigger boxes on/off
-    { "LPAP@KLR",			LTFALSE },  // mpbreach     - Toggle breach adjust on/off
-    { "LP@MH",				LTFALSE },  // mpcam        - Toggle 1st person camera adjust on/off
-    { "LPQMNO]LVo",			LTFALSE },  // mpracerboy   - Spawn in a motorcycle
-    { "LPQK^OM]M",			LTFALSE },  // mprosebud	- Spawn in a snowmobile
-    { "LPDKLP_MJP",			LTFALSE },  // mpgoattech   - get all of the mods for currently held weapons
-    { "LPfKPHHWRT^_HkPe_SRR\\gXXb[~",   LTFALSE }, // mpyoulooklikeyouneedamonkey       - All gear
-    { "LPN_^MJU",			LTFALSE },  // mpasscam     - toggle chase view
-    { "LPAA@J_RLZJ",		LTFALSE },  // mpbeenthere  - allow all missions
-    { "LPTVJKVQ",			LTFALSE },  // mpwhoami     - reset player history
-    { "LP@MH\\H[",			LTFALSE },  // mpcampos     - toggle camera pos/rot
-    { "LPWKJUVM\\X",		LTFALSE },  // mphookmeup   - give the player mission default inventory
-    { "LPJM]THVL",			LTFALSE },  // mpmaphole    - exit the current level
-    { "LPAQTHO",			LTFALSE },	// mpbuild      - build info
-    { "LPJUVOO",			LTFALSE },  // mpmiked      - mike d!
-    { "LPBfJ^MQ]WUZT_Pe_d`",LTFALSE }   // mpexorbitantamounts - lots o blood
+	{ "LPVIdI^\\OW[^Hf",	LTFALSE },	// GOD:	mpimyourfather
+	{ "LPTABI_NLW[^fXRd", LTFALSE },	// AMMO:   mpwegotdeathstar
+	{ "LPTKK@N\\KZV",	LTFALSE },	// ARMOR:  mpwonderbra
+	{ "LPCPAOI^c",		LTFALSE },	// HEALTH: mpdrdentz
+	{ "LP@JT\\",			LTFALSE },	// mpclip
+	{ "LPSAIO[W[\\",		LTFALSE },	// mpteleport
+	{ "LP_K^",			LTFALSE },	// mppos
+	{ "LPPMKPJ",			LTFALSE },	// KFA:	mpsanta
+	{ "LPJUHSVQ",		LTFALSE },	// mpmimimi	- all weapons
+	{ "LPT^J]",			LTFALSE },	// mpwpos	- toggle position weapon adjustment
+	{ "LPTI]I\\",			LTFALSE },	// mpwmpos	- toggle position weapon muzzle adjustment
+	{ "LP@MHO]I",		LTFALSE },	// mpcamera	- toggle camera offset adjustment
+	{ "LPKUBT_[JWSI",	LTFALSE },	// mplightscale - toggle light scale adjustment
+	{ "LPKUBT_IML",		LTFALSE },	// mplightadd   - toggle light add adjustment
+	{ "LPEKS",			LTFALSE },	// mpfov		- toggle fov adjustment
+	{ "LP_KIc",			LTFALSE },	// mppoly	- toggle menu polygrid adjustment
+	{ "LPHUKAH@]K_QRRdfPb`",LTFALSE }, // mpkingoftehmonstars  - All weapons, infinite ammo
+	{ "LPAKdS\\]JQ",		LTFALSE },	// mpboyisuck   - Remove all AI in the level
+	{ "LPSPTA@M[Y",		LTFALSE },	// mptriggers   - Toggle trigger boxes on/off
+	{ "LPAP@KLR",		LTFALSE },	// mpbreach	 - Toggle breach adjust on/off
+	{ "LP@MH",			LTFALSE },	// mpcam		- Toggle 1st person camera adjust on/off
+	{ "LPQMNO]LVo",		LTFALSE },	// mpracerboy   - Spawn in a motorcycle
+	{ "LPQK^OM]M",		LTFALSE },	// mprosebud	- Spawn in a snowmobile
+	{ "LPDKLP_MJP",		LTFALSE },	// mpgoattech   - get all of the mods for currently held weapons
+	{ "LPfKPHHWRT^_HkPe_SRR\\gXXb[~",   LTFALSE }, // mpyoulooklikeyouneedamonkey	- All gear
+	{ "LPN_^MJU",		LTFALSE },	// mpasscam	 - toggle chase view
+	{ "LPAA@J_RLZJ",	LTFALSE },	// mpbeenthere  - allow all missions
+	{ "LPTVJKVQ",		LTFALSE },	// mpwhoami	 - reset player history
+	{ "LP@MH\\H[",		LTFALSE },	// mpcampos	 - toggle camera pos/rot
+	{ "LPWKJUVM\\X",	LTFALSE },	// mphookmeup   - give the player mission default inventory
+	{ "LPJM]THVL",		LTFALSE },	// mpmaphole	- exit the current level
+	{ "LPAQTHO",		LTFALSE },	// mpbuild	  - build info
+	{ "LPJUVOO",			LTFALSE },	// mpmiked	  - mike d!
+	{ "LPBfJ^MQ]WUZT_Pe_d`",LTFALSE }   // mpexorbitantamounts - lots o blood
 };
 
 
@@ -89,26 +89,21 @@ LTBOOL CCheatMgr::m_bPlayerCheated = LTFALSE;
 
 namespace
 {
-    LTVector vMsgColor[MMGR_NUM_MESSAGE_TYPES];
-    HLTCOLOR hTransColor;
+	LTVector vMsgColor[MMGR_NUM_MESSAGE_TYPES];
+	HLTCOLOR hTransColor;
 }
 
 
 
 /*******************************************************************************
-
 	CMessageMgr
-
 *******************************************************************************/
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::CMessageMgr()
 //
-//	ROUTINE:	CMessageMgr::CMessageMgr()
-//
-//	PURPOSE:	constructor
-//
+//	PURPOSE: constructor
 // ----------------------------------------------------------------------- //
-
 CMessageMgr::CMessageMgr()
 {
 	g_pMessageMgr = this;
@@ -122,27 +117,24 @@ CMessageMgr::CMessageMgr()
 	m_nMessageCount	= 0;
 	m_nFirstMessage	= 0;
 	m_nNextMessage	= m_nFirstMessage;
-    m_bEditing = LTFALSE;
-    m_bTeamMsg = LTFALSE;
+	m_bEditing = LTFALSE;
+	m_bTeamMsg = LTFALSE;
 
-    m_bEnabled = LTFALSE;
+	m_bEnabled = LTFALSE;
 
-    m_pForeFont = LTNULL;
+	m_pForeFont = LTNULL;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::Init (CClientDE* pClientDE)
 //
-//	ROUTINE:	CMessageMgr::Init (CClientDE* pClientDE)
-//
-//	PURPOSE:	Initializes the Message manager
-//
+//	PURPOSE: Initializes the Message manager
 // ----------------------------------------------------------------------- //
-
 LTBOOL CMessageMgr::Init ()
 {
 
-    if (!m_InputLine.Init()) return LTFALSE;
+	if (!m_InputLine.Init()) return LTFALSE;
 
 	m_pForeFont = g_pInterfaceResMgr->GetMsgForeFont();
 
@@ -158,20 +150,17 @@ LTBOOL CMessageMgr::Init ()
 	m_fMessageTime	= g_pLayoutMgr->GetMessageTime();
 	m_fMessageFade	= g_pLayoutMgr->GetMessageFade();
 
-    g_vtMaxNumMessages.Init(g_pLTClient, "MaxNumMessages", NULL, 5.0f);
+	g_vtMaxNumMessages.Init(g_pLTClient, "MaxNumMessages", NULL, 5.0f);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::Enable()
 //
-//	ROUTINE:	CMessageMgr::Enable()
-//
-//	PURPOSE:	Sets the enabled flag
-//
+//	PURPOSE: Sets the enabled flag
 // ----------------------------------------------------------------------- //
-
 void CMessageMgr::Enable( LTBOOL bEnabled )
 {
 	if (m_bEnabled && !bEnabled)
@@ -182,46 +171,37 @@ void CMessageMgr::Enable( LTBOOL bEnabled )
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::AddLine()
 //
-//	ROUTINE:	CMessageMgr::AddLine()
-//
-//	PURPOSE:	Adds a new line to the Message buffer
-//
+//	PURPOSE: Adds a new line to the Message buffer
 // ----------------------------------------------------------------------- //
-
 void CMessageMgr::AddLine( char *szMsg, eMessageType eType, HSURFACE hSurf )
 {
 	if (szMsg)
 	{
-        HSTRING hString = g_pLTClient->CreateString(szMsg);
+		HSTRING hString = g_pLTClient->CreateString(szMsg);
 		AddLine(hString, eType, hSurf);
-        g_pLTClient->FreeString(hString);
+		g_pLTClient->FreeString(hString);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::AddLine()
 //
-//	ROUTINE:	CMessageMgr::AddLine()
-//
-//	PURPOSE:	Adds a new line to the Message buffer
-//
+//	PURPOSE: Adds a new line to the Message buffer
 // ----------------------------------------------------------------------- //
-
 void CMessageMgr::AddLine( int nStringId, eMessageType eType, HSURFACE hSurf )
 {
-    HSTRING hString = g_pLTClient->FormatString(nStringId);
+	HSTRING hString = g_pLTClient->FormatString(nStringId);
 	AddLine(hString, eType, hSurf);
-    g_pLTClient->FreeString(hString);
+	g_pLTClient->FreeString(hString);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::AddLine()
 //
-//	ROUTINE:	CMessageMgr::AddLine()
-//
-//	PURPOSE:	Adds a new line to the Message buffer
-//
+//	PURPOSE: Adds a new line to the Message buffer
 // ----------------------------------------------------------------------- //
-
 void CMessageMgr::AddLine( HSTRING hMsg, eMessageType eType, HSURFACE hSurf )
 {
 	LTFLOAT fDuration = m_fMessageTime;
@@ -268,18 +248,18 @@ void CMessageMgr::AddLine( HSTRING hMsg, eMessageType eType, HSURFACE hSurf )
 		--m_nMessageCount;
 	}
 
-    char* pStr = g_pLTClient->GetStringData(hMsg);
-    g_pLTClient->CPrint(pStr);
+	char* pStr = g_pLTClient->GetStringData(hMsg);
+	g_pLTClient->CPrint(pStr);
 
 	pMsg->fExpiration = g_pLTClient->GetTime() + fDuration;
 
 	pMsg->eType = eType;
 
-    uint32 surfHt = 0;
-    uint32 surfWd = 0;
+	uint32 surfHt = 0;
+	uint32 surfWd = 0;
 	if (hSurf)
 	{
-        g_pLTClient->GetSurfaceDims(hSurf,&surfWd,&surfHt);
+		g_pLTClient->GetSurfaceDims(hSurf,&surfWd,&surfHt);
 		pMsg->textOffset.x = (int)surfWd + 8;
 	}
 	else
@@ -287,11 +267,11 @@ void CMessageMgr::AddLine( HSTRING hMsg, eMessageType eType, HSURFACE hSurf )
 
 	int nWidth = (int)(480.0f * g_pInterfaceResMgr->GetXRatio());
 
-    LTIntPt txtSize = m_pForeFont->GetTextExtentsFormat(hMsg,nWidth);
+	LTIntPt txtSize = m_pForeFont->GetTextExtentsFormat(hMsg,nWidth);
 
 	if (txtSize.y > (int)surfHt)
 	{
-        pMsg->textOffset.y = 0;
+		pMsg->textOffset.y = 0;
 	}
 	else
 		pMsg->textOffset.y = ((int)surfHt - txtSize.y) /2;
@@ -299,18 +279,15 @@ void CMessageMgr::AddLine( HSTRING hMsg, eMessageType eType, HSURFACE hSurf )
 	pMsg->hForeText = g_pInterfaceResMgr->CreateSurfaceFromString(m_pForeFont,hMsg,kTransBlack,0,0,nWidth);
 	pMsg->nHeight = Max((int)surfHt,txtSize.y);
 
-    g_pLTClient->OptimizeSurface(pMsg->hSurface,kTransBlack);
+	g_pLTClient->OptimizeSurface(pMsg->hSurface,kTransBlack);
 	pMsg->hSurface = hSurf;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::Draw()
 //
-//	ROUTINE:	CMessageMgr::Draw()
-//
-//	PURPOSE:	Displays the Message list
-//
+//	PURPOSE: Displays the Message list
 // ----------------------------------------------------------------------- //
-
 void CMessageMgr::Draw( void )
 {
 	// early return if there are no Messages in the queue,
@@ -326,12 +303,12 @@ void CMessageMgr::Draw( void )
 //	g_pGameClientShell->AddToClearScreenCount();
 
 
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
-    uint32 nScreenHeight, nScreenWidth;
-    g_pLTClient->GetSurfaceDims (hScreen, &nScreenWidth, &nScreenHeight);
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	uint32 nScreenHeight, nScreenWidth;
+	g_pLTClient->GetSurfaceDims (hScreen, &nScreenWidth, &nScreenHeight);
 
-	float xRatio			= (float)nScreenWidth / 640.0f;
-	float yRatio			= (float)nScreenHeight / 480.0f;
+	float xRatio	= (float)nScreenWidth / 640.0f;
+	float yRatio	= (float)nScreenHeight / 480.0f;
 
 	int y = 5;
 	int baseX = 5;
@@ -344,7 +321,7 @@ void CMessageMgr::Draw( void )
 		Message *pMsg = &m_Messages[ (nFirst + i) % kMaxMessages ];
 
 		// expire Messages that have overstayed their welcome
-        if ( g_pLTClient->GetTime() >= pMsg->fExpiration )
+		if ( g_pLTClient->GetTime() >= pMsg->fExpiration )
 		{
 			g_pInterfaceMgr->AddToClearScreenCount();
 
@@ -358,9 +335,9 @@ void CMessageMgr::Draw( void )
 		}
 		else if (m_fMessageFade > 0.0f)
 		{
-            fAlpha = (pMsg->fExpiration - g_pLTClient->GetTime()) / m_fMessageFade;
+			fAlpha = (pMsg->fExpiration - g_pLTClient->GetTime()) / m_fMessageFade;
 			if (fAlpha < 1.0f)
-                g_pLTClient->SetSurfaceAlpha(pMsg->hSurface,fAlpha);
+				g_pLTClient->SetSurfaceAlpha(pMsg->hSurface,fAlpha);
 		}
 
 
@@ -419,13 +396,10 @@ void CMessageMgr::Draw( void )
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::Clear()
 //
-//	ROUTINE:	CMessageMgr::Clear()
-//
-//	PURPOSE:	removes all Messages from the array
-//
+//	PURPOSE: removes all Messages from the array
 // ----------------------------------------------------------------------- //
-
 void CMessageMgr::Clear( void )
 {
 	int i;
@@ -440,13 +414,10 @@ void CMessageMgr::Clear( void )
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::SetMaxMessages()
 //
-//	ROUTINE:	CMessageMgr::SetMaxMessages()
-//
-//	PURPOSE:	Sets the maximum number of Messages to display
-//
+//	PURPOSE: Sets the maximum number of Messages to display
 // ----------------------------------------------------------------------- //
-
 void CMessageMgr::SetMaxMessages( int nMaxMessages )
 {
 	if (nMaxMessages < 1) nMaxMessages = 1;
@@ -469,29 +440,23 @@ void CMessageMgr::SetMessageTime( LTFLOAT fSeconds )
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::HandleKeyDown()
 //
-//	ROUTINE:	CMessageMgr::HandleKeyDown()
-//
-//	PURPOSE:	Processes keystrokes
-//
+//	PURPOSE: Processes keystrokes
 // ----------------------------------------------------------------------- //
-
 LTBOOL CMessageMgr::HandleKeyDown(int key, int rep)
 {
 	if (m_bEditing)
 		return m_InputLine.HandleKeyDown(key, rep);
 	else
-        return LTFALSE;
+		return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::HandleChar()
 //
-//	ROUTINE:	CMessageMgr::HandleChar()
-//
-//	PURPOSE:	Processes keystrokes
-//
+//	PURPOSE: Processes keystrokes
 // ----------------------------------------------------------------------- //
-
 void CMessageMgr::HandleChar(char c)
 {
 	if (m_bEditing)
@@ -499,13 +464,10 @@ void CMessageMgr::HandleChar(char c)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMessageMgr::SetEditingState()
 //
-//	ROUTINE:	CMessageMgr::SetEditingState()
-//
-//	PURPOSE:	enter/leave editing mode
-//
+//	PURPOSE: enter/leave editing mode
 // ----------------------------------------------------------------------- //
-
 void CMessageMgr::SetEditingState(LTBOOL bEditing, LTBOOL bTeamMsg)
 {
 	m_bEditing = bEditing;
@@ -513,8 +475,8 @@ void CMessageMgr::SetEditingState(LTBOOL bEditing, LTBOOL bTeamMsg)
 
 	// Send the Message to the server
 	HMESSAGEWRITE hMsg = g_pLTClient->StartMessage(MID_PLAYER_CHATMODE);
-    g_pLTClient->WriteToMessageByte(hMsg, (uint8)bEditing);
-    g_pLTClient->EndMessage(hMsg);
+	g_pLTClient->WriteToMessageByte(hMsg, (uint8)bEditing);
+	g_pLTClient->EndMessage(hMsg);
 
 }
 
@@ -526,26 +488,20 @@ void CMessageMgr::SetEditingState(LTBOOL bEditing, LTBOOL bTeamMsg)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::Init (CClientDE* pClientDE)
 //
-//	ROUTINE:	CInputLine::Init (CClientDE* pClientDE)
-//
-//	PURPOSE:	Initializes the player Message
-//
+//	PURPOSE: Initializes the player Message
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInputLine::Init ()
 {
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::CInputLine()
 //
-//	ROUTINE:	CInputLine::CInputLine()
-//
-//	PURPOSE:	constructor
-//
+//	PURPOSE: constructor
 // ----------------------------------------------------------------------- //
-
 void CInputLine::Clear( void )
 {
 	*m_zText = '\0';	// nil the Message
@@ -554,44 +510,38 @@ void CInputLine::Clear( void )
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::CInputLine()
 //
-//	ROUTINE:	CInputLine::CInputLine()
-//
-//	PURPOSE:	constructor
-//
+//	PURPOSE: constructor
 // ----------------------------------------------------------------------- //
-
 void CInputLine::Term( void )
 {
 	Clear();
-    g_pMessageMgr->SetEditingState(LTFALSE);
-    g_pLTClient->SetInputState(LTTRUE);
+	g_pMessageMgr->SetEditingState(LTFALSE);
+	g_pLTClient->SetInputState(LTTRUE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::CInputLine()
 //
-//	ROUTINE:	CInputLine::CInputLine()
-//
-//	PURPOSE:	constructor
-//
+//	PURPOSE: constructor
 // ----------------------------------------------------------------------- //
-
 void CInputLine::Draw(HSURFACE hDest, long x, long y)
 {
 	char zTemp[ kMaxInputLine + 2 + 4];
 
-    HSTRING hStr = LTNULL;
+	HSTRING hStr = LTNULL;
 	if (!g_pMessageMgr->IsTeamMsg())
 		hStr = g_pLTClient->FormatString (IDS_SAY);
 	else
 		hStr = g_pLTClient->FormatString (IDS_TEAMSAY);
-    SAFE_STRCPY(zTemp, g_pLTClient->GetStringData (hStr));
-    g_pLTClient->FreeString (hStr);
+	SAFE_STRCPY(zTemp, g_pLTClient->GetStringData (hStr));
+	g_pLTClient->FreeString (hStr);
 
 	strcat(zTemp, m_zText);
 
-    double fTime = g_pLTClient->GetTime();
+	double fTime = g_pLTClient->GetTime();
 	double tmp;
 
 	fTime = modf(fTime, &tmp);
@@ -607,13 +557,10 @@ void CInputLine::Draw(HSURFACE hDest, long x, long y)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::CInputLine()
 //
-//	ROUTINE:	CInputLine::CInputLine()
-//
-//	PURPOSE:	constructor
-//
+//	PURPOSE: constructor
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInputLine::AddChar( uint8 ch )
 {
 	if (m_nTextLen < kMaxInputLine)	// space left in the Message
@@ -621,20 +568,17 @@ LTBOOL CInputLine::AddChar( uint8 ch )
 		m_zText[m_nTextLen] = ch;	// add a character
 		m_nTextLen++;				// increment the length
 		m_zText[m_nTextLen] = '\0';	// terminate the string
-        return LTTRUE;               // indicate success
+		return LTTRUE;			// indicate success
 	}
-    return LTFALSE;  // indicate failure
+	return LTFALSE;	// indicate failure
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::CInputLine()
 //
-//	ROUTINE:	CInputLine::CInputLine()
-//
-//	PURPOSE:	constructor
-//
+//	PURPOSE: constructor
 // ----------------------------------------------------------------------- //
-
 void CInputLine::DelChar( void )
 {
 	if (m_nTextLen > 0)	// text in the Message?
@@ -646,13 +590,10 @@ void CInputLine::DelChar( void )
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::CInputLine()
 //
-//	ROUTINE:	CInputLine::CInputLine()
-//
-//	PURPOSE:	constructor
-//
+//	PURPOSE: constructor
 // ----------------------------------------------------------------------- //
-
 void CInputLine::Set( char *pzText )
 {
 	strncpy(m_zText, pzText, kMaxInputLine);				// copy the text
@@ -662,13 +603,10 @@ void CInputLine::Set( char *pzText )
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::CInputLine()
 //
-//	ROUTINE:	CInputLine::CInputLine()
-//
-//	PURPOSE:	constructor
-//
+//	PURPOSE: constructor
 // ----------------------------------------------------------------------- //
-
 void CInputLine::Send( void )
 {
 	// First check and see if it was a cheat that was entered...
@@ -684,18 +622,18 @@ void CInputLine::Send( void )
 	char strName[128];
 	memset (strName, 0, 128);
 
-    uint32 nLocalID = 0;
-    g_pLTClient->GetLocalClientID (&nLocalID);
+	uint32 nLocalID = 0;
+	g_pLTClient->GetLocalClientID (&nLocalID);
 
 	int nGameMode = 0;
-    g_pLTClient->GetGameMode(&nGameMode);
-    if (nGameMode == STARTGAME_NORMAL || nGameMode == GAMEMODE_NONE || nLocalID == LT_NOTCONNECTED)
+	g_pLTClient->GetGameMode(&nGameMode);
+	if (nGameMode == STARTGAME_NORMAL || nGameMode == GAMEMODE_NONE || nLocalID == LT_NOTCONNECTED)
 	{
-        HSTRING hStr = g_pLTClient->FormatString (IDS_PLAYER);
-        strncpy (strName, g_pLTClient->GetStringData (hStr), 127);
-        g_pLTClient->FreeString (hStr);
+		HSTRING hStr = g_pLTClient->FormatString (IDS_PLAYER);
+		strncpy (strName, g_pLTClient->GetStringData (hStr), 127);
+		g_pLTClient->FreeString (hStr);
 	}
-    else
+	else
 	{
 		CClientInfoMgr* pClientInfoMgr = g_pInterfaceMgr->GetClientInfoMgr();
 		strncpy (strName, pClientInfoMgr->GetPlayerName (nLocalID), 127);
@@ -719,24 +657,21 @@ void CInputLine::Send( void )
 	if (g_pGameClientShell->GetPlayerState() == PS_GHOST)
 		hMsg = g_pLTClient->StartMessage(MID_PLAYER_GHOSTMESSAGE);
 	else if (g_pMessageMgr->IsTeamMsg())
-        hMsg = g_pLTClient->StartMessage(MID_PLAYER_TEAMMESSAGE);
+		hMsg = g_pLTClient->StartMessage(MID_PLAYER_TEAMMESSAGE);
 	else
-        hMsg = g_pLTClient->StartMessage(MID_PLAYER_MESSAGE);
-    g_pLTClient->WriteToMessageString(hMsg, strMessage);
-    g_pLTClient->EndMessage(hMsg);
+		hMsg = g_pLTClient->StartMessage(MID_PLAYER_MESSAGE);
+	g_pLTClient->WriteToMessageString(hMsg, strMessage);
+	g_pLTClient->EndMessage(hMsg);
 
 	Term();
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::CInputLine()
 //
-//	ROUTINE:	CInputLine::CInputLine()
-//
-//	PURPOSE:	constructor
-//
+//	PURPOSE: constructor
 // ----------------------------------------------------------------------- //
-
 LTBOOL CInputLine::HandleKeyDown(int key, int rep)
 {
 	switch( key )
@@ -761,7 +696,7 @@ LTBOOL CInputLine::HandleKeyDown(int key, int rep)
 
 		case VK_SHIFT:
 		{
-            m_bShift = LTTRUE;
+			m_bShift = LTTRUE;
 		}
 		break;
 
@@ -807,54 +742,45 @@ LTBOOL CInputLine::HandleKeyDown(int key, int rep)
 		{
 			AddToRecentList();
 			Send();
-            g_pLTClient->ClearInput(); // Don't process the key they hit...
+			g_pLTClient->ClearInput(); // Don't process the key they hit...
 		}
 		break;
 
 	}
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::HandleKeyUp()
 //
-//	ROUTINE:	CInputLine::HandleKeyUp()
-//
-//	PURPOSE:	Handles a key up Message, used for tracking shift keys
-//
+//	PURPOSE: Handles a key up Message, used for tracking shift keys
 // ----------------------------------------------------------------------- //
-
 void CInputLine::HandleKeyUp(int key)
 {
 	switch( key )
 	{
 		case VK_SHIFT:
-            m_bShift = LTFALSE;
+			m_bShift = LTFALSE;
 		break;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::HandleChar()
 //
-//	ROUTINE:	CInputLine::HandleChar()
-//
-//	PURPOSE:	Handles a OnChar Message
-//
+//	PURPOSE: Handles a OnChar Message
 // ----------------------------------------------------------------------- //
-
 void CInputLine::HandleChar(char c)
 {
 	AddChar(c);
 }
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CInputLine::AddToRecentList()
 //
-//	ROUTINE:	CInputLine::AddToRecentList()
-//
-//	PURPOSE:	Adds the current string to the recent-string list
-//
+//	PURPOSE: Adds the current string to the recent-string list
 // ----------------------------------------------------------------------- //
-
 void CInputLine::AddToRecentList()
 {
 	// add the current line to the array of past input lines
@@ -866,7 +792,7 @@ void CInputLine::AddToRecentList()
 		m_nBaseRecentLine = 0;
 
 	SAFE_STRCPY(m_pRecentLines[m_nBaseRecentLine], m_zText);
-    m_bRecentLineUsed[m_nBaseRecentLine] = LTTRUE;
+	m_bRecentLineUsed[m_nBaseRecentLine] = LTTRUE;
 	m_nCurrentRecentLine = -1;
 }
 
@@ -925,13 +851,10 @@ void ShowCheatListCommand(int argc, char** argv)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::Init()
 //
-//	ROUTINE:	CCheatMgr::Init()
-//
-//	PURPOSE:	Initializes the cheat manager
-//
+//	PURPOSE: Initializes the cheat manager
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::Init()
 {
 	g_pCheatMgr = this;
@@ -941,20 +864,17 @@ void CCheatMgr::Init()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::Check()
 //
-//	ROUTINE:	CCheatMgr::Check()
-//
-//	PURPOSE:	See if a string is a cheat code
-//
+//	PURPOSE: See if a string is a cheat code
 // ----------------------------------------------------------------------- //
-
 LTBOOL CCheatMgr::Check( char *pzText )
 {
 	char buf[100];
 
 
 #ifdef _DEMO
-    return LTFALSE;      // Don't do cheats in the demo...
+	return LTFALSE;	  // Don't do cheats in the demo...
 #endif
 
 	// copy their text
@@ -962,11 +882,11 @@ LTBOOL CCheatMgr::Check( char *pzText )
 
 	// It should start with "MP"
 	if ( strncmp(buf, "mp", 2) != 0 )
-        return LTFALSE;
+		return LTFALSE;
 
 	// convert it to cheat compatible text
-    unsigned int i;
-    for ( i = 0; i < strlen(pzText); i++ )
+	unsigned int i;
+	for ( i = 0; i < strlen(pzText); i++ )
 		buf[i] = ((buf[i] ^ 38) + i) ^ 7;
 
 	// then compare the converted text
@@ -975,27 +895,24 @@ LTBOOL CCheatMgr::Check( char *pzText )
 		if ( strcmp( buf, s_CheatInfo[i].pzText ) == 0)
 		{
 			Process( (CheatCode)i );
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::Process()
 //
-//	ROUTINE:	CCheatMgr::Process()
-//
-//	PURPOSE:	Calls the appropriate cheat function
-//
+//	PURPOSE: Calls the appropriate cheat function
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::Process( CheatCode nCheatCode )
 {
 	if ( nCheatCode <= CHEAT_NONE || nCheatCode >= CHEAT_MAX ) return;
 
 	// Don't do cheats in multiplayer...
-    if (g_pGameClientShell->IsMultiplayerGame())
+	if (g_pGameClientShell->IsMultiplayerGame())
 	{
 		// Well, okay, let them toggle between 1st and 3rd person ;)
 		// and, well, blood is pretty cool...
@@ -1063,19 +980,19 @@ void CCheatMgr::Process( CheatCode nCheatCode )
 			FullGear();
 		break;
 
-		case CHEAT_CHASETOGGLE:	   // toggle 3rd person view
+		case CHEAT_CHASETOGGLE:	// toggle 3rd person view
 			ChaseToggle();
 		break;
 
-		case CHEAT_TEARS:	      // toggle tears cheat
+		case CHEAT_TEARS:		  // toggle tears cheat
 			Tears(!s_CheatInfo[nCheatCode].bActive);
 		break;
 
-		case CHEAT_VERSION:	      // display version info
+		case CHEAT_VERSION:		  // display version info
 			Version();
 		break;
 
-		case CHEAT_MIKED:	      // we love you!
+		case CHEAT_MIKED:		  // we love you!
 			MikeD();
 		break;
 
@@ -1095,7 +1012,7 @@ void CCheatMgr::Process( CheatCode nCheatCode )
 			Teleport();
 		break;
 
-		case CHEAT_CAM_POSROT:    // show/hide camera position/rotation
+		case CHEAT_CAM_POSROT:	// show/hide camera position/rotation
 			SetCamPosRot(!s_CheatInfo[nCheatCode].bActive);
 		break;
 
@@ -1117,7 +1034,7 @@ void CCheatMgr::Process( CheatCode nCheatCode )
 
 		// These cheats are too obscure/useless for users
 #ifndef _FINAL
-		case CHEAT_POSWEAPON:		    // toggle adjust of weapon pos
+		case CHEAT_POSWEAPON:			// toggle adjust of weapon pos
 			PosWeapon(!s_CheatInfo[nCheatCode].bActive);
 		break;
 
@@ -1125,15 +1042,15 @@ void CCheatMgr::Process( CheatCode nCheatCode )
 			PosWeaponMuzzle(!s_CheatInfo[nCheatCode].bActive);
 		break;
 
-		case CHEAT_CAMERAOFFSET:	   // toggle adjust of camera offset
+		case CHEAT_CAMERAOFFSET:	// toggle adjust of camera offset
 			Pos1stCam(!s_CheatInfo[nCheatCode].bActive);
 		break;
 
-		case CHEAT_LIGHTSCALE:	      // toggle client light scale offset
+		case CHEAT_LIGHTSCALE:		  // toggle client light scale offset
 			LightScale(!s_CheatInfo[nCheatCode].bActive);
 		break;
 
-		case CHEAT_LIGHTADD:	      // toggle client light add offset
+		case CHEAT_LIGHTADD:		  // toggle client light add offset
 			LightAdd(!s_CheatInfo[nCheatCode].bActive);
 		break;
 
@@ -1141,7 +1058,7 @@ void CCheatMgr::Process( CheatCode nCheatCode )
 			FOV(!s_CheatInfo[nCheatCode].bActive);
 		break;
 
-		case CHEAT_INTERFACEADJUST:     // toggle menu polygrid cheat
+		case CHEAT_INTERFACEADJUST:	 // toggle menu polygrid cheat
 			InterfaceAdjust(!s_CheatInfo[nCheatCode].bActive);
 		break;
 
@@ -1162,37 +1079,31 @@ void CCheatMgr::Process( CheatCode nCheatCode )
 			return;				// skip setting global cheat indicator for unhandled cheats
 	}
 
-    m_bPlayerCheated = LTTRUE;
+	m_bPlayerCheated = LTTRUE;
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SendCheatMessage()
 //
-//	ROUTINE:	CCheatMgr::SendCheatMessage()
-//
-//	PURPOSE:	sends a cheat to the server
-//
+//	PURPOSE: sends a cheat to the server
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SendCheatMessage( CheatCode nCheatCode, uint8 nData )
 {
 	// Send the Message to the server
-    HMESSAGEWRITE hMsg = g_pLTClient->StartMessage(MID_PLAYER_CHEAT);
-    g_pLTClient->WriteToMessageByte(hMsg, (uint8)nCheatCode);
-    g_pLTClient->WriteToMessageByte(hMsg, nData);
-    g_pLTClient->EndMessage(hMsg);
+	HMESSAGEWRITE hMsg = g_pLTClient->StartMessage(MID_PLAYER_CHEAT);
+	g_pLTClient->WriteToMessageByte(hMsg, (uint8)nCheatCode);
+	g_pLTClient->WriteToMessageByte(hMsg, nData);
+	g_pLTClient->EndMessage(hMsg);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SetGodMode()
 //
-//	ROUTINE:	CCheatMgr::SetGodMode()
-//
-//	PURPOSE:	Sets/resets God mode
-//
+//	PURPOSE: Sets/resets God mode
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SetGodMode(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_GOD].bActive = bMode;
@@ -1212,56 +1123,47 @@ void CCheatMgr::SetGodMode(LTBOOL bMode)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SetAmmo()
 //
-//	ROUTINE:	CCheatMgr::SetAmmo()
-//
-//	PURPOSE:	Gives full ammo
-//
+//	PURPOSE: Gives full ammo
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SetAmmo()
 {
-    s_CheatInfo[CHEAT_AMMO].bActive = LTTRUE;
+	s_CheatInfo[CHEAT_AMMO].bActive = LTTRUE;
 
 	// Tell the server
-    SendCheatMessage(CHEAT_AMMO, LTTRUE);
+	SendCheatMessage(CHEAT_AMMO, LTTRUE);
 
 	g_pMessageMgr->AddLine("You can never have too many bullets...");
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SetArmor()
 //
-//	ROUTINE:	CCheatMgr::SetArmor()
-//
-//	PURPOSE:	Gives full armor
-//
+//	PURPOSE: Gives full armor
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SetArmor()
 {
-    s_CheatInfo[CHEAT_ARMOR].bActive = LTTRUE;
+	s_CheatInfo[CHEAT_ARMOR].bActive = LTTRUE;
 
 	// Tell the server
-    SendCheatMessage(CHEAT_ARMOR, LTTRUE);
+	SendCheatMessage(CHEAT_ARMOR, LTTRUE);
 
 	g_pMessageMgr->AddLine("We got def star, we got def star!");
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SetHealth()
 //
-//	ROUTINE:	CCheatMgr::SetHealth()
-//
-//	PURPOSE:	Gives full health
-//
+//	PURPOSE: Gives full health
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SetHealth(LTBOOL bPlaySound)
 {
-    s_CheatInfo[CHEAT_HEALTH].bActive = LTTRUE;
+	s_CheatInfo[CHEAT_HEALTH].bActive = LTTRUE;
 
 	// Tell the server
-    SendCheatMessage(CHEAT_HEALTH, LTTRUE);
+	SendCheatMessage(CHEAT_HEALTH, LTTRUE);
 
 	g_pMessageMgr->AddLine("Doctor Dentz!");
 
@@ -1273,13 +1175,10 @@ void CCheatMgr::SetHealth(LTBOOL bPlaySound)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SetClipMode()
 //
-//	ROUTINE:	CCheatMgr::SetClipMode()
-//
-//	PURPOSE:	Sets/resets Clip mode
-//
+//	PURPOSE: Sets/resets Clip mode
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SetClipMode(LTBOOL bMode)
 {
 	// Can't do this in multiplayer.
@@ -1298,124 +1197,103 @@ void CCheatMgr::SetClipMode(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Spectator mode enabled");
+		g_pMessageMgr->AddLine("Spectator mode enabled");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Spectator mode disabled");
+		g_pMessageMgr->AddLine("Spectator mode disabled");
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::Teleport()
 //
-//	ROUTINE:	CCheatMgr::Teleport()
-//
-//	PURPOSE:	Teleports to beginning of level
-//
+//	PURPOSE: Teleports to beginning of level
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::Teleport()
 {
-    SendCheatMessage(CHEAT_TELEPORT, LTTRUE);
+	SendCheatMessage(CHEAT_TELEPORT, LTTRUE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SetFullWeapons()
 //
-//	ROUTINE:	CCheatMgr::SetFullWeapons()
-//
-//	PURPOSE:	Give us all the weapons
-//
+//	PURPOSE: Give us all the weapons
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SetFullWeapons()
 {
-    s_CheatInfo[CHEAT_FULL_WEAPONS].bActive = LTTRUE;
+	s_CheatInfo[CHEAT_FULL_WEAPONS].bActive = LTTRUE;
 
 	// Tell the server
-    SendCheatMessage(CHEAT_FULL_WEAPONS, LTTRUE);
+	SendCheatMessage(CHEAT_FULL_WEAPONS, LTTRUE);
 
-    g_pMessageMgr->AddLine("Lots of guns...");
+	g_pMessageMgr->AddLine("Lots of guns...");
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SetKFA()
 //
-//	ROUTINE:	CCheatMgr::SetKFA()
-//
-//	PURPOSE:	Give us all weapons, ammo, armor, and health...
-//
+//	PURPOSE: Give us all weapons, ammo, armor, and health...
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SetKFA()
 {
-    s_CheatInfo[CHEAT_KFA].bActive = LTTRUE;
+	s_CheatInfo[CHEAT_KFA].bActive = LTTRUE;
 
 	// Give us all weapons, ammo, armor, and health...
 	SetFullWeapons(); // Gives us all ammo too
 	SetHealth(LTFALSE);
 	SetArmor();
 
-    g_pMessageMgr->AddLine("Knock em out the box Luke...");
+	g_pMessageMgr->AddLine("Knock em out the box Luke...");
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SetExitLevel()
 //
-//	ROUTINE:	CCheatMgr::SetExitLevel()
-//
-//	PURPOSE:	Exit the current level
-//
+//	PURPOSE: Exit the current level
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SetExitLevel()
 {
-    s_CheatInfo[CHEAT_EXITLEVEL].bActive = LTTRUE;
+	s_CheatInfo[CHEAT_EXITLEVEL].bActive = LTTRUE;
 
 	g_pGameClientShell->HandleExitLevel(0, LTNULL);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::ModSquad()
 //
-//	ROUTINE:	CCheatMgr::ModSquad()
-//
-//	PURPOSE:	Give us all the mods
-//
+//	PURPOSE: Give us all the mods
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::ModSquad()
 {
-    s_CheatInfo[CHEAT_MODSQUAD].bActive = LTTRUE;
+	s_CheatInfo[CHEAT_MODSQUAD].bActive = LTTRUE;
 
 	// Tell the server
-    SendCheatMessage(CHEAT_MODSQUAD, LTTRUE);
+	SendCheatMessage(CHEAT_MODSQUAD, LTTRUE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::FullGear()
 //
-//	ROUTINE:	CCheatMgr::FullGear()
-//
-//	PURPOSE:	Give us all gear
-//
+//	PURPOSE: Give us all gear
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::FullGear()
 {
-    s_CheatInfo[CHEAT_FULL_GEAR].bActive = LTTRUE;
+	s_CheatInfo[CHEAT_FULL_GEAR].bActive = LTTRUE;
 
 	// Tell the server
-    SendCheatMessage(CHEAT_FULL_GEAR, LTTRUE);
+	SendCheatMessage(CHEAT_FULL_GEAR, LTTRUE);
 
-    g_pMessageMgr->AddLine("Gear! (as in 'Boy the Beatles sure are Gear!')");
+	g_pMessageMgr->AddLine("Gear! (as in 'Boy the Beatles sure are Gear!')");
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SetPos()
 //
-//	ROUTINE:	CCheatMgr::SetPos()
-//
-//	PURPOSE:	Toggle displaying of position on/off
-//
+//	PURPOSE: Toggle displaying of position on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SetPos(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_POS].bActive = bMode;
@@ -1427,22 +1305,19 @@ void CCheatMgr::SetPos(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Show position enabled.");
+		g_pMessageMgr->AddLine("Show position enabled.");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Show position disabled.");
+		g_pMessageMgr->AddLine("Show position disabled.");
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SetCamPosRot()
 //
-//	ROUTINE:	CCheatMgr::SetCamPosRot()
-//
-//	PURPOSE:	Toggle displaying of camera pos/rot on/off
-//
+//	PURPOSE: Toggle displaying of camera pos/rot on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SetCamPosRot(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_CAM_POSROT].bActive = bMode;
@@ -1454,23 +1329,20 @@ void CCheatMgr::SetCamPosRot(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Show Camera Pos/Rot enabled.");
+		g_pMessageMgr->AddLine("Show Camera Pos/Rot enabled.");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Show Camera Pos/Rot disabled.");
+		g_pMessageMgr->AddLine("Show Camera Pos/Rot disabled.");
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::SetMissionInventory()
 //
-//	ROUTINE:	CCheatMgr::SetMissionInventory()
-//
-//	PURPOSE:	Give the player the default inventory for the current
+//	PURPOSE: Give the player the default inventory for the current
 //				mission
-//
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::SetMissionInventory()
 {
 	s_CheatInfo[CHEAT_MISSION_INVENTORY].bActive = LTTRUE;
@@ -1480,17 +1352,14 @@ void CCheatMgr::SetMissionInventory()
 		g_pInterfaceMgr->DoMissionOutfitCheat();
 	}
 
-    g_pMessageMgr->AddLine("You're good to go...");
+	g_pMessageMgr->AddLine("You're good to go...");
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::PosWeapon()
 //
-//	ROUTINE:	CCheatMgr::PosWeapon()
-//
-//	PURPOSE:	Toggle positioning of player view weapon on/off
-//
+//	PURPOSE: Toggle positioning of player view weapon on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::PosWeapon(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_POSWEAPON].bActive = bMode;
@@ -1505,22 +1374,19 @@ void CCheatMgr::PosWeapon(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Adjust player-view weapon position: ON");
+		g_pMessageMgr->AddLine("Adjust player-view weapon position: ON");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Adjust player-view weapon position: OFF");
+		g_pMessageMgr->AddLine("Adjust player-view weapon position: OFF");
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::PosWeaponMuzzle()
 //
-//	ROUTINE:	CCheatMgr::PosWeaponMuzzle()
-//
-//	PURPOSE:	Toggle positioning of player view weapon muzzle on/off
-//
+//	PURPOSE: Toggle positioning of player view weapon muzzle on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::PosWeaponMuzzle(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_POSWEAPON_MUZZLE].bActive = bMode;
@@ -1535,22 +1401,19 @@ void CCheatMgr::PosWeaponMuzzle(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Adjust player-view weapon muzzle position: ON");
+		g_pMessageMgr->AddLine("Adjust player-view weapon muzzle position: ON");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Adjust player-view weapon muzzle position: OFF");
+		g_pMessageMgr->AddLine("Adjust player-view weapon muzzle position: OFF");
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::LightScale()
 //
-//	ROUTINE:	CCheatMgr::LightScale()
-//
-//	PURPOSE:	Toggle adjustment of light scale offset on/off
-//
+//	PURPOSE: Toggle adjustment of light scale offset on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::LightScale(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_LIGHTSCALE].bActive = bMode;
@@ -1562,22 +1425,19 @@ void CCheatMgr::LightScale(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Adjust Light Scale: ON");
+		g_pMessageMgr->AddLine("Adjust Light Scale: ON");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Adjust Light Scale: OFF");
+		g_pMessageMgr->AddLine("Adjust Light Scale: OFF");
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::LightAdd()
 //
-//	ROUTINE:	CCheatMgr::LightAdd()
-//
-//	PURPOSE:	Toggle adjustment of light add offset on/off
-//
+//	PURPOSE: Toggle adjustment of light add offset on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::LightAdd(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_LIGHTADD].bActive = bMode;
@@ -1589,22 +1449,19 @@ void CCheatMgr::LightAdd(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Adjust Light Add: ON");
+		g_pMessageMgr->AddLine("Adjust Light Add: ON");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Adjust Light Add: OFF");
+		g_pMessageMgr->AddLine("Adjust Light Add: OFF");
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::FOV()
 //
-//	ROUTINE:	CCheatMgr::FOV()
-//
-//	PURPOSE:	Toggle adjustment of FOV on/off
-//
+//	PURPOSE: Toggle adjustment of FOV on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::FOV(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_FOV].bActive = bMode;
@@ -1616,22 +1473,19 @@ void CCheatMgr::FOV(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Adjust FOV: ON");
+		g_pMessageMgr->AddLine("Adjust FOV: ON");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Adjust FOV: OFF");
+		g_pMessageMgr->AddLine("Adjust FOV: OFF");
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::InterfaceAdjust()
 //
-//	ROUTINE:	CCheatMgr::InterfaceAdjust()
-//
-//	PURPOSE:	Toggle adjustment of the interface on/off
-//
+//	PURPOSE: Toggle adjustment of the interface on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::InterfaceAdjust(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_INTERFACEADJUST].bActive = bMode;
@@ -1643,22 +1497,19 @@ void CCheatMgr::InterfaceAdjust(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Adjust Interface: ON");
+		g_pMessageMgr->AddLine("Adjust Interface: ON");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Adjust Interface: OFF");
+		g_pMessageMgr->AddLine("Adjust Interface: OFF");
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::Tears()
 //
-//	ROUTINE:	CCheatMgr::Tears()
-//
-//	PURPOSE:	Toggle tears cheat on/off
-//
+//	PURPOSE: Toggle tears cheat on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::Tears(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_TEARS].bActive = bMode;
@@ -1668,23 +1519,20 @@ void CCheatMgr::Tears(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_bInfiniteAmmo = LTTRUE;
-        g_pMessageMgr->AddLine("RAWWR!!!");
+		g_bInfiniteAmmo = LTTRUE;
+		g_pMessageMgr->AddLine("RAWWR!!!");
 	}
 	else
 	{
-        g_bInfiniteAmmo = LTFALSE;
+		g_bInfiniteAmmo = LTFALSE;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::RemoveAI()
 //
-//	ROUTINE:	CCheatMgr::RemoveAI()
-//
-//	PURPOSE:	Remove all AI in the level
-//
+//	PURPOSE: Remove all AI in the level
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::RemoveAI(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_REMOVEAI].bActive = bMode;
@@ -1694,23 +1542,20 @@ void CCheatMgr::RemoveAI(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Cheaters never prosper...");
+		g_pMessageMgr->AddLine("Cheaters never prosper...");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Sheeze, you really ARE pathetic...");
+		g_pMessageMgr->AddLine("Sheeze, you really ARE pathetic...");
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::TriggerBox()
 //
-//	ROUTINE:	CCheatMgr::TriggerBox()
-//
-//	PURPOSE:	Toggle trigger boxes on/off
-//
+//	PURPOSE: Toggle trigger boxes on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::TriggerBox(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_TRIGGERBOX].bActive = bMode;
@@ -1720,23 +1565,20 @@ void CCheatMgr::TriggerBox(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Ah shucks, that takes all the fun out of it...");
+		g_pMessageMgr->AddLine("Ah shucks, that takes all the fun out of it...");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("That's better sport!");
+		g_pMessageMgr->AddLine("That's better sport!");
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::Breach()
 //
-//	ROUTINE:	CCheatMgr::Breach()
-//
-//	PURPOSE:	Toggle adjusting hand-held weapon breach on/off
-//
+//	PURPOSE: Toggle adjusting hand-held weapon breach on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::Breach(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_POSBREACH].bActive = bMode;
@@ -1751,23 +1593,20 @@ void CCheatMgr::Breach(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Adjust hand-held weapon breach offset: ON");
+		g_pMessageMgr->AddLine("Adjust hand-held weapon breach offset: ON");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Adjust hand-held weapon breach offset: OFF");
+		g_pMessageMgr->AddLine("Adjust hand-held weapon breach offset: OFF");
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::Pos1stCam()
 //
-//	ROUTINE:	CCheatMgr::Pos1stCam()
-//
-//	PURPOSE:	Toggle adjusting 1st person camera on/off
-//
+//	PURPOSE: Toggle adjusting 1st person camera on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::Pos1stCam(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_POS1STCAM].bActive = bMode;
@@ -1782,23 +1621,20 @@ void CCheatMgr::Pos1stCam(LTBOOL bMode)
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Adjust 1st person camera offset: ON");
+		g_pMessageMgr->AddLine("Adjust 1st person camera offset: ON");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Adjust 1st person camera offset: OFF");
+		g_pMessageMgr->AddLine("Adjust 1st person camera offset: OFF");
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::Motorcycle()
 //
-//	ROUTINE:	CCheatMgr::Motorcycle()
-//
-//	PURPOSE:	Spawn in a motorcycle
-//
+//	PURPOSE: Spawn in a motorcycle
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::Motorcycle(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_MOTORCYCLE].bActive = bMode;
@@ -1808,13 +1644,10 @@ void CCheatMgr::Motorcycle(LTBOOL bMode)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::Snowmobile()
 //
-//	ROUTINE:	CCheatMgr::Snowmobile()
-//
-//	PURPOSE:	Spawn in a snowmobile
-//
+//	PURPOSE: Spawn in a snowmobile
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::Snowmobile(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_SNOWMOBILE].bActive = bMode;
@@ -1824,13 +1657,10 @@ void CCheatMgr::Snowmobile(LTBOOL bMode)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::ChaseToggle()
 //
-//	ROUTINE:	CCheatMgr::ChaseToggle()
-//
-//	PURPOSE:	Toggle 3rd person camera on/off
-//
+//	PURPOSE: Toggle 3rd person camera on/off
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::ChaseToggle()
 {
 	// Tell the server
@@ -1842,13 +1672,10 @@ void CCheatMgr::ChaseToggle()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::Version()
 //
-//	ROUTINE:	CCheatMgr::Version()
-//
-//	PURPOSE:	Display version info
-//
+//	PURPOSE: Display version info
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::Version()
 {
 	// Display the version info...
@@ -1857,77 +1684,65 @@ void CCheatMgr::Version()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::MikeD()
 //
-//	ROUTINE:	CCheatMgr::MikeD()
-//
-//	PURPOSE:	To show our love
-//
+//	PURPOSE: To show our love
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::MikeD()
 {
-     HSTRING hString = g_pLTClient->CreateString("Would you like EXORBITANT amounts of money?");
+	 HSTRING hString = g_pLTClient->CreateString("Would you like EXORBITANT amounts of money?");
 	 g_pInterfaceMgr->ShowMessageBox(hString, LTMB_YESNO, MikeDCallBack, LTNULL);
 	 g_pLTClient->FreeString(hString);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::BigBlood()
 //
-//	ROUTINE:	CCheatMgr::BigBlood()
-//
-//	PURPOSE:	Buckets O blood
-//
+//	PURPOSE: Buckets O blood
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::BigBlood(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_BIGBLOOD].bActive = bMode;
 
 	if (bMode)
 	{
-        WriteConsoleInt("BigBlood", 1);
-        g_pMessageMgr->AddLine("Everybody down, hard rain is falling!");
+		WriteConsoleInt("BigBlood", 1);
+		g_pMessageMgr->AddLine("Everybody down, hard rain is falling!");
 	}
 	else
 	{
-        WriteConsoleInt("BigBlood", 0);
+		WriteConsoleInt("BigBlood", 0);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::AllowAllMissions()
 //
-//	ROUTINE:	CCheatMgr::AllowAllMissions()
-//
-//	PURPOSE:	Allow player to select any mission
-//
+//	PURPOSE: Allow player to select any mission
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::AllowAllMissions(LTBOOL bMode)
 {
 	s_CheatInfo[CHEAT_ALL_MISSIONS].bActive = bMode;
 
 	if (bMode)
 	{
-        g_pMessageMgr->AddLine("Been there, done that.");
+		g_pMessageMgr->AddLine("Been there, done that.");
 	}
 	else
 	{
-        g_pMessageMgr->AddLine("Back in Kansas again.");
+		g_pMessageMgr->AddLine("Back in Kansas again.");
 	}
 
 	g_bAllowAllMissions = bMode;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCheatMgr::ResetHistory()
 //
-//	ROUTINE:	CCheatMgr::ResetHistory()
-//
-//	PURPOSE:	Reset player history
-//
+//	PURPOSE: Reset player history
 // ----------------------------------------------------------------------- //
-
 void CCheatMgr::ResetHistory()
 {
-    g_pMessageMgr->AddLine("This is not my beautiful wife.");
+	g_pMessageMgr->AddLine("This is not my beautiful wife.");
 	g_pGameClientShell->GetPlayerSummary()->ClearStatus();
 }

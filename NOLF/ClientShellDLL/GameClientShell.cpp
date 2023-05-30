@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: GameClientShell.cpp
 //
-// MODULE  : GameClientShell.cpp
+// PURPOSE: Game Client Shell - Implementation
 //
-// PURPOSE : Game Client Shell - Implementation
-//
-// CREATED : 9/18/97
+// CREATED: 9/18/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "GameClientShell.h"
 #include "MsgIds.h"
@@ -78,121 +75,121 @@ extern ConsoleMgr* g_pConsoleMgr;
 #define LOD_ZOOMADJUST					-5.0f
 
 #define MAX_SHAKE_AMOUNT				10.0f
-#define MAX_FRAME_DELTA					0.1f
+#define MAX_FRAME_DELTA				0.1f
 
-#define WEAPON_MOVE_INC_VALUE_SLOW		0.005f
-#define WEAPON_MOVE_INC_VALUE_FAST		0.02f
+#define WEAPON_MOVE_INC_VALUE_SLOW	0.005f
+#define WEAPON_MOVE_INC_VALUE_FAST	0.02f
 
 #define DEFAULT_CSENDRATE				7.0f
 
-#define VK_TOGGLE_EDITMODE				VK_F2
+#define VK_TOGGLE_EDITMODE			VK_F2
 #define VK_TOGGLE_SCREENSHOTMODE		VK_F3
 
 #define MAX_TIMEOUT_RETRIES 2
 
-uint32              g_dwSpecial         = 2342349;
-LTBOOL              g_bScreenShotMode   = LTFALSE;
-HLTCOLOR            g_hColorTransparent = LTNULL;
+uint32		g_dwSpecial		= 2342349;
+LTBOOL		g_bScreenShotMode	= LTFALSE;
+HLTCOLOR	g_hColorTransparent	= LTNULL;
 
-HWND				g_hMainWnd = NULL;
-RECT*				g_prcClip = NULL;
+HWND		g_hMainWnd = NULL;
+RECT*		g_prcClip = NULL;
 
 CGameClientShell*   g_pGameClientShell = LTNULL;
 
-LTVector            g_vWorldWindVel(0.0f, 0.0f, 0.0f);
-LTVector            g_vNVModelColor(0.0f, 0.0f, 0.0f);      // model color modifier for night vision
-LTVector            g_vIRModelColor(0.0f, 0.0f, 0.0f);      // model color modifier for infrared
+LTVector		g_vWorldWindVel(0.0f, 0.0f, 0.0f);
+LTVector		g_vNVModelColor(0.0f, 0.0f, 0.0f);	// model color modifier for night vision
+LTVector		g_vIRModelColor(0.0f, 0.0f, 0.0f);	// model color modifier for infrared
 
-PhysicsState		g_normalPhysicsState;
-PhysicsState		g_waterPhysicsState;
+PhysicsState	g_normalPhysicsState;
+PhysicsState	g_waterPhysicsState;
 
-VarTrack			g_vtFOVXNormal;
-VarTrack			g_vtFOVYNormal;
-VarTrack			g_vtInterfceFOVX;
-VarTrack			g_vtInterfceFOVY;
-VarTrack			g_CV_CSendRate;		// The SendRate console variable.
-VarTrack			g_vtPlayerRotate;	// The PlayerRotate console variable
-VarTrack			g_vtShowTimingTrack;
-VarTrack			g_vtNormalTurnRate;
-VarTrack			g_vtFastTurnRate;
-VarTrack			g_vtLookUpRate;
-VarTrack			g_vtCameraSwayXFreq;
-VarTrack			g_vtCameraSwayYFreq;
-VarTrack			g_vtCameraSwayXSpeed;
-VarTrack			g_vtCameraSwayYSpeed;
-VarTrack			g_vtCameraSwayDuckMult;
-VarTrack			g_vtChaseCamPitchAdjust;
-VarTrack			g_vtChaseCamOffset;
-VarTrack			g_vtChaseCamDistUp;
-VarTrack			g_vtChaseCamDistBack;
-VarTrack			g_vtActivateOverride;
-VarTrack			g_vtCamDamage;
-VarTrack			g_vtCamDamagePitch;
-VarTrack			g_vtCamDamageRoll;
-VarTrack			g_vtCamDamageTime1;
-VarTrack			g_vtCamDamageTime2;
-VarTrack			g_vtCamDamageVal;
-VarTrack			g_vtCamDamagePitchMin;
-VarTrack			g_vtCamDamageRollMin;
-VarTrack			g_varStartLevelScreenFadeTime;
-VarTrack			g_varStartLevelScreenFade;
-VarTrack			g_vtUseCamRecoil;
-VarTrack			g_vtCamRecoilRecover;
-VarTrack			g_vtBaseCamRecoilPitch;
-VarTrack			g_vtMaxCamRecoilPitch;
-VarTrack			g_vtBaseCamRecoilYaw;
-VarTrack			g_vtMaxCamRecoilYaw;
-VarTrack			g_vtFireJitterDecayTime;
-VarTrack			g_vtFireJitterMaxPitchDelta;
-VarTrack            g_vtCamRotInterpTime;
-VarTrack			g_vtRespawnWaitTime;
-VarTrack			g_vtMultiplayerRespawnWaitTime;
-VarTrack			g_vtUseSoundFilters;
-VarTrack			g_vtScreenFadeInTime;
-VarTrack			g_vtScreenFadeOutTime;
-VarTrack			g_vtSpecial;
-VarTrack			g_vtModelGlowTime;
-VarTrack			g_vtModelGlowMin;
-VarTrack			g_vtModelGlowMax;
+VarTrack		g_vtFOVXNormal;
+VarTrack		g_vtFOVYNormal;
+VarTrack		g_vtInterfceFOVX;
+VarTrack		g_vtInterfceFOVY;
+VarTrack		g_CV_CSendRate;	// The SendRate console variable.
+VarTrack		g_vtPlayerRotate;	// The PlayerRotate console variable
+VarTrack		g_vtShowTimingTrack;
+VarTrack		g_vtNormalTurnRate;
+VarTrack		g_vtFastTurnRate;
+VarTrack		g_vtLookUpRate;
+VarTrack		g_vtCameraSwayXFreq;
+VarTrack		g_vtCameraSwayYFreq;
+VarTrack		g_vtCameraSwayXSpeed;
+VarTrack		g_vtCameraSwayYSpeed;
+VarTrack		g_vtCameraSwayDuckMult;
+VarTrack		g_vtChaseCamPitchAdjust;
+VarTrack		g_vtChaseCamOffset;
+VarTrack		g_vtChaseCamDistUp;
+VarTrack		g_vtChaseCamDistBack;
+VarTrack		g_vtActivateOverride;
+VarTrack		g_vtCamDamage;
+VarTrack		g_vtCamDamagePitch;
+VarTrack		g_vtCamDamageRoll;
+VarTrack		g_vtCamDamageTime1;
+VarTrack		g_vtCamDamageTime2;
+VarTrack		g_vtCamDamageVal;
+VarTrack		g_vtCamDamagePitchMin;
+VarTrack		g_vtCamDamageRollMin;
+VarTrack		g_varStartLevelScreenFadeTime;
+VarTrack		g_varStartLevelScreenFade;
+VarTrack		g_vtUseCamRecoil;
+VarTrack		g_vtCamRecoilRecover;
+VarTrack		g_vtBaseCamRecoilPitch;
+VarTrack		g_vtMaxCamRecoilPitch;
+VarTrack		g_vtBaseCamRecoilYaw;
+VarTrack		g_vtMaxCamRecoilYaw;
+VarTrack		g_vtFireJitterDecayTime;
+VarTrack		g_vtFireJitterMaxPitchDelta;
+VarTrack		g_vtCamRotInterpTime;
+VarTrack		g_vtRespawnWaitTime;
+VarTrack		g_vtMultiplayerRespawnWaitTime;
+VarTrack		g_vtUseSoundFilters;
+VarTrack		g_vtScreenFadeInTime;
+VarTrack		g_vtScreenFadeOutTime;
+VarTrack		g_vtSpecial;
+VarTrack		g_vtModelGlowTime;
+VarTrack		g_vtModelGlowMin;
+VarTrack		g_vtModelGlowMax;
 
-VarTrack			g_vtSunZoomLevel1MaxDist;
-VarTrack			g_vtSunZoomLevel2MaxDist;
+VarTrack		g_vtSunZoomLevel1MaxDist;
+VarTrack		g_vtSunZoomLevel2MaxDist;
 
-VarTrack			g_vtFOVYMaxUW;
-VarTrack			g_vtFOVYMinUW;
-VarTrack			g_vtUWFOVRate;
-VarTrack			g_vtPlayerName;
+VarTrack		g_vtFOVYMaxUW;
+VarTrack		g_vtFOVYMinUW;
+VarTrack		g_vtUWFOVRate;
+VarTrack		g_vtPlayerName;
 
 // New!
-VarTrack			g_vtLockFPS;					// FramerateLock			<0-1>
-VarTrack			g_vtShowFPS;					// ShowFramerate			<0-1>
-VarTrack			g_vtOldMouseLook;				// OldMouseLook				<0-1>
-VarTrack			g_vtNoFunMenus;					// NoFunMenus				<0-1>
-VarTrack			g_vtLockCinematicAspectRatio;   // RestrictCinematicsTo4x3	<0-1>
-VarTrack			g_vtQuickSwitch;				// QuickSwitch				<0-1>
-VarTrack			g_vtUIScale;					// UIScale					<0.0-1.0>
-VarTrack			g_vtUseGOTYMenu;				// UseGotyMenu				<0-1>
-VarTrack			g_vtNoRawInput;					// NoRawInput				<0-1>
-VarTrack			g_vtConsoleBackdrop;			// ConsoleBackdrop			<0-2>
-VarTrack			g_vtBigHeadMode;				// BigHeadMode				<0-1>
-VarTrack			g_vtModPatchNum;				// ModPatchNum
-VarTrack			g_vtEnableScreenTint;			// EnableScreenTinting		<0-1>
-VarTrack			g_vtEnableLightScale;			// EnableLightScale			<0-1>
+VarTrack		g_vtLockFPS;					// FramerateLock			<0-1>
+VarTrack		g_vtShowFPS;					// ShowFramerate			<0-1>
+VarTrack		g_vtOldMouseLook;				// OldMouseLook			<0-1>
+VarTrack		g_vtNoFunMenus;				// NoFunMenus				<0-1>
+VarTrack		g_vtLockCinematicAspectRatio;	// RestrictCinematicsTo4x3	<0-1>
+VarTrack		g_vtQuickSwitch;				// QuickSwitch				<0-1>
+VarTrack		g_vtUIScale;					// UIScale					<0.0-1.0>
+VarTrack		g_vtUseGOTYMenu;			// UseGotyMenu			<0-1>
+VarTrack		g_vtNoRawInput;				// NoRawInput				<0-1>
+VarTrack		g_vtConsoleBackdrop;			// ConsoleBackdrop			<0-2>
+VarTrack		g_vtBigHeadMode;				// BigHeadMode			<0-1>
+VarTrack		g_vtModPatchNum;				// ModPatchNum
+VarTrack		g_vtEnableScreenTint;			// EnableScreenTinting		<0-1>
+VarTrack		g_vtEnableLightScale;			// EnableLightScale			<0-1>
 
-LTFLOAT             s_fDemoTime     = 0.0f;
-LTFLOAT             s_fDeadTimer    = 0.0f;
-LTFLOAT             s_fDeathDelay   = 0.0f;
+LTFLOAT	s_fDemoTime	 = 0.0f;
+LTFLOAT	s_fDeadTimer	= 0.0f;
+LTFLOAT	s_fDeathDelay   = 0.0f;
 
-LTVector            g_vPlayerCameraOffset = g_kvPlayerCameraOffset;
+LTVector		g_vPlayerCameraOffset = g_kvPlayerCameraOffset;
 
 // SDL Logging
-STD fstream 			g_SDLLogFile;
-SDL_Window* 		g_SDLWindow = NULL;
-bool 				g_CursorCenterHack = false;
+STD fstream 	g_SDLLogFile;
+SDL_Window* g_SDLWindow = NULL;
+bool 			g_CursorCenterHack = false;
 
-int					g_nCinSaveModelShadows = 0;
+int			g_nCinSaveModelShadows = 0;
 
-static uint8		s_nLastCamType = CT_FULLSCREEN;
+static uint8	s_nLastCamType = CT_FULLSCREEN;
 
 extern CCheatMgr*	g_pCheatMgr;
 
@@ -257,8 +254,8 @@ IClientShell* CreateClientShell(ILTClient *pClientDE)
 
 	// Get our ClientDE pointer
 
-    g_pLTClient  = pClientDE;
-    _ASSERT(g_pLTClient);
+	g_pLTClient  = pClientDE;
+	_ASSERT(g_pLTClient);
 
 	// Register our proxy functions, these will allow us to populate a list of console commands
 	g_pRegisterConsoleProgram = g_pLTClient->RegisterConsoleProgram;
@@ -272,15 +269,15 @@ IClientShell* CreateClientShell(ILTClient *pClientDE)
 
 	// Init our LT subsystems
 
-    g_pMathLT = g_pLTClient->GetMathLT();
-    g_pModelLT = g_pLTClient->GetModelLT();
-    g_pTransLT = g_pLTClient->GetTransformLT();
-    g_pPhysicsLT = g_pLTClient->Physics();
+	g_pMathLT = g_pLTClient->GetMathLT();
+	g_pModelLT = g_pLTClient->GetModelLT();
+	g_pTransLT = g_pLTClient->GetTransformLT();
+	g_pPhysicsLT = g_pLTClient->Physics();
 	g_pBaseLT = static_cast<ILTCSBase*>(g_pLTClient);
 
 	g_pPhysicsLT->SetStairHeight(DEFAULT_STAIRSTEP_HEIGHT);
 
-    return ((IClientShell*)pShell);
+	return ((IClientShell*)pShell);
 }
 
 void DeleteClientShell(IClientShell *pInputShell)
@@ -304,17 +301,17 @@ void LeakFileFn(int argc, char **argv)
 {
 	if (argc < 1)
 	{
-        g_pLTClient->CPrint("LeakFile <filename>");
+		g_pLTClient->CPrint("LeakFile <filename>");
 		return;
 	}
 
-    if (LoadLeakFile(g_pLTClient, argv[0]))
+	if (LoadLeakFile(g_pLTClient, argv[0]))
 	{
-        g_pLTClient->CPrint("Leak file %s loaded successfully!", argv[0]);
+		g_pLTClient->CPrint("Leak file %s loaded successfully!", argv[0]);
 	}
 	else
 	{
-        g_pLTClient->CPrint("Unable to load leak file %s", argv[0]);
+		g_pLTClient->CPrint("Unable to load leak file %s", argv[0]);
 	}
 }
 
@@ -324,17 +321,17 @@ void ConnectFn(int argc, char **argv)
 {
 	if (argc <= 0)
 	{
-        g_pLTClient->CPrint("Connect <tcpip address> (use '*' for local net)");
+		g_pLTClient->CPrint("Connect <tcpip address> (use '*' for local net)");
 		return;
 	}
 
-    ConnectToTcpIpAddress(g_pLTClient, argv[0]);
+	ConnectToTcpIpAddress(g_pLTClient, argv[0]);
 }
 
 void FragSelfFn(int argc, char **argv)
 {
-    HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_FRAG_SELF);
-    g_pLTClient->EndMessage(hWrite);
+	HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_FRAG_SELF);
+	g_pLTClient->EndMessage(hWrite);
 }
 
 void CheatFn(int argc, char **argv)
@@ -354,32 +351,32 @@ void SunglassFn(int argc, char **argv)
 		if (mode == NUM_SUN_MODES)
 		{
 			g_pInterfaceMgr->SetSunglassMode(SUN_NONE);
-            g_pLTClient->CPrint("sunglasses off");
+			g_pLTClient->CPrint("sunglasses off");
 		}
 		else
 		{
 			g_pInterfaceMgr->SetSunglassMode((eSunglassMode)mode);
-            g_pLTClient->CPrint("sunglasses %d",mode);
+			g_pLTClient->CPrint("sunglasses %d",mode);
 		}
 	}
 }
 
 void ReloadWeaponAttributesFn(int argc, char **argv)
 {
-    g_pWeaponMgr->Reload(g_pLTClient);
-    g_pLTClient->CPrint("Reloaded weapons attributes file...");
+	g_pWeaponMgr->Reload(g_pLTClient);
+	g_pLTClient->CPrint("Reloaded weapons attributes file...");
 }
 
 void ReloadSurfacesAttributesFn(int argc, char **argv)
 {
-    g_pSurfaceMgr->Reload(g_pLTClient);
-    g_pLTClient->CPrint("Reloaded surface attributes file...");
+	g_pSurfaceMgr->Reload(g_pLTClient);
+	g_pLTClient->CPrint("Reloaded surface attributes file...");
 }
 
 void ReloadFXAttributesFn(int argc, char **argv)
 {
-    g_pFXButeMgr->Reload(g_pLTClient);
-    g_pLTClient->CPrint("Reloaded fx attributes file...");
+	g_pFXButeMgr->Reload(g_pLTClient);
+	g_pLTClient->CPrint("Reloaded fx attributes file...");
 
 	// Make sure we re-load the weapons and surface data, it has probably
 	// changed...
@@ -421,15 +418,15 @@ void ChaseToggleFn(int argc, char **argv)
 
 void ChangeTeamFn(int argc, char **argv)
 {
-    uint8 team = 0;
+	uint8 team = 0;
 	if (argc >= 1)
 	{
-        team = (uint8)atoi(argv[0]);
+		team = (uint8)atoi(argv[0]);
 	}
 
-    HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_PLAYER_CHANGETEAM);
-    g_pLTClient->WriteToMessageByte(hWrite, team);
-    g_pLTClient->EndMessage(hWrite);
+	HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_PLAYER_CHANGETEAM);
+	g_pLTClient->WriteToMessageByte(hWrite, team);
+	g_pLTClient->EndMessage(hWrite);
 
 }
 
@@ -437,7 +434,7 @@ void ExitGame(LTBOOL bResponse, uint32 nUserData)
 {
 	if (bResponse)
 	{
-        g_pLTClient->Shutdown();
+		g_pLTClient->Shutdown();
 	}
 }
 
@@ -453,27 +450,27 @@ void MusicFn(int argc, char **argv)
 {
 	if (!g_pGameClientShell->GetMusic()->IsInitialized())
 	{
-        g_pLTClient->CPrint("Direct Music hasn't been initialized!");
+		g_pLTClient->CPrint("Direct Music hasn't been initialized!");
 	}
 
 	if (argc < 2)
 	{
-        g_pLTClient->CPrint("Music <command>");
-        g_pLTClient->CPrint("  Commands: (syntax -> Command <Required> [Optional])");
-        g_pLTClient->CPrint("    I  <intensity number to set> [when to enact change]");
-        g_pLTClient->CPrint("    PS <segment name> [when to begin playing]");
-        g_pLTClient->CPrint("    PM <motif style> <motif name> [when to begin playing]");
-        g_pLTClient->CPrint("    V  <volume adjustment in db>");
-        g_pLTClient->CPrint("    SS <segment name> [when to stop]");
-        g_pLTClient->CPrint("    SM <motif name> [when to stop]");
-        g_pLTClient->CPrint(" ");
-        g_pLTClient->CPrint("  Enact Change Values:");
-        g_pLTClient->CPrint("    Default     - Will use the default value that is defined in the Control File or by DirectMusic");
-        g_pLTClient->CPrint("    Immediately - Will happen immediately");
-        g_pLTClient->CPrint("    Beat        - Will happen on the next beat");
-        g_pLTClient->CPrint("    Measure     - Will happen on the next measure");
-        g_pLTClient->CPrint("    Grid        - Will happen on the next grid");
-        g_pLTClient->CPrint("    Segment     - Will happen on the next segment transition");
+		g_pLTClient->CPrint("Music <command>");
+		g_pLTClient->CPrint("  Commands: (syntax -> Command <Required> [Optional])");
+		g_pLTClient->CPrint("	I  <intensity number to set> [when to enact change]");
+		g_pLTClient->CPrint("	PS <segment name> [when to begin playing]");
+		g_pLTClient->CPrint("	PM <motif style> <motif name> [when to begin playing]");
+		g_pLTClient->CPrint("	V  <volume adjustment in db>");
+		g_pLTClient->CPrint("	SS <segment name> [when to stop]");
+		g_pLTClient->CPrint("	SM <motif name> [when to stop]");
+		g_pLTClient->CPrint(" ");
+		g_pLTClient->CPrint("  Enact Change Values:");
+		g_pLTClient->CPrint("	Default	 - Will use the default value that is defined in the Control File or by DirectMusic");
+		g_pLTClient->CPrint("	Immediately - Will happen immediately");
+		g_pLTClient->CPrint("	Beat		- Will happen on the next beat");
+		g_pLTClient->CPrint("	Measure	 - Will happen on the next measure");
+		g_pLTClient->CPrint("	Grid		- Will happen on the next grid");
+		g_pLTClient->CPrint("	Segment	 - Will happen on the next segment transition");
 
 		return;
 	}
@@ -493,13 +490,10 @@ void MusicFn(int argc, char **argv)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::CGameClientShell()
 //
-//	ROUTINE:	CGameClientShell::CGameClientShell()
-//
-//	PURPOSE:	Initialization
-//
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
-
 CGameClientShell::CGameClientShell()
 {
 	//AfxSetAllocStop(37803);
@@ -510,28 +504,28 @@ CGameClientShell::CGameClientShell()
 
 	g_vWorldWindVel.Init();
 
-    m_hCamera               = LTNULL;
-    m_hInterfaceCamera      = LTNULL;
+	m_hCamera			= LTNULL;
+	m_hInterfaceCamera	= LTNULL;
 
-    m_bUseWorldFog          = LTTRUE;
-    m_bMainWindowMinimized  = LTFALSE;
+	m_bUseWorldFog		= LTTRUE;
+	m_bMainWindowMinimized = LTFALSE;
 
-    m_bStrafing             = LTFALSE;
-    m_bHoldingMouseLook     = LTFALSE;
+	m_bStrafing			= LTFALSE;
+	m_bHoldingMouseLook	= LTFALSE;
 
-    m_bGamePaused           = LTFALSE;
+	m_bGamePaused		= LTFALSE;
 	m_resSoundInit			= LT_ERROR;
 
-	m_fYawBackup				= 0.0f;
-	m_fPitchBackup				= 0.0f;
-    m_bRestoreOrientation       = LTFALSE;
-    m_bAllowPlayerMovement      = LTTRUE;
-    m_bLastAllowPlayerMovement  = LTTRUE;
-    m_bWasUsingExternalCamera   = LTFALSE;
-    m_bUsingExternalCamera      = LTFALSE;
-	m_bCamIsListener			= LTFALSE;
+	m_fYawBackup		= 0.0f;
+	m_fPitchBackup		= 0.0f;
+	m_bRestoreOrientation	= LTFALSE;
+	m_bAllowPlayerMovement	= LTTRUE;
+	m_bLastAllowPlayerMovement	= LTTRUE;
+	m_bWasUsingExternalCamera	= LTFALSE;
+	m_bUsingExternalCamera	= LTFALSE;
+	m_bCamIsListener		= LTFALSE;
 
-    m_bNightVision  = LTFALSE;
+	m_bNightVision  = LTFALSE;
 	m_vNVScreenTint.Init(0.0f, 0.0f, 0.0f);
 
 	m_vDefaultLightScale.Init(1.0f, 1.0f, 1.0f);
@@ -539,11 +533,11 @@ CGameClientShell::CGameClientShell()
 	m_nPlayerInfoChangeFlags	= 0;
 	m_fPlayerInfoLastSendTime	= 0.0f;
 
-    m_rRotation.Init();
+	m_rRotation.Init();
 
 	m_fPitch			= 0.0f;
-	m_fYaw				= 0.0f;
-	m_fRoll				= 0.0f;
+	m_fYaw			= 0.0f;
+	m_fRoll			= 0.0f;
 
 	m_fPlayerPitch		= 0.0f;
 	m_fPlayerYaw		= 0.0f;
@@ -552,21 +546,21 @@ CGameClientShell::CGameClientShell()
 	m_fFireJitterPitch	= 0.0f;
 	m_fFireJitterYaw	= 0.0f;
 
-	m_dwPlayerFlags			= 0;
-	m_ePlayerState			= PS_UNKNOWN;
-    m_bSpectatorMode        = LTFALSE;
-    m_bTweakingWeapon       = LTFALSE;
-    m_bTweakingWeaponMuzzle = LTFALSE;
-    m_bAdjustWeaponBreach   = LTFALSE;
-    m_bAdjust1stPersonCamera = LTFALSE;
+	m_dwPlayerFlags		= 0;
+	m_ePlayerState		= PS_UNKNOWN;
+	m_bSpectatorMode		= LTFALSE;
+	m_bTweakingWeapon	= LTFALSE;
+	m_bTweakingWeaponMuzzle = LTFALSE;
+	m_bAdjustWeaponBreach	= LTFALSE;
+	m_bAdjust1stPersonCamera = LTFALSE;
 
 	m_vShakeAmount.Init();
 
-    m_bFlashScreen      = LTFALSE;
+	m_bFlashScreen	= LTFALSE;
 	m_fFlashTime		= 0.0f;
 	m_fFlashStart		= 0.0f;
-	m_fFlashRampUp		= 0.0f;
-	m_fFlashRampDown	= 0.0f;
+	m_fFlashRampUp	= 0.0f;
+	m_fFlashRampDown = 0.0f;
 	m_vFlashColor.Init();
 
 	memset(m_strCurrentWorldName, 0, 256);
@@ -574,48 +568,48 @@ CGameClientShell::CGameClientShell()
 	m_vIRLightScale.Init(1.0f,1.0,1.0f);
 	m_vCurContainerLightScale.Init(-1.0f, -1.0f, -1.0f);
 
-	m_nZoomView				= 0;
-    m_bZooming              = LTFALSE;
-    m_bZoomingIn            = LTFALSE;
-	m_fSaveLODScale			= DEFAULT_LOD_OFFSET;
-    m_bInWorld              = LTFALSE;
-    m_bStartedLevel         = LTFALSE;
-	m_nCurrentLevel			= 0;
-	m_nCurrentMission		= 0;
-	m_nMPNameId				= 0;
-	m_nMPBriefingId			= 0;
+	m_nZoomView		= 0;
+	m_bZooming		= LTFALSE;
+	m_bZoomingIn		= LTFALSE;
+	m_fSaveLODScale	= DEFAULT_LOD_OFFSET;
+	m_bInWorld		= LTFALSE;
+	m_bStartedLevel	= LTFALSE;
+	m_nCurrentLevel	= 0;
+	m_nCurrentMission	= 0;
+	m_nMPNameId	= 0;
+	m_nMPBriefingId	= 0;
 
 
-    m_bStartedDuckingDown   = LTFALSE;
-    m_bStartedDuckingUp     = LTFALSE;
-	m_fCamDuck				= 0.0f;
-	m_fDuckDownV			= -75.0f;
-	m_fDuckUpV				= 75.0f;
-	m_fMaxDuckDistance		= -20.0f;
+	m_bStartedDuckingDown	= LTFALSE;
+	m_bStartedDuckingUp	= LTFALSE;
+	m_fCamDuck			= 0.0f;
+	m_fDuckDownV		= -75.0f;
+	m_fDuckUpV			= 75.0f;
+	m_fMaxDuckDistance	= -20.0f;
 	m_fStartDuckTime		= 0.0f;
 
-    m_h3rdPersonCrosshair   = LTNULL;
-    m_hContainerSound       = LTNULL;
-	m_eCurContainerCode		= CC_NO_CONTAINER;
+	m_h3rdPersonCrosshair	= LTNULL;
+	m_hContainerSound		= LTNULL;
+	m_eCurContainerCode	= CC_NO_CONTAINER;
 	m_nSoundFilterId		= 0;
 	m_nGlobalSoundFilterId	= 0;
 
-    m_bShowPlayerPos        = LTFALSE;
-	m_bShowCamPosRot		= LTFALSE;
-    m_hDebugInfo            = LTNULL;
+	m_bShowPlayerPos		= LTFALSE;
+	m_bShowCamPosRot	= LTFALSE;
+	m_hDebugInfo			= LTNULL;
 
-    m_bAdjustLightScale     = LTFALSE;
-    m_bAdjustLightAdd       = LTFALSE;
-    m_bAdjustFOV            = LTFALSE;
+	m_bAdjustLightScale	= LTFALSE;
+	m_bAdjustLightAdd		= LTFALSE;
+	m_bAdjustFOV		= LTFALSE;
 
 	m_fContainerStartTime	= -1.0f;
 	m_fFovXFXDir			= 1.0f;
 
-    m_bPanSky               = LTFALSE;
+	m_bPanSky			= LTFALSE;
 	m_fPanSkyOffsetX		= 1.0f;
 	m_fPanSkyOffsetZ		= 1.0f;
-	m_fPanSkyScaleX			= 1.0f;
-	m_fPanSkyScaleZ			= 1.0f;
+	m_fPanSkyScaleX		= 1.0f;
+	m_fPanSkyScaleZ		= 1.0f;
 	m_fCurSkyXOffset		= 0.0f;
 	m_fCurSkyZOffset		= 0.0f;
 
@@ -623,29 +617,29 @@ CGameClientShell::CGameClientShell()
 	m_vMaxModelGlow.Init(255.0f, 255.0f, 255.0f);
 	m_vMinModelGlow.Init(50.0f, 50.0f, 50.f);
 	m_fModelGlowCycleTime	= 0.0f;
-    m_bModelGlowCycleUp     = LTTRUE;
+	m_bModelGlowCycleUp	= LTTRUE;
 
-    m_bFirstUpdate          = LTFALSE;
-    m_bRestoringGame        = LTFALSE;
-    m_bQuickSave            = LTFALSE;
+	m_bFirstUpdate		= LTFALSE;
+	m_bRestoringGame		= LTFALSE;
+	m_bQuickSave			= LTFALSE;
 
-    m_bCameraPosInited      = LTFALSE;
+	m_bCameraPosInited	= LTFALSE;
 
 	m_eDifficulty			= GD_NORMAL;
-	m_bFadeBodies			= LTFALSE;
-	m_eGameType				= SINGLE;
-	m_eLevelEnd				= LE_UNKNOWN;
+	m_bFadeBodies		= LTFALSE;
+	m_eGameType			= SINGLE;
+	m_eLevelEnd			= LE_UNKNOWN;
 	m_nEndString			= 0;
 
 	m_fEarliestRespawnTime	= 0.0f;
-    m_hBoundingBox          = LTNULL;
+	m_hBoundingBox		= LTNULL;
 
-    m_bMainWindowFocus      = LTFALSE;
+	m_bMainWindowFocus	= LTFALSE;
 
-    m_bPlayerPosSet         = LTFALSE;
+	m_bPlayerPosSet		= LTFALSE;
 
 	m_fNextSoundReverbTime	= 0.0f;
-    m_bUseReverb            = LTFALSE;
+	m_bUseReverb				= LTFALSE;
 	m_fReverbLevel			= 0.0f;
 	m_bCameraAttachedToHead	= LTFALSE;
 
@@ -656,11 +650,11 @@ CGameClientShell::CGameClientShell()
 	m_szServerName[0]		= LTNULL;
 	memset(m_fServerOptions, 0, sizeof(m_fServerOptions));
 
-	m_bForceDisconnect		= LTFALSE;
+	m_bForceDisconnect	= LTFALSE;
 
-	m_nDisconnectCode = 0;
-	m_nDisconnectSubCode = 0;
-	m_pDisconnectMsg = LTNULL;
+	m_nDisconnectCode		= 0;
+	m_nDisconnectSubCode	= 0;
+	m_pDisconnectMsg		= LTNULL;
 
 	// Start up SDL! -- Maybe trim down what we're initing here...
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
@@ -675,16 +669,16 @@ CGameClientShell::CGameClientShell()
 	SDL_Log("-- Hello World, We're all set here. Enjoy the show!");
 
 	// Just some default
-	m_lNextUpdate = 1L;
-	m_iPreviousMouseX = 0;
-	m_iPreviousMouseY = 0;
-	m_iCurrentMouseX = 0;
-	m_iCurrentMouseY = 0;
+	m_lNextUpdate	= 1L;
+	m_iPreviousMouseX	= 0;
+	m_iPreviousMouseY	= 0;
+	m_iCurrentMouseX	= 0;
+	m_iCurrentMouseY	= 0;
 
 	// Get a reference for currentMouseX/Y!
-	m_bGetBaseMouse = LTTRUE;
+	m_bGetBaseMouse	= LTTRUE;
 
-	m_bLockFramerate = LTTRUE;
+	m_bLockFramerate	= LTTRUE;
 
 	// If we can't get timer frequency, we can't limit the framerate!
 	if(!QueryPerformanceFrequency(&m_lTimerFrequency)) {
@@ -700,30 +694,27 @@ CGameClientShell::CGameClientShell()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::~CGameClientShell()
 //
-//	ROUTINE:	CGameClientShell::~CGameClientShell()
-//
-//	PURPOSE:	Destruction
-//
+//	PURPOSE: Destruction
 // ----------------------------------------------------------------------- //
-
 CGameClientShell::~CGameClientShell()
 {
 	if (m_hDebugInfo)
 	{
-        g_pLTClient->DeleteSurface(m_hDebugInfo);
+		g_pLTClient->DeleteSurface(m_hDebugInfo);
 		m_hDebugInfo = NULL;
 	}
 
 	if (m_hBoundingBox)
 	{
-        g_pLTClient->DeleteObject(m_hBoundingBox);
+		g_pLTClient->DeleteObject(m_hBoundingBox);
 	}
 
 	if (g_prcClip)
 	{
 		debug_delete(g_prcClip);
-        g_prcClip = LTNULL;
+		g_prcClip = LTNULL;
 	}
 
 	if (m_pDisconnectMsg)
@@ -732,20 +723,17 @@ CGameClientShell::~CGameClientShell()
 		m_pDisconnectMsg = LTNULL;
 	}
 
-    g_pGameClientShell = LTNULL;
+	g_pGameClientShell = LTNULL;
 
 	SDL_Quit();
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::InitSound
 //
-//	ROUTINE:	CGameClientShell::InitSound
-//
-//	PURPOSE:	Initialize the sounds
-//
+//	PURPOSE: Initialize the sounds
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::InitSound()
 {
 	CGameSettings* pSettings = m_InterfaceMgr.GetSettings();
@@ -755,27 +743,27 @@ void CGameClientShell::InitSound()
 	InitSoundInfo soundInfo;
 	ReverbProperties reverbProperties;
 	HCONSOLEVAR hVar;
-    uint32 dwProviderID;
+	uint32 dwProviderID;
 	char sz3dSoundProviderName[_MAX_PATH + 1];
 	int nError;
 
 	m_resSoundInit = LT_ERROR;
 
-    uint32 dwAdvancedOptions = m_InterfaceMgr.GetAdvancedOptions();
+	uint32 dwAdvancedOptions = m_InterfaceMgr.GetAdvancedOptions();
 	if (!(dwAdvancedOptions & AO_SOUND)) return;
 
-    soundInfo.Init();
+	soundInfo.Init();
 
 	// Reload the sounds if there are any...
 
-	soundInfo.m_dwFlags	= INITSOUNDINFOFLAG_RELOADSOUNDS;
+	soundInfo.m_dwFlags = INITSOUNDINFOFLAG_RELOADSOUNDS;
 
 	// Get the 3d sound provider id....
 
-    hVar = g_pLTClient->GetConsoleVar("3DSoundProvider");
+	hVar = g_pLTClient->GetConsoleVar("3DSoundProvider");
 	if (hVar)
 	{
-        dwProviderID = ( uint32 )g_pLTClient->GetVarValueFloat( hVar );
+		dwProviderID = ( uint32 )g_pLTClient->GetVarValueFloat( hVar );
 	}
 	else
 	{
@@ -789,10 +777,10 @@ void CGameClientShell::InitSound()
 		 dwProviderID == SOUND3DPROVIDERID_UNKNOWN )
 	{
 		sz3dSoundProviderName[0] = 0;
-        hVar = g_pLTClient->GetConsoleVar("3DSoundProviderName");
+		hVar = g_pLTClient->GetConsoleVar("3DSoundProviderName");
 		if ( hVar )
 		{
-            SAFE_STRCPY( sz3dSoundProviderName, g_pLTClient->GetVarValueString( hVar ));
+			SAFE_STRCPY( sz3dSoundProviderName, g_pLTClient->GetVarValueString( hVar ));
 			dwProviderID = SOUND3DPROVIDERID_UNKNOWN;
 		}
 	}
@@ -801,7 +789,7 @@ void CGameClientShell::InitSound()
 
 	if ( dwProviderID != SOUND3DPROVIDERID_NONE )
 	{
-        g_pLTClient->GetSound3DProviderLists( pSound3DProviderList, LTFALSE );
+		g_pLTClient->GetSound3DProviderLists( pSound3DProviderList, LTFALSE );
 		if ( !pSound3DProviderList )
 		{
 			m_resSoundInit = LT_NO3DSOUNDPROVIDER;
@@ -832,10 +820,10 @@ void CGameClientShell::InitSound()
 			SAFE_STRCPY( soundInfo.m_sz3DProvider, pSound3DProvider->m_szProvider);
 
 			// Get the maximum number of 3d voices to use.
-            hVar = g_pLTClient->GetConsoleVar("Max3DVoices");
+			hVar = g_pLTClient->GetConsoleVar("Max3DVoices");
 			if (hVar)
 			{
-                soundInfo.m_nNum3DVoices = (uint8)g_pLTClient->GetVarValueFloat(hVar);
+				soundInfo.m_nNum3DVoices = (uint8)g_pLTClient->GetVarValueFloat(hVar);
 			}
 			else
 			{
@@ -843,23 +831,23 @@ void CGameClientShell::InitSound()
 			}
 		}
 
-        g_pLTClient->ReleaseSound3DProviderList(pSound3DProviderList);
+		g_pLTClient->ReleaseSound3DProviderList(pSound3DProviderList);
 	}
 
 	// Get the maximum number of sw voices to use.
-    hVar = g_pLTClient->GetConsoleVar("MaxSWVoices");
+	hVar = g_pLTClient->GetConsoleVar("MaxSWVoices");
 	if (hVar)
 	{
-        soundInfo.m_nNumSWVoices = (uint8)g_pLTClient->GetVarValueFloat(hVar);
+		soundInfo.m_nNumSWVoices = (uint8)g_pLTClient->GetVarValueFloat(hVar);
 	}
 	else
 	{
 		soundInfo.m_nNumSWVoices = 32;
 	}
 
-	soundInfo.m_nSampleRate		= 22050;
+	soundInfo.m_nSampleRate	= 22050;
 	soundInfo.m_nBitsPerSample	= 16;
-	soundInfo.m_nVolume			= (unsigned short)pSettings->SoundVolume();
+	soundInfo.m_nVolume		= (unsigned short)pSettings->SoundVolume();
 
 	if ( !pSettings->Sound16Bit( ) )
 	{
@@ -870,18 +858,18 @@ void CGameClientShell::InitSound()
 
 	// Go initialize the sounds...
 
-    m_bUseReverb = LTFALSE;
-    if ((m_resSoundInit = g_pLTClient->InitSound(&soundInfo)) == LT_OK)
+	m_bUseReverb = LTFALSE;
+	if ((m_resSoundInit = g_pLTClient->InitSound(&soundInfo)) == LT_OK)
 	{
 		if (soundInfo.m_dwResults & INITSOUNDINFORESULTS_REVERB)
 		{
-            m_bUseReverb = LTTRUE;
+			m_bUseReverb = LTTRUE;
 		}
 
-        hVar = g_pLTClient->GetConsoleVar("ReverbLevel");
+		hVar = g_pLTClient->GetConsoleVar("ReverbLevel");
 		if (hVar)
 		{
-            m_fReverbLevel = g_pLTClient->GetVarValueFloat(hVar);
+			m_fReverbLevel = g_pLTClient->GetVarValueFloat(hVar);
 		}
 		else
 		{
@@ -890,7 +878,7 @@ void CGameClientShell::InitSound()
 
 		reverbProperties.m_dwParams = REVERBPARAM_VOLUME;
 		reverbProperties.m_fVolume = m_fReverbLevel;
-        g_pLTClient->SetReverbProperties(&reverbProperties);
+		g_pLTClient->SetReverbProperties(&reverbProperties);
 	}
 	else
 	{
@@ -910,13 +898,10 @@ void CGameClientShell::InitSound()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::PreChangeGameState
 //
-//	ROUTINE:	CGameClientShell::PreChangeGameState
-//
-//	PURPOSE:	Handle pre setting of game state
-//
+//	PURPOSE: Handle pre setting of game state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::PreChangeGameState(GameState eNewState)
 {
 	switch (eNewState)
@@ -926,12 +911,12 @@ LTBOOL CGameClientShell::PreChangeGameState(GameState eNewState)
 			if (m_bUsingExternalCamera)
 			{
 				TurnOffAlternativeCamera(CT_FULLSCREEN);
-                m_bCameraPosInited = LTFALSE;
+				m_bCameraPosInited = LTFALSE;
 
 				// Special case, we want to still be using the external camera
 				// when we return to the game...
 
-                m_bUsingExternalCamera = LTTRUE;
+				m_bUsingExternalCamera = LTTRUE;
 			}
 		}
 		break;
@@ -939,30 +924,24 @@ LTBOOL CGameClientShell::PreChangeGameState(GameState eNewState)
 		default : break;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::PostChangeGameState
 //
-//	ROUTINE:	CGameClientShell::PostChangeGameState
-//
-//	PURPOSE:	Handle post setting of game state
-//
+//	PURPOSE: Handle post setting of game state
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::PostChangeGameState(GameState eOldState)
 {
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::CSPrint
 //
-//	ROUTINE:	CGameClientShell::CSPrint
-//
-//	PURPOSE:	Displays a line of text on the client
-//
+//	PURPOSE: Displays a line of text on the client
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::CSPrint(char* msg, ...)
 {
 	// parse the message
@@ -1026,21 +1005,18 @@ void CGameClientShell::ClearBindings()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnEngineInitialized
 //
-//	ROUTINE:	CGameClientShell::OnEngineInitialized
-//
-//	PURPOSE:	Called after engine is fully initialized
+//	PURPOSE: Called after engine is fully initialized
 //				Handle object initialization here
-//
 // ----------------------------------------------------------------------- //
-
 uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 {
 	//CWinUtil::DebugBreak();
 
 	*pAppGuid = NOLFGUID;
 
-    char strTimeDiff[64];
+	char strTimeDiff[64];
 	float fStartTime = CWinUtil::GetTime();
 
 	if (!g_hMainWnd)
@@ -1059,55 +1035,55 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 
 	// Initialize global console variables...
 
-    g_vtFOVXNormal.Init(g_pLTClient, "FovX", NULL, 90.0f);
-    g_vtFOVYNormal.Init(g_pLTClient, "FovY", NULL, 78.0f);
+	g_vtFOVXNormal.Init(g_pLTClient, "FovX", NULL, 90.0f);
+	g_vtFOVYNormal.Init(g_pLTClient, "FovY", NULL, 78.0f);
 
-    g_vtInterfceFOVX.Init(g_pLTClient, "FovXInterface", NULL, 90.0f);
-    g_vtInterfceFOVY.Init(g_pLTClient, "FovYInterface", NULL, 75.0f);
+	g_vtInterfceFOVX.Init(g_pLTClient, "FovXInterface", NULL, 90.0f);
+	g_vtInterfceFOVY.Init(g_pLTClient, "FovYInterface", NULL, 75.0f);
 
-    g_CV_CSendRate.Init(g_pLTClient, "CSendRate", NULL, DEFAULT_CSENDRATE);
-    g_vtPlayerRotate.Init(g_pLTClient, "PlayerRotate", NULL, 1.0f);
+	g_CV_CSendRate.Init(g_pLTClient, "CSendRate", NULL, DEFAULT_CSENDRATE);
+	g_vtPlayerRotate.Init(g_pLTClient, "PlayerRotate", NULL, 1.0f);
 
-    g_vtShowTimingTrack.Init(g_pLTClient, "ShowTiming", NULL, 0.0f);
+	g_vtShowTimingTrack.Init(g_pLTClient, "ShowTiming", NULL, 0.0f);
 
-    g_vtFastTurnRate.Init(g_pLTClient, "FastTurnRate", NULL, 2.3f);
-    g_vtNormalTurnRate.Init(g_pLTClient, "NormalTurnRate", NULL, 1.5f);
-    g_vtLookUpRate.Init(g_pLTClient, "LookUpRate", NULL, 2.5f);
+	g_vtFastTurnRate.Init(g_pLTClient, "FastTurnRate", NULL, 2.3f);
+	g_vtNormalTurnRate.Init(g_pLTClient, "NormalTurnRate", NULL, 1.5f);
+	g_vtLookUpRate.Init(g_pLTClient, "LookUpRate", NULL, 2.5f);
 
-    g_vtCameraSwayXFreq.Init(g_pLTClient, "CameraSwayXFreq", NULL, 13.0f);
-    g_vtCameraSwayYFreq.Init(g_pLTClient, "CameraSwayYFreq", NULL, 5.0f);
-    g_vtCameraSwayXSpeed.Init(g_pLTClient, "CameraSwayXSpeed", NULL, 12.0f);
-    g_vtCameraSwayYSpeed.Init(g_pLTClient, "CameraSwayYSpeed", NULL, 1.5f);
-    g_vtCameraSwayDuckMult.Init(g_pLTClient, "CameraSwayCrouchMultiplier", NULL, 0.5f);
+	g_vtCameraSwayXFreq.Init(g_pLTClient, "CameraSwayXFreq", NULL, 13.0f);
+	g_vtCameraSwayYFreq.Init(g_pLTClient, "CameraSwayYFreq", NULL, 5.0f);
+	g_vtCameraSwayXSpeed.Init(g_pLTClient, "CameraSwayXSpeed", NULL, 12.0f);
+	g_vtCameraSwayYSpeed.Init(g_pLTClient, "CameraSwayYSpeed", NULL, 1.5f);
+	g_vtCameraSwayDuckMult.Init(g_pLTClient, "CameraSwayCrouchMultiplier", NULL, 0.5f);
 
-    g_vtChaseCamOffset.Init(g_pLTClient, "ChaseCamOffset", NULL, 50.0f);
-    g_vtChaseCamPitchAdjust.Init(g_pLTClient, "ChaseCamPitchAdjust", NULL, 0.0f);
-    g_vtChaseCamDistUp.Init(g_pLTClient, "ChaseCamDistUp", NULL, 10.0f);
-    g_vtChaseCamDistBack.Init(g_pLTClient, "ChaseCamDistBack", NULL, 100.0f);
+	g_vtChaseCamOffset.Init(g_pLTClient, "ChaseCamOffset", NULL, 50.0f);
+	g_vtChaseCamPitchAdjust.Init(g_pLTClient, "ChaseCamPitchAdjust", NULL, 0.0f);
+	g_vtChaseCamDistUp.Init(g_pLTClient, "ChaseCamDistUp", NULL, 10.0f);
+	g_vtChaseCamDistBack.Init(g_pLTClient, "ChaseCamDistBack", NULL, 100.0f);
 
-    g_vtActivateOverride.Init(g_pLTClient, "ActivateOverride", " ", 0.0f);
+	g_vtActivateOverride.Init(g_pLTClient, "ActivateOverride", " ", 0.0f);
 
-    g_vtCamDamage.Init(g_pLTClient, "CamDamage", NULL, 1.0f);
-    g_vtCamDamagePitch.Init(g_pLTClient, "CamDamagePitch", NULL, 1.0f);
-    g_vtCamDamageRoll.Init(g_pLTClient, "CamDamageRoll", NULL, 1.0f);
-    g_vtCamDamageTime1.Init(g_pLTClient, "CamDamageTime1", NULL, 0.1f);
-    g_vtCamDamageTime2.Init(g_pLTClient, "CamDamageTime2", NULL, 0.25f);
-    g_vtCamDamageVal.Init(g_pLTClient, "CamDamageVal", NULL, 5.0f);
-    g_vtCamDamagePitchMin.Init(g_pLTClient, "CamDamagePitchMin", NULL, 0.7f);
-    g_vtCamDamageRollMin.Init(g_pLTClient, "CamDamageRollMin", NULL, 0.7f);
+	g_vtCamDamage.Init(g_pLTClient, "CamDamage", NULL, 1.0f);
+	g_vtCamDamagePitch.Init(g_pLTClient, "CamDamagePitch", NULL, 1.0f);
+	g_vtCamDamageRoll.Init(g_pLTClient, "CamDamageRoll", NULL, 1.0f);
+	g_vtCamDamageTime1.Init(g_pLTClient, "CamDamageTime1", NULL, 0.1f);
+	g_vtCamDamageTime2.Init(g_pLTClient, "CamDamageTime2", NULL, 0.25f);
+	g_vtCamDamageVal.Init(g_pLTClient, "CamDamageVal", NULL, 5.0f);
+	g_vtCamDamagePitchMin.Init(g_pLTClient, "CamDamagePitchMin", NULL, 0.7f);
+	g_vtCamDamageRollMin.Init(g_pLTClient, "CamDamageRollMin", NULL, 0.7f);
 
-    g_varStartLevelScreenFade.Init(g_pLTClient, "ScreenFadeAtLevelStart", NULL, 1.0f);
-    g_varStartLevelScreenFadeTime.Init(g_pLTClient, "ScreenFadeInAtLevelStartTime", NULL, 3.0f);
+	g_varStartLevelScreenFade.Init(g_pLTClient, "ScreenFadeAtLevelStart", NULL, 1.0f);
+	g_varStartLevelScreenFadeTime.Init(g_pLTClient, "ScreenFadeInAtLevelStartTime", NULL, 3.0f);
 	g_vtScreenFadeInTime.Init(g_pLTClient, "ScreenFadeInTime", LTNULL, 3.0f);
 	g_vtScreenFadeOutTime.Init(g_pLTClient, "ScreenFadeOutTime", LTNULL, 5.0f);
 
-    g_vtUseCamRecoil.Init(g_pLTClient, "CamRecoil", NULL, 0.0f);
-    g_vtCamRecoilRecover.Init(g_pLTClient, "CamRecoilRecover", NULL, 0.3f);
-    g_vtBaseCamRecoilPitch.Init(g_pLTClient, "CamRecoilBasePitch", NULL, 5.0f);
-    g_vtMaxCamRecoilPitch.Init(g_pLTClient, "CamRecoilMaxPitch", NULL, 75.0f);
-    g_vtBaseCamRecoilYaw.Init(g_pLTClient, "CamRecoilBaseYaw", NULL, 3.0f);
-    g_vtMaxCamRecoilYaw.Init(g_pLTClient, "CamRecoilMaxYaw", NULL, 35.0f);
-    g_vtCamRotInterpTime.Init(g_pLTClient, "CamRotInterpTime", NULL, 0.15f);
+	g_vtUseCamRecoil.Init(g_pLTClient, "CamRecoil", NULL, 0.0f);
+	g_vtCamRecoilRecover.Init(g_pLTClient, "CamRecoilRecover", NULL, 0.3f);
+	g_vtBaseCamRecoilPitch.Init(g_pLTClient, "CamRecoilBasePitch", NULL, 5.0f);
+	g_vtMaxCamRecoilPitch.Init(g_pLTClient, "CamRecoilMaxPitch", NULL, 75.0f);
+	g_vtBaseCamRecoilYaw.Init(g_pLTClient, "CamRecoilBaseYaw", NULL, 3.0f);
+	g_vtMaxCamRecoilYaw.Init(g_pLTClient, "CamRecoilMaxYaw", NULL, 35.0f);
+	g_vtCamRotInterpTime.Init(g_pLTClient, "CamRotInterpTime", NULL, 0.15f);
 
 	g_vtRespawnWaitTime.Init(g_pLTClient, "RespawnWaitTime", NULL, 1.0f);
 	g_vtMultiplayerRespawnWaitTime.Init(g_pLTClient, "RespawnMultiWaitTime", NULL, 0.5f);
@@ -1126,24 +1102,24 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 	// Default these to use values specified in the weapon...(just here for
 	// tweaking values...)
 
-    g_vtFireJitterDecayTime.Init(g_pLTClient, "FireJitterDecayTime", NULL, -1.0f);
-    g_vtFireJitterMaxPitchDelta.Init(g_pLTClient, "FireJitterMaxPitchDelta", NULL, -1.0f);
+	g_vtFireJitterDecayTime.Init(g_pLTClient, "FireJitterDecayTime", NULL, -1.0f);
+	g_vtFireJitterMaxPitchDelta.Init(g_pLTClient, "FireJitterMaxPitchDelta", NULL, -1.0f);
 
-    HSTRING hStr = g_pLTClient->FormatString(IDS_PLAYER);
-    g_vtPlayerName.Init(g_pLTClient, "NetPlayerName", g_pLTClient->GetStringData(hStr), 0.0f);
+	HSTRING hStr = g_pLTClient->FormatString(IDS_PLAYER);
+	g_vtPlayerName.Init(g_pLTClient, "NetPlayerName", g_pLTClient->GetStringData(hStr), 0.0f);
 	g_pLTClient->FreeString (hStr);
 
 
 	g_vtFOVYMaxUW.Init(g_pLTClient, "FOVYUWMax", NULL, 78.0f);
-    g_vtFOVYMinUW.Init(g_pLTClient, "FOVYUWMin", NULL, 77.0f);
-    g_vtUWFOVRate.Init(g_pLTClient, "FOVUWRate", NULL, 0.3f);
+	g_vtFOVYMinUW.Init(g_pLTClient, "FOVYUWMin", NULL, 77.0f);
+	g_vtUWFOVRate.Init(g_pLTClient, "FOVUWRate", NULL, 0.3f);
 
-    HCONSOLEVAR hIsSet = g_pLTClient->GetConsoleVar("UpdateRateInitted");
-    if (!hIsSet || g_pLTClient->GetVarValueFloat(hIsSet) != 1.0f)
+	HCONSOLEVAR hIsSet = g_pLTClient->GetConsoleVar("UpdateRateInitted");
+	if (!hIsSet || g_pLTClient->GetVarValueFloat(hIsSet) != 1.0f)
 	{
 		// Initialize the update rate.
-        g_pLTClient->RunConsoleString("+UpdateRateInitted 1");
-        g_pLTClient->RunConsoleString("+UpdateRate 6");
+		g_pLTClient->RunConsoleString("+UpdateRateInitted 1");
+		g_pLTClient->RunConsoleString("+UpdateRate 6");
 	}
 
 	// Init new console vars
@@ -1170,12 +1146,12 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 	g_pLTClient->RunConsoleString("optimizesurfaces 1");
 
 
-    m_MoveMgr.Init();
+	m_MoveMgr.Init();
 	m_editMgr.Init();
 	m_cheatMgr.Init();
 	m_LightScaleMgr.Init();
 
-    m_AttachButeMgr.Init(g_pLTClient);
+	m_AttachButeMgr.Init(g_pLTClient);
 
 	// Init the jukebox attribute manager
 	m_JukeBoxButeMgr.Init(g_pLTClient);
@@ -1183,23 +1159,23 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 	m_CameraOffsetMgr.Init();
 	m_HeadBobMgr.Init();
 
-    g_pLTClient->RegisterConsoleProgram("Cheat", CheatFn);
-    g_pLTClient->RegisterConsoleProgram("Sunglass", SunglassFn);
-    g_pLTClient->RegisterConsoleProgram("LeakFile", LeakFileFn);
+	g_pLTClient->RegisterConsoleProgram("Cheat", CheatFn);
+	g_pLTClient->RegisterConsoleProgram("Sunglass", SunglassFn);
+	g_pLTClient->RegisterConsoleProgram("LeakFile", LeakFileFn);
 //  g_pLTClient->RegisterConsoleProgram("Connect", ConnectFn);
-    g_pLTClient->RegisterConsoleProgram("FragSelf", FragSelfFn);
-    g_pLTClient->RegisterConsoleProgram("ReloadWeapons", ReloadWeaponAttributesFn);
-    g_pLTClient->RegisterConsoleProgram("ReloadSurfaces", ReloadSurfacesAttributesFn);
-    g_pLTClient->RegisterConsoleProgram("ReloadFX", ReloadFXAttributesFn);
-    g_pLTClient->RegisterConsoleProgram("Record", RecordFn);
-    g_pLTClient->RegisterConsoleProgram("PlayDemo", PlayDemoFn);
-    g_pLTClient->RegisterConsoleProgram("InitSound", InitSoundFn);
-    g_pLTClient->RegisterConsoleProgram("ExitLevel", ExitLevelFn);
-    g_pLTClient->RegisterConsoleProgram("ChaseToggle", ChaseToggleFn);
-    g_pLTClient->RegisterConsoleProgram("ChangeTeam", ChangeTeamFn);
-    g_pLTClient->RegisterConsoleProgram("Music", MusicFn);
+	g_pLTClient->RegisterConsoleProgram("FragSelf", FragSelfFn);
+	g_pLTClient->RegisterConsoleProgram("ReloadWeapons", ReloadWeaponAttributesFn);
+	g_pLTClient->RegisterConsoleProgram("ReloadSurfaces", ReloadSurfacesAttributesFn);
+	g_pLTClient->RegisterConsoleProgram("ReloadFX", ReloadFXAttributesFn);
+	g_pLTClient->RegisterConsoleProgram("Record", RecordFn);
+	g_pLTClient->RegisterConsoleProgram("PlayDemo", PlayDemoFn);
+	g_pLTClient->RegisterConsoleProgram("InitSound", InitSoundFn);
+	g_pLTClient->RegisterConsoleProgram("ExitLevel", ExitLevelFn);
+	g_pLTClient->RegisterConsoleProgram("ChaseToggle", ChaseToggleFn);
+	g_pLTClient->RegisterConsoleProgram("ChangeTeam", ChangeTeamFn);
+	g_pLTClient->RegisterConsoleProgram("Music", MusicFn);
 
-    g_pLTClient->SetModelHook((ModelHookFn)DefaultModelHook, this);
+	g_pLTClient->SetModelHook((ModelHookFn)DefaultModelHook, this);
 
 	// Make sure the save directory exists...
 	if (!CWinUtil::DirExist("Save"))
@@ -1210,24 +1186,24 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 	// Add to NumRuns count...
 
 	float nNumRuns = 0.0f;
-    HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("NumRuns");
+	HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("NumRuns");
 	if (hVar)
 	{
-        nNumRuns = g_pLTClient->GetVarValueFloat(hVar);
+		nNumRuns = g_pLTClient->GetVarValueFloat(hVar);
 	}
 	nNumRuns++;
 
 	char strConsole[64];
 	sprintf (strConsole, "+NumRuns %f", nNumRuns);
-    g_pLTClient->RunConsoleString(strConsole);
+	g_pLTClient->RunConsoleString(strConsole);
 
-    LTBOOL bNetworkGameStarted = LTFALSE;
+	LTBOOL bNetworkGameStarted = LTFALSE;
 
 	// Initialize the renderer
-    LTRESULT hResult = g_pLTClient->SetRenderMode(pMode);
+	LTRESULT hResult = g_pLTClient->SetRenderMode(pMode);
 	if (hResult != LT_OK)
 	{
-        g_pLTClient->DebugOut("%s Error: Couldn't set render mode!\n", GAME_NAME);
+		g_pLTClient->DebugOut("%s Error: Couldn't set render mode!\n", GAME_NAME);
 
 		RMode rMode;
 
@@ -1243,24 +1219,24 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 		sprintf(rMode.m_InternalName, "%s", pMode->m_InternalName);
 		sprintf(rMode.m_Description, "%s", pMode->m_Description);
 
-        g_pLTClient->DebugOut("Setting render mode to 800x600x32...\n");
+		g_pLTClient->DebugOut("Setting render mode to 800x600x32...\n");
 
-        if (g_pLTClient->SetRenderMode(&rMode) != LT_OK)
+		if (g_pLTClient->SetRenderMode(&rMode) != LT_OK)
 		{
 			// Okay, that didn't work, looks like we're stuck with software...
 
-            rMode.m_bHardware = LTFALSE;
+			rMode.m_bHardware = LTFALSE;
 
 			sprintf(rMode.m_RenderDLL, "d3d.ren");
 			sprintf(rMode.m_InternalName, "");
 			sprintf(rMode.m_Description, "");
 
-            g_pLTClient->DebugOut("Setting render mode to D3D Emulation mode...\n");
+			g_pLTClient->DebugOut("Setting render mode to D3D Emulation mode...\n");
 
-            if (g_pLTClient->SetRenderMode(&rMode) != LT_OK)
+			if (g_pLTClient->SetRenderMode(&rMode) != LT_OK)
 			{
-                g_pLTClient->DebugOut("%s Error: Couldn't set to D3D Emulation mode.\nShutting down %s...\n", GAME_NAME, GAME_NAME);
-                g_pLTClient->ShutdownWithMessage("%s Error: Couldn't set D3D Emulation mode.\nShutting down %s...\n", GAME_NAME, GAME_NAME);
+				g_pLTClient->DebugOut("%s Error: Couldn't set to D3D Emulation mode.\nShutting down %s...\n", GAME_NAME, GAME_NAME);
+				g_pLTClient->ShutdownWithMessage("%s Error: Couldn't set D3D Emulation mode.\nShutting down %s...\n", GAME_NAME, GAME_NAME);
 				return LT_ERROR;
 			}
 		}
@@ -1273,11 +1249,11 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 
 	// Setup the music stuff...(before we setup the interface!)
 
-    uint32 dwAdvancedOptions = m_InterfaceMgr.GetAdvancedOptions();
+	uint32 dwAdvancedOptions = m_InterfaceMgr.GetAdvancedOptions();
 
 	if (!m_Music.IsInitialized() && (dwAdvancedOptions & AO_MUSIC))
 	{
-        m_Music.Init(g_pLTClient);
+		m_Music.Init(g_pLTClient);
 	}
 
 
@@ -1290,19 +1266,19 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
  		return LT_ERROR;
 	}
 
-    if (!m_PlayerSummary.Init(g_pLTClient))
+	if (!m_PlayerSummary.Init(g_pLTClient))
 	{
-        char errorBuf[256];
+		char errorBuf[256];
 		sprintf(errorBuf, "ERROR in CGameClientShell::OnEngineInitialized()\n\nCouldn't initialize PlayerSummaryMgr!");
-        g_pLTClient->ShutdownWithMessage(errorBuf);
+		g_pLTClient->ShutdownWithMessage(errorBuf);
 		return LT_ERROR;
 	}
 
-    if (!m_IntelItemMgr.Init())
+	if (!m_IntelItemMgr.Init())
 	{
-        char errorBuf[256];
+		char errorBuf[256];
 		sprintf(errorBuf, "ERROR in CGameClientShell::OnEngineInitialized()\n\nCouldn't initialize IntelItemMgr!");
-        g_pLTClient->ShutdownWithMessage(errorBuf);
+		g_pLTClient->ShutdownWithMessage(errorBuf);
 		return LT_ERROR;
 	}
 
@@ -1319,29 +1295,29 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 
 	// Create the camera...
 
-    uint32 dwWidth = 640;
-    uint32 dwHeight = 480;
+	uint32 dwWidth = 640;
+	uint32 dwHeight = 480;
 
-    g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &dwWidth, &dwHeight);
+	g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &dwWidth, &dwHeight);
 
 	ObjectCreateStruct theStruct;
 	INIT_OBJECTCREATESTRUCT(theStruct);
 
 	theStruct.m_ObjectType = OT_CAMERA;
 
-    m_hCamera = g_pLTClient->CreateObject(&theStruct);
+	m_hCamera = g_pLTClient->CreateObject(&theStruct);
 	_ASSERT(m_hCamera);
 
-    g_pLTClient->SetCameraRect(m_hCamera, LTFALSE, 0, 0, dwWidth, dwHeight);
+	g_pLTClient->SetCameraRect(m_hCamera, LTFALSE, 0, 0, dwWidth, dwHeight);
 	SetCameraFOV(DEG2RAD(g_vtFOVXNormal.GetFloat()), DEG2RAD(g_vtFOVYNormal.GetFloat()));
 
 	// Create the Interface camera...
 
-    m_hInterfaceCamera = g_pLTClient->CreateObject(&theStruct);
+	m_hInterfaceCamera = g_pLTClient->CreateObject(&theStruct);
 	_ASSERT(m_hInterfaceCamera);
 
-    g_pLTClient->SetCameraRect(m_hInterfaceCamera, LTFALSE, 0, 0, dwWidth, dwHeight);
-    g_pLTClient->SetCameraFOV(m_hInterfaceCamera, DEG2RAD(g_vtInterfceFOVX.GetFloat()), DEG2RAD(g_vtInterfceFOVY.GetFloat()));
+	g_pLTClient->SetCameraRect(m_hInterfaceCamera, LTFALSE, 0, 0, dwWidth, dwHeight);
+	g_pLTClient->SetCameraFOV(m_hInterfaceCamera, DEG2RAD(g_vtInterfceFOVX.GetFloat()), DEG2RAD(g_vtInterfceFOVY.GetFloat()));
 
 	// Initialize the global physics states...
 
@@ -1352,7 +1328,7 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 
 	// Player camera (non-1st person) stuff...
 
-    if (m_PlayerCamera.Init(g_pLTClient))
+	if (m_PlayerCamera.Init(g_pLTClient))
 	{
 		InitPlayerCamera();
 		m_PlayerCamera.GoFirstPerson();
@@ -1364,17 +1340,17 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 
 
 	// Init the special fx mgr...
-    if (!m_sfxMgr.Init(g_pLTClient))
+	if (!m_sfxMgr.Init(g_pLTClient))
 	{
-        g_pLTClient->ShutdownWithMessage("Could not initialize SFXMgr!");
+		g_pLTClient->ShutdownWithMessage("Could not initialize SFXMgr!");
 		return LT_ERROR;
 	}
 
 	// Init the damage fx mgr...
 
-    if (!m_DamageFXMgr.Init(g_pLTClient))
+	if (!m_DamageFXMgr.Init(g_pLTClient))
 	{
-        g_pLTClient->ShutdownWithMessage("Could not initialize DamageFXMgr!");
+		g_pLTClient->ShutdownWithMessage("Could not initialize DamageFXMgr!");
 		return LT_ERROR;
 	}
 
@@ -1386,7 +1362,7 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 
 	char* sConnect = NULL;
 
-    if (hVar = g_pLTClient->GetConsoleVar("connect"))
+	if (hVar = g_pLTClient->GetConsoleVar("connect"))
 	{
 		sConnect = g_pLTClient->GetVarValueString(hVar);
 		if (sConnect)
@@ -1395,7 +1371,7 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 		}
 	}
 
-    if (hVar = g_pLTClient->GetConsoleVar("multiplayer"))
+	if (hVar = g_pLTClient->GetConsoleVar("multiplayer"))
 	{
 		LTFLOAT fMulti = g_pLTClient->GetVarValueFloat(hVar);
 		if (fMulti != 0.0f)
@@ -1416,20 +1392,20 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 	{
 		HCONSOLEVAR hVar;
 
-        if (hVar = g_pLTClient->GetConsoleVar("NumConsoleLines"))
+		if (hVar = g_pLTClient->GetConsoleVar("NumConsoleLines"))
 		{
 			// UNCOMMENT this for final builds...Show console output
 			// for debugging...
-            // g_pLTClient->RunConsoleString("+NumConsoleLines 0");
+			// g_pLTClient->RunConsoleString("+NumConsoleLines 0");
 		}
 
-        if (hVar = g_pLTClient->GetConsoleVar("runworld"))
+		if (hVar = g_pLTClient->GetConsoleVar("runworld"))
 		{
-            if (!LoadWorld(g_pLTClient->GetVarValueString(hVar)))
+			if (!LoadWorld(g_pLTClient->GetVarValueString(hVar)))
 			{
-                HSTRING hString = g_pLTClient->FormatString(IDS_NOLOADLEVEL);
-                g_pLTClient->ShutdownWithMessage(g_pLTClient->GetStringData(hString));
-                g_pLTClient->FreeString(hString);
+				HSTRING hString = g_pLTClient->FormatString(IDS_NOLOADLEVEL);
+				g_pLTClient->ShutdownWithMessage(g_pLTClient->GetStringData(hString));
+				g_pLTClient->FreeString(hString);
 				return LT_ERROR;
 			}
 		}
@@ -1485,9 +1461,9 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 
 	// Check for playdemo....
 
-    if (hVar = g_pLTClient->GetConsoleVar("playdemo"))
+	if (hVar = g_pLTClient->GetConsoleVar("playdemo"))
 	{
-        DoLoadWorld("", NULL, NULL, LOAD_NEW_GAME, NULL, g_pLTClient->GetVarValueString(hVar));
+		DoLoadWorld("", NULL, NULL, LOAD_NEW_GAME, NULL, g_pLTClient->GetVarValueString(hVar));
 	}
 
 	// Quickfix in case this gets stuck on.
@@ -1539,28 +1515,25 @@ uint32 CGameClientShell::OnEngineInitialized(RMode *pMode, LTGUID *pAppGuid)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnEngineTerm()
 //
-//	ROUTINE:	CGameClientShell::OnEngineTerm()
-//
-//	PURPOSE:	Called before the engine terminates itself
+//	PURPOSE: Called before the engine terminates itself
 //				Handle object destruction here
-//
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::OnEngineTerm()
 {
-    UnhookWindow();
+	UnhookWindow();
 
 	if (m_hCamera)
 	{
-        g_pLTClient->DeleteObject(m_hCamera);
-        m_hCamera = LTNULL;
+		g_pLTClient->DeleteObject(m_hCamera);
+		m_hCamera = LTNULL;
 	}
 
 	if (m_hInterfaceCamera)
 	{
-        g_pLTClient->DeleteObject(m_hInterfaceCamera);
-        m_hInterfaceCamera = LTNULL;
+		g_pLTClient->DeleteObject(m_hInterfaceCamera);
+		m_hInterfaceCamera = LTNULL;
 	}
 
 	m_InterfaceMgr.Term();
@@ -1570,14 +1543,11 @@ void CGameClientShell::OnEngineTerm()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnEvent()
 //
-//	ROUTINE:	CGameClientShell::OnEvent()
-//
-//	PURPOSE:	Called for asynchronous errors that cause the server
+//	PURPOSE: Called for asynchronous errors that cause the server
 //				to shut down
-//
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::OnEvent(uint32 dwEventID, uint32 dwParam)
 {
 	switch(dwEventID)
@@ -1638,7 +1608,7 @@ void CGameClientShell::OnEvent(uint32 dwEventID, uint32 dwParam)
 
 		} break;
 
-        case LTEVENT_LOSTFOCUS:
+		case LTEVENT_LOSTFOCUS:
 		{
 			m_bMainWindowFocus = FALSE;
 		}
@@ -1650,7 +1620,7 @@ void CGameClientShell::OnEvent(uint32 dwEventID, uint32 dwParam)
 		}
 		break;
 
-        case LTEVENT_RENDERTERM:
+		case LTEVENT_RENDERTERM:
 		{
 			m_bMainWindowFocus = FALSE;
 		}
@@ -1667,11 +1637,11 @@ void CGameClientShell::OnEvent(uint32 dwEventID, uint32 dwParam)
 
 			// Clip the cursor if we're NOT in a window...
 
-            HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("Windowed");
+			HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("Windowed");
 			BOOL bClip = TRUE;
 			if (hVar)
 			{
-                float fVal = g_pLTClient->GetVarValueFloat(hVar);
+				float fVal = g_pLTClient->GetVarValueFloat(hVar);
 				if (fVal == 1.0f)
 				{
 					bClip = FALSE;
@@ -1721,13 +1691,10 @@ LTRESULT CGameClientShell::OnTouchNotify(HOBJECT hMain, CollisionInfo *pInfo, fl
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::PreLoadWorld()
 //
-//	ROUTINE:	CGameClientShell::PreLoadWorld()
-//
-//	PURPOSE:	Called before world loads
-//
+//	PURPOSE: Called before world loads
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::PreLoadWorld(char *pWorldName)
 {
 	if (IsMainWindowMinimized())
@@ -1740,13 +1707,10 @@ void CGameClientShell::PreLoadWorld(char *pWorldName)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnEnterWorld()
 //
-//	ROUTINE:	CGameClientShell::OnEnterWorld()
-//
-//	PURPOSE:	Handle entering world
-//
+//	PURPOSE: Handle entering world
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::OnEnterWorld()
 {
 	g_pLTClient->ResumeSounds();
@@ -1758,11 +1722,11 @@ void CGameClientShell::OnEnterWorld()
 
 	m_vShakeAmount.Init();
 
-    m_bPlayerPosSet = LTFALSE;
-    m_bInWorld      = LTTRUE;
+	m_bPlayerPosSet = LTFALSE;
+	m_bInWorld	  = LTTRUE;
 	m_nZoomView		= 0;
-    m_bZooming      = LTFALSE;
-    m_bZoomingIn    = LTFALSE;
+	m_bZooming	  = LTFALSE;
+	m_bZoomingIn	= LTFALSE;
 
 	m_eCurContainerCode		= CC_NO_CONTAINER;
 
@@ -1771,15 +1735,15 @@ void CGameClientShell::OnEnterWorld()
 	m_LightScaleMgr.Init();
 	m_InterfaceMgr.AddToClearScreenCount();
 
-    g_pLTClient->ClearInput();
+	g_pLTClient->ClearInput();
 
 	m_HeadBobMgr.OnEnterWorld();
 	m_InterfaceMgr.OnEnterWorld(m_bRestoringGame);
 
-    SetExternalCamera(LTFALSE);
+	SetExternalCamera(LTFALSE);
 
-    m_bRestoringGame        = LTFALSE;
-    m_bCameraPosInited      = LTFALSE;
+	m_bRestoringGame		= LTFALSE;
+	m_bCameraPosInited	  = LTFALSE;
 	m_nPlayerInfoChangeFlags |= CLIENTUPDATE_PLAYERROT | CLIENTUPDATE_ALLOWINPUT;
 
 	m_vLastReverbPos.Init();
@@ -1792,23 +1756,20 @@ void CGameClientShell::OnEnterWorld()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnExitWorld()
 //
-//	ROUTINE:	CGameClientShell::OnExitWorld()
-//
-//	PURPOSE:	Handle exiting the world
-//
+//	PURPOSE: Handle exiting the world
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::OnExitWorld()
 {
-    g_pLTClient->PauseSounds();
+	g_pLTClient->PauseSounds();
 
-    m_bInWorld      = LTFALSE;
-    m_bStartedLevel = LTFALSE;
+	m_bInWorld	  = LTFALSE;
+	m_bStartedLevel = LTFALSE;
 
 	m_LightScaleMgr.Term();
 	ClearScreenTint();
-    HandleZoomChange(m_weaponModel.GetWeaponId(), LTTRUE);
+	HandleZoomChange(m_weaponModel.GetWeaponId(), LTTRUE);
 	EndZoom();
 	m_InterfaceMgr.EndUnderwater();
 
@@ -1816,21 +1777,21 @@ void CGameClientShell::OnExitWorld()
 
 	if (m_h3rdPersonCrosshair)
 	{
-        g_pLTClient->DeleteObject(m_h3rdPersonCrosshair);
-        m_h3rdPersonCrosshair = LTNULL;
+		g_pLTClient->DeleteObject(m_h3rdPersonCrosshair);
+		m_h3rdPersonCrosshair = LTNULL;
 	}
 
 	m_DamageFXMgr.Clear();					// Remove all the sfx
 	m_sfxMgr.RemoveAll();					// Remove all the sfx
-    m_PlayerCamera.AttachToObject(LTNULL);   // Detatch camera
+	m_PlayerCamera.AttachToObject(LTNULL);	// Detatch camera
 
 	m_weaponModel.Reset();
 	m_FlashLight.TurnOff();
 
 	if (m_hContainerSound)
 	{
-        g_pLTClient->KillSound(m_hContainerSound);
-        m_hContainerSound = LTNULL;
+		g_pLTClient->KillSound(m_hContainerSound);
+		m_hContainerSound = LTNULL;
 	}
 
 	m_InterfaceMgr.OnExitWorld();
@@ -1839,13 +1800,10 @@ void CGameClientShell::OnExitWorld()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::PreUpdate()
 //
-//	ROUTINE:	CGameClientShell::PreUpdate()
-//
-//	PURPOSE:	Handle client pre-updates
-//
+//	PURPOSE: Handle client pre-updates
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::PreUpdate()
 {
 	// Conditions in which we don't want to clear the screen
@@ -1859,12 +1817,12 @@ void CGameClientShell::PreUpdate()
 	// immediately, and add to the clearscreen count
 	if (m_bUsingExternalCamera && !m_bWasUsingExternalCamera)
 	{
-        m_bWasUsingExternalCamera = LTTRUE;
+		m_bWasUsingExternalCamera = LTTRUE;
 		m_InterfaceMgr.AddToClearScreenCount();
 	}
 	else if (m_bWasUsingExternalCamera && !m_bUsingExternalCamera)
 	{
-        m_bWasUsingExternalCamera = LTFALSE;
+		m_bWasUsingExternalCamera = LTFALSE;
 		m_InterfaceMgr.AddToClearScreenCount();
 	}
 
@@ -1877,13 +1835,10 @@ void CGameClientShell::PreUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::Update()
 //
-//	ROUTINE:	CGameClientShell::Update()
-//
-//	PURPOSE:	Handle client updates
-//
+//	PURPOSE: Handle client updates
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::Update()
 {
 	// This will happen when something wanted to disconnect, but wasn't
@@ -1896,7 +1851,7 @@ void CGameClientShell::Update()
 	}
 
 	// Set up the time for this frame...
-    m_fFrameTime = g_pLTClient->GetFrameTime();
+	m_fFrameTime = g_pLTClient->GetFrameTime();
 	if (m_fFrameTime > MAX_FRAME_DELTA)
 	{
 		m_fFrameTime = MAX_FRAME_DELTA;
@@ -1981,13 +1936,10 @@ void CGameClientShell::Update()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdatePlaying()
 //
-//	ROUTINE:	CGameClientShell::UpdatePlaying()
-//
-//	PURPOSE:	Handle updating playing (normal) game state
-//
+//	PURPOSE: Handle updating playing (normal) game state
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdatePlaying()
 {
 	// Handle first update...
@@ -2018,7 +1970,7 @@ void CGameClientShell::UpdatePlaying()
 
 	if (!m_bStartedLevel)
 	{
-        m_bStartedLevel = LTTRUE;
+		m_bStartedLevel = LTTRUE;
 		StartLevel();
 	}
 
@@ -2035,7 +1987,7 @@ void CGameClientShell::UpdatePlaying()
 		m_fCurSkyXOffset += m_fFrameTime * m_fPanSkyOffsetX;
 		m_fCurSkyZOffset += m_fFrameTime * m_fPanSkyOffsetZ;
 
-        g_pLTClient->SetGlobalPanInfo(GLOBALPAN_SKYSHADOW, m_fCurSkyXOffset, m_fCurSkyZOffset, m_fPanSkyScaleX, m_fPanSkyScaleZ);
+		g_pLTClient->SetGlobalPanInfo(GLOBALPAN_SKYSHADOW, m_fCurSkyXOffset, m_fCurSkyZOffset, m_fPanSkyScaleX, m_fPanSkyScaleZ);
 	}
 
 
@@ -2087,19 +2039,16 @@ void CGameClientShell::UpdatePlaying()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::PostUpdate()
 //
-//	ROUTINE:	CGameClientShell::PostUpdate()
-//
-//	PURPOSE:	Handle post updates - after the scene is rendered
-//
+//	PURPOSE: Handle post updates - after the scene is rendered
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::PostUpdate()
 {
 	if (m_bQuickSave && GetGameType() == SINGLE)
 	{
 		SaveGame(QUICKSAVE_FILENAME);
-        m_bQuickSave = LTFALSE;
+		m_bQuickSave = LTFALSE;
 	}
 
 	// Conditions where we don't want to flip...
@@ -2136,13 +2085,10 @@ void CGameClientShell::PostUpdate()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::GetDynamicSoundFilter()
 //
-//	ROUTINE:	CGameClientShell::GetDynamicSoundFilter()
-//
-//	PURPOSE:	Get the dynamic sound filter
-//
+//	PURPOSE: Get the dynamic sound filter
 // ----------------------------------------------------------------------- //
-
 SOUNDFILTER* CGameClientShell::GetDynamicSoundFilter()
 {
 	// See if we have a current container filter override...
@@ -2166,25 +2112,22 @@ SOUNDFILTER* CGameClientShell::GetDynamicSoundFilter()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateSoundReverb()
 //
-//	ROUTINE:	CGameClientShell::UpdateSoundReverb()
-//
-//	PURPOSE:	Update the sound reverb
-//
+//	PURPOSE: Update the sound reverb
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateSoundReverb( )
 {
 	if (!m_bUseReverb) return;
 
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (!hPlayerObj) return;
 
 	float fReverbLevel;
-    HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("ReverbLevel");
+	HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("ReverbLevel");
 	if (hVar)
 	{
-        fReverbLevel = g_pLTClient->GetVarValueFloat(hVar);
+		fReverbLevel = g_pLTClient->GetVarValueFloat(hVar);
 	}
 	else
 	{
@@ -2199,14 +2142,14 @@ void CGameClientShell::UpdateSoundReverb( )
 
 	// Check if it's time yet...
 
-    if (g_pLTClient->GetTime() < m_fNextSoundReverbTime) return;
+	if (g_pLTClient->GetTime() < m_fNextSoundReverbTime) return;
 
 	// Update timer...
 
 	float fUpdatePeriod = g_pClientButeMgr->GetReverbAttributeFloat(REVERB_BUTE_UPDATEPERIOD);
-    m_fNextSoundReverbTime = g_pLTClient->GetTime() + fUpdatePeriod;
+	m_fNextSoundReverbTime = g_pLTClient->GetTime() + fUpdatePeriod;
 
-    HOBJECT hFilterList[] = {hPlayerObj, m_MoveMgr.GetObject(), LTNULL};
+	HOBJECT hFilterList[] = {hPlayerObj, m_MoveMgr.GetObject(), LTNULL};
 
 	ClientIntersectInfo info;
 	ClientIntersectQuery query;
@@ -2214,7 +2157,7 @@ void CGameClientShell::UpdateSoundReverb( )
 	query.m_FilterFn = ObjListFilterFn;
 	query.m_pUserData = hFilterList;
 
-    g_pLTClient->GetObjectPos(hPlayerObj, &query.m_From);
+	g_pLTClient->GetObjectPos(hPlayerObj, &query.m_From);
 
 	// Make sure the player moved far enough to check reverb again...
 
@@ -2224,7 +2167,7 @@ void CGameClientShell::UpdateSoundReverb( )
 	float fReverbSegmentLen = g_pClientButeMgr->GetReverbAttributeFloat(REVERB_BUTE_INTERSECTSEGMENTLEN);
 	VEC_COPY( m_vLastReverbPos, query.m_From );
 
-    LTVector vPos[6], vSegs[6];
+	LTVector vPos[6], vSegs[6];
 	VEC_SET( vSegs[0], query.m_From.x + fReverbSegmentLen, query.m_From.y, query.m_From.z );
 	VEC_SET( vSegs[1], query.m_From.x - fReverbSegmentLen, query.m_From.y, query.m_From.z );
 	VEC_SET( vSegs[2], query.m_From.x, query.m_From.y + fReverbSegmentLen, query.m_From.z );
@@ -2232,12 +2175,12 @@ void CGameClientShell::UpdateSoundReverb( )
 	VEC_SET( vSegs[4], query.m_From.x, query.m_From.y, query.m_From.z + fReverbSegmentLen );
 	VEC_SET( vSegs[5], query.m_From.x, query.m_From.y, query.m_From.z - fReverbSegmentLen );
 
-    LTBOOL bOpen = LTFALSE;
+	LTBOOL bOpen = LTFALSE;
 	for (int i = 0; i < 6; i++)
 	{
 		VEC_COPY( query.m_To, vSegs[i] );
 
-        if ( g_pLTClient->IntersectSegment( &query, &info ))
+		if ( g_pLTClient->IntersectSegment( &query, &info ))
 		{
 			VEC_COPY( vPos[i], info.m_Point );
 
@@ -2246,13 +2189,13 @@ void CGameClientShell::UpdateSoundReverb( )
 			if (eSurfType == ST_AIR || eSurfType == ST_SKY ||
 				eSurfType == ST_INVISIBLE)
 			{
-                bOpen = LTTRUE;
+				bOpen = LTTRUE;
 			}
 		}
 		else
 		{
 			VEC_COPY( vPos[i], vSegs[i] );
-            bOpen = LTTRUE;
+			bOpen = LTTRUE;
 		}
 	}
 
@@ -2369,18 +2312,15 @@ void CGameClientShell::UpdateSoundReverb( )
 	}
 
 	reverbProperties.m_dwParams = REVERBPARAM_ALL;
-    g_pLTClient->SetReverbProperties(&reverbProperties);
+	g_pLTClient->SetReverbProperties(&reverbProperties);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateCheats()
 //
-//	ROUTINE:	CGameClientShell::UpdateCheats()
-//
-//	PURPOSE:	Update cheats...
-//
+//	PURPOSE: Update cheats...
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::UpdateCheats()
 {
 	if (m_bAdjustLightScale)
@@ -2414,7 +2354,7 @@ LTBOOL CGameClientShell::UpdateCheats()
 	{
 		UpdateCamera();
 		RenderCamera();
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 	// Update weapon position if appropriated...
@@ -2424,27 +2364,24 @@ LTBOOL CGameClientShell::UpdateCheats()
 		UpdateWeaponPosition();
 		UpdateCamera();
 		RenderCamera();
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if (m_bTweakingWeaponMuzzle)
 	{
 		UpdateWeaponMuzzlePosition();
 		UpdateCamera();
 		RenderCamera();
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateCamera()
 //
-//	ROUTINE:	CGameClientShell::UpdateCamera()
-//
-//	PURPOSE:	Update the camera position/rotation
-//
+//	PURPOSE: Update the camera position/rotation
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateCamera()
 {
 	// Update the sway...
@@ -2480,7 +2417,7 @@ void CGameClientShell::UpdateCamera()
 
 	if (m_bUsingExternalCamera)
 	{
-        HandleZoomChange(m_weaponModel.GetWeaponId(), LTTRUE);
+		HandleZoomChange(m_weaponModel.GetWeaponId(), LTTRUE);
 	}
 
 	// Update zoom if applicable...
@@ -2505,13 +2442,10 @@ void CGameClientShell::UpdateCamera()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdatePlayerInfo()
 //
-//	ROUTINE:	CGameClientShell::UpdatePlayerInfo()
-//
-//	PURPOSE:	Tell the player about the new camera stuff
-//
+//	PURPOSE: Tell the player about the new camera stuff
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdatePlayerInfo()
 {
 	if (m_bAllowPlayerMovement != m_bLastAllowPlayerMovement)
@@ -2539,36 +2473,36 @@ void CGameClientShell::UpdatePlayerInfo()
 
 	if (m_nPlayerInfoChangeFlags & CLIENTUPDATE_ALLOWINPUT)
 	{
-        HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_UPDATE);
-        g_pLTClient->WriteToMessageWord(hMessage, CLIENTUPDATE_ALLOWINPUT);
-        g_pLTClient->WriteToMessageByte(hMessage, (uint8)m_bAllowPlayerMovement);
-        g_pLTClient->EndMessage(hMessage);
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_UPDATE);
+		g_pLTClient->WriteToMessageWord(hMessage, CLIENTUPDATE_ALLOWINPUT);
+		g_pLTClient->WriteToMessageByte(hMessage, (uint8)m_bAllowPlayerMovement);
+		g_pLTClient->EndMessage(hMessage);
 		m_nPlayerInfoChangeFlags &= ~CLIENTUPDATE_ALLOWINPUT;
 	}
 
-    float fCurTime   = g_pLTClient->GetTime();
+	float fCurTime   = g_pLTClient->GetTime();
 	float fSendRate  = 1.0f / g_CV_CSendRate.GetFloat(DEFAULT_CSENDRATE);
 	float fSendDelta = (fCurTime - m_fPlayerInfoLastSendTime);
 
 	if (!IsMultiplayerGame() || fSendDelta > fSendRate)
 	{
-        HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_UPDATE);
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_UPDATE);
 
 		if (g_vtPlayerRotate.GetFloat(1.0) > 0.0)
 		{
 			m_nPlayerInfoChangeFlags |= CLIENTUPDATE_PLAYERROT;
 		}
 
-        g_pLTClient->WriteToMessageWord(hMessage, m_nPlayerInfoChangeFlags);
+		g_pLTClient->WriteToMessageWord(hMessage, m_nPlayerInfoChangeFlags);
 
 		if (m_nPlayerInfoChangeFlags & CLIENTUPDATE_PLAYERROT)
 		{
 			// Set the player's rotation (don't allow model to rotate up/down).
 
-            LTRotation rPlayerRot;
-            //g_pLTClient->SetupEuler(&rPlayerRot, 0.0f, m_fYaw, m_fRoll);
-            g_pLTClient->SetupEuler(&rPlayerRot, m_fPlayerPitch, m_fPlayerYaw, m_fPlayerRoll);
-            g_pLTClient->WriteToMessageByte(hMessage, CompressRotationByte(g_pLTClient->Common(), &rPlayerRot));
+			LTRotation rPlayerRot;
+			//g_pLTClient->SetupEuler(&rPlayerRot, 0.0f, m_fYaw, m_fRoll);
+			g_pLTClient->SetupEuler(&rPlayerRot, m_fPlayerPitch, m_fPlayerYaw, m_fPlayerRoll);
+			g_pLTClient->WriteToMessageByte(hMessage, CompressRotationByte(g_pLTClient->Common(), &rPlayerRot));
 
 			{ // BL 10/05/00 - character waist pitching
 //				CGameSettings* pSettings = m_InterfaceMgr.GetSettings();
@@ -2583,7 +2517,7 @@ void CGameClientShell::UpdatePlayerInfo()
 
 		m_MoveMgr.WritePositionInfo(hMessage);
 
-        g_pLTClient->EndMessage2(hMessage, 0);
+		g_pLTClient->EndMessage2(hMessage, 0);
 
 		m_fPlayerInfoLastSendTime = fCurTime;
 		m_nPlayerInfoChangeFlags  = 0;
@@ -2592,28 +2526,25 @@ void CGameClientShell::UpdatePlayerInfo()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::StartLevel()
 //
-//	ROUTINE:	CGameClientShell::StartLevel()
-//
-//	PURPOSE:	Tell the player to start the level
-//
+//	PURPOSE: Tell the player to start the level
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::StartLevel()
 {
 	if (IsMultiplayerGame()) return;
 
-    HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_SINGLEPLAYER_START);
-    g_pLTClient->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_SINGLEPLAYER_START);
+	g_pLTClient->EndMessage(hMessage);
 
 	// Set Initial cheats...
 
 	if (g_pCheatMgr)
 	{
-        uint8 nNumCheats = g_pClientButeMgr->GetNumCheatAttributes();
+		uint8 nNumCheats = g_pClientButeMgr->GetNumCheatAttributes();
 		CString strCheat;
 
-        for (uint8 i=0; i < nNumCheats; i++)
+		for (uint8 i=0; i < nNumCheats; i++)
 		{
 			strCheat = g_pClientButeMgr->GetCheat(i);
 			if (strCheat.GetLength() > 1)
@@ -2626,13 +2557,10 @@ void CGameClientShell::StartLevel()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdatePlayerCamera()
 //
-//	ROUTINE:	CGameClientShell::UpdatePlayerCamera()
-//
-//	PURPOSE:	Update the player camera
-//
+//	PURPOSE: Update the player camera
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::UpdatePlayerCamera()
 {
 	// Make sure our player camera is attached...
@@ -2657,20 +2585,17 @@ LTBOOL CGameClientShell::UpdatePlayerCamera()
 	m_PlayerCamera.CameraUpdate(m_fFrameTime);
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::InitPlayerCamera()
 //
-//	ROUTINE:	CGameClientShell::InitPlayerCamera()
-//
-//	PURPOSE:	Update the player camera
-//
+//	PURPOSE: Update the player camera
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::InitPlayerCamera()
 {
-    LTVector vOffset(0.0f, 0.0f, 0.0f);
+	LTVector vOffset(0.0f, 0.0f, 0.0f);
 	vOffset.y = g_vtChaseCamOffset.GetFloat();
 
 	m_PlayerCamera.SetDistUp(g_vtChaseCamDistUp.GetFloat());
@@ -2694,58 +2619,52 @@ void CGameClientShell::InitPlayerCamera()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::SetExternalCamera()
 //
-//	ROUTINE:	CGameClientShell::SetExternalCamera()
-//
-//	PURPOSE:	Turn on/off external camera mode
-//
+//	PURPOSE: Turn on/off external camera mode
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::SetExternalCamera(LTBOOL bExternal)
 {
 	if (bExternal && m_PlayerCamera.IsFirstPerson())
 	{
 		m_DamageFXMgr.Clear();
-        m_weaponModel.SetVisible(LTFALSE);
+		m_weaponModel.SetVisible(LTFALSE);
 
-        ShowPlayer(LTTRUE);
+		ShowPlayer(LTTRUE);
 		m_PlayerCamera.GoChaseMode();
 		m_PlayerCamera.CameraUpdate(0.0f);
 
-        m_InterfaceMgr.EnableCrosshair(LTFALSE); // Disable cross hair in 3rd person...
+		m_InterfaceMgr.EnableCrosshair(LTFALSE); // Disable cross hair in 3rd person...
 	}
 	else if (!bExternal && !m_PlayerCamera.IsFirstPerson()) // Go Internal
 	{
-        m_weaponModel.SetVisible(LTTRUE);
-        ShowPlayer(LTFALSE);
+		m_weaponModel.SetVisible(LTTRUE);
+		ShowPlayer(LTFALSE);
 
 		m_PlayerCamera.GoFirstPerson();
 		m_PlayerCamera.CameraUpdate(0.0f);
 
-        m_InterfaceMgr.EnableCrosshair(LTTRUE);
+		m_InterfaceMgr.EnableCrosshair(LTTRUE);
 
 		if (m_h3rdPersonCrosshair)
 		{
-            g_pLTClient->DeleteObject(m_h3rdPersonCrosshair);
-            m_h3rdPersonCrosshair = LTNULL;
+			g_pLTClient->DeleteObject(m_h3rdPersonCrosshair);
+			m_h3rdPersonCrosshair = LTNULL;
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateAlternativeCamera()
 //
-//	ROUTINE:	CGameClientShell::UpdateAlternativeCamera()
-//
-//	PURPOSE:	Update the camera using an alternative camera
-//
+//	PURPOSE: Update the camera using an alternative camera
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::UpdateAlternativeCamera()
 {
 	m_bLastAllowPlayerMovement = m_bAllowPlayerMovement;
-    m_bAllowPlayerMovement     = LTTRUE;
+	m_bAllowPlayerMovement	 = LTTRUE;
 
-    HOBJECT hObj = LTNULL;
+	HOBJECT hObj = LTNULL;
 
 	// See if we should use an alternative camera position...
 
@@ -2763,25 +2682,25 @@ LTBOOL CGameClientShell::UpdateAlternativeCamera()
 
 			if (hObj)
 			{
-                uint32 dwUsrFlags;
-                g_pLTClient->GetObjectUserFlags(hObj, &dwUsrFlags);
+				uint32 dwUsrFlags;
+				g_pLTClient->GetObjectUserFlags(hObj, &dwUsrFlags);
 
 				if (dwUsrFlags & USRFLG_CAMERA_LIVE)
 				{
-                    m_InterfaceMgr.SetDrawInterface(LTFALSE);
+					m_InterfaceMgr.SetDrawInterface(LTFALSE);
 
-                    SetExternalCamera(LTTRUE);
+					SetExternalCamera(LTTRUE);
 
 					m_bAllowPlayerMovement = pCamFX->AllowPlayerMovement();
 
-                    LTVector vPos;
-                    g_pLTClient->GetObjectPos(hObj, &vPos);
-                    g_pLTClient->SetObjectPos(m_hCamera, &vPos);
-                    m_bCameraPosInited = LTTRUE;
+					LTVector vPos;
+					g_pLTClient->GetObjectPos(hObj, &vPos);
+					g_pLTClient->SetObjectPos(m_hCamera, &vPos);
+					m_bCameraPosInited = LTTRUE;
 
-                    LTRotation rRot;
-                    g_pLTClient->GetObjectRotation(hObj, &rRot);
-                    g_pLTClient->SetObjectRotation(m_hCamera, &rRot);
+					LTRotation rRot;
+					g_pLTClient->GetObjectRotation(hObj, &rRot);
+					g_pLTClient->SetObjectRotation(m_hCamera, &rRot);
 
 					m_bCamIsListener = pCamFX->IsListener();
 
@@ -2796,7 +2715,7 @@ LTBOOL CGameClientShell::UpdateAlternativeCamera()
 
 					TurnOnAlternativeCamera(s_nLastCamType);
 
-                    return LTTRUE;
+					return LTTRUE;
 				}
 			}
 		}
@@ -2811,19 +2730,16 @@ LTBOOL CGameClientShell::UpdateAlternativeCamera()
 	}
 
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::TurnOnAlternativeCamera()
 //
-//	ROUTINE:	CGameClientShell::TurnOnAlternativeCamera()
-//
-//	PURPOSE:	Set up using an alternative camera
-//
+//	PURPOSE: Set up using an alternative camera
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::TurnOnAlternativeCamera(uint8 nCamType)
 {
 	if(nCamType == CT_CINEMATIC) {
@@ -2833,18 +2749,18 @@ void CGameClientShell::TurnOnAlternativeCamera(uint8 nCamType)
 
 	if (!m_bUsingExternalCamera)
 	{
-	    //g_pLTClient->CPrint("TURNING ALTERNATIVE CAMERA: ON");
+		//g_pLTClient->CPrint("TURNING ALTERNATIVE CAMERA: ON");
 
 		// Make sure we clear whatever was on the screen before
 		// we switch to this camera...
 
 		m_InterfaceMgr.ClearAllScreenBuffers();
 
-        m_InterfaceMgr.ClosePopup();
+		m_InterfaceMgr.ClosePopup();
 		m_weaponModel.Disable(LTTRUE);
 	}
 
-    m_bUsingExternalCamera = LTTRUE;
+	m_bUsingExternalCamera = LTTRUE;
 
 	// Turn off model shadows in cinematics...
 	WriteConsoleInt("MaxModelShadows", 0);
@@ -2852,27 +2768,24 @@ void CGameClientShell::TurnOnAlternativeCamera(uint8 nCamType)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::TurnOffAlternativeCamera()
 //
-//	ROUTINE:	CGameClientShell::TurnOffAlternativeCamera()
-//
-//	PURPOSE:	Turn off the alternative camera mode
-//
+//	PURPOSE: Turn off the alternative camera mode
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::TurnOffAlternativeCamera(uint8 nCamType)
 {
-    //g_pLTClient->CPrint("TURNING ALTERNATIVE CAMERA: OFF");
+	//g_pLTClient->CPrint("TURNING ALTERNATIVE CAMERA: OFF");
 
 	m_InterfaceMgr.SetDrawInterface(LTTRUE);
-    m_bUsingExternalCamera = LTFALSE;
+	m_bUsingExternalCamera = LTFALSE;
 
 	// Set the listener back to the client...
 
-    g_pLTClient->SetListener(LTTRUE, LTNULL, LTNULL);
+	g_pLTClient->SetListener(LTTRUE, LTNULL, LTNULL);
 
 	// Force 1st person...
 
-    SetExternalCamera(LTFALSE);
+	SetExternalCamera(LTFALSE);
 
 	m_weaponModel.Disable(LTFALSE);
 
@@ -2887,16 +2800,13 @@ void CGameClientShell::TurnOffAlternativeCamera(uint8 nCamType)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateCameraPosition()
 //
-//	ROUTINE:	CGameClientShell::UpdateCameraPosition()
-//
-//	PURPOSE:	Update the camera position
-//
+//	PURPOSE: Update the camera position
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateCameraPosition()
 {
-    LTVector vPos = m_PlayerCamera.GetPos();
+	LTVector vPos = m_PlayerCamera.GetPos();
 
 	if (m_PlayerCamera.IsFirstPerson())
 	{
@@ -2915,31 +2825,28 @@ void CGameClientShell::UpdateCameraPosition()
 	}
 	else
 	{
-        m_rRotation = m_PlayerCamera.GetRotation();
+		m_rRotation = m_PlayerCamera.GetRotation();
 	}
 
  	g_pLTClient->SetObjectPos(m_hCamera, &vPos);
 
 
-    m_bCameraPosInited = LTTRUE;
+	m_bCameraPosInited = LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::CalculateCameraRotation()
 //
-//	ROUTINE:	CGameClientShell::CalculateCameraRotation()
-//
-//	PURPOSE:	Calculate the new camera rotation
-//
+//	PURPOSE: Calculate the new camera rotation
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::CalculateCameraRotation()
 {
 	CGameSettings* pSettings = m_InterfaceMgr.GetSettings();
 	if (!pSettings) return;
 
-    LTBOOL bIsVehicle = m_MoveMgr.GetVehicleMgr()->IsVehiclePhysics();
+	LTBOOL bIsVehicle = m_MoveMgr.GetVehicleMgr()->IsVehiclePhysics();
 
-    LTFLOAT fVal = 1.0f + (LTFLOAT)(3 * m_nZoomView);
+	LTFLOAT fVal = 1.0f + (LTFLOAT)(3 * m_nZoomView);
 
 	// Get axis offsets...
 	float offsets[3] = {0.0, 0.0, 0.0};
@@ -2983,7 +2890,7 @@ void CGameClientShell::CalculateCameraRotation()
 	if (m_bRestoreOrientation)
 	{
 		memset(offsets, 0, sizeof(float) * 3);
-        m_bRestoreOrientation = LTFALSE;
+		m_bRestoreOrientation = LTFALSE;
 	}
 
 	if (m_bStrafing)
@@ -2991,8 +2898,8 @@ void CGameClientShell::CalculateCameraRotation()
 		m_MoveMgr.UpdateMouseStrafeFlags(offsets);
 	}
 
-   	LTFLOAT fYawDelta    = offsets[0] / fVal;
-    LTFLOAT fPitchDelta  = offsets[1] / fVal;
+   	LTFLOAT fYawDelta	= offsets[0] / fVal;
+	LTFLOAT fPitchDelta  = offsets[1] / fVal;
 
 	m_fYaw += fYawDelta;
 
@@ -3012,8 +2919,8 @@ void CGameClientShell::CalculateCameraRotation()
 
 	if (pSettings->MouseLook() || (m_dwPlayerFlags & BC_CFLG_LOOKUP) || (m_dwPlayerFlags & BC_CFLG_LOOKDOWN)
 		|| m_bHoldingMouseLook)
-    {
-        if (pSettings->MouseLook() || m_bHoldingMouseLook)
+	{
+		if (pSettings->MouseLook() || m_bHoldingMouseLook)
 		{
 			if (pSettings->MouseInvertY())
 			{
@@ -3039,7 +2946,7 @@ void CGameClientShell::CalculateCameraRotation()
 
 		if (!m_PlayerCamera.IsFirstPerson())
 		{
-            LTFLOAT fMinY = DEG2RAD(45.0f) - 0.1f;
+			LTFLOAT fMinY = DEG2RAD(45.0f) - 0.1f;
 
 			if (m_fPitch < -fMinY) m_fPitch = -fMinY;
 			if (m_fPitch > fMinY)  m_fPitch = fMinY;
@@ -3047,12 +2954,12 @@ void CGameClientShell::CalculateCameraRotation()
 	}
 	else if (m_fPitch != 0.0f && pSettings->Lookspring())
 	{
-        LTFLOAT fPitchDelta = (m_fFrameTime * g_vtLookUpRate.GetFloat());
+		LTFLOAT fPitchDelta = (m_fFrameTime * g_vtLookUpRate.GetFloat());
 		if (m_fPitch > 0.0f) m_fPitch -= min(fPitchDelta, m_fPitch);
 		if (m_fPitch < 0.0f) m_fPitch += min(fPitchDelta, -m_fPitch);
 	}
 
-    LTFLOAT fMinY = MATH_HALFPI - 0.1f;
+	LTFLOAT fMinY = MATH_HALFPI - 0.1f;
 
 	if (m_fPitch < -fMinY) m_fPitch = -fMinY;
 	if (m_fPitch > fMinY)  m_fPitch = fMinY;
@@ -3090,27 +2997,24 @@ void CGameClientShell::CalculateCameraRotation()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateCameraRotation()
 //
-//	ROUTINE:	CGameClientShell::UpdateCameraRotation()
-//
-//	PURPOSE:	Set the new camera rotation
-//
+//	PURPOSE: Set the new camera rotation
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::UpdateCameraRotation()
 {
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
-    if (!hPlayerObj) return LTFALSE;
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	if (!hPlayerObj) return LTFALSE;
 
 	// Update camera orientation vars...
 
-    LTVector vPitchYawRollDelta = m_CameraOffsetMgr.GetPitchYawRollDelta();
+	LTVector vPitchYawRollDelta = m_CameraOffsetMgr.GetPitchYawRollDelta();
 
 	if (m_bUsingExternalCamera)
 	{
 		// Just calculate the correct player rotation...
 
-        g_pLTClient->SetupEuler(&m_rRotation, m_fPitch, m_fYaw, m_fRoll);
+		g_pLTClient->SetupEuler(&m_rRotation, m_fPitch, m_fYaw, m_fRoll);
 	}
 	else if (m_PlayerCamera.IsFirstPerson())
 	{
@@ -3127,7 +3031,7 @@ LTBOOL CGameClientShell::UpdateCameraRotation()
 			m_rRotation = rNewRot;
 		}
 
-	    g_pLTClient->SetObjectRotation(m_hCamera, &m_rRotation);
+		g_pLTClient->SetObjectRotation(m_hCamera, &m_rRotation);
 	}
 	else
 	{
@@ -3135,62 +3039,56 @@ LTBOOL CGameClientShell::UpdateCameraRotation()
 		// however we still need to calculate the correct rotation to be sent
 		// to the player...
 
-        LTFLOAT fAdjust = DEG2RAD(g_vtChaseCamPitchAdjust.GetFloat());
-        g_pLTClient->EulerRotateX(&m_rRotation, m_fPitch + fAdjust);
+		LTFLOAT fAdjust = DEG2RAD(g_vtChaseCamPitchAdjust.GetFloat());
+		g_pLTClient->EulerRotateX(&m_rRotation, m_fPitch + fAdjust);
  		g_pLTClient->SetObjectRotation(m_hCamera, &m_rRotation);
 
 		// Okay, now calculate the correct player rotation...
 
-        g_pLTClient->SetupEuler(&m_rRotation, m_fPitch, m_fYaw, m_fRoll);
+		g_pLTClient->SetupEuler(&m_rRotation, m_fPitch, m_fYaw, m_fRoll);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::SetCameraFOV
 //
-//	ROUTINE:	CGameClientShell::SetCameraFOV
-//
-//	PURPOSE:	Set the camera's FOV
-//
+//	PURPOSE: Set the camera's FOV
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::SetCameraFOV(LTFLOAT fFovX, LTFLOAT fFovY)
 {
 	if (!m_hCamera) return;
 
-    g_pLTClient->SetCameraFOV(m_hCamera, fFovX, fFovY);
+	g_pLTClient->SetCameraFOV(m_hCamera, fFovX, fFovY);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateCameraZoom
 //
-//	ROUTINE:	CGameClientShell::UpdateCameraZoom
-//
-//	PURPOSE:	Update the camera's field of view
-//
+//	PURPOSE: Update the camera's field of view
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateCameraZoom()
 {
 	char strConsole[30];
 
-    uint32 dwWidth = 640, dwHeight = 480;
-    g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &dwWidth, &dwHeight);
+	uint32 dwWidth = 640, dwHeight = 480;
+	g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &dwWidth, &dwHeight);
 
-    LTFLOAT fovX, fovY;
-    g_pLTClient->GetCameraFOV(m_hCamera, &fovX, &fovY);
+	LTFLOAT fovX, fovY;
+	g_pLTClient->GetCameraFOV(m_hCamera, &fovX, &fovY);
 
-    LTFLOAT fOldFovX = fovX;
+	LTFLOAT fOldFovX = fovX;
 
 	if (!fovX)
 	{
 		fovX = DEG2RAD(g_vtFOVXNormal.GetFloat());
 	}
 
-    m_bZooming = LTTRUE;
+	m_bZooming = LTTRUE;
 
 
-    LTFLOAT fFovXZoomed, fZoomDist;
+	LTFLOAT fFovXZoomed, fZoomDist;
 
 	if (m_bZoomingIn)
 	{
@@ -3229,8 +3127,8 @@ void CGameClientShell::UpdateCameraZoom()
 		}
 	}
 
-    LTFLOAT fZoomVel = fZoomDist / ZOOM_TIME;
-    LTFLOAT fZoomAmount = fZoomVel * m_fFrameTime;
+	LTFLOAT fZoomVel = fZoomDist / ZOOM_TIME;
+	LTFLOAT fZoomAmount = fZoomVel * m_fFrameTime;
 
 	// Zoom camera in or out...
 
@@ -3246,7 +3144,7 @@ void CGameClientShell::UpdateCameraZoom()
 		if (fovX <= fFovXZoomed)
 		{
 			fovX = fFovXZoomed;
-            m_bZooming = LTFALSE;
+			m_bZooming = LTFALSE;
 			m_InterfaceMgr.EndZoom();
 		}
 	}
@@ -3262,7 +3160,7 @@ void CGameClientShell::UpdateCameraZoom()
 		if (fovX >= fFovXZoomed)
 		{
 			fovX = fFovXZoomed;
-            m_bZooming = LTFALSE;
+			m_bZooming = LTFALSE;
 			m_InterfaceMgr.EndZoom();
 			if (m_nZoomView == 0)
 			{
@@ -3282,23 +3180,20 @@ void CGameClientShell::UpdateCameraZoom()
 		LTFLOAT fNewLODOffset = m_fSaveLODScale + (LOD_ZOOMADJUST * fZoomAmount);
 
 		sprintf(strConsole, "+ModelLODOffset %f", fNewLODOffset);
-        g_pLTClient->RunConsoleString(strConsole);
+		g_pLTClient->RunConsoleString(strConsole);
 
-        //g_pLTClient->CPrint("Current FOV (%f, %f)", fovX, fovY);
-        //g_pLTClient->CPrint("Current Zoom LODOffset: %f", fNewLODOffset);
+		//g_pLTClient->CPrint("Current FOV (%f, %f)", fovX, fovY);
+		//g_pLTClient->CPrint("Current Zoom LODOffset: %f", fNewLODOffset);
 	}
 
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::InCameraGadgetRange
 //
-//	ROUTINE:	CGameClientShell::InCameraGadgetRange
-//
-//	PURPOSE:	See if the given object is in the camera gadget's range
-//
+//	PURPOSE: See if the given object is in the camera gadget's range
 // --------------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::InCameraGadgetRange(HOBJECT hObj)
 {
 	if (!hObj || !m_hCamera) return LTFALSE;
@@ -3333,18 +3228,15 @@ LTBOOL CGameClientShell::InCameraGadgetRange(HOBJECT hObj)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateCameraShake
 //
-//	ROUTINE:	CGameClientShell::UpdateCameraShake
-//
-//	PURPOSE:	Update the camera's shake
-//
+//	PURPOSE: Update the camera's shake
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateCameraShake()
 {
 	// Decay...
 
-    LTFLOAT fDecayAmount = 2.0f * m_fFrameTime;
+	LTFLOAT fDecayAmount = 2.0f * m_fFrameTime;
 
 	m_vShakeAmount.x -= fDecayAmount;
 	m_vShakeAmount.y -= fDecayAmount;
@@ -3360,53 +3252,50 @@ void CGameClientShell::UpdateCameraShake()
 
 	// Apply...
 
-    LTFLOAT faddX = GetRandom(-1.0f, 1.0f) * m_vShakeAmount.x * 3.0f;
-    LTFLOAT faddY = GetRandom(-1.0f, 1.0f) * m_vShakeAmount.y * 3.0f;
-    LTFLOAT faddZ = GetRandom(-1.0f, 1.0f) * m_vShakeAmount.z * 3.0f;
+	LTFLOAT faddX = GetRandom(-1.0f, 1.0f) * m_vShakeAmount.x * 3.0f;
+	LTFLOAT faddY = GetRandom(-1.0f, 1.0f) * m_vShakeAmount.y * 3.0f;
+	LTFLOAT faddZ = GetRandom(-1.0f, 1.0f) * m_vShakeAmount.z * 3.0f;
 
 	// Don't update the camera's position if the interface
 	// doesn't want us to...
 
  	if (!m_InterfaceMgr.AllowCameraMovement()) return;
 
-    LTVector vPos, vAdd;
+	LTVector vPos, vAdd;
 	vAdd.Init(faddX, faddY, faddZ);
 
-    g_pLTClient->GetObjectPos(m_hCamera, &vPos);
+	g_pLTClient->GetObjectPos(m_hCamera, &vPos);
 	vPos += vAdd;
 
-    g_pLTClient->SetObjectPos(m_hCamera, &vPos);
+	g_pLTClient->SetObjectPos(m_hCamera, &vPos);
 
 	HLOCALOBJ hWeapon = m_weaponModel.GetHandle();
 	if (!hWeapon) return;
 
-    g_pLTClient->GetObjectPos(hWeapon, &vPos);
+	g_pLTClient->GetObjectPos(hWeapon, &vPos);
 
 	vAdd += 0.95f;
 	vPos += vAdd;
-    g_pLTClient->SetObjectPos(hWeapon, &vPos);
+	g_pLTClient->SetObjectPos(hWeapon, &vPos);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateScreenFlash
 //
-//	ROUTINE:	CGameClientShell::UpdateScreenFlash
-//
-//	PURPOSE:	Update the screen flash
-//
+//	PURPOSE: Update the screen flash
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateScreenFlash()
 {
 	if (!m_bFlashScreen) return;
 
-    LTVector vLightAdd;
+	LTVector vLightAdd;
 	VEC_SET(vLightAdd, 0.0f, 0.0f, 0.0f);
 
-    LTFLOAT fTime  = g_pLTClient->GetTime();
+	LTFLOAT fTime  = g_pLTClient->GetTime();
 	if ((m_fFlashRampUp > 0.0f) && (fTime < m_fFlashStart + m_fFlashRampUp))
 	{
-        LTFLOAT fDelta = (fTime - m_fFlashStart);
+		LTFLOAT fDelta = (fTime - m_fFlashStart);
 		vLightAdd.x = fDelta * (m_vFlashColor.x) / m_fFlashRampUp;
 		vLightAdd.y = fDelta * (m_vFlashColor.y) / m_fFlashRampUp;
 		vLightAdd.z = fDelta * (m_vFlashColor.z) / m_fFlashRampUp;
@@ -3417,7 +3306,7 @@ void CGameClientShell::UpdateScreenFlash()
 	}
 	else if ((m_fFlashRampDown > 0.0f) && (fTime < m_fFlashStart + m_fFlashRampUp + m_fFlashTime + m_fFlashRampDown))
 	{
-        LTFLOAT fDelta = (fTime - (m_fFlashStart + m_fFlashRampUp + m_fFlashTime));
+		LTFLOAT fDelta = (fTime - (m_fFlashStart + m_fFlashRampUp + m_fFlashTime));
 
 		vLightAdd.x = m_vFlashColor.x - (fDelta * (m_vFlashColor.x) / m_fFlashRampUp);
 		vLightAdd.y = m_vFlashColor.y - (fDelta * (m_vFlashColor.y) / m_fFlashRampUp);
@@ -3425,7 +3314,7 @@ void CGameClientShell::UpdateScreenFlash()
 	}
 	else
 	{
-        m_bFlashScreen = LTFALSE;
+		m_bFlashScreen = LTFALSE;
 	}
 
 	// Make sure values are in range...
@@ -3439,19 +3328,16 @@ void CGameClientShell::UpdateScreenFlash()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::ClearScreenTint
 //
-//	ROUTINE:	CGameClientShell::ClearScreenTint
-//
-//	PURPOSE:	Clear any screen tinting
-//
+//	PURPOSE: Clear any screen tinting
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::ClearScreenTint()
 {
 	m_ScreenTintMgr.ClearAll();
 	if (m_bFlashScreen)
 	{
-        m_bFlashScreen = LTFALSE;
+		m_bFlashScreen = LTFALSE;
 	}
 
 	m_LightScaleMgr.Term();
@@ -3460,16 +3346,13 @@ void CGameClientShell::ClearScreenTint()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateWeaponModel()
 //
-//	ROUTINE:	CGameClientShell::UpdateWeaponModel()
-//
-//	PURPOSE:	Update the weapon model
-//
+//	PURPOSE: Update the weapon model
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateWeaponModel()
 {
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (!hPlayerObj) return;
 
 
@@ -3481,13 +3364,13 @@ void CGameClientShell::UpdateWeaponModel()
 	// If possible, get these values from the camera, because it
 	// is more up-to-date...
 
-    LTRotation rRot;
+	LTRotation rRot;
 	rRot.Init();
-    LTVector vPos(0, 0, 0);
+	LTVector vPos(0, 0, 0);
 
 	// Weapon model pos/rot is relative to camera now...
-    g_pLTClient->GetObjectPos(m_hCamera, &vPos);
-    g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
+	g_pLTClient->GetObjectPos(m_hCamera, &vPos);
+	g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
 
 	if (!m_PlayerCamera.IsFirstPerson() || m_bUsingExternalCamera)
 	{
@@ -3501,7 +3384,7 @@ void CGameClientShell::UpdateWeaponModel()
 	// let us fire.
 
 	FireType eFireType = FT_NORMAL_FIRE;
-    LTBOOL bFire = LTFALSE;
+	LTBOOL bFire = LTFALSE;
 
 	// Only check if we're firing if we aren't choosing ammo/weapons...
 	if (!m_InterfaceMgr.IsChoosingAmmo() && ( !m_InterfaceMgr.IsChoosingWeapon() || g_vtQuickSwitch.GetFloat() ))
@@ -3509,13 +3392,13 @@ void CGameClientShell::UpdateWeaponModel()
 		if ((m_dwPlayerFlags & BC_CFLG_FIRING) || (m_dwPlayerFlags & BC_CFLG_ALT_FIRING) &&
 			!IsPlayerDead() && !m_bSpectatorMode)
 		{
-            bFire = LTTRUE;
+			bFire = LTTRUE;
 			// Disable alt-fire
 			//eFireType = (m_dwPlayerFlags & BC_CFLG_ALT_FIRING) ? FT_ALT_FIRE : FT_NORMAL_FIRE;
 
 			if (m_dwPlayerFlags & BC_CFLG_ALT_FIRING)
 			{
-                bFire = LTFALSE;
+				bFire = LTFALSE;
 			}
 		}
 	}
@@ -3543,13 +3426,10 @@ void CGameClientShell::UpdateWeaponModel()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::StartWeaponRecoil()
 //
-//	ROUTINE:	CGameClientShell::StartWeaponRecoil()
-//
-//	PURPOSE:	Start the weapon recoiling...
-//
+//	PURPOSE: Start the weapon recoiling...
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::StartWeaponRecoil()
 {
 	// Shake the screen if it isn't shaking...
@@ -3558,7 +3438,7 @@ void CGameClientShell::StartWeaponRecoil()
 		m_vShakeAmount.y < 0.1f &&
 		m_vShakeAmount.z < 0.1f)
 	{
-        LTVector vShake(0.1f, 0.1f, 0.1f);
+		LTVector vShake(0.1f, 0.1f, 0.1f);
 		ShakeScreen(vShake);
 	}
 
@@ -3566,16 +3446,16 @@ void CGameClientShell::StartWeaponRecoil()
 	{
 		// Move view up a bit...
 
-        LTFLOAT fPCorrect = 1.0f - (m_fFireJitterPitch / DEG2RAD(g_vtMaxCamRecoilPitch.GetFloat()));
-        LTFLOAT fPVal = GetRandom(0.5f,2.0f) * DEG2RAD(g_vtBaseCamRecoilPitch.GetFloat()) * fPCorrect;
+		LTFLOAT fPCorrect = 1.0f - (m_fFireJitterPitch / DEG2RAD(g_vtMaxCamRecoilPitch.GetFloat()));
+		LTFLOAT fPVal = GetRandom(0.5f,2.0f) * DEG2RAD(g_vtBaseCamRecoilPitch.GetFloat()) * fPCorrect;
 		m_fFireJitterPitch += fPVal;
 		m_fPitch -= fPVal;
 
 		// Move view left/right a bit...
 
-        LTFLOAT fYawDiff = (LTFLOAT)fabs(m_fFireJitterYaw);
-        LTFLOAT fYCorrect = 1.0f - (fYawDiff / DEG2RAD(g_vtMaxCamRecoilYaw.GetFloat()));
-        LTFLOAT fYVal = GetRandom(-2.0f,2.0f) * DEG2RAD(g_vtBaseCamRecoilYaw.GetFloat()) * fYCorrect;
+		LTFLOAT fYawDiff = (LTFLOAT)fabs(m_fFireJitterYaw);
+		LTFLOAT fYCorrect = 1.0f - (fYawDiff / DEG2RAD(g_vtMaxCamRecoilYaw.GetFloat()));
+		LTFLOAT fYVal = GetRandom(-2.0f,2.0f) * DEG2RAD(g_vtBaseCamRecoilYaw.GetFloat()) * fYCorrect;
 		m_fFireJitterYaw += fYVal;
 		m_fYaw -= fYVal;
 	}
@@ -3586,7 +3466,7 @@ void CGameClientShell::StartWeaponRecoil()
 		WEAPON* pWeaponData = m_weaponModel.GetWeapon();
 		AMMO*	pAmmoData	= m_weaponModel.GetAmmo();
 
-        LTFLOAT fMaxPitch = g_vtFireJitterMaxPitchDelta.GetFloat();
+		LTFLOAT fMaxPitch = g_vtFireJitterMaxPitchDelta.GetFloat();
 
 		if (pWeaponData && pAmmoData)
 		{
@@ -3596,7 +3476,7 @@ void CGameClientShell::StartWeaponRecoil()
 			}
 		}
 
-        LTFLOAT fVal = (LTFLOAT)DEG2RAD(fMaxPitch) - m_fFireJitterPitch;
+		LTFLOAT fVal = (LTFLOAT)DEG2RAD(fMaxPitch) - m_fFireJitterPitch;
 		m_fFireJitterPitch += fVal;
 		m_fPitch -= fVal;
 	}
@@ -3604,13 +3484,10 @@ void CGameClientShell::StartWeaponRecoil()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::DecayWeaponRecoil()
 //
-//	ROUTINE:	CGameClientShell::DecayWeaponRecoil()
-//
-//	PURPOSE:	Decay the weapon's recoil...
-//
+//	PURPOSE: Decay the weapon's recoil...
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::DecayWeaponRecoil()
 {
 	// Decay firing jitter if necessary...
@@ -3619,8 +3496,8 @@ void CGameClientShell::DecayWeaponRecoil()
 	{
 		if (m_fFireJitterPitch > 0.0f)
 		{
-            LTFLOAT fCorrect = 1.0f + m_fFireJitterPitch / DEG2RAD(g_vtMaxCamRecoilPitch.GetFloat());
-            LTFLOAT fVal = (m_fFrameTime * g_vtCamRecoilRecover.GetFloat()) * fCorrect;
+			LTFLOAT fCorrect = 1.0f + m_fFireJitterPitch / DEG2RAD(g_vtMaxCamRecoilPitch.GetFloat());
+			LTFLOAT fVal = (m_fFrameTime * g_vtCamRecoilRecover.GetFloat()) * fCorrect;
 
 			if (m_fFireJitterPitch < fVal)
 			{
@@ -3631,11 +3508,11 @@ void CGameClientShell::DecayWeaponRecoil()
 			m_fPitch += fVal;
 		}
 
-        LTFLOAT fYawDiff = (LTFLOAT)fabs(m_fFireJitterYaw);
+		LTFLOAT fYawDiff = (LTFLOAT)fabs(m_fFireJitterYaw);
 		if (fYawDiff > 0.0f)
 		{
-            LTFLOAT fCorrect = 1.0f + fYawDiff / DEG2RAD(g_vtMaxCamRecoilYaw.GetFloat());
-            LTFLOAT fVal = (m_fFrameTime * g_vtCamRecoilRecover.GetFloat()) * fCorrect;
+			LTFLOAT fCorrect = 1.0f + fYawDiff / DEG2RAD(g_vtMaxCamRecoilYaw.GetFloat());
+			LTFLOAT fVal = (m_fFrameTime * g_vtCamRecoilRecover.GetFloat()) * fCorrect;
 
 			if (fYawDiff < fVal)
 			{
@@ -3652,13 +3529,13 @@ void CGameClientShell::DecayWeaponRecoil()
 	{
 		if (m_fFireJitterPitch > 0.0f)
 		{
-            LTFLOAT fVal = m_fFireJitterPitch;
+			LTFLOAT fVal = m_fFireJitterPitch;
 
 			WEAPON* pWeaponData = m_weaponModel.GetWeapon();
 			AMMO*	pAmmoData	= m_weaponModel.GetAmmo();
 
-            LTFLOAT fMaxPitch  = g_vtFireJitterMaxPitchDelta.GetFloat();
-            LTFLOAT fTotalTime = g_vtFireJitterDecayTime.GetFloat();
+			LTFLOAT fMaxPitch  = g_vtFireJitterMaxPitchDelta.GetFloat();
+			LTFLOAT fTotalTime = g_vtFireJitterDecayTime.GetFloat();
 
 			if (pWeaponData && pAmmoData)
 			{
@@ -3692,13 +3569,10 @@ void CGameClientShell::DecayWeaponRecoil()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::Update3rdPersonCrossHair()
 //
-//	ROUTINE:	CGameClientShell::Update3rdPersonCrossHair()
-//
-//	PURPOSE:	Update the 3rd person crosshair pos
-//
+//	PURPOSE: Update the 3rd person crosshair pos
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::Update3rdPersonCrossHair(LTFLOAT fDistance)
 {
 	if (!m_PlayerCamera.IsChaseView()) return;
@@ -3720,90 +3594,87 @@ void CGameClientShell::Update3rdPersonCrossHair(LTFLOAT fDistance)
 		theStruct.m_ObjectType = OT_SPRITE;
 		SAFE_STRCPY(theStruct.m_Filename, "Spr\\Crosshair.spr");
 		theStruct.m_Flags = FLAG_VISIBLE | FLAG_GLOWSPRITE | FLAG_NOLIGHT;
-        m_h3rdPersonCrosshair = g_pLTClient->CreateObject(&theStruct);
+		m_h3rdPersonCrosshair = g_pLTClient->CreateObject(&theStruct);
 
-        LTVector vScale;
+		LTVector vScale;
 		VEC_SET(vScale, .5f, .5f, 1.0f);
-        g_pLTClient->SetObjectScale(m_h3rdPersonCrosshair, &vScale);
+		g_pLTClient->SetObjectScale(m_h3rdPersonCrosshair, &vScale);
 	}
 
 	if (fDistance < 1.0f || m_bUsingExternalCamera || !m_InterfaceMgr.IsCrosshairOn())
 	{
-        uint32 dwFlags = g_pLTClient->GetObjectFlags(m_h3rdPersonCrosshair);
-        g_pLTClient->SetObjectFlags(m_h3rdPersonCrosshair, dwFlags & ~FLAG_VISIBLE);
+		uint32 dwFlags = g_pLTClient->GetObjectFlags(m_h3rdPersonCrosshair);
+		g_pLTClient->SetObjectFlags(m_h3rdPersonCrosshair, dwFlags & ~FLAG_VISIBLE);
 		return;
 	}
 	else
 	{
-        uint32 dwFlags = g_pLTClient->GetObjectFlags(m_h3rdPersonCrosshair);
-        g_pLTClient->SetObjectFlags(m_h3rdPersonCrosshair, dwFlags | FLAG_VISIBLE);
+		uint32 dwFlags = g_pLTClient->GetObjectFlags(m_h3rdPersonCrosshair);
+		g_pLTClient->SetObjectFlags(m_h3rdPersonCrosshair, dwFlags | FLAG_VISIBLE);
 	}
 
-    LTVector vU, vR, vF;
-    g_pLTClient->GetRotationVectors(&m_rRotation, &vU, &vR, &vF);
+	LTVector vU, vR, vF;
+	g_pLTClient->GetRotationVectors(&m_rRotation, &vU, &vR, &vF);
 	VEC_NORM(vF);
 
-    LTVector vPos;
-    g_pLTClient->GetObjectPos(hPlayerObj, &vPos);
+	LTVector vPos;
+	g_pLTClient->GetObjectPos(hPlayerObj, &vPos);
 
-    LTFLOAT fDist = fDistance > 100.0f ? fDistance - 20.0f : fDistance;
+	LTFLOAT fDist = fDistance > 100.0f ? fDistance - 20.0f : fDistance;
 
-    LTVector vTemp;
+	LTVector vTemp;
 	VEC_MULSCALAR(vTemp, vF, fDist);
 	VEC_ADD(vPos, vPos, vTemp);
 
 	// Set the 3rd person crosshair to the correct position...
 
-    g_pLTClient->SetObjectPos(m_h3rdPersonCrosshair, &vPos);
+	g_pLTClient->SetObjectPos(m_h3rdPersonCrosshair, &vPos);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateContainerFX
 //
-//	ROUTINE:	CGameClientShell::UpdateContainerFX
-//
-//	PURPOSE:	Update any client side container fx
-//
+//	PURPOSE: Update any client side container fx
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateContainerFX()
 {
-    LTVector vPos;
-    g_pLTClient->GetObjectPos(m_hCamera, &vPos);
+	LTVector vPos;
+	g_pLTClient->GetObjectPos(m_hCamera, &vPos);
 
 	HLOCALOBJ objList[1];
-    uint32 dwNum = g_pLTClient->GetPointContainers(&vPos, objList, 1);
+	uint32 dwNum = g_pLTClient->GetPointContainers(&vPos, objList, 1);
 
-    LTVector vScale, vLightAdd;
+	LTVector vScale, vLightAdd;
 	VEC_SET(vScale, 1.0f, 1.0f, 1.0f);
 	VEC_SET(vLightAdd, 0.0f, 0.0f, 0.0f);
-    LTBOOL bClearCurrentLightScale = LTFALSE;
+	LTBOOL bClearCurrentLightScale = LTFALSE;
 
-    char* pCurSound      = LTNULL;
+	char* pCurSound	  = LTNULL;
 	ContainerCode eCode  = CC_NO_CONTAINER;
 	uint8 nSoundFilterId = 0;
-    uint32 dwUserFlags   = USRFLG_VISIBLE;
-    m_bUseWorldFog       = LTTRUE;
+	uint32 dwUserFlags   = USRFLG_VISIBLE;
+	m_bUseWorldFog	= LTTRUE;
 
 	// Get the user flags associated with the container, and make sure that
 	// the container isn't hidden...
 
 	if (dwNum > 0 && objList[0])
 	{
-        g_pLTClient->GetObjectUserFlags(objList[0], &dwUserFlags);
+		g_pLTClient->GetObjectUserFlags(objList[0], &dwUserFlags);
 	}
 
 
 	if (dwNum > 0 && (dwUserFlags & USRFLG_VISIBLE))
 	{
-        uint16 code;
-        if (g_pLTClient->GetContainerCode(objList[0], &code))
+		uint16 code;
+		if (g_pLTClient->GetContainerCode(objList[0], &code))
 		{
 			eCode = (ContainerCode)code;
 
 			// See if we have entered/left a container...
 
-            LTFLOAT fTime = g_pLTClient->GetTime();
+			LTFLOAT fTime = g_pLTClient->GetTime();
 
 			if (m_eCurContainerCode != eCode)
 			{
@@ -3826,32 +3697,32 @@ void CGameClientShell::UpdateContainerFX()
 
 					// See if this container has fog associated with it..
 
-                    LTBOOL bFog = pFX->IsFogEnable();
+					LTBOOL bFog = pFX->IsFogEnable();
 
 					if (bFog)
 					{
-                        m_bUseWorldFog = LTFALSE;
+						m_bUseWorldFog = LTFALSE;
 
 						char buf[30];
 						sprintf(buf, "FogEnable %d", (int)bFog);
-                        g_pLTClient->RunConsoleString(buf);
+						g_pLTClient->RunConsoleString(buf);
 
 						sprintf(buf, "FogNearZ %d", (int)pFX->GetFogNearZ());
-                        g_pLTClient->RunConsoleString(buf);
+						g_pLTClient->RunConsoleString(buf);
 
 						sprintf(buf, "FogFarZ %d", (int)pFX->GetFogFarZ());
-                        g_pLTClient->RunConsoleString(buf);
+						g_pLTClient->RunConsoleString(buf);
 
-                        LTVector vFogColor = pFX->GetFogColor();
+						LTVector vFogColor = pFX->GetFogColor();
 
 						sprintf(buf, "FogR %d", (int)vFogColor.x);
-                        g_pLTClient->RunConsoleString(buf);
+						g_pLTClient->RunConsoleString(buf);
 
 						sprintf(buf, "FogG %d", (int)vFogColor.y);
-                        g_pLTClient->RunConsoleString(buf);
+						g_pLTClient->RunConsoleString(buf);
 
 						sprintf(buf, "FogB %d", (int)vFogColor.z);
-                        g_pLTClient->RunConsoleString(buf);
+						g_pLTClient->RunConsoleString(buf);
 					}
 
 					// Get the tint color...
@@ -3883,7 +3754,7 @@ void CGameClientShell::UpdateContainerFX()
 
 				case CC_ENDLESS_FALL:
 				{
-                    LTFLOAT fFallTime = 1.0f;
+					LTFLOAT fFallTime = 1.0f;
 
 					if (fTime > m_fContainerStartTime + fFallTime)
 					{
@@ -3891,10 +3762,10 @@ void CGameClientShell::UpdateContainerFX()
 					}
 					else
 					{
-                        LTFLOAT fScaleStart = .3f;
-                        LTFLOAT fTimeLeft = (m_fContainerStartTime + fFallTime) - fTime;
-                        LTFLOAT fScalePercent = fTimeLeft/fFallTime;
-                        LTFLOAT fScale = fScaleStart * fScalePercent;
+						LTFLOAT fScaleStart = .3f;
+						LTFLOAT fTimeLeft = (m_fContainerStartTime + fFallTime) - fTime;
+						LTFLOAT fScalePercent = fTimeLeft/fFallTime;
+						LTFLOAT fScale = fScaleStart * fScalePercent;
 
 						VEC_SET(vScale, fScale, fScale, fScale);
 					}
@@ -3903,7 +3774,7 @@ void CGameClientShell::UpdateContainerFX()
 					// if this is our first time in this case, don't clear the effect - otherwise clear it
 					if (m_eCurContainerCode == CC_ENDLESS_FALL)
 					{
-                        bClearCurrentLightScale = LTTRUE;
+						bClearCurrentLightScale = LTTRUE;
 					}
 				}
 				break;
@@ -3921,7 +3792,7 @@ void CGameClientShell::UpdateContainerFX()
 	{
 		// See if the old container (if any) modified the light scale
 
-        bClearCurrentLightScale = LTTRUE;
+		bClearCurrentLightScale = LTTRUE;
 
 		// Adjust Fog as necessary...
 
@@ -3932,7 +3803,7 @@ void CGameClientShell::UpdateContainerFX()
 
 		// See if we need to reset the current lightscale
 		// If we entered a new container (or modified the light scale in the case of endless fall), then vScale won't be (1,1,1)
-        // If we left a container that modified the light scale, then bClearCurrentLightScale will be LTTRUE
+		// If we left a container that modified the light scale, then bClearCurrentLightScale will be LTTRUE
 
 		if (bClearCurrentLightScale)
 		{
@@ -3950,14 +3821,14 @@ void CGameClientShell::UpdateContainerFX()
 
 		if (IsLiquid(m_eCurContainerCode) && !IsLiquid(eCode))
 		{
-            UpdateUnderWaterFX(LTFALSE);
-            g_pLTClient->RunConsoleString("+ModelWarble 0");
+			UpdateUnderWaterFX(LTFALSE);
+			g_pLTClient->RunConsoleString("+ModelWarble 0");
 			m_InterfaceMgr.EndUnderwater();
 		}
 
 		if (!IsLiquid(m_eCurContainerCode) && IsLiquid(eCode))
 		{
-            g_pLTClient->RunConsoleString("ModelWarble 1");
+			g_pLTClient->RunConsoleString("ModelWarble 1");
 			m_InterfaceMgr.BeginUnderwater();
 		}
 
@@ -3966,13 +3837,13 @@ void CGameClientShell::UpdateContainerFX()
 
 		if (m_hContainerSound)
 		{
-            g_pLTClient->KillSound(m_hContainerSound);
-            m_hContainerSound = LTNULL;
+			g_pLTClient->KillSound(m_hContainerSound);
+			m_hContainerSound = LTNULL;
 		}
 
 		if (pCurSound)
 		{
-            uint32 dwFlags = PLAYSOUND_CLIENT | PLAYSOUND_LOOP | PLAYSOUND_GETHANDLE;
+			uint32 dwFlags = PLAYSOUND_CLIENT | PLAYSOUND_LOOP | PLAYSOUND_GETHANDLE;
 			m_hContainerSound = g_pClientSoundMgr->PlaySoundLocal(pCurSound, SOUNDPRIORITY_PLAYER_MEDIUM, dwFlags);
 		}
 
@@ -3994,36 +3865,33 @@ void CGameClientShell::UpdateContainerFX()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateUnderWaterFX
 //
-//	ROUTINE:	CGameClientShell::UpdateUnderWaterFX
-//
-//	PURPOSE:	Update under water fx
-//
+//	PURPOSE: Update under water fx
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateUnderWaterFX(LTBOOL bUpdate)
 {
 	if (m_nZoomView) return;
 
-    uint32 dwWidth = 640, dwHeight = 480;
-    g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &dwWidth, &dwHeight);
+	uint32 dwWidth = 640, dwHeight = 480;
+	g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &dwWidth, &dwHeight);
 
 	if (dwWidth < 0 || dwHeight < 0) return;
 
 
 	// Initialize to default fov x and y...
 
-    LTFLOAT fFovX = g_vtFOVXNormal.GetFloat();
-    LTFLOAT fFovY = g_vtFOVYNormal.GetFloat();
+	LTFLOAT fFovX = g_vtFOVXNormal.GetFloat();
+	LTFLOAT fFovY = g_vtFOVYNormal.GetFloat();
 
 	if (bUpdate)
 	{
-        g_pLTClient->GetCameraFOV(m_hCamera, &fFovX, &fFovY);
+		g_pLTClient->GetCameraFOV(m_hCamera, &fFovX, &fFovY);
 
 		fFovX = RAD2DEG(fFovX);
 		fFovY = RAD2DEG(fFovY);
 
-        LTFLOAT fSpeed = g_vtUWFOVRate.GetFloat() * m_fFrameTime;
+		LTFLOAT fSpeed = g_vtUWFOVRate.GetFloat() * m_fFrameTime;
 
 		if (m_fFovXFXDir > 0)
 		{
@@ -4053,13 +3921,10 @@ void CGameClientShell::UpdateUnderWaterFX(LTBOOL bUpdate)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateBreathingFX
 //
-//	ROUTINE:	CGameClientShell::UpdateBreathingFX
-//
-//	PURPOSE:	Update breathing fx
-//
+//	PURPOSE: Update breathing fx
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateBreathingFX(LTBOOL bUpdate)
 {
 	//if (m_nZoomView) return;
@@ -4069,27 +3934,24 @@ void CGameClientShell::UpdateBreathingFX(LTBOOL bUpdate)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::ChangeWeapon()
 //
-//	ROUTINE:	CGameClientShell::ChangeWeapon()
-//
-//	PURPOSE:	Change the weapon model
-//
+//	PURPOSE: Change the weapon model
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::ChangeWeapon(HMESSAGEREAD hMessage)
 {
 	if (!hMessage) return;
 
-    uint8 nCommandId = g_pLTClient->ReadFromMessageByte(hMessage);
-    uint8 bAuto      = (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
-    LTFLOAT fAmmoId  = g_pLTClient->ReadFromMessageFloat(hMessage);
+	uint8 nCommandId = g_pLTClient->ReadFromMessageByte(hMessage);
+	uint8 bAuto	  = (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
+	LTFLOAT fAmmoId  = g_pLTClient->ReadFromMessageFloat(hMessage);
 
 
-    uint8 nWeaponId = g_pWeaponMgr->GetWeaponId(nCommandId);
+	uint8 nWeaponId = g_pWeaponMgr->GetWeaponId(nCommandId);
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(nWeaponId);
 	if (!pWeapon) return;
 
-    LTBOOL bChange = LTTRUE;
+	LTBOOL bChange = LTTRUE;
 
 	// See what ammo the weapon should start with...
 
@@ -4105,7 +3967,7 @@ void CGameClientShell::ChangeWeapon(HMESSAGEREAD hMessage)
 
 	if (bAuto && IsMultiplayerGame())
 	{
-        bChange = (LTBOOL)GetConsoleInt("AutoWeaponSwitch",1);
+		bChange = (LTBOOL)GetConsoleInt("AutoWeaponSwitch",1);
 
 		// See if the weapon we're chaning to is really a weapon...
 
@@ -4123,124 +3985,106 @@ void CGameClientShell::ChangeWeapon(HMESSAGEREAD hMessage)
 
 	if (bChange)
 	{
-        // Force a change to the approprite weapon...
+		// Force a change to the approprite weapon...
 		CPlayerStats* pStats = m_InterfaceMgr.GetPlayerStats();
 		if (pStats)
 		{
 			ChangeWeapon(nWeaponId, nAmmoId, pStats->GetAmmoCount(nAmmoId));
 		}
-    }
+	}
 
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::ChangeWeapon()
 //
-//	ROUTINE:	CGameClientShell::ChangeWeapon()
-//
-//	PURPOSE:	Change the weapon model
-//
+//	PURPOSE: Change the weapon model
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::ChangeWeapon(uint8 nWeaponId, uint8 nAmmoId, uint32 dwAmmo)
 {
-    LTBOOL bSameWeapon = (nWeaponId == m_weaponModel.GetWeaponId());
+	LTBOOL bSameWeapon = (nWeaponId == m_weaponModel.GetWeaponId());
 	// Turn off zooming...
 
-    uint8 nOldWeaponId = m_weaponModel.GetWeaponId();
+	uint8 nOldWeaponId = m_weaponModel.GetWeaponId();
 	if (!bSameWeapon && g_pWeaponMgr->IsValidWeapon(nOldWeaponId))
 	{
-        HandleZoomChange(nOldWeaponId, LTTRUE);
+		HandleZoomChange(nOldWeaponId, LTTRUE);
 	}
 
 	if (!m_weaponModel.GetHandle() || !bSameWeapon)
 	{
-        m_weaponModel.Create(g_pLTClient, nWeaponId, nAmmoId, dwAmmo);
+		m_weaponModel.Create(g_pLTClient, nWeaponId, nAmmoId, dwAmmo);
 	}
 
 	if (m_PlayerCamera.IsChaseView())
 	{
-        m_weaponModel.SetVisible(LTFALSE);
+		m_weaponModel.SetVisible(LTFALSE);
 	}
 
 	// Tell the server to change weapons...
 
-    HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_WEAPON_CHANGE);
-    g_pLTClient->WriteToMessageByte(hMessage, nWeaponId);
-    g_pLTClient->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_WEAPON_CHANGE);
+	g_pLTClient->WriteToMessageByte(hMessage, nWeaponId);
+	g_pLTClient->EndMessage(hMessage);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::BeginInfrared()
 //
-//	ROUTINE:	CGameClientShell::BeginInfrared()
-//
-//	PURPOSE:	setup infrared viewing mode
-//
+//	PURPOSE: setup infrared viewing mode
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::BeginInfrared()
 {
 	m_LightScaleMgr.SetLightScale(&m_vIRLightScale, LightEffectPowerup);
-    g_pLTClient->SetModelHook((ModelHookFn)IRModelHook, this);
+	g_pLTClient->SetModelHook((ModelHookFn)IRModelHook, this);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::EndInfrared()
 //
-//	ROUTINE:	CGameClientShell::EndInfrared()
-//
-//	PURPOSE:	end infrared viewing mode
-//
+//	PURPOSE: end infrared viewing mode
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::EndInfrared()
 {
 	m_LightScaleMgr.ClearLightScale(&m_vIRLightScale, LightEffectPowerup);
-    g_pLTClient->SetModelHook((ModelHookFn)DefaultModelHook, this);
+	g_pLTClient->SetModelHook((ModelHookFn)DefaultModelHook, this);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::BeginMineMode()
 //
-//	ROUTINE:	CGameClientShell::BeginMineMode()
-//
-//	PURPOSE:	setup mine viewing mode
-//
+//	PURPOSE: setup mine viewing mode
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::BeginMineMode()
 {
-    LTVector vCol = g_pLayoutMgr->GetMineDetectScreenTint();
+	LTVector vCol = g_pLayoutMgr->GetMineDetectScreenTint();
 	m_LightScaleMgr.SetLightScale(&vCol, LightEffectPowerup);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::EndMineMode()
 //
-//	ROUTINE:	CGameClientShell::EndMineMode()
-//
-//	PURPOSE:	end mine viewing mode
-//
+//	PURPOSE: end mine viewing mode
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::EndMineMode()
 {
-    LTVector vCol = g_pLayoutMgr->GetMineDetectScreenTint();
+	LTVector vCol = g_pLayoutMgr->GetMineDetectScreenTint();
 	m_LightScaleMgr.ClearLightScale(&vCol, LightEffectPowerup);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::BeginZoom()
 //
-//	ROUTINE:	CGameClientShell::BeginZoom()
-//
-//	PURPOSE:	prepare for zooming
-//
+//	PURPOSE: prepare for zooming
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::BeginZoom()
 {
-    m_bNightVision = LTFALSE;
+	m_bNightVision = LTFALSE;
 	CPlayerStats* pStats = m_InterfaceMgr.GetPlayerStats();
-    uint8 nScopeId = pStats->GetScope();
+	uint8 nScopeId = pStats->GetScope();
 	if (nScopeId != WMGR_INVALID_ID)
 	{
 		MOD* pMod = g_pWeaponMgr->GetMod(nScopeId);
@@ -4255,19 +4099,16 @@ void CGameClientShell::BeginZoom()
 	{
 		//m_ScreenTintMgr.Set(TINT_NIGHTVISION,&m_vNVScreenTint);
 		m_LightScaleMgr.SetLightScale(&m_vNVScreenTint, LightEffectPowerup);
-        g_pLTClient->SetModelHook((ModelHookFn)NVModelHook, this);
+		g_pLTClient->SetModelHook((ModelHookFn)NVModelHook, this);
 	}
-    m_weaponModel.SetVisible(LTFALSE);
+	m_weaponModel.SetVisible(LTFALSE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::EndZoom()
 //
-//	ROUTINE:	CGameClientShell::EndZoom()
-//
-//	PURPOSE:	done zooming
-//
+//	PURPOSE: done zooming
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::EndZoom()
 {
 	m_InterfaceMgr.EndScope();
@@ -4275,20 +4116,17 @@ void CGameClientShell::EndZoom()
 	{
 		// m_ScreenTintMgr.Clear(TINT_NIGHTVISION);
 		m_LightScaleMgr.ClearLightScale(&m_vNVScreenTint, LightEffectPowerup);
-        g_pLTClient->SetModelHook((ModelHookFn)DefaultModelHook, this);
-        m_bNightVision = LTFALSE;
+		g_pLTClient->SetModelHook((ModelHookFn)DefaultModelHook, this);
+		m_bNightVision = LTFALSE;
 	}
-    m_weaponModel.SetVisible(LTTRUE);
+	m_weaponModel.SetVisible(LTTRUE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleZoomChange()
 //
-//	ROUTINE:	CGameClientShell::HandleZoomChange()
-//
-//	PURPOSE:	Handle a potential zoom change
-//
+//	PURPOSE: Handle a potential zoom change
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleZoomChange(uint8 nWeaponId, LTBOOL bReset)
 {
 	// Reset to normal FOV...
@@ -4298,8 +4136,8 @@ void CGameClientShell::HandleZoomChange(uint8 nWeaponId, LTBOOL bReset)
 		if (m_nZoomView == 0) return;
 
 		m_nZoomView  = 0;
-        m_bZooming   = LTFALSE;
-        m_bZoomingIn = LTFALSE;
+		m_bZooming   = LTFALSE;
+		m_bZoomingIn = LTFALSE;
 		m_InterfaceMgr.EndZoom();
 		EndZoom();
 
@@ -4307,12 +4145,12 @@ void CGameClientShell::HandleZoomChange(uint8 nWeaponId, LTBOOL bReset)
 
 		char strConsole[40];
 		sprintf(strConsole, "+ModelLODOffset %f", m_fSaveLODScale);
-        g_pLTClient->RunConsoleString(strConsole);
+		g_pLTClient->RunConsoleString(strConsole);
 	}
 
 
 	CPlayerStats* pStats = m_InterfaceMgr.GetPlayerStats();
-    uint8 nScopeId = pStats->GetScope();
+	uint8 nScopeId = pStats->GetScope();
 	if (nScopeId == WMGR_INVALID_ID) return;
 
 	MOD* pMod = g_pWeaponMgr->GetMod(nScopeId);
@@ -4351,7 +4189,7 @@ void CGameClientShell::ProcessHandshake(HMESSAGEREAD hMessage)
 				m_bForceDisconnect = LTTRUE;
 
 				// Show a mis-matched version message to the user
-				g_pInterfaceMgr->ChangeState(GS_FOLDER);  // Note : Don't take this out or the cursor goes away!
+				g_pInterfaceMgr->ChangeState(GS_FOLDER);	// Note : Don't take this out or the cursor goes away!
 				HSTRING hString = g_pLTClient->FormatString(IDS_NETERR_NOTSAMEGUID);
 				g_pInterfaceMgr->ShowMessageBox(hString,LTMB_OK,LTNULL,LTNULL,g_pInterfaceResMgr->IsEnglish());
 				g_pLTClient->FreeString(hString);
@@ -4361,8 +4199,8 @@ void CGameClientShell::ProcessHandshake(HMESSAGEREAD hMessage)
 
 			// Send back a hello response
 			HMESSAGEWRITE hResponse = g_pLTClient->StartMessage(MID_HANDSHAKE);
-		    g_pLTClient->WriteToMessageByte(hResponse, MID_HANDSHAKE_HELLO);
-		    g_pLTClient->WriteToMessageWord(hResponse, GAME_HANDSHAKE_VER);
+			g_pLTClient->WriteToMessageByte(hResponse, MID_HANDSHAKE_HELLO);
+			g_pLTClient->WriteToMessageWord(hResponse, GAME_HANDSHAKE_VER);
 			// Send them our secret key
 			g_pLTClient->WriteToMessageDWord(hResponse, GAME_HANDSHAKE_PASSWORD);
 			g_pLTClient->EndMessage(hResponse);
@@ -4416,7 +4254,7 @@ void CGameClientShell::ProcessHandshake(HMESSAGEREAD hMessage)
 			m_bForceDisconnect = LTTRUE;
 
 			// Show a mis-matched version message to the user
-			g_pInterfaceMgr->ChangeState(GS_FOLDER);  // Note : Don't take this out or the cursor goes away!
+			g_pInterfaceMgr->ChangeState(GS_FOLDER);	// Note : Don't take this out or the cursor goes away!
 			HSTRING hString = g_pLTClient->FormatString(IDS_NETERR_NOTSAMEGUID);
 			g_pInterfaceMgr->ShowMessageBox(hString,LTMB_OK,LTNULL,LTNULL,g_pInterfaceResMgr->IsEnglish());
 			g_pLTClient->FreeString(hString);
@@ -4426,13 +4264,10 @@ void CGameClientShell::ProcessHandshake(HMESSAGEREAD hMessage)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnCommandOn()
 //
-//	ROUTINE:	CGameClientShell::OnCommandOn()
-//
-//	PURPOSE:	Handle client commands
-//
+//	PURPOSE: Handle client commands
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::OnCommandOn(int command)
 {
 	// If console is active, ignore any other commands
@@ -4495,7 +4330,7 @@ void CGameClientShell::OnCommandOn(int command)
 			if (m_weaponModel.IsDisabled()) break;
 
 			CPlayerStats* pStats = m_InterfaceMgr.GetPlayerStats();
-            uint8 nScopeId = pStats->GetScope();
+			uint8 nScopeId = pStats->GetScope();
 			if (nScopeId == WMGR_INVALID_ID) break;
 
 			MOD* pMod = g_pWeaponMgr->GetMod(nScopeId);
@@ -4513,13 +4348,13 @@ void CGameClientShell::OnCommandOn(int command)
 
 				if (m_nZoomView != nOldZoom)
 				{
-                    m_bZooming   = LTTRUE;
-                    m_bZoomingIn = LTTRUE;
+					m_bZooming   = LTTRUE;
+					m_bZoomingIn = LTTRUE;
 
 					if (nOldZoom == 0)
 					{
 						BeginZoom();
-                    }
+					}
 
 					m_InterfaceMgr.BeginZoom(LTTRUE);
 					HandleZoomChange(pStats->GetCurWeapon());
@@ -4533,7 +4368,7 @@ void CGameClientShell::OnCommandOn(int command)
 			if (m_weaponModel.IsDisabled()) break;
 
 			CPlayerStats* pStats = m_InterfaceMgr.GetPlayerStats();
-            uint8 nScopeId = pStats->GetScope();
+			uint8 nScopeId = pStats->GetScope();
 			if (nScopeId == WMGR_INVALID_ID) break;
 
 			MOD* pMod = g_pWeaponMgr->GetMod(nScopeId);
@@ -4548,9 +4383,9 @@ void CGameClientShell::OnCommandOn(int command)
 
 				if (m_nZoomView != nOldZoom)
 				{
-                    m_bZooming   = LTTRUE;
-                    m_bZoomingIn = LTFALSE;
-                    m_InterfaceMgr.BeginZoom(LTFALSE);
+					m_bZooming   = LTTRUE;
+					m_bZoomingIn = LTFALSE;
+					m_InterfaceMgr.BeginZoom(LTFALSE);
 					HandleZoomChange(pStats->GetCurWeapon());
 				}
 			}
@@ -4620,7 +4455,7 @@ void CGameClientShell::OnCommandOn(int command)
 			{
 				if (!pSettings->MouseLook())
 				{
-                    m_bHoldingMouseLook = LTTRUE;
+					m_bHoldingMouseLook = LTTRUE;
 				}
 			}
 		}
@@ -4638,7 +4473,7 @@ void CGameClientShell::OnCommandOn(int command)
 			{
 				if (IsMultiplayerGame())
 				{
-                    if (g_pLTClient->GetTime() > m_fEarliestRespawnTime)
+					if (g_pLTClient->GetTime() > m_fEarliestRespawnTime)
 					{
 						HandleRespawn();
 					}
@@ -4653,7 +4488,7 @@ void CGameClientShell::OnCommandOn(int command)
 
 		case COMMAND_ID_STRAFE:
 		{
-            m_bStrafing = LTTRUE;
+			m_bStrafing = LTTRUE;
 		}
 		break;
 
@@ -4667,8 +4502,8 @@ void CGameClientShell::OnCommandOn(int command)
 			else if (GetGameType() == SINGLE)
 			{
 				// Can't quicksave now...
-			    HSTRING hStr = g_pLTClient->FormatString(IDS_CANTQUICKSAVE);
-			    char* pStr = g_pLTClient->GetStringData(hStr);
+				HSTRING hStr = g_pLTClient->FormatString(IDS_CANTQUICKSAVE);
+				char* pStr = g_pLTClient->GetStringData(hStr);
 				CSPrint(pStr);
 				g_pLTClient->FreeString(hStr);
 			}
@@ -4677,10 +4512,10 @@ void CGameClientShell::OnCommandOn(int command)
 
 		case COMMAND_ID_QUICKLOAD :
 		{
-            if (GetGameType() != SINGLE && IsPlayerInWorld())
+			if (GetGameType() != SINGLE && IsPlayerInWorld())
 			{
-			    HSTRING hString = g_pLTClient->FormatString(IDS_ENDCURRENTGAME);
-			    g_pInterfaceMgr->ShowMessageBox(hString,LTMB_YESNO,QuickLoadCallBack,this);
+				HSTRING hString = g_pLTClient->FormatString(IDS_ENDCURRENTGAME);
+				g_pInterfaceMgr->ShowMessageBox(hString,LTMB_YESNO,QuickLoadCallBack,this);
 				g_pLTClient->FreeString(hString);
 			}
 			else
@@ -4697,13 +4532,10 @@ void CGameClientShell::OnCommandOn(int command)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnCommandOff()
 //
-//	ROUTINE:	CGameClientShell::OnCommandOff()
-//
-//	PURPOSE:	Handle command off notification
-//
+//	PURPOSE: Handle command off notification
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::OnCommandOff(int command)
 {
 	// Let the interface handle the command first...
@@ -4716,30 +4548,27 @@ void CGameClientShell::OnCommandOff(int command)
 	{
 		case COMMAND_ID_STRAFE :
 		{
-            m_bStrafing = LTFALSE;
+			m_bStrafing = LTFALSE;
 		}
 		break;
 
 		case COMMAND_ID_MOUSEAIMTOGGLE :
 		{
-            m_bHoldingMouseLook = LTFALSE;
+			m_bHoldingMouseLook = LTFALSE;
 		}
 		break;
 
-        default : break;
+		default : break;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnKeyDown(int key, int rep)
 //
-//	ROUTINE:	CGameClientShell::OnKeyDown(int key, int rep)
-//
-//	PURPOSE:	Handle key down notification
+//	PURPOSE: Handle key down notification
 //				Try to avoid using OnKeyDown and OnKeyUp as they
 //				are not portable functions
-//
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::OnKeyDown(int key, int rep)
 {
 
@@ -4752,7 +4581,7 @@ void CGameClientShell::OnKeyDown(int key, int rep)
 #ifndef _FINAL
 		g_bScreenShotMode = !g_bScreenShotMode;
 		m_InterfaceMgr.DrawPlayerStats((!g_bScreenShotMode && !m_editMgr.IsEditMode()));
-        g_pLTClient->CPrint("Screen shot mode: %s", g_bScreenShotMode ? "ON" : "OFF");
+		g_pLTClient->CPrint("Screen shot mode: %s", g_bScreenShotMode ? "ON" : "OFF");
 #endif
 #endif
 		return;
@@ -4842,11 +4671,9 @@ void CGameClientShell::OnKeyDown(int key, int rep)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnKeyUp(int key, int rep)
 //
-//	ROUTINE:	CGameClientShell::OnKeyUp(int key, int rep)
-//
-//	PURPOSE:	Handle key up notification
-//
+//	PURPOSE: Handle key up notification
 // ----------------------------------------------------------------------- //
 void CGameClientShell::OnKeyUp(int key)
 {
@@ -4854,25 +4681,22 @@ void CGameClientShell::OnKeyUp(int key)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdatePlayerFlags
 //
-//	ROUTINE:	CGameClientShell::UpdatePlayerFlags
-//
-//	PURPOSE:	Update our copy of the movement flags
-//
+//	PURPOSE: Update our copy of the movement flags
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdatePlayerFlags()
 {
 	// Update flags...
 
 	m_dwPlayerFlags = m_MoveMgr.GetControlFlags();
 
-    if (g_pLTClient->IsCommandOn(COMMAND_ID_LOOKUP))
+	if (g_pLTClient->IsCommandOn(COMMAND_ID_LOOKUP))
 	{
 		m_dwPlayerFlags |= BC_CFLG_LOOKUP;
 	}
 
-    if (g_pLTClient->IsCommandOn(COMMAND_ID_LOOKDOWN))
+	if (g_pLTClient->IsCommandOn(COMMAND_ID_LOOKDOWN))
 	{
 		m_dwPlayerFlags |= BC_CFLG_LOOKDOWN;
 	}
@@ -4881,13 +4705,10 @@ void CGameClientShell::UpdatePlayerFlags()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnMessage()
 //
-//	ROUTINE:	CGameClientShell::OnMessage()
-//
-//	PURPOSE:	Handle client messages
-//
+//	PURPOSE: Handle client messages
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 {
 	// Let interface handle message first...
@@ -4898,21 +4719,21 @@ void CGameClientShell::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 	{
 		case MID_TIMEOFDAYCOLOR:
 		{
-            LTVector vNewColor;
-            vNewColor.x = (float)g_pLTClient->ReadFromMessageByte(hMessage) / MAX_WORLDTIME_COLOR;
-            vNewColor.y = (float)g_pLTClient->ReadFromMessageByte(hMessage) / MAX_WORLDTIME_COLOR;
-            vNewColor.z = (float)g_pLTClient->ReadFromMessageByte(hMessage) / MAX_WORLDTIME_COLOR;
+			LTVector vNewColor;
+			vNewColor.x = (float)g_pLTClient->ReadFromMessageByte(hMessage) / MAX_WORLDTIME_COLOR;
+			vNewColor.y = (float)g_pLTClient->ReadFromMessageByte(hMessage) / MAX_WORLDTIME_COLOR;
+			vNewColor.z = (float)g_pLTClient->ReadFromMessageByte(hMessage) / MAX_WORLDTIME_COLOR;
 			m_LightScaleMgr.SetTimeOfDayScale(vNewColor);
 
-            LTVector vNewDir;
-            vNewDir.x = (float)(char)g_pLTClient->ReadFromMessageByte(hMessage) / 127.0f;
-            vNewDir.y = (float)(char)g_pLTClient->ReadFromMessageByte(hMessage) / 127.0f;
-            vNewDir.z = (float)(char)g_pLTClient->ReadFromMessageByte(hMessage) / 127.0f;
-            g_pLTClient->SetGlobalLightDir(vNewDir);
+			LTVector vNewDir;
+			vNewDir.x = (float)(char)g_pLTClient->ReadFromMessageByte(hMessage) / 127.0f;
+			vNewDir.y = (float)(char)g_pLTClient->ReadFromMessageByte(hMessage) / 127.0f;
+			vNewDir.z = (float)(char)g_pLTClient->ReadFromMessageByte(hMessage) / 127.0f;
+			g_pLTClient->SetGlobalLightDir(vNewDir);
 
-            LTFLOAT fTodHours = g_pLTClient->ReadFromMessageFloat(hMessage);
+			LTFLOAT fTodHours = g_pLTClient->ReadFromMessageFloat(hMessage);
 			// Hack: ignores it currently...
-            g_pLTClient->SetAmbientLight(0.4f);
+			g_pLTClient->SetAmbientLight(0.4f);
 
 			if (m_bUseWorldFog)
 			{
@@ -4925,7 +4746,7 @@ void CGameClientShell::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 		{
 			m_MoveMgr.OnServerForcePos(hMessage);
 
-            m_bPlayerPosSet = LTTRUE;
+			m_bPlayerPosSet = LTTRUE;
 		}
 		break;
 
@@ -4956,8 +4777,8 @@ void CGameClientShell::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 
 		case MID_SHAKE_SCREEN :
 		{
-            LTVector vAmount;
-            g_pLTClient->ReadFromMessageVector(hMessage, &vAmount);
+			LTVector vAmount;
+			g_pLTClient->ReadFromMessageVector(hMessage, &vAmount);
 			ShakeScreen(vAmount);
 		}
 		break;
@@ -5003,8 +4824,8 @@ void CGameClientShell::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 		{
 			// Set our pitch, yaw, and roll according to the players...
 
-            LTVector vVec;
-            g_pLTClient->ReadFromMessageVector(hMessage, &vVec);
+			LTVector vVec;
+			g_pLTClient->ReadFromMessageVector(hMessage, &vVec);
 
 			SDL_Log("Message GET! %f / %f / %f", vVec.x, vVec.y, vVec.z);
 
@@ -5021,7 +4842,7 @@ void CGameClientShell::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 
 		case MID_COMMAND_TOGGLE :
 		{
-            uint8 nId = g_pLTClient->ReadFromMessageByte(hMessage);
+			uint8 nId = g_pLTClient->ReadFromMessageByte(hMessage);
 
 			switch(nId)
 			{
@@ -5030,7 +4851,7 @@ void CGameClientShell::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 					CGameSettings* pSettings = m_InterfaceMgr.GetSettings();
 					if (pSettings)
 					{
-                        pSettings->SetRunLock((LTBOOL)g_pLTClient->ReadFromMessageByte(hMessage));
+						pSettings->SetRunLock((LTBOOL)g_pLTClient->ReadFromMessageByte(hMessage));
 					}
 				}
 				break;
@@ -5125,13 +4946,10 @@ void CGameClientShell::OnMessage(uint8 messageID, HMESSAGEREAD hMessage)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::ShakeScreen()
 //
-//	ROUTINE:	CGameClientShell::ShakeScreen()
-//
-//	PURPOSE:	Shanke, rattle, and roll
-//
+//	PURPOSE: Shanke, rattle, and roll
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::ShakeScreen(LTVector vShake)
 {
 	// Add...
@@ -5145,20 +4963,19 @@ void CGameClientShell::ShakeScreen(LTVector vShake)
 
 
 // ----------------------------------------------------------------------- //
-// Console command handlers for recording and playing demos.
+ Console command handlers for recording and playing demos.
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleRecord(int argc, char **argv)
 {
 	if(argc < 2)
 	{
-        g_pLTClient->CPrint("Record <world name> <filename>");
+		g_pLTClient->CPrint("Record <world name> <filename>");
 		return;
 	}
 
 	if(!DoLoadWorld(argv[0], NULL, NULL, LOAD_NEW_GAME, argv[1], NULL))
 	{
-        g_pLTClient->CPrint("Error starting world");
+		g_pLTClient->CPrint("Error starting world");
 	}
 }
 
@@ -5166,24 +4983,21 @@ void CGameClientShell::HandlePlaydemo(int argc, char **argv)
 {
 	if(argc < 1)
 	{
-        g_pLTClient->CPrint("Playdemo <filename>");
+		g_pLTClient->CPrint("Playdemo <filename>");
 		return;
 	}
 
 	if(!DoLoadWorld("asdf", NULL, NULL, LOAD_NEW_GAME, NULL, argv[0]))
 	{
-        g_pLTClient->CPrint("Error starting world");
+		g_pLTClient->CPrint("Error starting world");
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleCheat()
 //
-//	ROUTINE:	CGameClientShell::HandleCheat()
-//
-//	PURPOSE:	Handle cheat console command
-//
+//	PURPOSE: Handle cheat console command
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleCheat(int argc, char **argv)
 {
 	if (argc < 1 || !g_pCheatMgr) return;
@@ -5196,41 +5010,38 @@ void CGameClientShell::HandleCheat(int argc, char **argv)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::FlashScreen()
 //
-//	ROUTINE:	CGameClientShell::FlashScreen()
-//
-//	PURPOSE:	Tint screen
-//
+//	PURPOSE: Tint screen
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::FlashScreen(LTVector vFlashColor, LTVector vPos, LTFLOAT fFlashRange,
-                                  LTFLOAT fTime, LTFLOAT fRampUp, LTFLOAT fRampDown, LTBOOL bForce)
+								  LTFLOAT fTime, LTFLOAT fRampUp, LTFLOAT fRampDown, LTBOOL bForce)
 {
 	CGameSettings* pSettings = m_InterfaceMgr.GetSettings();
 	if (!pSettings) return;
 
 	if (!bForce && !pSettings->ScreenFlash()) return;
 
-    LTVector vCamPos;
-    g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
+	LTVector vCamPos;
+	g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
 
 	// Determine if we can see this...
 
-    LTVector vDir;
+	LTVector vDir;
 	vDir =  vPos - vCamPos;
-    LTFLOAT fDirMag = vDir.Mag();
+	LTFLOAT fDirMag = vDir.Mag();
 	if (fDirMag > fFlashRange) return;
 
 	// Okay, not adjust the tint based on the camera's angle to the tint pos.
 
-    LTRotation rRot;
-    LTVector vU, vR, vF;
-    g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTRotation rRot;
+	LTVector vU, vR, vF;
+	g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	VEC_NORM(vDir);
 	VEC_NORM(vF);
-    LTFLOAT fMul = VEC_DOT(vDir, vF);
+	LTFLOAT fMul = VEC_DOT(vDir, vF);
 	if (fMul <= 0.0f) return;
 
 	// {MD} See if we can even see this point.
@@ -5238,7 +5049,7 @@ void CGameClientShell::FlashScreen(LTVector vFlashColor, LTVector vPos, LTFLOAT 
 	ClientIntersectInfo iInfo;
 	iQuery.m_From = vPos;
 	iQuery.m_To = vCamPos;
-    if(g_pLTClient->IntersectSegment(&iQuery, &iInfo))
+	if(g_pLTClient->IntersectSegment(&iQuery, &iInfo))
 	{
 		// Something is in the way.
 		return;
@@ -5246,11 +5057,11 @@ void CGameClientShell::FlashScreen(LTVector vFlashColor, LTVector vPos, LTFLOAT 
 
 	// Tint less if the pos was far away from the camera...
 
-    LTFLOAT fVal = 1.0f - (fDirMag/fFlashRange);
+	LTFLOAT fVal = 1.0f - (fDirMag/fFlashRange);
 	fMul *= (fVal <= 1.0f ? fVal : 1.0f);
 
-    m_bFlashScreen  = LTTRUE;
-    m_fFlashStart   = g_pLTClient->GetTime();
+	m_bFlashScreen  = LTTRUE;
+	m_fFlashStart   = g_pLTClient->GetTime();
 	m_fFlashTime		= fTime;
 	m_fFlashRampUp	= fRampUp;
 	m_fFlashRampDown	= fRampDown;
@@ -5261,32 +5072,29 @@ void CGameClientShell::FlashScreen(LTVector vFlashColor, LTVector vPos, LTFLOAT 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateDuck()
 //
-//	ROUTINE:	CGameClientShell::UpdateDuck()
-//
-//	PURPOSE:	Update ducking camera offset
-//
+//	PURPOSE: Update ducking camera offset
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateDuck()
 {
 	// Can't duck when free movement...
 
-    if (m_MoveMgr.IsBodyInLiquid() || m_MoveMgr.IsBodyOnLadder() ||
-        IsFreeMovement(m_eCurContainerCode)) return;
+	if (m_MoveMgr.IsBodyInLiquid() || m_MoveMgr.IsBodyOnLadder() ||
+		IsFreeMovement(m_eCurContainerCode)) return;
 
 
-    LTFLOAT fTime = g_pLTClient->GetTime();
+	LTFLOAT fTime = g_pLTClient->GetTime();
 
 	if (m_dwPlayerFlags & BC_CFLG_DUCK)
 	{
-        m_bStartedDuckingUp = LTFALSE;
+		m_bStartedDuckingUp = LTFALSE;
 
 		// See if the duck just started...
 
 		if (!m_bStartedDuckingDown)
 		{
-            m_bStartedDuckingDown = LTTRUE;
+			m_bStartedDuckingDown = LTTRUE;
 			m_fStartDuckTime = fTime;
 		}
 
@@ -5300,12 +5108,12 @@ void CGameClientShell::UpdateDuck()
 	}
 	else if (m_fCamDuck < 0.0) // Raise up
 	{
-        m_bStartedDuckingDown = LTFALSE;
+		m_bStartedDuckingDown = LTFALSE;
 
 		if (!m_bStartedDuckingUp)
 		{
 			m_fStartDuckTime = fTime;
-            m_bStartedDuckingUp = LTTRUE;
+			m_bStartedDuckingUp = LTTRUE;
 		}
 
 		m_fCamDuck += m_fDuckUpV * (fTime - m_fStartDuckTime);
@@ -5319,30 +5127,27 @@ void CGameClientShell::UpdateDuck()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::PauseGame()
 //
-//	ROUTINE:	CGameClientShell::PauseGame()
-//
-//	PURPOSE:	Pauses/Unpauses the server
-//
+//	PURPOSE: Pauses/Unpauses the server
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::PauseGame(LTBOOL bPause, LTBOOL bPauseSound)
 {
 	m_bGamePaused = bPause;
 
 	if (!IsMultiplayerGame())
 	{
-        HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(bPause ? MID_GAME_PAUSE : MID_GAME_UNPAUSE);
-        g_pLTClient->EndMessage(hMessage);
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(bPause ? MID_GAME_PAUSE : MID_GAME_UNPAUSE);
+		g_pLTClient->EndMessage(hMessage);
 	}
 
 	if (bPause && bPauseSound)
 	{
-        g_pLTClient->PauseSounds();
+		g_pLTClient->PauseSounds();
 	}
 	else
 	{
-        g_pLTClient->ResumeSounds();
+		g_pLTClient->ResumeSounds();
 	}
 
 	SetInputState(!bPause && m_bAllowPlayerMovement);
@@ -5350,31 +5155,25 @@ void CGameClientShell::PauseGame(LTBOOL bPause, LTBOOL bPauseSound)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::SetInputState()
 //
-//	ROUTINE:	CGameClientShell::SetInputState()
-//
-//	PURPOSE:	Allows/disallows input
-//
+//	PURPOSE: Allows/disallows input
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::SetInputState(LTBOOL bAllowInput)
 {
-    g_pLTClient->SetInputState(bAllowInput);
+	g_pLTClient->SetInputState(bAllowInput);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::SetMouseInput()
 //
-//	ROUTINE:	CGameClientShell::SetMouseInput()
-//
-//	PURPOSE:	Allows or disallows mouse input on the client
-//
+//	PURPOSE: Allows or disallows mouse input on the client
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::SetMouseInput(LTBOOL bAllowInput)
 {
 	if (bAllowInput)
 	{
-        m_bRestoreOrientation = LTTRUE;
+		m_bRestoreOrientation = LTTRUE;
 		m_fYaw   = m_fYawBackup;
 		m_fPitch = m_fPitchBackup;
 	}
@@ -5392,16 +5191,13 @@ void CGameClientShell::AllowPlayerMovement(LTBOOL bAllowPlayerMovement)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandlePlayerStateChange()
 //
-//	ROUTINE:	CGameClientShell::HandlePlayerStateChange()
-//
-//	PURPOSE:	Update player state change
-//
+//	PURPOSE: Update player state change
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandlePlayerStateChange(HMESSAGEREAD hMessage)
 {
-    m_ePlayerState = (PlayerState) g_pLTClient->ReadFromMessageByte(hMessage);
+	m_ePlayerState = (PlayerState) g_pLTClient->ReadFromMessageByte(hMessage);
 
 	switch (m_ePlayerState)
 	{
@@ -5412,28 +5208,28 @@ void CGameClientShell::HandlePlayerStateChange(HMESSAGEREAD hMessage)
 			if (IsMultiplayerGame())
 			{
 				m_InterfaceMgr.GetPlayerStats()->ResetInventory();
-                m_fEarliestRespawnTime = g_pLTClient->GetTime() + g_vtMultiplayerRespawnWaitTime.GetFloat();
+				m_fEarliestRespawnTime = g_pLTClient->GetTime() + g_vtMultiplayerRespawnWaitTime.GetFloat();
 			}
 			else
 			{
-                m_fEarliestRespawnTime = g_pLTClient->GetTime() + g_vtRespawnWaitTime.GetFloat();
+				m_fEarliestRespawnTime = g_pLTClient->GetTime() + g_vtRespawnWaitTime.GetFloat();
 			}
 
 			HandleZoomChange(m_weaponModel.GetWeaponId(), LTTRUE);
 			EndZoom();
 			m_InterfaceMgr.EndUnderwater();
 
-            m_weaponModel.SetVisible(LTFALSE);
+			m_weaponModel.SetVisible(LTFALSE);
 			m_weaponModel.Reset();
 
-            m_InterfaceMgr.SetDrawInterface(LTFALSE);
+			m_InterfaceMgr.SetDrawInterface(LTFALSE);
 			m_InterfaceMgr.AddToClearScreenCount();
 
 			if (GetGameType() == SINGLE)
 			{
 				HSTRING hStr = g_pLTClient->FormatString(IDS_YOUWEREKILLED);
 				CSPrint(g_pLTClient->GetStringData(hStr));
-			    g_pLTClient->FreeString(hStr);
+				g_pLTClient->FreeString(hStr);
 				m_InterfaceMgr.StartScreenFadeOut(g_vtScreenFadeOutTime.GetFloat());
 			}
 		}
@@ -5446,13 +5242,13 @@ void CGameClientShell::HandlePlayerStateChange(HMESSAGEREAD hMessage)
 
 			AttachCameraToHead(LTFALSE);
 
-            m_InterfaceMgr.SetDrawInterface(LTTRUE);
-            m_InterfaceMgr.DrawPlayerStats(LTTRUE);
+			m_InterfaceMgr.SetDrawInterface(LTTRUE);
+			m_InterfaceMgr.DrawPlayerStats(LTTRUE);
 
-            SetExternalCamera(LTFALSE);
+			SetExternalCamera(LTFALSE);
 
-            m_weaponModel.Disable(LTFALSE);
-        }
+			m_weaponModel.Disable(LTFALSE);
+		}
 		break;
 
 		case PS_DEAD:
@@ -5465,21 +5261,21 @@ void CGameClientShell::HandlePlayerStateChange(HMESSAGEREAD hMessage)
 		case PS_GHOST:
 		{
 			AttachCameraToHead(LTFALSE);
-            m_weaponModel.SetVisible(LTFALSE);
+			m_weaponModel.SetVisible(LTFALSE);
 
-            m_InterfaceMgr.SetDrawInterface(LTFALSE);
-            m_InterfaceMgr.DrawPlayerStats(LTFALSE);
+			m_InterfaceMgr.SetDrawInterface(LTFALSE);
+			m_InterfaceMgr.DrawPlayerStats(LTFALSE);
 
 			m_InterfaceMgr.ForceScreenFadeIn(g_vtScreenFadeInTime.GetFloat());
 
 			m_InterfaceMgr.GetMessageMgr()->AddLine(IDS_NO_RESPAWN);
 
 /*
-            SetExternalCamera(LTTRUE);
+			SetExternalCamera(LTTRUE);
 */
-            m_weaponModel.Disable(LTTRUE);
+			m_weaponModel.Disable(LTTRUE);
 
-        }
+		}
 		break;
 
 		default : break;
@@ -5488,13 +5284,10 @@ void CGameClientShell::HandlePlayerStateChange(HMESSAGEREAD hMessage)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::AutoSave()
 //
-//	ROUTINE:	CGameClientShell::AutoSave()
-//
-//	PURPOSE:	Autosave the game
-//
+//	PURPOSE: Autosave the game
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::AutoSave(HMESSAGEREAD hMessage)
 {
 	if (m_ePlayerState != PS_ALIVE) return;
@@ -5527,71 +5320,68 @@ void CGameClientShell::AutoSave(HMESSAGEREAD hMessage)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandlePlayerDamage
 //
-//	ROUTINE:	CGameClientShell::HandlePlayerDamage
-//
-//	PURPOSE:	Handle the player getting damaged
-//
+//	PURPOSE: Handle the player getting damaged
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandlePlayerDamage(HMESSAGEREAD hMessage)
 {
 	if (!hMessage || g_bScreenShotMode) return;
 
-    LTVector vDir;
-    g_pLTClient->ReadFromMessageVector(hMessage, &vDir);
-    DamageType eType = (DamageType) g_pLTClient->ReadFromMessageByte(hMessage);
-    LTBOOL bUsingDamage = (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
+	LTVector vDir;
+	g_pLTClient->ReadFromMessageVector(hMessage, &vDir);
+	DamageType eType = (DamageType) g_pLTClient->ReadFromMessageByte(hMessage);
+	LTBOOL bUsingDamage = (LTBOOL) g_pLTClient->ReadFromMessageByte(hMessage);
 
-    LTFLOAT fPercent = VEC_MAG(vDir);
+	LTFLOAT fPercent = VEC_MAG(vDir);
 
 	LTFLOAT fLowValue = bUsingDamage ? 0.5f : 0.0f;
-    LTFLOAT fColor = fLowValue + fPercent;
+	LTFLOAT fColor = fLowValue + fPercent;
 	fColor = fColor > 1.0f ? 1.0f : fColor;
 
-    LTFLOAT fRampDown = fLowValue + fPercent * 2.0f;
+	LTFLOAT fRampDown = fLowValue + fPercent * 2.0f;
 
 	LTVector vFlashColor(fColor, 0.0f, 0.0f);
  	if (!bUsingDamage)
 	{
 		if (fColor > 0.7f) fColor = 0.7f;
-	    vFlashColor.Init(0.2f, 0.2f, fColor);
-    }
+		vFlashColor.Init(0.2f, 0.2f, fColor);
+	}
 
 	LTFLOAT fRampUp = 0.2f, fFlashTime = 0.1f;
 
-    LTVector vCamPos;
-    g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
+	LTVector vCamPos;
+	g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
 
-    LTRotation rRot;
-    g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
+	LTRotation rRot;
+	g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
 
-    LTVector vU, vR, vF;
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTVector vU, vR, vF;
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	VEC_MULSCALAR(vF, vF, 10.0f);
 	VEC_ADD(vCamPos, vCamPos, vF);
 
-    FlashScreen(vFlashColor, vCamPos, 1000.0f, fRampUp, fFlashTime, fRampDown, LTTRUE);
+	FlashScreen(vFlashColor, vCamPos, 1000.0f, fRampUp, fFlashTime, fRampDown, LTTRUE);
 
 	// Tilt the camera based on the direction the damage came from...
 
 	if (bUsingDamage && IsJarCameraType(eType) && m_PlayerCamera.IsFirstPerson() &&
 		g_vtCamDamage.GetFloat() > 0.0f && fPercent > 0.0f)
 	{
-        LTRotation rRot;
-        LTVector vU, vR, vF;
+		LTRotation rRot;
+		LTVector vU, vR, vF;
 		GetPlayerRotation(&rRot);
-        g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 		vDir.Norm();
-        LTFLOAT fMul = VEC_DOT(vDir, vF);
+		LTFLOAT fMul = VEC_DOT(vDir, vF);
 
 		CameraDelta delta;
 
 		if (g_vtCamDamagePitch.GetFloat() > 0.0f)
 		{
-            // g_pLTClient->CPrint("Damage Pitch Val: %.2f", fMul);
+			// g_pLTClient->CPrint("Damage Pitch Val: %.2f", fMul);
 
 			// Hit from the back...
 
@@ -5616,7 +5406,7 @@ void CGameClientShell::HandlePlayerDamage(HMESSAGEREAD hMessage)
 		if (g_vtCamDamageRoll.GetFloat() > 0.0f)
 		{
 			fMul = VEC_DOT(vDir, vR);
-            //g_pLTClient->CPrint("Damage Roll Val: %.2f", fMul);
+			//g_pLTClient->CPrint("Damage Roll Val: %.2f", fMul);
 
 			// Hit from the left...
 
@@ -5644,18 +5434,15 @@ void CGameClientShell::HandlePlayerDamage(HMESSAGEREAD hMessage)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleServerError()
 //
-//	ROUTINE:	CGameClientShell::HandleServerError()
-//
-//	PURPOSE:	Handle any error messages sent from the server
-//
+//	PURPOSE: Handle any error messages sent from the server
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleServerError(HMESSAGEREAD hMessage)
 {
 	if (!hMessage) return;
 
-    uint8 nError = g_pLTClient->ReadFromMessageByte(hMessage);
+	uint8 nError = g_pLTClient->ReadFromMessageByte(hMessage);
 	switch (nError)
 	{
 		case SERROR_SAVEGAME :
@@ -5677,18 +5464,15 @@ void CGameClientShell::HandleServerError(HMESSAGEREAD hMessage)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleMultiplayerGameData()
 //
-//	ROUTINE:	CGameClientShell::HandleMultiplayerGameData()
-//
-//	PURPOSE:	Handle global game data sent from the server
-//
+//	PURPOSE: Handle global game data sent from the server
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleMultiplayerGameData(HMESSAGEREAD hMessage)
 {
 	if (!hMessage) return;
 
-    uint8 byGameType = g_pLTClient->ReadFromMessageByte(hMessage);
+	uint8 byGameType = g_pLTClient->ReadFromMessageByte(hMessage);
 	m_eGameType = (GameType)byGameType;
 
 	if (m_eGameType != SINGLE)
@@ -5708,13 +5492,10 @@ void CGameClientShell::HandleMultiplayerGameData(HMESSAGEREAD hMessage)
 	}
 }
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleServerOptions()
 //
-//	ROUTINE:	CGameClientShell::HandleServerOptions()
-//
-//	PURPOSE:	Handle game option data sent from the server
-//
+//	PURPOSE: Handle game option data sent from the server
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleServerOptions(HMESSAGEREAD hMessage)
 {
 	if (!hMessage) return;
@@ -5739,19 +5520,16 @@ void CGameClientShell::HandleServerOptions(HMESSAGEREAD hMessage)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateWeaponMuzzlePosition()
 //
-//	ROUTINE:	CGameClientShell::UpdateWeaponMuzzlePosition()
-//
-//	PURPOSE:	Update the current weapon muzzle pos
-//
+//	PURPOSE: Update the current weapon muzzle pos
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateWeaponMuzzlePosition()
 {
-    LTFLOAT fIncValue = WEAPON_MOVE_INC_VALUE_SLOW;
-    LTBOOL bChanged = LTFALSE;
+	LTFLOAT fIncValue = WEAPON_MOVE_INC_VALUE_SLOW;
+	LTBOOL bChanged = LTFALSE;
 
-    LTVector vOffset;
+	LTVector vOffset;
 	VEC_INIT(vOffset);
 
 
@@ -5772,7 +5550,7 @@ void CGameClientShell::UpdateWeaponMuzzlePosition()
 	{
 		fIncValue = m_dwPlayerFlags & BC_CFLG_FORWARD ? fIncValue : -fIncValue;
 		vOffset.z += fIncValue;
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -5783,7 +5561,7 @@ void CGameClientShell::UpdateWeaponMuzzlePosition()
 	{
 		fIncValue = m_dwPlayerFlags & BC_CFLG_STRAFE_RIGHT ? fIncValue : -fIncValue;
 		vOffset.x += fIncValue;
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -5793,7 +5571,7 @@ void CGameClientShell::UpdateWeaponMuzzlePosition()
 	{
 		fIncValue = m_dwPlayerFlags & BC_CFLG_DUCK ? -fIncValue : fIncValue;
 		vOffset.y += fIncValue;
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -5813,19 +5591,16 @@ void CGameClientShell::UpdateWeaponMuzzlePosition()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateWeaponPosition()
 //
-//	ROUTINE:	CGameClientShell::UpdateWeaponPosition()
-//
-//	PURPOSE:	Update the position of the current weapon
-//
+//	PURPOSE: Update the position of the current weapon
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateWeaponPosition()
 {
-    LTFLOAT fIncValue = WEAPON_MOVE_INC_VALUE_SLOW;
-    LTBOOL bChanged = LTFALSE;
+	LTFLOAT fIncValue = WEAPON_MOVE_INC_VALUE_SLOW;
+	LTBOOL bChanged = LTFALSE;
 
-    LTVector vOffset;
+	LTVector vOffset;
 	VEC_INIT(vOffset);
 
 
@@ -5846,7 +5621,7 @@ void CGameClientShell::UpdateWeaponPosition()
 	{
 		fIncValue = m_dwPlayerFlags & BC_CFLG_FORWARD ? fIncValue : -fIncValue;
 		vOffset.z += fIncValue;
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -5857,7 +5632,7 @@ void CGameClientShell::UpdateWeaponPosition()
 	{
 		fIncValue = m_dwPlayerFlags & BC_CFLG_STRAFE_RIGHT ? fIncValue : -fIncValue;
 		vOffset.x += fIncValue;
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -5867,7 +5642,7 @@ void CGameClientShell::UpdateWeaponPosition()
 	{
 		fIncValue = m_dwPlayerFlags & BC_CFLG_DUCK ? -fIncValue : fIncValue;
 		vOffset.y += fIncValue;
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -5886,17 +5661,14 @@ void CGameClientShell::UpdateWeaponPosition()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::AdjustWeaponBreach()
 //
-//	ROUTINE:	CGameClientShell::AdjustWeaponBreach()
-//
-//	PURPOSE:	Update the position of the current hand-held weapon breach offset
-//
+//	PURPOSE: Update the position of the current hand-held weapon breach offset
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::AdjustWeaponBreach()
 {
-    LTFLOAT fIncValue = WEAPON_MOVE_INC_VALUE_SLOW;
-    LTBOOL bChanged = LTFALSE;
+	LTFLOAT fIncValue = WEAPON_MOVE_INC_VALUE_SLOW;
+	LTBOOL bChanged = LTFALSE;
 
 	// Move breach offset faster if running...
 
@@ -5908,7 +5680,7 @@ void CGameClientShell::AdjustWeaponBreach()
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(m_weaponModel.GetWeaponId());
 	if (!pWeapon) return;
 
-    LTFLOAT fBreach = pWeapon->fHHBreachOffset;
+	LTFLOAT fBreach = pWeapon->fHHBreachOffset;
 
 
 	// Move weapon breach offset forward or backwards...
@@ -5917,7 +5689,7 @@ void CGameClientShell::AdjustWeaponBreach()
 	{
 		fIncValue = m_dwPlayerFlags & BC_CFLG_FORWARD ? fIncValue : -fIncValue;
 		fBreach += fIncValue;
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 	if (bChanged)
@@ -5934,17 +5706,14 @@ void CGameClientShell::AdjustWeaponBreach()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::Adjust1stPersonCamera()
 //
-//	ROUTINE:	CGameClientShell::Adjust1stPersonCamera()
-//
-//	PURPOSE:	Update the 1st-person camera offset
-//
+//	PURPOSE: Update the 1st-person camera offset
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::Adjust1stPersonCamera()
 {
-    LTFLOAT fIncValue = 0.1f;
-    LTBOOL bChanged = LTFALSE;
+	LTFLOAT fIncValue = 0.1f;
+	LTBOOL bChanged = LTFALSE;
 
 	// Move breach offset faster if running...
 
@@ -5959,7 +5728,7 @@ void CGameClientShell::Adjust1stPersonCamera()
 	{
 		fIncValue = m_dwPlayerFlags & BC_CFLG_FORWARD ? fIncValue : -fIncValue;
 		g_vPlayerCameraOffset.x += fIncValue;
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 	// Move 1st person offset.y up or down...
@@ -5968,7 +5737,7 @@ void CGameClientShell::Adjust1stPersonCamera()
 	{
 		fIncValue = m_dwPlayerFlags & BC_CFLG_JUMP ? fIncValue : -fIncValue;
 		g_vPlayerCameraOffset.y += fIncValue;
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -5977,28 +5746,25 @@ void CGameClientShell::Adjust1stPersonCamera()
 		// Okay, set the offset...
 
 		m_PlayerCamera.SetFirstPersonOffset(g_vPlayerCameraOffset);
-        g_pLTClient->CPrint("1st person camera offset: %.2f, %.2f, %.2f", g_vPlayerCameraOffset.x, g_vPlayerCameraOffset.y, g_vPlayerCameraOffset.z);
+		g_pLTClient->CPrint("1st person camera offset: %.2f, %.2f, %.2f", g_vPlayerCameraOffset.x, g_vPlayerCameraOffset.y, g_vPlayerCameraOffset.z);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::AdjustLightScale()
 //
-//	ROUTINE:	CGameClientShell::AdjustLightScale()
-//
-//	PURPOSE:	Update the current global light scale
-//
+//	PURPOSE: Update the current global light scale
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::AdjustLightScale()
 {
-    LTFLOAT fIncValue = 0.01f;
-    LTBOOL bChanged = LTFALSE;
+	LTFLOAT fIncValue = 0.01f;
+	LTBOOL bChanged = LTFALSE;
 
-    LTVector vScale;
+	LTVector vScale;
 	VEC_INIT(vScale);
 
-    g_pLTClient->GetGlobalLightScale(&vScale);
+	g_pLTClient->GetGlobalLightScale(&vScale);
 
 	// Move faster if running...
 
@@ -6016,7 +5782,7 @@ void CGameClientShell::AdjustLightScale()
 		vScale.x += fIncValue;
 		vScale.x = vScale.x < 0.0f ? 0.0f : (vScale.x > 1.0f ? 1.0f : vScale.x);
 
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -6029,7 +5795,7 @@ void CGameClientShell::AdjustLightScale()
 		vScale.y += fIncValue;
 		vScale.y = vScale.y < 0.0f ? 0.0f : (vScale.y > 1.0f ? 1.0f : vScale.y);
 
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -6041,13 +5807,13 @@ void CGameClientShell::AdjustLightScale()
 		vScale.z += fIncValue;
 		vScale.z = vScale.z < 0.0f ? 0.0f : (vScale.z > 1.0f ? 1.0f : vScale.z);
 
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
 	// Okay, set the light scale.
 
-    g_pLTClient->SetGlobalLightScale(&vScale);
+	g_pLTClient->SetGlobalLightScale(&vScale);
 
 	if (bChanged)
 	{
@@ -6058,22 +5824,19 @@ void CGameClientShell::AdjustLightScale()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::AdjustLightAdd()
 //
-//	ROUTINE:	CGameClientShell::AdjustLightAdd()
-//
-//	PURPOSE:	Update the current global light add
-//
+//	PURPOSE: Update the current global light add
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::AdjustLightAdd()
 {
-    LTFLOAT fIncValue = 0.01f;
-    LTBOOL bChanged = LTFALSE;
+	LTFLOAT fIncValue = 0.01f;
+	LTBOOL bChanged = LTFALSE;
 
-    LTVector vScale;
+	LTVector vScale;
 	VEC_INIT(vScale);
 
-    g_pLTClient->GetCameraLightAdd(m_hCamera, &vScale);
+	g_pLTClient->GetCameraLightAdd(m_hCamera, &vScale);
 
 	// Move faster if running...
 
@@ -6091,7 +5854,7 @@ void CGameClientShell::AdjustLightAdd()
 		vScale.x += fIncValue;
 		vScale.x = vScale.x < 0.0f ? 0.0f : (vScale.x > 1.0f ? 1.0f : vScale.x);
 
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -6104,7 +5867,7 @@ void CGameClientShell::AdjustLightAdd()
 		vScale.y += fIncValue;
 		vScale.y = vScale.y < 0.0f ? 0.0f : (vScale.y > 1.0f ? 1.0f : vScale.y);
 
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -6116,13 +5879,13 @@ void CGameClientShell::AdjustLightAdd()
 		vScale.z += fIncValue;
 		vScale.z = vScale.z < 0.0f ? 0.0f : (vScale.z > 1.0f ? 1.0f : vScale.z);
 
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
 	// Okay, set the light add.
 
-    g_pLTClient->SetCameraLightAdd(m_hCamera, &vScale);
+	g_pLTClient->SetCameraLightAdd(m_hCamera, &vScale);
 
 	if (bChanged)
 	{
@@ -6131,23 +5894,20 @@ void CGameClientShell::AdjustLightAdd()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::AdjustFOV()
 //
-//	ROUTINE:	CGameClientShell::AdjustFOV()
-//
-//	PURPOSE:	Update the current FOV
-//
+//	PURPOSE: Update the current FOV
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::AdjustFOV()
 {
-    LTFLOAT fIncValue = 0.001f;
-    LTBOOL bChanged = LTFALSE;
+	LTFLOAT fIncValue = 0.001f;
+	LTBOOL bChanged = LTFALSE;
 
-    LTFLOAT fCurFOVx, fCurFOVy;
+	LTFLOAT fCurFOVx, fCurFOVy;
 
 	// Save the current camera fov...
 
-    g_pLTClient->GetCameraFOV(m_hCamera, &fCurFOVx, &fCurFOVy);
+	g_pLTClient->GetCameraFOV(m_hCamera, &fCurFOVx, &fCurFOVy);
 
 
 	// Move faster if running...
@@ -6165,7 +5925,7 @@ void CGameClientShell::AdjustFOV()
 		fIncValue = m_dwPlayerFlags & BC_CFLG_STRAFE_RIGHT ? fIncValue : -fIncValue;
 		fCurFOVx += fIncValue;
 
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -6176,7 +5936,7 @@ void CGameClientShell::AdjustFOV()
 		fIncValue = m_dwPlayerFlags & BC_CFLG_DUCK ? -fIncValue : fIncValue;
 		fCurFOVy += fIncValue;
 
-        bChanged = LTTRUE;
+		bChanged = LTTRUE;
 	}
 
 
@@ -6195,19 +5955,16 @@ void CGameClientShell::AdjustFOV()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::SpecialEffectNotify()
 //
-//	ROUTINE:	CGameClientShell::SpecialEffectNotify()
-//
-//	PURPOSE:	Handle creation of a special fx
-//
+//	PURPOSE: Handle creation of a special fx
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::SpecialEffectNotify(HLOCALOBJ hObj, HMESSAGEREAD hMessage)
 {
 	if (hObj)
 	{
-        uint32 dwCFlags = g_pLTClient->GetObjectClientFlags(hObj);
-        g_pLTClient->SetObjectClientFlags(hObj, dwCFlags | CF_NOTIFYREMOVE);
+		uint32 dwCFlags = g_pLTClient->GetObjectClientFlags(hObj);
+		g_pLTClient->SetObjectClientFlags(hObj, dwCFlags | CF_NOTIFYREMOVE);
 	}
 
 	m_sfxMgr.HandleSFXMsg(hObj, hMessage);
@@ -6215,13 +5972,10 @@ void CGameClientShell::SpecialEffectNotify(HLOCALOBJ hObj, HMESSAGEREAD hMessage
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnObjectRemove()
 //
-//	ROUTINE:	CGameClientShell::OnObjectRemove()
-//
-//	PURPOSE:	Handle removal of a server created object...
-//
+//	PURPOSE: Handle removal of a server created object...
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::OnObjectRemove(HLOCALOBJ hObj)
 {
 	if (!hObj) return;
@@ -6230,31 +5984,25 @@ void CGameClientShell::OnObjectRemove(HLOCALOBJ hObj)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleExitLevel()
 //
-//	ROUTINE:	CGameClientShell::HandleExitLevel()
-//
-//	PURPOSE:	Handle ExitLevel console command
-//
+//	PURPOSE: Handle ExitLevel console command
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleExitLevel(int argc, char **argv)
 {
 	// Tell the server to exit the level...
 	if (GetGameType() == SINGLE)
 	{
-	    HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_EXITLEVEL);
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_EXITLEVEL);
 		g_pLTClient->EndMessage(hMessage);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleExitLevel()
 //
-//	ROUTINE:	CGameClientShell::HandleExitLevel()
-//
-//	PURPOSE:	Update player state change
-//
+//	PURPOSE: Update player state change
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleExitLevel(HMESSAGEREAD hMessage)
 {
 	if (GetGameType() != SINGLE)
@@ -6273,23 +6021,20 @@ void CGameClientShell::HandleExitLevel(HMESSAGEREAD hMessage)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::ExitLevel()
 //
-//	ROUTINE:	CGameClientShell::ExitLevel()
-//
-//	PURPOSE:	Exit this level and go to the next level
-//
+//	PURPOSE: Exit this level and go to the next level
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::ExitLevel()
 {
-    g_pLTClient->ClearInput(); // Start next level with a clean slate
+	g_pLTClient->ClearInput(); // Start next level with a clean slate
 
 	TurnOffAlternativeCamera(CT_FULLSCREEN);
 
 
 	// We are officially no longer in a world...
 
-    m_bInWorld = LTFALSE;
+	m_bInWorld = LTFALSE;
 
 	// Go to the the next level...
 	SetCurrentLevel(m_nCurrentLevel + 1);
@@ -6297,8 +6042,8 @@ void CGameClientShell::ExitLevel()
 	MISSION* pMission = g_pMissionMgr->GetMission(m_nCurrentMission);
 	if (!pMission)
 	{
-        g_pLTClient->CPrint("ERROR in CGameClientShell::ExitLevel():");
-        g_pLTClient->CPrint("      Invalid mission %d!", m_nCurrentMission);
+		g_pLTClient->CPrint("ERROR in CGameClientShell::ExitLevel():");
+		g_pLTClient->CPrint("	  Invalid mission %d!", m_nCurrentMission);
 		return;
 	}
 
@@ -6340,20 +6085,17 @@ void CGameClientShell::ExitLevel()
 
 		if (!LoadCurrentLevel())
 		{
-            g_pLTClient->CPrint("ERROR in CGameClientShell::ExitLevel():");
-            g_pLTClient->CPrint("      Couldn't start level %d!", m_nCurrentLevel);
+			g_pLTClient->CPrint("ERROR in CGameClientShell::ExitLevel():");
+			g_pLTClient->CPrint("	  Couldn't start level %d!", m_nCurrentLevel);
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::SetSpectatorMode()
 //
-//	ROUTINE:	CGameClientShell::SetSpectatorMode()
-//
-//	PURPOSE:	Turn spectator mode on/off
-//
+//	PURPOSE: Turn spectator mode on/off
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::SetSpectatorMode(LTBOOL bOn)
 {
 	m_bSpectatorMode = bOn;
@@ -6364,7 +6106,7 @@ void CGameClientShell::SetSpectatorMode(LTBOOL bOn)
 
 	if (m_PlayerCamera.IsFirstPerson())
 	{
-        ShowPlayer(LTFALSE);
+		ShowPlayer(LTFALSE);
 
 		m_MoveMgr.SetSpectatorMode(bOn);
 	}
@@ -6374,15 +6116,12 @@ void CGameClientShell::SetSpectatorMode(LTBOOL bOn)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::LoadWorld()
 //
-//	ROUTINE:	CGameClientShell::LoadWorld()
-//
-//	PURPOSE:	Handles loading a world (with AutoSave)
-//
+//	PURPOSE: Handles loading a world (with AutoSave)
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::LoadWorld(char* pWorldFile, char* pCurWorldSaveFile,
-                                  char* pRestoreObjectsFile, uint8 nFlags)
+								  char* pRestoreObjectsFile, uint8 nFlags)
 {
 	// Auto save the newly loaded level...
 	return DoLoadWorld(pWorldFile, pCurWorldSaveFile, pRestoreObjectsFile, nFlags);
@@ -6390,32 +6129,29 @@ LTBOOL CGameClientShell::LoadWorld(char* pWorldFile, char* pCurWorldSaveFile,
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::DoLoadWorld()
 //
-//	ROUTINE:	CGameClientShell::DoLoadWorld()
-//
-//	PURPOSE:	Does actual work of loading a world
-//
+//	PURPOSE: Does actual work of loading a world
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::DoLoadWorld(char* pWorldFile, char* pCurWorldSaveFile,
-                                    char* pRestoreObjectsFile, uint8 nFlags,
+									char* pRestoreObjectsFile, uint8 nFlags,
 									char *pRecordFile, char *pPlaydemoFile)
 {
-    if (!pWorldFile) return LTFALSE;
+	if (!pWorldFile) return LTFALSE;
 
 
 	CMissionData* pMissionData = m_InterfaceMgr.GetMissionData();
 	_ASSERT(pMissionData);
-    if (!pMissionData) return LTFALSE;
+	if (!pMissionData) return LTFALSE;
 
 
 	// Make sure the FOV is set correctly...
 
-    uint32 dwWidth = 640;
-    uint32 dwHeight = 480;
-    g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &dwWidth, &dwHeight);
+	uint32 dwWidth = 640;
+	uint32 dwHeight = 480;
+	g_pLTClient->GetSurfaceDims(g_pLTClient->GetScreenSurface(), &dwWidth, &dwHeight);
 
-    g_pLTClient->SetCameraRect(m_hCamera, LTFALSE, 0, 0, dwWidth, dwHeight);
+	g_pLTClient->SetCameraRect(m_hCamera, LTFALSE, 0, 0, dwWidth, dwHeight);
 	SetCameraFOV(DEG2RAD(g_vtFOVXNormal.GetFloat()), DEG2RAD(g_vtFOVYNormal.GetFloat()));
 
 	// See if the loaded world is a custom level or not...
@@ -6425,7 +6161,7 @@ LTBOOL CGameClientShell::DoLoadWorld(char* pWorldFile, char* pCurWorldSaveFile,
 	{
 		SetCurrentMission(nMissionId);
 		SetCurrentLevel(nLevel);
-        m_bIsCustomLevel    = LTFALSE;
+		m_bIsCustomLevel	= LTFALSE;
 
 		// Set the level in the mission data...
 		if (nMissionId != pMissionData->GetMissionNum())
@@ -6471,23 +6207,23 @@ LTBOOL CGameClientShell::DoLoadWorld(char* pWorldFile, char* pCurWorldSaveFile,
 	}
 	else
 	{
-        m_bIsCustomLevel = LTTRUE;
+		m_bIsCustomLevel = LTTRUE;
 
 		// No mission data in custom levels...
 
 		pMissionData->Clear();
 		char *pWorld = strrchr(pWorldFile,'\\');
-        if(!pWorld)
-        {
-            pWorld = strrchr(pWorldFile, '/');
-        }
-        if(pWorld)
-        {
-            pWorld++;
-            HSTRING hWorld = g_pLTClient->CreateString(pWorld);
-            g_pInterfaceMgr->SetLoadLevelString(hWorld);
-            g_pLTClient->FreeString(hWorld);
-        }
+		if(!pWorld)
+		{
+			pWorld = strrchr(pWorldFile, '/');
+		}
+		if(pWorld)
+		{
+			pWorld++;
+			HSTRING hWorld = g_pLTClient->CreateString(pWorld);
+			g_pInterfaceMgr->SetLoadLevelString(hWorld);
+			g_pLTClient->FreeString(hWorld);
+		}
 
 		char szPhoto[512];
 		SAFE_STRCPY(szPhoto,pWorldFile);
@@ -6505,8 +6241,8 @@ LTBOOL CGameClientShell::DoLoadWorld(char* pWorldFile, char* pCurWorldSaveFile,
 	// single player mode from multiplayer...
 
 	int nGameMode = 0;
-    g_pLTClient->GetGameMode(&nGameMode);
-    if (pRecordFile || pPlaydemoFile || !g_pLTClient->IsConnected() ||
+	g_pLTClient->GetGameMode(&nGameMode);
+	if (pRecordFile || pPlaydemoFile || !g_pLTClient->IsConnected() ||
 		(nGameMode != STARTGAME_NORMAL && nGameMode != GAMEMODE_NONE))
 	{
 		StartGameRequest request;
@@ -6534,10 +6270,10 @@ LTBOOL CGameClientShell::DoLoadWorld(char* pWorldFile, char* pCurWorldSaveFile,
 			SAFE_STRCPY(request.m_PlaybackFilename, pPlaydemoFile);
 		}
 
-        LTRESULT dr = g_pLTClient->StartGame(&request);
+		LTRESULT dr = g_pLTClient->StartGame(&request);
 		if (dr != LT_OK)
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		if(pPlaydemoFile)
@@ -6558,45 +6294,42 @@ LTBOOL CGameClientShell::DoLoadWorld(char* pWorldFile, char* pCurWorldSaveFile,
 
 	// Send a message to the server shell with the needed info...
 
-    HSTRING hWorldFile          = g_pLTClient->CreateString(pWorldFile);
-    HSTRING hCurWorldSaveFile   = g_pLTClient->CreateString(pCurWorldSaveFile ? pCurWorldSaveFile : (char *)" ");
-    HSTRING hRestoreObjectsFile = g_pLTClient->CreateString(pRestoreObjectsFile ? pRestoreObjectsFile : (char *)" ");
+	HSTRING hWorldFile		  = g_pLTClient->CreateString(pWorldFile);
+	HSTRING hCurWorldSaveFile   = g_pLTClient->CreateString(pCurWorldSaveFile ? pCurWorldSaveFile : (char *)" ");
+	HSTRING hRestoreObjectsFile = g_pLTClient->CreateString(pRestoreObjectsFile ? pRestoreObjectsFile : (char *)" ");
 
-    HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_LOAD_GAME);
-    g_pLTClient->WriteToMessageByte(hMessage, nFlags);
-    g_pLTClient->WriteToMessageByte(hMessage, m_eDifficulty);
-    g_pLTClient->WriteToMessageByte(hMessage, m_bFadeBodies);
-    g_pLTClient->WriteToMessageHString(hMessage, hWorldFile);
-    g_pLTClient->WriteToMessageHString(hMessage, hCurWorldSaveFile);
-    g_pLTClient->WriteToMessageHString(hMessage, hRestoreObjectsFile);
+	HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_LOAD_GAME);
+	g_pLTClient->WriteToMessageByte(hMessage, nFlags);
+	g_pLTClient->WriteToMessageByte(hMessage, m_eDifficulty);
+	g_pLTClient->WriteToMessageByte(hMessage, m_bFadeBodies);
+	g_pLTClient->WriteToMessageHString(hMessage, hWorldFile);
+	g_pLTClient->WriteToMessageHString(hMessage, hCurWorldSaveFile);
+	g_pLTClient->WriteToMessageHString(hMessage, hRestoreObjectsFile);
 
 	BuildClientSaveMsg(hMessage);
 
-    g_pLTClient->EndMessage(hMessage);
+	g_pLTClient->EndMessage(hMessage);
 
-    g_pLTClient->FreeString(hWorldFile);
-    g_pLTClient->FreeString(hCurWorldSaveFile);
-    g_pLTClient->FreeString(hRestoreObjectsFile);
+	g_pLTClient->FreeString(hWorldFile);
+	g_pLTClient->FreeString(hCurWorldSaveFile);
+	g_pLTClient->FreeString(hRestoreObjectsFile);
 
 
 	//if we've loaded a game, we're now in a single player game!
 	SetGameType(SINGLE);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::LoadGame()
 //
-//	ROUTINE:	CGameClientShell::LoadGame()
-//
-//	PURPOSE:	Handles loading a saved game
-//
+//	PURPOSE: Handles loading a saved game
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::LoadGame(char* pWorld, char* pObjectsFile)
 {
-    if (!pWorld || !pObjectsFile) return LTFALSE;
+	if (!pWorld || !pObjectsFile) return LTFALSE;
 
 	TurnOffAlternativeCamera(CT_FULLSCREEN);
 
@@ -6604,126 +6337,114 @@ LTBOOL CGameClientShell::LoadGame(char* pWorld, char* pObjectsFile)
 	if (IsInWorld() && GetGameType() != SINGLE)
 		g_pInterfaceMgr->StartingNewGame();
 
-    return DoLoadWorld(pWorld, LTNULL, pObjectsFile, LOAD_RESTORE_GAME);
+	return DoLoadWorld(pWorld, LTNULL, pObjectsFile, LOAD_RESTORE_GAME);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::SaveGame()
 //
-//	ROUTINE:	CGameClientShell::SaveGame()
-//
-//	PURPOSE:	Handles saving a game...
-//
+//	PURPOSE: Handles saving a game...
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::SaveGame(char* pObjectsFile)
 {
-    if (!pObjectsFile) return LTFALSE;
+	if (!pObjectsFile) return LTFALSE;
 
-    uint8 nFlags = 0;
+	uint8 nFlags = 0;
 
 	// Save the level objects...
 
-    HSTRING hSaveObjectsName = g_pLTClient->CreateString(pObjectsFile);
+	HSTRING hSaveObjectsName = g_pLTClient->CreateString(pObjectsFile);
 
-    HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_SAVE_GAME);
-    g_pLTClient->WriteToMessageByte(hMessage, nFlags);
-    g_pLTClient->WriteToMessageHString(hMessage, hSaveObjectsName);
+	HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_SAVE_GAME);
+	g_pLTClient->WriteToMessageByte(hMessage, nFlags);
+	g_pLTClient->WriteToMessageHString(hMessage, hSaveObjectsName);
 
 	BuildClientSaveMsg(hMessage);
 
-    g_pLTClient->EndMessage(hMessage);
+	g_pLTClient->EndMessage(hMessage);
 
-    g_pLTClient->FreeString(hSaveObjectsName);
+	g_pLTClient->FreeString(hSaveObjectsName);
 
 	char strSaveGame[256];
 	sprintf (strSaveGame, "%s|%s",m_strCurrentWorldName, pObjectsFile);
 	CWinUtil::WinWritePrivateProfileString (GAME_NAME, "Continue", strSaveGame, SAVEGAMEINI_FILENAME);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::IsJoystickEnabled()
 //
-//	ROUTINE:	CGameClientShell::IsJoystickEnabled()
-//
-//	PURPOSE:	Determines whether or not there is a joystick device
+//	PURPOSE: Determines whether or not there is a joystick device
 //				enabled
-//
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::IsJoystickEnabled()
 {
 	// first attempt to find a joystick device
 
 	char strJoystick[128];
 	memset (strJoystick, 0, 128);
-    LTRESULT result = g_pLTClient->GetDeviceName (DEVICETYPE_JOYSTICK, strJoystick, 127);
-    if (result != LT_OK) return LTFALSE;
+	LTRESULT result = g_pLTClient->GetDeviceName (DEVICETYPE_JOYSTICK, strJoystick, 127);
+	if (result != LT_OK) return LTFALSE;
 
 	// ok - we found the device and have a name...see if it's enabled
 
-    LTBOOL bEnabled = LTFALSE;
-    g_pLTClient->IsDeviceEnabled (strJoystick, &bEnabled);
+	LTBOOL bEnabled = LTFALSE;
+	g_pLTClient->IsDeviceEnabled (strJoystick, &bEnabled);
 
 	return bEnabled;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::EnableJoystick()
 //
-//	ROUTINE:	CGameClientShell::EnableJoystick()
-//
-//	PURPOSE:	Attempts to find and enable a joystick device
-//
+//	PURPOSE: Attempts to find and enable a joystick device
 // ----------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::EnableJoystick()
 {
 	// first attempt to find a joystick device
 
 	char strJoystick[128];
 	memset(strJoystick, 0, 128);
-    LTRESULT result = g_pLTClient->GetDeviceName(DEVICETYPE_JOYSTICK, strJoystick, 127);
-    if (result != LT_OK) return LTFALSE;
+	LTRESULT result = g_pLTClient->GetDeviceName(DEVICETYPE_JOYSTICK, strJoystick, 127);
+	if (result != LT_OK) return LTFALSE;
 
 	// ok, now try to enable the device
 
 	char strConsole[256];
 	sprintf(strConsole, "EnableDevice \"%s\"", strJoystick);
-    g_pLTClient->RunConsoleString(strConsole);
+	g_pLTClient->RunConsoleString(strConsole);
 
-    LTBOOL bEnabled = LTFALSE;
-    g_pLTClient->IsDeviceEnabled(strJoystick, &bEnabled);
+	LTBOOL bEnabled = LTFALSE;
+	g_pLTClient->IsDeviceEnabled(strJoystick, &bEnabled);
 
 	return bEnabled;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateDebugInfo()
 //
-//	ROUTINE:	CGameClientShell::UpdateDebugInfo()
-//
-//	PURPOSE:	Update debugging info.
-//
+//	PURPOSE: Update debugging info.
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateDebugInfo()
 {
 	char buf[100];
 
 	if (m_hDebugInfo)
 	{
-        g_pLTClient->DeleteSurface(m_hDebugInfo);
+		g_pLTClient->DeleteSurface(m_hDebugInfo);
 		m_hDebugInfo = NULL;
 	}
 
 
 	// Check to see if we should show the player position...
 
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (m_bShowPlayerPos && hPlayerObj)
 	{
-        LTVector vPos;
-        g_pLTClient->GetObjectPos(hPlayerObj, &vPos);
+		LTVector vPos;
+		g_pLTClient->GetObjectPos(hPlayerObj, &vPos);
 
 		sprintf(buf, "Pos(%.0f,%.0f,%.0f)", vPos.x, vPos.y, vPos.z);
 
@@ -6732,8 +6453,8 @@ void CGameClientShell::UpdateDebugInfo()
 
 	if (m_bShowCamPosRot)
 	{
-        LTVector vPos;
-        g_pLTClient->GetObjectPos(m_hCamera, &vPos);
+		LTVector vPos;
+		g_pLTClient->GetObjectPos(m_hCamera, &vPos);
 
 		// Convert pitch and yaw to the same units used by DEdit...
 
@@ -6796,18 +6517,18 @@ void CGameClientShell::UpdateDebugInfo()
 	}
 
 
-    HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("PlayerDims");
+	HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("PlayerDims");
 	if (hVar)
 	{
-        if (g_pLTClient->GetVarValueFloat(hVar) > 0.0f)
+		if (g_pLTClient->GetVarValueFloat(hVar) > 0.0f)
 		{
 			CreateBoundingBox();
 			UpdateBoundingBox();
 		}
 		else if (m_hBoundingBox)
 		{
-            g_pLTClient->DeleteObject(m_hBoundingBox);
-            m_hBoundingBox = LTNULL;
+			g_pLTClient->DeleteObject(m_hBoundingBox);
+			m_hBoundingBox = LTNULL;
 		}
 	}
 
@@ -6820,38 +6541,32 @@ void CGameClientShell::UpdateDebugInfo()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::CreateDebugSurface
 //
-//	ROUTINE:	CGameClientShell::CreateDebugSurface
-//
-//	PURPOSE:	Create a surface with debug info on it.
-//
+//	PURPOSE: Create a surface with debug info on it.
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::CreateDebugSurface(char* strMessage)
 {
 	if (!strMessage || strMessage[0] == '\0' || m_hDebugInfo) return;
 
 	m_hDebugInfo = g_pInterfaceResMgr->CreateSurfaceFromString(
-        g_pInterfaceResMgr->GetLargeFont(), strMessage, g_hColorTransparent);
-    g_pLTClient->OptimizeSurface(m_hDebugInfo, g_hColorTransparent);
+		g_pInterfaceResMgr->GetLargeFont(), strMessage, g_hColorTransparent);
+	g_pLTClient->OptimizeSurface(m_hDebugInfo, g_hColorTransparent);
 
-    uint32 cx, cy;
-    g_pLTClient->GetSurfaceDims(m_hDebugInfo, &cx, &cy);
+	uint32 cx, cy;
+	g_pLTClient->GetSurfaceDims(m_hDebugInfo, &cx, &cy);
 	m_rcDebugInfo.left   = 0;
-	m_rcDebugInfo.top    = 0;
+	m_rcDebugInfo.top	= 0;
 	m_rcDebugInfo.right  = (int)cx;
 	m_rcDebugInfo.bottom = (int)cy;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::ToggleDebugCheat
 //
-//	ROUTINE:	CGameClientShell::ToggleDebugCheat
-//
-//	PURPOSE:	Handle debug cheat toggles
-//
+//	PURPOSE: Handle debug cheat toggles
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::ToggleDebugCheat(CheatCode eCheat)
 {
 	switch (eCheat)
@@ -6868,7 +6583,7 @@ void CGameClientShell::ToggleDebugCheat(CheatCode eCheat)
 
 				if (!m_bTweakingWeaponMuzzle)
 				{
-                    g_pWeaponMgr->WriteFile(g_pLTClient);
+					g_pWeaponMgr->WriteFile(g_pLTClient);
 				}
 			}
 		}
@@ -6886,7 +6601,7 @@ void CGameClientShell::ToggleDebugCheat(CheatCode eCheat)
 
 				if (!m_bTweakingWeapon)
 				{
-                    g_pWeaponMgr->WriteFile(g_pLTClient);
+					g_pWeaponMgr->WriteFile(g_pLTClient);
 				}
 			}
 		}
@@ -6904,7 +6619,7 @@ void CGameClientShell::ToggleDebugCheat(CheatCode eCheat)
 
 				if (!m_bAdjustWeaponBreach)
 				{
-                    g_pWeaponMgr->WriteFile(g_pLTClient);
+					g_pWeaponMgr->WriteFile(g_pLTClient);
 				}
 			}
 		}
@@ -6967,19 +6682,16 @@ void CGameClientShell::ToggleDebugCheat(CheatCode eCheat)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::FirstUpdate
 //
-//	ROUTINE:	CGameClientShell::FirstUpdate
-//
-//	PURPOSE:	Handle first update (each level)
-//
+//	PURPOSE: Handle first update (each level)
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::FirstUpdate()
 {
 	if (!m_bFirstUpdate) return;
 
 	char buf[200];
-    m_bFirstUpdate = LTFALSE;
+	m_bFirstUpdate = LTFALSE;
 
 
 	// Force the player camera to update...
@@ -6997,9 +6709,9 @@ void CGameClientShell::FirstUpdate()
 
 	// Initialize model warble sheeyot...
 
-    g_pLTClient->RunConsoleString("+ModelWarble 0");
-    g_pLTClient->RunConsoleString("+WarbleSpeed 15");
-    g_pLTClient->RunConsoleString("+WarbleScale .95");
+	g_pLTClient->RunConsoleString("+ModelWarble 0");
+	g_pLTClient->RunConsoleString("+WarbleSpeed 15");
+	g_pLTClient->RunConsoleString("+WarbleScale .95");
 
 
 	// Set prediction if we are playing multiplayer...We turn this
@@ -7007,21 +6719,21 @@ void CGameClientShell::FirstUpdate()
 
 	if (IsMultiplayerGame())
 	{
-	   g_pLTClient->RunConsoleString("Prediction 1");
+	g_pLTClient->RunConsoleString("Prediction 1");
 	}
 	else
 	{
-	   g_pLTClient->RunConsoleString("Prediction 0");
+	g_pLTClient->RunConsoleString("Prediction 0");
 	}
 
 
 	// Set up the panning sky values
 
-    m_bPanSky = (LTBOOL) g_pLTClient->GetServerConVarValueFloat("PanSky");
-    m_fPanSkyOffsetX = g_pLTClient->GetServerConVarValueFloat("PanSkyOffsetX");
-    m_fPanSkyOffsetZ = g_pLTClient->GetServerConVarValueFloat("PanSkyOffsetX");
-    m_fPanSkyScaleX = g_pLTClient->GetServerConVarValueFloat("PanSkyScaleX");
-    m_fPanSkyScaleZ = g_pLTClient->GetServerConVarValueFloat("PanSkyScaleZ");
+	m_bPanSky = (LTBOOL) g_pLTClient->GetServerConVarValueFloat("PanSky");
+	m_fPanSkyOffsetX = g_pLTClient->GetServerConVarValueFloat("PanSkyOffsetX");
+	m_fPanSkyOffsetZ = g_pLTClient->GetServerConVarValueFloat("PanSkyOffsetX");
+	m_fPanSkyScaleX = g_pLTClient->GetServerConVarValueFloat("PanSkyScaleX");
+	m_fPanSkyScaleZ = g_pLTClient->GetServerConVarValueFloat("PanSkyScaleZ");
 
 	char* pTexture = LTNULL;
 	if (m_bPanSky)
@@ -7029,7 +6741,7 @@ void CGameClientShell::FirstUpdate()
 		pTexture = g_pLTClient->GetServerConVarValueString("PanSkyTexture");
 	}
 
-    g_pLTClient->SetGlobalPanTexture(GLOBALPAN_SKYSHADOW, pTexture);
+	g_pLTClient->SetGlobalPanTexture(GLOBALPAN_SKYSHADOW, pTexture);
 
 
 	// Set misc console vars...
@@ -7039,10 +6751,10 @@ void CGameClientShell::FirstUpdate()
 
 	// Set up the environment map (chrome) texture...
 
-    char* pEnvMap = g_pLTClient->GetServerConVarValueString("EnvironmentMap");
-    const char* pVal = ((!pEnvMap || !pEnvMap[0]) ? "Tex\\Chrome.dtx" : pEnvMap);
+	char* pEnvMap = g_pLTClient->GetServerConVarValueString("EnvironmentMap");
+	const char* pVal = ((!pEnvMap || !pEnvMap[0]) ? "Tex\\Chrome.dtx" : pEnvMap);
 	sprintf(buf, "EnvMap %s", pVal);
-    g_pLTClient->RunConsoleString(buf);
+	g_pLTClient->RunConsoleString(buf);
 
  	m_nGlobalSoundFilterId = 0;
 
@@ -7058,9 +6770,9 @@ void CGameClientShell::FirstUpdate()
 
 	// Set up the global (per level) wind values...
 
-    g_vWorldWindVel.x = g_pLTClient->GetServerConVarValueFloat("WindX");
-    g_vWorldWindVel.y = g_pLTClient->GetServerConVarValueFloat("WindY");
-    g_vWorldWindVel.z = g_pLTClient->GetServerConVarValueFloat("WindZ");
+	g_vWorldWindVel.x = g_pLTClient->GetServerConVarValueFloat("WindX");
+	g_vWorldWindVel.y = g_pLTClient->GetServerConVarValueFloat("WindY");
+	g_vWorldWindVel.z = g_pLTClient->GetServerConVarValueFloat("WindZ");
 
 
 	// Set up the global (per level) fog values...
@@ -7125,20 +6837,18 @@ void CGameClientShell::FirstUpdate()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::MirrorSConVar
 //
-//	ROUTINE:	CGameClientShell::MirrorSConVar
-//
-//	PURPOSE:	Takes the value of the server-side variable specified by
+//	PURPOSE: Takes the value of the server-side variable specified by
 //				pSVarName and sets its value into the client-sdie variable
 ///				specified by pCVarName.
-//
 // --------------------------------------------------------------------------- //
 void CGameClientShell::MirrorSConVar(char *pSVarName, char *pCVarName)
 {
 	char buf[512];
 	float fVal;
 
-    fVal = g_pLTClient->GetServerConVarValueFloat(pSVarName);
+	fVal = g_pLTClient->GetServerConVarValueFloat(pSVarName);
 
 	// Special case, make all farz calls go through this function...
 	if (stricmp(pCVarName, "FarZ") == 0)
@@ -7153,13 +6863,10 @@ void CGameClientShell::MirrorSConVar(char *pSVarName, char *pCVarName)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::ResetGlobalFog
 //
-//	ROUTINE:	CGameClientShell::ResetGlobalFog
-//
-//	PURPOSE:	Reset the global fog values based on the saved values...
-//
+//	PURPOSE: Reset the global fog values based on the saved values...
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::ResetGlobalFog()
 {
 	// Set the FarZ for the level...
@@ -7169,11 +6876,11 @@ void CGameClientShell::ResetGlobalFog()
 
 	// See if fog should be disabled
 
-    uint32 dwAdvancedOptions = m_InterfaceMgr.GetAdvancedOptions();
+	uint32 dwAdvancedOptions = m_InterfaceMgr.GetAdvancedOptions();
 
 	if (!(dwAdvancedOptions & AO_FOG))
 	{
-        g_pLTClient->RunConsoleString("FogEnable 0");
+		g_pLTClient->RunConsoleString("FogEnable 0");
 		return;
 	}
 
@@ -7182,20 +6889,20 @@ void CGameClientShell::ResetGlobalFog()
 	MirrorSConVar("FogFarZ", "FogFarZ");
 	MirrorSConVar("LMAnimStatic", "LMAnimStatic");
 
-    LTVector todScale = m_LightScaleMgr.GetTimeOfDayScale();
+	LTVector todScale = m_LightScaleMgr.GetTimeOfDayScale();
 
 	char buf[255];
-    LTFLOAT fVal = g_pLTClient->GetServerConVarValueFloat("FogR") * todScale.x;
+	LTFLOAT fVal = g_pLTClient->GetServerConVarValueFloat("FogR") * todScale.x;
 	sprintf(buf, "FogR %d", (int)fVal);
-    g_pLTClient->RunConsoleString(buf);
+	g_pLTClient->RunConsoleString(buf);
 
-    fVal = g_pLTClient->GetServerConVarValueFloat("FogG") * todScale.y;
+	fVal = g_pLTClient->GetServerConVarValueFloat("FogG") * todScale.y;
 	sprintf(buf, "FogG %d", (int)fVal);
-    g_pLTClient->RunConsoleString(buf);
+	g_pLTClient->RunConsoleString(buf);
 
-    fVal = g_pLTClient->GetServerConVarValueFloat("FogB") * todScale.z;
+	fVal = g_pLTClient->GetServerConVarValueFloat("FogB") * todScale.z;
 	sprintf(buf, "FogB %d", (int)fVal);
-    g_pLTClient->RunConsoleString(buf);
+	g_pLTClient->RunConsoleString(buf);
 
 	MirrorSConVar("SkyFogEnable", "SkyFogEnable");
 	MirrorSConVar("SkyFogNearZ", "SkyFogNearZ");
@@ -7214,33 +6921,30 @@ void CGameClientShell::ResetGlobalFog()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::ShowPlayer()
 //
-//	ROUTINE:	CGameClientShell::ShowPlayer()
-//
-//	PURPOSE:	Show/Hide the player object
-//
+//	PURPOSE: Show/Hide the player object
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::ShowPlayer(LTBOOL bShow)
 {
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (!hPlayerObj) return;
 
 	// Comment this out to show player model in 1st person view...
 #define DO_NORMAL_PLAYER_HIDE_SHOW
 
-    uint32 dwFlags = g_pLTClient->GetObjectFlags(hPlayerObj);
+	uint32 dwFlags = g_pLTClient->GetObjectFlags(hPlayerObj);
 	if (bShow)
 	{
 		dwFlags |= FLAG_VISIBLE;
-        g_pLTClient->SetObjectFlags(hPlayerObj, dwFlags);
+		g_pLTClient->SetObjectFlags(hPlayerObj, dwFlags);
 
 #ifndef DO_NORMAL_PLAYER_HIDE_SHOW
 		HMODELPIECE hPiece;
-        g_pLTClient->GetModelLT()->GetPiece(hPlayerObj, "Torso", hPiece);
-        g_pLTClient->GetModelLT()->SetPieceHideStatus(hPlayerObj, hPiece, LTFALSE);
-        g_pLTClient->GetModelLT()->GetPiece(hPlayerObj, "Head_zTex1", hPiece);
-        g_pLTClient->GetModelLT()->SetPieceHideStatus(hPlayerObj, hPiece, LTFALSE);
+		g_pLTClient->GetModelLT()->GetPiece(hPlayerObj, "Torso", hPiece);
+		g_pLTClient->GetModelLT()->SetPieceHideStatus(hPlayerObj, hPiece, LTFALSE);
+		g_pLTClient->GetModelLT()->GetPiece(hPlayerObj, "Head_zTex1", hPiece);
+		g_pLTClient->GetModelLT()->SetPieceHideStatus(hPlayerObj, hPiece, LTFALSE);
 #endif
 
 	}
@@ -7253,54 +6957,48 @@ void CGameClientShell::ShowPlayer(LTBOOL bShow)
 		dwFlags |= FLAG_VISIBLE; // | FLAG_REALLYCLOSE;
 
 		HMODELPIECE hPiece;
-        g_pLTClient->GetModelLT()->GetPiece(hPlayerObj, "Torso", hPiece);
-        g_pLTClient->GetModelLT()->SetPieceHideStatus(hPlayerObj, hPiece, LTTRUE);
-        g_pLTClient->GetModelLT()->GetPiece(hPlayerObj, "Head_zTex1", hPiece);
-        g_pLTClient->GetModelLT()->SetPieceHideStatus(hPlayerObj, hPiece, LTTRUE);
+		g_pLTClient->GetModelLT()->GetPiece(hPlayerObj, "Torso", hPiece);
+		g_pLTClient->GetModelLT()->SetPieceHideStatus(hPlayerObj, hPiece, LTTRUE);
+		g_pLTClient->GetModelLT()->GetPiece(hPlayerObj, "Head_zTex1", hPiece);
+		g_pLTClient->GetModelLT()->SetPieceHideStatus(hPlayerObj, hPiece, LTTRUE);
 #endif
 
-        g_pLTClient->SetObjectFlags(hPlayerObj, dwFlags);
+		g_pLTClient->SetObjectFlags(hPlayerObj, dwFlags);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateServerPlayerModel()
 //
-//	ROUTINE:	CGameClientShell::UpdateServerPlayerModel()
-//
-//	PURPOSE:	Puts the server's player model where our invisible one is
-//
+//	PURPOSE: Puts the server's player model where our invisible one is
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateServerPlayerModel()
 {
 	HOBJECT hClientObj, hRealObj;
-    LTRotation myRot;
-    LTVector myPos;
+	LTRotation myRot;
+	LTVector myPos;
 
-    if (!(hClientObj = g_pLTClient->GetClientObject())) return;
+	if (!(hClientObj = g_pLTClient->GetClientObject())) return;
 
 	if (!(hRealObj = m_MoveMgr.GetObject())) return;
 
-    g_pLTClient->GetObjectPos(hRealObj, &myPos);
-    g_pLTClient->SetObjectPos(hClientObj, &myPos);
+	g_pLTClient->GetObjectPos(hRealObj, &myPos);
+	g_pLTClient->SetObjectPos(hClientObj, &myPos);
 
 	if (g_vtPlayerRotate.GetFloat(1.0) > 0.0)
 	{
-        g_pLTClient->SetupEuler(&myRot, m_fPlayerPitch, m_fPlayerYaw, m_fPlayerRoll);
-        g_pLTClient->SetObjectRotation(hClientObj, &myRot);
+		g_pLTClient->SetupEuler(&myRot, m_fPlayerPitch, m_fPlayerYaw, m_fPlayerRoll);
+		g_pLTClient->SetObjectRotation(hClientObj, &myRot);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::RenderCamera()
 //
-//	ROUTINE:	CGameClientShell::RenderCamera()
-//
-//	PURPOSE:	Sets up the client and renders the camera
-//
+//	PURPOSE: Sets up the client and renders the camera
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::RenderCamera(LTBOOL bDrawInterface)
 {
 	if (!m_bCameraPosInited) return;
@@ -7312,7 +7010,7 @@ void CGameClientShell::RenderCamera(LTBOOL bDrawInterface)
 	// Make sure we process attachments before updating the weapon model
 	// and special fx...(some fx are based on attachment positions/rotations)
 
-    g_pLTClient->ProcessAttachments(g_pLTClient->GetClientObject());
+	g_pLTClient->ProcessAttachments(g_pLTClient->GetClientObject());
 
 	// Make sure the weapon is updated before we render the camera...
 
@@ -7335,9 +7033,9 @@ void CGameClientShell::RenderCamera(LTBOOL bDrawInterface)
 
 	m_FlashLight.Update();
 
-    g_pLTClient->Start3D();
-    g_pLTClient->RenderCamera(m_hCamera);
-    g_pLTClient->StartOptimized2D();
+	g_pLTClient->Start3D();
+	g_pLTClient->RenderCamera(m_hCamera);
+	g_pLTClient->StartOptimized2D();
 
 	// Alternate Screen Tinting!
 	auto hScreen = g_pLTClient->GetScreenSurface();
@@ -7362,33 +7060,30 @@ void CGameClientShell::RenderCamera(LTBOOL bDrawInterface)
 	{
 		// Get the screen width and height...
 
-        //HSURFACE hScreen = g_pLTClient->GetScreenSurface();
-        uint32 nScreenWidth, nScreenHeight;
-        g_pLTClient->GetSurfaceDims(hScreen, &nScreenWidth, &nScreenHeight);
+		//HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+		uint32 nScreenWidth, nScreenHeight;
+		g_pLTClient->GetSurfaceDims(hScreen, &nScreenWidth, &nScreenHeight);
 
 		int x = nScreenWidth  - (m_rcDebugInfo.right - m_rcDebugInfo.left);
 		int y = nScreenHeight - (m_rcDebugInfo.bottom - m_rcDebugInfo.top);
 
-        g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hDebugInfo,
-            &m_rcDebugInfo, x, y, g_hColorTransparent);
+		g_pLTClient->DrawSurfaceToSurfaceTransparent(hScreen, m_hDebugInfo,
+			&m_rcDebugInfo, x, y, g_hColorTransparent);
 	}
 
-    g_pLTClient->EndOptimized2D();
-    g_pLTClient->End3D();
+	g_pLTClient->EndOptimized2D();
+	g_pLTClient->End3D();
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdatePlayer()
 //
-//	ROUTINE:	CGameClientShell::UpdatePlayer()
-//
-//	PURPOSE:	Update the player
-//
+//	PURPOSE: Update the player
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdatePlayer()
 {
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (!hPlayerObj || IsPlayerDead()) return;
 
 
@@ -7397,19 +7092,19 @@ void CGameClientShell::UpdatePlayer()
 	// player's flags at any time (and override anything that we set), we'll
 	// make sure that the player's flags are always what we want them to be :)
 
-    uint32 dwPlayerFlags = g_pLTClient->GetObjectFlags(hPlayerObj);
+	uint32 dwPlayerFlags = g_pLTClient->GetObjectFlags(hPlayerObj);
 	if (m_PlayerCamera.IsFirstPerson())
 	{
 		if (dwPlayerFlags & FLAG_VISIBLE)
 		{
-            ShowPlayer(LTFALSE);
+			ShowPlayer(LTFALSE);
 		}
 	}
 	else  // Third person
 	{
 		if (!(dwPlayerFlags & FLAG_VISIBLE))
 		{
-            ShowPlayer(LTTRUE);
+			ShowPlayer(LTTRUE);
 		}
 	}
 
@@ -7421,39 +7116,36 @@ void CGameClientShell::UpdatePlayer()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HideShowAttachments()
 //
-//	ROUTINE:	CGameClientShell::HideShowAttachments()
-//
-//	PURPOSE:	Recursively hide/show attachments...
-//
+//	PURPOSE: Recursively hide/show attachments...
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HideShowAttachments(HOBJECT hObj)
 {
 	if (!hObj) return;
 
 	HLOCALOBJ attachList[20];
-    uint32 dwListSize = 0;
-    uint32 dwNumAttach = 0;
+	uint32 dwListSize = 0;
+	uint32 dwNumAttach = 0;
 
-    g_pLTClient->GetAttachments(hObj, attachList, 20, &dwListSize, &dwNumAttach);
+	g_pLTClient->GetAttachments(hObj, attachList, 20, &dwListSize, &dwNumAttach);
 	int nNum = dwNumAttach <= dwListSize ? dwNumAttach : dwListSize;
 
 	for (int i=0; i < nNum; i++)
 	{
-        uint32 dwUsrFlags;
-        g_pLTClient->GetObjectUserFlags(attachList[i], &dwUsrFlags);
+		uint32 dwUsrFlags;
+		g_pLTClient->GetObjectUserFlags(attachList[i], &dwUsrFlags);
 
-        if (dwUsrFlags & USRFLG_ATTACH_HIDE1SHOW3)
+		if (dwUsrFlags & USRFLG_ATTACH_HIDE1SHOW3)
 		{
-            uint32 dwFlags = g_pLTClient->GetObjectFlags(attachList[i]);
+			uint32 dwFlags = g_pLTClient->GetObjectFlags(attachList[i]);
 
 			if (m_PlayerCamera.IsFirstPerson())
 			{
 				if (dwFlags & FLAG_VISIBLE)
 				{
 					dwFlags &= ~FLAG_VISIBLE;
-                    g_pLTClient->SetObjectFlags(attachList[i], dwFlags);
+					g_pLTClient->SetObjectFlags(attachList[i], dwFlags);
 				}
 
 				if (!(dwFlags & FLAG_PORTALVISIBLE))
@@ -7467,20 +7159,20 @@ void CGameClientShell::HideShowAttachments(HOBJECT hObj)
 				if (!(dwFlags & FLAG_VISIBLE))
 				{
 					dwFlags |= FLAG_VISIBLE;
-                    g_pLTClient->SetObjectFlags(attachList[i], dwFlags);
+					g_pLTClient->SetObjectFlags(attachList[i], dwFlags);
 				}
 			}
 		}
 		else if (dwUsrFlags & USRFLG_ATTACH_HIDE1)
 		{
-            uint32 dwFlags = g_pLTClient->GetObjectFlags(attachList[i]);
+			uint32 dwFlags = g_pLTClient->GetObjectFlags(attachList[i]);
 
 			if (m_PlayerCamera.IsFirstPerson())
 			{
 				if (dwFlags & FLAG_VISIBLE)
 				{
 					dwFlags &= ~FLAG_VISIBLE;
-                    g_pLTClient->SetObjectFlags(attachList[i], dwFlags);
+					g_pLTClient->SetObjectFlags(attachList[i], dwFlags);
 				}
 			}
 		}
@@ -7493,29 +7185,26 @@ void CGameClientShell::HideShowAttachments(HOBJECT hObj)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::Update3rdPersonInfo
 //
-//	ROUTINE:	CGameClientShell::Update3rdPersonInfo
-//
-//	PURPOSE:	Update the 3rd person cross hair / camera info
-//
+//	PURPOSE: Update the 3rd person cross hair / camera info
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::Update3rdPersonInfo()
 {
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 	if (!hPlayerObj || IsPlayerDead()) return;
 
-    HOBJECT hFilterList[] = {hPlayerObj, m_MoveMgr.GetObject(), LTNULL};
+	HOBJECT hFilterList[] = {hPlayerObj, m_MoveMgr.GetObject(), LTNULL};
 
 
 	ClientIntersectInfo info;
 	ClientIntersectQuery query;
-    LTVector vPlayerPos, vUp, vRight, vForward;
+	LTVector vPlayerPos, vUp, vRight, vForward;
 
-    g_pLTClient->GetObjectPos(hPlayerObj, &vPlayerPos);
+	g_pLTClient->GetObjectPos(hPlayerObj, &vPlayerPos);
 
-    LTFLOAT fCrosshairDist = -1.0f;
-    LTFLOAT fCameraOptZ = g_vtChaseCamDistBack.GetFloat();
+	LTFLOAT fCrosshairDist = -1.0f;
+	LTFLOAT fCameraOptZ = g_vtChaseCamDistBack.GetFloat();
 
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(m_weaponModel.GetWeaponId());
 	if (!pWeapon) return;
@@ -7524,13 +7213,13 @@ void CGameClientShell::Update3rdPersonInfo()
 
 	if (m_InterfaceMgr.IsCrosshairOn() && m_weaponModel.GetHandle())
 	{
-        fCrosshairDist = (LTFLOAT) pWeapon->nRange;
+		fCrosshairDist = (LTFLOAT) pWeapon->nRange;
 
-        g_pLTClient->GetRotationVectors(&m_rRotation, &vUp, &vRight, &vForward);
+		g_pLTClient->GetRotationVectors(&m_rRotation, &vUp, &vRight, &vForward);
 
 		// Determine where the cross hair should be...
 
-        LTVector vStart, vEnd, vPos;
+		LTVector vStart, vEnd, vPos;
 		VEC_COPY(vStart, vPlayerPos);
 		VEC_MULSCALAR(vEnd, vForward, fCrosshairDist);
 		VEC_ADD(vEnd, vEnd, vStart);
@@ -7542,7 +7231,7 @@ void CGameClientShell::Update3rdPersonInfo()
 		query.m_FilterFn = ObjListFilterFn;
 		query.m_pUserData = hFilterList;
 
-        if (g_pLTClient->IntersectSegment (&query, &info))
+		if (g_pLTClient->IntersectSegment (&query, &info))
 		{
 			VEC_COPY(vPos, info.m_Point);
 		}
@@ -7551,7 +7240,7 @@ void CGameClientShell::Update3rdPersonInfo()
 			VEC_COPY(vPos, vEnd);
 		}
 
-        LTVector vTemp;
+		LTVector vTemp;
 		VEC_SUB(vTemp, vPos, vStart);
 
 		fCrosshairDist = VEC_MAG(vTemp);
@@ -7560,14 +7249,14 @@ void CGameClientShell::Update3rdPersonInfo()
 
 	// Figure out optinal camera distance...
 
-    LTRotation rRot;
-    g_pLTClient->GetObjectRotation(hPlayerObj, &rRot);
-    g_pLTClient->GetRotationVectors(&rRot, &vUp, &vRight, &vForward);
+	LTRotation rRot;
+	g_pLTClient->GetObjectRotation(hPlayerObj, &rRot);
+	g_pLTClient->GetRotationVectors(&rRot, &vUp, &vRight, &vForward);
 	VEC_NORM(vForward);
 
 	// Determine how far behind the player the camera can go...
 
-    LTVector vEnd;
+	LTVector vEnd;
 	VEC_MULSCALAR(vEnd, vForward, -fCameraOptZ);
 	VEC_ADD(vEnd, vEnd, vPlayerPos);
 
@@ -7578,11 +7267,11 @@ void CGameClientShell::Update3rdPersonInfo()
 	query.m_FilterFn = ObjListFilterFn;
 	query.m_pUserData = hFilterList;
 
-    if (g_pLTClient->IntersectSegment (&query, &info))
+	if (g_pLTClient->IntersectSegment (&query, &info))
 	{
-        LTVector vTemp;
+		LTVector vTemp;
 		VEC_SUB(vTemp, info.m_Point, vPlayerPos);
-        LTFLOAT fDist = VEC_MAG(vTemp);
+		LTFLOAT fDist = VEC_MAG(vTemp);
 
 		fCameraOptZ = fDist < fCameraOptZ ? -(fDist - 5.0f) : -fCameraOptZ;
 	}
@@ -7599,19 +7288,16 @@ void CGameClientShell::Update3rdPersonInfo()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: UpdateModelGlow
 //
-//	ROUTINE:	UpdateModelGlow
-//
-//	PURPOSE:	Update the current model glow color
-//
+//	PURPOSE: Update the current model glow color
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateModelGlow()
 {
-    LTFLOAT fColor      = 0.0f;
+	LTFLOAT fColor	  = 0.0f;
 	LTFLOAT	fMin		= g_vtModelGlowMin.GetFloat();
 	LTFLOAT	fMax		= g_vtModelGlowMax.GetFloat();
-    LTFLOAT fColorRange = fMax - fMin;
+	LTFLOAT fColorRange = fMax - fMin;
 	LTFLOAT fTimeRange  = g_vtModelGlowTime.GetFloat();
 
 	if (m_bModelGlowCycleUp)
@@ -7640,7 +7326,7 @@ void CGameClientShell::UpdateModelGlow()
 		{
 			m_fModelGlowCycleTime = 0.0f;
 			m_vCurModelGlow.Init(fMin, fMin, fMin);
-            m_bModelGlowCycleUp = LTTRUE;
+			m_bModelGlowCycleUp = LTTRUE;
 			return;
 		}
 	}
@@ -7650,13 +7336,10 @@ void CGameClientShell::UpdateModelGlow()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::InitSinglePlayer
 //
-//	ROUTINE:	CGameClientShell::InitSinglePlayer
-//
-//	PURPOSE:	Send the server the initial single player info
-//
+//	PURPOSE: Send the server the initial single player info
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::InitSinglePlayer()
 {
 	CGameSettings* pSettings = m_InterfaceMgr.GetSettings();
@@ -7666,18 +7349,16 @@ void CGameClientShell::InitSinglePlayer()
 
 	// Init player variables on server...
 
-    HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_INITVARS);
-    g_pLTClient->WriteToMessageByte(hMessage, (uint8)pSettings->RunLock());
-    g_pLTClient->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_INITVARS);
+	g_pLTClient->WriteToMessageByte(hMessage, (uint8)pSettings->RunLock());
+	g_pLTClient->EndMessage(hMessage);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::InitMultiPlayer
 //
-//	ROUTINE:	CGameClientShell::InitMultiPlayer
-//
-//	PURPOSE:	Send the server the initial multiplayer info
-//
+//	PURPOSE: Send the server the initial multiplayer info
 // --------------------------------------------------------------------------- //
 void CGameClientShell::InitMultiPlayer()
 {
@@ -7687,7 +7368,7 @@ void CGameClientShell::InitMultiPlayer()
 	char	sMod[255];
 	char	sSkin[255];
 	char	sHead[255];
-    int		nTeam;
+	int		nTeam;
 
 	SAFE_STRCPY(sName,g_vtPlayerName.GetStr());
 	GetConsoleString("NetPlayerModel",sMod,"Hero,action");
@@ -7708,23 +7389,23 @@ void CGameClientShell::InitMultiPlayer()
 		} 
 	}
 
-    HSTRING hstrName = g_pLTClient->CreateString(sName);
+	HSTRING hstrName = g_pLTClient->CreateString(sName);
 	if (!hstrName) return;
-    HSTRING hstrMod = g_pLTClient->CreateString(sMod);
+	HSTRING hstrMod = g_pLTClient->CreateString(sMod);
 	if (!hstrMod) return;
-    HSTRING hstrSkin = g_pLTClient->CreateString(strchr(sSkin, ',')+1);
+	HSTRING hstrSkin = g_pLTClient->CreateString(strchr(sSkin, ',')+1);
 	if (!hstrSkin) return;
-    HSTRING hstrHead = g_pLTClient->CreateString(strchr(sHead, ',')+1);
+	HSTRING hstrHead = g_pLTClient->CreateString(strchr(sHead, ',')+1);
 	if (!hstrHead) return;
 
 	// Init multiplayer info on server...
 
-    HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_PLAYER_MULTIPLAYER_INIT);
-    g_pLTClient->WriteToMessageHString(hWrite, hstrName);
-    g_pLTClient->WriteToMessageHString(hWrite, hstrMod);
-    g_pLTClient->WriteToMessageHString(hWrite, hstrSkin);
-    g_pLTClient->WriteToMessageHString(hWrite, hstrHead);
-    g_pLTClient->EndMessage(hWrite);
+	HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_PLAYER_MULTIPLAYER_INIT);
+	g_pLTClient->WriteToMessageHString(hWrite, hstrName);
+	g_pLTClient->WriteToMessageHString(hWrite, hstrMod);
+	g_pLTClient->WriteToMessageHString(hWrite, hstrSkin);
+	g_pLTClient->WriteToMessageHString(hWrite, hstrHead);
+	g_pLTClient->EndMessage(hWrite);
 
 	g_pLTClient->FreeString(hstrName);
 	g_pLTClient->FreeString(hstrMod);
@@ -7736,9 +7417,9 @@ void CGameClientShell::InitMultiPlayer()
 	CGameSettings* pSettings = m_InterfaceMgr.GetSettings();
 	if (!pSettings) return;
 
-    hWrite = g_pLTClient->StartMessage(MID_PLAYER_INITVARS);
-    g_pLTClient->WriteToMessageByte(hWrite, (uint8)pSettings->RunLock());
-    g_pLTClient->EndMessage(hWrite);
+	hWrite = g_pLTClient->StartMessage(MID_PLAYER_INITVARS);
+	g_pLTClient->WriteToMessageByte(hWrite, (uint8)pSettings->RunLock());
+	g_pLTClient->EndMessage(hWrite);
 
 	if (IsHosting()) {
 		// Send a signal to not lock server framerate. 
@@ -7755,13 +7436,10 @@ void CGameClientShell::InitMultiPlayer()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::BuildClientSaveMsg
 //
-//	ROUTINE:	CGameClientShell::BuildClientSaveMsg
-//
-//	PURPOSE:	Save all the necessary client-side info
-//
+//	PURPOSE: Save all the necessary client-side info
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::BuildClientSaveMsg(HMESSAGEWRITE hMessage)
 {
 	if (!hMessage) return;
@@ -7771,7 +7449,7 @@ void CGameClientShell::BuildClientSaveMsg(HMESSAGEWRITE hMessage)
 		g_pLTClient->WriteToMessageDWord(hMessage, m_Music.GetMusicState()->nIntensity);
 	}
 
-    HMESSAGEWRITE hData = g_pLTClient->StartHMessageWrite();
+	HMESSAGEWRITE hData = g_pLTClient->StartHMessageWrite();
 
 	// Save complex data members...
 
@@ -7781,75 +7459,72 @@ void CGameClientShell::BuildClientSaveMsg(HMESSAGEWRITE hMessage)
 
 	// Save all necessary data members...
 
-    g_pLTClient->WriteToMessageRotation(hData, &m_rRotation);
-    g_pLTClient->WriteToMessageVector(hData, &m_vFlashColor);
+	g_pLTClient->WriteToMessageRotation(hData, &m_rRotation);
+	g_pLTClient->WriteToMessageVector(hData, &m_vFlashColor);
 
-    g_pLTClient->WriteToMessageByte(hData, m_eDifficulty);
-    g_pLTClient->WriteToMessageByte(hData, m_bFlashScreen);
-    g_pLTClient->WriteToMessageByte(hData, m_bSpectatorMode);
-    g_pLTClient->WriteToMessageByte(hData, m_bLastSent3rdPerson);
-//    g_pLTClient->WriteToMessageByte(hData, m_bStartedDuckingDown);
-//    g_pLTClient->WriteToMessageByte(hData, m_bStartedDuckingUp);
-    g_pLTClient->WriteToMessageByte(hData, m_bAllowPlayerMovement);
-    g_pLTClient->WriteToMessageByte(hData, m_bLastAllowPlayerMovement);
-    g_pLTClient->WriteToMessageByte(hData, m_bWasUsingExternalCamera);
-    g_pLTClient->WriteToMessageByte(hData, m_bUsingExternalCamera);
-    g_pLTClient->WriteToMessageByte(hData, m_ePlayerState);
-    g_pLTClient->WriteToMessageByte(hData, m_nCurrentLevel);
-    g_pLTClient->WriteToMessageByte(hData, m_nCurrentMission);
-    g_pLTClient->WriteToMessageByte(hData, m_nSoundFilterId);
-    g_pLTClient->WriteToMessageByte(hData, m_nGlobalSoundFilterId);
-    g_pLTClient->WriteToMessageByte(hData, m_weaponModel.GetHolster());
-    g_pLTClient->WriteToMessageByte(hData, m_FlashLight.IsOn());
+	g_pLTClient->WriteToMessageByte(hData, m_eDifficulty);
+	g_pLTClient->WriteToMessageByte(hData, m_bFlashScreen);
+	g_pLTClient->WriteToMessageByte(hData, m_bSpectatorMode);
+	g_pLTClient->WriteToMessageByte(hData, m_bLastSent3rdPerson);
+//	g_pLTClient->WriteToMessageByte(hData, m_bStartedDuckingDown);
+//	g_pLTClient->WriteToMessageByte(hData, m_bStartedDuckingUp);
+	g_pLTClient->WriteToMessageByte(hData, m_bAllowPlayerMovement);
+	g_pLTClient->WriteToMessageByte(hData, m_bLastAllowPlayerMovement);
+	g_pLTClient->WriteToMessageByte(hData, m_bWasUsingExternalCamera);
+	g_pLTClient->WriteToMessageByte(hData, m_bUsingExternalCamera);
+	g_pLTClient->WriteToMessageByte(hData, m_ePlayerState);
+	g_pLTClient->WriteToMessageByte(hData, m_nCurrentLevel);
+	g_pLTClient->WriteToMessageByte(hData, m_nCurrentMission);
+	g_pLTClient->WriteToMessageByte(hData, m_nSoundFilterId);
+	g_pLTClient->WriteToMessageByte(hData, m_nGlobalSoundFilterId);
+	g_pLTClient->WriteToMessageByte(hData, m_weaponModel.GetHolster());
+	g_pLTClient->WriteToMessageByte(hData, m_FlashLight.IsOn());
 
-    g_pLTClient->WriteToMessageFloat(hData, m_fPitch);
-    g_pLTClient->WriteToMessageFloat(hData, m_fYaw);
-    g_pLTClient->WriteToMessageFloat(hData, m_fRoll);
-    g_pLTClient->WriteToMessageFloat(hData, m_fPlayerPitch);
-    g_pLTClient->WriteToMessageFloat(hData, m_fPlayerYaw);
-    g_pLTClient->WriteToMessageFloat(hData, m_fPlayerRoll);
+	g_pLTClient->WriteToMessageFloat(hData, m_fPitch);
+	g_pLTClient->WriteToMessageFloat(hData, m_fYaw);
+	g_pLTClient->WriteToMessageFloat(hData, m_fRoll);
+	g_pLTClient->WriteToMessageFloat(hData, m_fPlayerPitch);
+	g_pLTClient->WriteToMessageFloat(hData, m_fPlayerYaw);
+	g_pLTClient->WriteToMessageFloat(hData, m_fPlayerRoll);
 
 	m_fPitchBackup = m_fPitch;
 	m_fYawBackup = m_fYaw;
 
-    g_pLTClient->WriteToMessageFloat(hData, m_fPitchBackup);
-    g_pLTClient->WriteToMessageFloat(hData, m_fYawBackup);
+	g_pLTClient->WriteToMessageFloat(hData, m_fPitchBackup);
+	g_pLTClient->WriteToMessageFloat(hData, m_fYawBackup);
 
-    g_pLTClient->WriteToMessageFloat(hData, m_fFlashTime);
-    g_pLTClient->WriteToMessageFloat(hData, m_fFlashStart);
-    g_pLTClient->WriteToMessageFloat(hData, m_fFlashRampUp);
-    g_pLTClient->WriteToMessageFloat(hData, m_fFlashRampDown);
-    g_pLTClient->WriteToMessageFloat(hData, m_fFireJitterPitch);
-    g_pLTClient->WriteToMessageFloat(hData, m_fFireJitterYaw);
-    g_pLTClient->WriteToMessageFloat(hData, m_fContainerStartTime);
-    g_pLTClient->WriteToMessageFloat(hData, m_fFovXFXDir);
-    g_pLTClient->WriteToMessageFloat(hData, m_fSaveLODScale);
-//    g_pLTClient->WriteToMessageFloat(hData, m_fCamDuck);
-//    g_pLTClient->WriteToMessageFloat(hData, m_fDuckDownV);
-//    g_pLTClient->WriteToMessageFloat(hData, m_fDuckUpV);
-//    g_pLTClient->WriteToMessageFloat(hData, m_fMaxDuckDistance);
-//    g_pLTClient->WriteToMessageFloat(hData, m_fStartDuckTime);
+	g_pLTClient->WriteToMessageFloat(hData, m_fFlashTime);
+	g_pLTClient->WriteToMessageFloat(hData, m_fFlashStart);
+	g_pLTClient->WriteToMessageFloat(hData, m_fFlashRampUp);
+	g_pLTClient->WriteToMessageFloat(hData, m_fFlashRampDown);
+	g_pLTClient->WriteToMessageFloat(hData, m_fFireJitterPitch);
+	g_pLTClient->WriteToMessageFloat(hData, m_fFireJitterYaw);
+	g_pLTClient->WriteToMessageFloat(hData, m_fContainerStartTime);
+	g_pLTClient->WriteToMessageFloat(hData, m_fFovXFXDir);
+	g_pLTClient->WriteToMessageFloat(hData, m_fSaveLODScale);
+//	g_pLTClient->WriteToMessageFloat(hData, m_fCamDuck);
+//	g_pLTClient->WriteToMessageFloat(hData, m_fDuckDownV);
+//	g_pLTClient->WriteToMessageFloat(hData, m_fDuckUpV);
+//	g_pLTClient->WriteToMessageFloat(hData, m_fMaxDuckDistance);
+//	g_pLTClient->WriteToMessageFloat(hData, m_fStartDuckTime);
 
-    g_pLTClient->WriteToMessageHMessageWrite(hMessage, hData);
-    g_pLTClient->EndHMessageWrite(hData);
+	g_pLTClient->WriteToMessageHMessageWrite(hMessage, hData);
+	g_pLTClient->EndHMessageWrite(hData);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UnpackClientSaveMsg
 //
-//	ROUTINE:	CGameClientShell::UnpackClientSaveMsg
-//
-//	PURPOSE:	Load all the necessary client-side info
-//
+//	PURPOSE: Load all the necessary client-side info
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::UnpackClientSaveMsg(HMESSAGEREAD hMessage)
 {
 	if (!hMessage) return;
 
-    m_bRestoringGame = LTTRUE;
+	m_bRestoringGame = LTTRUE;
 
-    HMESSAGEREAD hData = g_pLTClient->ReadFromMessageHMessageRead(hMessage);
+	HMESSAGEREAD hData = g_pLTClient->ReadFromMessageHMessageRead(hMessage);
 
 
 	// Load complex data members...
@@ -7859,24 +7534,24 @@ void CGameClientShell::UnpackClientSaveMsg(HMESSAGEREAD hMessage)
 
 	// Load data members...
 
-    g_pLTClient->ReadFromMessageRotation(hData, &m_rRotation);
-    g_pLTClient->ReadFromMessageVector(hData, &m_vFlashColor);
+	g_pLTClient->ReadFromMessageRotation(hData, &m_rRotation);
+	g_pLTClient->ReadFromMessageVector(hData, &m_vFlashColor);
 
-    m_eDifficulty               = (GameDifficulty) g_pLTClient->ReadFromMessageByte(hData);
-    m_bFlashScreen              = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
-    m_bSpectatorMode            = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
-    m_bLastSent3rdPerson        = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
-//    m_bStartedDuckingDown       = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
-//    m_bStartedDuckingUp         = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
-    m_bAllowPlayerMovement      = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
-    m_bLastAllowPlayerMovement  = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
-    m_bWasUsingExternalCamera   = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
-    m_bUsingExternalCamera      = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
-    m_ePlayerState              = (PlayerState) g_pLTClient->ReadFromMessageByte(hData);
-    /*m_nCurrentLevel             = */SetCurrentLevel(g_pLTClient->ReadFromMessageByte(hData));
-    /*m_nCurrentMission           = */SetCurrentMission(g_pLTClient->ReadFromMessageByte(hData));
-    m_nSoundFilterId            = g_pLTClient->ReadFromMessageByte(hData);
-    m_nGlobalSoundFilterId      = g_pLTClient->ReadFromMessageByte(hData);
+	m_eDifficulty			= (GameDifficulty) g_pLTClient->ReadFromMessageByte(hData);
+	m_bFlashScreen			  = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
+	m_bSpectatorMode			= (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
+	m_bLastSent3rdPerson		= (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
+//	m_bStartedDuckingDown	= (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
+//	m_bStartedDuckingUp		 = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
+	m_bAllowPlayerMovement	  = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
+	m_bLastAllowPlayerMovement  = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
+	m_bWasUsingExternalCamera   = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
+	m_bUsingExternalCamera	  = (LTBOOL) g_pLTClient->ReadFromMessageByte(hData);
+	m_ePlayerState			  = (PlayerState) g_pLTClient->ReadFromMessageByte(hData);
+	/*m_nCurrentLevel			 = */SetCurrentLevel(g_pLTClient->ReadFromMessageByte(hData));
+	/*m_nCurrentMission		= */SetCurrentMission(g_pLTClient->ReadFromMessageByte(hData));
+	m_nSoundFilterId			= g_pLTClient->ReadFromMessageByte(hData);
+	m_nGlobalSoundFilterId	  = g_pLTClient->ReadFromMessageByte(hData);
 
 	m_weaponModel.SetHolster(g_pLTClient->ReadFromMessageByte(hData));
 
@@ -7885,54 +7560,48 @@ void CGameClientShell::UnpackClientSaveMsg(HMESSAGEREAD hMessage)
 		m_FlashLight.TurnOn();
 	}
 
-    m_fPitch                    = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fYaw                      = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fRoll                     = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fPlayerPitch              = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fPlayerYaw                = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fPlayerRoll               = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fPitchBackup              = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fYawBackup                = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fFlashTime                = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fFlashStart               = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fFlashRampUp              = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fFlashRampDown            = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fFireJitterPitch          = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fFireJitterYaw	        = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fContainerStartTime       = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fFovXFXDir                = g_pLTClient->ReadFromMessageFloat(hData);
-    m_fSaveLODScale             = g_pLTClient->ReadFromMessageFloat(hData);
-//    m_fCamDuck                  = g_pLTClient->ReadFromMessageFloat(hData);
-//    m_fDuckDownV                = g_pLTClient->ReadFromMessageFloat(hData);
-//    m_fDuckUpV                  = g_pLTClient->ReadFromMessageFloat(hData);
-//    m_fMaxDuckDistance          = g_pLTClient->ReadFromMessageFloat(hData);
-//    m_fStartDuckTime            = g_pLTClient->ReadFromMessageFloat(hData);
+	m_fPitch					= g_pLTClient->ReadFromMessageFloat(hData);
+	m_fYaw					  = g_pLTClient->ReadFromMessageFloat(hData);
+	m_fRoll					 = g_pLTClient->ReadFromMessageFloat(hData);
+	m_fPlayerPitch			  = g_pLTClient->ReadFromMessageFloat(hData);
+	m_fPlayerYaw				= g_pLTClient->ReadFromMessageFloat(hData);
+	m_fPlayerRoll			= g_pLTClient->ReadFromMessageFloat(hData);
+	m_fPitchBackup			  = g_pLTClient->ReadFromMessageFloat(hData);
+	m_fYawBackup				= g_pLTClient->ReadFromMessageFloat(hData);
+	m_fFlashTime				= g_pLTClient->ReadFromMessageFloat(hData);
+	m_fFlashStart			= g_pLTClient->ReadFromMessageFloat(hData);
+	m_fFlashRampUp			  = g_pLTClient->ReadFromMessageFloat(hData);
+	m_fFlashRampDown			= g_pLTClient->ReadFromMessageFloat(hData);
+	m_fFireJitterPitch		  = g_pLTClient->ReadFromMessageFloat(hData);
+	m_fFireJitterYaw			= g_pLTClient->ReadFromMessageFloat(hData);
+	m_fContainerStartTime	= g_pLTClient->ReadFromMessageFloat(hData);
+	m_fFovXFXDir				= g_pLTClient->ReadFromMessageFloat(hData);
+	m_fSaveLODScale			 = g_pLTClient->ReadFromMessageFloat(hData);
+//	m_fCamDuck				  = g_pLTClient->ReadFromMessageFloat(hData);
+//	m_fDuckDownV				= g_pLTClient->ReadFromMessageFloat(hData);
+//	m_fDuckUpV				  = g_pLTClient->ReadFromMessageFloat(hData);
+//	m_fMaxDuckDistance		  = g_pLTClient->ReadFromMessageFloat(hData);
+//	m_fStartDuckTime			= g_pLTClient->ReadFromMessageFloat(hData);
 
-    g_pLTClient->EndHMessageRead(hData);
+	g_pLTClient->EndHMessageRead(hData);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::ProcessCheat
 //
-//	ROUTINE:	CGameClientShell::ProcessCheat
-//
-//	PURPOSE:	process a cheat.
-//
+//	PURPOSE: process a cheat.
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::ProcessCheat(CheatCode nCode)
 {
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleRespawn
 //
-//	ROUTINE:	CGameClientShell::HandleRespawn
-//
-//	PURPOSE:	Handle player respawn
-//
+//	PURPOSE: Handle player respawn
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::HandleRespawn()
 {
 	if (!IsPlayerDead()) return;
@@ -7946,8 +7615,8 @@ void CGameClientShell::HandleRespawn()
 		if (m_InterfaceMgr.GetGameState() != GS_MENU)
 		{
 			// send a message to the server telling it that it's ok to respawn us now...
-	        HMESSAGEWRITE hMsg = g_pLTClient->StartMessage(MID_PLAYER_RESPAWN);
-		    g_pLTClient->EndMessage(hMsg);
+			HMESSAGEWRITE hMsg = g_pLTClient->StartMessage(MID_PLAYER_RESPAWN);
+			g_pLTClient->EndMessage(hMsg);
 		}
 	}
 	else  // Bring up load game menu...
@@ -7958,24 +7627,21 @@ void CGameClientShell::HandleRespawn()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::QuickSave
 //
-//	ROUTINE:	CGameClientShell::QuickSave
-//
-//	PURPOSE:	Quick save the game
-//
+//	PURPOSE: Quick save the game
 // --------------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::QuickSave()
 {
 	if (IsPlayerDead() || m_bUsingExternalCamera || GetGameType() != SINGLE ||
-        m_InterfaceMgr.GetGameState() != GS_PLAYING) return LTFALSE;
+		m_InterfaceMgr.GetGameState() != GS_PLAYING) return LTFALSE;
 
 	// Do quick save...
 
-    HSTRING hStr = g_pLTClient->FormatString(IDS_QUICKSAVING);
-    char* pStr = g_pLTClient->GetStringData(hStr);
-    CSPrint(pStr);
-    g_pLTClient->FreeString(hStr);
+	HSTRING hStr = g_pLTClient->FormatString(IDS_QUICKSAVING);
+	char* pStr = g_pLTClient->GetStringData(hStr);
+	CSPrint(pStr);
+	g_pLTClient->FreeString(hStr);
 
 	time_t seconds;
 	time (&seconds);
@@ -7996,22 +7662,19 @@ LTBOOL CGameClientShell::QuickSave()
 
 	CWinUtil::WinWritePrivateProfileString(GAME_NAME, "SaveGame00", strSaveGame, SAVEGAMEINI_FILENAME);
 
-    m_bQuickSave = LTTRUE;
+	m_bQuickSave = LTTRUE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::QuickLoad
 //
-//	ROUTINE:	CGameClientShell::QuickLoad
-//
-//	PURPOSE:	Quick load the game
-//
+//	PURPOSE: Quick load the game
 // --------------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::QuickLoad()
 {
-    if (m_InterfaceMgr.GetGameState() != GS_PLAYING &&
+	if (m_InterfaceMgr.GetGameState() != GS_PLAYING &&
 		m_InterfaceMgr.GetGameState() != GS_FAILURE &&
 		m_InterfaceMgr.GetCurrentFolder() != FOLDER_ID_FAILURE &&
 		m_InterfaceMgr.GetCurrentFolder() != FOLDER_ID_SUMMARY) return LTFALSE;
@@ -8024,116 +7687,101 @@ LTBOOL CGameClientShell::QuickLoad()
 
 	if (!*strSaveGameSetting)
 	{
-        HSTRING hString = g_pLTClient->FormatString(IDS_NOQUICKSAVEGAME);
-        m_InterfaceMgr.ShowMessageBox(hString,LTMB_OK,LTNULL);
+		HSTRING hString = g_pLTClient->FormatString(IDS_NOQUICKSAVEGAME);
+		m_InterfaceMgr.ShowMessageBox(hString,LTMB_OK,LTNULL);
 		g_pLTClient->FreeString(hString);
 
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	char* strWorldName = strtok(strSaveGameSetting,"|");
 
 	if (!LoadGame(strWorldName, QUICKSAVE_FILENAME))
 	{
-        HSTRING hString = g_pLTClient->FormatString(IDS_LOADGAMEFAILED);
-        m_InterfaceMgr.ShowMessageBox(hString,LTMB_OK,LTNULL);
+		HSTRING hString = g_pLTClient->FormatString(IDS_LOADGAMEFAILED);
+		m_InterfaceMgr.ShowMessageBox(hString,LTMB_OK,LTNULL);
 		g_pLTClient->FreeString(hString);
 
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::IsMultiplayerGame()
 //
-//	ROUTINE:	CGameClientShell::IsMultiplayerGame()
-//
-//	PURPOSE:	See if we are playing a multiplayer game
-//
+//	PURPOSE: See if we are playing a multiplayer game
 // --------------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::IsMultiplayerGame()
 {
 	int nGameMode = 0;
-    g_pLTClient->GetGameMode(&nGameMode);
-    if (nGameMode == STARTGAME_NORMAL || nGameMode == GAMEMODE_NONE) return LTFALSE;
+	g_pLTClient->GetGameMode(&nGameMode);
+	if (nGameMode == STARTGAME_NORMAL || nGameMode == GAMEMODE_NONE) return LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::IsHosting()
 //
-//	ROUTINE:	CGameClientShell::IsHosting()
-//
-//	PURPOSE:	See if we are playing a multiplayer game
-//
+//	PURPOSE: See if we are playing a multiplayer game
 // --------------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::IsHosting()
 {
 	int nGameMode = 0;
-    g_pLTClient->GetGameMode(&nGameMode);
-    if (nGameMode == STARTGAME_HOST || nGameMode == STARTGAME_HOSTTCP) return LTTRUE;
+	g_pLTClient->GetGameMode(&nGameMode);
+	if (nGameMode == STARTGAME_HOST || nGameMode == STARTGAME_HOSTTCP) return LTTRUE;
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::IsPlayerInWorld()
 //
-//	ROUTINE:	CGameClientShell::IsPlayerInWorld()
-//
-//	PURPOSE:	See if the player is in the world
-//
+//	PURPOSE: See if the player is in the world
 // --------------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::IsPlayerInWorld()
 {
-    HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
+	HLOCALOBJ hPlayerObj = g_pLTClient->GetClientObject();
 
-    if (!m_bPlayerPosSet || !m_bInWorld || m_ePlayerState == PS_UNKNOWN || !hPlayerObj) return LTFALSE;
+	if (!m_bPlayerPosSet || !m_bInWorld || m_ePlayerState == PS_UNKNOWN || !hPlayerObj) return LTFALSE;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 void CGameClientShell::GetCameraRotation(LTRotation *pRot)
 {
-    g_pLTClient->SetupEuler(pRot, m_fPitch, m_fYaw, m_fRoll);
+	g_pLTClient->SetupEuler(pRot, m_fPitch, m_fYaw, m_fRoll);
 }
 
 void CGameClientShell::GetPlayerRotation(LTRotation *pRot)
 {
-    g_pLTClient->SetupEuler(pRot, m_fPlayerPitch, m_fPlayerYaw, m_fPlayerRoll);
+	g_pLTClient->SetupEuler(pRot, m_fPlayerPitch, m_fPlayerYaw, m_fPlayerRoll);
 }
 
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::StartGame
 //
-//	ROUTINE:	CGameClientShell::StartGame
-//
-//	PURPOSE:	Start a new game
-//
+//	PURPOSE: Start a new game
 // --------------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::StartGame(GameDifficulty eDifficulty)
 {
 	SetDifficulty(eDifficulty);
 	SetFadeBodies(m_bFadeBodies);
 	DoStartGame();
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::DoStartGame
 //
-//	ROUTINE:	CGameClientShell::DoStartGame
-//
-//	PURPOSE:	*Really* Start a new game
-//
+//	PURPOSE: *Really* Start a new game
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::DoStartGame()
 {
 	SetCurrentMission(0);
@@ -8141,20 +7789,17 @@ void CGameClientShell::DoStartGame()
 
 	if (!LoadCurrentLevel())
 	{
-        g_pLTClient->CPrint("ERROR in CGameClientShell::DoStartGame():");
-        g_pLTClient->CPrint("      Couldn't load the first mission!");
+		g_pLTClient->CPrint("ERROR in CGameClientShell::DoStartGame():");
+		g_pLTClient->CPrint("	  Couldn't load the first mission!");
 	}
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::StartMission
 //
-//	ROUTINE:	CGameClientShell::StartMission
-//
-//	PURPOSE:	Start a new mission
-//
+//	PURPOSE: Start a new mission
 // --------------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::StartMission(int nMissionId)
 {
 
@@ -8163,7 +7808,7 @@ LTBOOL CGameClientShell::StartMission(int nMissionId)
 		g_pInterfaceMgr->StartingNewGame();
 
 	MISSION* pMission = g_pMissionMgr->GetMission(nMissionId);
-    if (!pMission) return LTFALSE;
+	if (!pMission) return LTFALSE;
 
 	SetCurrentMission(nMissionId);
 	SetCurrentLevel(0);
@@ -8183,49 +7828,43 @@ LTBOOL CGameClientShell::StartMission(int nMissionId)
 
 	if (!LoadCurrentLevel())
 	{
-        g_pLTClient->CPrint("ERROR in CGameClientShell::StartMission():");
-        g_pLTClient->CPrint("      Couldn't start mission %d!", m_nCurrentMission);
-        m_InterfaceMgr.SwitchToFolder(g_pInterfaceMgr->GetMainFolder());
+		g_pLTClient->CPrint("ERROR in CGameClientShell::StartMission():");
+		g_pLTClient->CPrint("	  Couldn't start mission %d!", m_nCurrentMission);
+		m_InterfaceMgr.SwitchToFolder(g_pInterfaceMgr->GetMainFolder());
 
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::LoadCurrentLevel
 //
-//	ROUTINE:	CGameClientShell::LoadCurrentLevel
-//
-//	PURPOSE:	Handle loading the current level
-//
+//	PURPOSE: Handle loading the current level
 // --------------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::LoadCurrentLevel()
 {
 	MISSION* pMission = g_pMissionMgr->GetMission(m_nCurrentMission);
-    if (!pMission) return LTFALSE;
+	if (!pMission) return LTFALSE;
 
-    if (m_nCurrentLevel < 0 || m_nCurrentLevel > pMission->nNumLevels) return LTFALSE;
+	if (m_nCurrentLevel < 0 || m_nCurrentLevel > pMission->nNumLevels) return LTFALSE;
 
-    uint8 nFlags = m_nCurrentLevel == 0 ? LOAD_NEW_GAME : LOAD_NEW_LEVEL;
+	uint8 nFlags = m_nCurrentLevel == 0 ? LOAD_NEW_GAME : LOAD_NEW_LEVEL;
 
-    return LoadWorld(pMission->aLevels[m_nCurrentLevel].szLevel, LTNULL, LTNULL, nFlags);
+	return LoadWorld(pMission->aLevels[m_nCurrentLevel].szLevel, LTNULL, LTNULL, nFlags);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::GetNiceWorldName
 //
-//	ROUTINE:	CGameClientShell::GetNiceWorldName
-//
-//	PURPOSE:	Get the nice (level designer set) world name...
-//
+//	PURPOSE: Get the nice (level designer set) world name...
 // --------------------------------------------------------------------------- //
-
 LTBOOL CGameClientShell::GetNiceWorldName(char* pWorldFile, char* pRetName, int nRetLen)
 {
-    if (!pWorldFile || !pRetName || nRetLen < 2) return LTFALSE;
+	if (!pWorldFile || !pRetName || nRetLen < 2) return LTFALSE;
 
 	char buf[_MAX_PATH];
 	buf[0] = '\0';
@@ -8234,17 +7873,17 @@ LTBOOL CGameClientShell::GetNiceWorldName(char* pWorldFile, char* pRetName, int 
 	char buf2[_MAX_PATH];
 	sprintf(buf2, "%s.dat", pWorldFile);
 
-    LTRESULT dRes = g_pLTClient->GetWorldInfoString(buf2, buf, _MAX_PATH, &len);
+	LTRESULT dRes = g_pLTClient->GetWorldInfoString(buf2, buf, _MAX_PATH, &len);
 
 	if (dRes != LT_OK || !buf[0] || len < 1)
 	{
 		// try pre-pending "worlds\" to the filename to see if it will find it then...
 		// sprintf (buf2, "worlds\\%s.dat", pWorldFile);
-        // dRes = g_pLTClient->GetWorldInfoString(buf2, buf, _MAX_PATH, &len);
+		// dRes = g_pLTClient->GetWorldInfoString(buf2, buf, _MAX_PATH, &len);
 
 		if (dRes != LT_OK || !buf[0] || len < 1)
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 	}
 
@@ -8256,33 +7895,30 @@ LTBOOL CGameClientShell::GetNiceWorldName(char* pWorldFile, char* pRetName, int 
 	char* pCurPos = buf;
 	char* pNextPos;
 
-    LTBOOL bMore = LTTRUE;
+	LTBOOL bMore = LTTRUE;
 	while (bMore)
 	{
-        bMore = g_pLTClient->Parse(pCurPos, &pNextPos, tokenSpace, pTokens, &nArgs);
+		bMore = g_pLTClient->Parse(pCurPos, &pNextPos, tokenSpace, pTokens, &nArgs);
 		if (nArgs < 2) break;
 
 		if (_stricmp(pTokens[0], "WORLDNAME") == 0)
 		{
 			strncpy(pRetName, pTokens[1], nRetLen);
-            return LTTRUE;
+			return LTTRUE;
 		}
 
 		pCurPos = pNextPos;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnModelKey
 //
-//	ROUTINE:	CGameClientShell::OnModelKey
-//
-//	PURPOSE:	Handle weapon model keys
-//
+//	PURPOSE: Handle weapon model keys
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::OnModelKey(HLOCALOBJ hObj, ArgList *pArgs)
 {
 	if (m_weaponModel.GetHandle() == hObj)
@@ -8296,13 +7932,10 @@ void CGameClientShell::OnModelKey(HLOCALOBJ hObj, ArgList *pArgs)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::OnPlaySound
 //
-//	ROUTINE:	CGameClientShell::OnPlaySound
-//
-//	PURPOSE:	Handle a sound being played...
-//
+//	PURPOSE: Handle a sound being played...
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::OnPlaySound(PlaySoundInfo* pPSI)
 {
 	if (!pPSI || !g_vtUseSoundFilters.GetFloat()) return;
@@ -8364,13 +7997,10 @@ void CGameClientShell::OnPlaySound(PlaySoundInfo* pPSI)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::DoActivate
 //
-//	ROUTINE:	CGameClientShell::DoActivate
-//
-//	PURPOSE:	Tell the server to do Activate
-//
+//	PURPOSE: Tell the server to do Activate
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::DoActivate(LTBOOL bEditMode)
 {
 	// Don't allow activation when the zip cord is on...
@@ -8379,12 +8009,12 @@ void CGameClientShell::DoActivate(LTBOOL bEditMode)
 	char* pActivateOverride = g_vtActivateOverride.GetStr();
 	if (pActivateOverride && pActivateOverride[0] != ' ')
 	{
-        g_pLTClient->RunConsoleString(pActivateOverride);
+		g_pLTClient->RunConsoleString(pActivateOverride);
 		return;
 	}
 
-    LTRotation rRot;
-    LTVector vU, vR, vF, vPos;
+	LTRotation rRot;
+	LTVector vU, vR, vF, vPos;
 
 	if (m_PlayerCamera.IsFirstPerson())
 	{
@@ -8402,22 +8032,19 @@ void CGameClientShell::DoActivate(LTBOOL bEditMode)
 		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 	}
 
-    HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_ACTIVATE);
-    g_pLTClient->WriteToMessageVector(hMessage, &vPos);
-    g_pLTClient->WriteToMessageVector(hMessage, &vF);
-    g_pLTClient->WriteToMessageByte(hMessage, bEditMode);
-    g_pLTClient->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_ACTIVATE);
+	g_pLTClient->WriteToMessageVector(hMessage, &vPos);
+	g_pLTClient->WriteToMessageVector(hMessage, &vF);
+	g_pLTClient->WriteToMessageByte(hMessage, bEditMode);
+	g_pLTClient->EndMessage(hMessage);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::CreateBoundingBox
 //
-//	ROUTINE:	CGameClientShell::CreateBoundingBox
-//
-//	PURPOSE:	Create a box around the MoveMgr object
-//
+//	PURPOSE: Create a box around the MoveMgr object
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::CreateBoundingBox()
 {
 	if (m_hBoundingBox) return;
@@ -8428,8 +8055,8 @@ void CGameClientShell::CreateBoundingBox()
 	ObjectCreateStruct theStruct;
 	INIT_OBJECTCREATESTRUCT(theStruct);
 
-    LTVector vPos;
-    g_pLTClient->GetObjectPos(hMoveMgrObj, &vPos);
+	LTVector vPos;
+	g_pLTClient->GetObjectPos(hMoveMgrObj, &vPos);
 	VEC_COPY(theStruct.m_Pos, vPos);
 
 	SAFE_STRCPY(theStruct.m_Filename, "Models\\1x1_square.abc");
@@ -8437,19 +8064,16 @@ void CGameClientShell::CreateBoundingBox()
 	theStruct.m_ObjectType = OT_MODEL;
 	theStruct.m_Flags = FLAG_VISIBLE | FLAG_MODELWIREFRAME;
 
-    m_hBoundingBox = g_pLTClient->CreateObject(&theStruct);
+	m_hBoundingBox = g_pLTClient->CreateObject(&theStruct);
 
 	UpdateBoundingBox();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateBoundingBox()
 //
-//	ROUTINE:	CGameClientShell::UpdateBoundingBox()
-//
-//	PURPOSE:	Update the bounding box
-//
+//	PURPOSE: Update the bounding box
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateBoundingBox()
 {
 	if (!m_hBoundingBox) return;
@@ -8457,20 +8081,20 @@ void CGameClientShell::UpdateBoundingBox()
 	HLOCALOBJ hMoveMgrObj = m_MoveMgr.GetObject();
 	if (!hMoveMgrObj) return;
 
-    LTVector vPos;
-    g_pLTClient->GetObjectPos(hMoveMgrObj, &vPos);
-    g_pLTClient->SetObjectPos(m_hBoundingBox, &vPos);
+	LTVector vPos;
+	g_pLTClient->GetObjectPos(hMoveMgrObj, &vPos);
+	g_pLTClient->SetObjectPos(m_hBoundingBox, &vPos);
 
-    LTVector vDims;
-    g_pLTClient->Physics()->GetObjectDims(hMoveMgrObj, &vDims);
+	LTVector vDims;
+	g_pLTClient->Physics()->GetObjectDims(hMoveMgrObj, &vDims);
 
-    LTVector vScale;
+	LTVector vScale;
 	VEC_DIVSCALAR(vScale, vDims, 0.5f);
-    g_pLTClient->SetObjectScale(m_hBoundingBox, &vScale);
+	g_pLTClient->SetObjectScale(m_hBoundingBox, &vScale);
 }
 
 // --------------------------------------------------------------------------- //
-// Called by the engine, saves all variables (console and member variables)
+ Called by the engine, saves all variables (console and member variables)
 // related to demo playback.
 // --------------------------------------------------------------------------- //
 void LoadConVar(ILTClient *g_pLTClient, ILTStream *pStream, char *pVarName)
@@ -8480,7 +8104,7 @@ void LoadConVar(ILTClient *g_pLTClient, ILTStream *pStream, char *pVarName)
 
 	(*pStream) >> val;
 	sprintf(cString, "%s %f", pVarName, val);
-    g_pLTClient->RunConsoleString(cString);
+	g_pLTClient->RunConsoleString(cString);
 }
 
 void SaveConVar(ILTClient *g_pLTClient, ILTStream *pStream, char *pVarName, float defaultVal)
@@ -8489,9 +8113,9 @@ void SaveConVar(ILTClient *g_pLTClient, ILTStream *pStream, char *pVarName, floa
 	float val;
 
 	val = defaultVal;
-    if(hVar = g_pLTClient->GetConsoleVar (pVarName))
+	if(hVar = g_pLTClient->GetConsoleVar (pVarName))
 	{
-        val = g_pLTClient->GetVarValueFloat (hVar);
+		val = g_pLTClient->GetVarValueFloat (hVar);
 	}
 
 	(*pStream) << val;
@@ -8525,20 +8149,17 @@ void CGameClientShell::DemoSerialize(ILTStream *pStream, LTBOOL bLoad)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: LoadLeakFile
 //
-//	ROUTINE:	LoadLeakFile
-//
-//	PURPOSE:	Loads a leak file and creates a line system for it.
-//
+//	PURPOSE: Loads a leak file and creates a line system for it.
 // --------------------------------------------------------------------------- //
-
 LTBOOL LoadLeakFile(ILTClient *g_pLTClient, char *pFilename)
 {
 	FILE *fp;
 	char line[256];
 	HLOCALOBJ hObj;
 	ObjectCreateStruct cStruct;
-    LTLine theLine;
+	LTLine theLine;
 	int nRead;
 
 	fp = fopen(pFilename, "rt");
@@ -8547,11 +8168,11 @@ LTBOOL LoadLeakFile(ILTClient *g_pLTClient, char *pFilename)
 		INIT_OBJECTCREATESTRUCT(cStruct);
 		cStruct.m_ObjectType = OT_LINESYSTEM;
 		cStruct.m_Flags = FLAG_VISIBLE;
-        hObj = g_pLTClient->CreateObject(&cStruct);
+		hObj = g_pLTClient->CreateObject(&cStruct);
 		if(!hObj)
 		{
 			fclose(fp);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		while(fgets(line, 256, fp))
@@ -8569,72 +8190,66 @@ LTBOOL LoadLeakFile(ILTClient *g_pLTClient, char *pFilename)
 			theLine.m_Points[1].g = theLine.m_Points[1].b = 0;
 			theLine.m_Points[1].a = 1;
 
-            g_pLTClient->AddLine(hObj, &theLine);
+			g_pLTClient->AddLine(hObj, &theLine);
 		}
 
 		fclose(fp);
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: ConnectToTcpIpAddress
 //
-//	ROUTINE:	ConnectToTcpIpAddress
-//
-//	PURPOSE:	Connects (joins) to the given tcp/ip address
-//
+//	PURPOSE: Connects (joins) to the given tcp/ip address
 // --------------------------------------------------------------------------- //
-
 LTBOOL ConnectToTcpIpAddress(ILTClient* pClientDE, char* sAddress)
 {
 	// Sanity checks...
 
-    if (!g_pLTClient) return(LTFALSE);
-    if (!sAddress) return(LTFALSE);
+	if (!g_pLTClient) return(LTFALSE);
+	if (!sAddress) return(LTFALSE);
 
 /*
 	// Try to connect to the given address...
 
-    LTBOOL db = NetStart_DoConsoleConnect(g_pLTClient, sAddress);
+	LTBOOL db = NetStart_DoConsoleConnect(g_pLTClient, sAddress);
 
 	if (!db)
 	{
-        if (strlen(sAddress) <= 0) g_pLTClient->CPrint("Unable to connect");
-        else g_pLTClient->CPrint("Unable to connect to %s", sAddress);
-        return(LTFALSE);
+		if (strlen(sAddress) <= 0) g_pLTClient->CPrint("Unable to connect");
+		else g_pLTClient->CPrint("Unable to connect to %s", sAddress);
+		return(LTFALSE);
 	}
 
 
 	// All done...
 
-    if (strlen(sAddress) > 0) g_pLTClient->CPrint("Connected to %s", sAddress);
-    else g_pLTClient->CPrint("Connected");
+	if (strlen(sAddress) > 0) g_pLTClient->CPrint("Connected to %s", sAddress);
+	else g_pLTClient->CPrint("Connected");
 
-    return(LTTRUE);
+	return(LTTRUE);
 	*/
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: NVModelHook
 //
-//	ROUTINE:	NVModelHook
-//
-//	PURPOSE:	Special Rendering Code for NightVision Powerup
-//
+//	PURPOSE: Special Rendering Code for NightVision Powerup
 // --------------------------------------------------------------------------- //
-
 void NVModelHook (ModelHookData *pData, void *pUser)
 {
 	CGameClientShell* pShell = (CGameClientShell*) pUser;
 	if (!pShell) return;
 
-    uint32 nUserFlags = 0;
-    g_pLTClient->GetObjectUserFlags (pData->m_hObject, &nUserFlags);
+	uint32 nUserFlags = 0;
+	g_pLTClient->GetObjectUserFlags (pData->m_hObject, &nUserFlags);
 	if (nUserFlags & USRFLG_NIGHT_INFRARED)
 	{
 		pData->m_Flags &= ~MHF_USETEXTURE;
@@ -8651,20 +8266,17 @@ void NVModelHook (ModelHookData *pData, void *pUser)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: IRModelHook
 //
-//	ROUTINE:	IRModelHook
-//
-//	PURPOSE:	Special Rendering Code for Infrared Powerup
-//
+//	PURPOSE: Special Rendering Code for Infrared Powerup
 // --------------------------------------------------------------------------- //
-
 void IRModelHook (ModelHookData *pData, void *pUser)
 {
 	CGameClientShell* pShell = (CGameClientShell*) pUser;
 	if (!pShell) return;
 
-    uint32 nUserFlags = 0;
-    g_pLTClient->GetObjectUserFlags (pData->m_hObject, &nUserFlags);
+	uint32 nUserFlags = 0;
+	g_pLTClient->GetObjectUserFlags (pData->m_hObject, &nUserFlags);
 	if (nUserFlags & USRFLG_NIGHT_INFRARED)
 	{
 		pData->m_Flags &= ~MHF_USETEXTURE;
@@ -8683,21 +8295,18 @@ void IRModelHook (ModelHookData *pData, void *pUser)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DefaultModelHook
 //
-//	ROUTINE:	DefaultModelHook
-//
-//	PURPOSE:	Default model hook function
-//
+//	PURPOSE: Default model hook function
 // --------------------------------------------------------------------------- //
-
 void DefaultModelHook (ModelHookData *pData, void *pUser)
 {
 
 	CGameClientShell* pShell = (CGameClientShell*) pUser;
 	if (!pShell) return;
 
-    uint32 nUserFlags = 0;
-    g_pLTClient->GetObjectUserFlags (pData->m_hObject, &nUserFlags);
+	uint32 nUserFlags = 0;
+	g_pLTClient->GetObjectUserFlags (pData->m_hObject, &nUserFlags);
 
 	if (nUserFlags & USRFLG_GLOW)
 	{
@@ -8712,9 +8321,9 @@ void DefaultModelHook (ModelHookData *pData, void *pUser)
 		// Get the new color out of the upper 3 bytes of the
 		// user flags...
 
-        LTFLOAT r = (LTFLOAT)(nUserFlags>>24);
-        LTFLOAT g = (LTFLOAT)(nUserFlags>>16);
-        LTFLOAT b = (LTFLOAT)(nUserFlags>>8);
+		LTFLOAT r = (LTFLOAT)(nUserFlags>>24);
+		LTFLOAT g = (LTFLOAT)(nUserFlags>>16);
+		LTFLOAT b = (LTFLOAT)(nUserFlags>>8);
 
 		if (pData->m_LightAdd)
 		{
@@ -8726,13 +8335,10 @@ void DefaultModelHook (ModelHookData *pData, void *pUser)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: HookedWindowProc
 //
-//	ROUTINE:	HookedWindowProc
-//
-//	PURPOSE:	Hook it real good
-//
+//	PURPOSE: Hook it real good
 // --------------------------------------------------------------------------- //
-
 LRESULT CALLBACK HookedWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (!g_pfnMainWndProc)
@@ -8819,22 +8425,19 @@ BOOL OnSetCursor(HWND hwnd, HWND hwndCursor, UINT codeHitTest, UINT msg)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: HookWindow
 //
-//	ROUTINE:	HookWindow
-//
-//	PURPOSE:	HOOK IT!
-//
+//	PURPOSE: HOOK IT!
 // --------------------------------------------------------------------------- //
-
 BOOL HookWindow()
 {
 	// Get the screen dimz
-    HSURFACE hScreen = g_pLTClient->GetScreenSurface();
+	HSURFACE hScreen = g_pLTClient->GetScreenSurface();
 	if(!hScreen)
 		return FALSE;
 
 	// Hook the window
-    if(g_pLTClient->GetEngineHook("HWND",(void **)&g_hMainWnd) != LT_OK)
+	if(g_pLTClient->GetEngineHook("HWND",(void **)&g_hMainWnd) != LT_OK)
 	{
 		TRACE("HookWindow - ERROR - could not get the engine window!\n");
 		return FALSE;
@@ -8861,19 +8464,19 @@ BOOL HookWindow()
 	}
 
 	// Clip the cursor if we're NOT in a window
-    HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("Windowed");
+	HCONSOLEVAR hVar = g_pLTClient->GetConsoleVar("Windowed");
 	BOOL bClip = TRUE;
 	if(hVar)
 	{
-        float fVal = g_pLTClient->GetVarValueFloat(hVar);
+		float fVal = g_pLTClient->GetVarValueFloat(hVar);
 		if(fVal == 1.0f)
 			bClip = FALSE;
 	}
 
 	if(bClip)
 	{
-        uint32 dwScreenWidth = g_pGameClientShell->GetScreenWidth();
-        uint32 dwScreenHeight = g_pGameClientShell->GetScreenHeight();
+		uint32 dwScreenWidth = g_pGameClientShell->GetScreenWidth();
+		uint32 dwScreenHeight = g_pGameClientShell->GetScreenHeight();
 
 		SetWindowLong(g_hMainWnd,GWL_STYLE,WS_VISIBLE);
 		SetWindowPos(g_hMainWnd,HWND_TOPMOST,0,0,dwScreenWidth,dwScreenHeight,SWP_FRAMECHANGED);
@@ -8904,13 +8507,10 @@ BOOL HookWindow()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: UnhookWindow
 //
-//	ROUTINE:	UnhookWindow
-//
-//	PURPOSE:	Unhook the window
-//
+//	PURPOSE: Unhook the window
 // --------------------------------------------------------------------------- //
-
 void UnhookWindow()
 {
 	if(g_pfnMainWndProc && g_hMainWnd)
@@ -8928,50 +8528,41 @@ void UnhookWindow()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::SetDifficulty
 //
-//	ROUTINE:	CGameClientShell::SetDifficulty
-//
-//	PURPOSE:	Dynamically change our difficulty level
-//
+//	PURPOSE: Dynamically change our difficulty level
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::SetDifficulty(GameDifficulty e)
 {
 	m_eDifficulty = e;
 	WriteConsoleInt("Difficulty",(int)e);
 
-    HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_DIFFICULTY);
-    g_pLTClient->WriteToMessageByte(hMessage, m_eDifficulty);
-    g_pLTClient->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_DIFFICULTY);
+	g_pLTClient->WriteToMessageByte(hMessage, m_eDifficulty);
+	g_pLTClient->EndMessage(hMessage);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::SetFadeBodies
 //
-//	ROUTINE:	CGameClientShell::SetFadeBodies
-//
-//	PURPOSE:	Dynamically change our difficulty level
-//
+//	PURPOSE: Dynamically change our difficulty level
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::SetFadeBodies(LTBOOL bFade)
 {
 	m_bFadeBodies = bFade;
 
-    HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_FADEBODIES);
-    g_pLTClient->WriteToMessageByte(hMessage, (uint8)m_bFadeBodies);
-    g_pLTClient->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_FADEBODIES);
+	g_pLTClient->WriteToMessageByte(hMessage, (uint8)m_bFadeBodies);
+	g_pLTClient->EndMessage(hMessage);
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleWeaponPickup()
 //
-//	ROUTINE:	CGameClientShell::HandleWeaponPickup()
-//
-//	PURPOSE:	Handle picking up weapon
-//
+//	PURPOSE: Handle picking up weapon
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleWeaponPickup(uint8 nWeaponID)
 {
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(nWeaponID);
@@ -8988,59 +8579,56 @@ void CGameClientShell::HandleWeaponPickup(uint8 nWeaponID)
 	int nNameId = pWeapon->nNameId;
 	if (!nNameId) return;
 
-    HSTRING hStr = g_pLTClient->FormatString(nNameId);
+	HSTRING hStr = g_pLTClient->FormatString(nNameId);
 	if (!hStr) return;
 
-    char* pStr = g_pLTClient->GetStringData(hStr);
+	char* pStr = g_pLTClient->GetStringData(hStr);
 	if (!pStr)
 	{
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 		return;
 	}
 
-    HSURFACE hSurf = LTNULL;
+	HSURFACE hSurf = LTNULL;
 	if (strlen(pWeapon->szSmallIcon))
 		hSurf = g_pLTClient->CreateSurfaceFromBitmap(pWeapon->szSmallIcon);
 	else
 		hSurf = g_pLTClient->CreateSurfaceFromBitmap(pWeapon->szIcon);
 	if (!hSurf)
-        hSurf = g_pLTClient->CreateSurfaceFromBitmap("interface\\missingslot.pcx");
+		hSurf = g_pLTClient->CreateSurfaceFromBitmap("interface\\missingslot.pcx");
 
-    HSTRING hMsg = g_pLTClient->FormatString(IDS_GUNPICKUP,pStr);
+	HSTRING hMsg = g_pLTClient->FormatString(IDS_GUNPICKUP,pStr);
 	m_InterfaceMgr.GetMessageMgr()->AddLine(hMsg,MMGR_PICKUP,hSurf);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
-    LTVector vTintColor = g_pLayoutMgr->GetWeaponPickupColor();
-    LTFLOAT  fTotalTime = g_pLayoutMgr->GetTintTime();
+	LTVector vTintColor = g_pLayoutMgr->GetWeaponPickupColor();
+	LTFLOAT  fTotalTime = g_pLayoutMgr->GetTintTime();
 
-    LTFLOAT fRampDown = fTotalTime * 0.85f;
-    LTFLOAT fRampUp   = fTotalTime * 0.10f;
-    LTFLOAT fTintTime = fTotalTime * 0.05f;
+	LTFLOAT fRampDown = fTotalTime * 0.85f;
+	LTFLOAT fRampUp   = fTotalTime * 0.10f;
+	LTFLOAT fTintTime = fTotalTime * 0.05f;
 
-    LTVector vCamPos;
-    g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
+	LTVector vCamPos;
+	g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
 
-    LTRotation rRot;
-    g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
+	LTRotation rRot;
+	g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
 
-    LTVector vU, vR, vF;
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTVector vU, vR, vF;
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	VEC_MULSCALAR(vF, vF, 10.0f);
 	VEC_ADD(vCamPos, vCamPos, vF);
 
-    g_pGameClientShell->FlashScreen(vTintColor, vCamPos, 1000.0f, fRampUp, fTintTime, fRampDown, LTTRUE);
+	g_pGameClientShell->FlashScreen(vTintColor, vCamPos, 1000.0f, fRampUp, fTintTime, fRampDown, LTTRUE);
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleGearPickup()
 //
-//	ROUTINE:	CGameClientShell::HandleGearPickup()
-//
-//	PURPOSE:	Handle picking up gear
-//
+//	PURPOSE: Handle picking up gear
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleGearPickup(uint8 nGearId)
 {
 	GEAR* pGear = g_pWeaponMgr->GetGear(nGearId);
@@ -9049,62 +8637,59 @@ void CGameClientShell::HandleGearPickup(uint8 nGearId)
 	int nNameId = pGear->nNameId;
 	if (!nNameId) return;
 
-    HSTRING hStr = g_pLTClient->FormatString(nNameId);
+	HSTRING hStr = g_pLTClient->FormatString(nNameId);
 	if (!hStr) return;
 
-    char* pStr = g_pLTClient->GetStringData(hStr);
+	char* pStr = g_pLTClient->GetStringData(hStr);
 	if (!pStr)
 	{
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 		return;
 	}
 
-    HSURFACE hSurf = LTNULL;
+	HSURFACE hSurf = LTNULL;
 	if (strlen(pGear->szSmallIcon))
 		hSurf = g_pLTClient->CreateSurfaceFromBitmap(pGear->szSmallIcon);
 	else
 		hSurf = g_pLTClient->CreateSurfaceFromBitmap(pGear->szIcon);
 
 	if (!hSurf)
-        hSurf = g_pLTClient->CreateSurfaceFromBitmap("interface\\missingslot.pcx");
+		hSurf = g_pLTClient->CreateSurfaceFromBitmap("interface\\missingslot.pcx");
 
 
-    HSTRING hMsg = g_pLTClient->FormatString(IDS_GEARPICKUP,pStr);
+	HSTRING hMsg = g_pLTClient->FormatString(IDS_GEARPICKUP,pStr);
 	m_InterfaceMgr.GetMessageMgr()->AddLine(hMsg,MMGR_PICKUP, hSurf);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
-    LTVector vTintColor = pGear->vScreenTintColor;
-    LTFLOAT  fTotalTime = pGear->fScreenTintTime;
+	LTVector vTintColor = pGear->vScreenTintColor;
+	LTFLOAT  fTotalTime = pGear->fScreenTintTime;
 
-    LTFLOAT fRampDown = fTotalTime * 0.85f;
-    LTFLOAT fRampUp   = fTotalTime * 0.10f;
-    LTFLOAT fTintTime = fTotalTime * 0.05f;
+	LTFLOAT fRampDown = fTotalTime * 0.85f;
+	LTFLOAT fRampUp   = fTotalTime * 0.10f;
+	LTFLOAT fTintTime = fTotalTime * 0.05f;
 
 
-    LTVector vCamPos;
-    g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
+	LTVector vCamPos;
+	g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
 
-    LTRotation rRot;
-    g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
+	LTRotation rRot;
+	g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
 
-    LTVector vU, vR, vF;
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTVector vU, vR, vF;
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	VEC_MULSCALAR(vF, vF, 10.0f);
 	VEC_ADD(vCamPos, vCamPos, vF);
 
-    g_pGameClientShell->FlashScreen(vTintColor, vCamPos, 1000.0f, fRampUp, fTintTime, fRampDown, LTTRUE);
+	g_pGameClientShell->FlashScreen(vTintColor, vCamPos, 1000.0f, fRampUp, fTintTime, fRampDown, LTTRUE);
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleModPickup()
 //
-//	ROUTINE:	CGameClientShell::HandleModPickup()
-//
-//	PURPOSE:	Handle picking up mod
-//
+//	PURPOSE: Handle picking up mod
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleModPickup(uint8 nModId)
 {
 	MOD* pMod = g_pWeaponMgr->GetMod(nModId);
@@ -9113,60 +8698,57 @@ void CGameClientShell::HandleModPickup(uint8 nModId)
 	int nNameId = pMod->nNameId;
 	if (!nNameId) return;
 
-    HSTRING hStr = g_pLTClient->FormatString(nNameId);
+	HSTRING hStr = g_pLTClient->FormatString(nNameId);
 	if (!hStr) return;
 
-    char* pStr = g_pLTClient->GetStringData(hStr);
+	char* pStr = g_pLTClient->GetStringData(hStr);
 	if (!pStr)
 	{
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 		return;
 	}
 
-    HSURFACE hSurf = LTNULL;
+	HSURFACE hSurf = LTNULL;
 	if (strlen(pMod->szSmallIcon))
 		hSurf = g_pLTClient->CreateSurfaceFromBitmap(pMod->szSmallIcon);
-    else
+	else
 		hSurf = g_pLTClient->CreateSurfaceFromBitmap(pMod->szIcon);
 	if (!hSurf)
-        hSurf = g_pLTClient->CreateSurfaceFromBitmap("interface\\missingslot.pcx");
+		hSurf = g_pLTClient->CreateSurfaceFromBitmap("interface\\missingslot.pcx");
 
-    HSTRING hMsg = g_pLTClient->FormatString(IDS_MODPICKUP,pStr);
+	HSTRING hMsg = g_pLTClient->FormatString(IDS_MODPICKUP,pStr);
 	m_InterfaceMgr.GetMessageMgr()->AddLine(hMsg, MMGR_PICKUP, hSurf);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
-    LTVector vTintColor = pMod->vScreenTintColor;
-    LTFLOAT  fTotalTime = pMod->fScreenTintTime;
+	LTVector vTintColor = pMod->vScreenTintColor;
+	LTFLOAT  fTotalTime = pMod->fScreenTintTime;
 
-    LTFLOAT fRampDown = fTotalTime * 0.85f;
-    LTFLOAT fRampUp   = fTotalTime * 0.10f;
-    LTFLOAT fTintTime = fTotalTime * 0.05f;
+	LTFLOAT fRampDown = fTotalTime * 0.85f;
+	LTFLOAT fRampUp   = fTotalTime * 0.10f;
+	LTFLOAT fTintTime = fTotalTime * 0.05f;
 
 
-    LTVector vCamPos;
-    g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
+	LTVector vCamPos;
+	g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
 
-    LTRotation rRot;
-    g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
+	LTRotation rRot;
+	g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
 
-    LTVector vU, vR, vF;
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTVector vU, vR, vF;
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	VEC_MULSCALAR(vF, vF, 10.0f);
 	VEC_ADD(vCamPos, vCamPos, vF);
 
-    g_pGameClientShell->FlashScreen(vTintColor, vCamPos, 1000.0f, fRampUp, fTintTime, fRampDown, LTTRUE);
+	g_pGameClientShell->FlashScreen(vTintColor, vCamPos, 1000.0f, fRampUp, fTintTime, fRampDown, LTTRUE);
 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleAmmoPickup()
 //
-//	ROUTINE:	CGameClientShell::HandleAmmoPickup()
-//
-//	PURPOSE:	Handle picking up ammo
-//
+//	PURPOSE: Handle picking up ammo
 // ----------------------------------------------------------------------- //
-
 void CGameClientShell::HandleAmmoPickup(uint8 nAmmoId, int nAmmoCount)
 {
 	AMMO* pAmmo = g_pWeaponMgr->GetAmmo(nAmmoId);
@@ -9175,72 +8757,69 @@ void CGameClientShell::HandleAmmoPickup(uint8 nAmmoId, int nAmmoCount)
 	int nNameId = pAmmo->nNameId;
 	if (!nNameId) return;
 
-    HSTRING hStr = g_pLTClient->FormatString(nNameId);
+	HSTRING hStr = g_pLTClient->FormatString(nNameId);
 	if (!hStr) return;
 
-    char* pStr = g_pLTClient->GetStringData(hStr);
+	char* pStr = g_pLTClient->GetStringData(hStr);
 	if (!pStr)
 	{
-        g_pLTClient->FreeString(hStr);
+		g_pLTClient->FreeString(hStr);
 		return;
 	}
 
-    HSURFACE hSurf = g_pLTClient->CreateSurfaceFromBitmap(pAmmo->szSmallIcon);
+	HSURFACE hSurf = g_pLTClient->CreateSurfaceFromBitmap(pAmmo->szSmallIcon);
 	if (!hSurf)
-        hSurf = g_pLTClient->CreateSurfaceFromBitmap("interface\\missingslot.pcx");
+		hSurf = g_pLTClient->CreateSurfaceFromBitmap("interface\\missingslot.pcx");
 
-    HSTRING hMsg = g_pLTClient->FormatString(IDS_AMMOPICKUP, nAmmoCount, pStr);
+	HSTRING hMsg = g_pLTClient->FormatString(IDS_AMMOPICKUP, nAmmoCount, pStr);
 	m_InterfaceMgr.GetMessageMgr()->AddLine(hMsg,MMGR_PICKUP, hSurf);
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 
-    LTVector vTintColor = g_pLayoutMgr->GetAmmoPickupColor();
-    LTFLOAT  fTotalTime = g_pLayoutMgr->GetTintTime();
+	LTVector vTintColor = g_pLayoutMgr->GetAmmoPickupColor();
+	LTFLOAT  fTotalTime = g_pLayoutMgr->GetTintTime();
 
-    LTFLOAT fRampDown = fTotalTime * 0.85f;
-    LTFLOAT fRampUp   = fTotalTime * 0.10f;
-    LTFLOAT fTintTime = fTotalTime * 0.05f;
+	LTFLOAT fRampDown = fTotalTime * 0.85f;
+	LTFLOAT fRampUp   = fTotalTime * 0.10f;
+	LTFLOAT fTintTime = fTotalTime * 0.05f;
 
 
-    LTVector vCamPos;
-    g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
+	LTVector vCamPos;
+	g_pLTClient->GetObjectPos(m_hCamera, &vCamPos);
 
-    LTRotation rRot;
-    g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
+	LTRotation rRot;
+	g_pLTClient->GetObjectRotation(m_hCamera, &rRot);
 
-    LTVector vU, vR, vF;
-    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTVector vU, vR, vF;
+	g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	VEC_MULSCALAR(vF, vF, 10.0f);
 	VEC_ADD(vCamPos, vCamPos, vF);
 
-    g_pGameClientShell->FlashScreen(vTintColor, vCamPos, 1000.0f, fRampUp, fTintTime, fRampDown, LTTRUE);
+	g_pGameClientShell->FlashScreen(vTintColor, vCamPos, 1000.0f, fRampUp, fTintTime, fRampDown, LTTRUE);
 }
 
 
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::UpdateCameraSway
 //
-//	ROUTINE:	CGameClientShell::UpdateCameraSway
-//
-//	PURPOSE:	Update the camera's sway
-//
+//	PURPOSE: Update the camera's sway
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::UpdateCameraSway()
 {
 	if (g_pInterfaceMgr->GetSunglassMode() != SUN_NONE) return;
 
 	// Apply...
-    LTFLOAT swayAmount = m_fFrameTime / 1000.0f;
+	LTFLOAT swayAmount = m_fFrameTime / 1000.0f;
 
-    LTFLOAT tm  = g_pLTClient->GetTime()/10.0f;
+	LTFLOAT tm  = g_pLTClient->GetTime()/10.0f;
 
 	// Adjust if ducking...
 	LTFLOAT fMult = (m_dwPlayerFlags & BC_CFLG_DUCK) ? g_vtCameraSwayDuckMult.GetFloat() : 1.0f;
 
-    LTFLOAT faddP = fMult * g_vtCameraSwayYSpeed.GetFloat() * (float)sin(tm*g_vtCameraSwayYFreq.GetFloat()) * swayAmount;
-    LTFLOAT faddY = fMult * g_vtCameraSwayXSpeed.GetFloat() * (float)sin(tm*g_vtCameraSwayXFreq.GetFloat()) * swayAmount;
+	LTFLOAT faddP = fMult * g_vtCameraSwayYSpeed.GetFloat() * (float)sin(tm*g_vtCameraSwayYFreq.GetFloat()) * swayAmount;
+	LTFLOAT faddY = fMult * g_vtCameraSwayXSpeed.GetFloat() * (float)sin(tm*g_vtCameraSwayXFreq.GetFloat()) * swayAmount;
 
 	m_fPitch += faddP;
 	m_fYaw	 += faddY;
@@ -9250,19 +8829,16 @@ void CGameClientShell::UpdateCameraSway()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleWeaponDisable
 //
-//	ROUTINE:	CGameClientShell::HandleWeaponDisable
-//
-//	PURPOSE:	Handle the weapon being disabled...
-//
+//	PURPOSE: Handle the weapon being disabled...
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::HandleWeaponDisable(LTBOOL bDisabled)
 {
 	if (bDisabled)
 	{
 		ClearScreenTint();
-        HandleZoomChange(m_weaponModel.GetWeaponId(), LTTRUE);
+		HandleZoomChange(m_weaponModel.GetWeaponId(), LTTRUE);
 		EndZoom();
 	}
 	else
@@ -9281,23 +8857,20 @@ void CGameClientShell::HandleWeaponDisable(LTBOOL bDisabled)
 			UpdateContainerFX();
 		}
 
-        m_weaponModel.SetVisible(LTTRUE);
+		m_weaponModel.SetVisible(LTTRUE);
 	}
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::HandleMissionFailed
 //
-//	ROUTINE:	CGameClientShell::HandleMissionFailed
-//
-//	PURPOSE:	Handle mission failure
-//
+//	PURPOSE: Handle mission failure
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::HandleMissionFailed()
 {
 	ClearScreenTint();
-    HandleZoomChange(m_weaponModel.GetWeaponId(), LTTRUE);
+	HandleZoomChange(m_weaponModel.GetWeaponId(), LTTRUE);
 	EndZoom();
 	m_InterfaceMgr.EndUnderwater();
 
@@ -9307,26 +8880,20 @@ void CGameClientShell::HandleMissionFailed()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::AttachCameraToHead
 //
-//	ROUTINE:	CGameClientShell::AttachCameraToHead
-//
-//	PURPOSE:	Attach the camera to a socket in the player's head
-//
+//	PURPOSE: Attach the camera to a socket in the player's head
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::AttachCameraToHead(LTBOOL bAttach)
 {
 	m_bCameraAttachedToHead = bAttach;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::GetPlayerHeadPos
 //
-//	ROUTINE:	CGameClientShell::GetPlayerHeadPos
-//
-//	PURPOSE:	Get the player's head position
-//
+//	PURPOSE: Get the player's head position
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::GetPlayerHeadPosRot(LTVector & vPos, LTRotation & rRot)
 {
 	HMODELSOCKET hSocket = INVALID_MODEL_SOCKET;
@@ -9339,8 +8906,8 @@ void CGameClientShell::GetPlayerHeadPosRot(LTVector & vPos, LTRotation & rRot)
 
 	int nNumBodies = pList->GetSize();
 
-    uint32 dwId;
-    g_pLTClient->GetLocalClientID(&dwId);
+	uint32 dwId;
+	g_pLTClient->GetLocalClientID(&dwId);
 
 	for (int i=0; i < nNumBodies; i++)
 	{
@@ -9361,7 +8928,7 @@ void CGameClientShell::GetPlayerHeadPosRot(LTVector & vPos, LTRotation & rRot)
 		if (g_pModelLT->GetSocket(hBody, "Eyes", hSocket) == LT_OK)
 		{
 			LTransform transform;
-            if (g_pModelLT->GetSocketTransform(hBody, hSocket, transform, LTTRUE) == LT_OK)
+			if (g_pModelLT->GetSocketTransform(hBody, hSocket, transform, LTTRUE) == LT_OK)
 			{
 				g_pTransLT->Get(transform, vPos, rRot);
 				CalcNonClipPos(vPos, rRot);
@@ -9372,14 +8939,11 @@ void CGameClientShell::GetPlayerHeadPosRot(LTVector & vPos, LTRotation & rRot)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::SetFarZ
 //
-//	ROUTINE:	CGameClientShell::SetFarZ
-//
-//	PURPOSE:	Localize setting the far z (cause it can screw things up
+//	PURPOSE: Localize setting the far z (cause it can screw things up
 //				when set to 0)
-//
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::SetFarZ(int nFarZ)
 {
 	// Don't EVER set the farZ really close!
@@ -9390,13 +8954,10 @@ void CGameClientShell::SetFarZ(int nFarZ)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::ClearCurContainerCode
 //
-//	ROUTINE:	CGameClientShell::ClearCurContainerCode
-//
-//	PURPOSE:	Clear our current container info.
-//
+//	PURPOSE: Clear our current container info.
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::ClearCurContainerCode()
 {
 	m_eCurContainerCode = CC_NO_CONTAINER;
@@ -9496,11 +9057,11 @@ LTBOOL CGameClientShell::DoJoinGame(char* sIp)
 
 	// Try to join a game...
 
-    LTRESULT dr = g_pLTClient->InitNetworking(NULL, 0);
+	LTRESULT dr = g_pLTClient->InitNetworking(NULL, 0);
 	if (dr != LT_OK)
 	{
 		g_pLTClient->CPrint("InitNetworking() : error %d", dr);
-        return(LTFALSE);
+		return(LTFALSE);
 	}
 
 
@@ -9515,11 +9076,11 @@ LTBOOL CGameClientShell::DoJoinGame(char* sIp)
 		g_pLTClient->CPrint("[Attempt %d] Trying to start game!", nMaxRetries - nRetries);
 
 		// If successful, then we're done.
-        if( g_pLTClient->StartGame( &req ) == LT_OK )
+		if( g_pLTClient->StartGame( &req ) == LT_OK )
 		{
 			g_pLTClient->CPrint("Multiplayer game started!");
 
-            return(LTTRUE);
+			return(LTTRUE);
 		}
 
 		// Wait a sec and try again.
@@ -9528,17 +9089,14 @@ LTBOOL CGameClientShell::DoJoinGame(char* sIp)
 	}
 
 	// All done...
-    return(LTFALSE);
+	return(LTFALSE);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::SetDisconnectCode
 //
-//	ROUTINE:	CGameClientShell::SetDisconnectCode
-//
-//	PURPOSE:	Sets the disconnection code and message
-//
+//	PURPOSE: Sets the disconnection code and message
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::SetDisconnectCode(uint32 nCode, const char *pMsg, uint32 nSubCode)
 {
 	// Don't override what someone already told us
@@ -9554,13 +9112,10 @@ void CGameClientShell::SetDisconnectCode(uint32 nCode, const char *pMsg, uint32 
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::ClearDisconnectCode
 //
-//	ROUTINE:	CGameClientShell::ClearDisconnectCode
-//
-//	PURPOSE:	Clears the disconnection code and message
-//
+//	PURPOSE: Clears the disconnection code and message
 // --------------------------------------------------------------------------- //
-
 void CGameClientShell::ClearDisconnectCode()
 {
 	m_nDisconnectCode = 0;
@@ -9571,39 +9126,30 @@ void CGameClientShell::ClearDisconnectCode()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::GetDisconnectCode
 //
-//	ROUTINE:	CGameClientShell::GetDisconnectCode
-//
-//	PURPOSE:	Retrieves the disconnection code
-//
+//	PURPOSE: Retrieves the disconnection code
 // --------------------------------------------------------------------------- //
-
 uint32 CGameClientShell::GetDisconnectCode()
 {
 	return m_nDisconnectCode;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::GetDisconnectSubCode
 //
-//	ROUTINE:	CGameClientShell::GetDisconnectSubCode
-//
-//	PURPOSE:	Retrieves the disconnection sub-code
-//
+//	PURPOSE: Retrieves the disconnection sub-code
 // --------------------------------------------------------------------------- //
-
 uint32 CGameClientShell::GetDisconnectSubCode()
 {
 	return m_nDisconnectSubCode;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CGameClientShell::GetDisconnectMsg
 //
-//	ROUTINE:	CGameClientShell::GetDisconnectMsg
-//
-//	PURPOSE:	Retrieves the disconnection message
-//
+//	PURPOSE: Retrieves the disconnection message
 // --------------------------------------------------------------------------- //
-
 const char *CGameClientShell::GetDisconnectMsg()
 {
 	if (m_pDisconnectMsg)
@@ -9611,5 +9157,3 @@ const char *CGameClientShell::GetDisconnectMsg()
 	else
 		return LTNULL;
 }
-
-

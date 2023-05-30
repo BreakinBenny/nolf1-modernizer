@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: WeaponModel.cpp
 //
-// MODULE  : WeaponModel.cpp
+// PURPOSE: Generic client-side WeaponModel wrapper class - Implementation
 //
-// PURPOSE : Generic client-side WeaponModel wrapper class - Implementation
-//
-// CREATED : 9/27/97
+// CREATED: 9/27/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "WeaponModel.h"
 #include "ClientUtilities.h"
@@ -37,7 +34,7 @@ extern LTBOOL g_bInfiniteAmmo;
 #define INVALID_ANI				((HMODELANIM)-1)
 #define DEFAULT_ANI				((HMODELANIM)0)
 
-#define	WEAPON_KEY_SUNGLASS		"SUNGLASSES_KEY"
+#define	WEAPON_KEY_SUNGLASS	"SUNGLASSES_KEY"
 
 static uint8 g_nRandomWeaponSeed;
 
@@ -64,70 +61,67 @@ namespace
 	VarTrack	g_vtPerturbWalkPercent;
 	VarTrack	g_vtCameraShutterSpeed;
 
-    LTFLOAT		m_fLastPitch = 0.0f;
-    LTFLOAT		m_fLastYaw = 0.0f;
+	LTFLOAT	m_fLastPitch = 0.0f;
+	LTFLOAT	m_fLastYaw = 0.0f;
 
-	int			m_nCurTracer = 0;
+	int	m_nCurTracer = 0;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CWeaponModel()
 //
-//	ROUTINE:	CWeaponModel::CWeaponModel()
-//
-//	PURPOSE:	Initialize
-//
+//	PURPOSE: Initialize
 // ----------------------------------------------------------------------- //
-
 CWeaponModel::CWeaponModel()
 {
 	m_nWeaponId			= WMGR_INVALID_ID;
 	m_nHolsterWeaponId	= WMGR_INVALID_ID;
 	m_nAmmoId			= WMGR_INVALID_ID;
-    m_hObject           = LTNULL;
+	m_hObject		= LTNULL;
 
-    m_hSilencerModel    = LTNULL;
-    m_hLaserModel       = LTNULL;
-    m_hScopeModel       = LTNULL;
+	m_hSilencerModel	= LTNULL;
+	m_hLaserModel	= LTNULL;
+	m_hScopeModel	= LTNULL;
 
-	m_hBreachSocket		= INVALID_MODEL_SOCKET;
-	m_hLaserSocket		= INVALID_MODEL_SOCKET;
+	m_hBreachSocket	= INVALID_MODEL_SOCKET;
+	m_hLaserSocket	= INVALID_MODEL_SOCKET;
 	m_hSilencerSocket	= INVALID_MODEL_SOCKET;
-	m_hScopeSocket		= INVALID_MODEL_SOCKET;
+	m_hScopeSocket	= INVALID_MODEL_SOCKET;
 
-    m_bHaveSilencer     = LTFALSE;
-    m_bHaveLaser        = LTFALSE;
-    m_bHaveScope        = LTFALSE;
+	m_bHaveSilencer	= LTFALSE;
+	m_bHaveLaser		= LTFALSE;
+	m_bHaveScope	= LTFALSE;
 
 	m_fBobHeight		= 0.0f;
-	m_fBobWidth			= 0.0f;
+	m_fBobWidth		= 0.0f;
 	m_fFlashStartTime	= 0.0f;
 
 	m_vFlashPos.Init();
 	m_vFlashOffset.Init();
 
-	m_fNextIdleTime			= 0.0f;
-	m_nAmmoInClip			= 0;
-	m_nNewAmmoInClip		= 0;
-    m_bFire                 = LTFALSE;
+	m_fNextIdleTime		= 0.0f;
+	m_nAmmoInClip		= 0;
+	m_nNewAmmoInClip	= 0;
+	m_bFire				= LTFALSE;
 	m_eState				= W_IDLE;
-	m_eLastWeaponState		= W_IDLE;
-	m_eLastFireType			= FT_NORMAL_FIRE;
-    m_bCanSetLastFire       = LTTRUE;
+	m_eLastWeaponState	= W_IDLE;
+	m_eLastFireType		= FT_NORMAL_FIRE;
+	m_bCanSetLastFire		= LTTRUE;
 
-    m_bUsingAltFireAnis         = LTFALSE;
-    m_bFireKeyDownLastUpdate    = LTFALSE;
+	m_bUsingAltFireAnis		= LTFALSE;
+	m_bFireKeyDownLastUpdate	= LTFALSE;
 
 	m_nSelectAni			= INVALID_ANI;
-	m_nDeselectAni			= INVALID_ANI;
+	m_nDeselectAni		= INVALID_ANI;
 	m_nReloadAni			= INVALID_ANI;
 
-	m_nAltSelectAni			= INVALID_ANI;
+	m_nAltSelectAni		= INVALID_ANI;
 	m_nAltDeselectAni		= INVALID_ANI;
 	m_nAltDeselect2Ani		= INVALID_ANI;
-	m_nAltReloadAni			= INVALID_ANI;
+	m_nAltReloadAni		= INVALID_ANI;
 
-    int i;
-    for (i=0; i < WM_MAX_FIRE_ANIS; i++)
+	int i;
+	for (i=0; i < WM_MAX_FIRE_ANIS; i++)
 	{
 		m_nFireAnis[i] = INVALID_ANI;
 	}
@@ -151,17 +145,17 @@ CWeaponModel::CWeaponModel()
 	m_vFirePos.Init();
 	m_vEndPos.Init();
 
-	m_wIgnoreFX				= 0;
+	m_wIgnoreFX			= 0;
 	m_nRequestedWeaponId	= WMGR_INVALID_ID;
-    m_bWeaponDeselected     = LTFALSE;
+	m_bWeaponDeselected	= LTFALSE;
 
-    m_pWeapon   = LTNULL;
-    m_pAmmo     = LTNULL;
+	m_pWeapon   = LTNULL;
+	m_pAmmo	 = LTNULL;
 
-	m_fMovementPerturb		= 0.0f;
+	m_fMovementPerturb	= 0.0f;
 
-    m_bDisabled             = LTFALSE;
-    m_bVisible              = LTTRUE;
+	m_bDisabled			= LTFALSE;
+	m_bVisible			= LTTRUE;
 
 	m_rCamRot.Init();
 	m_vCamPos.Init();
@@ -169,19 +163,16 @@ CWeaponModel::CWeaponModel()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CWeaponModel()
 //
-//	ROUTINE:	CWeaponModel::CWeaponModel()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
-
 CWeaponModel::~CWeaponModel()
 {
 	if (m_hObject)
 	{
-        g_pLTClient->DeleteObject(m_hObject);
-        m_hObject = LTNULL;
+		g_pLTClient->DeleteObject(m_hObject);
+		m_hObject = LTNULL;
 	}
 
 	RemoveMods();
@@ -190,54 +181,48 @@ CWeaponModel::~CWeaponModel()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::Init()
 //
-//	ROUTINE:	CWeaponModel::Init()
-//
-//	PURPOSE:	Initialize perturb variables
-//
+//	PURPOSE: Initialize perturb variables
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::Init()
 {
-    g_vtFastTurnRate.Init(g_pLTClient, "FastTurnRate", NULL, 2.3f);
+	g_vtFastTurnRate.Init(g_pLTClient, "FastTurnRate", NULL, 2.3f);
 
-    LTFLOAT fTemp = g_pLayoutMgr->GetPerturbRotationEffect();
-    g_vtPerturbRotationEffect.Init(g_pLTClient, "PerturbRotationEffect", NULL, fTemp);
+	LTFLOAT fTemp = g_pLayoutMgr->GetPerturbRotationEffect();
+	g_vtPerturbRotationEffect.Init(g_pLTClient, "PerturbRotationEffect", NULL, fTemp);
 
 	fTemp = g_pLayoutMgr->GetPerturbIncreaseSpeed();
-    g_vtPerturbIncreaseSpeed.Init(g_pLTClient, "PerturbIncreaseSpeed", NULL, fTemp);
+	g_vtPerturbIncreaseSpeed.Init(g_pLTClient, "PerturbIncreaseSpeed", NULL, fTemp);
 
 	fTemp = g_pLayoutMgr->GetPerturbDecreaseSpeed();
-    g_vtPerturbDecreaseSpeed.Init(g_pLTClient, "PerturbDecreaseSpeed", NULL, fTemp);
+	g_vtPerturbDecreaseSpeed.Init(g_pLTClient, "PerturbDecreaseSpeed", NULL, fTemp);
 
 	fTemp = g_pLayoutMgr->GetPerturbWalkPercent();
-    g_vtPerturbWalkPercent.Init(g_pLTClient, "PerturbWalkPercent", NULL, fTemp);
+	g_vtPerturbWalkPercent.Init(g_pLTClient, "PerturbWalkPercent", NULL, fTemp);
 
    g_vtCameraShutterSpeed.Init(g_pLTClient, "CameraShutterSpeed", NULL, 0.3f);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::Create()
 //
-//	ROUTINE:	CWeaponModel::Create()
-//
-//	PURPOSE:	Create the WeaponModel model
-//
+//	PURPOSE: Create the WeaponModel model
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::Create(ILTClient* pClientDE, uint8 nWeaponId, uint8 nAmmoId,
-                           uint32 dwAmmo)
+						uint32 dwAmmo)
 {
-    if (!pClientDE) return LTFALSE;
+	if (!pClientDE) return LTFALSE;
 
 	m_nWeaponId	= nWeaponId;
 	m_pWeapon = g_pWeaponMgr->GetWeapon(nWeaponId);
-    if (!m_pWeapon) return LTFALSE;
+	if (!m_pWeapon) return LTFALSE;
 
 	m_nAmmoId = nAmmoId;
 	m_pAmmo	= g_pWeaponMgr->GetAmmo(nAmmoId);
-    if (!m_pAmmo) return LTFALSE;
+	if (!m_pAmmo) return LTFALSE;
 
 	// Important to update this before we access PlayerStats...
 
@@ -254,54 +239,51 @@ LTBOOL CWeaponModel::Create(ILTClient* pClientDE, uint8 nWeaponId, uint8 nAmmoId
 
 	Select();	// Select the weapon
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::ResetWeaponData
 //
-//	ROUTINE:	CWeaponModel::ResetWeaponData
-//
-//	PURPOSE:	Reset weapon specific data
-//
+//	PURPOSE: Reset weapon specific data
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::ResetWeaponData()
 {
-	m_hBreachSocket		= INVALID_MODEL_SOCKET;
-	m_hLaserSocket		= INVALID_MODEL_SOCKET;
+	m_hBreachSocket	= INVALID_MODEL_SOCKET;
+	m_hLaserSocket	= INVALID_MODEL_SOCKET;
 	m_hSilencerSocket	= INVALID_MODEL_SOCKET;
-	m_hScopeSocket		= INVALID_MODEL_SOCKET;
+	m_hScopeSocket	= INVALID_MODEL_SOCKET;
 
-    m_bHaveSilencer     = LTFALSE;
-    m_bHaveLaser        = LTFALSE;
-    m_bHaveScope        = LTFALSE;
+	m_bHaveSilencer	= LTFALSE;
+	m_bHaveLaser		= LTFALSE;
+	m_bHaveScope	= LTFALSE;
 
 	m_fBobHeight		= 0.0f;
-	m_fBobWidth			= 0.0f;
+	m_fBobWidth		= 0.0f;
 	m_fFlashStartTime	= 0.0f;
 
 	m_vFlashPos.Init();
 	m_vFlashOffset.Init();
 
-	m_nAmmoInClip			= 0;
-	m_nNewAmmoInClip		= 0;
-    m_bFire                 = LTFALSE;
+	m_nAmmoInClip		= 0;
+	m_nNewAmmoInClip	= 0;
+	m_bFire				= LTFALSE;
 	m_eState				= W_IDLE;
-	m_eLastWeaponState		= W_IDLE;
-	m_eLastFireType			= FT_NORMAL_FIRE;
-    m_bCanSetLastFire       = LTTRUE;
+	m_eLastWeaponState	= W_IDLE;
+	m_eLastFireType		= FT_NORMAL_FIRE;
+	m_bCanSetLastFire	= LTTRUE;
 
-	m_nSelectAni			= INVALID_ANI;
-	m_nDeselectAni			= INVALID_ANI;
-	m_nReloadAni			= INVALID_ANI;
+	m_nSelectAni		= INVALID_ANI;
+	m_nDeselectAni	= INVALID_ANI;
+	m_nReloadAni		= INVALID_ANI;
 
-	m_nAltSelectAni			= INVALID_ANI;
-	m_nAltDeselectAni		= INVALID_ANI;
-	m_nAltDeselect2Ani		= INVALID_ANI;
-	m_nAltReloadAni			= INVALID_ANI;
+	m_nAltSelectAni	= INVALID_ANI;
+	m_nAltDeselectAni	= INVALID_ANI;
+	m_nAltDeselect2Ani	= INVALID_ANI;
+	m_nAltReloadAni	= INVALID_ANI;
 
-    int i;
-    for (i=0; i < WM_MAX_FIRE_ANIS; i++)
+	int i;
+	for (i=0; i < WM_MAX_FIRE_ANIS; i++)
 	{
 		m_nFireAnis[i] = INVALID_ANI;
 	}
@@ -325,50 +307,47 @@ void CWeaponModel::ResetWeaponData()
 	m_vFirePos.Init();
 	m_vEndPos.Init();
 
-	m_wIgnoreFX				= 0;
+	m_wIgnoreFX			= 0;
 	m_nRequestedWeaponId	= WMGR_INVALID_ID;
-    m_bWeaponDeselected     = LTFALSE;
+	m_bWeaponDeselected	= LTFALSE;
 
 	m_nAmmoInClip		= 0;
 	m_nNewAmmoInClip	= 0;
 
-    m_bHaveSilencer     = LTFALSE;
-    m_bHaveLaser        = LTFALSE;
-    m_bHaveScope        = LTFALSE;
+	m_bHaveSilencer		= LTFALSE;
+	m_bHaveLaser			= LTFALSE;
+	m_bHaveScope		= LTFALSE;
 
-    m_bUsingAltFireAnis         = LTFALSE;
-    m_bFireKeyDownLastUpdate    = LTFALSE;
+	m_bUsingAltFireAnis	= LTFALSE;
+	m_bFireKeyDownLastUpdate = LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::InitAnimations
 //
-//	ROUTINE:	CWeaponModel::InitAnimations
-//
-//	PURPOSE:	Set the animations
-//
+//	PURPOSE: Set the animations
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::InitAnimations(LTBOOL bAllowSelectOverride)
 {
 	if (!m_hObject) return;
 
-    m_nSelectAni    = g_pLTClient->GetAnimIndex(m_hObject, "Select");
-    m_nDeselectAni  = g_pLTClient->GetAnimIndex(m_hObject, "Deselect");
-    m_nReloadAni    = g_pLTClient->GetAnimIndex(m_hObject, "Reload");
+	m_nSelectAni		= g_pLTClient->GetAnimIndex(m_hObject, "Select");
+	m_nDeselectAni	= g_pLTClient->GetAnimIndex(m_hObject, "Deselect");
+	m_nReloadAni		= g_pLTClient->GetAnimIndex(m_hObject, "Reload");
 
-    m_nAltSelectAni     = g_pLTClient->GetAnimIndex(m_hObject, "AltSelect");
-    m_nAltDeselectAni   = g_pLTClient->GetAnimIndex(m_hObject, "AltDeselect");
-    m_nAltDeselect2Ani  = g_pLTClient->GetAnimIndex(m_hObject, "AltDeselect2");
-    m_nAltReloadAni     = g_pLTClient->GetAnimIndex(m_hObject, "AltReload");
+	m_nAltSelectAni	= g_pLTClient->GetAnimIndex(m_hObject, "AltSelect");
+	m_nAltDeselectAni	= g_pLTClient->GetAnimIndex(m_hObject, "AltDeselect");
+	m_nAltDeselect2Ani	= g_pLTClient->GetAnimIndex(m_hObject, "AltDeselect2");
+	m_nAltReloadAni	= g_pLTClient->GetAnimIndex(m_hObject, "AltReload");
 
 	char buf[30];
 
-    int i;
-    for (i=0; i < WM_MAX_IDLE_ANIS; i++)
+	int i;
+	for (i=0; i < WM_MAX_IDLE_ANIS; i++)
 	{
 		sprintf(buf, "Idle_%d", i);
-        m_nIdleAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, buf);
-    }
+		m_nIdleAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, buf);
+	}
 
 
 	for (i=0; i < WM_MAX_FIRE_ANIS; i++)
@@ -382,13 +361,13 @@ void CWeaponModel::InitAnimations(LTBOOL bAllowSelectOverride)
 			sprintf(buf, "Fire");
 		}
 
-        m_nFireAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, buf);
+		m_nFireAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, buf);
 	}
 
 	for (i=0; i < WM_MAX_ALTIDLE_ANIS; i++)
 	{
 		sprintf(buf, "AltIdle_%d", i);
-        m_nAltIdleAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, buf);
+		m_nAltIdleAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, buf);
 	}
 
 	for (i=0; i < WM_MAX_ALTFIRE_ANIS; i++)
@@ -402,7 +381,7 @@ void CWeaponModel::InitAnimations(LTBOOL bAllowSelectOverride)
 			sprintf(buf, "AltFire");
 		}
 
-        m_nAltFireAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, buf);
+		m_nAltFireAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, buf);
 	}
 
 
@@ -410,46 +389,42 @@ void CWeaponModel::InitAnimations(LTBOOL bAllowSelectOverride)
 	if (m_pAmmo->pAniOverrides)
 	{
 		// Set new animations...
-
 		SetAmmoOverrideAnis(bAllowSelectOverride);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::SetAmmoOverrideAnis
 //
-//	ROUTINE:	CWeaponModel::SetAmmoOverrideAnis
-//
-//	PURPOSE:	Set the ammo specific override animations...
-//
+//	PURPOSE: Set the ammo specific override animations...
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::SetAmmoOverrideAnis(LTBOOL bAllowSelectOverride)
 {
 	if (!m_hObject || !m_pAmmo || ! m_pAmmo->pAniOverrides) return;
 
 	if (bAllowSelectOverride && m_pAmmo->pAniOverrides->szSelectAni[0])
 	{
-        m_nSelectAni = g_pLTClient->GetAnimIndex(m_hObject, m_pAmmo->pAniOverrides->szSelectAni);
+		m_nSelectAni = g_pLTClient->GetAnimIndex(m_hObject, m_pAmmo->pAniOverrides->szSelectAni);
 	}
 
 	if (m_pAmmo->pAniOverrides->szDeselectAni[0])
 	{
-        m_nDeselectAni = g_pLTClient->GetAnimIndex(m_hObject, m_pAmmo->pAniOverrides->szDeselectAni);
+		m_nDeselectAni = g_pLTClient->GetAnimIndex(m_hObject, m_pAmmo->pAniOverrides->szDeselectAni);
 	}
 
 	if (m_pAmmo->pAniOverrides->szReloadAni[0])
 	{
-        m_nReloadAni = g_pLTClient->GetAnimIndex(m_hObject, m_pAmmo->pAniOverrides->szReloadAni);
+		m_nReloadAni = g_pLTClient->GetAnimIndex(m_hObject, m_pAmmo->pAniOverrides->szReloadAni);
 	}
 
-    int i;
-    for (i=0; i < WM_MAX_IDLE_ANIS; i++)
+	int i;
+	for (i=0; i < WM_MAX_IDLE_ANIS; i++)
 	{
 		if (i < m_pAmmo->pAniOverrides->nNumIdleAnis)
 		{
 			if (m_pAmmo->pAniOverrides->szIdleAnis[i][0])
 			{
-                m_nIdleAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, m_pAmmo->pAniOverrides->szIdleAnis[i]);
+				m_nIdleAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, m_pAmmo->pAniOverrides->szIdleAnis[i]);
 			}
 		}
 		else
@@ -465,7 +440,7 @@ void CWeaponModel::SetAmmoOverrideAnis(LTBOOL bAllowSelectOverride)
 		{
 			if (m_pAmmo->pAniOverrides->szFireAnis[i][0])
 			{
-                m_nFireAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, m_pAmmo->pAniOverrides->szFireAnis[i]);
+				m_nFireAnis[i] = g_pLTClient->GetAnimIndex(m_hObject, m_pAmmo->pAniOverrides->szFireAnis[i]);
 			}
 		}
 		else
@@ -477,82 +452,73 @@ void CWeaponModel::SetAmmoOverrideAnis(LTBOOL bAllowSelectOverride)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::Reset()
 //
-//	ROUTINE:	CWeaponModel::Reset()
-//
-//	PURPOSE:	Reset the model
-//
+//	PURPOSE: Reset the model
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::Reset()
 {
 	if (!m_hObject) return;
 
 	RemoveModel();
 
-	m_nWeaponId				= WMGR_INVALID_ID;
-	m_nHolsterWeaponId		= WMGR_INVALID_ID;
-	m_nAmmoInClip			= 0;
-    m_bFire                 = LTFALSE;
+	m_nWeaponId			= WMGR_INVALID_ID;
+	m_nHolsterWeaponId	= WMGR_INVALID_ID;
+	m_nAmmoInClip		= 0;
+	m_bFire				= LTFALSE;
 	m_nRequestedWeaponId	= WMGR_INVALID_ID;
-    m_bWeaponDeselected     = LTFALSE;
+	m_bWeaponDeselected	= LTFALSE;
 
-    m_bUsingAltFireAnis         = LTFALSE;
-    m_bFireKeyDownLastUpdate    = LTFALSE;
+	m_bUsingAltFireAnis		= LTFALSE;
+	m_bFireKeyDownLastUpdate	= LTFALSE;
 
 	m_PVFXMgr.Term();
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::RemoveModel()
 //
-//	ROUTINE:	CWeaponModel::RemoveModel()
-//
-//	PURPOSE:	Remove our model data member
-//
+//	PURPOSE: Remove our model data member
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::RemoveModel()
 {
 	if (!m_hObject) return;
 
 	RemoveMods();
 
-    g_pLTClient->DeleteObject(m_hObject);
-    m_hObject   = LTNULL;
+	g_pLTClient->DeleteObject(m_hObject);
+	m_hObject   = LTNULL;
 
 	m_MuzzleFlash.Term();
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::RemoveMods()
 //
-//	ROUTINE:	CWeaponModel::RemoveMods()
-//
-//	PURPOSE:	Remove our mod data members
-//
+//	PURPOSE: Remove our mod data members
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::RemoveMods()
 {
 	// Remove the silencer model...
 
 	if (m_hSilencerModel)
 	{
-        g_pLTClient->DeleteObject(m_hSilencerModel);
-        m_hSilencerModel  = LTNULL;
+		g_pLTClient->DeleteObject(m_hSilencerModel);
+		m_hSilencerModel  = LTNULL;
 		m_hSilencerSocket = INVALID_MODEL_SOCKET;
-        m_bHaveSilencer   = LTFALSE;
+		m_bHaveSilencer   = LTFALSE;
 	}
 
 	// Remove the laser model...
 
 	if (m_hLaserModel)
 	{
-        g_pLTClient->DeleteObject(m_hLaserModel);
-        m_hLaserModel  = LTNULL;
+		g_pLTClient->DeleteObject(m_hLaserModel);
+		m_hLaserModel = LTNULL;
 		m_hLaserSocket = INVALID_MODEL_SOCKET;
-        m_bHaveLaser   = LTFALSE;
+		m_bHaveLaser	= LTFALSE;
 
 		m_LaserBeam.TurnOff();
 	}
@@ -561,34 +527,29 @@ void CWeaponModel::RemoveMods()
 
 	if (m_hScopeModel)
 	{
-        g_pLTClient->DeleteObject(m_hScopeModel);
-        m_hScopeModel  = LTNULL;
-		m_hScopeSocket = INVALID_MODEL_SOCKET;
-        m_bHaveScope   = LTFALSE;
+		g_pLTClient->DeleteObject(m_hScopeModel);
+		m_hScopeModel	= LTNULL;
+		m_hScopeSocket	= INVALID_MODEL_SOCKET;
+		m_bHaveScope	= LTFALSE;
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::UpdateWeaponModel()
 //
-//	ROUTINE:	CWeaponModel::UpdateWeaponModel()
-//
-//	PURPOSE:	Update the WeaponModel state
-//
+//	PURPOSE: Update the WeaponModel state
 // ----------------------------------------------------------------------- //
-
 WeaponState CWeaponModel::UpdateWeaponModel(LTRotation rCamRot, LTVector vCamPos,
-                                            LTBOOL bFire, FireType eFireType)
+											LTBOOL bFire, FireType eFireType)
 {
 	if (!m_hObject) return W_IDLE;
 
 	// Store current camera pos/rot...
-
 	m_rCamRot = rCamRot;
 	m_vCamPos = vCamPos;
 
 	// See if we are disabled...If so don't allow any weapon stuff...
-
 	if (m_bDisabled)
 	{
 		// Make sure we all the pvfxmgr to hide its stuff...
@@ -600,11 +561,10 @@ WeaponState CWeaponModel::UpdateWeaponModel(LTRotation rCamRot, LTVector vCamPos
 
 	if (bFire && m_bCanSetLastFire)
 	{
-		m_eLastFireType	= eFireType;
+		m_eLastFireType = eFireType;
 	}
 
 	// See if we just started/stopped firing...
-
 	if (!m_bFireKeyDownLastUpdate && bFire)
 	{
 		HandleFireKeyDown();
@@ -625,17 +585,16 @@ WeaponState CWeaponModel::UpdateWeaponModel(LTRotation rCamRot, LTVector vCamPos
 	// Need to set these after HandleZipCordFire...It uses the
 	// m_bFireKeyDownLastUpdate...
 
-	m_bFireKeyDownLastUpdate = bFire;
-	m_eLastWeaponState		 = GetState();
+	m_bFireKeyDownLastUpdate	= bFire;
+	m_eLastWeaponState		= GetState();
 
 	bFire = bFireOverride;
 
 	// Selecting Alt-fire does not fire the weapon if we are using
 	// alt fire animations...
-
 	if (m_bUsingAltFireAnis && m_eLastFireType == FT_ALT_FIRE)
 	{
-        bFire = LTFALSE;
+		bFire = LTFALSE;
 	}
 
 
@@ -647,24 +606,24 @@ WeaponState CWeaponModel::UpdateWeaponModel(LTRotation rCamRot, LTVector vCamPos
 	// Compute offset for WeaponModel and move the model to the
 	// correct position (this is all now camera-relative)
 
-    LTVector vOffset         = GetWeaponOffset();
-    LTVector vMuzzleOffset   = GetMuzzleOffset();
-    LTVector vRecoil         = m_pWeapon->vRecoil;
+	LTVector vOffset		= GetWeaponOffset();
+	LTVector vMuzzleOffset	= GetMuzzleOffset();
+	LTVector vRecoil		= m_pWeapon->vRecoil;
 
-    LTVector vNewPos(0, 0, 0);
-    LTRotation rNewRot;
+	LTVector vNewPos(0, 0, 0);
+	LTRotation rNewRot;
 	rNewRot.Init();
-    g_pLTClient->SetObjectRotation(m_hObject, &rNewRot);
+	g_pLTClient->SetObjectRotation(m_hObject, &rNewRot);
 
-    LTVector vU, vR, vF;
-    g_pLTClient->GetRotationVectors(&rNewRot, &vU, &vR, &vF);
+	LTVector vU, vR, vF;
+	g_pLTClient->GetRotationVectors(&rNewRot, &vU, &vR, &vF);
 
-    LTVector vCamU, vCamR, vCamF;
-    g_pLTClient->GetRotationVectors(&m_rCamRot, &vCamU, &vCamR, &vCamF);
+	LTVector vCamU, vCamR, vCamF;
+	g_pLTClient->GetRotationVectors(&m_rCamRot, &vCamU, &vCamR, &vCamF);
 
-    vNewPos += vR * (vOffset.x + m_fBobWidth);
-    vNewPos += vU * (vOffset.y + m_fBobHeight);
-    vNewPos += vF * vOffset.z;
+	vNewPos += vR * (vOffset.x + m_fBobWidth);
+	vNewPos += vU * (vOffset.y + m_fBobHeight);
+	vNewPos += vF * vOffset.z;
 
 	LTVector vTemp(0, 0, 0);
 	m_vFlashOffset.Init();
@@ -679,9 +638,9 @@ WeaponState CWeaponModel::UpdateWeaponModel(LTRotation rCamRot, LTVector vCamPos
 
 	if (FiredWeapon(eState))
 	{
-        LTFLOAT xRand = GetRandom(-vRecoil.x, vRecoil.x);
-        LTFLOAT yRand = GetRandom(-vRecoil.y, vRecoil.y);
-        LTFLOAT zRand = GetRandom(-vRecoil.z, vRecoil.z);
+		LTFLOAT xRand = GetRandom(-vRecoil.x, vRecoil.x);
+		LTFLOAT yRand = GetRandom(-vRecoil.y, vRecoil.y);
+		LTFLOAT zRand = GetRandom(-vRecoil.z, vRecoil.z);
 
 		vNewPos += vU * yRand;
 		vNewPos += vR * xRand;
@@ -695,7 +654,7 @@ WeaponState CWeaponModel::UpdateWeaponModel(LTRotation rCamRot, LTVector vCamPos
 		vTemp += vCamU * m_vFlashOffset.y;
 		vTemp += vCamF * m_vFlashOffset.z;
 
-        g_pLTClient->SetObjectPos(m_hObject, &vNewPos, LTTRUE);
+		g_pLTClient->SetObjectPos(m_hObject, &vNewPos, LTTRUE);
 
 		if (!m_bHaveSilencer)
 		{
@@ -703,12 +662,11 @@ WeaponState CWeaponModel::UpdateWeaponModel(LTRotation rCamRot, LTVector vCamPos
 		}
 
 		// Send message to server telling player to fire...
-
 		SendFireMsg();
 	}
 	else
 	{
-        g_pLTClient->SetObjectPos(m_hObject, &vNewPos, LTTRUE);
+		g_pLTClient->SetObjectPos(m_hObject, &vNewPos, LTTRUE);
 	}
 
 
@@ -716,7 +674,6 @@ WeaponState CWeaponModel::UpdateWeaponModel(LTRotation rCamRot, LTVector vCamPos
 
 
 	// Update the muzzle flash...
-
 	if (!m_bHaveSilencer)
 	{
 		UpdateFlash(eState);
@@ -724,12 +681,10 @@ WeaponState CWeaponModel::UpdateWeaponModel(LTRotation rCamRot, LTVector vCamPos
 
 
 	// Update the mods...
-
 	UpdateMods();
 
 
 	// Update any player-view fx...
-
 	m_PVFXMgr.Update();
 
 
@@ -737,7 +692,6 @@ WeaponState CWeaponModel::UpdateWeaponModel(LTRotation rCamRot, LTVector vCamPos
 
 
 	// AutoSelectWeapon
-
 	if (GetState() == W_FIRING_NOAMMO)
 	{
 		AutoSelectWeapon();
@@ -748,13 +702,10 @@ WeaponState CWeaponModel::UpdateWeaponModel(LTRotation rCamRot, LTVector vCamPos
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::UpdateBob()
 //
-//	ROUTINE:	CWeaponModel::UpdateBob()
-//
-//	PURPOSE:	Update WeaponModel bob
-//
+//	PURPOSE: Update WeaponModel bob
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::UpdateBob(LTFLOAT fWidth, LTFLOAT fHeight)
 {
 	m_fBobWidth  = fWidth;
@@ -763,21 +714,18 @@ void CWeaponModel::UpdateBob(LTFLOAT fWidth, LTFLOAT fHeight)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::UpdateMods()
 //
-//	ROUTINE:	CWeaponModel::UpdateMods()
-//
-//	PURPOSE:	Update WeaponModel bob
-//
+//	PURPOSE: Update WeaponModel bob
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::UpdateMods()
 {
 	if (!m_hObject) return;
 
-    LTVector vPos = GetModelPos();
+	LTVector vPos = GetModelPos();
 
-    LTRotation rRot;
-    uint32 dwFlags;
+	LTRotation rRot;
+	uint32 dwFlags;
 
 	// Update the silencer...
 
@@ -786,23 +734,21 @@ void CWeaponModel::UpdateMods()
 		if (m_bHaveSilencer && m_hSilencerSocket != INVALID_MODEL_SOCKET)
 		{
 			LTransform transform;
-            if (g_pModelLT->GetSocketTransform(m_hObject, m_hSilencerSocket, transform, LTTRUE) == LT_OK)
+			if (g_pModelLT->GetSocketTransform(m_hObject, m_hSilencerSocket, transform, LTTRUE) == LT_OK)
 			{
 				g_pTransLT->Get(transform, vPos, rRot);
-                g_pLTClient->SetObjectPos(m_hSilencerModel, &vPos, LTTRUE);
-                g_pLTClient->SetObjectRotation(m_hSilencerModel, &rRot);
+				g_pLTClient->SetObjectPos(m_hSilencerModel, &vPos, LTTRUE);
+				g_pLTClient->SetObjectRotation(m_hSilencerModel, &rRot);
 			}
 		}
 		else
 		{
 			// Keep the model close to us...
-
-            g_pLTClient->SetObjectPos(m_hSilencerModel, &vPos, LTTRUE);
+			g_pLTClient->SetObjectPos(m_hSilencerModel, &vPos, LTTRUE);
 
 			// Hide model...
-
-            dwFlags = g_pLTClient->GetObjectFlags(m_hSilencerModel);
-            g_pLTClient->SetObjectFlags(m_hSilencerModel, dwFlags & ~FLAG_VISIBLE);
+			dwFlags = g_pLTClient->GetObjectFlags(m_hSilencerModel);
+			g_pLTClient->SetObjectFlags(m_hSilencerModel, dwFlags & ~FLAG_VISIBLE);
 		}
 	}
 
@@ -814,27 +760,24 @@ void CWeaponModel::UpdateMods()
 		if (m_bHaveLaser && m_hLaserSocket != INVALID_MODEL_SOCKET)
 		{
 			LTransform transform;
-            if (g_pModelLT->GetSocketTransform(m_hObject, m_hLaserSocket, transform, LTTRUE) == LT_OK)
+			if (g_pModelLT->GetSocketTransform(m_hObject, m_hLaserSocket, transform, LTTRUE) == LT_OK)
 			{
 				g_pTransLT->Get(transform, vPos, rRot);
-                g_pLTClient->SetObjectPos(m_hLaserModel, &vPos, LTTRUE);
-                g_pLTClient->SetObjectRotation(m_hLaserModel, &rRot);
+				g_pLTClient->SetObjectPos(m_hLaserModel, &vPos, LTTRUE);
+				g_pLTClient->SetObjectRotation(m_hLaserModel, &rRot);
 
 				// Update the laser beam...
-
-                m_LaserBeam.Update(vPos, &rRot, LTFALSE);
+				m_LaserBeam.Update(vPos, &rRot, LTFALSE);
 			}
 		}
 		else
 		{
 			// Keep the model close to us...
-
-            g_pLTClient->SetObjectPos(m_hLaserModel, &vPos, LTTRUE);
+			g_pLTClient->SetObjectPos(m_hLaserModel, &vPos, LTTRUE);
 
 			// Hide model...
-
-            dwFlags = g_pLTClient->GetObjectFlags(m_hLaserModel);
-            g_pLTClient->SetObjectFlags(m_hLaserModel, dwFlags & ~FLAG_VISIBLE);
+			dwFlags = g_pLTClient->GetObjectFlags(m_hLaserModel);
+			g_pLTClient->SetObjectFlags(m_hLaserModel, dwFlags & ~FLAG_VISIBLE);
 
 			m_LaserBeam.TurnOff();
 		}
@@ -842,73 +785,62 @@ void CWeaponModel::UpdateMods()
 
 
 	// Update the scope...
-
 	if (m_hScopeModel)
 	{
 		if (m_bHaveScope && m_hScopeSocket != INVALID_MODEL_SOCKET)
 		{
 			LTransform transform;
-            if (g_pModelLT->GetSocketTransform(m_hObject, m_hScopeSocket, transform, LTTRUE) == LT_OK)
+			if (g_pModelLT->GetSocketTransform(m_hObject, m_hScopeSocket, transform, LTTRUE) == LT_OK)
 			{
 				g_pTransLT->Get(transform, vPos, rRot);
-                g_pLTClient->SetObjectPos(m_hScopeModel, &vPos, LTTRUE);
-                g_pLTClient->SetObjectRotation(m_hScopeModel, &rRot);
+				g_pLTClient->SetObjectPos(m_hScopeModel, &vPos, LTTRUE);
+				g_pLTClient->SetObjectRotation(m_hScopeModel, &rRot);
 			}
 		}
 		else
 		{
 			// Keep the model close to us...
-
-            g_pLTClient->SetObjectPos(m_hScopeModel, &vPos, LTTRUE);
+			g_pLTClient->SetObjectPos(m_hScopeModel, &vPos, LTTRUE);
 
 			// Hide model...
-
-            dwFlags = g_pLTClient->GetObjectFlags(m_hScopeModel);
-            g_pLTClient->SetObjectFlags(m_hScopeModel, dwFlags & ~FLAG_VISIBLE);
+			dwFlags = g_pLTClient->GetObjectFlags(m_hScopeModel);
+			g_pLTClient->SetObjectFlags(m_hScopeModel, dwFlags & ~FLAG_VISIBLE);
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::Disable()
 //
-//	ROUTINE:	CWeaponModel::Disable()
-//
-//	PURPOSE:	Disable/Enable the weapon
-//
+//	PURPOSE: Disable/Enable the weapon
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::Disable(LTBOOL bDisable)
 {
-    LTBOOL bOldVisibility = m_bVisible;
+	LTBOOL bOldVisibility = m_bVisible;
 
 	// Let the client shell handle the weapon being disabled...
-
 	g_pGameClientShell->HandleWeaponDisable(bDisable);
 
 	// Handle Gadget Disable...
-
 	GadgetDisable(bDisable);
 
 	if (bDisable)
 	{
 		// Force weapon invisible...
-
-        SetVisible(LTFALSE);
+		SetVisible(LTFALSE);
 
 		// Reset our data member for when the weapon is re-enabled...
-
 		m_bVisible = bOldVisibility;
 
 		// Must set this AFTER call to SetVisible()
-
-        m_bDisabled = LTTRUE;
+		m_bDisabled = LTTRUE;
 	}
 	else
 	{
 		// Must set this BEFORE the call to SetVisible()
 
-        m_bDisabled = LTFALSE;
+		m_bDisabled = LTFALSE;
 
 		// Set the visibility back to whatever it was...
 
@@ -917,19 +849,15 @@ void CWeaponModel::Disable(LTBOOL bDisable)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GadgetDisable()
 //
-//	ROUTINE:	CWeaponModel::GadgetDisable()
-//
-//	PURPOSE:	Disable/Enable the gadget
-//
+//	PURPOSE: Disable/Enable the gadget
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::GadgetDisable(LTBOOL bDisable)
 {
 	if (!m_pAmmo) return;
 
 	// Handle sunglasses gadget...
-
 	if (m_pAmmo->eType == GADGET)
 	{
 		if (bDisable)
@@ -951,7 +879,7 @@ void CWeaponModel::GadgetDisable(LTBOOL bDisable)
 				g_pInterfaceMgr->SetSunglassMode(SUN_NONE);
 			}
 		}
-		else  // Enable...
+		else	// Enable...
 		{
 			if (m_pAmmo->eInstDamageType == DT_GADGET_CAMERA)
 			{
@@ -975,13 +903,10 @@ void CWeaponModel::GadgetDisable(LTBOOL bDisable)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::SetVisible()
 //
-//	ROUTINE:	CWeaponModel::SetVisible()
-//
-//	PURPOSE:	Hide/Show the weapon model
-//
+//	PURPOSE: Hide/Show the weapon model
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::SetVisible(LTBOOL bVis)
 {
 	if (!m_hObject) return;
@@ -996,8 +921,7 @@ void CWeaponModel::SetVisible(LTBOOL bVis)
 
 
 	// Hide/Show weapon model...
-
-    uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject);
 	if (bVis)
 	{
 		dwFlags |= FLAG_VISIBLE;
@@ -1007,19 +931,17 @@ void CWeaponModel::SetVisible(LTBOOL bVis)
 		dwFlags &= ~FLAG_VISIBLE;
 	}
 
-    g_pLTClient->SetObjectFlags(m_hObject, dwFlags);
+	g_pLTClient->SetObjectFlags(m_hObject, dwFlags);
 
 
 	// Always hide the flash (it will be shown when needed)...
-
 	m_MuzzleFlash.Hide();
 
 
 	// Hide/Show silencer...
-
 	if (m_hSilencerModel)
 	{
-        dwFlags = g_pLTClient->GetObjectFlags(m_hSilencerModel);
+		dwFlags = g_pLTClient->GetObjectFlags(m_hSilencerModel);
 		if (bVis && m_bHaveSilencer)
 		{
 			dwFlags |= FLAG_VISIBLE;
@@ -1029,15 +951,14 @@ void CWeaponModel::SetVisible(LTBOOL bVis)
 			dwFlags &= ~FLAG_VISIBLE;
 		}
 
-        g_pLTClient->SetObjectFlags(m_hSilencerModel, dwFlags);
+		g_pLTClient->SetObjectFlags(m_hSilencerModel, dwFlags);
 	}
 
 
 	// Hide/Show laser...
-
 	if (m_hLaserModel)
 	{
-        dwFlags = g_pLTClient->GetObjectFlags(m_hLaserModel);
+		dwFlags = g_pLTClient->GetObjectFlags(m_hLaserModel);
 		if (bVis && m_bHaveLaser)
 		{
 			dwFlags |= FLAG_VISIBLE;
@@ -1047,7 +968,7 @@ void CWeaponModel::SetVisible(LTBOOL bVis)
 			dwFlags &= ~FLAG_VISIBLE;
 		}
 
-        g_pLTClient->SetObjectFlags(m_hLaserModel, dwFlags);
+		g_pLTClient->SetObjectFlags(m_hLaserModel, dwFlags);
 	}
 
 	if (bVis && m_bHaveLaser)
@@ -1061,10 +982,9 @@ void CWeaponModel::SetVisible(LTBOOL bVis)
 
 
 	// Hide/Show scope...
-
 	if (m_hScopeModel)
 	{
-        dwFlags = g_pLTClient->GetObjectFlags(m_hScopeModel);
+		dwFlags = g_pLTClient->GetObjectFlags(m_hScopeModel);
 		if (bVis && m_bHaveScope)
 		{
 			dwFlags |= FLAG_VISIBLE;
@@ -1074,19 +994,16 @@ void CWeaponModel::SetVisible(LTBOOL bVis)
 			dwFlags &= ~FLAG_VISIBLE;
 		}
 
-        g_pLTClient->SetObjectFlags(m_hScopeModel, dwFlags);
+		g_pLTClient->SetObjectFlags(m_hScopeModel, dwFlags);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CreateFlash
 //
-//	ROUTINE:	CWeaponModel::CreateFlash
-//
-//	PURPOSE:	Create the muzzle flash
-//
+//	PURPOSE: Create the muzzle flash
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::CreateFlash()
 {
 	if (!m_pWeapon) return;
@@ -1104,7 +1021,7 @@ void CWeaponModel::CreateFlash()
 
 	MUZZLEFLASHCREATESTRUCT mf;
 
-    mf.bPlayerView  = LTTRUE;
+	mf.bPlayerView	= LTTRUE;
 	mf.hParent		= m_hObject;
 	mf.pWeapon		= m_pWeapon;
 	mf.vPos			= GetModelPos();
@@ -1116,13 +1033,10 @@ void CWeaponModel::CreateFlash()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CreateModel
 //
-//	ROUTINE:	CWeaponModel::CreateModel
-//
-//	PURPOSE:	Create the weapon model
-//
+//	PURPOSE: Create the weapon model
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::CreateModel()
 {
 	if (!m_pWeapon) return;
@@ -1133,8 +1047,7 @@ void CWeaponModel::CreateModel()
 	SAFE_STRCPY(createStruct.m_Filename, m_pWeapon->szPVModel);
 	SAFE_STRCPY(createStruct.m_SkinNames[0], m_pWeapon->szPVSkin);
 
-    // Figure out what hand skin to use...
-
+	// Figure out what hand skin to use...
 	ModelStyle eModelStyle = eModelStyleDefault;
 	CCharacterFX* pCharFX = g_pGameClientShell->GetMoveMgr()->GetCharacterFX();
 	if (pCharFX)
@@ -1152,7 +1065,6 @@ void CWeaponModel::CreateModel()
 	}
 
 	// Check for special case of hands for the main weapon skin...
-
 	if (strcmp(m_pWeapon->szPVSkin, "Hands") == 0)
 	{
 		if ( g_pGameClientShell->GetGameType() == SINGLE )
@@ -1182,13 +1094,10 @@ void CWeaponModel::CreateModel()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::DoSpecialCreateModel()
 //
-//	ROUTINE:	CWeaponModel::DoSpecialCreateModel()
-//
-//	PURPOSE:	Do special case create model processing...
-//
+//	PURPOSE: Do special case create model processing...
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::DoSpecialCreateModel()
 {
 	// Currently we need to check for gadget special cases...
@@ -1200,19 +1109,16 @@ void CWeaponModel::DoSpecialCreateModel()
 	if (m_pAmmo->eType == GADGET)
 	{
 		// If we're out of ammo, hide the necessary pieces...
-
 		if (IsOutOfAmmo(m_nWeaponId))
 		{
 			// Hide the necessary pieces...
-
-            SpecialShowPieces(LTFALSE);
+			SpecialShowPieces(LTFALSE);
 		}
 
 		// See if we should set the alpha (sunglasses)...
-
 		if ((m_pAmmo->eInstDamageType == DT_GADGET_CAMERA) ||
-		   (m_pAmmo->eInstDamageType == DT_GADGET_MINE_DETECTOR) ||
-		   (m_pAmmo->eInstDamageType == DT_GADGET_INFRA_RED))
+		(m_pAmmo->eInstDamageType == DT_GADGET_MINE_DETECTOR) ||
+		(m_pAmmo->eInstDamageType == DT_GADGET_INFRA_RED))
 		{
 			a = 0.99f;
 		}
@@ -1222,66 +1128,59 @@ void CWeaponModel::DoSpecialCreateModel()
 
 
 	// Just do a SetupModel()...This will handle other special cases...
-
 	SetupModel();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CreateModelObject
 //
-//	ROUTINE:	CWeaponModel::CreateModelObject
-//
-//	PURPOSE:	Create a weaponmodel model object
-//
+//	PURPOSE: Create a weaponmodel model object
 // ----------------------------------------------------------------------- //
-
 HOBJECT CWeaponModel::CreateModelObject(HOBJECT hOldObj, ObjectCreateStruct & createStruct)
 {
-    if (!m_pWeapon) return LTNULL;
+	if (!m_pWeapon) return LTNULL;
 
 	HOBJECT hObj = hOldObj;
 
 	if (!hObj)
 	{
 		createStruct.m_ObjectType = OT_MODEL;
-        createStruct.m_Flags     |= FLAG_VISIBLE | FLAG_REALLYCLOSE;
+		createStruct.m_Flags	 |= FLAG_VISIBLE | FLAG_REALLYCLOSE;
 		createStruct.m_Flags2	 |= FLAG2_PORTALINVISIBLE | FLAG2_DYNAMICDIRLIGHT;
 
-        hObj = g_pLTClient->CreateObject(&createStruct);
-        if (!hObj) return LTNULL;
+		hObj = g_pLTClient->CreateObject(&createStruct);
+		if (!hObj) return LTNULL;
 
-        //g_pLTClient->SetObjectColor(hObj, 1.0f, 1.0f, 1.0f, 1.0f);
+		//g_pLTClient->SetObjectColor(hObj, 1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-    g_pLTClient->Common()->SetObjectFilenames(hObj, &createStruct);
+	g_pLTClient->Common()->SetObjectFilenames(hObj, &createStruct);
 
-    uint32 dwFlags = g_pLTClient->GetObjectFlags(hObj);
+	uint32 dwFlags = g_pLTClient->GetObjectFlags(hObj);
 
 	if (m_pWeapon->bEnvironmentMap)
 	{
-        g_pLTClient->SetObjectFlags(hObj, dwFlags | FLAG_ENVIRONMENTMAP);
+		g_pLTClient->SetObjectFlags(hObj, dwFlags | FLAG_ENVIRONMENTMAP);
 	}
 	else
 	{
-        g_pLTClient->SetObjectFlags(hObj, dwFlags & ~FLAG_ENVIRONMENTMAP);
+		g_pLTClient->SetObjectFlags(hObj, dwFlags & ~FLAG_ENVIRONMENTMAP);
 	}
 
-    uint32 dwCFlags = g_pLTClient->GetObjectClientFlags(hObj);
-    g_pLTClient->SetObjectClientFlags(hObj, dwCFlags | CF_NOTIFYMODELKEYS);
+	uint32 dwCFlags = g_pLTClient->GetObjectClientFlags(hObj);
+	g_pLTClient->SetObjectClientFlags(hObj, dwCFlags | CF_NOTIFYMODELKEYS);
 
-    g_pLTClient->SetModelLooping(hObj, LTFALSE);
-    g_pLTClient->SetModelAnimation(hObj, 0);
+	g_pLTClient->SetModelLooping(hObj, LTFALSE);
+	g_pLTClient->SetModelAnimation(hObj, 0);
 
 	return hObj;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CreateMods
 //
-//	ROUTINE:	CWeaponModel::CreateMods
-//
-//	PURPOSE:	Create any necessary mods
-//
+//	PURPOSE: Create any necessary mods
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::CreateMods()
 {
 	if (!m_pWeapon) return;
@@ -1299,13 +1198,10 @@ void CWeaponModel::CreateMods()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CreateSilencer
 //
-//	ROUTINE:	CWeaponModel::CreateSilencer
-//
-//	PURPOSE:	Create the silencer model
-//
+//	PURPOSE: Create the silencer model
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::CreateSilencer()
 {
 	if (!m_pWeapon) return;
@@ -1322,8 +1218,8 @@ void CWeaponModel::CreateSilencer()
 	{
 		if (m_hSilencerModel)
 		{
-            uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hSilencerModel);
-            g_pLTClient->SetObjectFlags(m_hSilencerModel, dwFlags & ~FLAG_VISIBLE);
+			uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hSilencerModel);
+			g_pLTClient->SetObjectFlags(m_hSilencerModel, dwFlags & ~FLAG_VISIBLE);
 		}
 
 		return;
@@ -1339,8 +1235,8 @@ void CWeaponModel::CreateSilencer()
 		{
 			if (m_hSilencerModel)
 			{
-                uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hSilencerModel);
-                g_pLTClient->SetObjectFlags(m_hSilencerModel, dwFlags & ~FLAG_VISIBLE);
+				uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hSilencerModel);
+				g_pLTClient->SetObjectFlags(m_hSilencerModel, dwFlags & ~FLAG_VISIBLE);
 			}
 
 			return;
@@ -1360,28 +1256,25 @@ void CWeaponModel::CreateSilencer()
 
 	if (m_hSilencerModel)
 	{
-        uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hSilencerModel);
-        g_pLTClient->SetObjectFlags(m_hSilencerModel, dwFlags | FLAG_VISIBLE);
-        g_pLTClient->SetObjectScale(m_hSilencerModel, &(pMod->vAttachScale));
+		uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hSilencerModel);
+		g_pLTClient->SetObjectFlags(m_hSilencerModel, dwFlags | FLAG_VISIBLE);
+		g_pLTClient->SetObjectScale(m_hSilencerModel, &(pMod->vAttachScale));
 	}
 
-    m_bHaveSilencer = LTTRUE;
+	m_bHaveSilencer = LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CreateLaser
 //
-//	ROUTINE:	CWeaponModel::CreateLaser
-//
-//	PURPOSE:	Create the laser model
-//
+//	PURPOSE: Create the laser model
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::CreateLaser()
 {
 	if (!m_pWeapon) return;
 
-    uint32 dwFlags;
+	uint32 dwFlags;
 
 	m_hLaserSocket = INVALID_MODEL_SOCKET;
 
@@ -1393,11 +1286,11 @@ void CWeaponModel::CreateLaser()
 
 	if (!pMod || !pMod->szSocket[0] || !pStats->HaveMod(pMod->nId))
 	{
-        uint32 dwFlags;
+		uint32 dwFlags;
 		if (m_hLaserModel)
 		{
-            dwFlags = g_pLTClient->GetObjectFlags(m_hLaserModel);
-            g_pLTClient->SetObjectFlags(m_hLaserModel, dwFlags & ~FLAG_VISIBLE);
+			dwFlags = g_pLTClient->GetObjectFlags(m_hLaserModel);
+			g_pLTClient->SetObjectFlags(m_hLaserModel, dwFlags & ~FLAG_VISIBLE);
 		}
 
 		m_LaserBeam.TurnOff();
@@ -1413,8 +1306,8 @@ void CWeaponModel::CreateLaser()
 		{
 			if (m_hLaserModel)
 			{
-                dwFlags = g_pLTClient->GetObjectFlags(m_hLaserModel);
-                g_pLTClient->SetObjectFlags(m_hLaserModel, dwFlags & ~FLAG_VISIBLE);
+				dwFlags = g_pLTClient->GetObjectFlags(m_hLaserModel);
+				g_pLTClient->SetObjectFlags(m_hLaserModel, dwFlags & ~FLAG_VISIBLE);
 			}
 
 			m_LaserBeam.TurnOff();
@@ -1435,25 +1328,22 @@ void CWeaponModel::CreateLaser()
 
 	if (m_hLaserModel)
 	{
-        dwFlags = g_pLTClient->GetObjectFlags(m_hLaserModel);
-        g_pLTClient->SetObjectFlags(m_hLaserModel, dwFlags | FLAG_VISIBLE);
-        g_pLTClient->SetObjectScale(m_hLaserModel, &(pMod->vAttachScale));
+		dwFlags = g_pLTClient->GetObjectFlags(m_hLaserModel);
+		g_pLTClient->SetObjectFlags(m_hLaserModel, dwFlags | FLAG_VISIBLE);
+		g_pLTClient->SetObjectScale(m_hLaserModel, &(pMod->vAttachScale));
 	}
 
 	m_LaserBeam.TurnOn();
 
-    m_bHaveLaser = LTTRUE;
+	m_bHaveLaser = LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CreateScope
 //
-//	ROUTINE:	CWeaponModel::CreateScope
-//
-//	PURPOSE:	Create the scope model
-//
+//	PURPOSE: Create the scope model
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::CreateScope()
 {
 	if (!m_pWeapon) return;
@@ -1469,8 +1359,8 @@ void CWeaponModel::CreateScope()
 	{
 		if (m_hScopeModel)
 		{
-            uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hScopeModel);
-            g_pLTClient->SetObjectFlags(m_hScopeModel, dwFlags & ~FLAG_VISIBLE);
+			uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hScopeModel);
+			g_pLTClient->SetObjectFlags(m_hScopeModel, dwFlags & ~FLAG_VISIBLE);
 		}
 
 		return;
@@ -1486,8 +1376,8 @@ void CWeaponModel::CreateScope()
 		{
 			if (m_hScopeModel)
 			{
-                uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hScopeModel);
-                g_pLTClient->SetObjectFlags(m_hScopeModel, dwFlags & ~FLAG_VISIBLE);
+				uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hScopeModel);
+				g_pLTClient->SetObjectFlags(m_hScopeModel, dwFlags & ~FLAG_VISIBLE);
 			}
 
 			return;
@@ -1507,27 +1397,24 @@ void CWeaponModel::CreateScope()
 
 	if (m_hScopeModel)
 	{
-        uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hScopeModel);
-        g_pLTClient->SetObjectFlags(m_hScopeModel, dwFlags | FLAG_VISIBLE);
-        g_pLTClient->SetObjectScale(m_hScopeModel, &(pMod->vAttachScale));
+		uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hScopeModel);
+		g_pLTClient->SetObjectFlags(m_hScopeModel, dwFlags | FLAG_VISIBLE);
+		g_pLTClient->SetObjectScale(m_hScopeModel, &(pMod->vAttachScale));
 	}
 
-    m_bHaveScope = LTTRUE;
+	m_bHaveScope = LTTRUE;
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::UpdateFlash()
 //
-//	ROUTINE:	CWeaponModel::UpdateFlash()
-//
-//	PURPOSE:	Update muzzle flash state
-//
+//	PURPOSE: Update muzzle flash state
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::UpdateFlash(WeaponState eState)
 {
-    uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTClient->GetObjectFlags(m_hObject);
 
 	if (!(dwFlags & FLAG_VISIBLE) || !m_pWeapon->pPVMuzzleFX)
 	{
@@ -1535,8 +1422,8 @@ void CWeaponModel::UpdateFlash(WeaponState eState)
 		return;
 	}
 
-    LTFLOAT fCurTime = g_pLTClient->GetTime();
-    LTFLOAT fFlashDuration = m_pWeapon->pPVMuzzleFX->fDuration;
+	LTFLOAT fCurTime = g_pLTClient->GetTime();
+	LTFLOAT fFlashDuration = m_pWeapon->pPVMuzzleFX->fDuration;
 
 	if ( fCurTime >= m_fFlashStartTime + fFlashDuration ||
 		 g_pGameClientShell->GetPlayerState() != PS_ALIVE ||
@@ -1557,36 +1444,30 @@ void CWeaponModel::UpdateFlash(WeaponState eState)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::StartFlash()
 //
-//	ROUTINE:	CWeaponModel::StartFlash()
-//
-//	PURPOSE:	Start the muzzle flash
-//
+//	PURPOSE: Start the muzzle flash
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::StartFlash()
 {
 
-    m_fFlashStartTime = g_pLTClient->GetTime();
+	m_fFlashStartTime = g_pLTClient->GetTime();
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetModelPos()
 //
-//	ROUTINE:	CWeaponModel::GetModelPos()
-//
-//	PURPOSE:	Get the position of the weapon model
-//
+//	PURPOSE: Get the position of the weapon model
 // ----------------------------------------------------------------------- //
-
 LTVector CWeaponModel::GetModelPos() const
 {
-    LTVector vPos;
+	LTVector vPos;
 	vPos.Init();
 
 	if (m_hObject)
 	{
-        g_pLTClient->GetObjectPos(m_hObject, &vPos);
+		g_pLTClient->GetObjectPos(m_hObject, &vPos);
 		vPos += m_vCamPos;
 	}
 
@@ -1594,23 +1475,20 @@ LTVector CWeaponModel::GetModelPos() const
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetModelRot()
 //
-//	ROUTINE:	CWeaponModel::GetModelRot()
-//
-//	PURPOSE:	Get the rotation of the weapon model
-//
+//	PURPOSE: Get the rotation of the weapon model
 // ----------------------------------------------------------------------- //
-
 LTRotation CWeaponModel::GetModelRot() const
 {
 	return m_rCamRot;
 
-    LTRotation rRot;
+	LTRotation rRot;
 	rRot.Init();
 
 	if (m_hObject)
 	{
-        g_pLTClient->GetObjectRotation(m_hObject, &rRot);
+		g_pLTClient->GetObjectRotation(m_hObject, &rRot);
 		//rRot += m_rCamRot;
 	}
 
@@ -1618,13 +1496,10 @@ LTRotation CWeaponModel::GetModelRot() const
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CPVWeaponModel::StringKey()
 //
-//	ROUTINE:	CPVWeaponModel::StringKey()
-//
-//	PURPOSE:	Handle animation command
-//
+//	PURPOSE: Handle animation command
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::OnModelKey(HLOCALOBJ hObj, ArgList* pArgList)
 {
 	if (!hObj || (hObj != m_hObject) || !pArgList || !pArgList->argv || pArgList->argc == 0) return;
@@ -1650,7 +1525,7 @@ void CWeaponModel::OnModelKey(HLOCALOBJ hObj, ArgList* pArgList)
 	{
 		if (pArgList->argc > 1 && pArgList->argv[1])
 		{
-            char* pBuf = LTNULL;
+			char* pBuf = LTNULL;
 
 			PlayerSoundId nId = (PlayerSoundId)atoi(pArgList->argv[1]);
 			switch (nId)
@@ -1679,15 +1554,15 @@ void CWeaponModel::OnModelKey(HLOCALOBJ hObj, ArgList* pArgList)
 
 				// Send message to Server so that other client's can hear this sound...
 
-                uint32 dwId;
-                g_pLTClient->GetLocalClientID(&dwId);
+				uint32 dwId;
+				g_pLTClient->GetLocalClientID(&dwId);
 
-                HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_WEAPON_SOUND);
-                g_pLTClient->WriteToMessageByte(hWrite, nId);
-                g_pLTClient->WriteToMessageByte(hWrite, m_nWeaponId);
-                g_pLTClient->WriteToMessageByte(hWrite, (uint8)dwId);
-                g_pLTClient->WriteToMessageVector(hWrite, &m_vFlashPos);
-                g_pLTClient->EndMessage2(hWrite, MESSAGE_NAGGLEFAST);
+				HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_WEAPON_SOUND);
+				g_pLTClient->WriteToMessageByte(hWrite, nId);
+				g_pLTClient->WriteToMessageByte(hWrite, m_nWeaponId);
+				g_pLTClient->WriteToMessageByte(hWrite, (uint8)dwId);
+				g_pLTClient->WriteToMessageVector(hWrite, &m_vFlashPos);
+				g_pLTClient->EndMessage2(hWrite, MESSAGE_NAGGLEFAST);
 			}
 		}
 	}
@@ -1704,7 +1579,7 @@ void CWeaponModel::OnModelKey(HLOCALOBJ hObj, ArgList* pArgList)
 			uint32 dwAni = g_pLTClient->GetModelAnimation(m_hObject);
 			if (IsFireAni(dwAni))
 			{
-		        m_bFire = LTTRUE;
+				m_bFire = LTTRUE;
 			}
 		}
 
@@ -1717,13 +1592,10 @@ void CWeaponModel::OnModelKey(HLOCALOBJ hObj, ArgList* pArgList)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::HandleSunglassWeaponKey()
 //
-//	ROUTINE:	CWeaponModel::HandleSunglassWeaponKey()
-//
-//	PURPOSE:	Handle changing sunglass modes...
-//
+//	PURPOSE: Handle changing sunglass modes...
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::HandleSunglassMode()
 {
 	// Handle sunglasses gadget...
@@ -1758,13 +1630,10 @@ void CWeaponModel::HandleSunglassMode()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::UpdateModelState
 //
-//	ROUTINE:	CWeaponModel::UpdateModelState
-//
-//  PURPOSE:    Update the model's state (fire if bFire == LTTRUE)
-//
+//  PURPOSE: Update the model's state (fire if bFire == LTTRUE)
 // ----------------------------------------------------------------------- //
-
 WeaponState CWeaponModel::UpdateModelState(LTBOOL bFire)
 {
 	WeaponState eRet = W_IDLE;
@@ -1791,7 +1660,7 @@ WeaponState CWeaponModel::UpdateModelState(LTBOOL bFire)
 
 	if (m_bWeaponDeselected)
 	{
-        m_bWeaponDeselected = LTFALSE;
+		m_bWeaponDeselected = LTFALSE;
 
 		// Change weapons if we're not chaing between normal and
 		// alt-fire modes...
@@ -1807,13 +1676,10 @@ WeaponState CWeaponModel::UpdateModelState(LTBOOL bFire)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::Fire
 //
-//	ROUTINE:	CWeaponModel::Fire
-//
-//	PURPOSE:	Handle firing the weapon
-//
+//	PURPOSE: Handle firing the weapon
 // ----------------------------------------------------------------------- //
-
 WeaponState CWeaponModel::Fire(LTBOOL bUpdateAmmo)
 {
 
@@ -1822,7 +1688,7 @@ WeaponState CWeaponModel::Fire(LTBOOL bUpdateAmmo)
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
 	if (!pStats) return W_IDLE;
 
-    LTBOOL bInfiniteAmmo = (g_bInfiniteAmmo || m_pWeapon->bInfiniteAmmo);
+	LTBOOL bInfiniteAmmo = (g_bInfiniteAmmo || m_pWeapon->bInfiniteAmmo);
 	int nAmmo = bInfiniteAmmo ? INFINITE_AMMO_AMOUNT : pStats->GetAmmoCount(m_nAmmoId);
 
 	// If this weapon uses ammo, make sure we have ammo...
@@ -1850,37 +1716,34 @@ WeaponState CWeaponModel::Fire(LTBOOL bUpdateAmmo)
 
 		// Send message to Server so that other client's can hear this sound...
 
-        uint32 dwId;
-        g_pLTClient->GetLocalClientID(&dwId);
+		uint32 dwId;
+		g_pLTClient->GetLocalClientID(&dwId);
 
-        HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_WEAPON_SOUND);
-        g_pLTClient->WriteToMessageByte(hWrite, PSI_DRY_FIRE);
-        g_pLTClient->WriteToMessageByte(hWrite, m_nWeaponId);
-        g_pLTClient->WriteToMessageByte(hWrite, (uint8)dwId);
-        g_pLTClient->WriteToMessageVector(hWrite, &m_vFlashPos);
-        g_pLTClient->EndMessage2(hWrite, MESSAGE_NAGGLEFAST);
+		HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_WEAPON_SOUND);
+		g_pLTClient->WriteToMessageByte(hWrite, PSI_DRY_FIRE);
+		g_pLTClient->WriteToMessageByte(hWrite, m_nWeaponId);
+		g_pLTClient->WriteToMessageByte(hWrite, (uint8)dwId);
+		g_pLTClient->WriteToMessageVector(hWrite, &m_vFlashPos);
+		g_pLTClient->EndMessage2(hWrite, MESSAGE_NAGGLEFAST);
 	}
 
-    m_bFire = LTFALSE;
+	m_bFire = LTFALSE;
 
 	return eRet;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::DecrementAmmo
 //
-//	ROUTINE:	CWeaponModel::DecrementAmmo
-//
-//	PURPOSE:	Decrement the weapon's ammo count
-//
+//	PURPOSE: Decrement the weapon's ammo count
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::DecrementAmmo()
 {
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
 	if (!pStats) return;
 
-    LTBOOL bInfiniteAmmo = (g_bInfiniteAmmo || m_pWeapon->bInfiniteAmmo);
+	LTBOOL bInfiniteAmmo = (g_bInfiniteAmmo || m_pWeapon->bInfiniteAmmo);
 	int nAmmo = bInfiniteAmmo ? INFINITE_AMMO_AMOUNT : pStats->GetAmmoCount(m_nAmmoId);
 
 	int nShotsPerClip = m_pWeapon->nShotsPerClip;
@@ -1909,7 +1772,7 @@ void CWeaponModel::DecrementAmmo()
 	{
 		if (m_nAmmoInClip <= 0)
 		{
-            ReloadClip(LTTRUE, nAmmo);
+			ReloadClip(LTTRUE, nAmmo);
 		}
 	}
 
@@ -1926,13 +1789,10 @@ void CWeaponModel::DecrementAmmo()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeapon::ReloadClip
 //
-//	ROUTINE:	CWeapon::ReloadClip
-//
-//	PURPOSE:	Fill the clip
-//
+//	PURPOSE: Fill the clip
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::ReloadClip(LTBOOL bPlayReload, int nNewAmmo, LTBOOL bForce)
 {
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
@@ -1994,16 +1854,13 @@ void CWeaponModel::ReloadClip(LTBOOL bPlayReload, int nNewAmmo, LTBOOL bForce)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::UpdateFiring
 //
-//	ROUTINE:	CWeaponModel::UpdateFiring
-//
-//	PURPOSE:	Update the animation state of the model
-//
+//	PURPOSE: Update the animation state of the model
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::UpdateFiring()
 {
-    m_bCanSetLastFire = LTTRUE;
+	m_bCanSetLastFire = LTTRUE;
 
 	if (GetState() == W_RELOADING)
 	{
@@ -2034,33 +1891,30 @@ void CWeaponModel::UpdateFiring()
 	{
 		if (PlayFireAnimation())
 		{
-            m_bCanSetLastFire = LTFALSE;
+			m_bCanSetLastFire = LTFALSE;
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::UpdateNonFiring
 //
-//	ROUTINE:	CWeaponModel::UpdateNonFiring
-//
-//	PURPOSE:	Update the non-firing animation state of the model
-//
+//	PURPOSE: Update the non-firing animation state of the model
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::UpdateNonFiring()
 {
-    m_bCanSetLastFire = LTTRUE;
+	m_bCanSetLastFire = LTTRUE;
 
 	if (GetState() == W_FIRING)
 	{
-        if (!PlayFireAnimation(LTFALSE))
+		if (!PlayFireAnimation(LTFALSE))
 		{
 			SetState(W_IDLE);
 		}
 		else
 		{
-            m_bCanSetLastFire = LTFALSE;
+			m_bCanSetLastFire = LTFALSE;
 		}
 	}
 	if (GetState() == W_FIRING_NOAMMO)
@@ -2085,7 +1939,7 @@ void CWeaponModel::UpdateNonFiring()
 	{
 		if (!PlayDeselectAnimation())
 		{
-            m_bWeaponDeselected = LTTRUE;
+			m_bWeaponDeselected = LTTRUE;
 			SetState(W_IDLE);
 		}
 	}
@@ -2097,128 +1951,116 @@ void CWeaponModel::UpdateNonFiring()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::PlaySelectAnimation()
 //
-//	ROUTINE:	CWeaponModel::PlaySelectAnimation()
-//
-//	PURPOSE:	Set model to select animation
-//
+//	PURPOSE: Set model to select animation
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::PlaySelectAnimation()
 {
-    uint32 dwSelectAni = GetSelectAni();
+	uint32 dwSelectAni = GetSelectAni();
 
-    if (!m_hObject || dwSelectAni == INVALID_ANI) return LTFALSE;
+	if (!m_hObject || dwSelectAni == INVALID_ANI) return LTFALSE;
 
-    uint32 dwAni    = g_pLTClient->GetModelAnimation(m_hObject);
-    uint32 dwState  = g_pLTClient->GetModelPlaybackState(m_hObject);
+	uint32 dwAni	= g_pLTClient->GetModelAnimation(m_hObject);
+	uint32 dwState  = g_pLTClient->GetModelPlaybackState(m_hObject);
 
-    LTBOOL bIsSelectAni = IsSelectAni(dwAni);
+	LTBOOL bIsSelectAni = IsSelectAni(dwAni);
 	if (bIsSelectAni && (dwState & MS_PLAYDONE))
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 	else if (!bIsSelectAni)
 	{
-        g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
-        g_pLTClient->SetModelAnimation(m_hObject, dwSelectAni);
+		g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
+		g_pLTClient->SetModelAnimation(m_hObject, dwSelectAni);
 /*
 		// Tell the server we're playing the select animation...
 
-        HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
-        g_pLTClient->WriteToMessageByte(hMessage, CP_WEAPON_STATUS);
-        g_pLTClient->WriteToMessageByte(hMessage, WS_SELECT);
-        g_pLTClient->EndMessage(hMessage);
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
+		g_pLTClient->WriteToMessageByte(hMessage, CP_WEAPON_STATUS);
+		g_pLTClient->WriteToMessageByte(hMessage, WS_SELECT);
+		g_pLTClient->EndMessage(hMessage);
 */
 	}
 
-    return LTTRUE;  // Animation playing
+	return LTTRUE;	// Animation playing
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::PlayDeselectAnimation()
 //
-//	ROUTINE:	CWeaponModel::PlayDeselectAnimation()
-//
-//	PURPOSE:	Set model to deselect animation
-//
+//	PURPOSE: Set model to deselect animation
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::PlayDeselectAnimation()
 {
-    uint32 dwDeselectAni = GetDeselectAni();
+	uint32 dwDeselectAni = GetDeselectAni();
 
 	if (!m_hObject || dwDeselectAni == INVALID_ANI)
 	{
-        m_bWeaponDeselected = LTTRUE;
-        return LTFALSE;
+		m_bWeaponDeselected = LTTRUE;
+		return LTFALSE;
 	}
 
-    uint32 dwAni    = g_pLTClient->GetModelAnimation(m_hObject);
-    uint32 dwState  = g_pLTClient->GetModelPlaybackState(m_hObject);
+	uint32 dwAni	= g_pLTClient->GetModelAnimation(m_hObject);
+	uint32 dwState  = g_pLTClient->GetModelPlaybackState(m_hObject);
 
-    LTBOOL bIsDeselectAni = IsDeselectAni(dwAni);
+	LTBOOL bIsDeselectAni = IsDeselectAni(dwAni);
 
 	if (bIsDeselectAni && (dwState & MS_PLAYDONE))
 	{
-        m_bWeaponDeselected = LTTRUE;
-        return LTFALSE;
+		m_bWeaponDeselected = LTTRUE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;  // Animation playing
+	return LTTRUE;	// Animation playing
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::PlayFireAnimation()
 //
-//	ROUTINE:	CWeaponModel::PlayFireAnimation()
-//
-//	PURPOSE:	Set model to firing animation
-//
+//	PURPOSE: Set model to firing animation
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::PlayFireAnimation(LTBOOL bResetAni)
 {
-    if (!m_hObject) return LTFALSE;
+	if (!m_hObject) return LTFALSE;
 
 	// Can only set the last fire type if a fire animation isn't playing
 	// (i.e., we'll assume this function will return false)...
 
-    uint32 dwAni    = g_pLTClient->GetModelAnimation(m_hObject);
-    uint32 dwState  = g_pLTClient->GetModelPlaybackState(m_hObject);
+	uint32 dwAni	= g_pLTClient->GetModelAnimation(m_hObject);
+	uint32 dwState  = g_pLTClient->GetModelPlaybackState(m_hObject);
 
-    LTBOOL bIsFireAni = IsFireAni(dwAni);
+	LTBOOL bIsFireAni = IsFireAni(dwAni);
 
 	if (!bIsFireAni || (dwState & MS_PLAYDONE))
 	{
 		if (bResetAni)
 		{
-            uint32 dwFireAni = GetFireAni(m_eLastFireType);
-            if (dwFireAni == INVALID_ANI) return LTFALSE;
+			uint32 dwFireAni = GetFireAni(m_eLastFireType);
+			if (dwFireAni == INVALID_ANI) return LTFALSE;
 
-            g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
-            g_pLTClient->SetModelAnimation(m_hObject, dwFireAni);
-            g_pLTClient->ResetModelAnimation(m_hObject);  // Start from beginning
+			g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
+			g_pLTClient->SetModelAnimation(m_hObject, dwFireAni);
+			g_pLTClient->ResetModelAnimation(m_hObject);	// Start from beginning
 		}
 
 		if (bIsFireAni && (dwState & MS_PLAYDONE))
 		{
 			DoSpecialEndFire();
-            return LTFALSE;
+			return LTFALSE;
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::DoSpecialFire()
 //
-//	ROUTINE:	CWeaponModel::DoSpecialFire()
-//
-//	PURPOSE:	Do special case fire processing
-//
+//	PURPOSE: Do special case fire processing
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::DoSpecialFire()
 {
 	// Currently we need to check for gadget special cases...
@@ -2227,7 +2069,7 @@ void CWeaponModel::DoSpecialFire()
 	{
 		// Hide the necessary pieces...
 
-        SpecialShowPieces(LTFALSE);
+		SpecialShowPieces(LTFALSE);
 
 		// Decrement ammo count here...
 
@@ -2236,13 +2078,10 @@ void CWeaponModel::DoSpecialFire()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::DoSpecialEndFire()
 //
-//	ROUTINE:	CWeaponModel::DoSpecialEndFire()
-//
-//	PURPOSE:	Do special case end of fire animation processing
-//
+//	PURPOSE: Do special case end of fire animation processing
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::DoSpecialEndFire()
 {
 	// Currently we need to check for gadget special cases...
@@ -2251,7 +2090,7 @@ void CWeaponModel::DoSpecialEndFire()
 	{
 		// Unhide any hidden pieces...
 
-        SpecialShowPieces(LTTRUE);
+		SpecialShowPieces(LTTRUE);
 
 		// If we're out of ammo, switch weapons...
 
@@ -2263,13 +2102,10 @@ void CWeaponModel::DoSpecialEndFire()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::SpecialShowPieces()
 //
-//	ROUTINE:	CWeaponModel::SpecialShowPieces()
-//
-//	PURPOSE:	Special case showing nodes
-//
+//	PURPOSE: Special case showing nodes
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::SpecialShowPieces(LTBOOL bShow, LTBOOL bForce)
 {
 	// Currently we need to check for gadget special cases...
@@ -2283,11 +2119,11 @@ void CWeaponModel::SpecialShowPieces(LTBOOL bShow, LTBOOL bForce)
 			CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
 			if (pStats && pStats->GetAmmoCount(m_nAmmoId) < 1)
 			{
-                bShow = LTFALSE; // Hide the necessary pieces...
+				bShow = LTFALSE; // Hide the necessary pieces...
 			}
 		}
 
-        char** s_pPieceArray = LTNULL;
+		char** s_pPieceArray = LTNULL;
 
 		DamageType eType = m_pAmmo->eInstDamageType;
 		if (eType == DT_GADGET_CAMERA_DISABLER)
@@ -2299,8 +2135,8 @@ void CWeaponModel::SpecialShowPieces(LTBOOL bShow, LTBOOL bForce)
 			s_pPieceArray = s_pCodeDecPieces;
 		}
 
-        ILTModel* pModelLT = g_pLTClient->GetModelLT();
-        HMODELPIECE hPiece = LTNULL;
+		ILTModel* pModelLT = g_pLTClient->GetModelLT();
+		HMODELPIECE hPiece = LTNULL;
 
 		for (int i=0; s_pPieceArray && s_pPieceArray[i]; i++)
 		{
@@ -2313,25 +2149,22 @@ void CWeaponModel::SpecialShowPieces(LTBOOL bShow, LTBOOL bForce)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::PlayReloadAnimation()
 //
-//	ROUTINE:	CWeaponModel::PlayReloadAnimation()
-//
-//	PURPOSE:	Set model to reloading animation
-//
+//	PURPOSE: Set model to reloading animation
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::PlayReloadAnimation()
 {
-    uint32 dwReloadAni = GetReloadAni();
+	uint32 dwReloadAni = GetReloadAni();
 
-    if (!m_hObject || dwReloadAni == INVALID_ANI) return LTFALSE;
+	if (!m_hObject || dwReloadAni == INVALID_ANI) return LTFALSE;
 
-    uint32 dwAni    = g_pLTClient->GetModelAnimation(m_hObject);
-    uint32 dwState  = g_pLTClient->GetModelPlaybackState(m_hObject);
+	uint32 dwAni	= g_pLTClient->GetModelAnimation(m_hObject);
+	uint32 dwState  = g_pLTClient->GetModelPlaybackState(m_hObject);
 
-    LTBOOL bCanPlay  = (!IsFireAni(dwAni) || g_pLTClient->GetModelLooping(m_hObject) || (dwState & MS_PLAYDONE));
+	LTBOOL bCanPlay  = (!IsFireAni(dwAni) || g_pLTClient->GetModelLooping(m_hObject) || (dwState & MS_PLAYDONE));
 
-    LTBOOL bIsReloadAni = IsReloadAni(dwAni);
+	LTBOOL bIsReloadAni = IsReloadAni(dwAni);
 
 	if (bIsReloadAni && (dwState & MS_PLAYDONE))
 	{
@@ -2348,47 +2181,44 @@ LTBOOL CWeaponModel::PlayReloadAnimation()
 			g_pInterfaceMgr->UpdateWeaponStats(m_nWeaponId, m_nAmmoId, nAmmo);
 		}
 
-        return LTFALSE;
+		return LTFALSE;
 	}
 	else if (!bIsReloadAni && bCanPlay)
 	{
-        g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
-        g_pLTClient->SetModelAnimation(m_hObject, dwReloadAni);
+		g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
+		g_pLTClient->SetModelAnimation(m_hObject, dwReloadAni);
 
 		// Tell the server we're playing the reload ani...
 
-        HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
-        g_pLTClient->WriteToMessageByte(hMessage, CP_WEAPON_STATUS);
-        g_pLTClient->WriteToMessageByte(hMessage, WS_RELOADING);
-        g_pLTClient->EndMessage(hMessage);
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
+		g_pLTClient->WriteToMessageByte(hMessage, CP_WEAPON_STATUS);
+		g_pLTClient->WriteToMessageByte(hMessage, WS_RELOADING);
+		g_pLTClient->EndMessage(hMessage);
 	}
 
-    return LTTRUE;  // Animation playing
+	return LTTRUE;	// Animation playing
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::PlayIdleAnimation()
 //
-//	ROUTINE:	CWeaponModel::PlayIdleAnimation()
-//
-//	PURPOSE:	Set model to Idle animation
-//
+//	PURPOSE: Set model to Idle animation
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::PlayIdleAnimation()
 {
-    if (!m_hObject || g_pGameClientShell->IsZoomed()) return LTFALSE;
+	if (!m_hObject || g_pGameClientShell->IsZoomed()) return LTFALSE;
 
-    LTBOOL bCurAniDone = !!(g_pLTClient->GetModelPlaybackState(m_hObject) & MS_PLAYDONE);
+	LTBOOL bCurAniDone = !!(g_pLTClient->GetModelPlaybackState(m_hObject) & MS_PLAYDONE);
 
 	// Make sure idle animation is done if one is currently playing...
 
-    uint32 dwAni = g_pLTClient->GetModelAnimation(m_hObject);
+	uint32 dwAni = g_pLTClient->GetModelAnimation(m_hObject);
 	if (IsIdleAni(dwAni))
 	{
 		if (!bCurAniDone)
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
@@ -2396,7 +2226,7 @@ LTBOOL CWeaponModel::PlayIdleAnimation()
 	// See if the player is moving...Don't do normal idles when player is
 	// moving...
 
-    LTBOOL bMoving = LTFALSE;
+	LTBOOL bMoving = LTFALSE;
 	if (g_pGameClientShell->GetMoveMgr()->GetVelMagnitude() > 0.1f)
 	{
 		bMoving = !!(g_pGameClientShell->GetPlayerFlags() & BC_CFLG_MOVING);
@@ -2405,9 +2235,9 @@ LTBOOL CWeaponModel::PlayIdleAnimation()
 
 	// Play idle if it is time...(and not moving)...
 
-    LTFLOAT fTime = g_pLTClient->GetTime();
+	LTFLOAT fTime = g_pLTClient->GetTime();
 
-    LTBOOL bPlayIdle = LTFALSE;
+	LTBOOL bPlayIdle = LTFALSE;
 
 	if (fTime > m_fNextIdleTime && bCurAniDone)
 	{
@@ -2415,21 +2245,21 @@ LTBOOL CWeaponModel::PlayIdleAnimation()
 		m_fNextIdleTime	= GetNextIdleTime();
 	}
 
-    uint32 nSubleIdleAni = GetSubtleIdleAni();
+	uint32 nSubleIdleAni = GetSubtleIdleAni();
 
 	if (bPlayIdle)
 	{
-        uint32 nAni = GetIdleAni();
+		uint32 nAni = GetIdleAni();
 
 		if (nAni == INVALID_ANI)
 		{
 			nAni = DEFAULT_ANI;
 		}
 
-        g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
-        g_pLTClient->SetModelAnimation(m_hObject, nAni);
+		g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
+		g_pLTClient->SetModelAnimation(m_hObject, nAni);
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 	else if (nSubleIdleAni != INVALID_ANI)
 	{
@@ -2437,50 +2267,47 @@ LTBOOL CWeaponModel::PlayIdleAnimation()
 
 		if (dwAni != nSubleIdleAni || bCurAniDone)
 		{
-            g_pLTClient->SetModelLooping(m_hObject, LTFALSE /*LTTRUE*/);
-            g_pLTClient->SetModelAnimation(m_hObject, nSubleIdleAni);
-            g_pLTClient->ResetModelAnimation(m_hObject);
+			g_pLTClient->SetModelLooping(m_hObject, LTFALSE /*LTTRUE*/);
+			g_pLTClient->SetModelAnimation(m_hObject, nSubleIdleAni);
+			g_pLTClient->ResetModelAnimation(m_hObject);
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::Select()
 //
-//	ROUTINE:	CWeaponModel::Select()
-//
-//	PURPOSE:	Select the weapon
-//
+//	PURPOSE: Select the weapon
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::Select()
 {
 	SetState(W_SELECT);
 
-    ReloadClip(LTFALSE);
+	ReloadClip(LTFALSE);
 
-    uint32 dwSelectAni = GetSelectAni();
+	uint32 dwSelectAni = GetSelectAni();
 
 	if (m_hObject && dwSelectAni != INVALID_ANI)
 	{
-        uint32 dwAni = g_pLTClient->GetModelAnimation(m_hObject);
+		uint32 dwAni = g_pLTClient->GetModelAnimation(m_hObject);
 
 		if (!IsSelectAni(dwAni))
 		{
-            g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
-            g_pLTClient->SetModelAnimation(m_hObject, dwSelectAni);
-            g_pLTClient->ResetModelAnimation(m_hObject);
+			g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
+			g_pLTClient->SetModelAnimation(m_hObject, dwSelectAni);
+			g_pLTClient->ResetModelAnimation(m_hObject);
 		}
 
 		// Tell the server we're playing the select animation...
 
-        HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
-        g_pLTClient->WriteToMessageByte(hMessage, CP_WEAPON_STATUS);
-        g_pLTClient->WriteToMessageByte(hMessage, WS_SELECT);
-        g_pLTClient->EndMessage(hMessage);
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
+		g_pLTClient->WriteToMessageByte(hMessage, CP_WEAPON_STATUS);
+		g_pLTClient->WriteToMessageByte(hMessage, WS_SELECT);
+		g_pLTClient->EndMessage(hMessage);
 	}
 
 	// Make sure the zipcord is off (incase it was on)...
@@ -2489,13 +2316,10 @@ void CWeaponModel::Select()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GadgetReload()
 //
-//	ROUTINE:	CWeaponModel::GadgetReload()
-//
-//	PURPOSE:	Handle gadget reload
-//
+//	PURPOSE: Handle gadget reload
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::GadgetReload()
 {
 	// Handle sunglasses gadget...
@@ -2535,61 +2359,55 @@ void CWeaponModel::GadgetReload()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::Deselect()
 //
-//	ROUTINE:	CWeaponModel::Deselect()
-//
-//	PURPOSE:	Deselect the weapon
-//
+//	PURPOSE: Deselect the weapon
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::Deselect()
 {
-    uint32 dwDeselectAni = GetDeselectAni();
-    LTBOOL bPlayDeselectAni = (m_hObject && dwDeselectAni != INVALID_ANI);
+	uint32 dwDeselectAni = GetDeselectAni();
+	LTBOOL bPlayDeselectAni = (m_hObject && dwDeselectAni != INVALID_ANI);
 
 	// Special case for gadgets...
 
 	if (m_pAmmo->eType == GADGET && IsOutOfAmmo(m_nWeaponId))
 	{
-        bPlayDeselectAni = LTFALSE;
+		bPlayDeselectAni = LTFALSE;
 	}
 
 	if (bPlayDeselectAni)
 	{
-        uint32 dwAni = g_pLTClient->GetModelAnimation(m_hObject);
+		uint32 dwAni = g_pLTClient->GetModelAnimation(m_hObject);
 
 		SetState(W_DESELECT);
 
 		if (!IsDeselectAni(dwAni))
 		{
-            g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
-            g_pLTClient->SetModelAnimation(m_hObject, dwDeselectAni);
-            g_pLTClient->ResetModelAnimation(m_hObject);
+			g_pLTClient->SetModelLooping(m_hObject, LTFALSE);
+			g_pLTClient->SetModelAnimation(m_hObject, dwDeselectAni);
+			g_pLTClient->ResetModelAnimation(m_hObject);
 		}
 
 		// Tell the server we're playing the deselect animation...
 
-        HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
-        g_pLTClient->WriteToMessageByte(hMessage, CP_WEAPON_STATUS);
-        g_pLTClient->WriteToMessageByte(hMessage, WS_DESELECT);
-        g_pLTClient->EndMessage(hMessage);
+		HMESSAGEWRITE hMessage = g_pLTClient->StartMessage(MID_PLAYER_CLIENTMSG);
+		g_pLTClient->WriteToMessageByte(hMessage, CP_WEAPON_STATUS);
+		g_pLTClient->WriteToMessageByte(hMessage, WS_DESELECT);
+		g_pLTClient->EndMessage(hMessage);
 	}
 	else
 	{
-        m_bWeaponDeselected = LTTRUE;
+		m_bWeaponDeselected = LTTRUE;
 	}
 
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::SendFireMsg
 //
-//	ROUTINE:	CWeaponModel::SendFireMsg
-//
-//	PURPOSE:	Send fire message to server
-//
+//	PURPOSE: Send fire message to server
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::SendFireMsg()
 {
 	if (!m_hObject) return;
@@ -2606,12 +2424,12 @@ void CWeaponModel::SendFireMsg()
 
 
 	LTVector vU, vR, vF, vFirePos;
-    LTFLOAT fPerturb = m_fMovementPerturb;
+	LTFLOAT fPerturb = m_fMovementPerturb;
 
 	if (!g_pGameClientShell->IsMultiplayerGame())
 	{
 		CPlayerSummaryMgr *pPSummary = g_pGameClientShell->GetPlayerSummary();
-        LTFLOAT  fPerturbX = pPSummary->m_PlayerRank.fPerturbMultiplier;
+		LTFLOAT  fPerturbX = pPSummary->m_PlayerRank.fPerturbMultiplier;
 		fPerturb *= fPerturbX;
 	}
 
@@ -2630,7 +2448,7 @@ void CWeaponModel::SendFireMsg()
 	// Calculate a random seed...(srand uses this value so it can't be 1, since
 	// that has a special meaning for srand)
 
-    uint8 nRandomSeed = GetRandom(2, 255);
+	uint8 nRandomSeed = GetRandom(2, 255);
 
 	g_nRandomWeaponSeed = nRandomSeed;
 
@@ -2653,7 +2471,7 @@ void CWeaponModel::SendFireMsg()
 
 		g_pWeaponMgr->CalculateWeaponPath(wp);
 
-        // g_pLTClient->CPrint("Client Fire Path (%d): %.2f, %.2f, %.2f",
+		// g_pLTClient->CPrint("Client Fire Path (%d): %.2f, %.2f, %.2f",
 		// g_nRandomWeaponSeed, wp.vPath.x, wp.vPath.y, wp.vPath.z);
 
 		// Do client-side firing...
@@ -2664,7 +2482,7 @@ void CWeaponModel::SendFireMsg()
 
 	// Play Fire sound...
 
-    uint8 nFireType = GetLastSndFireType();
+	uint8 nFireType = GetLastSndFireType();
 
 	PlayerSoundId eSoundId = PSI_FIRE;
 	if (nFireType == PSI_SILENCED_FIRE)
@@ -2684,44 +2502,41 @@ void CWeaponModel::SendFireMsg()
 
 	if (m_pAmmo->eType != GADGET)
 	{
-        HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_WEAPON_FIRE);
-        g_pLTClient->WriteToMessageVector(hWrite, &m_vFlashPos);
-        g_pLTClient->WriteToMessageVector(hWrite, &vFirePos);
-        g_pLTClient->WriteToMessageVector(hWrite, &vF);
-        g_pLTClient->WriteToMessageByte(hWrite, nRandomSeed);
-        g_pLTClient->WriteToMessageByte(hWrite, m_nWeaponId);
-        g_pLTClient->WriteToMessageByte(hWrite, m_nAmmoId);
-        g_pLTClient->WriteToMessageByte(hWrite, (LTBOOL) (m_eLastFireType == FT_ALT_FIRE));
-        g_pLTClient->WriteToMessageByte(hWrite, (uint8) (fPerturb * 255.0f));
+		HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_WEAPON_FIRE);
+		g_pLTClient->WriteToMessageVector(hWrite, &m_vFlashPos);
+		g_pLTClient->WriteToMessageVector(hWrite, &vFirePos);
+		g_pLTClient->WriteToMessageVector(hWrite, &vF);
+		g_pLTClient->WriteToMessageByte(hWrite, nRandomSeed);
+		g_pLTClient->WriteToMessageByte(hWrite, m_nWeaponId);
+		g_pLTClient->WriteToMessageByte(hWrite, m_nAmmoId);
+		g_pLTClient->WriteToMessageByte(hWrite, (LTBOOL) (m_eLastFireType == FT_ALT_FIRE));
+		g_pLTClient->WriteToMessageByte(hWrite, (uint8) (fPerturb * 255.0f));
 		g_pLTClient->WriteToMessageDWord(hWrite, (int) (g_pLTClient->GetTime() * 1000.0f));
-        g_pLTClient->EndMessage2(hWrite, MESSAGE_NAGGLEFAST);
+		g_pLTClient->EndMessage2(hWrite, MESSAGE_NAGGLEFAST);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetFireInfo
 //
-//	ROUTINE:	CWeaponModel::GetFireInfo
-//
-//	PURPOSE:	Get the fire pos/rot
-//
+//	PURPOSE: Get the fire pos/rot
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::GetFireInfo(LTVector & vU, LTVector & vR, LTVector & vF,
-                                LTVector & vFirePos)
+								LTVector & vFirePos)
 {
 	// Get the fire position / direction from the camera (so it lines
 	// up correctly with the crosshairs...
 
-    LTRotation rRot;
+	LTRotation rRot;
 	if (g_pGameClientShell->IsFirstPerson() &&
 		!g_pGameClientShell->IsUsingExternalCamera())
 	{
 		HOBJECT hCamera = g_pGameClientShell->GetCamera();
-        if (!hCamera) return LTFALSE;
+		if (!hCamera) return LTFALSE;
 
 		g_pLTClient->GetObjectPos(hCamera, &vFirePos);
 		g_pLTClient->GetObjectRotation(hCamera, &rRot);
-	    g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
+		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 	}
 	else
 	{
@@ -2730,22 +2545,19 @@ LTBOOL CWeaponModel::GetFireInfo(LTVector & vU, LTVector & vR, LTVector & vF,
 		g_pLTClient->GetRotationVectors(&rRot, &vU, &vR, &vF);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetLastSndFireType
 //
-//	ROUTINE:	CWeaponModel::GetLastSndFireType
-//
-//	PURPOSE:	Get the last fire snd type
-//
+//	PURPOSE: Get the last fire snd type
 // ----------------------------------------------------------------------- //
-
 uint8 CWeaponModel::GetLastSndFireType()
 {
 	// Determine the fire snd type...
 
-    uint8 nFireType = PSI_FIRE;
+	uint8 nFireType = PSI_FIRE;
 
 	if (m_bHaveSilencer)
 	{
@@ -2760,13 +2572,10 @@ uint8 CWeaponModel::GetLastSndFireType()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::ClientFire
 //
-//	ROUTINE:	CWeaponModel::ClientFire
-//
-//	PURPOSE:	Do client-side weapon firing
-//
+//	PURPOSE: Do client-side weapon firing
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::ClientFire(LTVector & vPath, LTVector & vFirePos)
 {
 	m_vPath		= vPath;
@@ -2800,20 +2609,17 @@ void CWeaponModel::ClientFire(LTVector & vPath, LTVector & vFirePos)
 
 		default :
 		{
-            g_pLTClient->CPrint("ERROR in CWeaponModel::ClientFire().  Invalid Ammo Type!");
+			g_pLTClient->CPrint("ERROR in CWeaponModel::ClientFire().  Invalid Ammo Type!");
 		}
 		break;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::DoProjectile
 //
-//	ROUTINE:	CWeaponModel::DoProjectile
-//
-//	PURPOSE:	Do client-side projectile
-//
+//	PURPOSE: Do client-side projectile
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::DoProjectile()
 {
 	// All projectiles are server-side (for now)...
@@ -2826,14 +2632,14 @@ void CWeaponModel::DoProjectile()
 
 	PROJECTILECREATESTRUCT projectile;
 
-    uint32 dwId;
-    g_pLTClient->GetLocalClientID(&dwId);
+	uint32 dwId;
+	g_pLTClient->GetLocalClientID(&dwId);
 
 	projectile.hServerObj = CreateServerObj();
 	projectile.nWeaponId  = m_nWeaponId;
 	projectile.nAmmoId	  = m_nAmmoId;
-    projectile.nShooterId = (uint8)dwId;
-    projectile.bLocal     = LTTRUE;
+	projectile.nShooterId = (uint8)dwId;
+	projectile.bLocal	 = LTTRUE;
 	projectile.bAltFire	  = !!(m_eLastFireType == FT_ALT_FIRE);
 
 
@@ -2842,24 +2648,21 @@ void CWeaponModel::DoProjectile()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CreateServerObj
 //
-//	ROUTINE:	CWeaponModel::CreateServerObj
-//
-//	PURPOSE:	Create a "server" object used by the projectile sfx
-//
+//	PURPOSE: Create a "server" object used by the projectile sfx
 // ----------------------------------------------------------------------- //
-
 HLOCALOBJ CWeaponModel::CreateServerObj()
 {
-    if (!m_hObject) return LTNULL;
+	if (!m_hObject) return LTNULL;
 
-    LTRotation rRot;
-    g_pLTClient->AlignRotation(&rRot, &m_vPath, LTNULL);
+	LTRotation rRot;
+	g_pLTClient->AlignRotation(&rRot, &m_vPath, LTNULL);
 
 	ObjectCreateStruct createStruct;
 	INIT_OBJECTCREATESTRUCT(createStruct);
 
-    uint32 dwFlags = FLAG_POINTCOLLIDE | FLAG_NOSLIDING | FLAG_TOUCH_NOTIFY;
+	uint32 dwFlags = FLAG_POINTCOLLIDE | FLAG_NOSLIDING | FLAG_TOUCH_NOTIFY;
 	dwFlags |= m_pAmmo->pProjectileFX ? m_pAmmo->pProjectileFX->dwObjectFlags : 0;
 
 	createStruct.m_ObjectType = OT_NORMAL;
@@ -2867,28 +2670,25 @@ HLOCALOBJ CWeaponModel::CreateServerObj()
 	createStruct.m_Pos = m_vFirePos;
 	createStruct.m_Rotation = rRot;
 
-    HLOCALOBJ hObj = g_pLTClient->CreateObject(&createStruct);
+	HLOCALOBJ hObj = g_pLTClient->CreateObject(&createStruct);
 
-    g_pLTClient->Physics()->SetForceIgnoreLimit(hObj, 0.0f);
+	g_pLTClient->Physics()->SetForceIgnoreLimit(hObj, 0.0f);
 
 	return hObj;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::DoGadget
 //
-//	ROUTINE:	CWeaponModel::DoGadget
-//
-//	PURPOSE:	Do client-side gadget
-//
+//	PURPOSE: Do client-side gadget
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::DoGadget()
 {
 	if (m_pAmmo->eInstDamageType == DT_GADGET_POODLE)
 	{
-        LTVector vImpactPoint(0, 0, 0);
-        HandleGadgetImpact(LTNULL, vImpactPoint);
+		LTVector vImpactPoint(0, 0, 0);
+		HandleGadgetImpact(LTNULL, vImpactPoint);
 	}
 	else
 	{
@@ -2905,13 +2705,10 @@ void CWeaponModel::DoGadget()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::DoVector
 //
-//	ROUTINE:	CWeaponModel::DoVector
-//
-//	PURPOSE:	Do client-side vector
-//
+//	PURPOSE: Do client-side vector
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::DoVector()
 {
 	if (!m_hObject) return;
@@ -2920,12 +2717,12 @@ void CWeaponModel::DoVector()
 	IntersectQuery qInfo;
 	qInfo.m_Flags = INTERSECT_OBJECTS | IGNORE_NONSOLID | INTERSECT_HPOLY;
 
-    LTVector vTemp;
+	LTVector vTemp;
 	VEC_MULSCALAR(vTemp, m_vPath, m_pWeapon->nRange);
 	VEC_ADD(m_vEndPos, m_vFirePos, vTemp);
 
-    HOBJECT hFilterList[] = {g_pLTClient->GetClientObject(),
-        g_pGameClientShell->GetMoveMgr()->GetObject(), LTNULL};
+	HOBJECT hFilterList[] = {g_pLTClient->GetClientObject(),
+		g_pGameClientShell->GetMoveMgr()->GetObject(), LTNULL};
 
 	qInfo.m_FilterFn  = ObjListFilterFn;
 	qInfo.m_pUserData = hFilterList;
@@ -2933,36 +2730,33 @@ void CWeaponModel::DoVector()
 	qInfo.m_From = m_vFirePos;
 	qInfo.m_To = m_vEndPos;
 
-    if (g_pLTClient->IntersectSegment(&qInfo, &iInfo))
+	if (g_pLTClient->IntersectSegment(&qInfo, &iInfo))
 	{
 		HandleVectorImpact(qInfo, iInfo);
 	}
 	else
 	{
-        LTVector vUp;
+		LTVector vUp;
 		vUp.Init(0.0f, 1.0f, 0.0f);
-        AddImpact(LTNULL, m_vEndPos, vUp, ST_SKY);
+		AddImpact(LTNULL, m_vEndPos, vUp, ST_SKY);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::AddImpact
 //
-//	ROUTINE:	CWeaponModel::AddImpact
-//
-//	PURPOSE:	Add the weapon impact
-//
+//	PURPOSE: Add the weapon impact
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::AddImpact(HLOCALOBJ hObj, LTVector & vImpactPoint,
-                             LTVector & vNormal, SurfaceType eType)
+							 LTVector & vNormal, SurfaceType eType)
 {
 	// Handle gadget special case...
 
 	if (m_pAmmo->eType == GADGET)
 	{
 		HandleGadgetImpact(hObj, vImpactPoint);
-		return;  // No impact fx for gadgets...
+		return;	// No impact fx for gadgets...
 	}
 
 	// See if we should do tracers or not...
@@ -2981,7 +2775,7 @@ void CWeaponModel::AddImpact(HLOCALOBJ hObj, LTVector & vImpactPoint,
 	}
 
 	::AddLocalImpactFX(hObj, m_vFlashPos, vImpactPoint, vNormal, eType,
-					   m_vPath, m_nWeaponId, m_nAmmoId, m_wIgnoreFX);
+					m_vPath, m_nWeaponId, m_nAmmoId, m_wIgnoreFX);
 
 	// If we do multiple calls to AddLocalImpact, make sure we only do some
 	// effects once :)
@@ -2991,13 +2785,10 @@ void CWeaponModel::AddImpact(HLOCALOBJ hObj, LTVector & vImpactPoint,
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::HandleVectorImpact
 //
-//	ROUTINE:	CProjectile::HandleVectorImpact
-//
-//	PURPOSE:	Handle a vector hitting something
-//
+//	PURPOSE: Handle a vector hitting something
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::HandleVectorImpact(IntersectQuery & qInfo, IntersectInfo & iInfo)
 {
 	// Get the surface type (check the poly first)...
@@ -3017,7 +2808,7 @@ void CWeaponModel::HandleVectorImpact(IntersectQuery & qInfo, IntersectInfo & iI
 	{
 		qInfo.m_FilterFn = AttackerLiquidFilterFn;
 
-        if (g_pLTClient->IntersectSegment(&qInfo, &iInfo))
+		if (g_pLTClient->IntersectSegment(&qInfo, &iInfo))
 		{
 			// Get the surface type (check the poly first)...
 
@@ -3035,30 +2826,27 @@ void CWeaponModel::HandleVectorImpact(IntersectQuery & qInfo, IntersectInfo & iI
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CProjectile::HandleGadgetImpact
 //
-//	ROUTINE:	CProjectile::HandleGadgetImpact
-//
-//	PURPOSE:	Handle a gadget vector hitting an object
-//
+//	PURPOSE: Handle a gadget vector hitting an object
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::HandleGadgetImpact(HOBJECT hObj, LTVector vImpactPoint)
 {
 	// If the gadget can activate this type of object, Tell the server
 	// that the gadget was activated on this object...
 
-    LTVector vU, vR, vF, vFirePos;
+	LTVector vU, vR, vF, vFirePos;
 	if (!GetFireInfo(vU, vR, vF, vFirePos)) return;
 
-    uint32 dwUserFlags = 0;
+	uint32 dwUserFlags = 0;
 	if (hObj)
 	{
-        g_pLTClient->GetObjectUserFlags(hObj, &dwUserFlags);
+		g_pLTClient->GetObjectUserFlags(hObj, &dwUserFlags);
 	}
 
 	DamageType eType = m_pAmmo->eInstDamageType;
 
-    LTBOOL bTestDamageType = LTTRUE;
+	LTBOOL bTestDamageType = LTTRUE;
 
 	// Make sure the object isn't a character object (gadget and character
 	// user flags overlap) unless this is a character specific gadget...
@@ -3072,23 +2860,23 @@ void CWeaponModel::HandleGadgetImpact(HOBJECT hObj, LTVector vImpactPoint)
 			// See if we're oriented correctly with the character
 			// to use the lighter...
 
-            LTVector vPos, vObjU, vObjR, vObjF;
+			LTVector vPos, vObjU, vObjR, vObjF;
 			vPos = GetModelPos();
 
-            LTVector vDir;
+			LTVector vDir;
 			vDir = vPos - vImpactPoint;
 			vDir.Norm();
 
-            LTRotation rRot;// = GetModelRot();
+			LTRotation rRot;// = GetModelRot();
 			g_pLTClient->GetObjectRotation(hObj, &rRot);
-            g_pLTClient->GetRotationVectors(&rRot, &vObjU, &vObjR, &vObjF);
+			g_pLTClient->GetRotationVectors(&rRot, &vObjU, &vObjR, &vObjF);
 
-            LTFLOAT fMul = VEC_DOT(vDir, vObjF);
+			LTFLOAT fMul = VEC_DOT(vDir, vObjF);
 			if (fMul <= 0.5f) return;
 
 			// Everything's cool...Light that baby...
 
-            bTestDamageType = LTFALSE;
+			bTestDamageType = LTFALSE;
 		}
 		else
 		{
@@ -3171,18 +2959,18 @@ void CWeaponModel::HandleGadgetImpact(HOBJECT hObj, LTVector vImpactPoint)
 	}
 
 
-    HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_WEAPON_FIRE);
-    g_pLTClient->WriteToMessageVector(hWrite, &m_vFlashPos);
-    g_pLTClient->WriteToMessageVector(hWrite, &vFirePos);
-    g_pLTClient->WriteToMessageVector(hWrite, &vF);
-    g_pLTClient->WriteToMessageByte(hWrite, 0);
-    g_pLTClient->WriteToMessageByte(hWrite, m_nWeaponId);
-    g_pLTClient->WriteToMessageByte(hWrite, m_nAmmoId);
-    g_pLTClient->WriteToMessageByte(hWrite, (LTBOOL) (m_eLastFireType == FT_ALT_FIRE));
-    g_pLTClient->WriteToMessageByte(hWrite, (uint8) (m_fMovementPerturb * 255.0f));
+	HMESSAGEWRITE hWrite = g_pLTClient->StartMessage(MID_WEAPON_FIRE);
+	g_pLTClient->WriteToMessageVector(hWrite, &m_vFlashPos);
+	g_pLTClient->WriteToMessageVector(hWrite, &vFirePos);
+	g_pLTClient->WriteToMessageVector(hWrite, &vF);
+	g_pLTClient->WriteToMessageByte(hWrite, 0);
+	g_pLTClient->WriteToMessageByte(hWrite, m_nWeaponId);
+	g_pLTClient->WriteToMessageByte(hWrite, m_nAmmoId);
+	g_pLTClient->WriteToMessageByte(hWrite, (LTBOOL) (m_eLastFireType == FT_ALT_FIRE));
+	g_pLTClient->WriteToMessageByte(hWrite, (uint8) (m_fMovementPerturb * 255.0f));
 	g_pLTClient->WriteToMessageDWord(hWrite, (int) (g_pLTClient->GetTime() * 1000.0f));
-    g_pLTClient->WriteToMessageObject(hWrite, hObj);
-    g_pLTClient->EndMessage2(hWrite, MESSAGE_NAGGLEFAST);
+	g_pLTClient->WriteToMessageObject(hWrite, hObj);
+	g_pLTClient->EndMessage2(hWrite, MESSAGE_NAGGLEFAST);
 
 
 	// Do any special processing...
@@ -3192,27 +2980,24 @@ void CWeaponModel::HandleGadgetImpact(HOBJECT hObj, LTVector vImpactPoint)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CanChangeToWeapon()
 //
-//	ROUTINE:	CWeaponModel::CanChangeToWeapon()
-//
-//	PURPOSE:	See if we can change to this weapon
-//
+//	PURPOSE: See if we can change to this weapon
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::CanChangeToWeapon(uint8 nCommandId)
 {
 	if (g_pGameClientShell->IsPlayerDead() ||
-        g_pGameClientShell->IsSpectatorMode()) return LTFALSE;
+		g_pGameClientShell->IsSpectatorMode()) return LTFALSE;
 
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
-    if (!pStats) return LTFALSE;
+	if (!pStats) return LTFALSE;
 
-    uint8 nWeaponId = g_pWeaponMgr->GetWeaponId(nCommandId);
+	uint8 nWeaponId = g_pWeaponMgr->GetWeaponId(nCommandId);
 
 
 	// Make sure this is a valid weapon for us to switch to...
 
-    if (!pStats->HaveWeapon(nWeaponId)) return LTFALSE;
+	if (!pStats->HaveWeapon(nWeaponId)) return LTFALSE;
 
 
 
@@ -3221,32 +3006,29 @@ LTBOOL CWeaponModel::CanChangeToWeapon(uint8 nCommandId)
 	if (IsOutOfAmmo(nWeaponId))
 	{
 		g_pInterfaceMgr->UpdatePlayerStats(IC_OUTOFAMMO_ID, nWeaponId, 0, 0.0f);
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::IsOutOfAmmo()
 //
-//	ROUTINE:	CWeaponModel::IsOutOfAmmo()
-//
-//	PURPOSE:	Do we have any ammo for this weapon
-//
+//	PURPOSE: Do we have any ammo for this weapon
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::IsOutOfAmmo(uint8 nWeaponId)
 {
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(nWeaponId);
-    if (!pWeapon) return LTTRUE;
+	if (!pWeapon) return LTTRUE;
 
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
-    if (!pStats) return LTTRUE;
+	if (!pStats) return LTTRUE;
 
 	if (pWeapon->bInfiniteAmmo)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 	else
 	{
@@ -3254,42 +3036,39 @@ LTBOOL CWeaponModel::IsOutOfAmmo(uint8 nWeaponId)
 		{
 			if (pStats->GetAmmoCount(pWeapon->aAmmoTypes[i]) > 0)
 			{
-                return LTFALSE;
+				return LTFALSE;
 			}
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetFirstAvailableAmmoType()
 //
-//	ROUTINE:	CWeaponModel::GetFirstAvailableAmmoType()
-//
-//	PURPOSE:	Get the fire available ammo type for this weapon.
-//
+//	PURPOSE: Get the fire available ammo type for this weapon.
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::GetFirstAvailableAmmoType(uint8 nWeaponId, int & nAmmoType)
 {
 	nAmmoType = WMGR_INVALID_ID;
 
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(nWeaponId);
-    if (!pWeapon) return LTFALSE;
+	if (!pWeapon) return LTFALSE;
 
 	// If we don't always have ammo, return an ammo type that we have (if
 	// possible)...
 
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
-    if (!pStats) return LTFALSE;
+	if (!pStats) return LTFALSE;
 
 	for (int i=0; i < pWeapon->nNumAmmoTypes; i++)
 	{
 		if (pStats->GetAmmoCount(pWeapon->aAmmoTypes[i]) > 0)
 		{
 			nAmmoType = pWeapon->aAmmoTypes[i];
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
@@ -3299,27 +3078,24 @@ LTBOOL CWeaponModel::GetFirstAvailableAmmoType(uint8 nWeaponId, int & nAmmoType)
 	if (pWeapon->bInfiniteAmmo)
 	{
 		nAmmoType = pWeapon->nDefaultAmmoType;
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetBestAvailableAmmoType()
 //
-//	ROUTINE:	CWeaponModel::GetBestAvailableAmmoType()
-//
-//	PURPOSE:	Get the best available ammo type for this weapon.
-//
+//	PURPOSE: Get the best available ammo type for this weapon.
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::GetBestAvailableAmmoType(uint8 nWeaponId, int & nAmmoType)
 {
 	nAmmoType = WMGR_INVALID_ID;
 
 	WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(nWeaponId);
-    if (!pWeapon) return LTFALSE;
+	if (!pWeapon) return LTFALSE;
 
 	// If this is a gadget, return the first ammo type...
 
@@ -3333,7 +3109,7 @@ LTBOOL CWeaponModel::GetBestAvailableAmmoType(uint8 nWeaponId, int & nAmmoType)
 	// possible)...
 
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
-    if (!pStats) return LTFALSE;
+	if (!pStats) return LTFALSE;
 
 	int nAmmoBest = WMGR_INVALID_ID;
 	LTFLOAT fMaxPriority = -1.0f;
@@ -3364,29 +3140,26 @@ LTBOOL CWeaponModel::GetBestAvailableAmmoType(uint8 nWeaponId, int & nAmmoType)
 	if (pWeapon->bInfiniteAmmo)
 	{
 		nAmmoType = pWeapon->nDefaultAmmoType;
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 	nAmmoType = WMGR_INVALID_ID;
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::ChangeWeapon()
 //
-//	ROUTINE:	CWeaponModel::ChangeWeapon()
-//
-//	PURPOSE:	Change to a different weapon
-//
+//	PURPOSE: Change to a different weapon
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::ChangeWeapon(uint8 nCommandId, LTBOOL bCanDeselect, LTBOOL bDontCloseChooser)
 {
 	if (!CanChangeToWeapon(nCommandId)) return;
 
 	// Don't do anything if we are trying to change to the same weapon...
 
-    LTBOOL bDeselectWeapon = (m_nWeaponId != WMGR_INVALID_ID);
-    uint8 nWeaponId = g_pWeaponMgr->GetWeaponId(nCommandId);
+	LTBOOL bDeselectWeapon = (m_nWeaponId != WMGR_INVALID_ID);
+	uint8 nWeaponId = g_pWeaponMgr->GetWeaponId(nCommandId);
 
 	if (nWeaponId == m_nWeaponId)
 	{
@@ -3417,13 +3190,10 @@ void CWeaponModel::ChangeWeapon(uint8 nCommandId, LTBOOL bCanDeselect, LTBOOL bD
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::HandleInternalWeaponChange()
 //
-//	ROUTINE:	CWeaponModel::HandleInternalWeaponChange()
-//
-//	PURPOSE:	Change to a different weapon
-//
+//	PURPOSE: Change to a different weapon
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::HandleInternalWeaponChange(uint8 nWeaponId)
 {
 	if (g_pGameClientShell->IsPlayerDead() ||
@@ -3436,15 +3206,12 @@ void CWeaponModel::HandleInternalWeaponChange(uint8 nWeaponId)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::DoWeaponChange()
 //
-//	ROUTINE:	CWeaponModel::DoWeaponChange()
-//
-//	PURPOSE:	Do the actual weapon change.  This isn't part of
+//	PURPOSE: Do the actual weapon change.  This isn't part of
 //				HandleInternalWeaponChange() so that it can be called when
 //				loading the player.
-//
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::DoWeaponChange(uint8 nWeaponId)
 {
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
@@ -3464,13 +3231,10 @@ void CWeaponModel::DoWeaponChange(uint8 nWeaponId)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::DoSpecialWeaponChange()
 //
-//	ROUTINE:	CWeaponModel::DoSpecialWeaponChange()
-//
-//	PURPOSE:	Do special case weapon change processing...
-//
+//	PURPOSE: Do special case weapon change processing...
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::DoSpecialWeaponChange()
 {
 	// Currently we need to check for gadget special cases...
@@ -3480,19 +3244,16 @@ void CWeaponModel::DoSpecialWeaponChange()
 		// Show the necessary pieces (so they aren't hidden on the new
 		// weapon model)...
 
-        SpecialShowPieces(LTTRUE, LTTRUE);
+		SpecialShowPieces(LTTRUE, LTTRUE);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::AutoSelectWeapon()
 //
-//	ROUTINE:	CWeaponModel::AutoSelectWeapon()
-//
-//	PURPOSE:	Determine what weapon to switch to, and switch
-//
+//	PURPOSE: Determine what weapon to switch to, and switch
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::AutoSelectWeapon()
 {
 	// Try and auto-select a new ammo type before auto selecting a new weapon...
@@ -3507,7 +3268,7 @@ void CWeaponModel::AutoSelectWeapon()
 
 		// Reload our clip...
 
-        ReloadClip(LTTRUE);
+		ReloadClip(LTTRUE);
 		return;
 	}
 
@@ -3518,14 +3279,11 @@ void CWeaponModel::AutoSelectWeapon()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::ChangeToNextRealWeapon()
 //
-//	ROUTINE:	CWeaponModel::ChangeToNextRealWeapon()
-//
-//	PURPOSE:	Change to the next weapon/gadget that does damage.
+//	PURPOSE: Change to the next weapon/gadget that does damage.
 //				(used by the auto weapon switching)
-//
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::ChangeToNextRealWeapon()
 {
 	if (!m_pWeapon) return;
@@ -3594,13 +3352,10 @@ void CWeaponModel::ChangeToNextRealWeapon()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::IsGadgetAmmo()
 //
-//	ROUTINE:	CWeaponModel::IsGadgetAmmo()
-//
-//	PURPOSE:	Is the ammo used by a gadget
-//
+//	PURPOSE: Is the ammo used by a gadget
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::IsGadgetAmmo(AMMO* pAmmo)
 {
 	if (!pAmmo) return LTFALSE;
@@ -3616,13 +3371,10 @@ LTBOOL CWeaponModel::IsGadgetAmmo(AMMO* pAmmo)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::PrevWeapon()
 //
-//	ROUTINE:	CWeaponModel::PrevWeapon()
-//
-//	PURPOSE:	Determine what the previous weapon is
-//
+//	PURPOSE: Determine what the previous weapon is
 // ----------------------------------------------------------------------- //
-
 uint8 CWeaponModel::PrevWeapon(uint8 nCurrWeaponId)
 {
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
@@ -3654,18 +3406,15 @@ uint8 CWeaponModel::PrevWeapon(uint8 nCurrWeaponId)
 		nWeaponIndex = g_pWeaponMgr->GetWeaponId(nWeapon);
 	}
 
-    return (uint8)g_pWeaponMgr->GetWeaponId(nWeapon);
+	return (uint8)g_pWeaponMgr->GetWeaponId(nWeapon);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::NextWeapon()
 //
-//	ROUTINE:	CWeaponModel::NextWeapon()
-//
-//	PURPOSE:	Determine what the next weapon is
-//
+//	PURPOSE: Determine what the next weapon is
 // ----------------------------------------------------------------------- //
-
 uint8 CWeaponModel::NextWeapon(uint8 nCurrWeaponId)
 {
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
@@ -3697,18 +3446,15 @@ uint8 CWeaponModel::NextWeapon(uint8 nCurrWeaponId)
 		nWeaponIndex = g_pWeaponMgr->GetWeaponId(nWeapon);
 	}
 
-    return (uint8)g_pWeaponMgr->GetWeaponId(nWeapon);
+	return (uint8)g_pWeaponMgr->GetWeaponId(nWeapon);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::NextAmmo()
 //
-//	ROUTINE:	CWeaponModel::NextAmmo()
-//
-//	PURPOSE:	Determine the next ammo type
-//
+//	PURPOSE: Determine the next ammo type
 // ----------------------------------------------------------------------- //
-
 uint8 CWeaponModel::NextAmmo(uint8 nCurrAmmoId)
 {
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
@@ -3753,13 +3499,10 @@ uint8 CWeaponModel::NextAmmo(uint8 nCurrAmmoId)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::ChangeAmmo()
 //
-//	ROUTINE:	CWeaponModel::ChangeAmmo()
-//
-//	PURPOSE:	Change to the specified ammo type
-//
+//	PURPOSE: Change to the specified ammo type
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::ChangeAmmo(uint8 nNewAmmoId, LTBOOL bForce)
 {
 	// Update the player's stats...
@@ -3777,7 +3520,7 @@ void CWeaponModel::ChangeAmmo(uint8 nNewAmmoId, LTBOOL bForce)
 			break;
 		}
 	}
-	if (i == m_pWeapon->nNumAmmoTypes) return;  // Not a valid ammo type
+	if (i == m_pWeapon->nNumAmmoTypes) return;	// Not a valid ammo type
 
 
 	if (g_pWeaponMgr->IsValidAmmoType(nNewAmmoId) && nNewAmmoId != m_nAmmoId)
@@ -3799,22 +3542,19 @@ void CWeaponModel::ChangeAmmo(uint8 nNewAmmoId, LTBOOL bForce)
 		{
 			// Do normal reload...
 
-            ReloadClip(LTTRUE, -1, LTTRUE);
+			ReloadClip(LTTRUE, -1, LTTRUE);
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetWeaponOffset()
 //
-//	ROUTINE:	CWeaponModel::GetWeaponOffset()
-//
-//	PURPOSE:	Set the weapon offset
-//
+//	PURPOSE: Set the weapon offset
 // ----------------------------------------------------------------------- //
-
 LTVector CWeaponModel::GetWeaponOffset()
 {
-    LTVector vRet;
+	LTVector vRet;
 	vRet.Init();
 
 	if (!m_pWeapon) return vRet;
@@ -3823,13 +3563,10 @@ LTVector CWeaponModel::GetWeaponOffset()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::SetWeaponOffset()
 //
-//	ROUTINE:	CWeaponModel::SetWeaponOffset()
-//
-//	PURPOSE:	Set the weapon offset
-//
+//	PURPOSE: Set the weapon offset
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::SetWeaponOffset(LTVector vPos)
 {
 	WEAPON* pWeaponData = g_pWeaponMgr->GetWeapon(m_nWeaponId);
@@ -3839,16 +3576,13 @@ void CWeaponModel::SetWeaponOffset(LTVector vPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetMuzzleOffset()
 //
-//	ROUTINE:	CWeaponModel::GetMuzzleOffset()
-//
-//	PURPOSE:	Set the weapon muzzle offset
-//
+//	PURPOSE: Set the weapon muzzle offset
 // ----------------------------------------------------------------------- //
-
 LTVector CWeaponModel::GetMuzzleOffset()
 {
-    LTVector vRet;
+	LTVector vRet;
 	vRet.Init();
 
 	if (!m_pWeapon) return vRet;
@@ -3857,13 +3591,10 @@ LTVector CWeaponModel::GetMuzzleOffset()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::SetMuzzleOffset()
 //
-//	ROUTINE:	CWeaponModel::SetMuzzleOffset()
-//
-//	PURPOSE:	Set the muzzle offset
-//
+//	PURPOSE: Set the muzzle offset
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::SetMuzzleOffset(LTVector vPos)
 {
 	if (!m_pWeapon) return;
@@ -3872,21 +3603,18 @@ void CWeaponModel::SetMuzzleOffset(LTVector vPos)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetShellEjectPos()
 //
-//	ROUTINE:	CWeaponModel::GetShellEjectPos()
-//
-//	PURPOSE:	Get the shell eject pos
-//
+//	PURPOSE: Get the shell eject pos
 // ----------------------------------------------------------------------- //
-
 LTVector CWeaponModel::GetShellEjectPos(LTVector & vOriginalPos)
 {
-    LTVector vPos = vOriginalPos;
+	LTVector vPos = vOriginalPos;
 
 	if (m_hObject && m_hBreachSocket != INVALID_MODEL_SOCKET)
 	{
 		LTransform transform;
-        if (g_pModelLT->GetSocketTransform(m_hObject, m_hBreachSocket, transform, LTTRUE) == LT_OK)
+		if (g_pModelLT->GetSocketTransform(m_hObject, m_hBreachSocket, transform, LTTRUE) == LT_OK)
 		{
 			g_pTransLT->GetPos(transform, vPos);
 		}
@@ -3896,26 +3624,20 @@ LTVector CWeaponModel::GetShellEjectPos(LTVector & vOriginalPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetNextIdleTime()
 //
-//	ROUTINE:	CWeaponModel::GetNextIdleTime()
-//
-//	PURPOSE:	Determine the next time we should play an idle animation
-//
+//	PURPOSE: Determine the next time we should play an idle animation
 // ----------------------------------------------------------------------- //
-
 LTFLOAT CWeaponModel::GetNextIdleTime()
 {
-    return g_pLTClient->GetTime() + GetRandom(WEAPON_MIN_IDLE_TIME, WEAPON_MAX_IDLE_TIME);
+	return g_pLTClient->GetTime() + GetRandom(WEAPON_MIN_IDLE_TIME, WEAPON_MAX_IDLE_TIME);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetFireAni()
 //
-//	ROUTINE:	CWeaponModel::GetFireAni()
-//
-//	PURPOSE:	Get the fire animation based on the fire type
-//
+//	PURPOSE: Get the fire animation based on the fire type
 // ----------------------------------------------------------------------- //
-
 uint32 CWeaponModel::GetFireAni(FireType eFireType)
 {
 	int nNumValid = 0;
@@ -3923,7 +3645,7 @@ uint32 CWeaponModel::GetFireAni(FireType eFireType)
 	if ((eFireType == FT_ALT_FIRE && !CanUseAltFireAnis()) ||
 		(m_bUsingAltFireAnis && eFireType == FT_NORMAL_FIRE))
 	{
-        uint32 dwValidAltFireAnis[WM_MAX_ALTFIRE_ANIS];
+		uint32 dwValidAltFireAnis[WM_MAX_ALTFIRE_ANIS];
 
 		for (int i=0; i < WM_MAX_ALTFIRE_ANIS; i++)
 		{
@@ -3941,7 +3663,7 @@ uint32 CWeaponModel::GetFireAni(FireType eFireType)
 	}
 	else if (eFireType == FT_NORMAL_FIRE)
 	{
-        uint32 dwValidFireAnis[WM_MAX_FIRE_ANIS];
+		uint32 dwValidFireAnis[WM_MAX_FIRE_ANIS];
 
 		for (int i=0; i < WM_MAX_FIRE_ANIS; i++)
 		{
@@ -3962,20 +3684,17 @@ uint32 CWeaponModel::GetFireAni(FireType eFireType)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetIdleAni()
 //
-//	ROUTINE:	CWeaponModel::GetIdleAni()
-//
-//	PURPOSE:	Get an idle animation
-//
+//	PURPOSE: Get an idle animation
 // ----------------------------------------------------------------------- //
-
 uint32 CWeaponModel::GetIdleAni()
 {
 	int nNumValid = 0;
 
 	if (m_bUsingAltFireAnis)
 	{
-        uint32 dwValidAltIdleAnis[WM_MAX_ALTIDLE_ANIS];
+		uint32 dwValidAltIdleAnis[WM_MAX_ALTIDLE_ANIS];
 
 		// Note that we skip the first ani, this is reserved for
 		// the subtle idle ani...
@@ -3996,7 +3715,7 @@ uint32 CWeaponModel::GetIdleAni()
 	}
 	else  // Normal idle anis
 	{
-        uint32 dwValidIdleAnis[WM_MAX_IDLE_ANIS];
+		uint32 dwValidIdleAnis[WM_MAX_IDLE_ANIS];
 
 		// Note that we skip the first ani, this is reserved for
 		// the subtle idle ani...
@@ -4021,55 +3740,43 @@ uint32 CWeaponModel::GetIdleAni()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetSubtleIdleAni()
 //
-//	ROUTINE:	CWeaponModel::GetSubtleIdleAni()
-//
-//	PURPOSE:	Get a sutble idle animation
-//
+//	PURPOSE: Get a sutble idle animation
 // ----------------------------------------------------------------------- //
-
 uint32 CWeaponModel::GetSubtleIdleAni()
 {
 	return m_bUsingAltFireAnis ? m_nAltIdleAnis[0] : m_nIdleAnis[0];
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetSelectAni()
 //
-//	ROUTINE:	CWeaponModel::GetSelectAni()
-//
-//	PURPOSE:	Get a select animation
-//
+//	PURPOSE: Get a select animation
 // ----------------------------------------------------------------------- //
-
 uint32 CWeaponModel::GetSelectAni()
 {
 	return m_bUsingAltFireAnis ? m_nAltSelectAni : m_nSelectAni;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetReloadAni()
 //
-//	ROUTINE:	CWeaponModel::GetReloadAni()
-//
-//	PURPOSE:	Get a reload animation
-//
+//	PURPOSE: Get a reload animation
 // ----------------------------------------------------------------------- //
-
 uint32 CWeaponModel::GetReloadAni()
 {
 	return m_bUsingAltFireAnis ? m_nAltReloadAni : m_nReloadAni;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::GetDeselectAni()
 //
-//	ROUTINE:	CWeaponModel::GetDeselectAni()
-//
-//	PURPOSE:	Get a deselect animation
-//
+//	PURPOSE: Get a deselect animation
 // ----------------------------------------------------------------------- //
-
 uint32 CWeaponModel::GetDeselectAni()
 {
-    uint32 dwAni = INVALID_ANI;
+	uint32 dwAni = INVALID_ANI;
 
 
 	if (m_bUsingAltFireAnis)
@@ -4096,23 +3803,20 @@ uint32 CWeaponModel::GetDeselectAni()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::IsFireAni()
 //
-//	ROUTINE:	CWeaponModel::IsFireAni()
-//
-//	PURPOSE:	Is the passed in animation a fire animation
-//
+//	PURPOSE: Is the passed in animation a fire animation
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::IsFireAni(uint32 dwAni)
 {
-    if (dwAni == INVALID_ANI) return LTFALSE;
+	if (dwAni == INVALID_ANI) return LTFALSE;
 
-    int i;
-    for (i=0; i < WM_MAX_FIRE_ANIS; i++)
+	int i;
+	for (i=0; i < WM_MAX_FIRE_ANIS; i++)
 	{
 		if (m_nFireAnis[i] == dwAni)
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
@@ -4120,33 +3824,30 @@ LTBOOL CWeaponModel::IsFireAni(uint32 dwAni)
 	{
 		if (m_nAltFireAnis[i] == dwAni)
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::IsIdleAni()
 //
-//	ROUTINE:	CWeaponModel::IsIdleAni()
-//
-//	PURPOSE:	Is the passed in animation an idle animation (NOTE this
-//              will return LTFALSE if the passed in animation is a subtle
+//	PURPOSE: Is the passed in animation an idle animation (NOTE this
+//			  will return LTFALSE if the passed in animation is a subtle
 //				idle animation).
-//
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::IsIdleAni(uint32 dwAni)
 {
-    if (dwAni == INVALID_ANI) return LTFALSE;
+	if (dwAni == INVALID_ANI) return LTFALSE;
 
-    int i;
-    for (i=1; i < WM_MAX_IDLE_ANIS; i++)
+	int i;
+	for (i=1; i < WM_MAX_IDLE_ANIS; i++)
 	{
 		if (m_nIdleAnis[i] == dwAni)
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
@@ -4154,96 +3855,81 @@ LTBOOL CWeaponModel::IsIdleAni(uint32 dwAni)
 	{
 		if (m_nAltIdleAnis[i] == dwAni)
 		{
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::IsDeselectAni()
 //
-//	ROUTINE:	CWeaponModel::IsDeselectAni()
-//
-//	PURPOSE:	Is this a valid deselect ani
-//
+//	PURPOSE: Is this a valid deselect ani
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::IsDeselectAni(uint32 dwAni)
 {
-    if (dwAni == INVALID_ANI) return LTFALSE;
+	if (dwAni == INVALID_ANI) return LTFALSE;
 
 	if (dwAni == m_nDeselectAni ||
 		dwAni == m_nAltDeselectAni ||
 		dwAni == m_nAltDeselect2Ani)
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::IsSelectAni()
 //
-//	ROUTINE:	CWeaponModel::IsSelectAni()
-//
-//	PURPOSE:	Is this a valid Select ani
-//
+//	PURPOSE: Is this a valid Select ani
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::IsSelectAni(uint32 dwAni)
 {
-    if (dwAni == INVALID_ANI) return LTFALSE;
+	if (dwAni == INVALID_ANI) return LTFALSE;
 
 	if (dwAni == m_nSelectAni || dwAni == m_nAltSelectAni)
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::IsReloadAni()
 //
-//	ROUTINE:	CWeaponModel::IsReloadAni()
-//
-//	PURPOSE:	Is this a valid Reload ani
-//
+//	PURPOSE: Is this a valid Reload ani
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::IsReloadAni(uint32 dwAni)
 {
-    if (dwAni == INVALID_ANI) return LTFALSE;
+	if (dwAni == INVALID_ANI) return LTFALSE;
 
 	if (dwAni == m_nReloadAni || dwAni == m_nAltReloadAni)
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::CanUseAltFireAnis()
 //
-//	ROUTINE:	CWeaponModel::CanUseAltFireAnis()
-//
-//	PURPOSE:	Can we use alt-fire anis?
-//
+//	PURPOSE: Can we use alt-fire anis?
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::CanUseAltFireAnis()
 {
 	return (m_nAltSelectAni != INVALID_ANI);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::HandleFireKeyDown()
 //
-//	ROUTINE:	CWeaponModel::HandleFireKeyDown()
-//
-//	PURPOSE:	Handle fire key down
-//
+//	PURPOSE: Handle fire key down
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::HandleFireKeyDown()
 {
 	// Only handle alt-fire case on weapons that have special
@@ -4254,7 +3940,7 @@ void CWeaponModel::HandleFireKeyDown()
 	// If we aren't playing the select, deselect, or fire ani, it is
 	// okay to toggle using Alt-Fire Anis on/off...
 
-    uint32 dwAni = g_pLTClient->GetModelAnimation(m_hObject);
+	uint32 dwAni = g_pLTClient->GetModelAnimation(m_hObject);
 
 	if (IsSelectAni(dwAni) || IsDeselectAni(dwAni) || IsFireAni(dwAni))
 	{
@@ -4298,25 +3984,19 @@ void CWeaponModel::HandleFireKeyDown()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::HandleFireKeyUp()
 //
-//	ROUTINE:	CWeaponModel::HandleFireKeyUp()
-//
-//	PURPOSE:	Handle fire key up
-//
+//	PURPOSE: Handle fire key up
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::HandleFireKeyUp()
 {
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::SetState()
 //
-//	ROUTINE:	CWeaponModel::SetState()
-//
-//	PURPOSE:	Set our m_eState data member
-//
+//	PURPOSE: Set our m_eState data member
 // ----------------------------------------------------------------------- //
-
 WeaponState CWeaponModel::SetState(WeaponState eNewState)
 {
 	WeaponState eOldState = m_eState;
@@ -4334,13 +4014,10 @@ WeaponState CWeaponModel::SetState(WeaponState eNewState)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::UpdateMovementPerturb()
 //
-//	ROUTINE:	CWeaponModel::UpdateMovementPerturb()
-//
-//	PURPOSE:	Update our weapon perturb value
-//
+//	PURPOSE: Update our weapon perturb value
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::UpdateMovementPerturb()
 {
 	// Make sure the weapon has perturb...
@@ -4351,8 +4028,8 @@ void CWeaponModel::UpdateMovementPerturb()
 		return;
 	}
 
-    LTFLOAT fDelta = g_pGameClientShell->GetFrameTime();
-    LTFLOAT fMove = g_pGameClientShell->GetMoveMgr()->GetMovementPercent();
+	LTFLOAT fDelta = g_pGameClientShell->GetFrameTime();
+	LTFLOAT fMove = g_pGameClientShell->GetMoveMgr()->GetMovementPercent();
 	if (fMove > 1.0f)
 	{
 		fMove = 1.0f;
@@ -4370,18 +4047,18 @@ void CWeaponModel::UpdateMovementPerturb()
 	}
 
 
-    LTVector vPlayerRot;
+	LTVector vPlayerRot;
 	g_pGameClientShell->GetPlayerPitchYawRoll(vPlayerRot);
-    LTFLOAT fPitchDiff = (LTFLOAT)fabs(vPlayerRot.x - m_fLastPitch);
-    LTFLOAT fYawDiff = (LTFLOAT)fabs(vPlayerRot.y - m_fLastYaw);
+	LTFLOAT fPitchDiff = (LTFLOAT)fabs(vPlayerRot.x - m_fLastPitch);
+	LTFLOAT fYawDiff = (LTFLOAT)fabs(vPlayerRot.y - m_fLastYaw);
 	m_fLastPitch = vPlayerRot.x;
 	m_fLastYaw = vPlayerRot.y;
-    LTFLOAT fRot = g_vtPerturbRotationEffect.GetFloat() * (fPitchDiff + fYawDiff) / (2.0f + g_vtFastTurnRate.GetFloat() * fDelta);
+	LTFLOAT fRot = g_vtPerturbRotationEffect.GetFloat() * (fPitchDiff + fYawDiff) / (2.0f + g_vtFastTurnRate.GetFloat() * fDelta);
 	if (fRot > 1.0f)
 		fRot = 1.0f;
 
-    LTFLOAT fAdj = Max(fRot,fMove);
-    LTFLOAT fDiff = (LTFLOAT)fabs(fAdj - m_fMovementPerturb);
+	LTFLOAT fAdj = Max(fRot,fMove);
+	LTFLOAT fDiff = (LTFLOAT)fabs(fAdj - m_fMovementPerturb);
 	if (fAdj >  m_fMovementPerturb)
 	{
 		fDelta *= g_vtPerturbIncreaseSpeed.GetFloat();
@@ -4397,13 +4074,10 @@ void CWeaponModel::UpdateMovementPerturb()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::ToggleHolster()
 //
-//	ROUTINE:	CWeaponModel::ToggleHolster()
-//
-//	PURPOSE:	Holster or unholster our weapon
-//
+//	PURPOSE: Holster or unholster our weapon
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::ToggleHolster(LTBOOL bPlayDeselect)
 {
 	// if weapon isn't hand
@@ -4422,13 +4096,10 @@ void CWeaponModel::ToggleHolster(LTBOOL bPlayDeselect)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::SetHolster()
 //
-//	ROUTINE:	CWeaponModel::SetHolster()
-//
-//	PURPOSE:	Set what weapon is in our holster
-//
+//	PURPOSE: Set what weapon is in our holster
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::SetHolster(uint8 nWeaponId)
 {
 	if (!g_pWeaponMgr->IsValidWeapon(nWeaponId)) return;
@@ -4437,13 +4108,10 @@ void CWeaponModel::SetHolster(uint8 nWeaponId)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::MeleeWeapon()
 //
-//	ROUTINE:	CWeaponModel::MeleeWeapon()
-//
-//	PURPOSE:	Determine what the current melee weapon is
-//
+//	PURPOSE: Determine what the current melee weapon is
 // ----------------------------------------------------------------------- //
-
 uint8 CWeaponModel::MeleeWeapon()
 {
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
@@ -4467,18 +4135,15 @@ uint8 CWeaponModel::MeleeWeapon()
 		nWeapon++;
 	}
 
-    return (uint8)g_pWeaponMgr->GetWeaponId(nMelee);
+	return (uint8)g_pWeaponMgr->GetWeaponId(nMelee);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::HandleZipCordFire()
 //
-//	ROUTINE:	CWeaponModel::HandleZipCordFire()
-//
-//	PURPOSE:	Handle the zip-cord firing...
-//
+//	PURPOSE: Handle the zip-cord firing...
 // ----------------------------------------------------------------------- //
-
 LTBOOL CWeaponModel::HandleZipCordFire()
 {
 	CPlayerStats* pStats = g_pGameClientShell->GetPlayerStats();
@@ -4517,14 +4182,11 @@ LTBOOL CWeaponModel::HandleZipCordFire()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CWeaponModel::SetupModel
 //
-//	ROUTINE:	CWeaponModel::SetupModel
-//
-//	PURPOSE:	Make sure the player-view model is using the correct
+//	PURPOSE: Make sure the player-view model is using the correct
 //				textures (based on the player's style).
-//
 // ----------------------------------------------------------------------- //
-
 void CWeaponModel::SetupModel()
 {
 	if (!m_hObject || !m_pWeapon) return;
@@ -4535,7 +4197,7 @@ void CWeaponModel::SetupModel()
 	SAFE_STRCPY(createStruct.m_Filename, m_pWeapon->szPVModel);
 	SAFE_STRCPY(createStruct.m_SkinNames[0], m_pWeapon->szPVSkin);
 
-    // Figure out what hand skin to use...
+	// Figure out what hand skin to use...
 
 	ModelStyle eModelStyle = eModelStyleDefault;
 	CCharacterFX* pCharFX = g_pGameClientShell->GetMoveMgr()->GetCharacterFX();
@@ -4579,5 +4241,5 @@ void CWeaponModel::SetupModel()
 
 	// Set the filenames...
 
-    g_pLTClient->Common()->SetObjectFilenames(m_hObject, &createStruct);
+	g_pLTClient->Common()->SetObjectFilenames(m_hObject, &createStruct);
 }

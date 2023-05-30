@@ -6,11 +6,9 @@
 #endif
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMultiWnd::InitFromBitmap
 //
-//	ROUTINE:	CLTMultiWnd::InitFromBitmap
-//
-//	PURPOSE:	Initialization
-//
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
 BOOL CLTMultiWnd::InitFromBitmap(int nControlID, char* szWndName, CLTWnd* pParentWnd,
 						CStringArray *pcollBitmaps, int xPos, int yPos, DWORD dwFlags,
@@ -39,11 +37,9 @@ BOOL CLTMultiWnd::InitFromBitmap(int nControlID, char* szWndName, CLTWnd* pParen
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMultiWnd::Init
 //
-//	ROUTINE:	CLTMultiWnd::Init
-//
-//	PURPOSE:	Initialization
-//
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
 BOOL CLTMultiWnd::Init(int nControlID, char* szWndName, CLTWnd* pParentWnd,
 						CLTSurfaceArray *pcollSurfs, int xPos, int yPos, DWORD dwFlags, DWORD dwState)
@@ -75,11 +71,9 @@ BOOL CLTMultiWnd::Init(int nControlID, char* szWndName, CLTWnd* pParentWnd,
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMultiWnd::FreeAllSurfaces
 //
-//	ROUTINE:	CLTMultiWnd::FreeAllSurfaces
-//
-//	PURPOSE:	Frees all surfaces
-//
+//	PURPOSE: Frees all surfaces
 // ----------------------------------------------------------------------- //
 void CLTMultiWnd::FreeAllSurfaces(CLTSurfaceArray* pcollSurfs)
 {
@@ -90,32 +84,30 @@ void CLTMultiWnd::FreeAllSurfaces(CLTSurfaceArray* pcollSurfs)
 		for (i = 0; i < pcollSurfs->GetSize(); i ++)
 		{
 			hSurf = pcollSurfs->GetAt(i);
-            if (hSurf)
-            {
-                g_pLTClient->DeleteSurface(hSurf);
-                hSurf = NULL;
-            }
+			if (hSurf)
+			{
+				g_pLTClient->DeleteSurface(hSurf);
+				hSurf = NULL;
+			}
 		}
 	}
 
 	for (i = 0; i < m_collSurfaces.GetSize(); i ++)
 	{
 		hSurf = m_collSurfaces.GetAt(i);
-        if (hSurf)
-        {
-            g_pLTClient->DeleteSurface(hSurf);
-            hSurf = NULL;
-        }
+		if (hSurf)
+		{
+			g_pLTClient->DeleteSurface(hSurf);
+			hSurf = NULL;
+		}
 	}
 	m_collSurfaces.RemoveAll();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTMultiWnd::CreateSurfaces
 //
-//	ROUTINE:	CLTMultiWnd::CreateSurfaces
-//
-//	PURPOSE:	Creates all the surfaces
-//
+//	PURPOSE: Creates all the surfaces
 // ----------------------------------------------------------------------- //
 BOOL CLTMultiWnd::CreateSurfaces(CStringArray *pcollBitmaps, CLTSurfaceArray* pcollSurfs)
 {
@@ -130,7 +122,7 @@ BOOL CLTMultiWnd::CreateSurfaces(CStringArray *pcollBitmaps, CLTSurfaceArray* pc
 
 	for (int i = 0; i < pcollBitmaps->GetSize(); i ++)
 	{
-        hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)pcollBitmaps->GetAt(i));
+		hSurf = g_pLTClient->CreateSurfaceFromBitmap((char *)(LPCSTR)pcollBitmaps->GetAt(i));
 		if(!hSurf)
 		{
 			TRACE("CLTMultiWnd::InitFromBitmap - ERROR - Could not create the surface: ""%s""\n",pcollBitmaps->GetAt(i));

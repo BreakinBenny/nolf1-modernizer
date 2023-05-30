@@ -1,13 +1,10 @@
 // ----------------------------------------------------------------------- //
+// MODULE: MultiplayerMenu.h
 //
-// MODULE  : MultiplayerMenu.h
+// PURPOSE: In-game Multiplayer Menu
 //
-// PURPOSE : In-game Multiplayer Menu
-//
-// CREATED : 3/20/00
-//
+// CREATED: 3/20/00
 // ----------------------------------------------------------------------- //
-
 #ifndef __MULTIPLAYER_MENU_H__
 #define __MULTIPLAYER_MENU_H__
 
@@ -19,7 +16,7 @@ public:
 	CMultiplayerMenu();
 
 	void Build();
-    void Select(uint8 byItem);
+	void Select(uint8 byItem);
 
 };
 
@@ -29,7 +26,7 @@ public:
 	CTeamMenu();
 
 	void Build();
-    void Select(uint8 byItem);
+	void Select(uint8 byItem);
 
 };
 
@@ -39,7 +36,7 @@ public:
 	COptionMenu();
 
 	void Build();
-    void Select(uint8 byItem);
+	void Select(uint8 byItem);
 
 };
 

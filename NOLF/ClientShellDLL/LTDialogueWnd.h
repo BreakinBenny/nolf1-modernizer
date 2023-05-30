@@ -1,13 +1,11 @@
 /****************************************************************************
+;	 MODULE: CLTDialogueWnd (.h)
 ;
-;	 MODULE:		CLTDialogueWnd (.h)
+;	PURPOSE: Class for a window with an irregular shape (like a bitmap)
 ;
-;	PURPOSE:		Class for a window with an irregular shape (like a bitmap)
+;	HISTORY: 12/10/98 [kml] This file was created
 ;
-;	HISTORY:		12/10/98 [kml] This file was created
-;
-;	COMMENT:		Copyright (c) 1998, Monolith Productions, Inc.
-;
+;	COMMENT: Copyright (c) 1998, Monolith Productions, Inc.
 ****************************************************************************/
 #ifndef _LTDIALOGUEWND_H_
 #define _LTDIALOGUEWND_H_
@@ -25,14 +23,14 @@ class CLTGUIFont;
 class DIALOGUEWNDCREATESTRUCT : public LTWNDCREATESTRUCT
 {
 public:
-    DIALOGUEWNDCREATESTRUCT();
+	DIALOGUEWNDCREATESTRUCT();
 
-    LTFLOAT      fAlpha;
-    LTFLOAT      fDecisionAlpha;
+	LTFLOAT	fAlpha;
+	LTFLOAT	fDecisionAlpha;
 	BOOL		bFrame;
 	BOOL		bDecisionFrame;
-	const char	*szFrame;
-	char		*szDecisionBitmap;
+	const char		*szFrame;
+	char			*szDecisionBitmap;
 	HSURFACE	hDecisionSurf;
 	CLTGUIFont	*pFont;
 	int			nWidth;
@@ -84,20 +82,20 @@ public:
 
 protected:
 
-    void    SetAlpha(LTFLOAT fAlpha);
+	void	SetAlpha(LTFLOAT fAlpha);
 
-	CLTGUIFont *m_pFont;
+	CLTGUIFont	*m_pFont;
 	CString		m_csText;
-	CLTMaskedWnd	m_Pic;
+	CLTMaskedWnd m_Pic;
 	BOOL		m_bOpening;
 	BOOL		m_bClosing;
 	CTimer		m_tmrClose;
-	float		m_fCloseHeight;
+	float			m_fCloseHeight;
 	BOOL		m_bDecisions;
 	BOOL		m_bCanClose;
 	BOOL		m_bMore;
 	CString		m_csDecisions;
-	CLTDecisionWnd	m_DecisionWnd;
+	CLTDecisionWnd m_DecisionWnd;
 	CRect		m_rcFrame;
 	CRect		m_rcTotal;
 	BOOL		m_bImmediateDecisions;
@@ -134,16 +132,16 @@ inline void CLTDialogueWnd::DoneShowing(uint8 bySelection, DWORD dwSelection)
 	if (bySelection)
 	{
 		HMESSAGEWRITE hMessage;
-        hMessage = g_pLTClient->StartMessage(CSM_DIALOGUE_DONE_SELECTION);
-        g_pLTClient->WriteToMessageByte(hMessage,bySelection);
-        g_pLTClient->WriteToMessageDWord(hMessage,dwSelection);
-        g_pLTClient->EndMessage(hMessage);
+		hMessage = g_pLTClient->StartMessage(CSM_DIALOGUE_DONE_SELECTION);
+		g_pLTClient->WriteToMessageByte(hMessage,bySelection);
+		g_pLTClient->WriteToMessageDWord(hMessage,dwSelection);
+		g_pLTClient->EndMessage(hMessage);
 	}
 	else
 	{
 		HMESSAGEWRITE hMessage;
-        hMessage = g_pLTClient->StartMessage(CSM_DIALOGUE_DONE);
-        g_pLTClient->EndMessage(hMessage);
+		hMessage = g_pLTClient->StartMessage(CSM_DIALOGUE_DONE);
+		g_pLTClient->EndMessage(hMessage);
 	}
 
 	if(!m_bMore)

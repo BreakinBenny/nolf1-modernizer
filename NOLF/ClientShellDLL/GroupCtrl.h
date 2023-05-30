@@ -15,13 +15,13 @@
 class CGroupSubCtrl
 {
 public:
-    CGroupSubCtrl(CLTGUICtrl* pCtrl, LTIntPt offset, LTBOOL bSelectable = LTFALSE);
+	CGroupSubCtrl(CLTGUICtrl* pCtrl, LTIntPt offset, LTBOOL bSelectable = LTFALSE);
 	virtual ~CGroupSubCtrl();
 
 public:
 	CLTGUICtrl* m_pCtrl;
-    LTIntPt      m_Offset;
-    LTBOOL       m_bSelectable;
+	LTIntPt	  m_Offset;
+	LTBOOL	m_bSelectable;
 protected:
 	CGroupSubCtrl();
 
@@ -34,47 +34,47 @@ public:
 	virtual ~CGroupCtrl();
 
 	// Creation
-    LTBOOL       Create ( int nWidth , int nHeight, LTBOOL bSubSelect = LTFALSE );
+	LTBOOL	Create ( int nWidth , int nHeight, LTBOOL bSubSelect = LTFALSE );
 
 	// Destroy the control
-	void		Destroy ( );
+	void	Destroy ( );
 
 	// Render the control
-	void		Render ( HSURFACE hDestSurf );
+	void	Render ( HSURFACE hDestSurf );
 
 	// Width/Height calculations
-	int			GetWidth ( )	{return m_nWidth; }
-	int			GetHeight ( )	{return m_nHeight; }
+	int	GetWidth ( )	{return m_nWidth; }
+	int	GetHeight ( )	{return m_nHeight; }
 
 	// Handle a keypress
-    LTBOOL       HandleKeyDown(int key, int rep);
+	LTBOOL	HandleKeyDown(int key, int rep);
 
-    virtual LTBOOL       OnEnter();
+	virtual LTBOOL	OnEnter();
 
-    virtual LTBOOL       OnLButtonDown(int x, int y);
-    virtual LTBOOL       OnLButtonUp(int x, int y);
-    virtual LTBOOL       OnMouseMove(int x, int y);
+	virtual LTBOOL	OnLButtonDown(int x, int y);
+	virtual LTBOOL	OnLButtonUp(int x, int y);
+	virtual LTBOOL	OnMouseMove(int x, int y);
 
 	// Add/Remove controls to the array
-    int         AddControl ( CLTGUICtrl *pControl, LTIntPt offset, LTBOOL bSelectable = LTFALSE);
-	void		RemoveControl ( CLTGUICtrl *pControl );
-	void		RemoveControl ( int nIndex );
-	void		RemoveAllControls ( );
-	int			GetNumControls ( )			{ return m_controlArray.GetSize(); }
+	int	AddControl ( CLTGUICtrl *pControl, LTIntPt offset, LTBOOL bSelectable = LTFALSE);
+	void	RemoveControl ( CLTGUICtrl *pControl );
+	void	RemoveControl ( int nIndex );
+	void	RemoveAllControls ( );
+	int	GetNumControls ( )	{ return m_controlArray.GetSize(); }
 
-    void        AllowSubSelection(LTBOOL bSubSelect) {m_bSubSelect = bSubSelect;}
+	void		AllowSubSelection(LTBOOL bSubSelect) {m_bSubSelect = bSubSelect;}
 
 	CLTGUICtrl	*GetControl ( int nIndex );
 	LTIntPt		GetControlOffset( int nIndex );
 
 	// Disable the control
-    virtual void    Enable ( LTBOOL bEnabled );
+	virtual void	Enable ( LTBOOL bEnabled );
 
 	// Update data
-    virtual void    UpdateData ( LTBOOL bSaveAndValidate = LTTRUE );
+	virtual void	UpdateData ( LTBOOL bSaveAndValidate = LTTRUE );
 
 
-    virtual uint32  GetHelpID();
+	virtual uint32  GetHelpID();
 
 protected:
 	// Called by Select().  The IsSelected() will return the newly selected state.
@@ -84,16 +84,16 @@ protected:
 
 	// Gets the index of the control that is under the specific screen point.
 	// Returns FALSE if there isn't one under the specified point.
-    LTBOOL       GetControlUnderPoint(int xPos, int yPos, int *pnIndex);
+	LTBOOL	GetControlUnderPoint(int xPos, int yPos, int *pnIndex);
 
 protected:
-    LTBOOL       m_bCreated;
-    LTBOOL       m_bSubSelect;
-	int			m_nWidth;					// Width of the control
-	int			m_nHeight;					// Height of the control
+	LTBOOL	m_bCreated;
+	LTBOOL	m_bSubSelect;
+	int		m_nWidth;	// Width of the control
+	int		m_nHeight;	// Height of the control
 
-	int			m_nLastMouseDown;
-	int			m_nSelection;
+	int		m_nLastMouseDown;
+	int		m_nSelection;
 
 	CMoArray<CGroupSubCtrl *>	m_controlArray;
 };

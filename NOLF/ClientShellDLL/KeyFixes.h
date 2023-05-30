@@ -4,4 +4,3 @@
 void ConvertKeyToCurrentKeyboard(char* sNewKey, char* sOldKey, int nNewKeyMaxSize);
 
 #endif
-

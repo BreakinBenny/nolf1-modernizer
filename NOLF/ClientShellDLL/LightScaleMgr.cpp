@@ -9,13 +9,13 @@ LTBOOL CLightScaleMgr::Init()
 {
 	m_TimeOfDayScale.Init(1, 1, 1);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 void CLightScaleMgr::Term()
 {
 	LS_EFFECT* pEffect = m_pEffects;
-    LS_EFFECT* pPrev = LTNULL;
+	LS_EFFECT* pPrev = LTNULL;
 	while (pEffect)
 	{
 		pPrev = pEffect;
@@ -23,7 +23,7 @@ void CLightScaleMgr::Term()
 		GetLSEffectBank()->Delete(pPrev);
 	}
 
-    m_pEffects = LTNULL;
+	m_pEffects = LTNULL;
 
 	m_TimeOfDayScale.Init(1, 1, 1);
 
@@ -63,7 +63,7 @@ void CLightScaleMgr::SetLightScale (LTFLOAT nRed, LTFLOAT nGreen, LTFLOAT nBlue,
 void CLightScaleMgr::ClearLightScale (LTFLOAT nRed, LTFLOAT nGreen, LTFLOAT nBlue, LightEffectType eType)
 {
 	LS_EFFECT* pEffect = m_pEffects;
-    LS_EFFECT* pPrev = LTNULL;
+	LS_EFFECT* pPrev = LTNULL;
 	while (pEffect)
 	{
 		if (pEffect->nRed == nRed && pEffect->nGreen == nGreen && pEffect->nBlue == nBlue && pEffect->eType == eType)
@@ -104,11 +104,11 @@ void CLightScaleMgr::SetLightScale()
 	{
 		if (pEffect->eType == LightEffectInterface)
 		{
-            LTVector vLightScale;
+			LTVector vLightScale;
 			vLightScale.x = pEffect->nRed;
 			vLightScale.y = pEffect->nGreen;
 			vLightScale.z = pEffect->nBlue;
-            g_pLTClient->SetGlobalLightScale (&vLightScale);
+			g_pLTClient->SetGlobalLightScale (&vLightScale);
 			return;
 		}
 		pEffect = pEffect->pNext;
@@ -121,11 +121,11 @@ void CLightScaleMgr::SetLightScale()
 	{
 		if (pEffect->eType == LightEffectDamage)
 		{
-            LTVector vLightScale;
+			LTVector vLightScale;
 			vLightScale.x = pEffect->nRed;
 			vLightScale.y = pEffect->nGreen;
 			vLightScale.z = pEffect->nBlue;
-            g_pLTClient->SetGlobalLightScale (&vLightScale);
+			g_pLTClient->SetGlobalLightScale (&vLightScale);
 			return;
 		}
 		pEffect = pEffect->pNext;
@@ -138,11 +138,11 @@ void CLightScaleMgr::SetLightScale()
 	{
 		if (pEffect->eType == LightEffectPowerup)
 		{
-            LTVector vLightScale;
+			LTVector vLightScale;
 			vLightScale.x = pEffect->nRed;
 			vLightScale.y = pEffect->nGreen;
 			vLightScale.z = pEffect->nBlue;
-            g_pLTClient->SetGlobalLightScale (&vLightScale);
+			g_pLTClient->SetGlobalLightScale (&vLightScale);
 			return;
 		}
 		pEffect = pEffect->pNext;
@@ -155,7 +155,7 @@ void CLightScaleMgr::SetLightScale()
 	{
 		if (pEffect->eType == LightEffectEnvironment)
 		{
-            LTVector vLightScale;
+			LTVector vLightScale;
 			vLightScale.x = pEffect->nRed;
 			vLightScale.y = pEffect->nGreen;
 			vLightScale.z = pEffect->nBlue;
@@ -164,7 +164,7 @@ void CLightScaleMgr::SetLightScale()
 			vLightScale.y *= m_TimeOfDayScale.y;
 			vLightScale.z *= m_TimeOfDayScale.z;
 
-            g_pLTClient->SetGlobalLightScale (&vLightScale);
+			g_pLTClient->SetGlobalLightScale (&vLightScale);
 			return;
 		}
 		pEffect = pEffect->pNext;
@@ -177,7 +177,7 @@ void CLightScaleMgr::SetLightScale()
 	{
 		if (pEffect->eType == LightEffectWorld)
 		{
-            LTVector vLightScale;
+			LTVector vLightScale;
 			vLightScale.x = pEffect->nRed;
 			vLightScale.y = pEffect->nGreen;
 			vLightScale.z = pEffect->nBlue;
@@ -186,7 +186,7 @@ void CLightScaleMgr::SetLightScale()
 			vLightScale.y *= m_TimeOfDayScale.y;
 			vLightScale.z *= m_TimeOfDayScale.z;
 
-            g_pLTClient->SetGlobalLightScale (&vLightScale);
+			g_pLTClient->SetGlobalLightScale (&vLightScale);
 			return;
 		}
 		pEffect = pEffect->pNext;
@@ -194,14 +194,14 @@ void CLightScaleMgr::SetLightScale()
 
 	// we got all the way through without finding a suitable light effect - just set the light scale to (1,1,1)
 
-    LTVector vec;
+	LTVector vec;
 	VEC_SET (vec, 1.0f, 1.0f, 1.0f);
 
 	vec.x *= m_TimeOfDayScale.x;
 	vec.y *= m_TimeOfDayScale.y;
 	vec.z *= m_TimeOfDayScale.z;
 
-    g_pLTClient->SetGlobalLightScale (&vec);
+	g_pLTClient->SetGlobalLightScale (&vec);
 }
 
 

@@ -23,151 +23,151 @@ public:
 	CInterfaceResMgr();
 	virtual ~CInterfaceResMgr();
 
-    LTBOOL               Init (ILTClient* pClientDE, CGameClientShell* pClientShell);
-	void				Term();
-	HSURFACE			GetSharedSurface(char *lpszPath)	{ return m_InterfaceSurfMgr.GetSurface(lpszPath); }
-	void				FreeSharedSurface(char *lpszPath)	{ m_InterfaceSurfMgr.FreeSurface(lpszPath); }
-	void				FreeSharedSurface(HSURFACE hSurf)	{ m_InterfaceSurfMgr.FreeSurface(hSurf); }
+	LTBOOL		Init (ILTClient* pClientDE, CGameClientShell* pClientShell);
+	void			Term();
+	HSURFACE	GetSharedSurface(char *lpszPath)	{ return m_InterfaceSurfMgr.GetSurface(lpszPath); }
+	void			FreeSharedSurface(char *lpszPath)	{ m_InterfaceSurfMgr.FreeSurface(lpszPath); }
+	void			FreeSharedSurface(HSURFACE hSurf)	{ m_InterfaceSurfMgr.FreeSurface(hSurf); }
 
-	CLTGUIFont			*GetTitleFont()						{return m_pTitleFont;}
-	CLTGUIFont			*GetLargeFont();
-	CLTGUIFont			*GetSmallFont()						{return m_pSmallFont;}
-	CLTGUIFont			*GetMediumFont()					{return m_pMediumFont;}
-	CLTGUIFont			*GetHelpFont()						{return m_pHelpFont;}
+	CLTGUIFont	*GetTitleFont()			{return m_pTitleFont;}
+	CLTGUIFont	*GetLargeFont();
+	CLTGUIFont	*GetSmallFont()		{return m_pSmallFont;}
+	CLTGUIFont	*GetMediumFont()		{return m_pMediumFont;}
+	CLTGUIFont	*GetHelpFont()			{return m_pHelpFont;}
 
-	CLTGUIFont			*GetMsgForeFont()					{return m_pMsgForeFont;}
-	CLTGUIFont			*GetHUDForeFont()					{return m_pHUDForeFont;}
-	CLTGUIFont			*GetAirFont()						{return m_pAirFont;}
-	CLTGUIFont			*GetChooserFont()					{return m_pChooserFont;}
+	CLTGUIFont	*GetMsgForeFont()		{return m_pMsgForeFont;}
+	CLTGUIFont	*GetHUDForeFont()		{return m_pHUDForeFont;}
+	CLTGUIFont	*GetAirFont()			{return m_pAirFont;}
+	CLTGUIFont	*GetChooserFont()		{return m_pChooserFont;}
 
-	HSURFACE			GetSurfaceLoading();
-	HSURFACE			GetSurfaceCursor();
+	HSURFACE	GetSurfaceLoading();
+	HSURFACE	GetSurfaceCursor();
 
 	// Creates a surface just large enough for the string.
 	// You can make the surface a little larger with extraPixelsX and extraPixelsY.
 	// if a Width > 0 is specified, the text is wrapped to fit that width
-    HSURFACE            CreateSurfaceFromString(CLTGUIFont *pFont, HSTRING hString, HLTCOLOR hBackColor,
+	HSURFACE	CreateSurfaceFromString(CLTGUIFont *pFont, HSTRING hString, HLTCOLOR hBackColor,
 												int extraPixelsX = 0, int extraPixelsY = 0, int nWidth = 0);
-    HSURFACE            CreateSurfaceFromString(CLTGUIFont *pFont, int  nStringId, HLTCOLOR hBackColor,
+	HSURFACE	CreateSurfaceFromString(CLTGUIFont *pFont, int  nStringId, HLTCOLOR hBackColor,
 												int extraPixelsX = 0, int extraPixelsY = 0, int nWidth = 0);
-    HSURFACE            CreateSurfaceFromString(CLTGUIFont *pFont, char *lpszString, HLTCOLOR hBackColor,
+	HSURFACE	CreateSurfaceFromString(CLTGUIFont *pFont, char *lpszString, HLTCOLOR hBackColor,
 												int extraPixelsX = 0, int extraPixelsY = 0, int nWidth = 0);
 
 
-	const char			*GetSoundSelect();
-	const char			*GetSoundChange();
-	const char			*GetSoundPageChange();
-	const char			*GetSoundUnselectable();
-	const char			*GetSoundArrowUp();
-	const char			*GetSoundArrowDown();
-	const char			*GetSoundArrowLeft();
-	const char			*GetSoundArrowRight();
-	const char			*GetObjectiveAddedSound();
-	const char			*GetObjectiveRemovedSound();
-	const char			*GetObjectiveCompletedSound();
+	const char		*GetSoundSelect();
+	const char		*GetSoundChange();
+	const char		*GetSoundPageChange();
+	const char		*GetSoundUnselectable();
+	const char		*GetSoundArrowUp();
+	const char		*GetSoundArrowDown();
+	const char		*GetSoundArrowLeft();
+	const char		*GetSoundArrowRight();
+	const char		*GetObjectiveAddedSound();
+	const char		*GetObjectiveRemovedSound();
+	const char		*GetObjectiveCompletedSound();
 
-	HSURFACE			CreateSurfaceBlank();
+	HSURFACE	CreateSurfaceBlank();
 
-	void				ScreenDimsChanged();
+	void			ScreenDimsChanged();
 
 
-    LTBOOL               IsEnglish()                         { return m_bEnglish; }
+	LTBOOL		IsEnglish()	{ return m_bEnglish; }
 
-	void				DrawFolder();
-	void				DrawLoadScreen();
-	void				DrawFolderBars();
+	void			DrawFolder();
+	void			DrawLoadScreen();
+	void			DrawFolderBars();
 
-	int					GetXOffset()						{return Get4x3Offset();}
-	int					GetYOffset()						{return 0;}
-    LTFLOAT             GetXRatio()                         {return m_fXRatio;}
-    LTFLOAT             GetYRatio()                         {return m_fYRatio;}
-	LTFLOAT				Get4x3Ratio()						{return (float)640/480;}
-	int 				Get4x3Offset();
-	LTFLOAT				GetUIScale();
-	void				SetUserScale(LTFLOAT fUserScale)	{ m_fUserScale = fUserScale; }
-	void				IncrementUserScale()				{ m_fUserScale += 0.10f; }
-	void				DecrementUserScale()				{ m_fUserScale -= 0.10f; }
+	int			GetXOffset()		{return Get4x3Offset();}
+	int			GetYOffset()		{return 0;}
+	LTFLOAT	GetXRatio()		{return m_fXRatio;}
+	LTFLOAT	GetYRatio()		{return m_fYRatio;}
+	LTFLOAT	Get4x3Ratio()		{return (float)640/480;}
+	int 			Get4x3Offset();
+	LTFLOAT	GetUIScale();
+	void			SetUserScale(LTFLOAT fUserScale)	{ m_fUserScale = fUserScale; }
+	void			IncrementUserScale()	{ m_fUserScale += 0.10f; }
+	void			DecrementUserScale()	{ m_fUserScale -= 0.10f; }
 
-    uint32              GetScreenWidth();
-    uint32              GetScreenHeight();
+	uint32	GetScreenWidth();
+	uint32	GetScreenHeight();
 
-	void				DrawMessage(CLTGUIFont* pFont, int nMessageId);
+	void		DrawMessage(CLTGUIFont* pFont, int nMessageId);
 
-	void				HandleBorderlessWindowed();
+	void		HandleBorderlessWindowed();
 
 
 	//call Setup() before entering a 2-d state (folder)
 	//call Clean() before returning to the game
-    LTBOOL               Setup();
-	void				Clean();
+	LTBOOL	Setup();
+	void		Clean();
 
 protected:
 	// More initialization
 
-    LTBOOL               InitFonts();
-    LTBOOL               InitEngineFont(CLTGUIFont *pFont, int nNameID, int nWidthID, int nHeightID, LTBOOL bBold);
-    LTBOOL               InitEngineFont(CLTGUIFont *pFont, char *lpszName, int nWidth, int nHeight, LTBOOL bBold);
-    LTBOOL               SetupFont(CLTGUIFont *pFont, LTBOOL bBlend = LTTRUE, uint32 dwFlags = LTF_INCLUDE_ALL);
+	LTBOOL	InitFonts();
+	LTBOOL	InitEngineFont(CLTGUIFont *pFont, int nNameID, int nWidthID, int nHeightID, LTBOOL bBold);
+	LTBOOL	InitEngineFont(CLTGUIFont *pFont, char *lpszName, int nWidth, int nHeight, LTBOOL bBold);
+	LTBOOL	SetupFont(CLTGUIFont *pFont, LTBOOL bBlend = LTTRUE, uint32 dwFlags = LTF_INCLUDE_ALL);
 
 protected:
-    LTBOOL               m_bEnglish;             // True if the resource file has English as the specified language
+	LTBOOL	m_bEnglish;	 // True if the resource file has English as the specified language
 
 	// HD Fonts - Upscaled for higher resolutions
-	CLTGUIFont			*m_pTitleHDFont;		// Title font
-	CLTGUIFont			*m_pLargeHDFont;		// Large fading font
-	CLTGUIFont			*m_pMediumHDFont;		// Medium fading font
-	CLTGUIFont			*m_pSmallHDFont;		// Small fading font
-	CLTGUIFont			*m_pHelpHDFont;			// Help font
-	CLTGUIFont			*m_pMsgForeHDFont;		// Foreground Font used in HUD text display
-	CLTGUIFont			*m_pHUDForeHDFont;		// Foreground Font used in HUD numeric display
-	CLTGUIFont			*m_pAirHDFont;			// Font used in HUD for air meter
-	CLTGUIFont			*m_pChooserHDFont;		// Font used in HUD for choosing weapons/ammo
+	CLTGUIFont	*m_pTitleHDFont;		// Title font
+	CLTGUIFont	*m_pLargeHDFont;		// Large fading font
+	CLTGUIFont	*m_pMediumHDFont;	// Medium fading font
+	CLTGUIFont	*m_pSmallHDFont;		// Small fading font
+	CLTGUIFont	*m_pHelpHDFont;		// Help font
+	CLTGUIFont	*m_pMsgForeHDFont;	// Foreground Font used in HUD text display
+	CLTGUIFont	*m_pHUDForeHDFont;	// Foreground Font used in HUD numeric display
+	CLTGUIFont	*m_pAirHDFont;		// Font used in HUD for air meter
+	CLTGUIFont	*m_pChooserHDFont;	// Font used in HUD for choosing weapons/ammo
 
 	// Original Fonts
-	CLTGUIFont			*m_pTitleFont;			// Title font
-	CLTGUIFont			*m_pLargeFont;			// Large fading font
-	CLTGUIFont			*m_pMediumFont;			// Medium fading font
-	CLTGUIFont			*m_pSmallFont;			// Small fading font
-	CLTGUIFont			*m_pHelpFont;			// Help font
-	CLTGUIFont			*m_pMsgForeFont;		// Foreground Font used in HUD text display
-	CLTGUIFont			*m_pHUDForeFont;		// Foreground Font used in HUD numeric display
-	CLTGUIFont			*m_pAirFont;			// Font used in HUD for air meter
-	CLTGUIFont			*m_pChooserFont;		// Font used in HUD for choosing weapons/ammo
+	CLTGUIFont	*m_pTitleFont;			// Title font
+	CLTGUIFont	*m_pLargeFont;		// Large fading font
+	CLTGUIFont	*m_pMediumFont;		// Medium fading font
+	CLTGUIFont	*m_pSmallFont;		// Small fading font
+	CLTGUIFont	*m_pHelpFont;			// Help font
+	CLTGUIFont	*m_pMsgForeFont;		// Foreground Font used in HUD text display
+	CLTGUIFont	*m_pHUDForeFont;		// Foreground Font used in HUD numeric display
+	CLTGUIFont	*m_pAirFont;			// Font used in HUD for air meter
+	CLTGUIFont	*m_pChooserFont;		// Font used in HUD for choosing weapons/ammo
 
-	HSURFACE			m_hSurfLoading;			// Loading level surface
-	HSURFACE			m_hSurfUpArrow;			// The up arrow surface
-	HSURFACE			m_hSurfDownArrow;		// The down arrow surface
-	HSURFACE			m_hSurfLeftArrow;		// The left arrow surface
-	HSURFACE			m_hSurfRightArrow;		// The right arrow surface
+	HSURFACE	m_hSurfLoading;		// Loading level surface
+	HSURFACE	m_hSurfUpArrow;		// The up arrow surface
+	HSURFACE	m_hSurfDownArrow;	// The down arrow surface
+	HSURFACE	m_hSurfLeftArrow;		// The left arrow surface
+	HSURFACE	m_hSurfRightArrow;	// The right arrow surface
 
-	HSURFACE			m_hSurfCursor;			// The software cursor surface
+	HSURFACE	m_hSurfCursor;		// The software cursor surface
 
-	int					m_nYesVKeyCode;			// The virtual key code for "yes" responses
-	int					m_nNoVKeyCode;			// The virtual key code for "no" responses
+	int	m_nYesVKeyCode;	// The virtual key code for "yes" responses
+	int	m_nNoVKeyCode;	// The virtual key code for "no" responses
 
-	CInterfaceSurfMgr	m_InterfaceSurfMgr;	// Used to share title graphics
+	CInterfaceSurfMgr m_InterfaceSurfMgr;	// Used to share title graphics
 
-    HLTCOLOR            m_hTransColor;
+	HLTCOLOR	m_hTransColor;
 
-    LTIntPt              m_Offset;
-    LTFLOAT              m_fXRatio;
-    LTFLOAT              m_fYRatio;
-	LTFLOAT				m_fUserScale;
-    uint32              m_dwScreenWidth;
-    uint32              m_dwScreenHeight;
+	LTIntPt		m_Offset;
+	LTFLOAT	m_fXRatio;
+	LTFLOAT	m_fYRatio;
+	LTFLOAT	m_fUserScale;
+	uint32		m_dwScreenWidth;
+	uint32		m_dwScreenHeight;
 	
 
-	CString				m_csSoundSelect;
-	CString				m_csSoundChange;
-	CString				m_csSoundPageChange;
-	CString				m_csSoundUnselectable;
-	CString				m_csSoundArrowUp;
-	CString				m_csSoundArrowDown;
-	CString				m_csSoundArrowLeft;
-	CString				m_csSoundArrowRight;
-	CString				m_csSoundObjAdd;
-	CString				m_csSoundObjRemove;
-	CString				m_csSoundObjComplete;
+	CString	m_csSoundSelect;
+	CString	m_csSoundChange;
+	CString	m_csSoundPageChange;
+	CString	m_csSoundUnselectable;
+	CString	m_csSoundArrowUp;
+	CString	m_csSoundArrowDown;
+	CString	m_csSoundArrowLeft;
+	CString	m_csSoundArrowRight;
+	CString	m_csSoundObjAdd;
+	CString	m_csSoundObjRemove;
+	CString	m_csSoundObjComplete;
 
 };
 

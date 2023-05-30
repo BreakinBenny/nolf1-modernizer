@@ -8,11 +8,9 @@
 extern CGameClientShell* g_pGameClientShell;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTTextWnd::Init
 //
-//	ROUTINE:	CLTTextWnd::Init
-//
-//	PURPOSE:	Initialization
-//
+//	PURPOSE: Initialization
 // ----------------------------------------------------------------------- //
 BOOL CLTTextWnd::Init(int nControlID, char* szWndName, CLTWnd* pParentWnd, CLTGUIFont* pFont,
 					  int xPos, int yPos, DWORD dwFlags, DWORD dwState)
@@ -24,21 +22,19 @@ BOOL CLTTextWnd::Init(int nControlID, char* szWndName, CLTWnd* pParentWnd, CLTGU
 		return FALSE;
 
 	m_pFont = pFont;
-    m_bSelected = LTFALSE;
+	m_bSelected = LTFALSE;
 
 	return TRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTTextWnd::SetText
 //
-//	ROUTINE:	CLTTextWnd::SetText
-//
-//	PURPOSE:	Sets the text to display
-//
+//	PURPOSE: Sets the text to display
 // ----------------------------------------------------------------------- //
 LTIntPt CLTTextWnd::SetText(const char *szText, int nWidth)
 {
-    LTIntPt pt;
+	LTIntPt pt;
 	pt.x = 0;
 	pt.y = 0;
 
@@ -52,7 +48,7 @@ LTIntPt CLTTextWnd::SetText(const char *szText, int nWidth)
 
 	// Set the size of the window based on the extents of the text
 	m_csText = szText;
-    HSTRING hStr = g_pLTClient->CreateString((char *)(LPCSTR)m_csText);
+	HSTRING hStr = g_pLTClient->CreateString((char *)(LPCSTR)m_csText);
 	if(nWidth > 0)
 	{
 		m_nWidth = nWidth;
@@ -65,23 +61,21 @@ LTIntPt CLTTextWnd::SetText(const char *szText, int nWidth)
 
 	m_nWidth = pt.x;
 	m_nHeight = pt.y;
-    g_pLTClient->FreeString(hStr);
+	g_pLTClient->FreeString(hStr);
 	m_lfdd.dwFormatWidth = m_nWidth;
 	m_lfdd.dwFlags |= LTF_DRAW_FORMATTED;
 
 	// Term the prev string just in case we drew this string last time timed...
-    m_lfsd.szPrevString = NULL;
-    m_lfsd.byLastState = LTF_STATE_NONE;
+	m_lfsd.szPrevString = NULL;
+	m_lfsd.byLastState = LTF_STATE_NONE;
 
 	return pt;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTTextWnd::DrawToSurface
 //
-//	ROUTINE:	CLTTextWnd::DrawToSurface
-//
-//	PURPOSE:	Draw us
-//
+//	PURPOSE: Draw us
 // ----------------------------------------------------------------------- //
 BOOL CLTTextWnd::DrawToSurface(HSURFACE hSurfDest)
 {
@@ -103,11 +97,9 @@ BOOL CLTTextWnd::DrawToSurface(HSURFACE hSurfDest)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTTextWnd::ShowWindow
 //
-//	ROUTINE:	CLTTextWnd::ShowWindow
-//
-//	PURPOSE:	Shows (or hides) the window
-//
+//	PURPOSE: Shows (or hides) the window
 // ----------------------------------------------------------------------- //
 BOOL CLTTextWnd::ShowWindow(BOOL bShow, BOOL bPlaySound, BOOL bAnimate)
 {
@@ -124,11 +116,9 @@ BOOL CLTTextWnd::ShowWindow(BOOL bShow, BOOL bPlaySound, BOOL bAnimate)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTTextWnd::OnLButtonDown
 //
-//	ROUTINE:	CLTTextWnd::OnLButtonDown
-//
-//	PURPOSE:	Left button down handler
-//
+//	PURPOSE: Left button down handler
 // ----------------------------------------------------------------------- //
 BOOL CLTTextWnd::OnLButtonDown(int xPos, int yPos)
 {
@@ -140,11 +130,9 @@ BOOL CLTTextWnd::OnLButtonDown(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTTextWnd::OnRButtonDown
 //
-//	ROUTINE:	CLTTextWnd::OnRButtonDown
-//
-//	PURPOSE:	Right button down handler
-//
+//	PURPOSE: Right button down handler
 // ----------------------------------------------------------------------- //
 BOOL CLTTextWnd::OnRButtonDown(int xPos, int yPos)
 {
@@ -157,11 +145,9 @@ BOOL CLTTextWnd::OnRButtonDown(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTTextWnd::OnLButtonUp
 //
-//	ROUTINE:	CLTTextWnd::OnLButtonUp
-//
-//	PURPOSE:	Left button Up handler
-//
+//	PURPOSE: Left button Up handler
 // ----------------------------------------------------------------------- //
 BOOL CLTTextWnd::OnLButtonUp(int xPos, int yPos)
 {
@@ -192,11 +178,9 @@ BOOL CLTTextWnd::OnLButtonUp(int xPos, int yPos)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTTextWnd::OnRButtonUp
 //
-//	ROUTINE:	CLTTextWnd::OnRButtonUp
-//
-//	PURPOSE:	Right button Up handler
-//
+//	PURPOSE: Right button Up handler
 // ----------------------------------------------------------------------- //
 BOOL CLTTextWnd::OnRButtonUp(int xPos, int yPos)
 {
@@ -227,11 +211,9 @@ BOOL CLTTextWnd::OnRButtonUp(int xPos, int yPos)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTTextWnd::OnMouseEnter
 //
-//	ROUTINE:	CLTTextWnd::OnMouseEnter
-//
-//	PURPOSE:	Mouse movement handler
-//
+//	PURPOSE: Mouse movement handler
 // ----------------------------------------------------------------------- //
 void CLTTextWnd::OnMouseEnter()
 {
@@ -254,24 +236,20 @@ void CLTTextWnd::OnMouseEnter()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTTextWnd::OnMouseLeave
 //
-//	ROUTINE:	CLTTextWnd::OnMouseLeave
-//
-//	PURPOSE:	Mouse movement handler
-//
+//	PURPOSE: Mouse movement handler
 // ----------------------------------------------------------------------- //
 void CLTTextWnd::OnMouseLeave()
 {
 //	if (m_bSelectable)
-//       Select(LTFALSE);
+//	Select(LTFALSE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CLTTextWnd::Select
 //
-//	ROUTINE:	CLTTextWnd::Select
-//
-//	PURPOSE:	Selection change handler
-//
+//	PURPOSE: Selection change handler
 // ----------------------------------------------------------------------- //
 void CLTTextWnd::Select(LTBOOL bSelect)
 {

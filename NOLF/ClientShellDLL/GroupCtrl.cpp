@@ -28,8 +28,8 @@ CGroupCtrl::CGroupCtrl()
 {
 	m_nWidth = 0;
 	m_nHeight = 0;
-    m_bCreated = LTFALSE;
-    m_bSubSelect = LTFALSE;
+	m_bCreated = LTFALSE;
+	m_bSubSelect = LTFALSE;
 	m_nLastMouseDown = -1;
 	m_nSelection = -1;
 }
@@ -43,17 +43,17 @@ LTBOOL CGroupCtrl::Create ( int nWidth , int nHeight, LTBOOL bSubSelect )
 {
 	m_nWidth = nWidth;
 	m_nHeight = nHeight;
-    m_bCreated = LTTRUE;
+	m_bCreated = LTTRUE;
 	m_bSubSelect = bSubSelect;
 	m_controlArray.SetSize(0);
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // Destroy the control
 void CGroupCtrl::Destroy ( )
 {
 	RemoveAllControls();
-    m_bCreated=LTFALSE;
+	m_bCreated=LTFALSE;
 }
 
 // Render the control
@@ -73,10 +73,10 @@ void CGroupCtrl::Render ( HSURFACE hDestSurf )
 // Handle a keypress
 LTBOOL CGroupCtrl::HandleKeyDown(int key, int rep)
 {
-    LTBOOL bHandled = LTFALSE;
+	LTBOOL bHandled = LTFALSE;
 	if (CLTGUICtrl::HandleKeyDown(key, rep))
 	{
-        bHandled = LTTRUE;
+		bHandled = LTTRUE;
 	}
 	else
 	{
@@ -93,23 +93,23 @@ LTBOOL CGroupCtrl::HandleKeyDown(int key, int rep)
 LTBOOL CGroupCtrl::OnLButtonDown(int x, int y)
 {
 	if (!m_bSubSelect)
-        return LTFALSE;
+		return LTFALSE;
 
 	// Get the control that the click was on
 	int nControlIndex=0;
 	if (GetControlUnderPoint(x, y, &nControlIndex))
 	{
 		m_nLastMouseDown = nControlIndex;
-        return LTTRUE;
+		return LTTRUE;
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CGroupCtrl::OnLButtonUp(int x, int y)
 {
 	if (!m_bSubSelect)
 	{
-        LTBOOL handled = LTFALSE;
+		LTBOOL handled = LTFALSE;
 		unsigned int i;
 		unsigned int n = m_controlArray.GetSize();
 		for ( i = 0;!handled && i < m_controlArray.GetSize(); i++ )
@@ -131,7 +131,7 @@ LTBOOL CGroupCtrl::OnLButtonUp(int x, int y)
 			if (pCtrl->IsEnabled() )
 			{
 				if (pCtrl->OnLButtonUp(x,y))
-                    return LTTRUE;
+					return LTTRUE;
 			}
 
 		}
@@ -139,14 +139,14 @@ LTBOOL CGroupCtrl::OnLButtonUp(int x, int y)
 	else
 		m_nLastMouseDown = -1;
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 LTBOOL CGroupCtrl::OnEnter()
 {
 	if (!m_bSubSelect)
 	{
-        LTBOOL handled = LTFALSE;
+		LTBOOL handled = LTFALSE;
 		unsigned int i;
 		for ( i = 0;!handled && i < m_controlArray.GetSize(); i++ )
 		{
@@ -164,12 +164,12 @@ LTBOOL CGroupCtrl::OnEnter()
 		{
 			if (pCtrl->OnEnter())
 			{
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // Gets the index of the control that is under the specific screen point.
@@ -178,7 +178,7 @@ LTBOOL CGroupCtrl::GetControlUnderPoint(int xPos, int yPos, int *pnIndex)
 {
 	_ASSERT(pnIndex);
 	if (!m_bSubSelect)
-        return LTFALSE;
+		return LTFALSE;
 
 
 	// See if the user clicked on any of the controls.
@@ -196,10 +196,10 @@ LTBOOL CGroupCtrl::GetControlUnderPoint(int xPos, int yPos, int *pnIndex)
 		{
 			*pnIndex=i;
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
@@ -264,7 +264,7 @@ LTIntPt CGroupCtrl::GetControlOffset( int nIndex )
 
 void CGroupCtrl::OnSelChange()
 {
-    LTBOOL bSelect = IsSelected() && !m_bSubSelect;
+	LTBOOL bSelect = IsSelected() && !m_bSubSelect;
 	unsigned int i;
 	for ( i = 0; i < m_controlArray.GetSize(); i++ )
 	{
@@ -278,14 +278,14 @@ void CGroupCtrl::OnSelChange()
 	{
 		if (m_bSubSelect)
 		{
-            LTIntPt mPos = g_pInterfaceMgr->GetCursorPos();
+			LTIntPt mPos = g_pInterfaceMgr->GetCursorPos();
 			OnMouseMove(mPos.x,mPos.y);
 		}
 	}
 }
 
 // Disable the control
-void    CGroupCtrl::Enable( LTBOOL bEnabled )
+void	CGroupCtrl::Enable( LTBOOL bEnabled )
 {
 	m_bEnabled=bEnabled;
 	unsigned int i;
@@ -298,10 +298,10 @@ void    CGroupCtrl::Enable( LTBOOL bEnabled )
 LTBOOL CGroupCtrl::OnMouseMove(int x, int y)
 {
 	if (!m_bSubSelect)
-        return LTFALSE;
+		return LTFALSE;
 	// Get the control that the click was on
 	int nControlIndex=0;
-    LTBOOL bOnCtrl = GetControlUnderPoint(x, y, &nControlIndex);
+	LTBOOL bOnCtrl = GetControlUnderPoint(x, y, &nControlIndex);
 	if (bOnCtrl)
 	{
 		SelectControl(nControlIndex);
@@ -326,7 +326,7 @@ void CGroupCtrl::SelectControl(int nNewSelection)
 	{
 		if ( m_controlArray[m_nSelection]->m_bSelectable)
 		{
-            m_controlArray[m_nSelection]->m_pCtrl->Select(LTFALSE);
+			m_controlArray[m_nSelection]->m_pCtrl->Select(LTFALSE);
 		}
 		m_nSelection = -1;
 	}
@@ -334,7 +334,7 @@ void CGroupCtrl::SelectControl(int nNewSelection)
 	{
 		if ( m_controlArray[nNewSelection]->m_bSelectable )
 		{
-            m_controlArray[nNewSelection]->m_pCtrl->Select(LTTRUE);
+			m_controlArray[nNewSelection]->m_pCtrl->Select(LTTRUE);
 			m_nSelection = nNewSelection;
 		}
 	}
@@ -363,4 +363,3 @@ void CGroupCtrl::UpdateData(LTBOOL bSaveAndValidate)
 		m_controlArray[i]->m_pCtrl->UpdateData(bSaveAndValidate);
 	}
 }
-

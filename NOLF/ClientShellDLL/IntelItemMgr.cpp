@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: IntelItemMgr.cpp
 //
-// MODULE  : IntelItemMgr.cpp
+// PURPOSE: IntelItemMgr implementation - Player summary
 //
-// PURPOSE : IntelItemMgr implementation - Player summary
-//
-// CREATED : 9/08/99
+// CREATED: 9/08/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "IntelItemMgr.h"
 #include "GameButeMgr.h"
@@ -22,23 +19,20 @@
 extern CGameClientShell* g_pGameClientShell;
 extern LTBOOL g_bAllowAllMissions;
 
-#define IMGR_DEFAULT_CRYPT_KEY					"KeyForIntelItemMgr"
+#define IMGR_DEFAULT_CRYPT_KEY	"KeyForIntelItemMgr"
 
-#define IMGR_MISSION_TAG						"Mission"
-#define IMGR_INTEL								"Intel"
+#define IMGR_MISSION_TAG	"Mission"
+#define IMGR_INTEL			"Intel"
 
 static char s_aAttributeFile[256];
 static char s_aTagName[30];
 static char s_aAttName[100];
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelItemMgr::CIntelItemMgr()
 //
-//	ROUTINE:	CIntelItemMgr::CIntelItemMgr()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
-
 CIntelItemMgr::CIntelItemMgr()
 {
 //	m_pCryptKey  = IMGR_DEFAULT_CRYPT_KEY;
@@ -49,26 +43,20 @@ CIntelItemMgr::CIntelItemMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelItemMgr::~CIntelItemMgr()
 //
-//	ROUTINE:	CIntelItemMgr::~CIntelItemMgr()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
-
 CIntelItemMgr::~CIntelItemMgr()
 {
 	Term();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelItemMgr::Term()
 //
-//	ROUTINE:	CIntelItemMgr::Term()
-//
-//	PURPOSE:	Clean up.
-//
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
-
 void CIntelItemMgr::Term()
 {
 	m_buteMgr.Term();
@@ -76,16 +64,13 @@ void CIntelItemMgr::Term()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelItemMgr::Init()
 //
-//	ROUTINE:	CIntelItemMgr::Init()
-//
-//	PURPOSE:	Init mgr
-//
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
-
 LTBOOL CIntelItemMgr::Init(const char* szAttributeFile)
 {
-    if (!szAttributeFile) return LTFALSE;
+	if (!szAttributeFile) return LTFALSE;
 
 	strncpy(s_aAttributeFile, szAttributeFile, sizeof(s_aAttributeFile));
 
@@ -104,7 +89,7 @@ LTBOOL CIntelItemMgr::Init(const char* szAttributeFile)
 		m_buteMgr.Save(s_aAttributeFile);
 		RefreshData();
 	}
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
@@ -124,8 +109,8 @@ void CIntelItemMgr::AddItem(uint8 nType, uint32 nID)
 	CPoint test(-1,-1);
 	while (!bFound && m_buteMgr.Exist(s_aTagName,s_aAttName))
 	{
-        CPoint zero(0,0);
-        test = m_buteMgr.GetPoint(s_aTagName,s_aAttName,zero);
+		CPoint zero(0,0);
+		test = m_buteMgr.GetPoint(s_aTagName,s_aAttName,zero);
 		bFound = (test.y == item.y);
 		if (!bFound)
 		{
@@ -162,29 +147,24 @@ void CIntelItemMgr::GetItem(int nMissionNum, int nIndex, IntelItem* pItem)
 	if (!pItem) return;
 	sprintf(s_aTagName,"%s%d",IMGR_MISSION_TAG,nMissionNum);
 	sprintf(s_aAttName,"%s%d",IMGR_INTEL,nIndex);
-    CPoint zero(0,0);
-    CPoint item = m_buteMgr.GetPoint(s_aTagName,s_aAttName,zero);
+	CPoint zero(0,0);
+	CPoint item = m_buteMgr.GetPoint(s_aTagName,s_aAttName,zero);
 	pItem->nType = (uint8)item.x;
 	pItem->nID = (uint32)item.y;
 
 }
 
 
-
-
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelItemMgr::Parse()
 //
-//	ROUTINE:	CIntelItemMgr::Parse()
-//
-//	PURPOSE:	Parse from a rez file
-//
+//	PURPOSE: Parse from a rez file
 // ----------------------------------------------------------------------- //
-
 LTBOOL CIntelItemMgr::Parse(const char* sButeFile)
 {
 	// Sanity checks...
 
-    if (!sButeFile)	return(LTFALSE);
+	if (!sButeFile)	return(LTFALSE);
 
 
 	BOOL bRet = TRUE;
@@ -205,20 +185,15 @@ LTBOOL CIntelItemMgr::Parse(const char* sButeFile)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelItemMgr::RefreshData()
 //
-//	ROUTINE:	CIntelItemMgr::RefreshData()
-//
-//	PURPOSE:	Make sure our bute mgr is up-to-date with what is in the
-//				file
-//
+//	PURPOSE: Make sure our bute mgr is up-to-date with what is in the
+//			file
 // ----------------------------------------------------------------------- //
-
 void CIntelItemMgr::RefreshData()
 {
 	m_buteMgr.Term();
 	m_buteMgr.Init(GBM_DisplayError);
-    if (!Parse(s_aAttributeFile))
+	if (!Parse(s_aAttributeFile))
 		g_pLTClient->CPrint("error parsing in RefreshData()");
 }
-
-

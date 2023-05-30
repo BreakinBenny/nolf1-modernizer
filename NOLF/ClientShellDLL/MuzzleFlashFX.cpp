@@ -1,15 +1,12 @@
 // ----------------------------------------------------------------------- //
+// MODULE: MuzzleFlashFX.cpp
 //
-// MODULE  : MuzzleFlashFX.cpp
+// PURPOSE: MuzzleFlash special FX - Implementation
 //
-// PURPOSE : MuzzleFlash special FX - Implementation
-//
-// CREATED : 12/17/99
+// CREATED: 12/17/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
-
 #include "stdafx.h"
 #include "MuzzleFlashFX.h"
 #include "iltclient.h"
@@ -22,40 +19,34 @@
 VarTrack	g_vtReallyClose;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::Init
 //
-//	ROUTINE:	CMuzzleFlashFX::Init
-//
-//	PURPOSE:	Init the MuzzleFlash
-//
+//	PURPOSE: Init the MuzzleFlash
 // ----------------------------------------------------------------------- //
-
 LTBOOL CMuzzleFlashFX::Init(HLOCALOBJ hServObj, HMESSAGEREAD hMessage)
 {
-    if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
-    if (!hMessage) return LTFALSE;
+	if (!CSpecialFX::Init(hServObj, hMessage)) return LTFALSE;
+	if (!hMessage) return LTFALSE;
 
 	// Don't support server-side versions of this fx...
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::Init
 //
-//	ROUTINE:	CMuzzleFlashFX::Init
-//
-//	PURPOSE:	Init the MuzzleFlash
-//
+//	PURPOSE: Init the MuzzleFlash
 // ----------------------------------------------------------------------- //
-
 LTBOOL CMuzzleFlashFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 {
-    if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
+	if (!CSpecialFX::Init(psfxCreateStruct)) return LTFALSE;
 
 	MUZZLEFLASHCREATESTRUCT* pMF = (MUZZLEFLASHCREATESTRUCT*)psfxCreateStruct;
 
 	m_cs = *((MUZZLEFLASHCREATESTRUCT*)pMF);
 
-    if (!m_cs.pWeapon) return LTFALSE;
+	if (!m_cs.pWeapon) return LTFALSE;
 
 	// Set our server object to our hParent so we get notified when
 	// the hParent goes away...
@@ -65,47 +56,41 @@ LTBOOL CMuzzleFlashFX::Init(SFXCREATESTRUCT* psfxCreateStruct)
 		m_hServerObject = m_cs.hParent;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::CreateObject
 //
-//	ROUTINE:	CMuzzleFlashFX::CreateObject
-//
-//	PURPOSE:	Create fx objects
-//
+//	PURPOSE: Create fx objects
 // ----------------------------------------------------------------------- //
-
 LTBOOL CMuzzleFlashFX::CreateObject(ILTClient *pClientDE)
 {
-    if (!pClientDE || !CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
+	if (!pClientDE || !CSpecialFX::CreateObject(pClientDE)) return LTFALSE;
 
 	if (!g_vtReallyClose.IsInitted())
 	{
-	    g_vtReallyClose.Init(pClientDE, "MFReallyClose", NULL, 1.0f);
+		g_vtReallyClose.Init(pClientDE, "MFReallyClose", NULL, 1.0f);
 	}
 
 	return ResetFX();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::Setup
 //
-//	ROUTINE:	CMuzzleFlashFX::Setup
-//
-//	PURPOSE:	Create fx objects
-//
+//	PURPOSE: Create fx objects
 // ----------------------------------------------------------------------- //
-
 LTBOOL CMuzzleFlashFX::Setup(MUZZLEFLASHCREATESTRUCT & cs)
 {
-    LTBOOL bRet = LTFALSE;
+	LTBOOL bRet = LTFALSE;
 
 	if (!m_pClientDE)
 	{
 		if (Init(&cs))
 		{
-            bRet = CreateObject(g_pLTClient);
+			bRet = CreateObject(g_pLTClient);
 		}
 	}
 	else
@@ -118,16 +103,13 @@ LTBOOL CMuzzleFlashFX::Setup(MUZZLEFLASHCREATESTRUCT & cs)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::Reset
 //
-//	ROUTINE:	CMuzzleFlashFX::Reset
-//
-//	PURPOSE:	Reset the muzzle flash
-//
+//	PURPOSE: Reset the muzzle flash
 // ----------------------------------------------------------------------- //
-
 LTBOOL CMuzzleFlashFX::Reset(MUZZLEFLASHCREATESTRUCT & cs)
 {
-    if (!m_pClientDE) return LTFALSE;
+	if (!m_pClientDE) return LTFALSE;
 
 	m_cs = cs;
 
@@ -136,26 +118,23 @@ LTBOOL CMuzzleFlashFX::Reset(MUZZLEFLASHCREATESTRUCT & cs)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::ResetFX
 //
-//	ROUTINE:	CMuzzleFlashFX::ResetFX
-//
-//	PURPOSE:	Reset all the fx...
-//
+//	PURPOSE: Reset all the fx...
 // ----------------------------------------------------------------------- //
-
 LTBOOL CMuzzleFlashFX::ResetFX()
 {
 	if (!m_pClientDE) return LTFALSE;
 
-    m_bUsingParticles = LTFALSE;
-    m_bUsingLight     = LTFALSE;
-    m_bUsingScale     = LTFALSE;
+	m_bUsingParticles = LTFALSE;
+	m_bUsingLight	 = LTFALSE;
+	m_bUsingScale	 = LTFALSE;
 
 	// Create/Reset the fx specified by the weapon...
 
-    if (!m_cs.pWeapon) return LTFALSE;
+	if (!m_cs.pWeapon) return LTFALSE;
 
-    CMuzzleFX* pMuzzleFX = LTNULL;
+	CMuzzleFX* pMuzzleFX = LTNULL;
 	if (m_cs.bPlayerView)
 	{
 		pMuzzleFX = m_cs.pWeapon->pPVMuzzleFX;
@@ -165,7 +144,7 @@ LTBOOL CMuzzleFlashFX::ResetFX()
 		pMuzzleFX = m_cs.pWeapon->pHHMuzzleFX;
 	}
 
-    if (!pMuzzleFX) return LTFALSE;
+	if (!pMuzzleFX) return LTFALSE;
 
 
 	// Create/Update the dynamic light...
@@ -184,10 +163,10 @@ LTBOOL CMuzzleFlashFX::ResetFX()
 
 	if (pMuzzleFX->pScaleFX)
 	{
-        LTVector vU, vR, vF;
-        m_pClientDE->GetRotationVectors(&(m_cs.rRot), &vU, &vR, &vF);
+		LTVector vU, vR, vF;
+		m_pClientDE->GetRotationVectors(&(m_cs.rRot), &vU, &vR, &vF);
 
-        m_bUsingScale = (LTBOOL) !!(g_pFXButeMgr->CreateScaleFX(pMuzzleFX->pScaleFX,
+		m_bUsingScale = (LTBOOL) !!(g_pFXButeMgr->CreateScaleFX(pMuzzleFX->pScaleFX,
 			m_cs.vPos, vF, LTNULL, &(m_cs.rRot), &m_Scale));
 
 		// Make camera-relative if player view...
@@ -207,17 +186,17 @@ LTBOOL CMuzzleFlashFX::ResetFX()
 	if (pMuzzleFX->pPMuzzleFX)
 	{
 		MFPCREATESTRUCT mfpcs;
-		mfpcs.pPMuzzleFX		= pMuzzleFX->pPMuzzleFX;
-		mfpcs.bPlayerView		= m_cs.bPlayerView;
-		mfpcs.vPos				= m_cs.vPos;
-		mfpcs.rRot				= m_cs.rRot;
-        mfpcs.hFiredFrom        = m_cs.bPlayerView ? LTNULL : m_cs.hParent;
+		mfpcs.pPMuzzleFX	= pMuzzleFX->pPMuzzleFX;
+		mfpcs.bPlayerView	= m_cs.bPlayerView;
+		mfpcs.vPos		= m_cs.vPos;
+		mfpcs.rRot		= m_cs.rRot;
+		mfpcs.hFiredFrom	= m_cs.bPlayerView ? LTNULL : m_cs.hParent;
 
 		if (!m_Particle.GetObject())
 		{
 			if (m_Particle.Init(&mfpcs))
 			{
-                m_Particle.CreateObject(m_pClientDE);
+				m_Particle.CreateObject(m_pClientDE);
 
 				// Make camera-relative if player view...
 
@@ -244,29 +223,26 @@ LTBOOL CMuzzleFlashFX::ResetFX()
 			m_Particle.Reset(mfpcs);
 		}
 
-        m_bUsingParticles = LTTRUE;
+		m_bUsingParticles = LTTRUE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::Update
 //
-//	ROUTINE:	CMuzzleFlashFX::Update
-//
-//	PURPOSE:	Update the fx
-//
+//	PURPOSE: Update the fx
 // ----------------------------------------------------------------------- //
-
 LTBOOL CMuzzleFlashFX::Update()
 {
-    if (!m_pClientDE || m_bHidden) return LTFALSE;
+	if (!m_pClientDE || m_bHidden) return LTFALSE;
 
 	// If we we're not a player-view muzzle fx,  If our
 	// server object has been removed, we should go away...
 
-    if (!m_cs.bPlayerView && !m_hServerObject) return LTFALSE;
+	if (!m_cs.bPlayerView && !m_hServerObject) return LTFALSE;
 
 	// Set/Clear the FLAG_REALLYCLOSE
 
@@ -308,9 +284,9 @@ LTBOOL CMuzzleFlashFX::Update()
 
 	// Update all the fx, and see if we're done...
 
-    LTBOOL bParticleDone = m_bUsingParticles ? !m_Particle.Update()  : LTTRUE;
-    LTBOOL bLightDone    = m_bUsingLight     ? !m_Light.Update()     : LTTRUE;
-    LTBOOL bScaleDone    = m_bUsingScale     ? !m_Scale.Update()     : LTTRUE;
+	LTBOOL bParticleDone	= m_bUsingParticles	? !m_Particle.Update()	: LTTRUE;
+	LTBOOL bLightDone	= m_bUsingLight	? !m_Light.Update()		: LTTRUE;
+	LTBOOL bScaleDone	= m_bUsingScale	? !m_Scale.Update()		: LTTRUE;
 
 
 	// Keep the objects in the correct place...
@@ -318,8 +294,8 @@ LTBOOL CMuzzleFlashFX::Update()
 	if (!m_cs.bPlayerView && m_cs.hParent)
 	{
 		HOBJECT hObj;
-        LTRotation rRot;
-        LTVector vPos;
+		LTRotation rRot;
+		LTVector vPos;
 
 		GetAttachmentSocketTransform(m_cs.hParent, "Flash", vPos, rRot);
 
@@ -328,8 +304,8 @@ LTBOOL CMuzzleFlashFX::Update()
 			hObj = m_Scale.GetObject();
 			if (hObj)
 			{
-                m_pClientDE->SetObjectPos(hObj, &vPos);
-                m_pClientDE->SetObjectRotation(hObj, &rRot);
+				m_pClientDE->SetObjectPos(hObj, &vPos);
+				m_pClientDE->SetObjectRotation(hObj, &rRot);
 			}
 		}
 
@@ -338,8 +314,8 @@ LTBOOL CMuzzleFlashFX::Update()
 			hObj = m_Particle.GetObject();
 			if (hObj)
 			{
-                m_pClientDE->SetObjectPos(hObj, &vPos);
-                m_pClientDE->SetObjectRotation(hObj, &rRot);
+				m_pClientDE->SetObjectPos(hObj, &vPos);
+				m_pClientDE->SetObjectRotation(hObj, &rRot);
 			}
 		}
 
@@ -348,7 +324,7 @@ LTBOOL CMuzzleFlashFX::Update()
 			hObj = m_Light.GetObject();
 			if (hObj)
 			{
-                m_pClientDE->SetObjectPos(hObj, &vPos);
+				m_pClientDE->SetObjectPos(hObj, &vPos);
 			}
 		}
 	}
@@ -358,41 +334,35 @@ LTBOOL CMuzzleFlashFX::Update()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::Hide
 //
-//	ROUTINE:	CMuzzleFlashFX::Hide
-//
-//	PURPOSE:	Hide the fx
-//
+//	PURPOSE: Hide the fx
 // ----------------------------------------------------------------------- //
-
 void CMuzzleFlashFX::Hide()
 {
-    m_bHidden = LTTRUE;
+	m_bHidden = LTTRUE;
 	ReallyHide();
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::ReallyHide
 //
-//	ROUTINE:	CMuzzleFlashFX::ReallyHide
-//
-//	PURPOSE:	Hide the fx
-//
+//	PURPOSE: Hide the fx
 // ----------------------------------------------------------------------- //
-
 void CMuzzleFlashFX::ReallyHide()
 {
 	if (!m_pClientDE) return;
 
 	HOBJECT hObj;
-    uint32 dwFlags;
+	uint32 dwFlags;
 
 	// Hide particles...
 
 	hObj = m_Particle.GetObject();
 	if (hObj)
 	{
-        dwFlags = m_pClientDE->GetObjectFlags(hObj);
-        m_pClientDE->SetObjectFlags(hObj, dwFlags & ~FLAG_VISIBLE);
+		dwFlags = m_pClientDE->GetObjectFlags(hObj);
+		m_pClientDE->SetObjectFlags(hObj, dwFlags & ~FLAG_VISIBLE);
 	}
 
 	// Hide light...
@@ -400,8 +370,8 @@ void CMuzzleFlashFX::ReallyHide()
 	hObj = m_Light.GetObject();
 	if (hObj)
 	{
-        dwFlags = m_pClientDE->GetObjectFlags(hObj);
-        m_pClientDE->SetObjectFlags(hObj, dwFlags & ~FLAG_VISIBLE);
+		dwFlags = m_pClientDE->GetObjectFlags(hObj);
+		m_pClientDE->SetObjectFlags(hObj, dwFlags & ~FLAG_VISIBLE);
 	}
 
 	// Hide scale fx...
@@ -409,27 +379,24 @@ void CMuzzleFlashFX::ReallyHide()
 	hObj = m_Scale.GetObject();
 	if (hObj)
 	{
-        dwFlags = m_pClientDE->GetObjectFlags(hObj);
-        m_pClientDE->SetObjectFlags(hObj, dwFlags & ~FLAG_VISIBLE);
+		dwFlags = m_pClientDE->GetObjectFlags(hObj);
+		m_pClientDE->SetObjectFlags(hObj, dwFlags & ~FLAG_VISIBLE);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::Show
 //
-//	ROUTINE:	CMuzzleFlashFX::Show
-//
-//	PURPOSE:	Show the fx
-//
+//	PURPOSE: Show the fx
 // ----------------------------------------------------------------------- //
-
 void CMuzzleFlashFX::Show()
 {
 	if (!m_pClientDE) return;
 
 	HOBJECT hObj;
-    uint32 dwFlags;
+	uint32 dwFlags;
 
-    m_bHidden = LTFALSE;
+	m_bHidden = LTFALSE;
 
 	// Show particles...
 
@@ -438,8 +405,8 @@ void CMuzzleFlashFX::Show()
 		hObj = m_Particle.GetObject();
 		if (hObj)
 		{
-            dwFlags = m_pClientDE->GetObjectFlags(hObj);
-            m_pClientDE->SetObjectFlags(hObj, dwFlags | FLAG_VISIBLE);
+			dwFlags = m_pClientDE->GetObjectFlags(hObj);
+			m_pClientDE->SetObjectFlags(hObj, dwFlags | FLAG_VISIBLE);
 		}
 	}
 
@@ -450,8 +417,8 @@ void CMuzzleFlashFX::Show()
 		hObj = m_Light.GetObject();
 		if (hObj)
 		{
-            dwFlags = m_pClientDE->GetObjectFlags(hObj);
-            m_pClientDE->SetObjectFlags(hObj, dwFlags | FLAG_VISIBLE);
+			dwFlags = m_pClientDE->GetObjectFlags(hObj);
+			m_pClientDE->SetObjectFlags(hObj, dwFlags | FLAG_VISIBLE);
 		}
 	}
 
@@ -462,20 +429,17 @@ void CMuzzleFlashFX::Show()
 		hObj = m_Scale.GetObject();
 		if (hObj)
 		{
-            dwFlags = m_pClientDE->GetObjectFlags(hObj);
-            m_pClientDE->SetObjectFlags(hObj, dwFlags | FLAG_VISIBLE);
+			dwFlags = m_pClientDE->GetObjectFlags(hObj);
+			m_pClientDE->SetObjectFlags(hObj, dwFlags | FLAG_VISIBLE);
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::SetPos
 //
-//	ROUTINE:	CMuzzleFlashFX::SetPos
-//
-//	PURPOSE:	Set the fx positions
-//
+//	PURPOSE: Set the fx positions
 // ----------------------------------------------------------------------- //
-
 void CMuzzleFlashFX::SetPos(LTVector vWorldPos, LTVector vCamRelPos)
 {
 	if (!m_pClientDE) return;
@@ -506,7 +470,7 @@ void CMuzzleFlashFX::SetPos(LTVector vWorldPos, LTVector vCamRelPos)
 		hObj = m_Light.GetObject();
 		if (hObj)
 		{
-            m_pClientDE->SetObjectPos(hObj, &vWorldPos, LTTRUE);
+			m_pClientDE->SetObjectPos(hObj, &vWorldPos, LTTRUE);
 		}
 	}
 
@@ -515,19 +479,16 @@ void CMuzzleFlashFX::SetPos(LTVector vWorldPos, LTVector vCamRelPos)
 		hObj = m_Scale.GetObject();
 		if (hObj)
 		{
-            m_pClientDE->SetObjectPos(hObj, &vCamRelPos, LTTRUE);
+			m_pClientDE->SetObjectPos(hObj, &vCamRelPos, LTTRUE);
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::SetRot
 //
-//	ROUTINE:	CMuzzleFlashFX::SetRot
-//
-//	PURPOSE:	Set the fx rotations
-//
+//	PURPOSE: Set the fx rotations
 // ----------------------------------------------------------------------- //
-
 void CMuzzleFlashFX::SetRot(LTRotation rRot)
 {
 	if (!m_pClientDE) return;
@@ -557,7 +518,7 @@ void CMuzzleFlashFX::SetRot(LTRotation rRot)
 		hObj = m_Light.GetObject();
 		if (hObj)
 		{
-            m_pClientDE->SetObjectRotation(hObj, &rRot);
+			m_pClientDE->SetObjectRotation(hObj, &rRot);
 		}
 	}
 
@@ -574,22 +535,19 @@ void CMuzzleFlashFX::SetRot(LTRotation rRot)
 				rTempRot.Init();
 			}
 
-            m_pClientDE->SetObjectRotation(hObj, &rTempRot);
+			m_pClientDE->SetObjectRotation(hObj, &rTempRot);
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMuzzleFlashFX::Term
 //
-//	ROUTINE:	CMuzzleFlashFX::Term
-//
-//	PURPOSE:	If Term() is called on the CMuzzleFlashFX, Setup must be
-//				called on the object to re-create any engine objects
-//				associated with the fx.
-//
+//	PURPOSE: If Term() is called on the CMuzzleFlashFX, Setup must be
+//			called on the object to re-create any engine objects
+//			associated with the fx.
 // ----------------------------------------------------------------------- //
-
 void CMuzzleFlashFX::Term()
 {
 	// Set our clientde pointer to NULL, this is how Setup knows to
