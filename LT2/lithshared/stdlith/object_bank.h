@@ -1,4 +1,3 @@
-
 // These work just like StructBanks but are for C++ objects that need their
 // constructors and destructors called.
 
@@ -44,7 +43,7 @@
 	{
 	public:
 
-		virtual			~BaseObjectBank() {}
+		virtual		~BaseObjectBank() {}
 
 		virtual void*	AllocVoid()=0;
 		virtual void	FreeVoid(void *ptr)=0;
@@ -57,27 +56,27 @@
 	{
 	public:
 
-					ObjectBank();
-					ObjectBank(unsigned long cacheSize, unsigned long preAllocate=0);
-		virtual		~ObjectBank();
+				ObjectBank();
+				ObjectBank(unsigned long cacheSize, unsigned long preAllocate=0);
+		virtual	~ObjectBank();
 
 		void		Init(unsigned long cacheSize, unsigned long preAllocate=0);
 
 		// Set the cache size (in numbers of objects).  Default is DEFAULT_OBJECT_CACHE_SIZE.
 		void		SetCacheSize(unsigned long size);
 
-		T*			Allocate();
+		T*		Allocate();
 		void		Free(T *pObj);
 
 		// Returns TRUE if the object is currently allocated.
 		// Only returns FALSE in debug mode..
-		BOOL		IsObjectAllocated(T *pObj);
+		BOOL	IsObjectAllocated(T *pObj);
 
 
 	// Overrides.
 	public:
 
-		virtual void*	AllocVoid()			{return Allocate();}
+		virtual void*	AllocVoid()		{return Allocate();}
 		virtual void	FreeVoid(void *ptr)	{Free((T*)ptr);}
 		virtual void	Term();
 
@@ -168,7 +167,3 @@
 
 
 #endif  // __OBJECT_BANK_H__
-
-
-
-

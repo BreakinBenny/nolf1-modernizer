@@ -1,4 +1,3 @@
-
 // This module defines a bunch of functions to convert between the different
 // list formats (arrays, linked lists, etc).
 
@@ -48,5 +47,3 @@
 
 
 #endif
-
-

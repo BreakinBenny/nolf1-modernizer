@@ -22,4 +22,3 @@ CPoint::CPoint(int32 newx, int32 newy)
 	x = newx;
 	y = newy;
 }
-

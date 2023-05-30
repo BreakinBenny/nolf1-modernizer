@@ -1,4 +1,3 @@
-
 #ifndef __GENHASH_H__
 #define __GENHASH_H__
 
@@ -31,16 +30,16 @@
 	{
 	public:
 
-						GenHash();
-						~GenHash();
+		GenHash();
+		~GenHash();
 
 		// Sets up list size and hash generator.
-		BOOL			Init(
+		BOOL	Init(
 			DWORD nLists,
 			GenHashHelper<T> *pHelper,
 			DWORD listCacheSize=0);
 
-		void			Term();
+		void	Term();
 
 
 	// GenList implementation.
@@ -53,7 +52,7 @@
 		virtual BOOL		GenAppend(T &toAppend);
 		virtual void		GenRemoveAt(GenListPos pos);
 		virtual void		GenRemoveAll();
-		virtual DWORD		GenGetSize() const;
+		virtual DWORD	GenGetSize() const;
 		virtual BOOL		GenCopyList(const GenList<T> &other);
 		virtual BOOL		GenAppendList(const GenList<T> &other);
 		virtual BOOL		GenFindElement(const T &toFind, GenListPos &thePos) const;
@@ -62,11 +61,11 @@
 	private:
 		
 		// The hash table.
-		BucketType			*m_pLists;
-		DWORD				m_nLists;
+		BucketType	*m_pLists;
+		DWORD		m_nLists;
 
 		// Tracked as elements are added and removed.
-		DWORD				m_nElements;
+		DWORD		m_nElements;
 
 		// Does the actual hash code calculations.
 		GenHashHelper<T>	*m_pHelper;
@@ -307,4 +306,3 @@
 
 
 #endif
-

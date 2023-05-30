@@ -1,15 +1,13 @@
 //------------------------------------------------------------------
+//	FILE: MultiLinkList.h
 //
-//	FILE	  : MultiLinkList.h
+//	PURPOSE: Defines the CMultiLinkList class.  This is a linked list
+//			that allows more control over its use, so an object can
+//			be contained in multiple linked lists.
 //
-//	PURPOSE	  : Defines the CMultiLinkList class.  This is a linked list
-//              that allows more control over its use, so an object can
-//              be contained in multiple linked lists.
+//	CREATED: December 1 1996
 //
-//	CREATED	  : December 1 1996
-//
-//	COPYRIGHT : Microsoft 1996 All Rights Reserved
-//
+//	COPYRIGHT: Microsoft 1996 All Rights Reserved
 //------------------------------------------------------------------
 
 #ifndef __MULTILINKLIST_H__
@@ -47,59 +45,59 @@
 		
 		public:
 
-						CMultiLinkList()
-						{
-							m_nElements = 0;
-							m_pHead = NULL;
-						}
+			CMultiLinkList()
+			{
+				m_nElements = 0;
+				m_pHead = NULL;
+			}
 
-						~CMultiLinkList()
-						{
-							RemoveAll();
-						}
+			~CMultiLinkList()
+			{
+				RemoveAll();
+			}
 
-						// Replacement for GetHeadPosition().
-						operator MPOS()		{ return m_pHead; }
+			// Replacement for GetHeadPosition().
+			operator MPOS()	{ return m_pHead; }
 			
-			DWORD		GetCount() const		{ return m_nElements; }
-			DWORD		GetSize() const		{ return m_nElements; }
-			int			IsEmpty()  const		{ return !m_pHead; }
+			DWORD	GetCount() const	{ return m_nElements; }
+			DWORD	GetSize() const		{ return m_nElements; }
+			int		IsEmpty()  const	{ return !m_pHead; }
 
-			T			GetHead()	const;
-			T			GetTail()	const;
+			T		GetHead()	const;
+			T		GetTail()	const;
 
-			T			RemoveHead();
-			T			RemoveTail();
+			T		RemoveHead();
+			T		RemoveTail();
 
-			MPOS		AddHead( T newHead, CMLLNode *pLinkInfo );
-			MPOS		AddTail( T newTail, CMLLNode *pLinkInfo );
+			MPOS	AddHead( T newHead, CMLLNode *pLinkInfo );
+			MPOS	AddTail( T newTail, CMLLNode *pLinkInfo );
 
 			void		RemoveAll();
 
-			MPOS		GetHeadPosition()	const	{ return m_pHead; }
-			MPOS		GetTailPosition()	const	{ return (m_pHead ? m_pHead->m_pGPrev : NULL); }
+			MPOS	GetHeadPosition()	const	{ return m_pHead; }
+			MPOS	GetTailPosition()	const	{ return (m_pHead ? m_pHead->m_pGPrev : NULL); }
 
-			T			GetNext( MPOS &pos )	const;
-			T			GetPrev( MPOS &pos )	const;
+			T		GetNext( MPOS &pos )	const;
+			T		GetPrev( MPOS &pos )	const;
 			
-			T			GetAt( MPOS pos );
+			T		GetAt( MPOS pos );
 			
 			void		RemoveAt( MPOS pos );
 
-			MPOS		InsertBefore( MPOS pos, T el, CMLLNode *pLinkInfo );
-			MPOS		InsertAfter( MPOS pos, T el, CMLLNode *pLinkInfo );
+			MPOS	InsertBefore( MPOS pos, T el, CMLLNode *pLinkInfo );
+			MPOS	InsertAfter( MPOS pos, T el, CMLLNode *pLinkInfo );
 
-			MPOS		Find( T searchFor, DWORD *pIndex=NULL )		const;
-			DWORD		FindElement( T searchFor, MPOS *pPos=NULL )	const;
-			MPOS		FindIndex( DWORD index )					const;
+			MPOS	Find( T searchFor, DWORD *pIndex=NULL )		const;
+			DWORD	FindElement( T searchFor, MPOS *pPos=NULL )	const;
+			MPOS	FindIndex( DWORD index )					const;
 
 
 
 
 		protected:
 
-			DWORD			m_nElements;
-			CMLLNode		*m_pHead;
+			DWORD		m_nElements;
+			CMLLNode	*m_pHead;
 
 	};
 
@@ -124,7 +122,7 @@
 	template<class T>
 	T CMultiLinkList<T>::GetNext( MPOS &pos ) const
 	{
-		T			ret = (T)pos->m_pObject;
+		T	ret = (T)pos->m_pObject;
 		
 		if( pos->m_pGNext == m_pHead )
 			pos = NULL;
@@ -138,7 +136,7 @@
 	template<class T>
 	T CMultiLinkList<T>::GetPrev( MPOS &pos ) const
 	{
-		T			ret = (T)pos->m_pObject;
+		T	ret = (T)pos->m_pObject;
 
 		if( pos->m_pGPrev == m_pHead )
 			pos = NULL;
@@ -360,9 +358,3 @@
 
 
 #endif // __MULTILINKLIST_H__
-	
-
-
-
-
-

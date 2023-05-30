@@ -44,60 +44,60 @@
 	
 	public:
 
-					CGLinkedList()
-					{
-						m_nElements = 0;
-						m_pHead = NULL;
-					}
+		CGLinkedList()
+		{
+			m_nElements = 0;
+			m_pHead = NULL;
+		}
 
-					~CGLinkedList()
-					{
-						RemoveAll();
-					}
+		~CGLinkedList()
+		{
+			RemoveAll();
+		}
 
 		inline void	Term() {RemoveAll();}
 
 			operator DWORD() {return m_nElements;}
 			operator GPOS() { return m_pHead; }
 		
-		DWORD		GetCount()	const		{ return m_nElements; }
-		DWORD		GetSize()	const		{ return m_nElements; }
-		int			IsEmpty()	const		{ return !m_pHead; }
+		DWORD	GetCount()	const	{ return m_nElements; }
+		DWORD	GetSize()		const	{ return m_nElements; }
+		int		IsEmpty()		const	{ return !m_pHead; }
 
-		inline T		GetHead()	const;
-		inline T		GetTail()	const;
+		inline T	GetHead()	const;
+		inline T	GetTail()		const;
 
-		inline T		RemoveHead();
-		inline T		RemoveTail();
+		inline T	RemoveHead();
+		inline T	RemoveTail();
 
 		inline void		Append(T newTail)
 		{
 			AddTail(newTail);
 		}
 
-		inline GPOS		AddHead( T newHead );
-		inline GPOS		AddTail( T newTail );
+		inline GPOS	AddHead( T newHead );
+		inline GPOS	AddTail( T newTail );
 
-		inline void		RemoveAll();
+		inline void	RemoveAll();
 
-		GPOS		GetHeadPosition()	const	{ return m_pHead; }
-		GPOS		GetTailPosition()	const	{ return (m_pHead ? m_pHead->m_pGPrev : NULL); }
+		GPOS	GetHeadPosition()	const	{ return m_pHead; }
+		GPOS	GetTailPosition()	const	{ return (m_pHead ? m_pHead->m_pGPrev : NULL); }
 
-		inline T		GetNext( GPOS &pos )	const;
-		inline T		GetPrev( GPOS &pos )	const;
+		inline T	GetNext( GPOS &pos )	const;
+		inline T	GetPrev( GPOS &pos )	const;
 		
-		inline T		GetAt( GPOS pos ) const;
+		inline T	GetAt( GPOS pos ) const;
 		
-		inline void		RemoveAt( GPOS pos );
+		inline void	RemoveAt( GPOS pos );
 
-		GPOS		InsertBefore( GPOS pos, T el );
-		GPOS		InsertAfter( GPOS pos, T el );
+		GPOS	InsertBefore( GPOS pos, T el );
+		GPOS	InsertAfter( GPOS pos, T el );
 
 		// Find and compare with T::operator==.
-		GPOS		Find( T searchFor, DWORD *pIndex=NULL )			const;
-		DWORD		FindElement( T searchFor, GPOS *pPos=NULL )		const;
+		GPOS	Find( T searchFor, DWORD *pIndex=NULL )		const;
+		DWORD	FindElement( T searchFor, GPOS *pPos=NULL )	const;
 
-		GPOS		FindIndex( DWORD index )						const;
+		GPOS	FindIndex( DWORD index )	const;
 
 		// Copy the source list.  This also calls _Term_ on theList.
 		void		StealList(CGLinkedList<T> &theList);
@@ -118,12 +118,12 @@
 			#endif
 		}
 
-		virtual BOOL		GenIsValid(const GenListPos &pos) const
+		virtual BOOL	GenIsValid(const GenListPos &pos) const
 		{
 			return !!pos.m_Pos;
 		}
 
-		virtual T			GenGetNext(GenListPos &pos) const
+		virtual T	GenGetNext(GenListPos &pos) const
 		{
 			#ifdef _DEBUG
 				++pos.m_Index;
@@ -132,39 +132,39 @@
 			return GetNext(*((GPOS*)&pos.m_Pos));
 		}
 
-		virtual T			GenGetAt(GenListPos &pos) const
+		virtual T	GenGetAt(GenListPos &pos) const
 		{
 			return GetAt(*((GPOS*)&pos.m_Pos));
 		}
 
-		virtual BOOL		GenAppend(T &toAppend)
+		virtual BOOL	GenAppend(T &toAppend)
 		{
 			Append(toAppend);
 			return TRUE;
 		}
 
-		virtual void		GenRemoveAt(GenListPos pos)
+		virtual void	GenRemoveAt(GenListPos pos)
 		{
 			RemoveAt((GPOS)pos.m_Pos);
 		}
 
-		virtual void		GenRemoveAll()
+		virtual void	GenRemoveAll()
 		{
 			RemoveAll();
 		}
 
-		virtual DWORD		GenGetSize() const
+		virtual DWORD	GenGetSize() const
 		{
 			return GetSize();
 		}
 
-		virtual BOOL		GenCopyList(const GenList<T> &other)
+		virtual BOOL	GenCopyList(const GenList<T> &other)
 		{
 			RemoveAll();
 			return GenAppendList(other);
 		}
 
-		virtual BOOL		GenAppendList(const GenList<T> &other)
+		virtual BOOL	GenAppendList(const GenList<T> &other)
 		{
 			GenListPos pos;
 			
@@ -176,7 +176,7 @@
 			return TRUE;
 		}
 
-		virtual BOOL		GenFindElement(const T &toFind, GenListPos &thePos) const
+		virtual BOOL	GenFindElement(const T &toFind, GenListPos &thePos) const
 		{
 			thePos.m_Pos = GLinkedList_FindElementMemcmp(
 				m_pHead,
@@ -189,8 +189,8 @@
 
 	protected:
 
-		DWORD			m_nElements;
-		CGLLNode		*m_pHead;
+		DWORD		m_nElements;
+		CGLLNode	*m_pHead;
 	};
 
 
@@ -214,7 +214,7 @@
 	template<class T>
 	inline T CGLinkedList<T>::GetNext( GPOS &pos ) const
 	{
-		T			ret = (T)pos;
+		T	ret = (T)pos;
 		
 		if( pos->m_pGNext == m_pHead )
 			pos = NULL;
@@ -228,7 +228,7 @@
 	template<class T>
 	inline T CGLinkedList<T>::GetPrev( GPOS &pos ) const
 	{
-		T			ret = (T)pos;
+		T	ret = (T)pos;
 
 		if( pos->m_pGPrev == m_pHead )
 			pos = NULL;
@@ -361,8 +361,8 @@
 	template<class T>
 	GPOS CGLinkedList<T>::Find( T searchFor, DWORD *pIndex )	const
 	{
-		T			pCur;
-		DWORD		index = 0;
+		T		pCur;
+		DWORD	index = 0;
 		
 		if( m_pHead )
 		{
@@ -409,7 +409,7 @@
 	template<class T>
 	GPOS CGLinkedList<T>::FindIndex( DWORD index )	const
 	{
-		T			pCur;
+		T	pCur;
 		
 		if( index >= m_nElements )
 			return NULL;
@@ -445,7 +445,7 @@
 	template<class T>
 	void GDeleteAndRemoveElements( CGLinkedList<T> &theList)
 	{
-		GPOS		pos;
+		GPOS	pos;
 
 		for(pos=theList.GetHeadPosition(); pos != NULL;)
 			delete (T)(theList.GetNext(pos));
@@ -470,9 +470,3 @@
 
 
 #endif // __GOODLINKLIST_H__
-	
-
-
-
-
-

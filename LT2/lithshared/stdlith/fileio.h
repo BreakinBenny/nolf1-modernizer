@@ -1,13 +1,11 @@
 //------------------------------------------------------------------
+//	FILE: FileIO.h
 //
-//	FILE	  : FileIO.h
+//	PURPOSE: Defines the CMoFileIO class.
 //
-//	PURPOSE	  : Defines the CMoFileIO class.
+//	CREATED: 1st May 1996
 //
-//	CREATED	  : 1st May 1996
-//
-//	COPYRIGHT : Microsoft 1996 All Rights Reserved
-//
+//	COPYRIGHT: Microsoft 1996 All Rights Reserved
 //------------------------------------------------------------------
 
 #ifndef __FILEIO_H__
@@ -23,28 +21,27 @@
 		public:
 
 			// Constructor
-								CMoFileIO();
-								~CMoFileIO();
+				CMoFileIO();
+				~CMoFileIO();
 
 			
 			// Member functions
 
-			BOOL				Open( const char *pFilename, const char *pAccess );
-			void				Close();
+			BOOL	Open( const char *pFilename, const char *pAccess );
+			void		Close();
 
-			BOOL				IsOpen();
+			BOOL	IsOpen();
 			
-			void				SetBoundaries( DWORD min, DWORD max );
+			void		SetBoundaries( DWORD min, DWORD max );
 
-			BOOL				Write( void *pBlock, DWORD blockSize );
-			BOOL				Read( void *pBlock, DWORD blockSize );
+			BOOL	Write( void *pBlock, DWORD blockSize );
+			BOOL	Read( void *pBlock, DWORD blockSize );
 
-			DWORD				GetCurPos();
-			DWORD				GetLen();
+			DWORD	GetCurPos();
+			DWORD	GetLen();
 
-			BOOL				SeekTo( DWORD pos );
+			BOOL	SeekTo( DWORD pos );
 	
-		
 		public:
 
 			// Private member functions
@@ -53,16 +50,14 @@
 		public:
 			
 			// Private member variables
-			FILE				*m_pFile;
+			FILE	*m_pFile;
 			
 			// File boundaries...
-			DWORD				m_FileMin, m_FileMax;
+			DWORD	m_FileMin, m_FileMax;
 			
-			DWORD				m_FileLen;
+			DWORD	m_FileLen;
 
 	};
 
 
 #endif
-
-

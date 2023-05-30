@@ -28,7 +28,7 @@
 	class LAlloc
 	{
 	public:
-		virtual			~LAlloc() {}
+		virtual		~LAlloc() {}
 		
 		virtual void*	Alloc(DWORD size)	{return DefStdlithAlloc(size);}
 		virtual void	Free(void *ptr)		{DefStdlithFree(ptr);}
@@ -40,9 +40,9 @@
 	{
 	public:
 
-						LAllocCount(LAlloc *pDelegate);
+			LAllocCount(LAlloc *pDelegate);
 
-		void			ClearCounts();
+		void	ClearCounts();
 
 		virtual void*	Alloc(DWORD size);
 		virtual void	Free(void *ptr);
@@ -51,23 +51,23 @@
 	public:
 
 		// Total allocations/frees.
-		DWORD		m_nTotalAllocations;
-		DWORD		m_nTotalFrees;
+		DWORD	m_nTotalAllocations;
+		DWORD	m_nTotalFrees;
 
 		// Total amount of memory allocated (this might overflow...)
-		DWORD		m_TotalMemoryAllocated;
+		DWORD	m_TotalMemoryAllocated;
 
 		// Current number of active allocations.
-		DWORD		m_nCurrentAllocations;
+		DWORD	m_nCurrentAllocations;
 
 		// Number of times Alloc failed (if you try to allocate 0 and it returns
 		// NULL, that is not considered a failure).
-		DWORD		m_nAllocationFailures;
+		DWORD	m_nAllocationFailures;
 
 
 	private:
 
-		LAlloc		*m_pDelegate;
+		LAlloc	*m_pDelegate;
 	};
 
 
@@ -78,14 +78,14 @@
 	{
 	public:
 
-						LAllocSimpleBlock();
-		virtual			~LAllocSimpleBlock();
+				LAllocSimpleBlock();
+		virtual	~LAllocSimpleBlock();
 
 		// Allocates the block and prepares for allocations.
 		// NOTE: it hangs onto the delegate until its destructor or
 		// when Term is called.
-		BOOL			Init(LAlloc *pDelegate, DWORD blockSize);
-		void			Term();
+		BOOL	Init(LAlloc *pDelegate, DWORD blockSize);
+		void		Term();
 
 
 	// Overrides.
@@ -95,19 +95,19 @@
 		virtual void	Free(void *ptr);
 
 	// Functions specific to LAllocSimpleBlock
-		DWORD			GetBlockSize() const { return m_BlockSize; };
+		DWORD	GetBlockSize() const { return m_BlockSize; };
 
 	private:
 
-		void			Clear();
+		void		Clear();
 
 
 	private:
 
-		LAlloc			*m_pDelegate;
-		BYTE			*m_pBlock;
-		DWORD			m_CurBlockPos;
-		DWORD			m_BlockSize;
+		LAlloc	*m_pDelegate;
+		BYTE	*m_pBlock;
+		DWORD	m_CurBlockPos;
+		DWORD	m_BlockSize;
 	};
 
 
@@ -243,5 +243,3 @@
 
 
 #endif
-
-

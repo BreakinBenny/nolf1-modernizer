@@ -1,10 +1,8 @@
-
 #ifndef __STRUCTBANK_H__
 #define __STRUCTBANK_H__
 
 
 	#include "l_allocator.h"
-
 
 	// This can be set to TRUE for debug builds, which will cause the structbanks
 	// to just allocate and free memory like normal.  Helps find memory leaks.
@@ -21,7 +19,7 @@
 	{
 		struct StructBankPage_t	*m_pNext;
 		unsigned long	m_nObjects; // How many objects are in this page?
-		DWORD			m_Data[1];
+		DWORD		m_Data[1];
 	} StructBankPage;
 
 
@@ -47,7 +45,7 @@
 		StructBankPage	*m_PageHead;
 
 		// The free list.
-		StructLink		*m_FreeListHead;
+		StructLink	*m_FreeListHead;
 	} StructBank;
 
 
@@ -159,7 +157,3 @@
 	}
 
 #endif
-
-
-
-

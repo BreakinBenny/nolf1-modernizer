@@ -1,14 +1,12 @@
 //------------------------------------------------------------------
+//	FILE: StdLith.h
 //
-//	FILE	  : StdLith.h
+//	PURPOSE: Includes all the useful files for your
+//			programming pleasure.
 //
-//	PURPOSE	  : Includes all the useful files for your
-//              programming pleasure.
+//	CREATED: August 20 1996
 //
-//	CREATED	  : August 20 1996
-//
-//	COPYRIGHT : Microsoft 1996 All Rights Reserved
-//
+//	COPYRIGHT: Microsoft 1996 All Rights Reserved
 //------------------------------------------------------------------
 
 #ifndef __STDLITH_H__

@@ -1,13 +1,11 @@
 //------------------------------------------------------------------
+//	FILE: StdLithDefs.h
 //
-//	FILE	  : StdLithDefs.h
+//	PURPOSE: Defines types and stuff for StdLith files.
 //
-//	PURPOSE	  : Defines types and stuff for StdLith files.
+//	CREATED: September 7 1996
 //
-//	CREATED	  : September 7 1996
-//
-//	COPYRIGHT : Microsoft 1996 All Rights Reserved
-//
+//	COPYRIGHT: Microsoft 1996 All Rights Reserved
 //------------------------------------------------------------------
 
 
@@ -77,6 +75,3 @@
 */
 
 #endif  // __STDLITH_DEFS_H__
-
-
-

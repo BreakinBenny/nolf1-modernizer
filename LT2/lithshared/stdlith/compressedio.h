@@ -1,14 +1,12 @@
 //------------------------------------------------------------------
+//	FILE: CompressedIO.h
 //
-//	FILE	  : CompressedIO.h
-//
-//	PURPOSE	  : Defines the CCompressedIO class, which allows you
+//	PURPOSE: Defines the CCompressedIO class, which allows you
 //              to compress any IO stream.
 //
-//	CREATED	  : February 15 1997
+//	CREATED: February 15 1997
 //
-//	COPYRIGHT : Microsoft 1997 All Rights Reserved
-//
+//	COPYRIGHT: Microsoft 1997 All Rights Reserved
 //------------------------------------------------------------------
 
 #ifndef __COMPRESSEDIO_H__
@@ -25,42 +23,42 @@
 		// Initialization.
 		public:
 
-								CCompressedIO();
-								~CCompressedIO();
+				CCompressedIO();
+				~CCompressedIO();
 
 			// Compresses the input stream into the output stream.
 			// Throws CLithMemException and any exception thrown by pInStream or pOutStream.
-			BOOL				WriteStream( CAbstractIO *pInStream, CAbstractIO *pOutStream, DWORD chunkSize, DWORD sizeToWrite );
+			BOOL	WriteStream( CAbstractIO *pInStream, CAbstractIO *pOutStream, DWORD chunkSize, DWORD sizeToWrite );
 			
 			// Read from a stream compressed with WriteStream.
-			BOOL				InitRead( CAbstractIO *pStreamToUse );
-			void				Term();
+			BOOL	InitRead( CAbstractIO *pStreamToUse );
+			void		Term();
 
 		
 		// Normal IO routines.
 		public:
 
 			// CANNOT WRITE TO A COMPRESSEDIO.  USE WRITESTREAM.
-			virtual BOOL			Write( void *pBlock, DWORD blockSize )	{ ASSERT(FALSE); return FALSE; }
+			virtual BOOL	Write( void *pBlock, DWORD blockSize )	{ ASSERT(FALSE); return FALSE; }
 
 			// Functions to read data
-			virtual BOOL			Read( void *pBlock, DWORD blockSize );
+			virtual BOOL	Read( void *pBlock, DWORD blockSize );
 
-			virtual DWORD			GetCurPos();
-			virtual DWORD			GetLen();
+			virtual DWORD	GetCurPos();
+			virtual DWORD	GetLen();
 
-			virtual BOOL			SeekTo( DWORD pos );
+			virtual BOOL	SeekTo( DWORD pos );
 
 
 		// Internal stuff.
 		protected:
 
-			CAbstractIO&		Stream()	{ return *m_pReadStream; }
+			CAbstractIO&	Stream()	{ return *m_pReadStream; }
 
-			DWORD				WriteChunk( CAbstractIO &inStream, CAbstractIO &outStream, CMoByteArray &compressed, CMoByteArray &uncompressed, DWORD size );
+			DWORD		WriteChunk( CAbstractIO &inStream, CAbstractIO &outStream, CMoByteArray &compressed, CMoByteArray &uncompressed, DWORD size );
 
-			void				SwitchToChunk( DWORD iChunk, DWORD offset );
-			void				LoadCurChunk();
+			void		SwitchToChunk( DWORD iChunk, DWORD offset );
+			void		LoadCurChunk();
 
 
 		protected:
@@ -73,50 +71,49 @@
 
 			
 			// Where we are in the file.
-			DWORD				m_iCurChunk;
-			DWORD				m_CurChunkPos;
+			DWORD	m_iCurChunk;
+			DWORD	m_CurChunkPos;
 
 			// Just stored data .. the current chunk's uncompressed size.
-			DWORD				m_CurChunkSize;
+			DWORD	m_CurChunkSize;
 
 			
 			// Which chunk is loaded (-1 if none).  It won't actually load a chunk and set this
 			// until you try to read from a chunk.
-			DWORD				m_iCurLoadedChunk;
+			DWORD	m_iCurLoadedChunk;
 
 			
 
 			// Number of chunks in this file.
-			DWORD				m_nChunks;
+			DWORD	m_nChunks;
 
 			// (Uncompressed) chunk size for this file.
-			DWORD				m_ChunkSize;			
+			DWORD	m_ChunkSize;			
 
 			// (Uncompressed) file length.
-			DWORD				m_FileLen;
+			DWORD	m_FileLen;
 
 
 			// Offsets of each chunk into the file (NOT offset by m_BaseFilePos).
-			CMoDWordArray		m_ChunkOffsets;
+			CMoDWordArray	m_ChunkOffsets;
 
 			// Size of each (compressed) chunk in the file.
-			CMoDWordArray		m_ChunkSizes;
+			CMoDWordArray	m_ChunkSizes;
 
 
 			// Size of each uncompressed chunk in the file.
-			CMoDWordArray		m_UncompressedChunkSizes;
+			CMoDWordArray	m_UncompressedChunkSizes;
 
 
 			// Used when seeking .. this way you can start up a compressed stream in the
 			// middle of a big file containing lots of little compressed streams.
-			DWORD				m_BaseFilePos;
+			DWORD	m_BaseFilePos;
 
 
 			// Stream used for reading.
-			CAbstractIO			*m_pReadStream;
+			CAbstractIO	*m_pReadStream;
 
 	};
 
 
 #endif  // __COMPRESSEDIO_H__
-

@@ -29,10 +29,10 @@
 	{
 		public:
 
-						CLithException()				{ SetExceptionType(LITH_EXCEPTION); }
+			CLithException()	{ SetExceptionType(LITH_EXCEPTION); }
 
-			void		SetExceptionType( int type )	{ g_LithExceptionType = type; }
-			int			GetExceptionType()				{ return g_LithExceptionType; }
+			void	SetExceptionType( int type )	{ g_LithExceptionType = type; }
+			int	GetExceptionType()			{ return g_LithExceptionType; }
 
 	};
 
@@ -42,7 +42,7 @@
 	{
 		public:
 			
-						CLithMemException()		{ SetExceptionType(LITH_MEMEXCEPTION); }
+			CLithMemException()	{ SetExceptionType(LITH_MEMEXCEPTION); }
 
 	};
 

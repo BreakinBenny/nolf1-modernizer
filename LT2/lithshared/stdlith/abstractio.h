@@ -1,13 +1,11 @@
 //------------------------------------------------------------------
+//	FILE: AbstractIO.h
 //
-//	FILE	  : AbstractIO.h
+//	PURPOSE: Defines the CAbstractIO class.
 //
-//	PURPOSE	  : Defines the CAbstractIO class.
-//
-//	CREATED	  : 1st May 1996
+//	CREATED: 1st May 1996
 //
 //	COPYRIGHT : Microsoft 1996 All Rights Reserved
-//
 //------------------------------------------------------------------
 
 #ifndef __ABSTRACTIO_H__
@@ -30,7 +28,7 @@
 	} LithIOExceptionType;
 
 
-	#define LITHIO_EXCEPTION		10
+	#define LITHIO_EXCEPTION	10
 	
 	class CLithIOException : public CLithException
 	{
@@ -47,7 +45,7 @@
 				m_Code=code;
 			}
 
-			LithIOExceptionType		m_Code;
+			LithIOExceptionType	m_Code;
 
 	};
 
@@ -59,19 +57,19 @@
 
 			// Member functions
 
-									CAbstractIO();
-									~CAbstractIO();
+				CAbstractIO();
+				~CAbstractIO();
 
-			virtual BOOL			Open( const char *pFilename, const char *pAccess )	{ return TRUE; }
-			virtual void			Close()												{}
-
-
-			void					SetUserData1( DWORD data )	{ m_UserData1 = data; }
-			DWORD					GetUserData1()				{ return m_UserData1; }
+			virtual BOOL	Open( const char *pFilename, const char *pAccess )	{ return TRUE; }
+			virtual void	Close()	{}
 
 
-			void					EnableExceptions( BOOL bEnable );
-			BOOL					IsExceptionsEnabled();
+			void		SetUserData1( DWORD data )	{ m_UserData1 = data; }
+			DWORD	GetUserData1()	{ return m_UserData1; }
+
+
+			void		EnableExceptions( BOOL bEnable );
+			BOOL	IsExceptionsEnabled();
 
 			// Functions to toWrite data
 			virtual BOOL			Write( void *pBlock, DWORD blockSize )=0;
@@ -97,31 +95,29 @@
 			CAbstractIO&	operator >> ( double &toRead )	{ Read(&toRead, sizeof(toRead)); return *this; }
 			CAbstractIO&	operator >> ( int &toRead )		{ Read(&toRead, sizeof(toRead)); return *this; }
 
-			BOOL					WriteString( char *pStr );
-			BOOL					ReadString( char *pStr, DWORD maxLen );
+			BOOL	WriteString( char *pStr );
+			BOOL	ReadString( char *pStr, DWORD maxLen );
 
-			BOOL					ReadTextString(char *pStr, DWORD maxLen);
+			BOOL	ReadTextString(char *pStr, DWORD maxLen);
 
-			virtual DWORD			GetCurPos()=0;
-			virtual DWORD			GetLen()=0;
+			virtual DWORD	GetCurPos()=0;
+			virtual DWORD	GetLen()=0;
 
-			virtual BOOL			SeekTo( DWORD pos )=0;
+			virtual BOOL	SeekTo( DWORD pos )=0;
 
 		
 		protected:
 
 			// User data stuff.
-			DWORD					m_UserData1;
+			DWORD	m_UserData1;
 
 			// Tells whether or not it should throw exceptions.
-			BOOL					m_bExceptionsEnabled;
+			BOOL	m_bExceptionsEnabled;
 
 			// Throws an exception if they're enabled.
-			void					MaybeThrowIOException( LithIOExceptionType code );
+			void	MaybeThrowIOException( LithIOExceptionType code );
 
 	};
 
 
 #endif
-
-

@@ -1,4 +1,3 @@
-
 // The 100th linked list class I've got in Stdlith :)
 // This one is for REALLY simple doubly linked lists..
 // You need a GLink for the list head, and this just defines

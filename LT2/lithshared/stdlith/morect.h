@@ -1,13 +1,11 @@
 //------------------------------------------------------------------
+//	FILE: MoRect.h
 //
-//	FILE	  : MoRect.h
+//	PURPOSE: Defines the CMoRect class.
 //
-//	PURPOSE	  : Defines the CMoRect class.
+//	CREATED: November 7 1996
 //
-//	CREATED	  : November 7 1996
-//
-//	COPYRIGHT : Microsoft 1996 All Rights Reserved
-//
+//	COPYRIGHT: Microsoft 1996 All Rights Reserved
 //------------------------------------------------------------------
 
 #ifndef __MORECT_H__
@@ -23,13 +21,13 @@
 	
 			BOOL	Init( int x1, int y1, int x2, int y2 );
 			
-			int		Width()		{ return right-left; }
-			int		Height()	{ return bottom-top; }
+			int	Width()	{ return right-left; }
+			int	Height()	{ return bottom-top; }
 
 			void	NormalizeRect();
 					
 
-			int		left, top, right, bottom;
+			int	left, top, right, bottom;
 			
 	};
 
@@ -67,4 +65,3 @@
 
 
 #endif  // __MORECT_H__
-

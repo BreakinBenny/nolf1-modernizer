@@ -24,9 +24,9 @@
 	{
 		public:
 			
-			CLLNode<T>		*m_pPrev;
-			CLLNode<T>		*m_pNext;
-			T				m_pData;
+			CLLNode<T>	*m_pPrev;
+			CLLNode<T>	*m_pNext;
+			T			m_pData;
 	};
 
 	// NOTE: m_pPrev and m_pNext in this structure MUST match 
@@ -34,8 +34,8 @@
 	class CGenLLNode
 	{
 	public:
-		CGenLLNode		*m_pPrev;
-		CGenLLNode		*m_pNext;
+		CGenLLNode	*m_pPrev;
+		CGenLLNode	*m_pNext;
 		char			m_Data[1];	// (Used to look at m_pData);
 	};
 
@@ -66,32 +66,32 @@
 					}
 
 		
-		DWORD		GetSize() const		{ return m_nElements; }
-		DWORD		GetCount() const		{ return m_nElements; }
-		int			IsEmpty()  const		{ return !m_pHead; }
+		DWORD	GetSize() const		{ return m_nElements; }
+		DWORD	GetCount() const	{ return m_nElements; }
+		int		IsEmpty()  const	{ return !m_pHead; }
 
 					operator LPOS() {return GetHeadPosition();}
 					operator unsigned long() {return m_nElements;}
 
-		T&			GetHead()				{ ASSERT(m_pHead);  return m_pHead->m_pData; }
-		T			GetHead()	const		{ ASSERT(m_pHead);  return m_pHead->m_pData; }
-		T&			GetTail()				{ ASSERT(m_pHead);	return m_pHead->m_pPrev->m_pData; }
-		T			GetTail()	const		{ ASSERT(m_pHead);	return m_pHead->m_pPrev->m_pData; }
+		T&	GetHead()			{ ASSERT(m_pHead);  return m_pHead->m_pData; }
+		T	GetHead()	const	{ ASSERT(m_pHead);  return m_pHead->m_pData; }
+		T&	GetTail()				{ ASSERT(m_pHead);	return m_pHead->m_pPrev->m_pData; }
+		T	GetTail()	const		{ ASSERT(m_pHead);	return m_pHead->m_pPrev->m_pData; }
 
-		T			RemoveHead();
-		T			RemoveTail();
+		T		RemoveHead();
+		T		RemoveTail();
 
-		LPOS		Append(T toAppend) {return AddTail(toAppend);}
+		LPOS	Append(T toAppend) {return AddTail(toAppend);}
 
-		LPOS		AddHead( T newHead );
-		LPOS		AddTail( T newTail );
+		LPOS	AddHead( T newHead );
+		LPOS	AddTail( T newTail );
 
 		void		RemoveAll();
 
-		LPOS			GetHeadPosition()	const	{ return m_pHead; }
-		LPOS			GetTailPosition()	const	{ return (m_pHead ? m_pHead->m_pPrev : NULL); }
+		LPOS	GetHeadPosition()	const	{ return m_pHead; }
+		LPOS	GetTailPosition()	const	{ return (m_pHead ? m_pHead->m_pPrev : NULL); }
 
-		inline T		GetNext( LPOS &pos ) const
+		inline T	GetNext( LPOS &pos ) const
 		{
 			CLLNode<T> *pLink = ((CLLNode<T>*)pos);
 			T ret = pLink->m_pData;
@@ -105,7 +105,7 @@
 		}
 
 
-		inline T		GetPrev( LPOS &pos ) const
+		inline T	GetPrev( LPOS &pos ) const
 		{
 			CLLNode<T> *pLink = ((CLLNode<T>*)pos);
 			T ret = pLink->m_pData;
@@ -118,19 +118,19 @@
 			return ret;
 		}
 
-		T&			GetAt( LPOS &lPos )	const		{ return ((CLLNode<T>*)lPos)->m_pData; }
+		T&		GetAt( LPOS &lPos )	const	{ return ((CLLNode<T>*)lPos)->m_pData; }
 		
-		void		SetAt( LPOS &lPos, T el )		{ ((CLLNode<T>*)lPos)->m_pData = el; }
+		void		SetAt( LPOS &lPos, T el )	{ ((CLLNode<T>*)lPos)->m_pData = el; }
 		void		RemoveAt( LPOS lPos );
-		BOOL		RemoveElement(T el);
+		BOOL	RemoveElement(T el);
 
-		LPOS			InsertBefore( LPOS lPos, T el );
-		LPOS			InsertAfter( LPOS lPos, T el );
+		LPOS	InsertBefore( LPOS lPos, T el );
+		LPOS	InsertAfter( LPOS lPos, T el );
 
 		// Find and compare with T::operator==.
-		LPOS			Find( T searchFor )			const;
+		LPOS	Find( T searchFor )			const;
 		
-		LPOS			FindIndex( DWORD index )	const;
+		LPOS	FindIndex( DWORD index )	const;
 		
 		// Yes, we can be a hash bucket.
 		static void		CheckSupportHashBucket() {}
@@ -148,12 +148,12 @@
 			#endif
 		}
 
-		virtual BOOL		GenIsValid(const GenListPos &pos) const
+		virtual BOOL	GenIsValid(const GenListPos &pos) const
 		{
 			return !!pos.m_Pos;
 		}
 
-		virtual T			GenGetNext(GenListPos &pos) const
+		virtual T	GenGetNext(GenListPos &pos) const
 		{
 			#ifdef _DEBUG
 				++pos.m_Index;
@@ -162,39 +162,39 @@
 			return GetNext(*((LPOS*)&pos.m_Pos));
 		}
 
-		virtual T			GenGetAt(GenListPos &pos) const
+		virtual T	GenGetAt(GenListPos &pos) const
 		{
 			return GetAt(*((LPOS*)&pos.m_Pos));
 		}
 
-		virtual BOOL		GenAppend(T &toAppend)
+		virtual BOOL	GenAppend(T &toAppend)
 		{
 			Append(toAppend);
 			return TRUE;
 		}
 
-		virtual void		GenRemoveAt(GenListPos pos)
+		virtual void	GenRemoveAt(GenListPos pos)
 		{
 			RemoveAt((LPOS)pos.m_Pos);
 		}
 
-		virtual void		GenRemoveAll()
+		virtual void	GenRemoveAll()
 		{
 			RemoveAll();
 		}
 
-		virtual DWORD		GenGetSize() const
+		virtual DWORD	GenGetSize() const
 		{
 			return GetSize();
 		}
 
-		virtual BOOL		GenCopyList(const GenList<T> &other)
+		virtual BOOL	GenCopyList(const GenList<T> &other)
 		{
 			RemoveAll();
 			return GenAppendList(other);
 		}
 
-		virtual BOOL		GenAppendList(const GenList<T> &other)
+		virtual BOOL	GenAppendList(const GenList<T> &other)
 		{
 			GenListPos pos;
 			
@@ -207,7 +207,7 @@
 		}
 
 
-		virtual BOOL		GenFindElement(const T &toFind, GenListPos &thePos) const
+		virtual BOOL	GenFindElement(const T &toFind, GenListPos &thePos) const
 		{
 			thePos.m_Pos = LinkList_FindElementMemcmp(
 				m_pHead,
@@ -465,9 +465,3 @@
 
 
 #endif // __LINKLIST_H__
-	
-
-
-
-
-

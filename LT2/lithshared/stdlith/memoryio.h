@@ -1,13 +1,11 @@
 //------------------------------------------------------------------
+//	FILE: MemoryIO.h
 //
-//	FILE	  : MemoryIO.h
+//	PURPOSE: Defines the CMemoryIO class.
 //
-//	PURPOSE	  : Defines the CMemoryIO class.
+//	CREATED: July 25 1996
 //
-//	CREATED	  : July 25 1996
-//
-//	COPYRIGHT : Microsoft 1996 All Rights Reserved
-//
+//	COPYRIGHT: Microsoft 1996 All Rights Reserved
 //------------------------------------------------------------------
 
 #ifndef __MEMORYIO_H__
@@ -24,45 +22,43 @@
 		public:
 
 			// Constructor
-								CMemoryIO();
+				CMemoryIO();
 
 			
 			// Member functions
 
-			BOOL				Open( const char *pFilename, const char *pAccess )	{ return TRUE; }
-			void				Close() {}
+			BOOL	Open( const char *pFilename, const char *pAccess )	{ return TRUE; }
+			void		Close() {}
 
-			BOOL				Write( void *pBlock, DWORD blockSize );
-			BOOL				Read( void *pBlock, DWORD blockSize );
+			BOOL	Write( void *pBlock, DWORD blockSize );
+			BOOL	Read( void *pBlock, DWORD blockSize );
 
-			DWORD				GetCurPos();
-			DWORD				GetLen();
+			DWORD	GetCurPos();
+			DWORD	GetLen();
 
-			BOOL				SeekTo( DWORD pos );
+			BOOL	SeekTo( DWORD pos );
 
 			// New functions...
-			void				SetCacheSize( DWORD size )	{ m_Data.SetCacheSize(size); }
+			void		SetCacheSize( DWORD size )	{ m_Data.SetCacheSize(size); }
 			
-			BOOL				SetDataSize( DWORD size )	{ return m_Data.SetSize( size ); }
-			void				*GetData()					{ return m_Data.GetArray(); }
+			BOOL	SetDataSize( DWORD size )	{ return m_Data.SetSize( size ); }
+			void		*GetData()					{ return m_Data.GetArray(); }
 			
-			void				Clear();
+			void		Clear();
 
 
 		public:
 
-			BOOL				m_bRanOutOfMemory;
+			BOOL	m_bRanOutOfMemory;
 	
 		
 		private:
 			
 			// Private member variables
 			CMoByteArray		m_Data;
-			DWORD				m_Pos;
+			DWORD			m_Pos;
 
 	};
 
 
 #endif
-
-

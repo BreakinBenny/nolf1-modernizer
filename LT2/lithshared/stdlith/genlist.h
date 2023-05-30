@@ -27,7 +27,7 @@ for(pos=pList->GenBegin(); pList->GenIsValid(pos); )
 	{
 	public:
 
-		void		operator=(const GenListPos &other);
+		void	operator=(const GenListPos &other);
 
 		// In debug, the elements are split out so linked lists can maintain a loop
 		// index as you iterate.
@@ -47,15 +47,15 @@ for(pos=pList->GenBegin(); pList->GenIsValid(pos); )
 	class GenListPos : public BaseGenListPos
 	{
 	public:
-					GenListPos()							{}
-					GenListPos(void *pos)					{m_Pos = pos;}
-					GenListPos(DWORD index)					{m_Index = index;}
-					GenListPos(DWORD index, BaseGenListPos subIndex)	{m_Index = index; m_SubIndex = subIndex;}
-					GenListPos(DWORD index, DWORD subIndex)	{m_Index = index; m_SubIndex.m_Index = subIndex;}
+		GenListPos()							{}
+		GenListPos(void *pos)					{m_Pos = pos;}
+		GenListPos(DWORD index)				{m_Index = index;}
+		GenListPos(DWORD index, BaseGenListPos subIndex)	{m_Index = index; m_SubIndex = subIndex;}
+		GenListPos(DWORD index, DWORD subIndex)	{m_Index = index; m_SubIndex.m_Index = subIndex;}
 					
-					#ifdef _DEBUG
-						GenListPos(void *pos, DWORD index)	{m_Pos = pos; m_Index = index;}
-					#endif
+		#ifdef _DEBUG
+			GenListPos(void *pos, DWORD index)	{m_Pos = pos; m_Index = index;}
+		#endif
 
 		// Use this to get m_SubIndex as a GenListPos.
 		inline GenListPos&	GetSubIndex()
@@ -78,13 +78,13 @@ for(pos=pList->GenBegin(); pList->GenIsValid(pos); )
 		virtual GenListPos	GenBegin() const = 0;
 		
 		// Returns TRUE if you're done iterating.
-		virtual BOOL		GenIsValid(const GenListPos &pos) const = 0;
+		virtual BOOL	GenIsValid(const GenListPos &pos) const = 0;
 		
 		// Get the next element and increment the iterator.		
-		virtual T			GenGetNext(GenListPos &pos) const = 0;
+		virtual T		GenGetNext(GenListPos &pos) const = 0;
 		
 		// Get the element at the specified position without incrementing or decrementing.
-		virtual T			GenGetAt(GenListPos &pos) const = 0;
+		virtual T		GenGetAt(GenListPos &pos) const = 0;
 		
 		// Append an element. Be careful with your usage of GenGetNext and GenGetAt because
 		// if you are only using GenGetNext and you append, you might not iterate over the
@@ -97,32 +97,32 @@ for(pos=pList->GenBegin(); pList->GenIsValid(pos); )
 		//     pList->GetNext(pos); // Increment here.
 		// }
 		// on 
-		virtual BOOL		GenAppend(T &toAppend)=0;
+		virtual BOOL	GenAppend(T &toAppend)=0;
 
 		// NOTE: this trashes all iterators so you must restart iteration.
 		// Note: this does a search through all elements for CLinkedLists.
-		virtual void		GenRemoveAt(GenListPos pos)=0;
+		virtual void	GenRemoveAt(GenListPos pos)=0;
 
 		// Remove all elements.
-		virtual void		GenRemoveAll()=0;
+		virtual void	GenRemoveAll()=0;
 
 		// Returns the number of elements in the list.
-		virtual DWORD		GenGetSize() const = 0;
+		virtual DWORD	GenGetSize() const = 0;
 
 		// Copy another list.
-		virtual BOOL		GenCopyList(const GenList<T> &other)=0;
+		virtual BOOL	GenCopyList(const GenList<T> &other)=0;
 
 		// Append another list.
-		virtual BOOL		GenAppendList(const GenList<T> &other)=0;
+		virtual BOOL	GenAppendList(const GenList<T> &other)=0;
 
 		// Search through the list for an item. If it finds it, fills in 
 		// the position it was found at.
 		// NOTE: this does comparisons with memcmp. This so objects that go in lists
 		// don't have to define operator==.
-		virtual BOOL		GenFindElement(const T &toFind, GenListPos &thePos) const = 0;
+		virtual BOOL	GenFindElement(const T &toFind, GenListPos &thePos) const = 0;
 
 		// Set cache size. This is only meaningful to CMoArrays.
-		virtual void		GenSetCacheSize(DWORD size) {}
+		virtual void	GenSetCacheSize(DWORD size) {}
 	};
 
 
@@ -139,9 +139,3 @@ for(pos=pList->GenBegin(); pList->GenIsValid(pos); )
 
 	
 #endif
-
-
-
-
-
-
