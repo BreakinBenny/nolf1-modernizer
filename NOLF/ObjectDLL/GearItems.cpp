@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: GearItems.cpp
 //
-// MODULE  : GearItems.cpp
+// PURPOSE: Gear items - Implementation
 //
-// PURPOSE : Gear items - Implementation
-//
-// CREATED : 10/22/99
+// CREATED: 10/22/99
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -29,26 +27,22 @@ BEGIN_CLASS(GearItem)
 END_CLASS_DEFAULT_FLAGS_PLUGIN(GearItem, PickupItem, NULL, NULL, 0, CGearPlugin)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GearItem::GearItem
 //
-//	ROUTINE:	GearItem::GearItem
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 GearItem::GearItem() : PickupItem()
 {
 	m_nGearId = -1;
-    m_bBounce = LTFALSE;
+	m_bBounce = LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GearItem::EngineMessageFn
 //
-//	ROUTINE:	GearItem::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 GearItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -57,7 +51,7 @@ uint32 GearItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 	{
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE || fData == PRECREATE_STRINGPROP)
 			{
@@ -72,13 +66,13 @@ uint32 GearItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -90,18 +84,16 @@ uint32 GearItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GearItem::ReadProp
 //
-//	ROUTINE:	GearItem::ReadProp
-//
-//	PURPOSE:	Read object properties
-//
+//	PURPOSE: Read object properties
 // ----------------------------------------------------------------------- //
 
 void GearItem::ReadProp(ObjectCreateStruct *pStruct)
 {
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("GearType", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("GearType", &genProp) == LT_OK)
 	{
 		GEAR* pGear = g_pWeaponMgr->GetGear(genProp.m_String);
 		if (pGear)
@@ -113,11 +105,9 @@ void GearItem::ReadProp(ObjectCreateStruct *pStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GearItem::PostPropRead
 //
-//	ROUTINE:	GearItem::PostPropRead
-//
-//	PURPOSE:	Handle post property read engine messages
-//
+//	PURPOSE: Handle post property read engine messages
 // ----------------------------------------------------------------------- //
 
 void GearItem::PostPropRead(ObjectCreateStruct *pStruct)
@@ -144,17 +134,15 @@ void GearItem::PostPropRead(ObjectCreateStruct *pStruct)
 			m_hstrRespawnSoundFile = g_pLTServer->CreateString(pGear->szRespawnSound);
 		}
 
-        m_bRotate = LTFALSE;
+		m_bRotate = LTFALSE;
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GearItem::ObjectTouch
 //
-//	ROUTINE:	GearItem::ObjectTouch
-//
-//	PURPOSE:	Add weapon PickupItem to object
-//
+//	PURPOSE: Add weapon PickupItem to object
 // ----------------------------------------------------------------------- //
 
 void GearItem::ObjectTouch(HOBJECT hObject)
@@ -165,56 +153,50 @@ void GearItem::ObjectTouch(HOBJECT hObject)
 
 	if (IsPlayer(hObject))
 	{
-        CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hObject);
+		CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hObject);
 
 		if (pPlayer && !pPlayer->IsDead())
 		{
-            HMESSAGEWRITE hMessage = g_pLTServer->StartMessageToObject(this, hObject, MID_ADDGEAR);
-            g_pLTServer->WriteToMessageByte(hMessage, m_nGearId);
-            g_pLTServer->EndMessage(hMessage);
+			HMESSAGEWRITE hMessage = g_pLTServer->StartMessageToObject(this, hObject, MID_ADDGEAR);
+			g_pLTServer->WriteToMessageByte(hMessage, m_nGearId);
+			g_pLTServer->EndMessage(hMessage);
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GearItem::Save
 //
-//	ROUTINE:	GearItem::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void GearItem::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageByte(hWrite, m_nGearId);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nGearId);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GearItem::Load
 //
-//	ROUTINE:	GearItem::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void GearItem::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    m_nGearId = g_pLTServer->ReadFromMessageByte(hRead);
+	m_nGearId = g_pLTServer->ReadFromMessageByte(hRead);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GearItem::PickedUp
 //
-//	ROUTINE:	GearItem::PickedUp
-//
-//	PURPOSE:	Picked up
-//
+//	PURPOSE: Picked up
 // ----------------------------------------------------------------------- //
 
 void GearItem::PickedUp(HMESSAGEREAD hRead)
@@ -225,15 +207,15 @@ void GearItem::PickedUp(HMESSAGEREAD hRead)
 
 	if (m_hPlayerObj)
 	{
-        CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(m_hPlayerObj);
+		CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(m_hPlayerObj);
 		if (pPlayer && !pPlayer->IsDead())
 		{
 			HCLIENT hClient = pPlayer->GetClient();
 			if (hClient)
 			{
-                HMESSAGEWRITE hWrite = g_pLTServer->StartMessage(hClient, MID_GEAR_PICKEDUP);
-                g_pLTServer->WriteToMessageByte(hWrite, m_nGearId);
-                g_pLTServer->EndMessage(hWrite);
+				HMESSAGEWRITE hWrite = g_pLTServer->StartMessage(hClient, MID_GEAR_PICKEDUP);
+				g_pLTServer->WriteToMessageByte(hWrite, m_nGearId);
+				g_pLTServer->EndMessage(hWrite);
 			}
 		}
 	}
@@ -243,11 +225,9 @@ void GearItem::PickedUp(HMESSAGEREAD hRead)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGearPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CGearPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Requests a state change
-//
+//	PURPOSE: Requests a state change
 // ----------------------------------------------------------------------- //
 LTRESULT CGearPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {
@@ -261,13 +241,13 @@ LTRESULT CGearPlugin::PreHook_EditStringList(const char* szRezPath, const char* 
 
 	if (_strcmpi("GearType", szPropName) == 0)
 	{
-        uint32 dwGearTypes = sm_ButeMgr.GetNumGearTypes();
+		uint32 dwGearTypes = sm_ButeMgr.GetNumGearTypes();
 
 		_ASSERT(cMaxStrings >= dwGearTypes);
 
-        GEAR* pGear = LTNULL;
+		GEAR* pGear = LTNULL;
 
-        for (uint32 i=0; i < dwGearTypes; i++)
+		for (uint32 i=0; i < dwGearTypes; i++)
 		{
 			pGear = sm_ButeMgr.GetGear(i);
 

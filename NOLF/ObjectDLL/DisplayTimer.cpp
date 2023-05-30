@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: DisplayTimer.cpp
 //
-// MODULE  : DisplayTimer.cpp
+// PURPOSE: DisplayTimer - Implementation
 //
-// PURPOSE : DisplayTimer - Implementation
-//
-// CREATED : 10/15/99
+// CREATED: 10/15/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -20,30 +18,26 @@
 BEGIN_CLASS(DisplayTimer)
 	ADD_STRINGPROP(StartCommand, "")
 	ADD_STRINGPROP(EndCommand, "")
-    ADD_BOOLPROP(RemoveWhenDone, LTTRUE)
+	ADD_BOOLPROP(RemoveWhenDone, LTTRUE)
 END_CLASS_DEFAULT(DisplayTimer, BaseClass, NULL, NULL)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::DisplayTimer()
 //
-//	ROUTINE:	DisplayTimer::DisplayTimer()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 DisplayTimer::DisplayTimer() : BaseClass(OT_NORMAL)
 {
-    m_hstrStartCmd      = LTNULL;
-    m_hstrEndCmd        = LTNULL;
-    m_bRemoveWhenDone   = LTTRUE;
+	m_hstrStartCmd	  = LTNULL;
+	m_hstrEndCmd		= LTNULL;
+	m_bRemoveWhenDone   = LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::~DisplayTimer()
 //
-//	ROUTINE:	DisplayTimer::~DisplayTimer()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 DisplayTimer::~DisplayTimer()
@@ -54,11 +48,9 @@ DisplayTimer::~DisplayTimer()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::EngineMessageFn
 //
-//	ROUTINE:	DisplayTimer::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 DisplayTimer::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -108,11 +100,9 @@ uint32 DisplayTimer::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDat
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::ObjectMessageFn
 //
-//	ROUTINE:	DisplayTimer::ObjectMessageFn
-//
-//	PURPOSE:	Handle object messages
-//
+//	PURPOSE: Handle object messages
 // ----------------------------------------------------------------------- //
 
 uint32 DisplayTimer::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -133,66 +123,60 @@ uint32 DisplayTimer::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGE
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::ReadProp
 //
-//	ROUTINE:	DisplayTimer::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 void DisplayTimer::ReadProp(ObjectCreateStruct *)
 {
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("StartCommand", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("StartCommand", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrStartCmd = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrStartCmd = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("EndCommand", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("EndCommand", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrEndCmd = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrEndCmd = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("RemoveWhenDone", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("RemoveWhenDone", &genProp) == LT_OK)
 	{
 		m_bRemoveWhenDone = genProp.m_Bool;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::InitialUpdate()
 //
-//	ROUTINE:	DisplayTimer::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 void DisplayTimer::InitialUpdate()
 {
 	// Must be triggered on...
 
-    g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::Update()
 //
-//	ROUTINE:	DisplayTimer::Update()
-//
-//	PURPOSE:	Update
-//
+//	PURPOSE: Update
 // ----------------------------------------------------------------------- //
 
 void DisplayTimer::Update()
 {
 	// Testing...
-    //g_pLTServer->CPrint("Time Left: %.2f", m_Timer.GetCountdownTime());
+	//g_pLTServer->CPrint("Time Left: %.2f", m_Timer.GetCountdownTime());
 
 	if (m_Timer.Stopped())
 	{
@@ -200,20 +184,18 @@ void DisplayTimer::Update()
 		return;
 	}
 
-    g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::TriggerMsg()
 //
-//	ROUTINE:	DisplayTimer::TriggerMsg()
-//
-//	PURPOSE:	Process cinematic trigger messages
-//
+//	PURPOSE: Process cinematic trigger messages
 // --------------------------------------------------------------------------- //
 
 void DisplayTimer::TriggerMsg(HOBJECT hSender, const char *szMsg)
 {
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return;
 
 	// ConParse does not destroy szMsg, so this is safe
@@ -229,14 +211,14 @@ void DisplayTimer::TriggerMsg(HOBJECT hSender, const char *szMsg)
 			{
 				if (parse.m_nArgs > 1)
 				{
-                    HandleStart((LTFLOAT)atof(parse.m_Args[1]));
+					HandleStart((LTFLOAT)atof(parse.m_Args[1]));
 				}
 			}
 			else if (_stricmp(parse.m_Args[0], "ADD") == 0)
 			{
 				if (parse.m_nArgs > 1)
 				{
-                    HandleAdd((LTFLOAT)atof(parse.m_Args[1]));
+					HandleAdd((LTFLOAT)atof(parse.m_Args[1]));
 				}
 			}
 			else if ((_stricmp(parse.m_Args[0], "END") == 0) ||
@@ -261,11 +243,9 @@ void DisplayTimer::TriggerMsg(HOBJECT hSender, const char *szMsg)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::HandleStart()
 //
-//	ROUTINE:	DisplayTimer::HandleStart()
-//
-//	PURPOSE:	Handle start message
-//
+//	PURPOSE: Handle start message
 // --------------------------------------------------------------------------- //
 
 void DisplayTimer::HandleStart(LTFLOAT fTime)
@@ -274,7 +254,7 @@ void DisplayTimer::HandleStart(LTFLOAT fTime)
 
 	if (m_hstrStartCmd)
 	{
-        char* pCmd = g_pLTServer->GetStringData(m_hstrStartCmd);
+		char* pCmd = g_pLTServer->GetStringData(m_hstrStartCmd);
 
 		if (pCmd && g_pCmdMgr->IsValidCmd(pCmd))
 		{
@@ -292,15 +272,13 @@ void DisplayTimer::HandleStart(LTFLOAT fTime)
 
 	// Update the DisplayTimer...
 
-    g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::HandlePause()
 //
-//	ROUTINE:	DisplayTimer::HandlePause()
-//
-//	PURPOSE:	Handle start message
-//
+//	PURPOSE: Handle start message
 // --------------------------------------------------------------------------- //
 
 void DisplayTimer::HandlePause()
@@ -313,15 +291,13 @@ void DisplayTimer::HandlePause()
 
 	// Update the DisplayTimer...
 
-    g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::HandleResume()
 //
-//	ROUTINE:	DisplayTimer::HandleResume()
-//
-//	PURPOSE:	Handle start message
-//
+//	PURPOSE: Handle start message
 // --------------------------------------------------------------------------- //
 
 void DisplayTimer::HandleResume()
@@ -335,16 +311,14 @@ void DisplayTimer::HandleResume()
 
 	// Update the DisplayTimer...
 
-    g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::HandleAdd()
 //
-//	ROUTINE:	DisplayTimer::HandleAdd()
-//
-//	PURPOSE:	Handle add message
-//
+//	PURPOSE: Handle add message
 // --------------------------------------------------------------------------- //
 
 void DisplayTimer::HandleAdd(LTFLOAT fTime)
@@ -374,18 +348,16 @@ void DisplayTimer::HandleAdd(LTFLOAT fTime)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::HandleEnd()
 //
-//	ROUTINE:	DisplayTimer::HandleEnd()
-//
-//	PURPOSE:	Handle the DisplayTimer ending
-//
+//	PURPOSE: Handle the DisplayTimer ending
 // ----------------------------------------------------------------------- //
 
 void DisplayTimer::HandleEnd()
 {
 	if (m_hstrEndCmd)
 	{
-        char* pCmd = g_pLTServer->GetStringData(m_hstrEndCmd);
+		char* pCmd = g_pLTServer->GetStringData(m_hstrEndCmd);
 
 		if (pCmd && g_pCmdMgr->IsValidCmd(pCmd))
 		{
@@ -400,55 +372,49 @@ void DisplayTimer::HandleEnd()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::UpdateClients()
 //
-//	ROUTINE:	DisplayTimer::UpdateClients()
-//
-//	PURPOSE:	Update the client's time
-//
+//	PURPOSE: Update the client's time
 // --------------------------------------------------------------------------- //
 
 void DisplayTimer::UpdateClients()
 {
 	// Send message to clients telling them about the DisplayTimer...
 
-    HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_DISPLAY_TIMER);
-    g_pLTServer->WriteToMessageFloat(hMessage, m_Timer.GetCountdownTime());
-    g_pLTServer->WriteToMessageByte(hMessage, (uint8)m_Timer.Paused());
-    g_pLTServer->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_DISPLAY_TIMER);
+	g_pLTServer->WriteToMessageFloat(hMessage, m_Timer.GetCountdownTime());
+	g_pLTServer->WriteToMessageByte(hMessage, (uint8)m_Timer.Paused());
+	g_pLTServer->EndMessage(hMessage);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::Handle()
 //
-//	ROUTINE:	DisplayTimer::Handle()
-//
-//	PURPOSE:	Handle abort message
-//
+//	PURPOSE: Handle abort message
 // --------------------------------------------------------------------------- //
 
 void DisplayTimer::HandleAbort()
 {
 	// Tell the client to stop the timer...
 
-    HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_DISPLAY_TIMER);
-    g_pLTServer->WriteToMessageFloat(hMessage, 0.0f);
-    g_pLTServer->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_DISPLAY_TIMER);
+	g_pLTServer->WriteToMessageFloat(hMessage, 0.0f);
+	g_pLTServer->EndMessage(hMessage);
 
-    g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
 
 	if (m_bRemoveWhenDone)
 	{
-        g_pLTServer->RemoveObject(m_hObject);
+		g_pLTServer->RemoveObject(m_hObject);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::Save
 //
-//	ROUTINE:	DisplayTimer::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void DisplayTimer::Save(HMESSAGEWRITE hWrite)
@@ -464,11 +430,9 @@ void DisplayTimer::Save(HMESSAGEWRITE hWrite)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayTimer::Load
 //
-//	ROUTINE:	DisplayTimer::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void DisplayTimer::Load(HMESSAGEREAD hRead)

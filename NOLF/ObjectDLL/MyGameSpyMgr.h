@@ -2,7 +2,7 @@
 ;
 ;	 MODULE:		MYGAMESPYMGR (.H)
 ;
-;	PURPOSE:		Derived Game Spy Manager for this game server
+;	PURPOSE: 	Derived Game Spy Manager for this game server
 ;
 ;	HISTORY:		09/21/98  [blg]  This file was created
 ;

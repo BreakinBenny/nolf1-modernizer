@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: GlobalServerMgr.h
 //
-// MODULE  : GlobalServerMgr.h
+// PURPOSE: Definition of server global definitions
 //
-// PURPOSE : Definition of server global definitions
-//
-// CREATED : 7/07/99
+// CREATED: 7/07/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __GLOBAL_SERVER_MGR_H__
@@ -28,7 +26,7 @@ class CGlobalServerMgr : public CGlobalMgr
 	public :
 		~CGlobalServerMgr();
 
-        LTBOOL Init();
+		LTBOOL Init();
 
 	protected :
 

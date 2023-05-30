@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CommandMgr.cpp
 //
-// MODULE  : CommandMgr.cpp
+// PURPOSE: CommandMgr implemenation
 //
-// PURPOSE : CommandMgr implemenation
-//
-// CREATED : 06/23/99
+// CREATED: 06/23/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -28,103 +26,103 @@ CCommandMgr* g_pCmdMgr = LTNULL;
 static LTBOOL cmdmgr_ListCommands(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessListCommands(parse, nCmdIndex);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Delay(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessDelay(parse, nCmdIndex);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_DelayId(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessDelayId(parse, nCmdIndex);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Msg(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessMsg(parse, nCmdIndex);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Rand(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessRand(parse, nCmdIndex);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Rand2(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessRandArgs(parse, nCmdIndex, 2);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Rand3(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessRandArgs(parse, nCmdIndex, 3);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Rand4(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessRandArgs(parse, nCmdIndex, 4);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Rand5(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessRandArgs(parse, nCmdIndex, 5);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Rand6(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessRandArgs(parse, nCmdIndex, 6);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Rand7(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessRandArgs(parse, nCmdIndex, 7);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Rand8(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessRandArgs(parse, nCmdIndex, 8);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Repeat(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessRepeat(parse, nCmdIndex);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_RepeatId(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessRepeatId(parse, nCmdIndex);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Loop(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessLoop(parse, nCmdIndex);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_LoopId(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessLoopId(parse, nCmdIndex);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static LTBOOL cmdmgr_Abort(CCommandMgr *pCmdMgr, ConParse & parse, int nCmdIndex)
 {
 	if (pCmdMgr) return pCmdMgr->ProcessAbort(parse, nCmdIndex);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 static CMD_PROCESS_STRUCT s_ValidCmds[] =
@@ -152,11 +150,9 @@ const int c_nNumValidCmds = sizeof(s_ValidCmds)/sizeof(s_ValidCmds[0]);
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::CCommandMgr()
 //
-//	ROUTINE:	CCommandMgr::CCommandMgr()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CCommandMgr::CCommandMgr()
@@ -166,30 +162,26 @@ CCommandMgr::CCommandMgr()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::~CCommandMgr()
 //
-//	ROUTINE:	CCommandMgr::~CCommandMgr()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CCommandMgr::~CCommandMgr()
 {
-    g_pCmdMgr = LTNULL;
+	g_pCmdMgr = LTNULL;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::Update()
 //
-//	ROUTINE:	CCommandMgr::Update()
-//
-//	PURPOSE:	Update the CommandMgr (process any pending commands)
-//
+//	PURPOSE: Update the CommandMgr (process any pending commands)
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::Update()
 {
-    LTFLOAT fTimeDelta = g_pLTServer->GetFrameTime();
+	LTFLOAT fTimeDelta = g_pLTServer->GetFrameTime();
 
 	for (int i=0; i < CMDMGR_MAX_PENDING_COMMANDS; i++)
 	{
@@ -231,21 +223,19 @@ LTBOOL CCommandMgr::Update()
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessCmd()
 //
-//	ROUTINE:	CCommandMgr::ProcessCmd()
-//
-//	PURPOSE:	Process the specified command
-//
+//	PURPOSE: Process the specified command
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessCmd(const char* pCmd, int nCmdIndex)
 {
-    if (!pCmd || pCmd[0] == CMDMGR_NULL_CHAR) return LTFALSE;
+	if (!pCmd || pCmd[0] == CMDMGR_NULL_CHAR) return LTFALSE;
 
 	// Process the command...
 
@@ -253,7 +243,7 @@ LTBOOL CCommandMgr::ProcessCmd(const char* pCmd, int nCmdIndex)
 	ConParse parse;
 	parse.Init((char*)pCmd);
 
-    while (g_pLTServer->Common()->Parse(&parse) == LT_OK)
+	while (g_pLTServer->Common()->Parse(&parse) == LT_OK)
 	{
 		if (parse.m_nArgs > 0 && parse.m_Args[0])
 		{
@@ -267,14 +257,14 @@ LTBOOL CCommandMgr::ProcessCmd(const char* pCmd, int nCmdIndex)
 						{
 							if (!s_ValidCmds[i].pProcessFn(this, parse, nCmdIndex))
 							{
-                                return LTFALSE;
+								return LTFALSE;
 							}
 						}
 						else
 						{
 							DevPrint("CCommandMgr::ProcessCmd() ERROR!");
 							DevPrint("s_ValidCmds[%d].pProcessFn is Invalid!", i);
-                            return LTFALSE;
+							return LTFALSE;
 						}
 					}
 				}
@@ -282,21 +272,19 @@ LTBOOL CCommandMgr::ProcessCmd(const char* pCmd, int nCmdIndex)
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessDelay()
 //
-//	ROUTINE:	CCommandMgr::ProcessDelay()
-//
-//	PURPOSE:	Process the Delay command
-//
+//	PURPOSE: Process the Delay command
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessDelay(ConParse & parse, int nCmdIndex)
 {
 	CMD_STRUCT_PARAM cmd;
-    cmd.fDelay  = (LTFLOAT) atof(parse.m_Args[1]);
+	cmd.fDelay  = (LTFLOAT) atof(parse.m_Args[1]);
 	cmd.pCmd	= parse.m_Args[2];
 
 	return AddDelayedCmd(cmd, nCmdIndex);
@@ -304,18 +292,16 @@ LTBOOL CCommandMgr::ProcessDelay(ConParse & parse, int nCmdIndex)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessDelayId()
 //
-//	ROUTINE:	CCommandMgr::ProcessDelayId()
-//
-//	PURPOSE:	Process the DelayId command
-//
+//	PURPOSE: Process the DelayId command
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessDelayId(ConParse & parse, int nCmdIndex)
 {
 	CMD_STRUCT_PARAM cmd;
 	cmd.pId		= parse.m_Args[1];
-    cmd.fDelay  = (LTFLOAT) atof(parse.m_Args[2]);
+	cmd.fDelay  = (LTFLOAT) atof(parse.m_Args[2]);
 	cmd.pCmd	= parse.m_Args[3];
 
 	return AddDelayedCmd(cmd, nCmdIndex);
@@ -323,12 +309,10 @@ LTBOOL CCommandMgr::ProcessDelayId(ConParse & parse, int nCmdIndex)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessMsg()
 //
-//	ROUTINE:	CCommandMgr::ProcessMsg()
-//
-//	PURPOSE:	Process the Msg command (send the message to the
+//	PURPOSE: Process the Msg command (send the message to the
 //				specified object(s))
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessMsg(ConParse & parse, int nCmdIndex)
@@ -336,45 +320,43 @@ LTBOOL CCommandMgr::ProcessMsg(ConParse & parse, int nCmdIndex)
 	char* pObjectNames	= parse.m_Args[1];
 	char* pMsg			= parse.m_Args[2];
 
-    if (!pObjectNames || !pMsg) return LTFALSE;
+	if (!pObjectNames || !pMsg) return LTFALSE;
 
 	ConParse parse2;
 	parse2.Init(pObjectNames);
 
-    if (g_pLTServer->Common()->Parse(&parse2) == LT_OK)
+	if (g_pLTServer->Common()->Parse(&parse2) == LT_OK)
 	{
 		for (int i=0; i < parse2.m_nArgs; i++)
 		{
-            SendTriggerMsgToObjects(LTNULL, parse2.m_Args[i], pMsg);
+			SendTriggerMsgToObjects(LTNULL, parse2.m_Args[i], pMsg);
 		}
 	}
 	else
 	{
 		DevPrint("CCommandMgr::ProcessMsg() ERROR!");
 		DevPrint("Could not parse object name(s) '%s'!", pObjectNames);
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessRand()
 //
-//	ROUTINE:	CCommandMgr::ProcessRand()
-//
-//	PURPOSE:	Process the Rand command (Pick one or the other of the
+//	PURPOSE: Process the Rand command (Pick one or the other of the
 //				messages based on the percent)
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessRand(ConParse & parse, int nCmdIndex)
 {
-    LTFLOAT fPercent = (LTFLOAT) atof(parse.m_Args[1]);
+	LTFLOAT fPercent = (LTFLOAT) atof(parse.m_Args[1]);
 	char* pCmd1		= parse.m_Args[2];
 	char* pCmd2		= parse.m_Args[3];
 
-    if (fPercent < 0.001f || fPercent > 1.0f || !pCmd1 || !pCmd2) return LTFALSE;
+	if (fPercent < 0.001f || fPercent > 1.0f || !pCmd1 || !pCmd2) return LTFALSE;
 
 	if (GetRandom(0.0f, 1.0f) < fPercent)
 	{
@@ -385,17 +367,15 @@ LTBOOL CCommandMgr::ProcessRand(ConParse & parse, int nCmdIndex)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessRandArgs()
 //
-//	ROUTINE:	CCommandMgr::ProcessRandArgs()
-//
-//	PURPOSE:	Process the Rand command.  Randomly pick between one of
+//	PURPOSE: Process the Rand command.  Randomly pick between one of
 //				the commands to process.
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessRandArgs(ConParse & parse, int nCmdIndex, int nNumArgs)
 {
-    if (nNumArgs < 2) return LTFALSE;
+	if (nNumArgs < 2) return LTFALSE;
 
 	int nCmd = GetRandom(1, nNumArgs);
 
@@ -404,11 +384,9 @@ LTBOOL CCommandMgr::ProcessRandArgs(ConParse & parse, int nCmdIndex, int nNumArg
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessRepeat()
 //
-//	ROUTINE:	CCommandMgr::ProcessRepeat()
-//
-//	PURPOSE:	Process the Repeat command (Add the command)
-//
+//	PURPOSE: Process the Repeat command (Add the command)
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessRepeat(ConParse & parse, int nCmdIndex)
@@ -416,8 +394,8 @@ LTBOOL CCommandMgr::ProcessRepeat(ConParse & parse, int nCmdIndex)
 	CMD_STRUCT_PARAM cmd;
 	cmd.nMinTimes	= (int) atol(parse.m_Args[1]);
 	cmd.nMaxTimes	= (int) atol(parse.m_Args[2]);
-    cmd.fMinDelay   = (LTFLOAT) atof(parse.m_Args[3]);
-    cmd.fMaxDelay   = (LTFLOAT) atof(parse.m_Args[4]);
+	cmd.fMinDelay   = (LTFLOAT) atof(parse.m_Args[3]);
+	cmd.fMaxDelay   = (LTFLOAT) atof(parse.m_Args[4]);
 	cmd.pCmd		= parse.m_Args[5];
 
 	return AddDelayedCmd(cmd, nCmdIndex);
@@ -425,11 +403,9 @@ LTBOOL CCommandMgr::ProcessRepeat(ConParse & parse, int nCmdIndex)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessRepeatId()
 //
-//	ROUTINE:	CCommandMgr::ProcessRepeatId()
-//
-//	PURPOSE:	Process the RepeatId command (Add the command)
-//
+//	PURPOSE: Process the RepeatId command (Add the command)
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessRepeatId(ConParse & parse, int nCmdIndex)
@@ -438,8 +414,8 @@ LTBOOL CCommandMgr::ProcessRepeatId(ConParse & parse, int nCmdIndex)
 	cmd.pId			= parse.m_Args[1];
 	cmd.nMinTimes	= (int) atol(parse.m_Args[2]);
 	cmd.nMaxTimes	= (int) atol(parse.m_Args[3]);
-    cmd.fMinDelay   = (LTFLOAT) atof(parse.m_Args[4]);
-    cmd.fMaxDelay   = (LTFLOAT) atof(parse.m_Args[5]);
+	cmd.fMinDelay   = (LTFLOAT) atof(parse.m_Args[4]);
+	cmd.fMaxDelay   = (LTFLOAT) atof(parse.m_Args[5]);
 	cmd.pCmd		= parse.m_Args[6];
 
 	return AddDelayedCmd(cmd, nCmdIndex);
@@ -447,18 +423,16 @@ LTBOOL CCommandMgr::ProcessRepeatId(ConParse & parse, int nCmdIndex)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessLoop()
 //
-//	ROUTINE:	CCommandMgr::ProcessLoop()
-//
-//	PURPOSE:	Process the Loop command (Add the command)
-//
+//	PURPOSE: Process the Loop command (Add the command)
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessLoop(ConParse & parse, int nCmdIndex)
 {
 	CMD_STRUCT_PARAM cmd;
-    cmd.fMinDelay   = (LTFLOAT) atof(parse.m_Args[1]);
-    cmd.fMaxDelay   = (LTFLOAT) atof(parse.m_Args[2]);
+	cmd.fMinDelay   = (LTFLOAT) atof(parse.m_Args[1]);
+	cmd.fMaxDelay   = (LTFLOAT) atof(parse.m_Args[2]);
 	cmd.pCmd		= parse.m_Args[3];
 
 	return AddDelayedCmd(cmd, nCmdIndex);
@@ -466,19 +440,17 @@ LTBOOL CCommandMgr::ProcessLoop(ConParse & parse, int nCmdIndex)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessLoopId()
 //
-//	ROUTINE:	CCommandMgr::ProcessLoopId()
-//
-//	PURPOSE:	Process the LoopId command (Add the command)
-//
+//	PURPOSE: Process the LoopId command (Add the command)
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessLoopId(ConParse & parse, int nCmdIndex)
 {
 	CMD_STRUCT_PARAM cmd;
 	cmd.pId			= parse.m_Args[1];
-    cmd.fMinDelay   = (LTFLOAT) atof(parse.m_Args[2]);
-    cmd.fMaxDelay   = (LTFLOAT) atof(parse.m_Args[3]);
+	cmd.fMinDelay   = (LTFLOAT) atof(parse.m_Args[2]);
+	cmd.fMaxDelay   = (LTFLOAT) atof(parse.m_Args[3]);
 	cmd.pCmd		= parse.m_Args[4];
 
 	return AddDelayedCmd(cmd, nCmdIndex);
@@ -486,11 +458,9 @@ LTBOOL CCommandMgr::ProcessLoopId(ConParse & parse, int nCmdIndex)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessAbort()
 //
-//	ROUTINE:	CCommandMgr::ProcessAbort()
-//
-//	PURPOSE:	Process the Abort command
-//
+//	PURPOSE: Process the Abort command
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessAbort(ConParse & parse, int nCmdIndex)
@@ -501,7 +471,7 @@ LTBOOL CCommandMgr::ProcessAbort(ConParse & parse, int nCmdIndex)
 	{
 		DevPrint("CCommandMgr::ProcessAbort() ERROR!");
 		DevPrint("Invalid Command Id!");
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 
@@ -515,23 +485,21 @@ LTBOOL CCommandMgr::ProcessAbort(ConParse & parse, int nCmdIndex)
 			if (_stricmp(m_PendingCmds[i].aId, pId) == 0)
 			{
 				m_PendingCmds[i].Clear();
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 	}
 
 	DevPrint("CCommandMgr::ProcessAbort() WARNING!");
 	DevPrint("Could not find command associated with id '%s'!", pId);
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::AddDelayedCmd()
 //
-//	ROUTINE:	CCommandMgr::AddDelayedCmd()
-//
-//	PURPOSE:	Add a delayed command
-//
+//	PURPOSE: Add a delayed command
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::AddDelayedCmd(CMD_STRUCT_PARAM & cmd, int nCmdIndex)
@@ -548,22 +516,22 @@ LTBOOL CCommandMgr::AddDelayedCmd(CMD_STRUCT_PARAM & cmd, int nCmdIndex)
 		DevPrint("  MaxDelay %.2f", cmd.fMaxDelay);
 		DevPrint("  Command %s", cmd.pCmd ? cmd.pCmd : "NULL");
 		DevPrint("  Id %s", cmd.pId ? cmd.pId : "NULL");
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 
 	// See if this command was part of a previously pending command...
 
-    LTBOOL bWasPending = LTFALSE;
+	LTBOOL bWasPending = LTFALSE;
 	if (nCmdIndex >= 0 && nCmdIndex < CMDMGR_MAX_PENDING_COMMANDS)
 	{
-        bWasPending = LTTRUE;
+		bWasPending = LTTRUE;
 	}
 
 
 	// Find a the first open position for the command...
-    int i;
-    for (i=0; i < CMDMGR_MAX_PENDING_COMMANDS; i++)
+	int i;
+	for (i=0; i < CMDMGR_MAX_PENDING_COMMANDS; i++)
 	{
 		if (m_PendingCmds[i].aCmd[0] == CMDMGR_NULL_CHAR)
 		{
@@ -625,29 +593,27 @@ LTBOOL CCommandMgr::AddDelayedCmd(CMD_STRUCT_PARAM & cmd, int nCmdIndex)
 		DevPrint("Processing command now!");
 
 		ProcessCmd(cmd.pCmd);
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::IsValidCmd()
 //
-//	ROUTINE:	CCommandMgr::IsValidCmd()
-//
-//	PURPOSE:	See if the command is valid
-//
+//	PURPOSE: See if the command is valid
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::IsValidCmd(const char* pCmd)
 {
-    if (!pCmd || pCmd[0] == CMDMGR_NULL_CHAR) return LTFALSE;
+	if (!pCmd || pCmd[0] == CMDMGR_NULL_CHAR) return LTFALSE;
 
 	// ConParse does not destroy szMsg, so this is safe
 	ConParse parse;
 	parse.Init((char*)pCmd);
 
-    if (g_pLTServer->Common()->Parse(&parse) == LT_OK)
+	if (g_pLTServer->Common()->Parse(&parse) == LT_OK)
 	{
 		if (parse.m_nArgs > 0 && parse.m_Args[0])
 		{
@@ -661,16 +627,14 @@ LTBOOL CCommandMgr::IsValidCmd(const char* pCmd)
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::CheckArgs()
 //
-//	ROUTINE:	CCommandMgr::CheckArgs()
-//
-//	PURPOSE:	Make sure the number of args match what is expected
-//
+//	PURPOSE: Make sure the number of args match what is expected
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::CheckArgs(ConParse & parse, int nNum)
@@ -686,38 +650,34 @@ LTBOOL CCommandMgr::CheckArgs(ConParse & parse, int nNum)
 			DevPrint("  Arg[%d] = '%s'", i, parse.m_Args[i]);
 		}
 
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::ProcessListCommands()
 //
-//	ROUTINE:	CCommandMgr::ProcessListCommands()
-//
-//	PURPOSE:	List available commands
-//
+//	PURPOSE: List available commands
 // --------------------------------------------------------------------------- //
 
 LTBOOL CCommandMgr::ProcessListCommands(ConParse & parse, int nCmdIndex)
 {
 	for (int i=0; i < c_nNumValidCmds; i++)
 	{
-        g_pLTServer->CPrint(s_ValidCmds[i].pSyntax);
+		g_pLTServer->CPrint(s_ValidCmds[i].pSyntax);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::DevPrint()
 //
-//	ROUTINE:	CCommandMgr::DevPrint()
-//
-//	PURPOSE:	Print out info that should only be seend during development
-//
+//	PURPOSE: Print out info that should only be seend during development
 // ----------------------------------------------------------------------- //
 
 void CCommandMgr::DevPrint(char *msg, ...)
@@ -732,16 +692,14 @@ void CCommandMgr::DevPrint(char *msg, ...)
 
 	if (nSuccess < 0) return;
 
-    g_pLTServer->CPrint("%s", pMsg);
+	g_pLTServer->CPrint("%s", pMsg);
 #endif
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::Save()
 //
-//	ROUTINE:	CCommandMgr::Save()
-//
-//	PURPOSE:	Save the command mgr
-//
+//	PURPOSE: Save the command mgr
 // ----------------------------------------------------------------------- //
 
 void CCommandMgr::Save(HMESSAGEWRITE hWrite)
@@ -753,11 +711,9 @@ void CCommandMgr::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCommandMgr::Load()
 //
-//	ROUTINE:	CCommandMgr::Load()
-//
-//	PURPOSE:	Load the command mgr
-//
+//	PURPOSE: Load the command mgr
 // ----------------------------------------------------------------------- //
 
 void CCommandMgr::Load(HMESSAGEREAD hRead)
@@ -770,42 +726,40 @@ void CCommandMgr::Load(HMESSAGEREAD hRead)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMD_STRUCT::Load()
 //
-//	ROUTINE:	CMD_STRUCT::Load()
-//
-//	PURPOSE:	Load all the info associated with the CMD_STRUCT
-//
+//	PURPOSE: Load all the info associated with the CMD_STRUCT
 // ----------------------------------------------------------------------- //
 
 void CMD_STRUCT::Load(HMESSAGEREAD hRead)
 {
 	if (!hRead) return;
 
-    fDelay      = g_pLTServer->ReadFromMessageFloat(hRead);
-    fMinDelay   = g_pLTServer->ReadFromMessageFloat(hRead);
-    fMaxDelay   = g_pLTServer->ReadFromMessageFloat(hRead);
-    nNumTimes   = (int) g_pLTServer->ReadFromMessageFloat(hRead);
-    nMinTimes   = (int) g_pLTServer->ReadFromMessageFloat(hRead);
-    nMaxTimes   = (int) g_pLTServer->ReadFromMessageFloat(hRead);
+	fDelay	  = g_pLTServer->ReadFromMessageFloat(hRead);
+	fMinDelay   = g_pLTServer->ReadFromMessageFloat(hRead);
+	fMaxDelay   = g_pLTServer->ReadFromMessageFloat(hRead);
+	nNumTimes   = (int) g_pLTServer->ReadFromMessageFloat(hRead);
+	nMinTimes   = (int) g_pLTServer->ReadFromMessageFloat(hRead);
+	nMaxTimes   = (int) g_pLTServer->ReadFromMessageFloat(hRead);
 
-    HSTRING hstr = g_pLTServer->ReadFromMessageHString(hRead);
+	HSTRING hstr = g_pLTServer->ReadFromMessageHString(hRead);
 	if (hstr)
 	{
-        strncpy(aCmd, g_pLTServer->GetStringData(hstr), CMDMGR_MAX_COMMAND_LENGTH);
+		strncpy(aCmd, g_pLTServer->GetStringData(hstr), CMDMGR_MAX_COMMAND_LENGTH);
 		aCmd[CMDMGR_MAX_COMMAND_LENGTH-1] = CMDMGR_NULL_CHAR;
-        g_pLTServer->FreeString(hstr);
+		g_pLTServer->FreeString(hstr);
 	}
 	else
 	{
 		aCmd[0] = CMDMGR_NULL_CHAR;
 	}
 
-    hstr = g_pLTServer->ReadFromMessageHString(hRead);
+	hstr = g_pLTServer->ReadFromMessageHString(hRead);
 	if (hstr)
 	{
-        strncpy(aId, g_pLTServer->GetStringData(hstr), CMDMGR_MAX_ID_LENGTH);
+		strncpy(aId, g_pLTServer->GetStringData(hstr), CMDMGR_MAX_ID_LENGTH);
 		aId[CMDMGR_MAX_ID_LENGTH-1] = CMDMGR_NULL_CHAR;
-        g_pLTServer->FreeString(hstr);
+		g_pLTServer->FreeString(hstr);
 	}
 	else
 	{
@@ -815,47 +769,45 @@ void CMD_STRUCT::Load(HMESSAGEREAD hRead)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMD_STRUCT::Save()
 //
-//	ROUTINE:	CMD_STRUCT::Save()
-//
-//	PURPOSE:	Save all the info associated with the CMD_STRUCT
-//
+//	PURPOSE: Save all the info associated with the CMD_STRUCT
 // ----------------------------------------------------------------------- //
 
 void CMD_STRUCT::Save(HMESSAGEWRITE hWrite)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageFloat(hWrite, fDelay);
-    g_pLTServer->WriteToMessageFloat(hWrite, fMinDelay);
-    g_pLTServer->WriteToMessageFloat(hWrite, fMaxDelay);
-    g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)nNumTimes);
-    g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)nMinTimes);
-    g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)nMaxTimes);
+	g_pLTServer->WriteToMessageFloat(hWrite, fDelay);
+	g_pLTServer->WriteToMessageFloat(hWrite, fMinDelay);
+	g_pLTServer->WriteToMessageFloat(hWrite, fMaxDelay);
+	g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)nNumTimes);
+	g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)nMinTimes);
+	g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT)nMaxTimes);
 
-    HSTRING hstr = LTNULL;
+	HSTRING hstr = LTNULL;
 	if (aCmd[0] != CMDMGR_NULL_CHAR)
 	{
-        hstr = g_pLTServer->CreateString(aCmd);
+		hstr = g_pLTServer->CreateString(aCmd);
 	}
 
-    g_pLTServer->WriteToMessageHString(hWrite, hstr);
+	g_pLTServer->WriteToMessageHString(hWrite, hstr);
 
 	if (hstr)
 	{
-        g_pLTServer->FreeString(hstr);
+		g_pLTServer->FreeString(hstr);
 	}
 
-    hstr = LTNULL;
+	hstr = LTNULL;
 	if (aId[0] != CMDMGR_NULL_CHAR)
 	{
-        hstr = g_pLTServer->CreateString(aId);
+		hstr = g_pLTServer->CreateString(aId);
 	}
 
-    g_pLTServer->WriteToMessageHString(hWrite, hstr);
+	g_pLTServer->WriteToMessageHString(hWrite, hstr);
 
 	if (hstr)
 	{
-        g_pLTServer->FreeString(hstr);
+		g_pLTServer->FreeString(hstr);
 	}
 }

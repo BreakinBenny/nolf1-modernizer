@@ -2,7 +2,7 @@
 ;
 ;	 MODULE:		MYGAMESPYMGR (.CPP)
 ;
-;	PURPOSE:		Derived Game Spy Manager for this game server
+;	PURPOSE: 	Derived Game Spy Manager for this game server
 ;
 ;	HISTORY:		09/21/98  [blg]  This file was created
 ;
@@ -27,11 +27,9 @@ extern	CGameServerShell*   g_pGameServerShell;
 // Functions...
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMyGameSpyMgr::OnInfoQuery
 //
-//	ROUTINE:	CMyGameSpyMgr::OnInfoQuery
-//
-//	PURPOSE:	Handles the "info" query
-//
+//	PURPOSE: Handles the "info" query
 // ----------------------------------------------------------------------- //
 
 BOOL CMyGameSpyMgr::OnInfoQuery()
@@ -84,11 +82,9 @@ BOOL CMyGameSpyMgr::OnInfoQuery()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMyGameSpyMgr::OnRulesQuery
 //
-//	ROUTINE:	CMyGameSpyMgr::OnRulesQuery
-//
-//	PURPOSE:	Handles the "rules" query
-//
+//	PURPOSE: Handles the "rules" query
 // ----------------------------------------------------------------------- //
 
 BOOL CMyGameSpyMgr::OnRulesQuery()
@@ -141,11 +137,9 @@ BOOL CMyGameSpyMgr::OnRulesQuery()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CMyGameSpyMgr::OnPlayersQuery
 //
-//	ROUTINE:	CMyGameSpyMgr::OnPlayersQuery
-//
-//	PURPOSE:	Handles the "players" query
-//
+//	PURPOSE: Handles the "players" query
 // ----------------------------------------------------------------------- //
 
 BOOL CMyGameSpyMgr::OnPlayersQuery()

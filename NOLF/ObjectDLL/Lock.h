@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Lock.cpp
 //
-// MODULE  : Lock.cpp
+// PURPOSE: Definition of the Lock object
 //
-// PURPOSE : Definition of the Lock object
-//
-// CREATED : 01/11/00
+// CREATED: 01/11/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __LOCK_H__
@@ -24,11 +22,11 @@ class Lock : public Prop
 
 	protected :
 
-        virtual uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
-        virtual uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		virtual uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		virtual uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
-        LTBOOL   ReadProp(ObjectCreateStruct *pData);
-        LTBOOL   InitialUpdate();
+		LTBOOL   ReadProp(ObjectCreateStruct *pData);
+		LTBOOL   InitialUpdate();
 
 		void	SetupUnlockState();
 		void	HandleGadgetMsg(HOBJECT hSender, ConParse & parse);
@@ -36,15 +34,15 @@ class Lock : public Prop
 		HSTRING	m_hstrUnlockCmd;
 		HSTRING m_hstrUnlockSnd;
 		HSTRING m_hstrPickSnd;
-        LTFLOAT  m_fSndRadius;
-        LTFLOAT  m_fUnlockHitPts;
-        LTFLOAT  m_fMinUnlockHitPts;
-        LTFLOAT  m_fMaxUnlockHitPts;
-        LTBOOL   m_bShootable;
-        LTBOOL   m_bWeldable;
-        LTBOOL   m_bLightable;
-        LTBOOL   m_bRemoveWhenDone;
-        LTBOOL   m_bUnlocked;
+		LTFLOAT  m_fSndRadius;
+		LTFLOAT  m_fUnlockHitPts;
+		LTFLOAT  m_fMinUnlockHitPts;
+		LTFLOAT  m_fMaxUnlockHitPts;
+		LTBOOL   m_bShootable;
+		LTBOOL   m_bWeldable;
+		LTBOOL   m_bLightable;
+		LTBOOL   m_bRemoveWhenDone;
+		LTBOOL   m_bUnlocked;
 
 	private :
 

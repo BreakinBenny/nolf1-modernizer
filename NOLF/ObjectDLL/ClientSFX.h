@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CClientSFX.h
 //
-// MODULE  : CClientSFX.h
+// PURPOSE: CClientSFX - Base class for client-side sfx objects - Definition
 //
-// PURPOSE : CClientSFX - Base class for client-side sfx objects - Definition
-//
-// CREATED : 10/21/97
-//
+// CREATED: 10/21/97
 // ----------------------------------------------------------------------- //
 
 #ifndef __CLIENT_SFX_H__
@@ -18,7 +16,7 @@ class CClientSFX : public BaseClass
 {
 	public :
 
-        CClientSFX(uint8 nType=OT_NORMAL);
+		CClientSFX(uint8 nType=OT_NORMAL);
 		virtual ~CClientSFX() {}
 
 };

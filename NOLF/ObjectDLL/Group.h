@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Group.h
 //
-// MODULE  : Group.h
+// PURPOSE: Group - Definition
 //
-// PURPOSE : Group - Definition
-//
-// CREATED : 12/21/99
+// CREATED: 12/21/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __GROUP_H__
@@ -27,14 +25,14 @@ class Group : public BaseClass
 
 	protected :
 
-        uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
-        uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+		uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 	private:
 
 		void		PreCreate(ObjectCreateStruct *pStruct);
-        void        Load(HMESSAGEREAD hRead, uint32 dwSaveFlags);
-        void        Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void		Load(HMESSAGEREAD hRead, uint32 dwSaveFlags);
+		void		Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
 		void		HandleTrigger(HOBJECT hSender, const char *pMsg);
 
 		HSTRING	m_hstrObjectNames[MAX_GROUP_TARGETS];

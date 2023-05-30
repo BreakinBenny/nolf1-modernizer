@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: DialogueWindow.h
 //
-// MODULE  : DialogueWindow.h
+// PURPOSE: DialogueWindow - Definition
 //
-// PURPOSE : DialogueWindow - Definition
-//
-// CREATED : 4/17/99
+// CREATED: 4/17/99
 //
 // COMMENT : Copyright (c) 1999, Monolith Productions, Inc.
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef _DIALOGUEWINDOW_H_
@@ -30,15 +28,15 @@ class CDialogueWindow : public CPrBase
 		BOOL				Init();
 		void				Term();
 		BOOL				IsInitialized() { return m_bInitialized; }
-        void                Finished(uint8 byDecision = 0, uint32 dwDecision = 0);
-        uint32              EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+		void				Finished(uint8 byDecision = 0, uint32 dwDecision = 0);
+		uint32			  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
 		BOOL				IsPlaying() { return m_bPlaying; }
-        BOOL                PlayDialogue(uint32 dwID, CActor* pSpeaker, BOOL bStayOpen, const char *szActorName,
+		BOOL				PlayDialogue(uint32 dwID, CActor* pSpeaker, BOOL bStayOpen, const char *szActorName,
 											char *szDecisions = NULL);
-        BOOL                PlayDialogue(uint32 dwID, BOOL bStayOpen, const char *szActorName,
+		BOOL				PlayDialogue(uint32 dwID, BOOL bStayOpen, const char *szActorName,
 								   char *szDecisions, CinematicTrigger* pCinematic);
 		void				StopDialogue() { if(m_pCurSpeaker) m_pCurSpeaker->KillDialogueSound(); }
-        BOOL                SendMessage(uint32 dwID, BOOL bStayOpen, const char *szActorName, char *szDecisions);
+		BOOL				SendMessage(uint32 dwID, BOOL bStayOpen, const char *szActorName, char *szDecisions);
 
 	private:
 
@@ -62,12 +60,12 @@ inline CDialogueWindow::CDialogueWindow()
 inline BOOL CDialogueWindow::SendMessage(uint32 dwID, BOOL bStayOpen, const char *szActorName, char *szDecisions)
 {
 	// Bring up a dialogue window on the client (NOTE: This goes to ALL CLIENTS)
-    HMESSAGEWRITE hMsg = g_pLTServer->StartMessage(LTNULL, SCM_PLAY_DIALOGUE);
-    g_pLTServer->WriteToMessageDWord(hMsg, dwID);
-    g_pLTServer->WriteToMessageString(hMsg,(char *)szActorName);
-    g_pLTServer->WriteToMessageByte(hMsg,bStayOpen);
-    g_pLTServer->WriteToMessageString(hMsg,szDecisions);
-    g_pLTServer->EndMessage(hMsg);
+	HMESSAGEWRITE hMsg = g_pLTServer->StartMessage(LTNULL, SCM_PLAY_DIALOGUE);
+	g_pLTServer->WriteToMessageDWord(hMsg, dwID);
+	g_pLTServer->WriteToMessageString(hMsg,(char *)szActorName);
+	g_pLTServer->WriteToMessageByte(hMsg,bStayOpen);
+	g_pLTServer->WriteToMessageString(hMsg,szDecisions);
+	g_pLTServer->EndMessage(hMsg);
 	m_bPlaying = TRUE;
 	return TRUE;
 }

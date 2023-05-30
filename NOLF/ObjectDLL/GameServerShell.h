@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: GameServerShell.cpp
 //
-// MODULE  : GameServerShell.cpp
+// PURPOSE: Game's Server Shell - Definition
 //
-// PURPOSE : Game's Server Shell - Definition
-//
-// CREATED : 9/18/97
-//
+// CREATED: 9/18/97
 // ----------------------------------------------------------------------- //
 
 #ifndef __GAME_SERVER_SHELL_H__
@@ -48,7 +46,7 @@ class TimeRamp
 			Clear();
 		}
 
-        TimeRamp(float time, LTVector color)
+		TimeRamp(float time, LTVector color)
 		{
 			Clear();
 			m_Time = time;
@@ -59,7 +57,7 @@ class TimeRamp
 		{
 			if(m_hMessage)
 			{
-                g_pLTServer->FreeString(m_hMessage);
+				g_pLTServer->FreeString(m_hMessage);
 			}
 		}
 
@@ -72,7 +70,7 @@ class TimeRamp
 		}
 
 		float		m_Time;
-        LTVector     m_Color; // 0-1
+		LTVector	 m_Color; // 0-1
 		HSTRING		m_hTarget;	// Message target...
 		HSTRING		m_hMessage;	// Message..
 };
@@ -90,31 +88,31 @@ class CGameServerShell : public IServerShell
 {
 	public :
 
-        CGameServerShell(ILTServer *pServerDE);
+		CGameServerShell(ILTServer *pServerDE);
 		~CGameServerShell();
 
 		void	ExitLevel(LTBOOL bSendMsgToClient=LTTRUE);
 
-        void    Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        void    Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		void	Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void	Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 
 		GameType		GetGameType()	const { return (GameType)m_GameInfo.m_byType; }
 		GameDifficulty	GetDifficulty() const { return m_eDifficulty; }
 		LTBOOL			GetFadeBodies() const { return m_bFadeBodies; }
-        LTBOOL           IsMultiplayerTeamBasedGame();
+		LTBOOL		   IsMultiplayerTeamBasedGame();
 
-        void        SetUpdateGameServ() { m_bUpdateGameServ = LTTRUE; }
-        LTRESULT     ServerAppMessageFn(char* sMsg, int nLen);
+		void		SetUpdateGameServ() { m_bUpdateGameServ = LTTRUE; }
+		LTRESULT	 ServerAppMessageFn(char* sMsg, int nLen);
 
-        void        PauseGame(LTBOOL b=LTTRUE);
+		void		PauseGame(LTBOOL b=LTTRUE);
 
 		TimeRamp*	GetTimeRamp(uint32 i);
 
 		CMissionData*	GetMissionData()			  { return &m_MissionData; }
-        LTBOOL           UseMissionData()        const { return m_bUseMissionData; }
-        void            SetUseMissionData(LTBOOL bUse) { m_bUseMissionData = bUse; }
-        ObjectivesList* GetObjectives(uint8 byTeam);
-        ObjectivesList* GetCompletedObjectives(uint8 byTeam);
+		LTBOOL		   UseMissionData()		const { return m_bUseMissionData; }
+		void			SetUseMissionData(LTBOOL bUse) { m_bUseMissionData = bUse; }
+		ObjectivesList* GetObjectives(uint8 byTeam);
+		ObjectivesList* GetCompletedObjectives(uint8 byTeam);
 
 		inline CTeamMgr*			GetTeamMgr()			{ return(&m_TeamMgr); }
 		inline CServerOptionMgr*	GetServerOptionMgr()	{ return(&m_ServerOptionMgr); }
@@ -142,17 +140,17 @@ class CGameServerShell : public IServerShell
 
 		void		OnAddClient(HCLIENT hClient);
 		void		OnRemoveClient(HCLIENT hClient);
-        LPBASECLASS OnClientEnterWorld(HCLIENT hClient, void *pClientData, uint32 clientDataLen);
+		LPBASECLASS OnClientEnterWorld(HCLIENT hClient, void *pClientData, uint32 clientDataLen);
 		void		OnClientExitWorld(HCLIENT hClient);
 
-        void        SendPlayerInfoMsgToClients(HCLIENT hClients, CPlayerObj *pPlayer, LTBOOL bNewPlayer);
-        void        OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD hMessage);
+		void		SendPlayerInfoMsgToClients(HCLIENT hClients, CPlayerObj *pPlayer, LTBOOL bNewPlayer);
+		void		OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD hMessage);
 		void		OnCommandOn(HCLIENT hClient, int command);
-        void        PreStartWorld(LTBOOL bSwitchingWorlds);
+		void		PreStartWorld(LTBOOL bSwitchingWorlds);
 		void		PostStartWorld();
 		void		CacheFiles();
 		void		UpdateClientPingTimes();
-        void        Update(LTFLOAT timeElapsed);
+		void		Update(LTFLOAT timeElapsed);
 		void		SendTimeOfDay(HCLIENT hClient);
 		void		SendGameDataToClient(HCLIENT hClient);
 		void		SendServerOptionsToClient(HCLIENT hClient);
@@ -165,11 +163,11 @@ class CGameServerShell : public IServerShell
 	private :
 
 		void HandleUpdatePlayerMsg(HCLIENT hSender, HMESSAGEREAD hMessage);
-        void HandleCheatCode(CPlayerObj* pPlayer, CheatCode nCheatCode, uint8 nData);
+		void HandleCheatCode(CPlayerObj* pPlayer, CheatCode nCheatCode, uint8 nData);
 		void HandleCheatSpectatorMsg(HCLIENT hSender, HMESSAGEREAD hMessage);
-        void HandlePlayerMsg(HCLIENT hSender, uint8 messageID, HMESSAGEREAD hMessage);
-        void HandleCheatRemoveAI(uint8 nData);
-        void HandleTriggerBoxCheat(uint8 nData);
+		void HandlePlayerMsg(HCLIENT hSender, uint8 messageID, HMESSAGEREAD hMessage);
+		void HandleCheatRemoveAI(uint8 nData);
+		void HandleTriggerBoxCheat(uint8 nData);
 
 		void HandlePlayerSummary(HCLIENT hSender, HMESSAGEREAD hMessage);
 		void HandlePlayerChangeTeam(HCLIENT hSender, HMESSAGEREAD hMessage);
@@ -197,9 +195,9 @@ class CGameServerShell : public IServerShell
 
 
 		TimeRamp		m_TimeRamps[MAX_TIME_RAMPS];
-        uint32          m_nTimeRamps;   // Only calculated right before using the time ramps.
+		uint32		  m_nTimeRamps;   // Only calculated right before using the time ramps.
 										// Based on the first one with m_Time == -1.
-        uint32          m_iPrevRamp;    // The previous time ramp we were sitting on (used to
+		uint32		  m_iPrevRamp;	// The previous time ramp we were sitting on (used to
 										// trigger time events).
 
 		float			m_ClientPingSendCounter;
@@ -210,9 +208,9 @@ class CGameServerShell : public IServerShell
 		CVarTrack		m_WorldTimeTrack;
 		CVarTrack		m_WorldTimeSpeedTrack;
 		float			m_TODSeconds;	// Current time of day
-        float           m_TODCounter;
-        uint8           m_WorldTimeColor[3]; // 0-64 so we don't send updates all the time.
-        uint8           m_SunVec[3];
+		float		   m_TODCounter;
+		uint8		   m_WorldTimeColor[3]; // 0-64 so we don't send updates all the time.
+		uint8		   m_SunVec[3];
 
 		HSTRING			m_hstrStartPointName;
 
@@ -221,22 +219,22 @@ class CGameServerShell : public IServerShell
 
 		NetGame			m_GameInfo;
 		int				m_nCurLevel;
-        LTBOOL           m_bHitFragLimit;
-        LTBOOL           m_bUpdateGameServ;
-        LTBOOL           m_bGameServHosted;
+		LTBOOL		   m_bHitFragLimit;
+		LTBOOL		   m_bUpdateGameServ;
+		LTBOOL		   m_bGameServHosted;
 
-        uint8           m_nLastLGFlags;
+		uint8		   m_nLastLGFlags;
 		GameDifficulty	m_eDifficulty;
 		LTBOOL			m_bFadeBodies;
 
 		HCONVAR			m_hSwitchWorldVar;
-        LTBOOL           m_bFirstUpdate;
+		LTBOOL		   m_bFirstUpdate;
 
 		CGlobalServerMgr	m_GlobalMgr;
 		CCommandMgr			m_CmdMgr;			// Same as g_pCmdMgr
 
 		CMissionData		m_MissionData;
-        LTBOOL               m_bUseMissionData;
+		LTBOOL			   m_bUseMissionData;
 
 		ObjectivesList	m_Objectives[NUM_TEAMS+1];
 		ObjectivesList	m_CompletedObjectives[NUM_TEAMS+1];
@@ -247,11 +245,11 @@ class CGameServerShell : public IServerShell
 		LevelEnd		m_eLevelEnd;
 		LTFLOAT			m_fSummaryEndTime;
 
-        CTeamMgr            m_TeamMgr;
+		CTeamMgr			m_TeamMgr;
 		CServerOptionMgr	m_ServerOptionMgr;
 		CMyGameSpyMgr		m_GameSpyMgr;
 
-        LTBOOL              m_bDontUseGameSpy;
+		LTBOOL			  m_bDontUseGameSpy;
 		int					m_nGetPlayerIndex;
 		int					m_nMaxPlrs;
 		char				m_sSpyGameHost[MAX_GEN_STRING];
@@ -263,7 +261,7 @@ class CGameServerShell : public IServerShell
 		LONGLONG			m_lNextUpdate;
 		LONGLONG			m_lFrametime;
 
-        CGameServSendHandler    m_SendHandler;
+		CGameServSendHandler	m_SendHandler;
 
 		LTBOOL m_bDisplayTriggersIsOn;
 
@@ -278,18 +276,18 @@ class CGameServerShell : public IServerShell
 		void FirstUpdate();
 		void UpdateTimeOfDay(LTFLOAT timeElapsed);
 
-        LTRESULT SwitchToWorld(char *pWorldName, char *pNextWorldName);
+		LTRESULT SwitchToWorld(char *pWorldName, char *pNextWorldName);
 		void StartNextMultiplayerLevel();
-        void ReportError(HCLIENT hClient, uint8 nErrorType);
+		void ReportError(HCLIENT hClient, uint8 nErrorType);
 
-        LTBOOL UpdateSessionName();
-        LTBOOL UpdateGameServer();
+		LTBOOL UpdateSessionName();
+		LTBOOL UpdateGameServer();
 		void  FillGameData(GAMEDATA *gameData);
 
-        void        ClearClientList() { for (int i = 0; i < MAX_CLIENTS; i++) { m_aClients[i] = LTNULL; } }
-        LTBOOL       AddClientToList(HCLIENT hClient);
-        LTBOOL       RemoveClientFromList(HCLIENT hClient);
-        LTBOOL       IsClientInList(HCLIENT hClient);
+		void		ClearClientList() { for (int i = 0; i < MAX_CLIENTS; i++) { m_aClients[i] = LTNULL; } }
+		LTBOOL	   AddClientToList(HCLIENT hClient);
+		LTBOOL	   RemoveClientFromList(HCLIENT hClient);
+		LTBOOL	   IsClientInList(HCLIENT hClient);
 		CPlayerObj*	GetPlayerFromClientList(HCLIENT hClient);
 
 		LTBOOL IsPositionOccupied(LTVector & vPos, CPlayerObj* pPlayer);

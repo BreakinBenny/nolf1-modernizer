@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CinematicTrigger.cpp
 //
-// MODULE  : CinematicTrigger.cpp
+// PURPOSE: CinematicTrigger - Implementation
 //
-// PURPOSE : CinematicTrigger - Implementation
-//
-// CREATED : 2/17/99
+// CREATED: 2/17/99
 //
 // COMMENT : Copyright (c) 1999-2000, Monolith Productions, Inc.
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -32,13 +30,13 @@
 	ADD_STRINGPROP_FLAG(Replies##num##, "", group)\
 	ADD_STRINGPROP_FLAG(RepliesTriggerTarget##num##, "", group)\
 	ADD_STRINGPROP_FLAG(RepliesTriggerMsg##num##, "", group)\
-    ADD_BOOLPROP_FLAG(Window##num##, LTFALSE, group)
+	ADD_BOOLPROP_FLAG(Window##num##, LTFALSE, group)
 
 
 BEGIN_CLASS(CinematicTrigger)
-    ADD_BOOLPROP(CanSkip, LTTRUE)
-    ADD_BOOLPROP(OneTimeOnly, LTTRUE)
-    ADD_BOOLPROP(StartOn, LTFALSE)
+	ADD_BOOLPROP(CanSkip, LTTRUE)
+	ADD_BOOLPROP(OneTimeOnly, LTTRUE)
+	ADD_BOOLPROP(StartOn, LTFALSE)
 	ADD_BOOLPROP(RemoveBadAI, LTFALSE)
 	ADD_STRINGPROP(CleanUpTriggerTarget, "")
 	ADD_STRINGPROP(CleanUpTriggerMsg, "")
@@ -46,7 +44,7 @@ BEGIN_CLASS(CinematicTrigger)
 	ADD_STRINGPROP(DialogueStartTriggerMsg, "")
 	ADD_STRINGPROP(DialogueDoneTriggerTarget, "")
 	ADD_STRINGPROP(DialogueDoneTriggerMsg, "")
-    ADD_BOOLPROP(AllWindows, LTFALSE)
+	ADD_BOOLPROP(AllWindows, LTFALSE)
 	ADD_BOOLPROP(LeaveCameraOnWhenDone, LTFALSE)
 
 	PROP_DEFINEGROUP(Dialogue, PF_GROUP1)
@@ -72,13 +70,13 @@ BEGIN_CLASS(CinematicTrigger)
 		ADD_DIALOGUE_PROP(20, PF_GROUP1)
 
 	PROP_DEFINEGROUP(Camera, PF_GROUP2)
-        ADD_BOOLPROP_FLAG(CreateCamera, LTTRUE, PF_GROUP2)
+		ADD_BOOLPROP_FLAG(CreateCamera, LTTRUE, PF_GROUP2)
 		ADD_CAMERA_PROPERTIES(PF_GROUP2)
-        ADD_BOOLPROP_FLAG(IsListener, LTTRUE, PF_GROUP2)
-        ADD_BOOLPROP_FLAG(OneTime, LTFALSE, PF_GROUP2 | PF_HIDDEN)
+		ADD_BOOLPROP_FLAG(IsListener, LTTRUE, PF_GROUP2)
+		ADD_BOOLPROP_FLAG(OneTime, LTFALSE, PF_GROUP2 | PF_HIDDEN)
 
 	PROP_DEFINEGROUP(KeyFramer, PF_GROUP3)
-        ADD_BOOLPROP_FLAG(CreateKeyFramer, LTFALSE, PF_GROUP3)
+		ADD_BOOLPROP_FLAG(CreateKeyFramer, LTFALSE, PF_GROUP3)
 		ADD_KEYFRAMER_PROPERTIES(PF_GROUP3)
 		ADD_STRINGPROP_FLAG(ObjectName, "", PF_GROUP3 | PF_HIDDEN)
 END_CLASS_DEFAULT(CinematicTrigger, BaseClass, NULL, NULL)
@@ -90,11 +88,9 @@ static const char* c_szKeyframerName	= "KF";
 static uint32 s_nKFId = 0;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::CinematicTrigger()
 //
-//	ROUTINE:	CinematicTrigger::CinematicTrigger()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 CinematicTrigger::CinematicTrigger()
@@ -107,166 +103,162 @@ CinematicTrigger::CinematicTrigger()
 	for (int i=0;i < MAX_CT_MESSAGES; i++)
 	{
 		m_fDelay[i]					= 0.0f;
-        m_hstrDialogue[i]           = LTNULL;
-        m_hstrWhoPlaysDialogue[i]   = LTNULL;
-        m_hstrTargetName[i]         = LTNULL;
-        m_hstrMessageName[i]        = LTNULL;
+		m_hstrDialogue[i]		   = LTNULL;
+		m_hstrWhoPlaysDialogue[i]   = LTNULL;
+		m_hstrTargetName[i]		 = LTNULL;
+		m_hstrMessageName[i]		= LTNULL;
 		m_hstrWhoPlaysDecisions[i]	= LTNULL;
-        m_hstrDecisions[i]          = LTNULL;
-        m_hstrReplies[i]            = LTNULL;
-        m_hstrRepliesTarget[i]      = LTNULL;
-        m_hstrRepliesMsg[i]         = LTNULL;
+		m_hstrDecisions[i]		  = LTNULL;
+		m_hstrReplies[i]			= LTNULL;
+		m_hstrRepliesTarget[i]	  = LTNULL;
+		m_hstrRepliesMsg[i]		 = LTNULL;
 		m_bWindow[i]				= LTFALSE;
 	}
 
-    m_bCanSkip          = LTTRUE;
-    m_bOn               = LTFALSE;
-    m_bNotified         = LTFALSE;
+	m_bCanSkip		  = LTTRUE;
+	m_bOn			   = LTFALSE;
+	m_bNotified		 = LTFALSE;
 	m_nCurMessage		= 0;
-    m_bAllWindows       = LTFALSE;
+	m_bAllWindows	   = LTFALSE;
 	m_bLeaveCameraOn	= LTFALSE;
 	m_byDecision		= 0;
 	m_byLastReply		= 0;
 
 
-    m_hCurSpeaker       = LTNULL;
-    m_hLastSpeaker      = LTNULL;
-    m_hCamera           = LTNULL;
-    m_hKeyFramer        = LTNULL;
+	m_hCurSpeaker	   = LTNULL;
+	m_hLastSpeaker	  = LTNULL;
+	m_hCamera		   = LTNULL;
+	m_hKeyFramer		= LTNULL;
 
 	m_bRemoveBadAI		= LTFALSE;
-    m_bStartOn          = LTFALSE;
-    m_bOneTimeOnly      = LTTRUE;
-    m_bCreateCamera     = LTFALSE;
-    m_bCreateKeyFramer  = LTFALSE;
+	m_bStartOn		  = LTFALSE;
+	m_bOneTimeOnly	  = LTTRUE;
+	m_bCreateCamera	 = LTFALSE;
+	m_bCreateKeyFramer  = LTFALSE;
 
 	m_fNextDialogueStart = -1.0f;
 
-    m_hstrCleanUpTriggerTarget  = LTNULL;
-    m_hstrCleanUpTriggerMsg     = LTNULL;
+	m_hstrCleanUpTriggerTarget  = LTNULL;
+	m_hstrCleanUpTriggerMsg	 = LTNULL;
 
-    m_bDialogueDone             = LTFALSE;
-    m_hstrDialogueDoneTarget    = LTNULL;
-    m_hstrDialogueDoneMsg       = LTNULL;
-    m_hstrDialogueStartTarget   = LTNULL;
-    m_hstrDialogueStartMsg      = LTNULL;
+	m_bDialogueDone			 = LTFALSE;
+	m_hstrDialogueDoneTarget	= LTNULL;
+	m_hstrDialogueDoneMsg	   = LTNULL;
+	m_hstrDialogueStartTarget   = LTNULL;
+	m_hstrDialogueStartMsg	  = LTNULL;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::~CinematicTrigger()
 //
-//	ROUTINE:	CinematicTrigger::~CinematicTrigger()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 CinematicTrigger::~CinematicTrigger()
 {
-    if (!g_pLTServer) return;
+	if (!g_pLTServer) return;
 
 	if (m_hCamera)
 	{
-        g_pLTServer->RemoveObject(m_hCamera);
-        m_hCamera = LTNULL;
+		g_pLTServer->RemoveObject(m_hCamera);
+		m_hCamera = LTNULL;
 	}
 
 	if (m_hKeyFramer)
 	{
-        g_pLTServer->RemoveObject(m_hKeyFramer);
-        m_hKeyFramer = LTNULL;
+		g_pLTServer->RemoveObject(m_hKeyFramer);
+		m_hKeyFramer = LTNULL;
 	}
 
 	for (int i=0; i < MAX_CT_MESSAGES; i++)
 	{
 		if (m_hstrWhoPlaysDialogue[i])
 		{
-            g_pLTServer->FreeString(m_hstrWhoPlaysDialogue[i]);
+			g_pLTServer->FreeString(m_hstrWhoPlaysDialogue[i]);
 		}
 
 		if (m_hstrTargetName[i])
 		{
-            g_pLTServer->FreeString(m_hstrTargetName[i]);
+			g_pLTServer->FreeString(m_hstrTargetName[i]);
 		}
 
 		if (m_hstrMessageName[i])
 		{
-            g_pLTServer->FreeString(m_hstrMessageName[i]);
+			g_pLTServer->FreeString(m_hstrMessageName[i]);
 		}
 
 		if (m_hstrWhoPlaysDecisions[i])
 		{
-            g_pLTServer->FreeString(m_hstrWhoPlaysDecisions[i]);
+			g_pLTServer->FreeString(m_hstrWhoPlaysDecisions[i]);
 		}
 
 		if (m_hstrDecisions[i])
 		{
-            g_pLTServer->FreeString(m_hstrDecisions[i]);
+			g_pLTServer->FreeString(m_hstrDecisions[i]);
 		}
 
 		if (m_hstrReplies[i])
 		{
-            g_pLTServer->FreeString(m_hstrReplies[i]);
+			g_pLTServer->FreeString(m_hstrReplies[i]);
 		}
 
 		if (m_hstrRepliesTarget[i])
 		{
-            g_pLTServer->FreeString(m_hstrRepliesTarget[i]);
+			g_pLTServer->FreeString(m_hstrRepliesTarget[i]);
 		}
 
 		if (m_hstrRepliesMsg[i])
 		{
-            g_pLTServer->FreeString(m_hstrRepliesMsg[i]);
+			g_pLTServer->FreeString(m_hstrRepliesMsg[i]);
 		}
 	}
 
 	if (m_hstrCleanUpTriggerTarget)
 	{
-        g_pLTServer->FreeString(m_hstrCleanUpTriggerTarget);
+		g_pLTServer->FreeString(m_hstrCleanUpTriggerTarget);
 	}
 
 	if (m_hstrCleanUpTriggerMsg)
 	{
-        g_pLTServer->FreeString(m_hstrCleanUpTriggerMsg);
+		g_pLTServer->FreeString(m_hstrCleanUpTriggerMsg);
 	}
 
 	if (m_hstrDialogueDoneTarget)
 	{
-        g_pLTServer->FreeString(m_hstrDialogueDoneTarget);
+		g_pLTServer->FreeString(m_hstrDialogueDoneTarget);
 	}
 
 	if (m_hstrDialogueDoneMsg)
 	{
-        g_pLTServer->FreeString(m_hstrDialogueDoneMsg);
+		g_pLTServer->FreeString(m_hstrDialogueDoneMsg);
 	}
 
 	if (m_hstrDialogueStartTarget)
 	{
-        g_pLTServer->FreeString(m_hstrDialogueStartTarget);
+		g_pLTServer->FreeString(m_hstrDialogueStartTarget);
 	}
 
 	if (m_hstrDialogueStartMsg)
 	{
-        g_pLTServer->FreeString(m_hstrDialogueStartMsg);
+		g_pLTServer->FreeString(m_hstrDialogueStartMsg);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::ReadProp
 //
-//	ROUTINE:	CinematicTrigger::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL CinematicTrigger::ReadProp(ObjectCreateStruct *pStruct)
 {
-    if (!g_pLTServer) return LTFALSE;
+	if (!g_pLTServer) return LTFALSE;
 
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("CreateCamera", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("CreateCamera", &genProp) == LT_OK)
 	{
 		m_bCreateCamera = genProp.m_Bool;
 		if (m_bCreateCamera)
@@ -275,7 +267,7 @@ LTBOOL CinematicTrigger::ReadProp(ObjectCreateStruct *pStruct)
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("CreateKeyFramer", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("CreateKeyFramer", &genProp) == LT_OK)
 	{
 		m_bCreateKeyFramer = genProp.m_Bool;
 		if (m_bCreateKeyFramer)
@@ -284,70 +276,70 @@ LTBOOL CinematicTrigger::ReadProp(ObjectCreateStruct *pStruct)
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("AllWindows", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("AllWindows", &genProp) == LT_OK)
 	{
 		m_bAllWindows = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("LeaveCameraOnWhenDone", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("LeaveCameraOnWhenDone", &genProp) == LT_OK)
 	{
 		m_bLeaveCameraOn = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("CanSkip", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("CanSkip", &genProp) == LT_OK)
 	{
 		m_bCanSkip = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("StartOn", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("StartOn", &genProp) == LT_OK)
 	{
 		m_bStartOn = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("RemoveBadAI", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("RemoveBadAI", &genProp) == LT_OK)
 	{
 		m_bRemoveBadAI = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("OneTimeOnly", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("OneTimeOnly", &genProp) == LT_OK)
 	{
 		m_bOneTimeOnly = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("CleanUpTriggerTarget", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("CleanUpTriggerTarget", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
-             m_hstrCleanUpTriggerTarget = g_pLTServer->CreateString(genProp.m_String);
+			 m_hstrCleanUpTriggerTarget = g_pLTServer->CreateString(genProp.m_String);
 	}
 
-    if (g_pLTServer->GetPropGeneric("CleanUpTriggerMsg", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("CleanUpTriggerMsg", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
-             m_hstrCleanUpTriggerMsg = g_pLTServer->CreateString(genProp.m_String);
+			 m_hstrCleanUpTriggerMsg = g_pLTServer->CreateString(genProp.m_String);
 	}
 
-    if (g_pLTServer->GetPropGeneric("DialogueDoneTriggerTarget", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DialogueDoneTriggerTarget", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
-             m_hstrDialogueDoneTarget = g_pLTServer->CreateString(genProp.m_String);
+			 m_hstrDialogueDoneTarget = g_pLTServer->CreateString(genProp.m_String);
 	}
 
-    if (g_pLTServer->GetPropGeneric("DialogueDoneTriggerMsg", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DialogueDoneTriggerMsg", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
-             m_hstrDialogueDoneMsg = g_pLTServer->CreateString(genProp.m_String);
+			 m_hstrDialogueDoneMsg = g_pLTServer->CreateString(genProp.m_String);
 	}
 
-    if (g_pLTServer->GetPropGeneric("DialogueStartTriggerTarget", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DialogueStartTriggerTarget", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
-             m_hstrDialogueStartTarget = g_pLTServer->CreateString(genProp.m_String);
+			 m_hstrDialogueStartTarget = g_pLTServer->CreateString(genProp.m_String);
 	}
 
-    if (g_pLTServer->GetPropGeneric("DialogueStartTriggerMsg", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DialogueStartTriggerMsg", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
-             m_hstrDialogueStartMsg = g_pLTServer->CreateString(genProp.m_String);
+			 m_hstrDialogueStartMsg = g_pLTServer->CreateString(genProp.m_String);
 	}
 
 	for (int i=0; i < MAX_CT_MESSAGES; i++)
@@ -355,72 +347,72 @@ LTBOOL CinematicTrigger::ReadProp(ObjectCreateStruct *pStruct)
 		char key[40];
 
 		sprintf(key, "Delay%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			m_fDelay[i] = genProp.m_Float;
 		}
 
 		sprintf(key, "Dialogue%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			if(genProp.m_String[0])
-                m_hstrDialogue[i] = g_pLTServer->CreateString(genProp.m_String);
+				m_hstrDialogue[i] = g_pLTServer->CreateString(genProp.m_String);
 		}
 
 		sprintf(key, "WhoPlaysDialogue%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			if (genProp.m_String[0])
-                m_hstrWhoPlaysDialogue[i] = g_pLTServer->CreateString(genProp.m_String);
+				m_hstrWhoPlaysDialogue[i] = g_pLTServer->CreateString(genProp.m_String);
 		}
 
 		sprintf(key, "StartDialogueTriggerTarget%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			if (genProp.m_String[0])
-                 m_hstrTargetName[i] = g_pLTServer->CreateString(genProp.m_String);
+				 m_hstrTargetName[i] = g_pLTServer->CreateString(genProp.m_String);
 		}
 
 		sprintf(key, "StartDialogueTriggerMsg%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			if (genProp.m_String[0])
-                 m_hstrMessageName[i] = g_pLTServer->CreateString(genProp.m_String);
+				 m_hstrMessageName[i] = g_pLTServer->CreateString(genProp.m_String);
 		}
 
 		sprintf(key, "WhoPlaysDecisions%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			if (genProp.m_String[0])
-                 m_hstrWhoPlaysDecisions[i] = g_pLTServer->CreateString(genProp.m_String);
+				 m_hstrWhoPlaysDecisions[i] = g_pLTServer->CreateString(genProp.m_String);
 		}
 
 		sprintf(key, "Decisions%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			if (genProp.m_String[0])
-                 m_hstrDecisions[i] = g_pLTServer->CreateString(genProp.m_String);
+				 m_hstrDecisions[i] = g_pLTServer->CreateString(genProp.m_String);
 		}
 
 		sprintf(key, "Replies%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			if (genProp.m_String[0])
-                 m_hstrReplies[i] = g_pLTServer->CreateString(genProp.m_String);
+				 m_hstrReplies[i] = g_pLTServer->CreateString(genProp.m_String);
 		}
 
 		sprintf(key, "RepliesTriggerTarget%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			if (genProp.m_String[0])
-                 m_hstrRepliesTarget[i] = g_pLTServer->CreateString(genProp.m_String);
+				 m_hstrRepliesTarget[i] = g_pLTServer->CreateString(genProp.m_String);
 		}
 
 		sprintf(key, "RepliesTriggerMsg%d", i+1);
-        if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 		{
 			if (genProp.m_String[0])
-                 m_hstrRepliesMsg[i] = g_pLTServer->CreateString(genProp.m_String);
+				 m_hstrRepliesMsg[i] = g_pLTServer->CreateString(genProp.m_String);
 		}
 
 		if(m_bAllWindows)
@@ -430,32 +422,30 @@ LTBOOL CinematicTrigger::ReadProp(ObjectCreateStruct *pStruct)
 		else
 		{
 			sprintf(key, "Window%d", i+1);
-            if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
+			if (g_pLTServer->GetPropGeneric(key, &genProp) == LT_OK)
 			{
 				m_bWindow[i] = genProp.m_Bool;
 			}
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::Update
 //
-//	ROUTINE:	CinematicTrigger::Update
-//
-//	PURPOSE:	Handle Update
-//
+//	PURPOSE: Handle Update
 // ----------------------------------------------------------------------- //
 
 LTBOOL CinematicTrigger::Update()
 {
-    if (!g_pLTServer) return LTFALSE;
+	if (!g_pLTServer) return LTFALSE;
 
-    SetNextUpdate(m_hObject, 0.001f);
+	SetNextUpdate(m_hObject, 0.001f);
 
-    LTBOOL bDialogueDone = !m_bDialogueDone ? !UpdateDialogue() : m_bDialogueDone;
+	LTBOOL bDialogueDone = !m_bDialogueDone ? !UpdateDialogue() : m_bDialogueDone;
 
 	// If we created a camera and it is done end the cinematic...
 
@@ -467,7 +457,7 @@ LTBOOL CinematicTrigger::Update()
 		}
 		else
 		{
-            uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hCamera);
+			uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hCamera);
 			if ( !(dwUsrFlags & USRFLG_CAMERA_LIVE) )
 			{
 				HandleOff();
@@ -481,19 +471,19 @@ LTBOOL CinematicTrigger::Update()
 	{
 		if (!m_bDialogueDone)
 		{
-            m_bDialogueDone = LTTRUE;
+			m_bDialogueDone = LTTRUE;
 
 			// Send trigger...
 
 			if (m_hstrDialogueDoneTarget && m_hstrDialogueDoneMsg)
 			{
-                SendTriggerMsgToObjects(this, g_pLTServer->GetStringData(m_hstrDialogueDoneTarget), g_pLTServer->GetStringData(m_hstrDialogueDoneMsg));
+				SendTriggerMsgToObjects(this, g_pLTServer->GetStringData(m_hstrDialogueDoneTarget), g_pLTServer->GetStringData(m_hstrDialogueDoneMsg));
 			}
 		}
 
 		if (m_hKeyFramer)
 		{
-            KeyFramer* pKeyFramer = (KeyFramer*)g_pLTServer->HandleToObject(m_hKeyFramer);
+			KeyFramer* pKeyFramer = (KeyFramer*)g_pLTServer->HandleToObject(m_hKeyFramer);
 			if (!pKeyFramer || pKeyFramer->m_bFinished)
 			{
 				HandleOff();
@@ -508,22 +498,20 @@ LTBOOL CinematicTrigger::Update()
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::UpdateDialogue
 //
-//	ROUTINE:	CinematicTrigger::UpdateDialogue
-//
-//	PURPOSE:	Handle update the dialogue.  Return false when
+//	PURPOSE: Handle update the dialogue.  Return false when
 //				dialogue is done playing.
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CinematicTrigger::UpdateDialogue()
 {
-    if (!g_pLTServer) return LTFALSE;
+	if (!g_pLTServer) return LTFALSE;
 
 	// If we haven't yet done so, let all the cinematic participants know
 	// they're under CinematicTrigger control
@@ -546,12 +534,12 @@ LTBOOL CinematicTrigger::UpdateDialogue()
 			}
 		}
 
-        m_bNotified = LTTRUE;
+		m_bNotified = LTTRUE;
 	}
 
 	// Now update...
 
-    LTFLOAT fTime = g_pLTServer->GetTime();
+	LTFLOAT fTime = g_pLTServer->GetTime();
 
 	// See if we are playing a dialogue...
 	BOOL bDone = FALSE;
@@ -559,7 +547,7 @@ LTBOOL CinematicTrigger::UpdateDialogue()
 	if (m_hCurSpeaker)
 	{
 		// If sound is done, stop it and wait for new sound...
-        CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hCurSpeaker);
+		CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hCurSpeaker);
 		if (pChar)
 		{
 			bDone = !pChar->IsPlayingDialogue();
@@ -580,8 +568,8 @@ LTBOOL CinematicTrigger::UpdateDialogue()
 
 		// Clear our speaker...
 
-        g_pLTServer->BreakInterObjectLink(m_hObject, m_hCurSpeaker);
-        m_hCurSpeaker = LTNULL;
+		g_pLTServer->BreakInterObjectLink(m_hObject, m_hCurSpeaker);
+		m_hCurSpeaker = LTNULL;
 
 		if(m_byLastReply)
 		{
@@ -596,7 +584,7 @@ LTBOOL CinematicTrigger::UpdateDialogue()
 		}
 		else
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 	}
 
@@ -608,7 +596,7 @@ LTBOOL CinematicTrigger::UpdateDialogue()
 
 		if (m_nCurMessage >= MAX_CT_MESSAGES || !m_hstrDialogue[m_nCurMessage])
 		{
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		// Start next sound...
@@ -619,16 +607,14 @@ LTBOOL CinematicTrigger::UpdateDialogue()
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::EngineMessageFn
 //
-//	ROUTINE:	CinematicTrigger::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 CinematicTrigger::EngineMessageFn(uint32 messageID, void *pData, float fData)
@@ -639,15 +625,15 @@ uint32 CinematicTrigger::EngineMessageFn(uint32 messageID, void *pData, float fD
 		{
 			if (!Update())
 			{
-                g_pLTServer->RemoveObject(m_hObject);
-                return LTFALSE;
+				g_pLTServer->RemoveObject(m_hObject);
+				return LTFALSE;
 			}
 		}
 		break;
 
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
 
 			if ((DWORD)fData == PRECREATE_WORLDFILE || (DWORD)fData == PRECREATE_STRINGPROP)
 			{
@@ -670,7 +656,7 @@ uint32 CinematicTrigger::EngineMessageFn(uint32 messageID, void *pData, float fD
 				{
 					// Wait for a trigger message...
 
-                    SetNextUpdate(m_hObject, 0.0f);
+					SetNextUpdate(m_hObject, 0.0f);
 				}
 			}
 		}
@@ -684,13 +670,13 @@ uint32 CinematicTrigger::EngineMessageFn(uint32 messageID, void *pData, float fD
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -702,11 +688,9 @@ uint32 CinematicTrigger::EngineMessageFn(uint32 messageID, void *pData, float fD
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::ObjectMessageFn
 //
-//	ROUTINE:	CinematicTrigger::ObjectMessageFn
-//
-//	PURPOSE:	Handle object messages
-//
+//	PURPOSE: Handle object messages
 // ----------------------------------------------------------------------- //
 
 uint32 CinematicTrigger::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -728,18 +712,16 @@ uint32 CinematicTrigger::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMES
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::TriggerMsg()
 //
-//	ROUTINE:	CinematicTrigger::TriggerMsg()
-//
-//	PURPOSE:	Process cinematic trigger messages
-//
+//	PURPOSE: Process cinematic trigger messages
 // --------------------------------------------------------------------------- //
 
 void CinematicTrigger::TriggerMsg(HOBJECT hSender, const char *pMsg)
 {
 	if (!pMsg) return;
 
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return;
 
 	// ConParse does not destroy szMsg, so this is safe
@@ -807,11 +789,9 @@ void CinematicTrigger::TriggerMsg(HOBJECT hSender, const char *pMsg)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::CreateCamera
 //
-//	ROUTINE:	CinematicTrigger::CreateCamera
-//
-//	PURPOSE:	Create the camera object
-//
+//	PURPOSE: Create the camera object
 // ----------------------------------------------------------------------- //
 
 void CinematicTrigger::CreateCamera(ObjectCreateStruct *pStruct)
@@ -822,29 +802,27 @@ void CinematicTrigger::CreateCamera(ObjectCreateStruct *pStruct)
 	INIT_OBJECTCREATESTRUCT(theStruct);
 
 	VEC_COPY(theStruct.m_Pos, pStruct->m_Pos);
-    theStruct.m_Rotation = pStruct->m_Rotation;
+	theStruct.m_Rotation = pStruct->m_Rotation;
 
 	// Give it the same name as us so the keyframer can move us around...
 
 	sprintf(theStruct.m_Name, "%s_%s%d", pStruct->m_Name, c_szCameraName, s_nKFId);
 
-    HCLASS hClass = g_pLTServer->GetClass("Camera");
-    Camera* pCamera = (Camera*) g_pLTServer->CreateObject(hClass, &theStruct);
+	HCLASS hClass = g_pLTServer->GetClass("Camera");
+	Camera* pCamera = (Camera*) g_pLTServer->CreateObject(hClass, &theStruct);
 	if (!pCamera) return;
 
 	pCamera->ReadProps();
 
 	m_hCamera = pCamera->m_hObject;
-    g_pLTServer->CreateInterObjectLink(m_hObject, m_hCamera);
+	g_pLTServer->CreateInterObjectLink(m_hObject, m_hCamera);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::CreateKeyFramer
 //
-//	ROUTINE:	CinematicTrigger::CreateKeyFramer
-//
-//	PURPOSE:	Create the key framer object
-//
+//	PURPOSE: Create the key framer object
 // ----------------------------------------------------------------------- //
 
 void CinematicTrigger::CreateKeyFramer(ObjectCreateStruct *pStruct)
@@ -855,18 +833,18 @@ void CinematicTrigger::CreateKeyFramer(ObjectCreateStruct *pStruct)
 	INIT_OBJECTCREATESTRUCT(theStruct);
 
 	VEC_COPY(theStruct.m_Pos, pStruct->m_Pos);
-    theStruct.m_Rotation = pStruct->m_Rotation;
+	theStruct.m_Rotation = pStruct->m_Rotation;
 
 	sprintf(theStruct.m_Name, "%s_%s%d", pStruct->m_Name, c_szKeyframerName, s_nKFId);
 
-    HCLASS hClass = g_pLTServer->GetClass("KeyFramer");
-    KeyFramer* pKeyFramer = (KeyFramer*) g_pLTServer->CreateObject(hClass, &theStruct);
+	HCLASS hClass = g_pLTServer->GetClass("KeyFramer");
+	KeyFramer* pKeyFramer = (KeyFramer*) g_pLTServer->CreateObject(hClass, &theStruct);
 	if (!pKeyFramer) return;
 
 	pKeyFramer->ReadProps();
 
 	m_hKeyFramer = pKeyFramer->m_hObject;
-    g_pLTServer->CreateInterObjectLink(m_hObject, m_hKeyFramer);
+	g_pLTServer->CreateInterObjectLink(m_hObject, m_hKeyFramer);
 
 	// Make the keyframer's ObjectName that of the camera...
 
@@ -877,16 +855,14 @@ void CinematicTrigger::CreateKeyFramer(ObjectCreateStruct *pStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::HandleOn
 //
-//	ROUTINE:	CinematicTrigger::HandleOn
-//
-//	PURPOSE:	Handle turning on the cinematic trigger
-//
+//	PURPOSE: Handle turning on the cinematic trigger
 // ----------------------------------------------------------------------- //
 
 void CinematicTrigger::HandleOn()
 {
-    m_bOn = LTTRUE;
+	m_bOn = LTTRUE;
 
 	if (m_bRemoveBadAI)
 	{
@@ -913,19 +889,17 @@ void CinematicTrigger::HandleOn()
 	m_nCurMessage	= 0;
 	m_byDecision	= 0;
 	m_byLastReply	= 0;
-    m_bDialogueDone = LTFALSE;
-    m_fNextDialogueStart = g_pLTServer->GetTime() + m_fDelay[0];
+	m_bDialogueDone = LTFALSE;
+	m_fNextDialogueStart = g_pLTServer->GetTime() + m_fDelay[0];
 
-    SetNextUpdate(m_hObject, 0.001f);
+	SetNextUpdate(m_hObject, 0.001f);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::HandleOff
 //
-//	ROUTINE:	CinematicTrigger::HandleOff
-//
-//	PURPOSE:	Handle turning off the cinematic trigger
-//
+//	PURPOSE: Handle turning off the cinematic trigger
 // ----------------------------------------------------------------------- //
 
 void CinematicTrigger::HandleOff()
@@ -948,13 +922,13 @@ void CinematicTrigger::HandleOff()
 		}
 	}
 
-    m_bOn = LTFALSE;
+	m_bOn = LTFALSE;
 
 	// If we have a current speaker, make sure he is done talking...
 
 	if (m_hCurSpeaker)
 	{
-        CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hCurSpeaker);
+		CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hCurSpeaker);
 		if (pChar)
 		{
 			pChar->StopDialogue();
@@ -962,21 +936,21 @@ void CinematicTrigger::HandleOff()
 
 		// Clear our speaker...
 
-        g_pLTServer->BreakInterObjectLink(m_hObject, m_hCurSpeaker);
-        m_hCurSpeaker = LTNULL;
+		g_pLTServer->BreakInterObjectLink(m_hObject, m_hCurSpeaker);
+		m_hCurSpeaker = LTNULL;
 	}
 
 	// Clear out our last speaker
 
 	if (m_hLastSpeaker)
 	{
-        CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hLastSpeaker);
+		CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hLastSpeaker);
 		if (pChar)
 		{
 			pChar->StopDialogue(TRUE);
 		}
-        g_pLTServer->BreakInterObjectLink(m_hObject, m_hLastSpeaker);
-        m_hLastSpeaker = LTNULL;
+		g_pLTServer->BreakInterObjectLink(m_hObject, m_hLastSpeaker);
+		m_hLastSpeaker = LTNULL;
 	}
 
 
@@ -984,7 +958,7 @@ void CinematicTrigger::HandleOff()
 
 	if (m_hstrCleanUpTriggerTarget && m_hstrCleanUpTriggerMsg)
 	{
-        SendTriggerMsgToObjects(this, g_pLTServer->GetStringData( m_hstrCleanUpTriggerTarget ), g_pLTServer->GetStringData( m_hstrCleanUpTriggerMsg ));
+		SendTriggerMsgToObjects(this, g_pLTServer->GetStringData( m_hstrCleanUpTriggerTarget ), g_pLTServer->GetStringData( m_hstrCleanUpTriggerMsg ));
 	}
 
 	// Turn off the camera...
@@ -1001,7 +975,7 @@ void CinematicTrigger::HandleOff()
 		SendTriggerMsgToObject(this, m_hKeyFramer, FALSE, "OFF");
 	}
 
-    SetNextUpdate(m_hObject, 0.0f);
+	SetNextUpdate(m_hObject, 0.0f);
 
 	if (m_bOneTimeOnly)
 	{
@@ -1016,11 +990,9 @@ void CinematicTrigger::HandleOff()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::HandleLinkBroken
 //
-//	ROUTINE:	CinematicTrigger::HandleLinkBroken
-//
-//	PURPOSE:	Handle broken link messages
-//
+//	PURPOSE: Handle broken link messages
 // ----------------------------------------------------------------------- //
 
 void CinematicTrigger::HandleLinkBroken(HOBJECT hLink)
@@ -1029,30 +1001,28 @@ void CinematicTrigger::HandleLinkBroken(HOBJECT hLink)
 	{
 		if (hLink == m_hCurSpeaker)
 		{
-            m_hCurSpeaker = LTNULL;
+			m_hCurSpeaker = LTNULL;
 		}
 		if (hLink == m_hCamera)
 		{
-            m_hCamera = LTNULL;
+			m_hCamera = LTNULL;
 		}
 		if (hLink == m_hKeyFramer)
 		{
-            m_hKeyFramer = LTNULL;
+			m_hKeyFramer = LTNULL;
 		}
 		if (hLink == m_hLastSpeaker)
 		{
-            m_hLastSpeaker = LTNULL;
+			m_hLastSpeaker = LTNULL;
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::SendMessage
 //
-//	ROUTINE:	CinematicTrigger::SendMessage
-//
-//	PURPOSE:	Sends the CinematicTrigger message
-//
+//	PURPOSE: Sends the CinematicTrigger message
 // ----------------------------------------------------------------------- //
 
 void CinematicTrigger::SendMessage()
@@ -1061,37 +1031,35 @@ void CinematicTrigger::SendMessage()
 	{
 		if (m_hstrTargetName[m_nCurMessage] && m_hstrMessageName[m_nCurMessage])
 		{
-            SendTriggerMsgToObjects(this, g_pLTServer->GetStringData( m_hstrTargetName[m_nCurMessage] ), g_pLTServer->GetStringData( m_hstrMessageName[m_nCurMessage] ));
+			SendTriggerMsgToObjects(this, g_pLTServer->GetStringData( m_hstrTargetName[m_nCurMessage] ), g_pLTServer->GetStringData( m_hstrMessageName[m_nCurMessage] ));
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::SendReplyMessage
 //
-//	ROUTINE:	CinematicTrigger::SendReplyMessage
-//
-//	PURPOSE:	Sends message based on reply
-//
+//	PURPOSE: Sends message based on reply
 // ----------------------------------------------------------------------- //
 
 void CinematicTrigger::SendReplyMessage(int nReply)
 {
 	if (m_nCurMessage >= MAX_CT_MESSAGES) return;
 
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return;
 
 	CString	csTarget;
 	CString csMsg;
 	ConParse parse;
 
-    char* pMsg = g_pLTServer->GetStringData(m_hstrRepliesTarget[m_nCurMessage]);
+	char* pMsg = g_pLTServer->GetStringData(m_hstrRepliesTarget[m_nCurMessage]);
 	if(!pMsg) return;
 
 	parse.Init(pMsg);
 
-    int i;
-    for(i=0;i<nReply;i++)
+	int i;
+	for(i=0;i<nReply;i++)
 	{
 		if(pCommon->Parse(&parse) == LT_OK)
 		{
@@ -1106,7 +1074,7 @@ void CinematicTrigger::SendReplyMessage(int nReply)
 		}
 	}
 
-    pMsg = g_pLTServer->GetStringData(m_hstrRepliesMsg[m_nCurMessage]);
+	pMsg = g_pLTServer->GetStringData(m_hstrRepliesMsg[m_nCurMessage]);
 	if(!pMsg) return;
 
 	parse.Init(pMsg);
@@ -1133,29 +1101,27 @@ void CinematicTrigger::SendReplyMessage(int nReply)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::StartDialogue
 //
-//	ROUTINE:	CinematicTrigger::StartDialogue
-//
-//	PURPOSE:	Start the appropriate Dialogue (return true if a Dialogue is played)
-//
+//	PURPOSE: Start the appropriate Dialogue (return true if a Dialogue is played)
 // ----------------------------------------------------------------------- //
 
 LTBOOL CinematicTrigger::StartDialogue(int nDecision)
 {
 	if(m_nCurMessage >= MAX_CT_MESSAGES)
-        return LTFALSE;
+		return LTFALSE;
 
 	CString csDialogue;
 	CString	csTarget;
 	CString csChar;
-    uint8 byMood = 0;
+	uint8 byMood = 0;
 
 	if(nDecision)
 	{
-        char* pMsg = g_pLTServer->GetStringData(m_hstrReplies[m_nCurMessage]);
+		char* pMsg = g_pLTServer->GetStringData(m_hstrReplies[m_nCurMessage]);
 		if(!pMsg) return FALSE;
 
-        ILTCommon* pCommon = g_pLTServer->Common();
+		ILTCommon* pCommon = g_pLTServer->Common();
 		if (!pCommon) return FALSE;
 
 		ConParse parse;
@@ -1169,7 +1135,7 @@ LTBOOL CinematicTrigger::StartDialogue(int nDecision)
 				{
 					if (parse.m_nArgs < 1 || stricmp(parse.m_Args[0], "NONE") != 0)
 					{
-                        g_pLTServer->CPrint("Cinematic Trigger - ERROR - Not enough replies for the amount of decisions!");
+						g_pLTServer->CPrint("Cinematic Trigger - ERROR - Not enough replies for the amount of decisions!");
 						TRACE("Cinematic Trigger - ERROR - Not enough replies for the amount of decisions!\n");
 						return FALSE;
 					}
@@ -1232,12 +1198,12 @@ LTBOOL CinematicTrigger::StartDialogue(int nDecision)
 		{
 			if (m_hstrDialogueStartTarget && m_hstrDialogueStartMsg)
 			{
-                SendTriggerMsgToObjects(this, g_pLTServer->GetStringData(m_hstrDialogueStartTarget), g_pLTServer->GetStringData(m_hstrDialogueStartMsg));
+				SendTriggerMsgToObjects(this, g_pLTServer->GetStringData(m_hstrDialogueStartTarget), g_pLTServer->GetStringData(m_hstrDialogueStartMsg));
 			}
 		}
 
-        csDialogue = g_pLTServer->GetStringData(m_hstrDialogue[m_nCurMessage]);
-        csTarget = g_pLTServer->GetStringData(m_hstrWhoPlaysDialogue[m_nCurMessage]);
+		csDialogue = g_pLTServer->GetStringData(m_hstrDialogue[m_nCurMessage]);
+		csTarget = g_pLTServer->GetStringData(m_hstrWhoPlaysDialogue[m_nCurMessage]);
 	}
 
 	if (csDialogue.IsEmpty())
@@ -1250,7 +1216,7 @@ LTBOOL CinematicTrigger::StartDialogue(int nDecision)
 			SendReplyMessage(nDecision);
 		}
 
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	const char *szCharOverride = NULL;
@@ -1272,15 +1238,15 @@ LTBOOL CinematicTrigger::StartDialogue(int nDecision)
 	}
 
 
-    HOBJECT hObj = !csTarget.IsEmpty() ? PlayedBy((char *)(LPCSTR)csTarget) : LTNULL;
+	HOBJECT hObj = !csTarget.IsEmpty() ? PlayedBy((char *)(LPCSTR)csTarget) : LTNULL;
 	if (hObj)
 	{
-        CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hObj);
+		CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(hObj);
 		if (pChar)
 		{
 			char *szDecisions = NULL;
 			if (!nDecision && m_hstrDecisions[m_nCurMessage])
-            {
+			{
 				szDecisions = g_pLTServer->GetStringData(m_hstrDecisions[m_nCurMessage]);
 			}
 
@@ -1289,69 +1255,65 @@ LTBOOL CinematicTrigger::StartDialogue(int nDecision)
 			//BOOL bStayOpen = (szDecisions || ((nNext < MAX_CT_MESSAGES) && m_hstrDialogue[nNext] && m_bWindow[nNext] && (m_fDelay[nNext] == 0.0f)));
 			//BOOL bWindow = m_bWindow[m_nCurMessage];
 
-            BOOL bStayOpen = LTFALSE;
+			BOOL bStayOpen = LTFALSE;
 			BOOL bWindow = (BOOL)szDecisions;
 
 			pChar->PlayDialogue((char *)(LPCSTR)csDialogue,this,bWindow,bStayOpen,szCharOverride,szDecisions,byMood);
 
 			SetupLinks(hObj);
 
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::SetupLinks
 //
-//	ROUTINE:	CinematicTrigger::SetupLinks
-//
-//	PURPOSE:	Setup links to our speakers
-//
+//	PURPOSE: Setup links to our speakers
 // ----------------------------------------------------------------------- //
 
 void CinematicTrigger::SetupLinks(HOBJECT hObj)
 {
 	if (m_hCurSpeaker && (m_hCurSpeaker != hObj))
 	{
-        g_pLTServer->BreakInterObjectLink(m_hObject, m_hCurSpeaker);
+		g_pLTServer->BreakInterObjectLink(m_hObject, m_hCurSpeaker);
 	}
 
 	m_hCurSpeaker = hObj;
 
 	if (hObj)
 	{
-        g_pLTServer->CreateInterObjectLink(m_hObject, m_hCurSpeaker);
+		g_pLTServer->CreateInterObjectLink(m_hObject, m_hCurSpeaker);
 	}
 
 	if (m_hLastSpeaker && (m_hLastSpeaker != hObj))
 	{
-        g_pLTServer->BreakInterObjectLink(m_hObject, m_hLastSpeaker);
+		g_pLTServer->BreakInterObjectLink(m_hObject, m_hLastSpeaker);
 	}
 
 	m_hLastSpeaker = hObj;
 
 	if (hObj)
 	{
-        g_pLTServer->CreateInterObjectLink(m_hObject, m_hLastSpeaker);
+		g_pLTServer->CreateInterObjectLink(m_hObject, m_hLastSpeaker);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::PlayedBy
 //
-//	ROUTINE:	CinematicTrigger::PlayedBy
-//
-//	PURPOSE:	Get the object that plays the Dialogue
-//
+//	PURPOSE: Get the object that plays the Dialogue
 // ----------------------------------------------------------------------- //
 
 HOBJECT CinematicTrigger::PlayedBy(char *pszName)
 {
-    if (!g_pLTServer || m_nCurMessage >= MAX_CT_MESSAGES) return m_hObject;
-    if (!pszName) return LTNULL;
+	if (!g_pLTServer || m_nCurMessage >= MAX_CT_MESSAGES) return m_hObject;
+	if (!pszName) return LTNULL;
 
 	ObjArray <HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
-    g_pLTServer->FindNamedObjects(pszName,objArray);
+	g_pLTServer->FindNamedObjects(pszName,objArray);
 
 	int numObjects = objArray.NumObjects();
 
@@ -1365,24 +1327,22 @@ HOBJECT CinematicTrigger::PlayedBy(char *pszName)
 		}
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::DialogueFinished
 //
-//	ROUTINE:	CinematicTrigger::DialogueFinished
-//
-//	PURPOSE:	Handle dialogue being finished
-//
+//	PURPOSE: Handle dialogue being finished
 // ----------------------------------------------------------------------- //
 
 LTBOOL CinematicTrigger::DialogueFinished(uint8 byDecision, uint32 dwDecisionID)
 {
-    if (!m_hCurSpeaker) return LTFALSE;
+	if (!m_hCurSpeaker) return LTFALSE;
 
-    CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hCurSpeaker);
-    if(!pChar) return LTFALSE;
+	CCharacter* pChar = (CCharacter*)g_pLTServer->HandleToObject(m_hCurSpeaker);
+	if(!pChar) return LTFALSE;
 
 	pChar->StopDialogue();
 
@@ -1394,7 +1354,7 @@ LTBOOL CinematicTrigger::DialogueFinished(uint8 byDecision, uint32 dwDecisionID)
 	}
 	else
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 
@@ -1405,25 +1365,23 @@ LTBOOL CinematicTrigger::DialogueFinished(uint8 byDecision, uint32 dwDecisionID)
 	if (hObj)
 	{
 		SetupLinks(hObj);
-        pChar = (CCharacter*)g_pLTServer->HandleToObject(hObj);
+		pChar = (CCharacter*)g_pLTServer->HandleToObject(hObj);
 
 		if (pChar)
 		{
 			pChar->PlayDialogue(dwDecisionID, this);
-            return LTTRUE;
+			return LTTRUE;
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::FindWhoPlaysDecision
 //
-//	ROUTINE:	CinematicTrigger::FindWhoPlaysDecision
-//
-//	PURPOSE:	Find the character that should play the decision dialogue
-//
+//	PURPOSE: Find the character that should play the decision dialogue
 // ----------------------------------------------------------------------- //
 
 HOBJECT CinematicTrigger::FindWhoPlaysDecision(uint8 byDecision)
@@ -1464,7 +1422,7 @@ HOBJECT CinematicTrigger::FindWhoPlaysDecision(uint8 byDecision)
 	}
 
 	ObjArray <HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
-    g_pLTServer->FindNamedObjects(pCharName, objArray);
+	g_pLTServer->FindNamedObjects(pCharName, objArray);
 
 	if (objArray.NumObjects())
 	{
@@ -1476,16 +1434,14 @@ HOBJECT CinematicTrigger::FindWhoPlaysDecision(uint8 byDecision)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::Save
 //
-//	ROUTINE:	CinematicTrigger::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void CinematicTrigger::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hWrite) return;
 
 	pServerDE->WriteToLoadSaveMessageObject(hWrite, m_hCurSpeaker);
@@ -1534,16 +1490,14 @@ void CinematicTrigger::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::Load
 //
-//	ROUTINE:	CinematicTrigger::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void CinematicTrigger::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hRead) return;
 
 	pServerDE->ReadFromLoadSaveMessageObject(hRead, &m_hCurSpeaker);
@@ -1553,17 +1507,17 @@ void CinematicTrigger::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	m_nCurMessage		= pServerDE->ReadFromMessageByte(hRead);
 
-    m_bOn               = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
-    m_bNotified         = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
-    m_bCreateCamera     = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
-    m_bCreateKeyFramer  = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
-    m_bStartOn          = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
-    m_bRemoveBadAI      = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
-	m_bOneTimeOnly      = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
-    m_bCanSkip          = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
-    m_bAllWindows       = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
-    m_bDialogueDone     = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
-    m_bLeaveCameraOn    = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bOn			   = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bNotified		 = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bCreateCamera	 = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bCreateKeyFramer  = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bStartOn		  = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bRemoveBadAI	  = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bOneTimeOnly	  = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bCanSkip		  = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bAllWindows	   = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bDialogueDone	 = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bLeaveCameraOn	= (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
 
 	m_fNextDialogueStart	= pServerDE->ReadFromMessageFloat(hRead);
 
@@ -1591,11 +1545,9 @@ void CinematicTrigger::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::IsActor
 //
-//	ROUTINE:	CinematicTrigger::IsActor
-//
-//	PURPOSE:	Is the object an actor
-//
+//	PURPOSE: Is the object an actor
 // ----------------------------------------------------------------------- //
 
 LTBOOL CinematicTrigger::IsActor(HOBJECT hObject)
@@ -1604,65 +1556,63 @@ LTBOOL CinematicTrigger::IsActor(HOBJECT hObject)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CinematicTrigger::RemoveBadAI
 //
-//	ROUTINE:	CinematicTrigger::RemoveBadAI
-//
-//	PURPOSE:	Remove all the Bad AI in the game
-//
+//	PURPOSE: Remove all the Bad AI in the game
 // ----------------------------------------------------------------------- //
 
 void CinematicTrigger::RemoveBadAI()
 {
-    HOBJECT hObj   = g_pLTServer->GetNextObject(LTNULL);
-    HCLASS  hClass = g_pLTServer->GetClass("CAI");
+	HOBJECT hObj   = g_pLTServer->GetNextObject(LTNULL);
+	HCLASS  hClass = g_pLTServer->GetClass("CAI");
 
 	// Remove all the ai objects...
 
-    LTBOOL bRemove = LTFALSE;
+	LTBOOL bRemove = LTFALSE;
 
-    HOBJECT hRemoveObj = LTNULL;
+	HOBJECT hRemoveObj = LTNULL;
 	while (hObj)
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 		{
 			hRemoveObj = hObj;
 		}
 
-        hObj = g_pLTServer->GetNextObject(hObj);
+		hObj = g_pLTServer->GetNextObject(hObj);
 
 		if (hRemoveObj)
 		{
-            CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(hRemoveObj);
+			CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(hRemoveObj);
 			if (pChar && pChar->GetCharacterClass() == BAD)
 			{
 				SendTriggerMsgToObject(this, pChar->m_hObject, LTFALSE, "REMOVE");
 			}
 
-            hRemoveObj = LTNULL;
+			hRemoveObj = LTNULL;
 		}
 	}
 
 
-    hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
-    hRemoveObj = LTNULL;
+	hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
+	hRemoveObj = LTNULL;
 	while (hObj)
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 		{
 			hRemoveObj = hObj;
 		}
 
-        hObj = g_pLTServer->GetNextInactiveObject(hObj);
+		hObj = g_pLTServer->GetNextInactiveObject(hObj);
 
 		if (hRemoveObj)
 		{
-            CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(hRemoveObj);
+			CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(hRemoveObj);
 			if (pChar && pChar->GetCharacterClass() == BAD)
 			{
 				SendTriggerMsgToObject(this, pChar->m_hObject, LTFALSE, "REMOVE");
 			}
 
-            hRemoveObj = LTNULL;
+			hRemoveObj = LTNULL;
 		}
 	}
 }

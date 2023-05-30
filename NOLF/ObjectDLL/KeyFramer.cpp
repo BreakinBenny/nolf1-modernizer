@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Keyframer.cpp
 //
-// MODULE  : Keyframer.cpp
+// PURPOSE: Keyframer implementation
 //
-// PURPOSE : Keyframer implementation
-//
-// CREATED : 10/7/97
-//
+// CREATED: 10/7/97
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -166,8 +164,7 @@ int AllocWorldModelsCB(ILTPreLight *pInterface, HPREOBJECT hObject,
 }
 
 
-// ----------------------------------------------------------------------- //
-// Preprocessor callback.. generates light animations for KeyframerLights.
+// ----------------------------------------------------------------------- // Preprocessor callback.. generates light animations for KeyframerLights.
 // ----------------------------------------------------------------------- //
 void KeyframerPreprocessorCB(HPREOBJECT hObject, ILTPreLight *pInterface)
 {
@@ -455,7 +452,7 @@ void KeyframerPreprocessorCB(HPREOBJECT hObject, ILTPreLight *pInterface)
 
 
 LTRESULT KeyframerPlugin::PreHook_Light(
-    ILTPreLight *pInterface,
+	ILTPreLight *pInterface,
 	HPREOBJECT hObject)
 {
 	// Just call thru to the old-style implementation.
@@ -492,11 +489,9 @@ inline void SubtractRotationValues(
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::KeyFramer()
 //
-//	ROUTINE:	KeyFramer::KeyFramer()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 KeyFramer::KeyFramer() : BaseClass(OT_NORMAL)
@@ -566,49 +561,47 @@ KeyFramer::KeyFramer() : BaseClass(OT_NORMAL)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::~KeyFramer()
 //
-//	ROUTINE:	KeyFramer::~KeyFramer()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 KeyFramer::~KeyFramer()
 {
 	if (m_hstrObjectName)
 	{
-        g_pLTServer->FreeString(m_hstrObjectName);
+		g_pLTServer->FreeString(m_hstrObjectName);
 	}
 
 	if (m_hstrTargetName)
 	{
-        g_pLTServer->FreeString(m_hstrTargetName);
+		g_pLTServer->FreeString(m_hstrTargetName);
 	}
 
 	if (m_hstrBaseKeyName)
 	{
-        g_pLTServer->FreeString(m_hstrBaseKeyName);
+		g_pLTServer->FreeString(m_hstrBaseKeyName);
 	}
 
 	if (m_hstrActiveSnd)
 	{
-        g_pLTServer->FreeString(m_hstrActiveSnd);
+		g_pLTServer->FreeString(m_hstrActiveSnd);
 	}
 
 	if (m_hstrDestCmd)
 	{
-        g_pLTServer->FreeString(m_hstrDestCmd);
+		g_pLTServer->FreeString(m_hstrDestCmd);
 	}
 
 	if (m_hActiveSnd)
 	{
-        // g_pLTServer->KillSoundLoop(m_hActiveSnd);
+		// g_pLTServer->KillSoundLoop(m_hActiveSnd);
 		g_pLTServer->KillSound(m_hActiveSnd);
 	}
 
 	if (m_pObjectList)
 	{
-        g_pLTServer->RelinquishList(m_pObjectList);
+		g_pLTServer->RelinquishList(m_pObjectList);
 	}
 
 	while (m_pKeys)
@@ -627,11 +620,9 @@ KeyFramer::~KeyFramer()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::GoActive
 //
-//	ROUTINE:	KeyFramer::GoActive
-//
-//	PURPOSE:	Start the KeyFramer going!
-//
+//	PURPOSE: Start the KeyFramer going!
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::GoActive(LTBOOL bReset)
@@ -650,22 +641,22 @@ void KeyFramer::GoActive(LTBOOL bReset)
 		m_vCurPos   = (m_eDirection == KFD_FORWARD) ? m_pKeys->keyData.m_vPos : m_pLastKey->keyData.m_vPos;
 	}
 
-    SetNextUpdate(m_hObject, KF_UPDATE_DELTA);
+	SetNextUpdate(m_hObject, KF_UPDATE_DELTA);
 
 
-    m_fEarliestGoActiveTime = g_pLTServer->GetTime() + KF_UPDATE_DELTA;
+	m_fEarliestGoActiveTime = g_pLTServer->GetTime() + KF_UPDATE_DELTA;
 
 
 	// Start active sound...
 
 	if (m_hstrActiveSnd && g_pServerSoundMgr)
 	{
-        char* pSound = g_pLTServer->GetStringData(m_hstrActiveSnd);
+		char* pSound = g_pLTServer->GetStringData(m_hstrActiveSnd);
 		if (!pSound) return;
 
 		if (m_hActiveSnd)
 		{
-            // g_pLTServer->KillSoundLoop(m_hActiveSnd);
+			// g_pLTServer->KillSoundLoop(m_hActiveSnd);
 			g_pLTServer->KillSound(m_hActiveSnd);
 			m_hActiveSnd = LTNULL;
 		}
@@ -681,21 +672,19 @@ void KeyFramer::GoActive(LTBOOL bReset)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::GoInActive
 //
-//	ROUTINE:	KeyFramer::GoInActive
-//
-//	PURPOSE:	Stop the KeyFramer...
-//
+//	PURPOSE: Stop the KeyFramer...
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::GoInActive()
 {
 	m_bActive = LTFALSE;
-    SetNextUpdate(m_hObject, 0.0f);
+	SetNextUpdate(m_hObject, 0.0f);
 
 	if (m_hActiveSnd)
 	{
-        //g_pLTServer->KillSoundLoop(m_hActiveSnd);
+		//g_pLTServer->KillSoundLoop(m_hActiveSnd);
 		g_pLTServer->KillSound(m_hActiveSnd);
 		m_hActiveSnd = LTNULL;
 	}
@@ -703,11 +692,9 @@ void KeyFramer::GoInActive()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::CreateKeyList
 //
-//	ROUTINE:	KeyFramer::CreateKeyList
-//
-//	PURPOSE:	Create our list of keys.
-//
+//	PURPOSE: Create our list of keys.
 // ----------------------------------------------------------------------- //
 
 LTBOOL KeyFramer::CreateKeyList()
@@ -720,23 +707,23 @@ LTBOOL KeyFramer::CreateKeyList()
 
 	// Make sure our object and base key names are valid...
 
-    char* pNames = g_pLTServer->GetStringData(m_hstrObjectName);
+	char* pNames = g_pLTServer->GetStringData(m_hstrObjectName);
 	if (!pNames || !pNames[0]) return LTFALSE;
 
-    char* pBaseKeyName = g_pLTServer->GetStringData(m_hstrBaseKeyName);
+	char* pBaseKeyName = g_pLTServer->GetStringData(m_hstrBaseKeyName);
 	if (!pBaseKeyName || !pBaseKeyName[0]) return LTFALSE;
 
 
 	// Find all the objects with the given names (m_hstrObjectName may be
 	// of the form: name1;name2;name3...
 
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return LTFALSE;
 
 	ConParse parse;
 	parse.Init(pNames);
 
-    m_pObjectList = g_pLTServer->CreateObjectList();
+	m_pObjectList = g_pLTServer->CreateObjectList();
 	if (!m_pObjectList) return LTFALSE;
 
 	while (pCommon->Parse(&parse) == LT_OK)
@@ -745,15 +732,15 @@ LTBOOL KeyFramer::CreateKeyList()
 		{
 			// Find the objects...
 
-            g_pLTServer->FindNamedObjects(parse.m_Args[0],objArray);
+			g_pLTServer->FindNamedObjects(parse.m_Args[0],objArray);
 
 			numObjects = objArray.NumObjects();
 
 			for (int i = 0; i < numObjects; i++)
 			{
 				hObject = objArray.GetObject(i);
-                g_pLTServer->AddObjectToList(m_pObjectList, hObject);
-                g_pLTServer->CreateInterObjectLink(m_hObject, hObject);
+				g_pLTServer->AddObjectToList(m_pObjectList, hObject);
+				g_pLTServer->CreateInterObjectLink(m_hObject, hObject);
 			}
 		}
 	}
@@ -763,7 +750,7 @@ LTBOOL KeyFramer::CreateKeyList()
 
 	if (m_pObjectList->m_nInList < 1)
 	{
-        g_pLTServer->RelinquishList(m_pObjectList);
+		g_pLTServer->RelinquishList(m_pObjectList);
 		m_pObjectList = LTNULL;
 		return LTFALSE;
 	}
@@ -786,7 +773,7 @@ LTBOOL KeyFramer::CreateKeyList()
 		// Find the first key with that name...
 
 		objArray.Reset();
-        g_pLTServer->FindNamedObjects(strKey,objArray);
+		g_pLTServer->FindNamedObjects(strKey,objArray);
 		numObjects = objArray.NumObjects();
 
 		if (!numObjects) break;
@@ -797,7 +784,7 @@ LTBOOL KeyFramer::CreateKeyList()
 		{
 			hObject = objArray.GetObject(i);
 
-            if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObject), g_pLTServer->GetClass ("Key")))
+			if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObject), g_pLTServer->GetClass ("Key")))
 			{
 				// Add this key to the list...
 
@@ -816,7 +803,7 @@ LTBOOL KeyFramer::CreateKeyList()
 
 				// Copy the key...
 
-                pNode->keyData.Copy((Key*)g_pLTServer->HandleToObject(hObject));
+				pNode->keyData.Copy((Key*)g_pLTServer->HandleToObject(hObject));
 
 				fTime += pNode->keyData.m_fTimeStamp;
 				pNode->keyData.m_fRealTime = fTime;
@@ -824,7 +811,7 @@ LTBOOL KeyFramer::CreateKeyList()
 
 				// Remove the key from the world...No longer needed...
 
-                g_pLTServer->RemoveObject(hObject);
+				g_pLTServer->RemoveObject(hObject);
 
 				bFoundKey = LTTRUE;
 
@@ -886,12 +873,12 @@ LTBOOL KeyFramer::CreateKeyList()
 		while (pLink)
 		{
 			LTVector vObjPos;
-            g_pLTServer->GetObjectPos(pLink->m_hObject, &vObjPos);
+			g_pLTServer->GetObjectPos(pLink->m_hObject, &vObjPos);
 
 			m_pOffsets[i] = vObjPos - vKeyPos;
 
 			LTRotation rObjRot;
-            g_pLTServer->GetObjectRotation(pLink->m_hObject, &rObjRot);
+			g_pLTServer->GetObjectRotation(pLink->m_hObject, &rObjRot);
 
 			SubtractRotationValues(
 				&m_pRotations[i],
@@ -908,12 +895,10 @@ LTBOOL KeyFramer::CreateKeyList()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::CalculateVelocityInfo
 //
-//	ROUTINE:	KeyFramer::CalculateVelocityInfo
-//
-//	PURPOSE:	Calculate the velocity info for all the keys if using
+//	PURPOSE: Calculate the velocity info for all the keys if using
 //				velocity to calculate position information
-//
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::CalculateVelocityInfo()
@@ -961,11 +946,9 @@ void KeyFramer::CalculateVelocityInfo()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::ProcessCurrentKey
 //
-//	ROUTINE:	KeyFramer::ProcessCurrentKey
-//
-//	PURPOSE:	Processes the current key
-//
+//	PURPOSE: Processes the current key
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::ProcessCurrentKey()
@@ -1011,7 +994,7 @@ void KeyFramer::ProcessCurrentKey()
 
 	if (pOldCurKey->keyData.m_nKeyType & SOUND_KEY)
 	{
-        char* pSound = pOldCurKey->keyData.m_hstrSoundName ? g_pLTServer->GetStringData(pOldCurKey->keyData.m_hstrSoundName) : LTNULL;
+		char* pSound = pOldCurKey->keyData.m_hstrSoundName ? g_pLTServer->GetStringData(pOldCurKey->keyData.m_hstrSoundName) : LTNULL;
 		if (pSound)
 		{
 			LTVector vPos;
@@ -1027,7 +1010,7 @@ void KeyFramer::ProcessCurrentKey()
 
 	if (pOldCurKey->keyData.m_nKeyType & BPRINT_KEY)
 	{
-        g_pLTServer->BPrint(g_pLTServer->GetStringData(pOldCurKey->keyData.m_hstrBPrintMessage));
+		g_pLTServer->BPrint(g_pLTServer->GetStringData(pOldCurKey->keyData.m_hstrBPrintMessage));
 	}
 
 
@@ -1044,11 +1027,9 @@ void KeyFramer::ProcessCurrentKey()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::ReachedDestination
 //
-//	ROUTINE:	KeyFramer::ReachedDestination
-//
-//	PURPOSE:	Handle reaching the destination key...
-//
+//	PURPOSE: Handle reaching the destination key...
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::ReachedDestination()
@@ -1062,25 +1043,23 @@ void KeyFramer::ReachedDestination()
 
 	if (m_hstrDestCmd)
 	{
-        char* pCmd = g_pLTServer->GetStringData(m_hstrDestCmd);
+		char* pCmd = g_pLTServer->GetStringData(m_hstrDestCmd);
 
 		if (pCmd && g_pCmdMgr->IsValidCmd(pCmd))
 		{
 			g_pCmdMgr->Process(pCmd);
 		}
 
-        g_pLTServer->FreeString(m_hstrDestCmd);
+		g_pLTServer->FreeString(m_hstrDestCmd);
 		m_hstrDestCmd = LTNULL;
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::EngineMessageFn
 //
-//	ROUTINE:	KeyFramer::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 KeyFramer::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -1137,11 +1116,9 @@ uint32 KeyFramer::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::ObjectMessageFn
 //
-//	ROUTINE:	KeyFramer::ObjectMessageFn
-//
-//	PURPOSE:	Handle object messages
-//
+//	PURPOSE: Handle object messages
 // ----------------------------------------------------------------------- //
 
 uint32 KeyFramer::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -1163,11 +1140,9 @@ uint32 KeyFramer::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREA
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::HandleLinkBroken()
 //
-//	ROUTINE:	KeyFramer::HandleLinkBroken()
-//
-//	PURPOSE:	Handle MID_LINKBROKEN engine message
-//
+//	PURPOSE: Handle MID_LINKBROKEN engine message
 // --------------------------------------------------------------------------- //
 
 void KeyFramer::HandleLinkBroken(HOBJECT hLink)
@@ -1180,7 +1155,7 @@ void KeyFramer::HandleLinkBroken(HOBJECT hLink)
 	{
 		if (m_hActiveSnd)
 		{
-            //g_pLTServer->KillSoundLoop(m_hActiveSnd);
+			//g_pLTServer->KillSoundLoop(m_hActiveSnd);
 			g_pLTServer->KillSound(m_hActiveSnd);
 			m_hActiveSnd = LTNULL;
 			m_hActiveSndObj = LTNULL;
@@ -1210,7 +1185,7 @@ void KeyFramer::HandleLinkBroken(HOBJECT hLink)
 
 			if (!m_pObjectList->m_nInList)
 			{
-                g_pLTServer->RelinquishList(m_pObjectList);
+				g_pLTServer->RelinquishList(m_pObjectList);
 				m_pObjectList = LTNULL;
 			}
 
@@ -1224,18 +1199,16 @@ void KeyFramer::HandleLinkBroken(HOBJECT hLink)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::TriggerMsg()
 //
-//	ROUTINE:	KeyFramer::TriggerMsg()
-//
-//	PURPOSE:	Process keyframer trigger messages
-//
+//	PURPOSE: Process keyframer trigger messages
 // --------------------------------------------------------------------------- //
 
 void KeyFramer::TriggerMsg(HOBJECT hSender, const char* szMsg)
 {
 	if (!szMsg) return;
 
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return;
 
 	// ConParse does not destroy szMsg, so this is safe
@@ -1353,11 +1326,9 @@ void KeyFramer::TriggerMsg(HOBJECT hSender, const char* szMsg)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::DeferCommand
 //
-//	ROUTINE:	KeyFramer::DeferCommand
-//
-//	PURPOSE:	Defer a command to be processed later...
-//
+//	PURPOSE: Defer a command to be processed later...
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::DeferCommand(ConParse parse)
@@ -1388,80 +1359,78 @@ void KeyFramer::DeferCommand(ConParse parse)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::ReadProps
 //
-//	ROUTINE:	KeyFramer::ReadProps
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL KeyFramer::ReadProps()
 {
 	GenericProp genProp;
-    if (g_pLTServer->GetPropGeneric("ObjectName", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ObjectName", &genProp) == LT_OK)
 	{
 		SetObjectName(genProp.m_String);
 	}
 
-    if (g_pLTServer->GetPropGeneric("TargetName", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("TargetName", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
-             m_hstrTargetName = g_pLTServer->CreateString(genProp.m_String);
+			 m_hstrTargetName = g_pLTServer->CreateString(genProp.m_String);
 	}
 
-    if (g_pLTServer->GetPropGeneric("TargetOffset", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("TargetOffset", &genProp) == LT_OK)
 	{
 		m_vTargetOffset = genProp.m_Vec;
 	}
 
-    if (g_pLTServer->GetPropGeneric("BaseKeyName", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("BaseKeyName", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
-             m_hstrBaseKeyName = g_pLTServer->CreateString(genProp.m_String);
+			 m_hstrBaseKeyName = g_pLTServer->CreateString(genProp.m_String);
 	}
 
-    if (g_pLTServer->GetPropGeneric("ActiveSound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ActiveSound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
-             m_hstrActiveSnd = g_pLTServer->CreateString(genProp.m_String);
+			 m_hstrActiveSnd = g_pLTServer->CreateString(genProp.m_String);
 	}
 
-    if (g_pLTServer->GetPropGeneric("SoundRadius", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("SoundRadius", &genProp) == LT_OK)
 	{
 		m_fSoundRadius = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("StartActive", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("StartActive", &genProp) == LT_OK)
 	{
 		m_bStartActive = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("StartPaused", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("StartPaused", &genProp) == LT_OK)
 	{
 		m_bStartPaused = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Looping", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Looping", &genProp) == LT_OK)
 	{
 		m_bLooping = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("IgnoreOffsets", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("IgnoreOffsets", &genProp) == LT_OK)
 	{
 		m_bIgnoreOffsets = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("PushObjects", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("PushObjects", &genProp) == LT_OK)
 	{
 		m_bPushObjects = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("AlignToPath", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("AlignToPath", &genProp) == LT_OK)
 	{
 		m_bAlignToPath = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("TotalPathTime", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("TotalPathTime", &genProp) == LT_OK)
 	{
 		m_fTotalPathTime = genProp.m_Float;
 		m_bUseVelocity = (m_fTotalPathTime > 0.0 ? LTTRUE : LTFALSE);
@@ -1471,23 +1440,23 @@ LTBOOL KeyFramer::ReadProps()
 
 	m_eWaveform = KFWAVE_LINEAR;
 
-    if (g_pLTServer->GetPropGeneric("Sine", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Sine", &genProp) == LT_OK)
 	{
 		m_eWaveform = genProp.m_Bool ? KFWAVE_SINE : m_eWaveform;
 	}
 
-    if (g_pLTServer->GetPropGeneric("SlowOff", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("SlowOff", &genProp) == LT_OK)
 	{
 		m_eWaveform = genProp.m_Bool ? KFWAVE_SLOWOFF : m_eWaveform;
 	}
 
-    if (g_pLTServer->GetPropGeneric("SlowOn", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("SlowOn", &genProp) == LT_OK)
 	{
 		m_eWaveform = genProp.m_Bool ? KFWAVE_SLOWON : m_eWaveform;
 	}
 
 	m_RotationWave = Wave_Sine;
-    if(g_pLTServer->GetPropGeneric("RotationWave", &genProp) == LT_OK)
+	if(g_pLTServer->GetPropGeneric("RotationWave", &genProp) == LT_OK)
 	{
 		m_RotationWave = ParseWaveType(genProp.m_String);
 	}
@@ -1497,11 +1466,9 @@ LTBOOL KeyFramer::ReadProps()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::SetObjectName
 //
-//	ROUTINE:	KeyFramer::SetObjectName
-//
-//	PURPOSE:	Set the object name...
-//
+//	PURPOSE: Set the object name...
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::SetObjectName(char* pName)
@@ -1510,75 +1477,69 @@ void KeyFramer::SetObjectName(char* pName)
 
 	if (m_hstrObjectName)
 	{
-        g_pLTServer->FreeString(m_hstrObjectName);
+		g_pLTServer->FreeString(m_hstrObjectName);
 	}
 
-     m_hstrObjectName = g_pLTServer->CreateString(pName);
+	 m_hstrObjectName = g_pLTServer->CreateString(pName);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::SetTarget
 //
-//	ROUTINE:	KeyFramer::SetTarget
-//
-//	PURPOSE:	Set the target object...
-//
+//	PURPOSE: Set the target object...
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::SetTarget(char* pName)
 {
 	if (m_hTargetObject)
 	{
-        g_pLTServer->BreakInterObjectLink(m_hObject, m_hTargetObject);
+		g_pLTServer->BreakInterObjectLink(m_hObject, m_hTargetObject);
 		m_hTargetObject = LTNULL;
 	}
 
 	if (!pName) return;
 
 	ObjArray <HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
-    g_pLTServer->FindNamedObjects(pName, objArray);
+	g_pLTServer->FindNamedObjects(pName, objArray);
 
 	if (objArray.NumObjects())
 	{
 		m_hTargetObject = objArray.GetObject(0);
-        g_pLTServer->CreateInterObjectLink(m_hObject, m_hTargetObject);
+		g_pLTServer->CreateInterObjectLink(m_hObject, m_hTargetObject);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::InitialUpdate()
 //
-//	ROUTINE:	KeyFramer::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::InitialUpdate()
 {
 	if (!g_SynchronizeKeyframers.IsInitted())
-        g_SynchronizeKeyframers.Init(g_pLTServer, "SynchKeyframers", LTNULL, 0.0f);
+		g_SynchronizeKeyframers.Init(g_pLTServer, "SynchKeyframers", LTNULL, 0.0f);
 
 	char objectName[64], animName[128];
 
-    if(g_pLTServer->GetObjectName(m_hObject, objectName, sizeof(objectName)) == LT_OK)
+	if(g_pLTServer->GetObjectName(m_hObject, objectName, sizeof(objectName)) == LT_OK)
 	{
 		GetKFModelAnimName(animName, objectName);
-        g_pLTServer->GetLightAnimLT()->FindLightAnim(animName, m_hLightAnim);
+		g_pLTServer->GetLightAnimLT()->FindLightAnim(animName, m_hLightAnim);
 	}
 
-    m_hKeyframerLightClass = g_pLTServer->GetClass(KEYFRAMERLIGHT_CLASSNAME);
+	m_hKeyframerLightClass = g_pLTServer->GetClass(KEYFRAMERLIGHT_CLASSNAME);
 
-    SetNextUpdate(m_hObject, KF_UPDATE_DELTA);
+	SetNextUpdate(m_hObject, KF_UPDATE_DELTA);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::Update()
 //
-//	ROUTINE:	KeyFramer::Update()
-//
-//	PURPOSE:	Update
-//
+//	PURPOSE: Update
 // ----------------------------------------------------------------------- //
 
 // BL 09/29/00 Added to fix falling off keyframed objects after loading game
@@ -1605,10 +1566,10 @@ void KeyFramer::Update()
 
 	if (g_SynchronizeKeyframers.GetFloat() != 0.0f)
 	{
-        LTFLOAT fGetTime = g_pLTServer->GetTime();
+		LTFLOAT fGetTime = g_pLTServer->GetTime();
 		if (fGetTime <= m_fEarliestGoActiveTime)
 		{
-            g_pLTServer->CPrint("KeyframerSynch: To early to update!");
+			g_pLTServer->CPrint("KeyframerSynch: To early to update!");
 			return;
 		}
 	}
@@ -1624,7 +1585,7 @@ void KeyFramer::Update()
 
 		if (m_hstrTargetName)
 		{
-            char* pName = g_pLTServer->GetStringData(m_hstrTargetName);
+			char* pName = g_pLTServer->GetStringData(m_hstrTargetName);
 			SetTarget(pName);
 		}
 
@@ -1661,13 +1622,13 @@ void KeyFramer::Update()
 	}
 	else
 	{
-        SetNextUpdate(m_hObject, KF_UPDATE_DELTA);
+		SetNextUpdate(m_hObject, KF_UPDATE_DELTA);
 	}
 
 
 	// Increment timer
 
-    float fTime = g_pLTServer->GetFrameTime();
+	float fTime = g_pLTServer->GetFrameTime();
 	m_fCurTime += (m_eDirection == KFD_FORWARD) ? fTime : -fTime;
 
 
@@ -1680,7 +1641,7 @@ void KeyFramer::Update()
 		if (m_bUseVelocity)
 		{
 			if (!m_vCurPos.Equals(m_pCurKey->keyData.m_vPos))
-            {
+			{
 				break;
 			}
 		}
@@ -1737,11 +1698,9 @@ void KeyFramer::Update()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::UpdateObjects()
 //
-//	ROUTINE:	KeyFramer::UpdateObjects()
-//
-//	PURPOSE:	Update the object(s) position(s) / rotation(s)
-//
+//	PURPOSE: Update the object(s) position(s) / rotation(s)
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::UpdateObjects(LTBOOL bInterpolate, LTBOOL bTeleport)
@@ -1771,7 +1730,7 @@ void KeyFramer::UpdateObjects(LTBOOL bInterpolate, LTBOOL bTeleport)
 	}
 	else
 	{
-        g_pLTServer->InterpolateRotation(&rRotNew, &rRot1, &rRot2, GetWaveFn(m_RotationWave)(m_fKeyPercent));
+		g_pLTServer->InterpolateRotation(&rRotNew, &rRot1, &rRot2, GetWaveFn(m_RotationWave)(m_fKeyPercent));
 	}
 
 
@@ -1783,7 +1742,7 @@ void KeyFramer::UpdateObjects(LTBOOL bInterpolate, LTBOOL bTeleport)
 	while (pLink)
 	{
 		LTVector vOldPos;
-        g_pLTServer->GetObjectPos(pLink->m_hObject, &vOldPos);
+		g_pLTServer->GetObjectPos(pLink->m_hObject, &vOldPos);
 
 		// Set object's new position...
 
@@ -1796,11 +1755,11 @@ void KeyFramer::UpdateObjects(LTBOOL bInterpolate, LTBOOL bTeleport)
 
 		if (m_bPushObjects && !bTeleport)
 		{
-            g_pLTServer->MoveObject(pLink->m_hObject, &vPos);
+			g_pLTServer->MoveObject(pLink->m_hObject, &vPos);
 		}
 		else
 		{
-            g_pLTServer->SetObjectPos(pLink->m_hObject, &vPos);
+			g_pLTServer->SetObjectPos(pLink->m_hObject, &vPos);
 		}
 
 
@@ -1818,14 +1777,14 @@ void KeyFramer::UpdateObjects(LTBOOL bInterpolate, LTBOOL bTeleport)
 			if (m_hTargetObject)
 			{
 				LTVector vTargetPos;
-                g_pLTServer->GetObjectPos(m_hTargetObject, &vTargetPos);
+				g_pLTServer->GetObjectPos(m_hTargetObject, &vTargetPos);
 
 				vTargetPos += m_vTargetOffset;
 
 				LTVector vDir = vTargetPos - vPos;
 				vDir.Norm();
 
-                g_pLTServer->AlignRotation(&rRot1, &vDir, LTNULL);
+				g_pLTServer->AlignRotation(&rRot1, &vDir, LTNULL);
 			}
 			else if (m_bAlignToPath)
 			{
@@ -1839,7 +1798,7 @@ void KeyFramer::UpdateObjects(LTBOOL bInterpolate, LTBOOL bTeleport)
 					vDir = -vDir;
 				}
 
-                g_pLTServer->AlignRotation(&rRot1, &vDir, LTNULL);
+				g_pLTServer->AlignRotation(&rRot1, &vDir, LTNULL);
 
 				// Now adjust the rotation to account for the pitch and roll of
 				// the key...
@@ -1850,15 +1809,15 @@ void KeyFramer::UpdateObjects(LTBOOL bInterpolate, LTBOOL bTeleport)
 				VEC_LERP(vNewPYR, vPYR1, vPYR2, m_fKeyPercent);
 
 				LTVector vU, vR, vF;
-                g_pLTServer->GetRotationVectors(&rRot1, &vU, &vR, &vF);
+				g_pLTServer->GetRotationVectors(&rRot1, &vU, &vR, &vF);
 
 				// Adjust pitch...
 
-                g_pLTServer->RotateAroundAxis(&rRot1, &vR, vNewPYR.x);
+				g_pLTServer->RotateAroundAxis(&rRot1, &vR, vNewPYR.x);
 
 				// Adjust roll...
 
-                g_pLTServer->RotateAroundAxis(&rRot1, &vF, vNewPYR.z);
+				g_pLTServer->RotateAroundAxis(&rRot1, &vF, vNewPYR.z);
 			}
 
 
@@ -1874,7 +1833,7 @@ void KeyFramer::UpdateObjects(LTBOOL bInterpolate, LTBOOL bTeleport)
 			// Set object's new rotation...
 
 			/*
-            g_pLTServer->GetObjectRotation( pLink->m_hObject, &rRot2 );
+			g_pLTServer->GetObjectRotation( pLink->m_hObject, &rRot2 );
 
 			// See if the object rotated significantly.
 			if ( fabs(rRot1.m_Spin - rRot2.m_Spin) > 0.0f || VEC_DISTSQR(rRot1.m_Vec, rRot2.m_Vec) > 0.0f)
@@ -1882,23 +1841,23 @@ void KeyFramer::UpdateObjects(LTBOOL bInterpolate, LTBOOL bTeleport)
 
 				if (bInterpolate)
 				{
-                    g_pLTServer->RotateObject(pLink->m_hObject, &rRot1);
+					g_pLTServer->RotateObject(pLink->m_hObject, &rRot1);
 				}
 				else
 				{
-                    g_pLTServer->SetObjectRotation(pLink->m_hObject, &rRot1);
+					g_pLTServer->SetObjectRotation(pLink->m_hObject, &rRot1);
 				}
 
 				/* // See if we should rotate the dims of the object.
-                if (g_pLTServer->GetObjectType(pLink->m_hObject) == OT_MODEL)
+				if (g_pLTServer->GetObjectType(pLink->m_hObject) == OT_MODEL)
 				{
-                    HMODELANIM hAni = g_pLTServer->GetModelAnimation(pLink->m_hObject);
+					HMODELANIM hAni = g_pLTServer->GetModelAnimation(pLink->m_hObject);
 					if (hAni != INVALID_ANI)
 					{
 						LTVector vDims;
-                        g_pLTServer->GetModelAnimUserDims( pLink->m_hObject, &vDims, hAni );
+						g_pLTServer->GetModelAnimUserDims( pLink->m_hObject, &vDims, hAni );
 						Utils::RotateDims(rRot1, vDims);
-                        g_pLTServer->SetObjectDims2(pLink->m_hObject, &vDims);
+						g_pLTServer->SetObjectDims2(pLink->m_hObject, &vDims);
 					}
 				}
 			}*/
@@ -1906,11 +1865,11 @@ void KeyFramer::UpdateObjects(LTBOOL bInterpolate, LTBOOL bTeleport)
 		//}
 
 		// Handle KeyframerLights.
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(pLink->m_hObject), m_hKeyframerLightClass))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(pLink->m_hObject), m_hKeyframerLightClass))
 		{
 			LTVector vLightPos;
-            g_pLTServer->GetObjectPos(pLink->m_hObject, &vLightPos);
-            UpdateKeyframerLight((KeyframerLight*)g_pLTServer->HandleToObject(pLink->m_hObject), vLightPos);
+			g_pLTServer->GetObjectPos(pLink->m_hObject, &vLightPos);
+			UpdateKeyframerLight((KeyframerLight*)g_pLTServer->HandleToObject(pLink->m_hObject), vLightPos);
 		}
 
 		i++;
@@ -1978,14 +1937,14 @@ void KeyFramer::UpdateShadowObjects()
 	CalcLMAnimFrames(uLightAnimFrame1, uLightAnimFrame2, fPercent);
 
 	// Set it up!
-    if(g_pLTServer->GetLightAnimLT()->GetLightAnimInfo(m_hLightAnim, info) == LT_OK)
+	if(g_pLTServer->GetLightAnimLT()->GetLightAnimInfo(m_hLightAnim, info) == LT_OK)
 	{
 		info.m_iFrames[0] = uLightAnimFrame1;
 		info.m_iFrames[1] = uLightAnimFrame2;
 		info.m_fPercentBetween = fPercent;
 		info.m_fBlendPercent = 1.0f;
 
-        g_pLTServer->GetLightAnimLT()->SetLightAnimInfo(m_hLightAnim, info);
+		g_pLTServer->GetLightAnimLT()->SetLightAnimInfo(m_hLightAnim, info);
 	}
 }
 
@@ -2003,7 +1962,7 @@ void KeyFramer::UpdateKeyframerLight(KeyframerLight *pLight, LTVector vLightPos)
 	CalcLMAnimFrames(uLightAnimFrame1, uLightAnimFrame2, fPercent);
 
 	// Set it up!
-    if(g_pLTServer->GetLightAnimLT()->GetLightAnimInfo(pLight->m_hLightAnim, info) == LT_OK)
+	if(g_pLTServer->GetLightAnimLT()->GetLightAnimInfo(pLight->m_hLightAnim, info) == LT_OK)
 	{
 		info.m_iFrames[0] = uLightAnimFrame1;
 		info.m_iFrames[1] = uLightAnimFrame2;
@@ -2013,7 +1972,7 @@ void KeyFramer::UpdateKeyframerLight(KeyframerLight *pLight, LTVector vLightPos)
 		info.m_vLightColor = pLight->m_vLightColor;
 		info.m_fLightRadius = pLight->m_fLightRadius;
 
-        g_pLTServer->GetLightAnimLT()->SetLightAnimInfo(pLight->m_hLightAnim, info);
+		g_pLTServer->GetLightAnimLT()->SetLightAnimInfo(pLight->m_hLightAnim, info);
 	}
 }
 
@@ -2037,11 +1996,9 @@ uint32 KeyFramer::GetKeyIndex(KEYNODE *pNode)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::CalcCurPos()
 //
-//	ROUTINE:	KeyFramer::CalcCurPos()
-//
-//	PURPOSE:	Calculate m_fCurPos and fKeyPercent
-//
+//	PURPOSE: Calculate m_fCurPos and fKeyPercent
 // ----------------------------------------------------------------------- //
 
 LTBOOL KeyFramer::CalcCurPos(LTBOOL & bAtKey)
@@ -2108,7 +2065,7 @@ LTBOOL KeyFramer::CalcCurPos(LTBOOL & bAtKey)
 
 		float fPathPercent = 1 - (fDistToEnd / m_fTotalDistance);
 		float fFrameSpeed = GetKFWaveValue(m_fVelocity, fPathPercent, m_eWaveform);
-        float fMoveDist = fFrameSpeed * g_pLTServer->GetFrameTime();
+		float fMoveDist = fFrameSpeed * g_pLTServer->GetFrameTime();
 		float fMovePercent = fMoveDist / fDistBetweenKeys;
 
 
@@ -2181,11 +2138,9 @@ LTBOOL KeyFramer::CalcCurPos(LTBOOL & bAtKey)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::GoToKey
 //
-//	ROUTINE:	KeyFramer::GoToKey
-//
-//	PURPOSE:	Set the current key to the specified key
-//
+//	PURPOSE: Set the current key to the specified key
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::GoToKey(char* pKeyName)
@@ -2200,7 +2155,7 @@ void KeyFramer::GoToKey(char* pKeyName)
 
 	if (!pCurKey)
 	{
-        g_pLTServer->CPrint("ERROR in KeyFramer::GoToKey() - Couldn't find key '%s'", pKeyName);
+		g_pLTServer->CPrint("ERROR in KeyFramer::GoToKey() - Couldn't find key '%s'", pKeyName);
 		return;
 	}
 
@@ -2235,7 +2190,7 @@ void KeyFramer::GoToKey(char* pKeyName)
 
 	if (!m_pPosition1)
 	{
-        g_pLTServer->CPrint("ERROR in KeyFramer::GoToKey() - m_pPosition1 and m_pPosition2 are both LTNULL!!!!");
+		g_pLTServer->CPrint("ERROR in KeyFramer::GoToKey() - m_pPosition1 and m_pPosition2 are both LTNULL!!!!");
 	}
 
 
@@ -2246,11 +2201,9 @@ void KeyFramer::GoToKey(char* pKeyName)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::MoveToKey
 //
-//	ROUTINE:	KeyFramer::MoveToKey
-//
-//	PURPOSE:	Set the destination key to the specified key
-//
+//	PURPOSE: Set the destination key to the specified key
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::MoveToKey(ConParse parse)
@@ -2267,10 +2220,10 @@ void KeyFramer::MoveToKey(ConParse parse)
 		{
 			if (m_hstrDestCmd)
 			{
-                g_pLTServer->FreeString(m_hstrDestCmd);
+				g_pLTServer->FreeString(m_hstrDestCmd);
 			}
 
-            m_hstrDestCmd = g_pLTServer->CreateString(parse.m_Args[2]);
+			m_hstrDestCmd = g_pLTServer->CreateString(parse.m_Args[2]);
 		}
 	}
 
@@ -2292,7 +2245,7 @@ void KeyFramer::MoveToKey(ConParse parse)
 
 	if (!m_pDestinationKey)
 	{
-        g_pLTServer->CPrint("ERROR in KeyFramer::MoveToKey() - Couldn't find key '%s'", pKeyName);
+		g_pLTServer->CPrint("ERROR in KeyFramer::MoveToKey() - Couldn't find key '%s'", pKeyName);
 		return;
 	}
 
@@ -2352,11 +2305,9 @@ void KeyFramer::MoveToKey(ConParse parse)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::FindKey
 //
-//	ROUTINE:	KeyFramer::FindKey
-//
-//	PURPOSE:	Find the specified key
-//
+//	PURPOSE: Find the specified key
 // ----------------------------------------------------------------------- //
 
 KEYNODE* KeyFramer::FindKey(char* pKeyName, KEYNODE* pTest, LTBOOL* pbAtOrBefore)
@@ -2380,7 +2331,7 @@ KEYNODE* KeyFramer::FindKey(char* pKeyName, KEYNODE* pTest, LTBOOL* pbAtOrBefore
 
 		if (pCurKey->keyData.m_hstrName)
 		{
-            char* pCurKeyName = g_pLTServer->GetStringData(pCurKey->keyData.m_hstrName);
+			char* pCurKeyName = g_pLTServer->GetStringData(pCurKey->keyData.m_hstrName);
 			if (pCurKeyName && _stricmp(pKeyName, pCurKeyName) == 0)
 			{
 				break;
@@ -2394,11 +2345,9 @@ KEYNODE* KeyFramer::FindKey(char* pKeyName, KEYNODE* pTest, LTBOOL* pbAtOrBefore
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::On()
 //
-//	ROUTINE:	KeyFramer::On()
-//
-//	PURPOSE:	Turn keyframer on
-//
+//	PURPOSE: Turn keyframer on
 // --------------------------------------------------------------------------- //
 
 void KeyFramer::On()
@@ -2419,11 +2368,9 @@ void KeyFramer::On()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::Off()
 //
-//	ROUTINE:	KeyFramer::Off()
-//
-//	PURPOSE:	Turn keyframer off
-//
+//	PURPOSE: Turn keyframer off
 // --------------------------------------------------------------------------- //
 
 void KeyFramer::Off()
@@ -2433,11 +2380,9 @@ void KeyFramer::Off()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::Pause()
 //
-//	ROUTINE:	KeyFramer::Pause()
-//
-//	PURPOSE:	Pause keyframer
-//
+//	PURPOSE: Pause keyframer
 // --------------------------------------------------------------------------- //
 
 void KeyFramer::Pause()
@@ -2451,11 +2396,9 @@ void KeyFramer::Pause()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::Resume()
 //
-//	ROUTINE:	KeyFramer::Resume()
-//
-//	PURPOSE:	Resume keyframer
-//
+//	PURPOSE: Resume keyframer
 // --------------------------------------------------------------------------- //
 
 void KeyFramer::Resume()
@@ -2469,11 +2412,9 @@ void KeyFramer::Resume()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::Forward()
 //
-//	ROUTINE:	KeyFramer::Forward()
-//
-//	PURPOSE:	Change keyframer direction to forward
-//
+//	PURPOSE: Change keyframer direction to forward
 // --------------------------------------------------------------------------- //
 
 void KeyFramer::Forward()
@@ -2491,11 +2432,9 @@ void KeyFramer::Forward()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::Backward()
 //
-//	ROUTINE:	KeyFramer::Backward()
-//
-//	PURPOSE:	Change keyframer direction to backward
-//
+//	PURPOSE: Change keyframer direction to backward
 // --------------------------------------------------------------------------- //
 
 void KeyFramer::Backward()
@@ -2513,11 +2452,9 @@ void KeyFramer::Backward()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::ToggleDir()
 //
-//	ROUTINE:	KeyFramer::ToggleDir()
-//
-//	PURPOSE:	Toggle keyframer direction
-//
+//	PURPOSE: Toggle keyframer direction
 // --------------------------------------------------------------------------- //
 
 void KeyFramer::ToggleDir()
@@ -2534,11 +2471,9 @@ void KeyFramer::ToggleDir()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::Save
 //
-//	ROUTINE:	KeyFramer::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -2546,59 +2481,59 @@ void KeyFramer::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 	if (!hWrite) return;
 
 	// Save m_pCommands
-    HSTRING hStr = g_pLTServer->CreateString(m_pCommands);
-    g_pLTServer->WriteToMessageHString(hWrite, hStr);
+	HSTRING hStr = g_pLTServer->CreateString(m_pCommands);
+	g_pLTServer->WriteToMessageHString(hWrite, hStr);
 
 	// Make sure we created the keylist (if Save is called before the first
 	// update, this may not have been created)...
 
 	CreateKeyList();
 
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hActiveSndObj);
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hTargetObject);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vTargetOffset);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vCurPos);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hActiveSndObj);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hTargetObject);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vTargetOffset);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vCurPos);
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fEarliestGoActiveTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fTotalPathTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fTotalDistance);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fVelocity);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fCurTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fEndTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fSoundRadius);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fKeyPercent);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrObjectName);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrTargetName);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrBaseKeyName);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrActiveSnd);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrDestCmd);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bUseVelocity);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bStartActive);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bStartPaused);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bLooping);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bIgnoreOffsets);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bActive);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bPaused);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bFinished);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bFirstUpdate);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bAlignToPath);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bPushObjects);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nNumKeys);
-    g_pLTServer->WriteToMessageByte(hWrite, m_eDirection);
-    g_pLTServer->WriteToMessageByte(hWrite, m_eWaveform);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fEarliestGoActiveTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fTotalPathTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fTotalDistance);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fVelocity);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fCurTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fEndTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fSoundRadius);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fKeyPercent);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrObjectName);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrTargetName);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrBaseKeyName);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrActiveSnd);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrDestCmd);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bUseVelocity);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bStartActive);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bStartPaused);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bLooping);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bIgnoreOffsets);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bActive);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bPaused);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bFinished);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bFirstUpdate);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bAlignToPath);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bPushObjects);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nNumKeys);
+	g_pLTServer->WriteToMessageByte(hWrite, m_eDirection);
+	g_pLTServer->WriteToMessageByte(hWrite, m_eWaveform);
 
 
 	// Determine the position in the list of m_pCurKey, m_pPosition1, and
 	// m_pPosition2.  Also, save out m_pKeys...
 
-	int nCurKeyIndex    = -1;
+	int nCurKeyIndex	= -1;
 	int nPosition1Index = -1;
 	int nPosition2Index = -1;
 	int nDestKeyIndex   = -1;
 
-    int i;
+	int i;
 	KEYNODE* pCurKey = m_pKeys;
-    for (i=0; i < m_nNumKeys && pCurKey; i++)
+	for (i=0; i < m_nNumKeys && pCurKey; i++)
 	{
 		if (m_pCurKey == pCurKey)
 		{
@@ -2623,23 +2558,23 @@ void KeyFramer::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 	// Save out the positions of our pointer data members...
 
-    g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nCurKeyIndex);
-    g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nPosition1Index);
-    g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nPosition2Index);
-    g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nDestKeyIndex);
+	g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nCurKeyIndex);
+	g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nPosition1Index);
+	g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nPosition2Index);
+	g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nDestKeyIndex);
 
 
 	// Save the number of objects to be key-framed...
 
-    uint8 nNumInList = m_pObjectList ? m_pObjectList->m_nInList : 0;
-    g_pLTServer->WriteToMessageByte(hWrite, nNumInList);
+	uint8 nNumInList = m_pObjectList ? m_pObjectList->m_nInList : 0;
+	g_pLTServer->WriteToMessageByte(hWrite, nNumInList);
 
 	// Save the offsets and rotations for each object...
 
 	for (i=0; i < nNumInList; i++)
 	{
-        g_pLTServer->WriteToMessageVector(hWrite, &(m_pOffsets[i]));
-        g_pLTServer->WriteToMessageRotation(hWrite, &(m_pRotations[i]));
+		g_pLTServer->WriteToMessageVector(hWrite, &(m_pOffsets[i]));
+		g_pLTServer->WriteToMessageRotation(hWrite, &(m_pRotations[i]));
 	}
 
 	// Save the objects we're supposed to key-frame...
@@ -2649,7 +2584,7 @@ void KeyFramer::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 		ObjectLink* pLink = m_pObjectList->m_pFirstLink;
 		while (pLink)
 		{
-            g_pLTServer->WriteToLoadSaveMessageObject(hWrite, pLink->m_hObject);
+			g_pLTServer->WriteToLoadSaveMessageObject(hWrite, pLink->m_hObject);
 			pLink = pLink->m_pNext;
 		}
 	}
@@ -2657,11 +2592,9 @@ void KeyFramer::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyFramer::Load
 //
-//	ROUTINE:	KeyFramer::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void KeyFramer::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -2669,10 +2602,10 @@ void KeyFramer::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 	if (!hRead) return;
 
 	// Load m_pCommands
-    HSTRING hStr = g_pLTServer->ReadFromMessageHString(hRead);
+	HSTRING hStr = g_pLTServer->ReadFromMessageHString(hRead);
 	if(hStr)
 	{
-        char *pstr = g_pLTServer->GetStringData(hStr);
+		char *pstr = g_pLTServer->GetStringData(hStr);
 		if(pstr && pstr[0])
 		{
 			if(m_pCommands)
@@ -2684,47 +2617,47 @@ void KeyFramer::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 			strcpy(m_pCommands,pstr);
 		}
 
-        g_pLTServer->FreeString(hStr);
+		g_pLTServer->FreeString(hStr);
 	}
 
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hActiveSndObj);
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hTargetObject);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vTargetOffset);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vCurPos);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hActiveSndObj);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hTargetObject);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vTargetOffset);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vCurPos);
 
-    m_fEarliestGoActiveTime = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fTotalPathTime    = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fTotalDistance    = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fVelocity         = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fCurTime          = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fEndTime          = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fSoundRadius      = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fKeyPercent       = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_hstrObjectName    = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrTargetName    = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrBaseKeyName   = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrActiveSnd     = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrDestCmd       = g_pLTServer->ReadFromMessageHString(hRead);
-    m_bUseVelocity      = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bStartActive      = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bStartPaused      = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bLooping          = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bIgnoreOffsets    = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bActive           = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bPaused           = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bFinished         = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bFirstUpdate      = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bAlignToPath      = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bPushObjects      = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_nNumKeys          = g_pLTServer->ReadFromMessageByte(hRead);
-    m_eDirection        = (KFDirection) g_pLTServer->ReadFromMessageByte(hRead);
-    m_eWaveform         = (KFWaveType) g_pLTServer->ReadFromMessageByte(hRead);
+	m_fEarliestGoActiveTime = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fTotalPathTime	= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fTotalDistance	= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fVelocity		 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fCurTime		  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fEndTime		  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fSoundRadius	  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fKeyPercent	   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_hstrObjectName	= g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrTargetName	= g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrBaseKeyName   = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrActiveSnd	 = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrDestCmd	   = g_pLTServer->ReadFromMessageHString(hRead);
+	m_bUseVelocity	  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bStartActive	  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bStartPaused	  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bLooping		  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bIgnoreOffsets	= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bActive		   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bPaused		   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bFinished		 = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bFirstUpdate	  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bAlignToPath	  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bPushObjects	  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_nNumKeys		  = g_pLTServer->ReadFromMessageByte(hRead);
+	m_eDirection		= (KFDirection) g_pLTServer->ReadFromMessageByte(hRead);
+	m_eWaveform		 = (KFWaveType) g_pLTServer->ReadFromMessageByte(hRead);
 
 	// Build the m_pKeys data member...
 
-    int i;
+	int i;
 	KEYNODE* pNode = LTNULL;
-    for (i=0; i < m_nNumKeys; i++)
+	for (i=0; i < m_nNumKeys; i++)
 	{
 		if (!m_pKeys)
 		{
@@ -2746,10 +2679,10 @@ void KeyFramer::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	// Determine the positions of our pointer data members...
 
-    int nCurKeyIndex    = (int) g_pLTServer->ReadFromMessageFloat(hRead);
-    int nPosition1Index = (int) g_pLTServer->ReadFromMessageFloat(hRead);
-    int nPosition2Index = (int) g_pLTServer->ReadFromMessageFloat(hRead);
-    int nDestKeyIndex   = (int) g_pLTServer->ReadFromMessageFloat(hRead);
+	int nCurKeyIndex	= (int) g_pLTServer->ReadFromMessageFloat(hRead);
+	int nPosition1Index = (int) g_pLTServer->ReadFromMessageFloat(hRead);
+	int nPosition2Index = (int) g_pLTServer->ReadFromMessageFloat(hRead);
+	int nDestKeyIndex   = (int) g_pLTServer->ReadFromMessageFloat(hRead);
 
 	KEYNODE* pCurKey = m_pKeys;
 	for (i=0; i < m_nNumKeys && pCurKey; i++)
@@ -2780,14 +2713,14 @@ void KeyFramer::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	// Load the number of objects we're supposed to key frame...
 
-    uint8 nNumInList = g_pLTServer->ReadFromMessageByte(hRead);
+	uint8 nNumInList = g_pLTServer->ReadFromMessageByte(hRead);
 
 	// Load the offsets and rotations for each object...
 
 	for (i=0; i < nNumInList; i++)
 	{
-        g_pLTServer->ReadFromMessageVector(hRead, &(m_pOffsets[i]));
-        g_pLTServer->ReadFromMessageRotation(hRead, &(m_pRotations[i]));
+		g_pLTServer->ReadFromMessageVector(hRead, &(m_pOffsets[i]));
+		g_pLTServer->ReadFromMessageRotation(hRead, &(m_pRotations[i]));
 	}
 
 	// Load the objects we're supposed to key-frame...
@@ -2796,10 +2729,10 @@ void KeyFramer::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 	{
 		if (m_pObjectList)
 		{
-            g_pLTServer->RelinquishList(m_pObjectList);
+			g_pLTServer->RelinquishList(m_pObjectList);
 		}
 
-        m_pObjectList = g_pLTServer->CreateObjectList();
+		m_pObjectList = g_pLTServer->CreateObjectList();
 
 		if (m_pObjectList)
 		{
@@ -2808,7 +2741,7 @@ void KeyFramer::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 			HOBJECT hObj = LTNULL;
 			for (int i=0; i < nNumInList; i++)
 			{
-                g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &hObj);
+				g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &hObj);
 				if (hObj)
 				{
 					hObjectArray[i] = hObj;
@@ -2826,7 +2759,7 @@ void KeyFramer::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 			{
 				if (hObjectArray[i])
 				{
-                    g_pLTServer->AddObjectToList(m_pObjectList, hObjectArray[i]);
+					g_pLTServer->AddObjectToList(m_pObjectList, hObjectArray[i]);
 				}
 			}
 

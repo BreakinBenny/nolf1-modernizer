@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: EventCounter.h
 //
-// MODULE  : EventCounter.h
+// PURPOSE: EventCounter - Definition
 //
-// PURPOSE : EventCounter - Definition
-//
-// CREATED : 04.23.1999
-//
+// CREATED: 04.23.1999
 // ----------------------------------------------------------------------- //
 
 #ifndef __EVENT_COUNTER_H__
@@ -19,14 +17,14 @@
 
 struct EventData
 {
-    EventData()
+	EventData()
 	{
 		nValue				= 0;
-        hstrIncToValCmd     = LTNULL;
-        hstrDecToValCmd     = LTNULL;
+		hstrIncToValCmd	 = LTNULL;
+		hstrDecToValCmd	 = LTNULL;
 	}
 
-    virtual ~EventData()
+	virtual ~EventData()
 	{
 		FREE_HSTRING(hstrIncToValCmd);
 		FREE_HSTRING(hstrDecToValCmd);
@@ -61,12 +59,12 @@ class EventCounter : public BaseClass
 		EventCounter();
 		~EventCounter();
 
-        uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
-        uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+		uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 	protected :
 
-        LTBOOL   ReadProp(ObjectCreateStruct *pData);
+		LTBOOL   ReadProp(ObjectCreateStruct *pData);
 		void	TriggerMsg(HOBJECT hSender, const char* pMsg);
 
 		void	Save(HMESSAGEWRITE hWrite);
@@ -74,7 +72,7 @@ class EventCounter : public BaseClass
 
 	private :
 
-        LTBOOL       m_bLocked;
+		LTBOOL	   m_bLocked;
 		int			m_nCurVal;
 
 		EventData	m_EventData[EC_MAX_NUMBER_OF_EVENTS];

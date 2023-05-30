@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: KeyData.cpp
 //
-// MODULE  : KeyData.cpp
+// PURPOSE: KeyData implementation for Keyframer class
 //
-// PURPOSE : KeyData implementation for Keyframer class
-//
-// CREATED : 12/31/97
+// CREATED: 12/31/97
 //
 // (c) 1997-1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -15,16 +13,14 @@
 #include "iltserver.h"
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyData::KeyData()
 //
-//	ROUTINE:	KeyData::KeyData()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 KeyData::KeyData()
 {
-    m_rRot.Init();
+	m_rRot.Init();
 	VEC_INIT(m_vPos);
 
 	m_nKeyType			= POSITION_KEY;
@@ -47,16 +43,14 @@ KeyData::KeyData()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyData::~KeyData()
 //
-//	ROUTINE:	KeyData::~KeyData()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 KeyData::~KeyData()
 {
-    ILTServer* pServerDE = BaseClass::GetServerDE();
+	ILTServer* pServerDE = BaseClass::GetServerDE();
 	if (pServerDE)
 	{
 		if (m_hstrName) pServerDE->FreeString (m_hstrName);
@@ -69,17 +63,15 @@ KeyData::~KeyData()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyData::Copy()
 //
-//	ROUTINE:	KeyData::Copy()
-//
-//	PURPOSE:	Copy the Key object's data
-//
+//	PURPOSE: Copy the Key object's data
 // ----------------------------------------------------------------------- //
 
 LTBOOL KeyData::Copy(Key* pKey)
 {
-    ILTServer* pServerDE = BaseClass::GetServerDE();
-    if (!pKey || !pServerDE) return LTFALSE;
+	ILTServer* pServerDE = BaseClass::GetServerDE();
+	if (!pKey || !pServerDE) return LTFALSE;
 
 	HOBJECT hKeyObj = pServerDE->ObjectToHandle(pKey);
 	pServerDE->GetObjectRotation(hKeyObj, &m_rRot);
@@ -140,22 +132,20 @@ LTBOOL KeyData::Copy(Key* pKey)
 
 	m_LightFrames = pKey->m_LightFrames;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyData::Save
 //
-//	ROUTINE:	KeyData::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void KeyData::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
-    ILTServer* pServerDE = BaseClass::GetServerDE();
+	ILTServer* pServerDE = BaseClass::GetServerDE();
 	if (!pServerDE || !hWrite) return;
 
 	pServerDE->WriteToMessageRotation(hWrite, &m_rRot);
@@ -178,16 +168,14 @@ void KeyData::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyData::Load
 //
-//	ROUTINE:	KeyData::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void KeyData::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
-    ILTServer* pServerDE = BaseClass::GetServerDE();
+	ILTServer* pServerDE = BaseClass::GetServerDE();
 	if (!pServerDE || !hRead) return;
 
 	pServerDE->ReadFromMessageRotation(hRead, &m_rRot);
@@ -210,19 +198,17 @@ void KeyData::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: KeyData::CacheFiles
 //
-//	ROUTINE:	KeyData::CacheFiles
-//
-//	PURPOSE:	CacheFiles resources used by this object
-//
+//	PURPOSE: CacheFiles resources used by this object
 // ----------------------------------------------------------------------- //
 
 void KeyData::CacheFiles()
 {
-    ILTServer* pServerDE = BaseClass::GetServerDE();
+	ILTServer* pServerDE = BaseClass::GetServerDE();
 	if (!pServerDE) return;
 
-    char* pFile = LTNULL;
+	char* pFile = LTNULL;
 	if (m_hstrSoundName)
 	{
 		pFile = pServerDE->GetStringData(m_hstrSoundName);

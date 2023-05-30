@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ExitTrigger.h
 //
-// MODULE  : ExitTrigger.h
+// PURPOSE: ExitTrigger - Implementation
 //
-// PURPOSE : ExitTrigger - Implementation
-//
-// CREATED : 10/6/97
-//
+// CREATED: 10/6/97
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -51,9 +49,9 @@ BEGIN_CLASS(ExitTrigger)
 	ADD_STRINGPROP_FLAG(AITriggerName, "", PF_HIDDEN)
 	ADD_BOOLPROP_FLAG(PlayerTriggerable, 1, PF_HIDDEN)
 	ADD_BOOLPROP_FLAG(AITriggerable, 0, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(WeightedTrigger, LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(WeightedTrigger, LTFALSE, PF_HIDDEN)
 	ADD_REALPROP_FLAG(Message1Weight, .5, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(TimedTrigger, LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(TimedTrigger, LTFALSE, PF_HIDDEN)
 	ADD_REALPROP_FLAG(MinTriggerTime, 0.0f, PF_HIDDEN)
 	ADD_REALPROP_FLAG(MaxTriggerTime, 10.0f, PF_HIDDEN)
 	ADD_LONGINTPROP_FLAG(ActivationCount, 1, PF_HIDDEN)
@@ -61,11 +59,9 @@ END_CLASS_DEFAULT(ExitTrigger, Trigger, NULL, NULL)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ExitTrigger::ExitTrigger()
 //
-//	ROUTINE:	ExitTrigger::ExitTrigger()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 ExitTrigger::ExitTrigger() : Trigger()
@@ -76,11 +72,9 @@ ExitTrigger::ExitTrigger() : Trigger()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ExitTrigger::~ExitTrigger()
 //
-//	ROUTINE:	ExitTrigger::~ExitTrigger()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 ExitTrigger::~ExitTrigger()
@@ -88,11 +82,9 @@ ExitTrigger::~ExitTrigger()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ExitTrigger::EngineMessageFn
 //
-//	ROUTINE:	ExitTrigger::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 ExitTrigger::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -106,7 +98,7 @@ uint32 ExitTrigger::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData
 				ReadProp((ObjectCreateStruct*)pData);
 			}
 
-            uint32 dwRet = Trigger::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = Trigger::EngineMessageFn(messageID, pData, fData);
 
 			PostPropRead((ObjectCreateStruct*)pData);
 
@@ -115,13 +107,13 @@ uint32 ExitTrigger::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -133,63 +125,57 @@ uint32 ExitTrigger::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ExitTrigger::ReadProp
 //
-//	ROUTINE:	ExitTrigger::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL ExitTrigger::ReadProp(ObjectCreateStruct *pData)
 {
-    if (!pData) return LTFALSE;
+	if (!pData) return LTFALSE;
 
 	GenericProp genProp;
-    if (g_pLTServer->GetPropGeneric("FadeOutTime", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("FadeOutTime", &genProp) == LT_OK)
 	{
 		m_fFadeOutTime = genProp.m_Float;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ExitTrigger::PostPropRead
 //
-//	ROUTINE:	ExitTrigger::PostPropRead
-//
-//	PURPOSE:	Handle extra initialization
-//
+//	PURPOSE: Handle extra initialization
 // ----------------------------------------------------------------------- //
 
 void ExitTrigger::PostPropRead(ObjectCreateStruct *pStruct)
 {
-    m_bPlayerTriggerable = LTTRUE;
-    m_bAITriggerable     = LTFALSE;
-    m_hstrAIName         = LTNULL;
+	m_bPlayerTriggerable = LTTRUE;
+	m_bAITriggerable	 = LTFALSE;
+	m_hstrAIName		 = LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ExitTrigger::Activate
 //
-//	ROUTINE:	ExitTrigger::Activate
-//
-//	PURPOSE:	Handle being activated
-//
+//	PURPOSE: Handle being activated
 // ----------------------------------------------------------------------- //
 
 LTBOOL ExitTrigger::Activate()
 {
-    if (!Trigger::Activate()) return LTFALSE;
+	if (!Trigger::Activate()) return LTFALSE;
 
 	if (m_fFadeOutTime > 0.05f && g_pGameServerShell->GetGameType() == SINGLE)
 	{
 		// Tell the client to fade the screen and exit...
 
-        HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_PLAYER_INFOCHANGE);
-        g_pLTServer->WriteToMessageByte(hMessage, IC_FADE_SCREEN_ID);
-        g_pLTServer->WriteToMessageByte(hMessage, 0);  // Fade out == 0
-        g_pLTServer->WriteToMessageByte(hMessage, 1);  // Exit level == 1
-        g_pLTServer->WriteToMessageFloat(hMessage, m_fFadeOutTime);
-        g_pLTServer->EndMessage2(hMessage, MESSAGE_GUARANTEED | MESSAGE_NAGGLE);
+		HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_PLAYER_INFOCHANGE);
+		g_pLTServer->WriteToMessageByte(hMessage, IC_FADE_SCREEN_ID);
+		g_pLTServer->WriteToMessageByte(hMessage, 0);  // Fade out == 0
+		g_pLTServer->WriteToMessageByte(hMessage, 1);  // Exit level == 1
+		g_pLTServer->WriteToMessageFloat(hMessage, m_fFadeOutTime);
+		g_pLTServer->EndMessage2(hMessage, MESSAGE_GUARANTEED | MESSAGE_NAGGLE);
 
 		g_pGameServerShell->ExitLevel(LTFALSE);
 	}
@@ -198,37 +184,33 @@ LTBOOL ExitTrigger::Activate()
 		g_pGameServerShell->ExitLevel(LTTRUE);
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ExitTrigger::Save
 //
-//	ROUTINE:	ExitTrigger::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void ExitTrigger::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fFadeOutTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fFadeOutTime);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ExitTrigger::Load
 //
-//	ROUTINE:	ExitTrigger::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void ExitTrigger::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    m_fFadeOutTime = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fFadeOutTime = g_pLTServer->ReadFromMessageFloat(hRead);
 }

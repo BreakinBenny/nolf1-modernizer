@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: NodeLine.h
 //
-// MODULE  : NodeLine.h
+// PURPOSE: Lines used to debug node system
 //
-// PURPOSE : Lines used to debug node system
-//
-// CREATED : 2/11/99
-//
+// CREATED: 2/11/99
 // ----------------------------------------------------------------------- //
 
 #ifndef __NODELINE_H__
@@ -24,11 +22,11 @@ class NodeLine : public BaseClass
 
 		// Simple accessors
 
-        void    Setup(const LTVector& vSource, const LTVector& vDestination);
+		void	Setup(const LTVector& vSource, const LTVector& vDestination);
 
 	protected : // Protected methods (only accessed by engine)
 
-        uint32  EngineMessageFn (uint32 messageID, void *pData, LTFLOAT lData);
+		uint32  EngineMessageFn (uint32 messageID, void *pData, LTFLOAT lData);
 };
 
 #endif

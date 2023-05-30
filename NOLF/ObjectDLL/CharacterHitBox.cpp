@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CharacterHitBox.cpp
 //
-// MODULE  : CharacterHitBox.cpp
+// PURPOSE: Character hit box object class implementation
 //
-// PURPOSE : Character hit box object class implementation
-//
-// CREATED : 01/05/00
+// CREATED: 01/05/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -37,28 +35,24 @@ BEGIN_CLASS(CCharacterHitBox)
 END_CLASS_DEFAULT_FLAGS(CCharacterHitBox, GameBase, NULL, NULL, CF_HIDDEN)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::CCharacterHitBox()
 //
-//	ROUTINE:	CCharacterHitBox::CCharacterHitBox()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CCharacterHitBox::CCharacterHitBox() : GameBase(OT_NORMAL)
 {
-    m_hModel = LTNULL;
+	m_hModel = LTNULL;
 	m_vOffset.Init();
 	m_bCanActivate = LTTRUE;
 
-    m_NodeRadiusList.Init(LTTRUE);
+	m_NodeRadiusList.Init(LTTRUE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::~CCharacterHitBox()
 //
-//	ROUTINE:	CCharacterHitBox::~CCharacterHitBox()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CCharacterHitBox::~CCharacterHitBox()
@@ -66,76 +60,72 @@ CCharacterHitBox::~CCharacterHitBox()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::Setup()
 //
-//	ROUTINE:	CCharacterHitBox::Setup()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCharacterHitBox::Init(HOBJECT hModel)
 {
 	if (!m_hObject || !hModel ||
-        (!IsCharacter(hModel) && !IsBody(hModel))) return LTFALSE;
+		(!IsCharacter(hModel) && !IsBody(hModel))) return LTFALSE;
 
 	m_hModel = hModel;
 
 	// Set my flags...
 
-    g_pLTServer->SetObjectFlags(m_hObject, FLAG_RAYHIT | FLAG_TOUCH_NOTIFY);
+	g_pLTServer->SetObjectFlags(m_hObject, FLAG_RAYHIT | FLAG_TOUCH_NOTIFY);
 
 	// Set our user flags to USRFLG_CHARACTER, so the client will process
 	// us like a character (for intersect segments)...
 
-    uint32 dwFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwFlags | USRFLG_CHARACTER);
+	uint32 dwFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwFlags | USRFLG_CHARACTER);
 
 	if (!g_vtShowNodeRadii.IsInitted())
 	{
-        g_vtShowNodeRadii.Init(g_pLTServer, "HitBoxShowNodeRadii", LTNULL, 0.0f);
+		g_vtShowNodeRadii.Init(g_pLTServer, "HitBoxShowNodeRadii", LTNULL, 0.0f);
 	}
 
 	if (!g_vtNodeRadiusUseOverride.IsInitted())
 	{
-        g_vtNodeRadiusUseOverride.Init(g_pLTServer, "HitBoxNodeRadiusOverride", LTNULL, 0.0f);
+		g_vtNodeRadiusUseOverride.Init(g_pLTServer, "HitBoxNodeRadiusOverride", LTNULL, 0.0f);
 	}
 
 	if (!g_vtHeadNodeRadius.IsInitted())
 	{
-        g_vtHeadNodeRadius.Init(g_pLTServer, "HitBoxHeadNodeRadius", LTNULL, DFAULT_NODE_RADIUS);
+		g_vtHeadNodeRadius.Init(g_pLTServer, "HitBoxHeadNodeRadius", LTNULL, DFAULT_NODE_RADIUS);
 	}
 
 	if (!g_vtTorsoNodeRadius.IsInitted())
 	{
-        g_vtTorsoNodeRadius.Init(g_pLTServer, "HitBoxTorsoNodeRadius", LTNULL, DFAULT_NODE_RADIUS);
+		g_vtTorsoNodeRadius.Init(g_pLTServer, "HitBoxTorsoNodeRadius", LTNULL, DFAULT_NODE_RADIUS);
 	}
 
 	if (!g_vtArmNodeRadius.IsInitted())
 	{
-        g_vtArmNodeRadius.Init(g_pLTServer, "HitBoxArmNodeRadius", LTNULL, DFAULT_NODE_RADIUS);
+		g_vtArmNodeRadius.Init(g_pLTServer, "HitBoxArmNodeRadius", LTNULL, DFAULT_NODE_RADIUS);
 	}
 
 	if (!g_vtLegNodeRadius.IsInitted())
 	{
-        g_vtLegNodeRadius.Init(g_pLTServer, "HitBoxLegNodeRadius", LTNULL, DFAULT_NODE_RADIUS);
+		g_vtLegNodeRadius.Init(g_pLTServer, "HitBoxLegNodeRadius", LTNULL, DFAULT_NODE_RADIUS);
 	}
 
 	if (!g_HitDebugTrack.IsInitted())
 	{
-        g_HitDebugTrack.Init(g_pLTServer, "HitDebug", LTNULL, 0.0f);
+		g_HitDebugTrack.Init(g_pLTServer, "HitDebug", LTNULL, 0.0f);
 	}
 
 	SetNextUpdate(0.0f);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::EngineMessageFn
 //
-//	ROUTINE:	CCharacterHitBox::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 CCharacterHitBox::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -161,16 +151,14 @@ uint32 CCharacterHitBox::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT 
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::ObjectMessageFn
 //
-//	ROUTINE:	CCharacterHitBox::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 CCharacterHitBox::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
 {
-    // Pass any messages to our model...
+	// Pass any messages to our model...
 
 	if (m_hModel)
 	{
@@ -185,32 +173,28 @@ uint32 CCharacterHitBox::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMES
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::GetBoundingBoxColor()
 //
-//	ROUTINE:	CCharacterHitBox::GetBoundingBoxColor()
-//
-//	PURPOSE:	Get the color of the bounding box
-//
+//	PURPOSE: Get the color of the bounding box
 // ----------------------------------------------------------------------- //
 
 LTVector CCharacterHitBox::GetBoundingBoxColor()
 {
-    return LTVector(1.0, 1.0, 0.0);
+	return LTVector(1.0, 1.0, 0.0);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::HandleImpact()
 //
-//	ROUTINE:	CCharacterHitBox::HandleImpact()
-//
-//	PURPOSE:	Handle a vector impacting on us
-//
+//	PURPOSE: Handle a vector impacting on us
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCharacterHitBox::HandleImpact(CProjectile* pProj, IntersectInfo & iInfo,
-                                     LTVector vDir, LTVector & vFrom)
+									 LTVector vDir, LTVector & vFrom)
 {
-    if (!pProj || !m_hModel) return LTFALSE;
+	if (!pProj || !m_hModel) return LTFALSE;
 
-    LTBOOL bHitSomething = LTTRUE;
+	LTBOOL bHitSomething = LTTRUE;
 	ModelNode eModelNode = eModelNodeInvalid;
 
 	if (UsingHitDetection())
@@ -246,7 +230,7 @@ LTBOOL CCharacterHitBox::HandleImpact(CProjectile* pProj, IntersectInfo & iInfo,
 
 				if ( IsCharacter(iInfo.m_hObject) )
 				{
-                    CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(iInfo.m_hObject);
+					CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(iInfo.m_hObject);
 					pProj->AdjustDamage(pCharacter->ComputeDamageModifier(eModelNode));
 				}
 			}
@@ -257,28 +241,26 @@ LTBOOL CCharacterHitBox::HandleImpact(CProjectile* pProj, IntersectInfo & iInfo,
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::HandleVectorImpact()
 //
-//	ROUTINE:	CCharacterHitBox::HandleVectorImpact()
-//
-//	PURPOSE:	Handle being hit by a vector
+//	PURPOSE: Handle being hit by a vector
 //
 // Peter Higley method...
-//
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCharacterHitBox::HandleVectorImpact(CProjectile* pProj, IntersectInfo& iInfo, LTVector& vDir,
-                                           LTVector& vFrom, ModelNode& eModelNode)
+										   LTVector& vFrom, ModelNode& eModelNode)
 {
 	ModelSkeleton eModelSkeleton = GetModelSkeleton();
 
 	// This algorithm may need to change since our dims are probably much
 	// bigger than the model's actual dims...
 
-    LTVector vObjDims;
-    g_pLTServer->GetObjectDims(m_hObject, &vObjDims);
+	LTVector vObjDims;
+	g_pLTServer->GetObjectDims(m_hObject, &vObjDims);
 
 	int cNodes = g_pModelButeMgr->GetSkeletonNumNodes(eModelSkeleton);
-    const char* szNodeName = LTNULL;
+	const char* szNodeName = LTNULL;
 
 	ModelNode aHitNodes[64];
 	int cHitNodes = 0;
@@ -290,27 +272,27 @@ LTBOOL CCharacterHitBox::HandleVectorImpact(CProjectile* pProj, IntersectInfo& i
 
 		if (szNodeName)
 		{
-            ILTModel* pModelLT = g_pLTServer->GetModelLT();
+			ILTModel* pModelLT = g_pLTServer->GetModelLT();
 
 			HMODELNODE hNode;
 			pModelLT->GetNode(m_hModel, (char*)szNodeName, hNode);
 
 			LTransform transform;
-            pModelLT->GetNodeTransform(m_hModel, hNode, transform, LTTRUE);
+			pModelLT->GetNodeTransform(m_hModel, hNode, transform, LTTRUE);
 
-            LTVector vPos;
-            LTRotation rRot;
-            ILTTransform* pTransLT = g_pLTServer->GetTransformLT();
+			LTVector vPos;
+			LTRotation rRot;
+			ILTTransform* pTransLT = g_pLTServer->GetTransformLT();
 			pTransLT->Get(transform, vPos, rRot);
 
-            LTFLOAT fNodeRadius = GetNodeRadius(eModelSkeleton, eCurrentNode);
+			LTFLOAT fNodeRadius = GetNodeRadius(eModelSkeleton, eCurrentNode);
 
-            const LTVector vRelativeNodePos = vPos - iInfo.m_Point;
+			const LTVector vRelativeNodePos = vPos - iInfo.m_Point;
 
 			// Distance along ray to point of closest approach to node point
 
-            const LTFLOAT fRayDist = vDir.Dot(vRelativeNodePos);
-            const LTFLOAT fDistSqr = (vDir*fRayDist - vRelativeNodePos).MagSqr();
+			const LTFLOAT fRayDist = vDir.Dot(vRelativeNodePos);
+			const LTFLOAT fDistSqr = (vDir*fRayDist - vRelativeNodePos).MagSqr();
 
 			if (fDistSqr < fNodeRadius*fNodeRadius)
 			{
@@ -321,17 +303,17 @@ LTBOOL CCharacterHitBox::HandleVectorImpact(CProjectile* pProj, IntersectInfo& i
 
 	// Find highest priority node we hit
 
-    LTFLOAT fMaxPriority = (LTFLOAT)(-INT_MAX);
+	LTFLOAT fMaxPriority = (LTFLOAT)(-INT_MAX);
 
 	if ( g_HitDebugTrack.GetFloat(0.0f) == 1.0f )
-        g_pLTServer->CPrint("Checking hit nodes..................");
+		g_pLTServer->CPrint("Checking hit nodes..................");
 
 	{for ( int iNode = 0 ; iNode < cHitNodes ; iNode++ )
 	{
 		if ( g_HitDebugTrack.GetFloat(0.0f) == 1.0f )
-            g_pLTServer->CPrint("Hit ''%s'' node", g_pModelButeMgr->GetSkeletonNodeName(eModelSkeleton, (ModelNode)aHitNodes[iNode]));
+			g_pLTServer->CPrint("Hit ''%s'' node", g_pModelButeMgr->GetSkeletonNodeName(eModelSkeleton, (ModelNode)aHitNodes[iNode]));
 
-        LTFLOAT fPriority = g_pModelButeMgr->GetSkeletonNodeHitPriority(eModelSkeleton, (ModelNode)aHitNodes[iNode]);
+		LTFLOAT fPriority = g_pModelButeMgr->GetSkeletonNodeHitPriority(eModelSkeleton, (ModelNode)aHitNodes[iNode]);
 		if ( fPriority > fMaxPriority )
 		{
 			eModelNode = (ModelNode)aHitNodes[iNode];
@@ -344,7 +326,7 @@ LTBOOL CCharacterHitBox::HandleVectorImpact(CProjectile* pProj, IntersectInfo& i
 	if (eModelNode != eModelNodeInvalid)
 	{
 		if ( g_HitDebugTrack.GetFloat(0.0f) == 1.0f )
-            g_pLTServer->CPrint("...........using ''%s''", g_pModelButeMgr->GetSkeletonNodeName(eModelSkeleton, eModelNode));
+			g_pLTServer->CPrint("...........using ''%s''", g_pModelButeMgr->GetSkeletonNodeName(eModelSkeleton, eModelNode));
 
 		// Set the hit object as us ... attachments may change this
 
@@ -359,11 +341,11 @@ LTBOOL CCharacterHitBox::HandleVectorImpact(CProjectile* pProj, IntersectInfo& i
 			pAttachments->HandleProjectileImpact(pProj, iInfo, vDir, vFrom, eModelSkeleton, eModelNode);
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 	if ( g_HitDebugTrack.GetFloat(0.0f) == 1.0f )
-        g_pLTServer->CPrint("....................hit nothing");
+		g_pLTServer->CPrint("....................hit nothing");
 
 	//
 	// Shot didn't hit box, propagate through box and return that point in
@@ -376,8 +358,8 @@ LTBOOL CCharacterHitBox::HandleVectorImpact(CProjectile* pProj, IntersectInfo& i
 	//	x with a dot product with the right vector, and every y with a dot
 	//	product with the up vector ("every x/y/z" doesn't include vObjDim)
 /*
-    LTVector vProjection(0.0f,0.0f,0.0f);
-    LTVector vAbsDir((float)fabs(vDir.x),(float)fabs(vDir.y),(float)fabs(vDir.z));
+	LTVector vProjection(0.0f,0.0f,0.0f);
+	LTVector vAbsDir((float)fabs(vDir.x),(float)fabs(vDir.y),(float)fabs(vDir.z));
 
 	if (vAbsDir.x > vAbsDir.y && vAbsDir.x > vAbsDir.z)
 	{
@@ -394,20 +376,18 @@ LTBOOL CCharacterHitBox::HandleVectorImpact(CProjectile* pProj, IntersectInfo& i
 */
 	vFrom = iInfo.m_Point + vDir*5.0f;
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::DidProjectileImpact()
 //
-//	ROUTINE:	CCharacterHitBox::DidProjectileImpact()
-//
-//	PURPOSE:	See if the projectile actually hit us
-//
+//	PURPOSE: See if the projectile actually hit us
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCharacterHitBox::DidProjectileImpact(CProjectile* pProjectile)
 {
-    if (!m_hModel || !pProjectile) return LTFALSE;
+	if (!m_hModel || !pProjectile) return LTFALSE;
 
 	// Test for simple hit case...
 	if (!pProjectile->CanTestImpact()) return LTTRUE;
@@ -418,11 +398,11 @@ LTBOOL CCharacterHitBox::DidProjectileImpact(CProjectile* pProjectile)
 	// This algorithm may need to change since our dims are probably much
 	// bigger than the model's actual dims...
 
-    LTVector vObjDims;
-    g_pLTServer->GetObjectDims(m_hObject, &vObjDims);
+	LTVector vObjDims;
+	g_pLTServer->GetObjectDims(m_hObject, &vObjDims);
 
 	int cNodes = g_pModelButeMgr->GetSkeletonNumNodes(eModelSkeleton);
-    const char* szNodeName = LTNULL;
+	const char* szNodeName = LTNULL;
 
 	ModelNode aHitNodes[64];
 	int cHitNodes = 0;
@@ -437,27 +417,27 @@ LTBOOL CCharacterHitBox::DidProjectileImpact(CProjectile* pProjectile)
 
 		if (szNodeName)
 		{
-            ILTModel* pModelLT = g_pLTServer->GetModelLT();
+			ILTModel* pModelLT = g_pLTServer->GetModelLT();
 
 			HMODELNODE hNode;
 			pModelLT->GetNode(m_hModel, (char*)szNodeName, hNode);
 
 			LTransform transform;
-            pModelLT->GetNodeTransform(m_hModel, hNode, transform, LTTRUE);
+			pModelLT->GetNodeTransform(m_hModel, hNode, transform, LTTRUE);
 
-            LTVector vPos;
-            LTRotation rRot;
-            ILTTransform* pTransLT = g_pLTServer->GetTransformLT();
+			LTVector vPos;
+			LTRotation rRot;
+			ILTTransform* pTransLT = g_pLTServer->GetTransformLT();
 			pTransLT->Get(transform, vPos, rRot);
 
-            LTFLOAT fNodeRadius = GetNodeRadius(eModelSkeleton, eCurrentNode);
+			LTFLOAT fNodeRadius = GetNodeRadius(eModelSkeleton, eCurrentNode);
 
-            const LTVector vRelativeNodePos = vPos - vFirePos;
+			const LTVector vRelativeNodePos = vPos - vFirePos;
 
 			// Distance along ray to point of closest approach to node point
 
-            const LTFLOAT fRayDist = vFireDir.Dot(vRelativeNodePos);
-            const LTFLOAT fDistSqr = (vFireDir*fRayDist - vRelativeNodePos).MagSqr();
+			const LTFLOAT fRayDist = vFireDir.Dot(vRelativeNodePos);
+			const LTFLOAT fDistSqr = (vFireDir*fRayDist - vRelativeNodePos).MagSqr();
 
 			if (fDistSqr < fNodeRadius*fNodeRadius)
 			{
@@ -468,19 +448,19 @@ LTBOOL CCharacterHitBox::DidProjectileImpact(CProjectile* pProjectile)
 
 	// Find highest priority node we hit
 
-    LTFLOAT fMaxPriority = (LTFLOAT)(-INT_MAX);
+	LTFLOAT fMaxPriority = (LTFLOAT)(-INT_MAX);
 
 	if ( g_HitDebugTrack.GetFloat(0.0f) == 1.0f )
-        g_pLTServer->CPrint("Checking hit nodes..................");
+		g_pLTServer->CPrint("Checking hit nodes..................");
 
 	ModelNode eModelNode = eModelNodeInvalid;
 
 	{for ( int iNode = 0 ; iNode < cHitNodes ; iNode++ )
 	{
 		if ( g_HitDebugTrack.GetFloat(0.0f) == 1.0f )
-            g_pLTServer->CPrint("Hit ''%s'' node", g_pModelButeMgr->GetSkeletonNodeName(eModelSkeleton, (ModelNode)aHitNodes[iNode]));
+			g_pLTServer->CPrint("Hit ''%s'' node", g_pModelButeMgr->GetSkeletonNodeName(eModelSkeleton, (ModelNode)aHitNodes[iNode]));
 
-        LTFLOAT fPriority = g_pModelButeMgr->GetSkeletonNodeHitPriority(eModelSkeleton, (ModelNode)aHitNodes[iNode]);
+		LTFLOAT fPriority = g_pModelButeMgr->GetSkeletonNodeHitPriority(eModelSkeleton, (ModelNode)aHitNodes[iNode]);
 		if ( fPriority > fMaxPriority )
 		{
 			eModelNode = (ModelNode)aHitNodes[iNode];
@@ -493,7 +473,7 @@ LTBOOL CCharacterHitBox::DidProjectileImpact(CProjectile* pProjectile)
 	if (eModelNode != eModelNodeInvalid)
 	{
 		if ( g_HitDebugTrack.GetFloat(0.0f) == 1.0f )
-            g_pLTServer->CPrint("...........using ''%s''", g_pModelButeMgr->GetSkeletonNodeName(eModelSkeleton, eModelNode));
+			g_pLTServer->CPrint("...........using ''%s''", g_pModelButeMgr->GetSkeletonNodeName(eModelSkeleton, eModelNode));
 
 		// Set our last hit node
 
@@ -505,31 +485,29 @@ LTBOOL CCharacterHitBox::DidProjectileImpact(CProjectile* pProjectile)
 
 		if ( IsCharacter(m_hModel) )
 		{
-            CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(m_hModel);
+			CCharacter* pCharacter = (CCharacter*)g_pLTServer->HandleToObject(m_hModel);
 			pProjectile->AdjustDamage(pCharacter->ComputeDamageModifier(eModelNode));
 		}
 
-        return LTTRUE;
+		return LTTRUE;
 	}
 
 	if ( g_HitDebugTrack.GetFloat(0.0f) == 1.0f )
-        g_pLTServer->CPrint("....................hit nothing");
+		g_pLTServer->CPrint("....................hit nothing");
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::GetNodeRadius()
 //
-//	ROUTINE:	CCharacterHitBox::GetNodeRadius()
-//
-//	PURPOSE:	Get the model node's radius
-//
+//	PURPOSE: Get the model node's radius
 // ----------------------------------------------------------------------- //
 
 LTFLOAT CCharacterHitBox::GetNodeRadius(ModelSkeleton eModelSkeleton,
 									   ModelNode eModelNode)
 {
-    LTFLOAT fRadius = g_pModelButeMgr->GetSkeletonNodeHitRadius(eModelSkeleton, eModelNode);
+	LTFLOAT fRadius = g_pModelButeMgr->GetSkeletonNodeHitRadius(eModelSkeleton, eModelNode);
 
 	// See if we're overriding the radius...
 
@@ -580,22 +558,20 @@ LTFLOAT CCharacterHitBox::GetNodeRadius(ModelSkeleton eModelSkeleton,
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::GetAttachments()
 //
-//	ROUTINE:	CCharacterHitBox::GetAttachments()
-//
-//	PURPOSE:	Get our model's attachments
-//
+//	PURPOSE: Get our model's attachments
 // ----------------------------------------------------------------------- //
 
 CAttachments* CCharacterHitBox::GetAttachments()
 {
-    if (!m_hModel) return LTNULL;
+	if (!m_hModel) return LTNULL;
 
-    CAttachments* pAttachments = LTNULL;
+	CAttachments* pAttachments = LTNULL;
 
 	if (IsCharacter(m_hModel))
 	{
-        CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(m_hModel);
+		CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(m_hModel);
 		if (pChar)
 		{
 			pAttachments = pChar->GetAttachments();
@@ -603,7 +579,7 @@ CAttachments* CCharacterHitBox::GetAttachments()
 	}
 	else if (IsBody(m_hModel))
 	{
-        Body* pProp = (Body*) g_pLTServer->HandleToObject(m_hModel);
+		Body* pProp = (Body*) g_pLTServer->HandleToObject(m_hModel);
 		if (pProp)
 		{
 			pAttachments = pProp->GetAttachments();
@@ -614,11 +590,9 @@ CAttachments* CCharacterHitBox::GetAttachments()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::GetModelSkeleton()
 //
-//	ROUTINE:	CCharacterHitBox::GetModelSkeleton()
-//
-//	PURPOSE:	Get our model's skeleton
-//
+//	PURPOSE: Get our model's skeleton
 // ----------------------------------------------------------------------- //
 
 ModelSkeleton CCharacterHitBox::GetModelSkeleton()
@@ -629,7 +603,7 @@ ModelSkeleton CCharacterHitBox::GetModelSkeleton()
 
 	if (IsCharacter(m_hModel))
 	{
-        CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(m_hModel);
+		CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(m_hModel);
 		if (pChar)
 		{
 			eModelSkeleton = pChar->GetModelSkeleton();
@@ -637,7 +611,7 @@ ModelSkeleton CCharacterHitBox::GetModelSkeleton()
 	}
 	else if (IsBody(m_hModel))
 	{
-        Body* pProp = (Body*) g_pLTServer->HandleToObject(m_hModel);
+		Body* pProp = (Body*) g_pLTServer->HandleToObject(m_hModel);
 		if (pProp)
 		{
 			eModelSkeleton = pProp->GetModelSkeleton();
@@ -649,11 +623,9 @@ ModelSkeleton CCharacterHitBox::GetModelSkeleton()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::SetModelNodeLastHit()
 //
-//	ROUTINE:	CCharacterHitBox::SetModelNodeLastHit()
-//
-//	PURPOSE:	Set our model's last hit node
-//
+//	PURPOSE: Set our model's last hit node
 // ----------------------------------------------------------------------- //
 
 void CCharacterHitBox::SetModelNodeLastHit(ModelNode eModelNode)
@@ -662,7 +634,7 @@ void CCharacterHitBox::SetModelNodeLastHit(ModelNode eModelNode)
 
 	if (IsCharacter(m_hModel))
 	{
-        CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(m_hModel);
+		CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(m_hModel);
 		if (pChar)
 		{
 			pChar->SetModelNodeLastHit(eModelNode);
@@ -670,7 +642,7 @@ void CCharacterHitBox::SetModelNodeLastHit(ModelNode eModelNode)
 	}
 	else if (IsBody(m_hModel))
 	{
-        Body* pBody = (Body*) g_pLTServer->HandleToObject(m_hModel);
+		Body* pBody = (Body*) g_pLTServer->HandleToObject(m_hModel);
 		if (pBody)
 		{
 			pBody->SetModelNodeLastHit(eModelNode);
@@ -680,36 +652,32 @@ void CCharacterHitBox::SetModelNodeLastHit(ModelNode eModelNode)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::UsingHitDetection()
 //
-//	ROUTINE:	CCharacterHitBox::UsingHitDetection()
-//
-//	PURPOSE:	Are we using hit detection?
-//
+//	PURPOSE: Are we using hit detection?
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCharacterHitBox::UsingHitDetection()
 {
-    if (!m_hModel) return LTFALSE;
+	if (!m_hModel) return LTFALSE;
 
 	if (IsCharacter(m_hModel))
 	{
-        CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(m_hModel);
+		CCharacter* pChar = (CCharacter*) g_pLTServer->HandleToObject(m_hModel);
 		if (pChar)
 		{
 			return pChar->UsingHitDetection();
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::CreateNodeRadiusModels()
 //
-//	ROUTINE:	CCharacterHitBox::CreateNodeRadiusModels()
-//
-//	PURPOSE:	Create models representing the model node radii
-//
+//	PURPOSE: Create models representing the model node radii
 // ----------------------------------------------------------------------- //
 
 void CCharacterHitBox::CreateNodeRadiusModels()
@@ -719,7 +687,7 @@ void CCharacterHitBox::CreateNodeRadiusModels()
 	ModelSkeleton eModelSkeleton = GetModelSkeleton();
 
 	int cNodes = g_pModelButeMgr->GetSkeletonNumNodes(eModelSkeleton);
-    const char* szNodeName = LTNULL;
+	const char* szNodeName = LTNULL;
 
 	for (int iNode = 0; iNode < cNodes; iNode++)
 	{
@@ -728,17 +696,17 @@ void CCharacterHitBox::CreateNodeRadiusModels()
 
 		if (szNodeName)
 		{
-            ILTModel* pModelLT = g_pLTServer->GetModelLT();
+			ILTModel* pModelLT = g_pLTServer->GetModelLT();
 
 			HMODELNODE hNode;
 			pModelLT->GetNode(m_hModel, (char*)szNodeName, hNode);
 
-            LTransform transform;
-            pModelLT->GetNodeTransform(m_hModel, hNode, transform, LTTRUE);
+			LTransform transform;
+			pModelLT->GetNodeTransform(m_hModel, hNode, transform, LTTRUE);
 
-            LTVector vPos;
-            LTRotation rRot;
-            ILTTransform* pTransLT = g_pLTServer->GetTransformLT();
+			LTVector vPos;
+			LTRotation rRot;
+			ILTTransform* pTransLT = g_pLTServer->GetTransformLT();
 			pTransLT->Get(transform, vPos, rRot);
 
 			// Create the radius model...
@@ -751,15 +719,15 @@ void CCharacterHitBox::CreateNodeRadiusModels()
 			theStruct.m_Flags = FLAG_VISIBLE;
 			theStruct.m_ObjectType = OT_MODEL;
 
-            HCLASS hClass = g_pLTServer->GetClass("BaseClass");
-            LPBASECLASS pModel = g_pLTServer->CreateObject(hClass, &theStruct);
+			HCLASS hClass = g_pLTServer->GetClass("BaseClass");
+			LPBASECLASS pModel = g_pLTServer->CreateObject(hClass, &theStruct);
 			if (!pModel) return;
 
-            LTFLOAT fNodeRadius = GetNodeRadius(eModelSkeleton, eCurrentNode) * 2.0f;
+			LTFLOAT fNodeRadius = GetNodeRadius(eModelSkeleton, eCurrentNode) * 2.0f;
 
-            LTVector vScale;
+			LTVector vScale;
 			vScale.Init(fNodeRadius, fNodeRadius, fNodeRadius);
-            g_pLTServer->ScaleObject(pModel->m_hObject, &vScale);
+			g_pLTServer->ScaleObject(pModel->m_hObject, &vScale);
 
 			NodeRadiusStruct* pNRS = debug_new(NodeRadiusStruct);
 
@@ -774,11 +742,9 @@ void CCharacterHitBox::CreateNodeRadiusModels()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::RemoveNodeRadiusModels()
 //
-//	ROUTINE:	CCharacterHitBox::RemoveNodeRadiusModels()
-//
-//	PURPOSE:	Remove models representing the model node radii
-//
+//	PURPOSE: Remove models representing the model node radii
 // ----------------------------------------------------------------------- //
 
 void CCharacterHitBox::RemoveNodeRadiusModels()
@@ -790,11 +756,9 @@ void CCharacterHitBox::RemoveNodeRadiusModels()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::UpdateNodeRadiusModels()
 //
-//	ROUTINE:	CCharacterHitBox::UpdateNodeRadiusModels()
-//
-//	PURPOSE:	Update models representing the model node radii
-//
+//	PURPOSE: Update models representing the model node radii
 // ----------------------------------------------------------------------- //
 
 void CCharacterHitBox::UpdateNodeRadiusModels()
@@ -810,12 +774,12 @@ void CCharacterHitBox::UpdateNodeRadiusModels()
 
 
 	ModelSkeleton eModelSkeleton = GetModelSkeleton();
-    const char* szNodeName = LTNULL;
+	const char* szNodeName = LTNULL;
 
 	NodeRadiusStruct** pNRS = m_NodeRadiusList.GetItem(TLIT_FIRST);
 	while (pNRS && *pNRS && (*pNRS)->hModel)
 	{
-        ILTModel* pModelLT = g_pLTServer->GetModelLT();
+		ILTModel* pModelLT = g_pLTServer->GetModelLT();
 
 		szNodeName = g_pModelButeMgr->GetSkeletonNodeName(eModelSkeleton, (*pNRS)->eNode);
 
@@ -823,20 +787,20 @@ void CCharacterHitBox::UpdateNodeRadiusModels()
 		pModelLT->GetNode(m_hModel, (char*)szNodeName, hNode);
 
 		LTransform transform;
-        pModelLT->GetNodeTransform(m_hModel, hNode, transform, LTTRUE);
+		pModelLT->GetNodeTransform(m_hModel, hNode, transform, LTTRUE);
 
-        LTVector vPos;
-        LTRotation rRot;
-        ILTTransform* pTransLT = g_pLTServer->GetTransformLT();
+		LTVector vPos;
+		LTRotation rRot;
+		ILTTransform* pTransLT = g_pLTServer->GetTransformLT();
 		pTransLT->Get(transform, vPos, rRot);
 
-        g_pLTServer->SetObjectPos((*pNRS)->hModel, &vPos);
+		g_pLTServer->SetObjectPos((*pNRS)->hModel, &vPos);
 
-        LTFLOAT fNodeRadius = GetNodeRadius(eModelSkeleton, (*pNRS)->eNode);
+		LTFLOAT fNodeRadius = GetNodeRadius(eModelSkeleton, (*pNRS)->eNode);
 
-        LTVector vScale;
+		LTVector vScale;
 		vScale.Init(fNodeRadius, fNodeRadius, fNodeRadius);
-        g_pLTServer->ScaleObject((*pNRS)->hModel, &vScale);
+		g_pLTServer->ScaleObject((*pNRS)->hModel, &vScale);
 
 		pNRS = m_NodeRadiusList.GetItem(TLIT_NEXT);
 	}
@@ -844,19 +808,17 @@ void CCharacterHitBox::UpdateNodeRadiusModels()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::Update()
 //
-//	ROUTINE:	CCharacterHitBox::Update()
-//
-//	PURPOSE:	Update our position
-//
+//	PURPOSE: Update our position
 // ----------------------------------------------------------------------- //
 
 void CCharacterHitBox::Update()
 {
 	if (!m_hModel || !m_hObject) return;
 
-    LTVector vPos, vMyPos;
-    g_pLTServer->GetObjectPos(m_hModel, &vPos);
+	LTVector vPos, vMyPos;
+	g_pLTServer->GetObjectPos(m_hModel, &vPos);
 	vPos += m_vOffset;
 
 	g_pLTServer->GetObjectPos(m_hObject, &vMyPos);
@@ -881,36 +843,32 @@ void CCharacterHitBox::Update()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::Save
 //
-//	ROUTINE:	CCharacterHitBox::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void CCharacterHitBox::Save(HMESSAGEWRITE hWrite)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hModel);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vOffset);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bCanActivate);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hModel);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vOffset);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bCanActivate);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterHitBox::Load
 //
-//	ROUTINE:	CCharacterHitBox::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void CCharacterHitBox::Load(HMESSAGEREAD hRead)
 {
 	if (!hRead) return;
 
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hModel);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vOffset);
-    m_bCanActivate = g_pLTServer->ReadFromMessageByte(hRead);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hModel);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vOffset);
+	m_bCanActivate = g_pLTServer->ReadFromMessageByte(hRead);
 }

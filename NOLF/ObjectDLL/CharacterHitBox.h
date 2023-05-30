@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CharacterHitBox.h
 //
-// MODULE  : CharacterHitBox.h
+// PURPOSE: Character hit box object class definition
 //
-// PURPOSE : Character hit box object class definition
-//
-// CREATED : 01/05/00
+// CREATED: 01/05/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __CHARACTER_HIT_BOX_H__
@@ -24,7 +22,7 @@ struct NodeRadiusStruct
 {
 	NodeRadiusStruct()
 	{
-        hModel = LTNULL;
+		hModel = LTNULL;
 		eNode = eModelNodeInvalid;
 	}
 
@@ -32,7 +30,7 @@ struct NodeRadiusStruct
 	{
 		if (hModel)
 		{
-            g_pLTServer->RemoveObject(hModel);
+			g_pLTServer->RemoveObject(hModel);
 		}
 	}
 
@@ -47,40 +45,40 @@ class CCharacterHitBox : public GameBase
 		CCharacterHitBox();
 		virtual ~CCharacterHitBox();
 
-        LTBOOL Init(HOBJECT hModel);
-        void  SetOffset(LTVector vOffset) { m_vOffset = vOffset; }
+		LTBOOL Init(HOBJECT hModel);
+		void  SetOffset(LTVector vOffset) { m_vOffset = vOffset; }
 
 		void  Update();
 
-        LTBOOL HandleImpact(CProjectile* pProj, IntersectInfo & iInfo,
-            LTVector vDir, LTVector & vFrom);
+		LTBOOL HandleImpact(CProjectile* pProj, IntersectInfo & iInfo,
+			LTVector vDir, LTVector & vFrom);
 
-        LTBOOL DidProjectileImpact(CProjectile* pProjectile);
+		LTBOOL DidProjectileImpact(CProjectile* pProjectile);
 
 		HOBJECT	GetModelObject() const { return m_hModel; }
 
 		LTBOOL CanActivate() const { return m_bCanActivate; }
 		void SetCanActivate(LTBOOL b) { m_bCanActivate = b; }
 
-        virtual uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
-        virtual uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		virtual uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		virtual uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 	protected :
 
-        virtual	LTVector GetBoundingBoxColor();
+		virtual	LTVector GetBoundingBoxColor();
 
-        LTBOOL  HandleVectorImpact(CProjectile* pProj, IntersectInfo& iInfo, LTVector& vDir,
-            LTVector& vFrom, ModelNode& eModelNode);
+		LTBOOL  HandleVectorImpact(CProjectile* pProj, IntersectInfo& iInfo, LTVector& vDir,
+			LTVector& vFrom, ModelNode& eModelNode);
 
-        LTBOOL  UsingHitDetection();
+		LTBOOL  UsingHitDetection();
 		void	SetModelNodeLastHit(ModelNode eModelNode);
 
 		ModelSkeleton	GetModelSkeleton();
 		CAttachments*	GetAttachments();
-        LTFLOAT			GetNodeRadius(ModelSkeleton eModelSkeleton, ModelNode eModelNode);
+		LTFLOAT			GetNodeRadius(ModelSkeleton eModelSkeleton, ModelNode eModelNode);
 
 		HOBJECT		m_hModel;
-        LTVector	m_vOffset;
+		LTVector	m_vOffset;
 
 	private :
 

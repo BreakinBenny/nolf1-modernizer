@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: DebrisFuncs.h
 //
-// MODULE  : DebrisFuncs.h
+// PURPOSE: Misc functions for creating debris
 //
-// PURPOSE : Misc functions for creating debris
-//
-// CREATED : 6/29/98
+// CREATED: 6/29/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __DEBRIS_FUNCS_H__
@@ -39,17 +37,17 @@ class CDebrisPlugin : public IObjectPlugin
 
   public:
 
-    virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
+	virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
 };
 
 struct CLIENTDEBRIS
 {
-    CLIENTDEBRIS();
+	CLIENTDEBRIS();
 
-    LTRotation   rRot;
-    LTVector     vPos;
-    uint8       nDebrisId;
+	LTRotation   rRot;
+	LTVector	 vPos;
+	uint8	   nDebrisId;
 };
 
 inline CLIENTDEBRIS::CLIENTDEBRIS()
@@ -61,24 +59,20 @@ inline CLIENTDEBRIS::CLIENTDEBRIS()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetDebrisProperties()
 //
-//	ROUTINE:	GetDebrisProperties()
-//
-//	PURPOSE:	Determine the debris properties (This should only be
+//	PURPOSE: Determine the debris properties (This should only be
 //				called during an object's ReadProp function if the object
 //				added the ADD_DEBRISTYPE_PROPERTY macro).
-//
 // ----------------------------------------------------------------------- //
 
 void GetDebrisProperties(uint8 & nDebrisId);
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CreatePropDebris()
 //
-//	ROUTINE:	CreatePropDebris()
-//
-//	PURPOSE:	Create client-side debris for props...
-//
+//	PURPOSE: Create client-side debris for props...
 // ----------------------------------------------------------------------- //
 
 void CreatePropDebris(LTVector & vPos, LTVector & vDir, uint8 nDebrisId);

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ModItem.cpp
 //
-// MODULE  : ModItem.cpp
+// PURPOSE: Mod items - Implementation
 //
-// PURPOSE : Mod items - Implementation
-//
-// CREATED : 7/21/00
+// CREATED: 7/21/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -28,26 +26,22 @@ BEGIN_CLASS(ModItem)
 END_CLASS_DEFAULT_FLAGS_PLUGIN(ModItem, PickupItem, NULL, NULL, 0, CModPlugin)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ModItem::ModItem
 //
-//	ROUTINE:	ModItem::ModItem
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 ModItem::ModItem() : PickupItem()
 {
 	m_nModId	= -1;
-    m_bBounce	= LTFALSE;
+	m_bBounce	= LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ModItem::EngineMessageFn
 //
-//	ROUTINE:	ModItem::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 ModItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -56,7 +50,7 @@ uint32 ModItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 	{
 		case MID_PRECREATE:
 		{
-            uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = PickupItem::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE || fData == PRECREATE_STRINGPROP)
 			{
@@ -71,13 +65,13 @@ uint32 ModItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -89,18 +83,16 @@ uint32 ModItem::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ModItem::ReadProp
 //
-//	ROUTINE:	ModItem::ReadProp
-//
-//	PURPOSE:	Read object properties
-//
+//	PURPOSE: Read object properties
 // ----------------------------------------------------------------------- //
 
 void ModItem::ReadProp(ObjectCreateStruct *pStruct)
 {
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("ModType", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ModType", &genProp) == LT_OK)
 	{
 		MOD* pMod = g_pWeaponMgr->GetMod(genProp.m_String);
 		if (pMod)
@@ -112,11 +104,9 @@ void ModItem::ReadProp(ObjectCreateStruct *pStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ModItem::PostPropRead
 //
-//	ROUTINE:	ModItem::PostPropRead
-//
-//	PURPOSE:	Handle post property read engine messages
-//
+//	PURPOSE: Handle post property read engine messages
 // ----------------------------------------------------------------------- //
 
 void ModItem::PostPropRead(ObjectCreateStruct *pStruct)
@@ -145,17 +135,15 @@ void ModItem::PostPropRead(ObjectCreateStruct *pStruct)
 
 		m_vScale.Init(pMod->fPowerupScale, pMod->fPowerupScale, pMod->fPowerupScale);
 
-        m_bRotate = LTFALSE;
+		m_bRotate = LTFALSE;
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ModItem::ObjectTouch
 //
-//	ROUTINE:	ModItem::ObjectTouch
-//
-//	PURPOSE:	Add mod to object
-//
+//	PURPOSE: Add mod to object
 // ----------------------------------------------------------------------- //
 
 void ModItem::ObjectTouch(HOBJECT hObject)
@@ -166,56 +154,50 @@ void ModItem::ObjectTouch(HOBJECT hObject)
 
 	if (IsPlayer(hObject))
 	{
-        CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hObject);
+		CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hObject);
 
 		if (pPlayer && !pPlayer->IsDead())
 		{
-            HMESSAGEWRITE hMessage = g_pLTServer->StartMessageToObject(this, hObject, MID_ADDMOD);
-            g_pLTServer->WriteToMessageByte(hMessage, m_nModId);
-            g_pLTServer->EndMessage(hMessage);
+			HMESSAGEWRITE hMessage = g_pLTServer->StartMessageToObject(this, hObject, MID_ADDMOD);
+			g_pLTServer->WriteToMessageByte(hMessage, m_nModId);
+			g_pLTServer->EndMessage(hMessage);
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ModItem::Save
 //
-//	ROUTINE:	ModItem::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void ModItem::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageByte(hWrite, m_nModId);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nModId);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ModItem::Load
 //
-//	ROUTINE:	ModItem::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void ModItem::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    m_nModId = g_pLTServer->ReadFromMessageByte(hRead);
+	m_nModId = g_pLTServer->ReadFromMessageByte(hRead);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ModItem::PickedUp
 //
-//	ROUTINE:	ModItem::PickedUp
-//
-//	PURPOSE:	Picked up
-//
+//	PURPOSE: Picked up
 // ----------------------------------------------------------------------- //
 
 void ModItem::PickedUp(HMESSAGEREAD hRead)
@@ -226,18 +208,18 @@ void ModItem::PickedUp(HMESSAGEREAD hRead)
 
 	if (m_hPlayerObj)
 	{
-        CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(m_hPlayerObj);
+		CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(m_hPlayerObj);
 		if (pPlayer && !pPlayer->IsDead())
 		{
 			HCLIENT hClient = pPlayer->GetClient();
 			if (hClient)
 			{
-                HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
-                g_pLTServer->WriteToMessageByte(hMessage, IC_MOD_PICKUP_ID);
-                g_pLTServer->WriteToMessageByte(hMessage, 0);
-                g_pLTServer->WriteToMessageByte(hMessage, m_nModId);
-                g_pLTServer->WriteToMessageFloat(hMessage, 0.0f);
-                g_pLTServer->EndMessage(hMessage);
+				HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_PLAYER_INFOCHANGE);
+				g_pLTServer->WriteToMessageByte(hMessage, IC_MOD_PICKUP_ID);
+				g_pLTServer->WriteToMessageByte(hMessage, 0);
+				g_pLTServer->WriteToMessageByte(hMessage, m_nModId);
+				g_pLTServer->WriteToMessageFloat(hMessage, 0.0f);
+				g_pLTServer->EndMessage(hMessage);
 			}
 		}
 	}
@@ -247,11 +229,9 @@ void ModItem::PickedUp(HMESSAGEREAD hRead)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CModPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CModPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Requests a state change
-//
+//	PURPOSE: Requests a state change
 // ----------------------------------------------------------------------- //
 LTRESULT CModPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {
@@ -265,13 +245,13 @@ LTRESULT CModPlugin::PreHook_EditStringList(const char* szRezPath, const char* s
 
 	if (_strcmpi("ModType", szPropName) == 0)
 	{
-        uint32 dwModTypes = sm_ButeMgr.GetNumModTypes();
+		uint32 dwModTypes = sm_ButeMgr.GetNumModTypes();
 
 		_ASSERT(cMaxStrings >= dwModTypes);
 
-        MOD* pMod = LTNULL;
+		MOD* pMod = LTNULL;
 
-        for (uint32 i=0; i < dwModTypes; i++)
+		for (uint32 i=0; i < dwModTypes; i++)
 		{
 			pMod = sm_ButeMgr.GetMod(i);
 

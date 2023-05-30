@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: DOOR.CPP
 //
-// MODULE  : DOOR.CPP
+// PURPOSE: a Door object
 //
-// PURPOSE : a Door object
-//
-// CREATED : 8/5/97 5:07:00 PM
+// CREATED: 8/5/97 5:07:00 PM
 //
 // (c) 1997-1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -43,20 +41,20 @@ static char *g_szDetach			= "DETACH";
 BEGIN_CLASS(Door)
 	ADD_DESTRUCTIBLE_MODEL_AGGREGATE(PF_GROUP1, 0)
 	ADD_REALPROP_FLAG(Mass, DOOR_DEFAULT_MASS, PF_GROUP1)
-    ADD_BOOLPROP_FLAG(NeverDestroy, LTTRUE, PF_GROUP1)
+	ADD_BOOLPROP_FLAG(NeverDestroy, LTTRUE, PF_GROUP1)
 	PROP_DEFINEGROUP(StateFlags, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(ActivateTrigger, LTTRUE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(StartOpen, LTFALSE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(TriggerClose, LTTRUE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(RemainsOpen, LTTRUE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(ForceMove, LTFALSE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(ActivateTrigger, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(StartOpen, LTFALSE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(TriggerClose, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(RemainsOpen, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(ForceMove, LTFALSE, PF_GROUP4)
 	ADD_VISIBLE_FLAG(LTTRUE, 0)
 	ADD_SOLID_FLAG(LTTRUE, 0)
-    ADD_RAYHIT_FLAG(LTTRUE, 0)
-    ADD_BOOLPROP(BlockLight, LTFALSE) // Used by pre-processor
-    ADD_BOOLPROP(BoxPhysics, LTTRUE)
-    ADD_BOOLPROP(Locked, LTFALSE)
-    ADD_BOOLPROP(IsKeyframed, LTFALSE)
+	ADD_RAYHIT_FLAG(LTTRUE, 0)
+	ADD_BOOLPROP(BlockLight, LTFALSE) // Used by pre-processor
+	ADD_BOOLPROP(BoxPhysics, LTTRUE)
+	ADD_BOOLPROP(Locked, LTFALSE)
+	ADD_BOOLPROP(IsKeyframed, LTFALSE)
 	ADD_REALPROP(Speed, 200.0f)
 	ADD_REALPROP(MoveDelay, 0.0f)
 	ADD_REALPROP(MoveDist, 0.0f)
@@ -68,7 +66,7 @@ BEGIN_CLASS(Door)
 	ADD_STRINGPROP_FLAG(OpenSound, "Snd\\Doors\\01wood_o.wav", PF_FILENAME)
 	ADD_STRINGPROP_FLAG(CloseSound, "Snd\\Doors\\01wood_c.wav", PF_FILENAME)
 	ADD_STRINGPROP_FLAG(LockedSound, "Snd\\Doors\\01Locked.wav", PF_FILENAME)
-    ADD_BOOLPROP(LoopSounds, LTFALSE)
+	ADD_BOOLPROP(LoopSounds, LTFALSE)
 	ADD_REALPROP_FLAG(SoundRadius, 1000.0f, PF_RADIUS)
 
 	ADD_STRINGPROP(OpenedCommand, "")
@@ -79,12 +77,12 @@ BEGIN_CLASS(Door)
 	ADD_REALPROP(ClosingSpeed, 0.0f)
 	ADD_BOOLPROP(AITriggerable, 0)
 	PROP_DEFINEGROUP(Waveform, PF_GROUP5)
-        ADD_BOOLPROP_FLAG(Linear, LTTRUE, PF_GROUP5)
-        ADD_BOOLPROP_FLAG(Sine, LTFALSE, PF_GROUP5)
-        ADD_BOOLPROP_FLAG(SlowOff, LTFALSE, PF_GROUP5)
-        ADD_BOOLPROP_FLAG(SlowOn, LTFALSE, PF_GROUP5)
+		ADD_BOOLPROP_FLAG(Linear, LTTRUE, PF_GROUP5)
+		ADD_BOOLPROP_FLAG(Sine, LTFALSE, PF_GROUP5)
+		ADD_BOOLPROP_FLAG(SlowOff, LTFALSE, PF_GROUP5)
+		ADD_BOOLPROP_FLAG(SlowOn, LTFALSE, PF_GROUP5)
 	ADD_STRINGPROP(Attachments, "")
-    ADD_BOOLPROP(RemoveAttachments, LTTRUE)
+	ADD_BOOLPROP(RemoveAttachments, LTTRUE)
 	ADD_VECTORPROP_VAL(AttachDir, 0.0f, 200.0f, 0.0f)
 	ADD_STRINGPROP_FLAG(ShadowLights, "", PF_OBJECTLINK)
 	ADD_LONGINTPROP(LightFrames, 1)
@@ -96,21 +94,21 @@ LTFLOAT GetDoorWaveValue(LTFLOAT fSpeed, LTFLOAT fPercent, uint32 nWaveType)
 {
 	if (nWaveType == DOORWAVE_LINEAR) return fSpeed;
 
-    LTFLOAT fNewSpeed;
-    LTFLOAT f10Percent = fSpeed * 0.1f;
+	LTFLOAT fNewSpeed;
+	LTFLOAT f10Percent = fSpeed * 0.1f;
 
 	switch (nWaveType)
 	{
 		case DOORWAVE_SINE:
-            fNewSpeed = fSpeed * ((LTFLOAT)sin(fPercent * MATH_PI)) + f10Percent;
+			fNewSpeed = fSpeed * ((LTFLOAT)sin(fPercent * MATH_PI)) + f10Percent;
 		break;
 
 		case DOORWAVE_SLOWOFF:
-            fNewSpeed = fSpeed * ((LTFLOAT)cos(fPercent * MATH_HALFPI)) + f10Percent;
+			fNewSpeed = fSpeed * ((LTFLOAT)cos(fPercent * MATH_HALFPI)) + f10Percent;
 		break;
 
 		case DOORWAVE_SLOWON:
-            fNewSpeed = fSpeed * ((LTFLOAT)sin(fPercent * MATH_HALFPI)) + f10Percent;
+			fNewSpeed = fSpeed * ((LTFLOAT)sin(fPercent * MATH_HALFPI)) + f10Percent;
 		break;
 	}
 
@@ -118,8 +116,7 @@ LTFLOAT GetDoorWaveValue(LTFLOAT fSpeed, LTFLOAT fPercent, uint32 nWaveType)
 }
 
 
-// ----------------------------------------------------------------------- //
-// The Door's preprocessor callback.. generates frames of light animation.
+// ----------------------------------------------------------------------- // The Door's preprocessor callback.. generates frames of light animation.
 // ----------------------------------------------------------------------- //
 void SetupDoorLightAnimName(char *pOutName, const char *pDoorName, uint32 iDoorLight)
 {
@@ -131,12 +128,12 @@ void SetupDoorLightAnimName(char *pOutName, const char *pDoorName, uint32 iDoorL
 void SetupTransform_Door(ILTPreLight *pInterface,
 	HPREOBJECT hObject,
 	float fPercent,
-    LTVector &vOutPos,
-    LTRotation &rOutRotation)
+	LTVector &vOutPos,
+	LTRotation &rOutRotation)
 {
 	GenericProp gProp;
-    LTVector vPos, vMoveDir;
-    LTRotation rRotation;
+	LTVector vPos, vMoveDir;
+	LTRotation rRotation;
 	float fMoveDist;
 
 
@@ -156,7 +153,7 @@ void SetupTransform_Door(ILTPreLight *pInterface,
 
 
 LTRESULT CDoorPlugin::PreHook_Light(
-    ILTPreLight *pInterface,
+	ILTPreLight *pInterface,
 	HPREOBJECT hObject)
 {
 	GenericProp gProp;
@@ -169,7 +166,7 @@ LTRESULT CDoorPlugin::PreHook_Light(
 	KLProps theProps;
 	DWORD iStep;
 	float fPercent;
-    uint32 iDoorLight;
+	uint32 iDoorLight;
 	PreLightAnimFrameInfo *pFrame;
 	PreLightInfo *pLightInfo;
 	PreWorldModelInfo *pWorldModelInfo;
@@ -177,7 +174,7 @@ LTRESULT CDoorPlugin::PreHook_Light(
 	PreLightAnimFrameInfo frames[MAX_DOOR_LIGHT_STEPS+1];
 	PreLightInfo lightInfos[MAX_DOOR_LIGHT_STEPS+1];
 	PreWorldModelInfo worldModelInfos[MAX_DOOR_LIGHT_STEPS+1];
-    uint32 uLightFrames;
+	uint32 uLightFrames;
 
 
 	// Figure out what type of door this is.
@@ -227,7 +224,7 @@ LTRESULT CDoorPlugin::PreHook_Light(
 		if((uLightFrames & 1) == 0)
 			++uLightFrames;
 
-        uLightFrames = LTCLAMP(uLightFrames, 2, MAX_DOOR_LIGHT_STEPS);
+		uLightFrames = LTCLAMP(uLightFrames, 2, MAX_DOOR_LIGHT_STEPS);
 		for(iStep=0; iStep < (uLightFrames+1); iStep++)
 		{
 			pFrame = &frames[iStep];
@@ -235,7 +232,7 @@ LTRESULT CDoorPlugin::PreHook_Light(
 			pWorldModelInfo = &worldModelInfos[iStep];
 			fPercent = (float)iStep / (uLightFrames - 1);
 
-            pFrame->m_bSunLight = LTFALSE;
+			pFrame->m_bSunLight = LTFALSE;
 
 			pFrame->m_Lights = pLightInfo;
 			pFrame->m_nLights = 1;
@@ -256,7 +253,7 @@ LTRESULT CDoorPlugin::PreHook_Light(
 			if(iStep == uLightFrames)
 			{
 				// The last frame is without the world model for when it's destroyed.
-                pWorldModelInfo->m_bInvisible = LTTRUE;
+				pWorldModelInfo->m_bInvisible = LTTRUE;
 			}
 			else
 			{
@@ -283,9 +280,9 @@ LTRESULT CDoorPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 	if (m_DestructibleModelPlugin.PreHook_EditStringList(szRezPath,
 		szPropName, aszStrings, pcStrings, cMaxStrings, cMaxStringLength) == LT_OK)
@@ -297,11 +294,9 @@ LTRESULT CDoorPlugin::PreHook_EditStringList(
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Door::Door()
 //
-//	ROUTINE:	Door::Door()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 Door::Door() : GameBase(OT_WORLDMODEL)
@@ -309,38 +304,38 @@ Door::Door() : GameBase(OT_WORLDMODEL)
 	AddAggregate(&m_damage);
 	AddAggregate(&m_editable);
 
-    m_hstrOpenSound         = LTNULL;
-    m_hstrCloseSound        = LTNULL;
-    m_hstrLockedSound       = LTNULL;
-    m_hstrAttachments       = LTNULL;
-    m_hstrOpenCmd           = LTNULL;
-    m_hstrCloseCmd          = LTNULL;
-    m_hstrLockedCmd         = LTNULL;
+	m_hstrOpenSound		 = LTNULL;
+	m_hstrCloseSound		= LTNULL;
+	m_hstrLockedSound	   = LTNULL;
+	m_hstrAttachments	   = LTNULL;
+	m_hstrOpenCmd		   = LTNULL;
+	m_hstrCloseCmd		  = LTNULL;
+	m_hstrLockedCmd		 = LTNULL;
 
-    m_sndLastSound          = LTNULL;
-    m_bLoopSounds           = LTFALSE;
+	m_sndLastSound		  = LTNULL;
+	m_bLoopSounds		   = LTFALSE;
 
 	m_fSoundRadius			= 1000.0f;
 	m_fMoveDelay			= 0.0f;
 	m_dwStateFlags			= 0;
 	m_fMoveStartTime		= -10.0f;
-    m_bLoopSounds           = LTFALSE;
+	m_bLoopSounds		   = LTFALSE;
 	m_fDoorStopTime			= -10.0f;
-    m_bAITriggerable        = LTFALSE;
-    m_hstrPortalName        = LTNULL;
-    m_bBoxPhysics           = LTTRUE;
-    m_bLocked               = LTFALSE;
-    m_bIsKeyframed          = LTFALSE;
-    m_bFirstUpdate          = LTTRUE;
-    m_bRemoveAttachments    = LTTRUE;
+	m_bAITriggerable		= LTFALSE;
+	m_hstrPortalName		= LTNULL;
+	m_bBoxPhysics		   = LTTRUE;
+	m_bLocked			   = LTFALSE;
+	m_bIsKeyframed		  = LTFALSE;
+	m_bFirstUpdate		  = LTTRUE;
+	m_bRemoveAttachments	= LTTRUE;
 	m_vAttachDir.Init(0, 200, 0);
 
-    m_pAttachmentList       = LTNULL;
+	m_pAttachmentList	   = LTNULL;
 
-    m_hActivateObj          = LTNULL;
-    m_hAttachmentObj        = LTNULL;
-    m_hDoorLink             = LTNULL;
-    m_hstrDoorLink          = LTNULL;
+	m_hActivateObj		  = LTNULL;
+	m_hAttachmentObj		= LTNULL;
+	m_hDoorLink			 = LTNULL;
+	m_hstrDoorLink		  = LTNULL;
 
 	m_vMoveDir.Init(0, 0, 0);
 	m_vSoundPos.Init(0, 0, 0);
@@ -352,63 +347,61 @@ Door::Door() : GameBase(OT_WORLDMODEL)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Door::~Door()
 //
-//	ROUTINE:	Door::~Door()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 Door::~Door()
 {
 	if (m_hstrAttachments)
 	{
-        g_pLTServer->FreeString(m_hstrAttachments);
-        m_hstrAttachments = LTNULL;
+		g_pLTServer->FreeString(m_hstrAttachments);
+		m_hstrAttachments = LTNULL;
 	}
 	if (m_hstrOpenSound)
 	{
-        g_pLTServer->FreeString(m_hstrOpenSound);
-        m_hstrOpenSound = LTNULL;
+		g_pLTServer->FreeString(m_hstrOpenSound);
+		m_hstrOpenSound = LTNULL;
 	}
 	if (m_hstrLockedSound)
 	{
-        g_pLTServer->FreeString(m_hstrLockedSound);
-        m_hstrLockedSound = LTNULL;
+		g_pLTServer->FreeString(m_hstrLockedSound);
+		m_hstrLockedSound = LTNULL;
 	}
 	if (m_hstrCloseSound)
 	{
-        g_pLTServer->FreeString(m_hstrCloseSound);
-        m_hstrCloseSound = LTNULL;
+		g_pLTServer->FreeString(m_hstrCloseSound);
+		m_hstrCloseSound = LTNULL;
 	}
 	if (m_hstrPortalName)
 	{
-        g_pLTServer->FreeString(m_hstrPortalName);
-        m_hstrPortalName = LTNULL;
+		g_pLTServer->FreeString(m_hstrPortalName);
+		m_hstrPortalName = LTNULL;
 	}
 	if (m_hShadowLightsString)
 	{
-        g_pLTServer->FreeString(m_hShadowLightsString);
+		g_pLTServer->FreeString(m_hShadowLightsString);
 		m_hShadowLightsString = NULL;
 	}
 	if (m_hstrOpenCmd)
 	{
-        g_pLTServer->FreeString(m_hstrOpenCmd);
+		g_pLTServer->FreeString(m_hstrOpenCmd);
 		m_hstrOpenCmd = NULL;
 	}
 	if (m_hstrCloseCmd)
 	{
-        g_pLTServer->FreeString(m_hstrCloseCmd);
+		g_pLTServer->FreeString(m_hstrCloseCmd);
 		m_hstrCloseCmd = NULL;
 	}
 	if (m_hstrDoorLink)
 	{
-        g_pLTServer->FreeString(m_hstrDoorLink);
+		g_pLTServer->FreeString(m_hstrDoorLink);
 		m_hstrDoorLink = NULL;
 	}
 	if (m_hstrLockedCmd)
 	{
-        g_pLTServer->FreeString(m_hstrLockedCmd);
+		g_pLTServer->FreeString(m_hstrLockedCmd);
 		m_hstrLockedCmd = NULL;
 	}
 
@@ -422,11 +415,9 @@ Door::~Door()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Door::RemoveAttachments()
 //
-//	ROUTINE:	Door::RemoveAttachments()
-//
-//	PURPOSE:	Remove our attachments
-//
+//	PURPOSE: Remove our attachments
 // ----------------------------------------------------------------------- //
 
 void Door::RemoveAttachments()
@@ -441,7 +432,7 @@ void Door::RemoveAttachments()
 
 			if (m_bRemoveAttachments)
 			{
-                g_pLTServer->RemoveObject(pLink->m_hObject);
+				g_pLTServer->RemoveObject(pLink->m_hObject);
 			}
 			else  // Tell object to destroy itself...
 			{
@@ -458,18 +449,16 @@ void Door::RemoveAttachments()
 			pLink = pLink->m_pNext;
 		}
 
-        g_pLTServer->RelinquishList(m_pAttachmentList);
-        m_pAttachmentList = LTNULL;
+		g_pLTServer->RelinquishList(m_pAttachmentList);
+		m_pAttachmentList = LTNULL;
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Door::DetachObject()
 //
-//	ROUTINE:	Door::DetachObject()
-//
-//	PURPOSE:	Remove our attachments to this object
-//
+//	PURPOSE: Remove our attachments to this object
 // ----------------------------------------------------------------------- //
 
 void Door::DetachObject(HOBJECT hObj, LTBOOL bBreakLink)
@@ -478,169 +467,167 @@ void Door::DetachObject(HOBJECT hObj, LTBOOL bBreakLink)
 
 	if (bBreakLink)
 	{
-        g_pLTServer->BreakInterObjectLink(m_hObject, hObj);
+		g_pLTServer->BreakInterObjectLink(m_hObject, hObj);
 	}
 
 	HATTACHMENT hAttachment;
-    if (g_pLTServer->FindAttachment(m_hObject, hObj, &hAttachment) == LT_OK)
+	if (g_pLTServer->FindAttachment(m_hObject, hObj, &hAttachment) == LT_OK)
 	{
-        g_pLTServer->RemoveAttachment(hAttachment);
+		g_pLTServer->RemoveAttachment(hAttachment);
 	}
 
 	// Make sure object falls if it has gravity...
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(hObj);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(hObj);
 
 	if (IsKindOf(hObj, "Prop") && (dwFlags & FLAG_GRAVITY))
 	{
-        LTVector vVel;
-        g_pLTServer->GetVelocity(hObj, &vVel);
+		LTVector vVel;
+		g_pLTServer->GetVelocity(hObj, &vVel);
 		vVel.y -= 10.0f;
-        g_pLTServer->SetVelocity(hObj, &vVel);
+		g_pLTServer->SetVelocity(hObj, &vVel);
 	}
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::ReadProp()
 //
-//	ROUTINE:	Door::ReadProp()
-//
-//	PURPOSE:	Reads door properties
-//
+//	PURPOSE: Reads door properties
 // --------------------------------------------------------------------------- //
 
 LTBOOL Door::ReadProp(ObjectCreateStruct *)
 {
-    LTBOOL bFlag;
+	LTBOOL bFlag;
 	GenericProp gProp;
 	char shadowLights[256];
 	ConParse cParse;
 	char animName[128], doorName[128];
 
 
-    g_pLTServer->GetPropBool("ActivateTrigger", &bFlag);
+	g_pLTServer->GetPropBool("ActivateTrigger", &bFlag);
 	m_dwStateFlags |= bFlag ? DF_ACTIVATETRIGGER : 0;
 
-    g_pLTServer->GetPropBool("StartOpen", &bFlag);
+	g_pLTServer->GetPropBool("StartOpen", &bFlag);
 	m_dwStateFlags |= bFlag ? DF_STARTOPEN : 0;
 
-    g_pLTServer->GetPropBool("TriggerClose", &bFlag);
+	g_pLTServer->GetPropBool("TriggerClose", &bFlag);
 	m_dwStateFlags |= bFlag ? DF_TRIGGERCLOSE : 0;
 
-    g_pLTServer->GetPropBool("RemainsOpen", &bFlag);
+	g_pLTServer->GetPropBool("RemainsOpen", &bFlag);
 	m_dwStateFlags |= bFlag ? DF_REMAINSOPEN : 0;
 
-    g_pLTServer->GetPropBool("ForceMove", &bFlag);
+	g_pLTServer->GetPropBool("ForceMove", &bFlag);
 	m_dwStateFlags |= bFlag ? DF_FORCEMOVE : 0;
 
-    g_pLTServer->GetPropBool("BoxPhysics", &m_bBoxPhysics);
-    g_pLTServer->GetPropBool("Locked", &m_bLocked);
-    g_pLTServer->GetPropBool("IsKeyframed", &m_bIsKeyframed);
-    g_pLTServer->GetPropBool("LoopSounds", &m_bLoopSounds);
-    g_pLTServer->GetPropReal("Speed", &m_fSpeed);
-    g_pLTServer->GetPropReal("MoveDelay", &m_fMoveDelay);
-    g_pLTServer->GetPropReal("MoveDist", &m_fMoveDist);
-    g_pLTServer->GetPropVector("MoveDir", &m_vMoveDir);
+	g_pLTServer->GetPropBool("BoxPhysics", &m_bBoxPhysics);
+	g_pLTServer->GetPropBool("Locked", &m_bLocked);
+	g_pLTServer->GetPropBool("IsKeyframed", &m_bIsKeyframed);
+	g_pLTServer->GetPropBool("LoopSounds", &m_bLoopSounds);
+	g_pLTServer->GetPropReal("Speed", &m_fSpeed);
+	g_pLTServer->GetPropReal("MoveDelay", &m_fMoveDelay);
+	g_pLTServer->GetPropReal("MoveDist", &m_fMoveDist);
+	g_pLTServer->GetPropVector("MoveDir", &m_vMoveDir);
 
-    g_pLTServer->GetPropBool("RemoveAttachments", &m_bRemoveAttachments);
-    g_pLTServer->GetPropVector("AttachDir", &m_vAttachDir);
+	g_pLTServer->GetPropBool("RemoveAttachments", &m_bRemoveAttachments);
+	g_pLTServer->GetPropVector("AttachDir", &m_vAttachDir);
 
 
 	GenericProp genProp;
-    if (g_pLTServer->GetPropGeneric("Attachments", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Attachments", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrAttachments = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrAttachments = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("PortalName", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("PortalName", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrPortalName = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrPortalName = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("OpenSound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("OpenSound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrOpenSound = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrOpenSound = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("LockedSound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("LockedSound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrLockedSound = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrLockedSound = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("CloseSound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("CloseSound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrCloseSound = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrCloseSound = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("OpenedCommand", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("OpenedCommand", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrOpenCmd = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrOpenCmd = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("LockedCommand", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("LockedCommand", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrLockedCmd = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrLockedCmd = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("ClosedCommand", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ClosedCommand", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrCloseCmd = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrCloseCmd = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("DoorLink", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DoorLink", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrDoorLink = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrDoorLink = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    g_pLTServer->GetPropReal("OpenWaitTime", &m_fOpenWaitTime);
-    g_pLTServer->GetPropReal("CloseWaitTime", &m_fCloseWaitTime);
-    g_pLTServer->GetPropReal("ClosingSpeed", &m_fClosingSpeed);
-    g_pLTServer->GetPropReal("SoundRadius", &m_fSoundRadius);
+	g_pLTServer->GetPropReal("OpenWaitTime", &m_fOpenWaitTime);
+	g_pLTServer->GetPropReal("CloseWaitTime", &m_fCloseWaitTime);
+	g_pLTServer->GetPropReal("ClosingSpeed", &m_fClosingSpeed);
+	g_pLTServer->GetPropReal("SoundRadius", &m_fSoundRadius);
 
-    g_pLTServer->GetPropVector("SoundPos", &m_vSoundPos);
-    g_pLTServer->GetPropBool("AITriggerable", &m_bAITriggerable);
+	g_pLTServer->GetPropVector("SoundPos", &m_vSoundPos);
+	g_pLTServer->GetPropBool("AITriggerable", &m_bAITriggerable);
 
 	// Set up waveform (don't need to check for Linear)...
 
 	m_dwWaveform = DOORWAVE_LINEAR;
 
-    g_pLTServer->GetPropBool("Sine", &bFlag);
+	g_pLTServer->GetPropBool("Sine", &bFlag);
 	m_dwWaveform = bFlag ? DOORWAVE_SINE : m_dwWaveform;
 
-    g_pLTServer->GetPropBool("SlowOff", &bFlag);
+	g_pLTServer->GetPropBool("SlowOff", &bFlag);
 	m_dwWaveform = bFlag ? DOORWAVE_SLOWOFF : m_dwWaveform;
 
-    g_pLTServer->GetPropBool("SlowOn", &bFlag);
+	g_pLTServer->GetPropBool("SlowOn", &bFlag);
 	m_dwWaveform = bFlag ? DOORWAVE_SLOWON : m_dwWaveform;
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	// Set up the properties that can be edited during game play...
 	m_editable.AddBoolProp("Locked", &m_bLocked);
@@ -658,15 +645,15 @@ LTBOOL Door::ReadProp(ObjectCreateStruct *)
 	m_editable.AddVectorProp("SoundPos", &m_vSoundPos);
 
 	// Get LightAnim info.
-    g_pLTServer->GetPropGeneric("Name", &gProp);
+	g_pLTServer->GetPropGeneric("Name", &gProp);
 	SAFE_STRCPY(doorName, gProp.m_String);
 
 	m_nLightAnims = 0;
 	shadowLights[0] = '\0';
-    g_pLTServer->GetPropGeneric("ShadowLights", &gProp);
+	g_pLTServer->GetPropGeneric("ShadowLights", &gProp);
 	SAFE_STRCPY(shadowLights, gProp.m_String);
 
-    if (g_pLTServer->GetPropGeneric("LightFrames", &gProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("LightFrames", &gProp) == LT_OK)
 	{
 		m_nLightFrames = gProp.m_Long;
 	}
@@ -678,15 +665,15 @@ LTBOOL Door::ReadProp(ObjectCreateStruct *)
 	// Store the property so we can access the lights in the initial update.
 	if (shadowLights[0])
 	{
-        m_hShadowLightsString = g_pLTServer->CreateString(shadowLights);
+		m_hShadowLightsString = g_pLTServer->CreateString(shadowLights);
 
 		cParse.Init(shadowLights);
-        while(g_pLTServer->Common()->Parse(&cParse) == LT_OK)
+		while(g_pLTServer->Common()->Parse(&cParse) == LT_OK)
 		{
 			SetupDoorLightAnimName(animName, doorName, m_nLightAnims);
 
 			m_hLightAnims[m_nLightAnims] = INVALID_LIGHT_ANIM;
-            g_pLTServer->GetLightAnimLT()->FindLightAnim(animName, m_hLightAnims[m_nLightAnims]);
+			g_pLTServer->GetLightAnimLT()->FindLightAnim(animName, m_hLightAnims[m_nLightAnims]);
 			m_nLightAnims++;
 
 			if(m_nLightAnims >= MAX_DOOR_LIGHT_ANIMS)
@@ -694,15 +681,13 @@ LTBOOL Door::ReadProp(ObjectCreateStruct *)
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::PostPropRead()
 //
-//	ROUTINE:	Door::PostPropRead()
-//
-//	PURPOSE:	Initializes door data
-//
+//	PURPOSE: Initializes door data
 // --------------------------------------------------------------------------- //
 
 void Door::PostPropRead(ObjectCreateStruct *pStruct)
@@ -716,11 +701,9 @@ void Door::PostPropRead(ObjectCreateStruct *pStruct)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::TriggerHandler()
 //
-//	ROUTINE:	Door::TriggerHandler()
-//
-//	PURPOSE:	Trigger function to open and close a door
-//
+//	PURPOSE: Trigger function to open and close a door
 // --------------------------------------------------------------------------- //
 
 void Door::TriggerHandler(LTBOOL bTriggerLink)
@@ -735,7 +718,7 @@ void Door::TriggerHandler(LTBOOL bTriggerLink)
 
 			if (m_hstrLockedSound)
 			{
-                StartSound(m_hstrLockedSound, LTFALSE);
+				StartSound(m_hstrLockedSound, LTFALSE);
 			}
 
 			// Tell any doorknobs attached to us to play the "locked" animation...
@@ -769,7 +752,7 @@ void Door::TriggerHandler(LTBOOL bTriggerLink)
 		{
 			if (m_hDoorLink)
 			{
-                Door* pDoorLink = (Door*) g_pLTServer->HandleToObject(m_hDoorLink);
+				Door* pDoorLink = (Door*) g_pLTServer->HandleToObject(m_hDoorLink);
 				if (pDoorLink)
 				{
 					pDoorLink->TriggerLink(m_hActivateObj);
@@ -783,7 +766,7 @@ void Door::TriggerHandler(LTBOOL bTriggerLink)
 	{
 		case DOORSTATE_CLOSED:
 		{
-            if (g_pLTServer->GetTime() > m_fDoorStopTime + m_fCloseWaitTime)
+			if (g_pLTServer->GetTime() > m_fDoorStopTime + m_fCloseWaitTime)
 			{
 				SetOpening();
 			}
@@ -806,14 +789,14 @@ void Door::TriggerHandler(LTBOOL bTriggerLink)
 		{
 			if (m_dwStateFlags & DF_TRIGGERCLOSE)
 			{
-                if (g_pLTServer->GetTime() > m_fDoorStopTime + m_fOpenWaitTime)
+				if (g_pLTServer->GetTime() > m_fDoorStopTime + m_fOpenWaitTime)
 				{
 					SetClosing();
 				}
 			}
 			else
 			{
-                SetOpen(LTTRUE); // Call SetOpen again to reset the door times
+				SetOpen(LTTRUE); // Call SetOpen again to reset the door times
 			}
 		}
 		break;
@@ -823,12 +806,10 @@ void Door::TriggerHandler(LTBOOL bTriggerLink)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::PlayDoorKnobAni()
 //
-//	ROUTINE:	Door::PlayDoorKnobAni()
-//
-//	PURPOSE:	Tell any DoorKnob objects attached to us, to play this the
+//	PURPOSE: Tell any DoorKnob objects attached to us, to play this the
 //				specified animation...
-//
 // --------------------------------------------------------------------------- //
 
 void Door::PlayDoorKnobAni(char* pAniName)
@@ -842,12 +823,12 @@ void Door::PlayDoorKnobAni(char* pAniName)
 	{
 		if (pLink->m_hObject && IsKindOf(pLink->m_hObject, "DoorKnob"))
 		{
-            HMODELANIM hAnim = g_pLTServer->GetAnimIndex(pLink->m_hObject, pAniName);
+			HMODELANIM hAnim = g_pLTServer->GetAnimIndex(pLink->m_hObject, pAniName);
 			if (hAnim != INVALID_ANI)
 			{
-                g_pLTServer->SetModelLooping(pLink->m_hObject, LTFALSE);
-                g_pLTServer->SetModelAnimation(pLink->m_hObject, hAnim);
-                g_pLTServer->ResetModelAnimation(pLink->m_hObject);
+				g_pLTServer->SetModelLooping(pLink->m_hObject, LTFALSE);
+				g_pLTServer->SetModelAnimation(pLink->m_hObject, hAnim);
+				g_pLTServer->ResetModelAnimation(pLink->m_hObject);
 			}
 		}
 
@@ -858,19 +839,17 @@ void Door::PlayDoorKnobAni(char* pAniName)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::TriggerClose()
 //
-//	ROUTINE:	Door::TriggerClose()
-//
-//	PURPOSE:	Trigger function to only close a door (useful for stay-open-
-//              forever types.
-//
+//	PURPOSE: Trigger function to only close a door (useful for stay-open-
+//			  forever types.
 // --------------------------------------------------------------------------- //
 
 void Door::TriggerClose()
 {
 	if (m_dwDoorState == DOORSTATE_OPEN || m_dwDoorState == DOORSTATE_OPENING)
 	{
-        if (g_pLTServer->GetTime() > m_fDoorStopTime + m_fOpenWaitTime)
+		if (g_pLTServer->GetTime() > m_fDoorStopTime + m_fOpenWaitTime)
 		{
 			SetClosing();
 		}
@@ -878,11 +857,9 @@ void Door::TriggerClose()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::HandleAttach()
 //
-//	ROUTINE:	Door::HandleAttach()
-//
-//	PURPOSE:	Handle attach message
-//
+//	PURPOSE: Handle attach message
 // --------------------------------------------------------------------------- //
 
 void Door::HandleAttach(char* pObjName)
@@ -893,24 +870,24 @@ void Door::HandleAttach(char* pObjName)
 	{
 		ObjArray <HOBJECT, 1> objArray;
 
-        g_pLTServer->FindNamedObjects(pObjName, objArray);
+		g_pLTServer->FindNamedObjects(pObjName, objArray);
 
 		if (objArray.NumObjects())
 		{
 			DetachObject(m_hAttachmentObj);
-            m_hAttachmentObj = AttachObject(objArray.GetObject(0), LTFALSE);
+			m_hAttachmentObj = AttachObject(objArray.GetObject(0), LTFALSE);
 		}
 	}
 
 
 	// See if there is an an object we should attach to us...
 
-    LTRotation rRot;
-    LTVector vPos, vDims, vU, vF, vR;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
-    g_pLTServer->GetObjectDims(m_hObject, &vDims);
-    g_pLTServer->GetObjectRotation(m_hObject, &rRot);
-    g_pLTServer->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTRotation rRot;
+	LTVector vPos, vDims, vU, vF, vR;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	g_pLTServer->GetObjectDims(m_hObject, &vDims);
+	g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+	g_pLTServer->GetRotationVectors(&rRot, &vU, &vR, &vF);
 
 	IntersectQuery IQuery;
 	IntersectInfo IInfo;
@@ -920,43 +897,39 @@ void Door::HandleAttach(char* pObjName)
 
 	IQuery.m_Flags = INTERSECT_OBJECTS | IGNORE_NONSOLID;
 
-    if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
+	if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
 	{
 		if (IInfo.m_hObject && IsKindOf(IInfo.m_hObject, "Prop"))
 		{
 			DetachObject(m_hAttachmentObj);
-            m_hAttachmentObj = AttachObject(IInfo.m_hObject, LTFALSE);
+			m_hAttachmentObj = AttachObject(IInfo.m_hObject, LTFALSE);
 		}
 	}
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::HandleDetach()
 //
-//	ROUTINE:	Door::HandleDetach()
-//
-//	PURPOSE:	Handle detach message
-//
+//	PURPOSE: Handle detach message
 // --------------------------------------------------------------------------- //
 
 void Door::HandleDetach()
 {
 	DetachObject(m_hAttachmentObj);
-    m_hAttachmentObj = LTNULL;
+	m_hAttachmentObj = LTNULL;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::InitialUpdate()
 //
-//	ROUTINE:	Door::InitialUpdate()
-//
-//	PURPOSE:	Initializes door data.
-//
+//	PURPOSE: Initializes door data.
 // --------------------------------------------------------------------------- //
 
 LTBOOL Door::InitialUpdate(int nInfo)
 {
-    if (nInfo == INITIALUPDATE_SAVEGAME) return LTTRUE;
+	if (nInfo == INITIALUPDATE_SAVEGAME) return LTTRUE;
 
-    uint32 dwUsrFlgs = g_pLTServer->GetObjectUserFlags(m_hObject);
+	uint32 dwUsrFlgs = g_pLTServer->GetObjectUserFlags(m_hObject);
 
 	if (TreatLikeWorld() && !m_bIsKeyframed)
 	{
@@ -979,13 +952,13 @@ LTBOOL Door::InitialUpdate(int nInfo)
 		dwUsrFlgs |= USRFLG_CANT_CRUSH;
 	}
 
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlgs);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlgs);
 
-    g_pLTServer->SetBlockingPriority(m_hObject, DOOR_DEFAULT_BLOCKING_PRIORITY);
+	g_pLTServer->SetBlockingPriority(m_hObject, DOOR_DEFAULT_BLOCKING_PRIORITY);
 
 
 
-    LTVector vt, pos;
+	LTVector vt, pos;
 
 	// Only normalize if we won't divide by zero!
 	if (m_vMoveDir.MagSqr() != 0.0f) {
@@ -994,7 +967,7 @@ LTBOOL Door::InitialUpdate(int nInfo)
 
 	// Current position is the closed position
 
-    g_pLTServer->GetObjectPos(m_hObject, &pos);
+	g_pLTServer->GetObjectPos(m_hObject, &pos);
 	VEC_COPY(m_vClosedPos, pos);
 
 	// Determine the open position
@@ -1004,32 +977,30 @@ LTBOOL Door::InitialUpdate(int nInfo)
 
 	if (m_dwStateFlags & DF_STARTOPEN)
 	{
-        LTVector vTemp;
+		LTVector vTemp;
 		VEC_COPY(vTemp, m_vOpenPos);
 		VEC_COPY(m_vOpenPos, m_vClosedPos);
 		VEC_COPY(m_vClosedPos, vTemp);
 
 		VEC_MULSCALAR(m_vMoveDir, m_vMoveDir, -1.0f);
 
-        g_pLTServer->MoveObject(m_hObject, &m_vClosedPos);
+		g_pLTServer->MoveObject(m_hObject, &m_vClosedPos);
 	}
 
-    SetClosed(LTTRUE);
+	SetClosed(LTTRUE);
 
 	// Make sure update gets called at least once...
 
-    SetNextUpdate(0.0001f);
+	SetNextUpdate(0.0001f);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::Update()
 //
-//	ROUTINE:	Door::Update()
-//
-//	PURPOSE:	Door update function, updates the current state.
-//
+//	PURPOSE: Door update function, updates the current state.
 // --------------------------------------------------------------------------- //
 
 LTBOOL Door::Update()
@@ -1037,10 +1008,10 @@ LTBOOL Door::Update()
 	if (m_bFirstUpdate)
 	{
 		FirstUpdate();
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    SetNextUpdate(UPDATE_DELTA);
+	SetNextUpdate(UPDATE_DELTA);
 
 	switch (m_dwDoorState)
 	{
@@ -1050,26 +1021,24 @@ LTBOOL Door::Update()
 		case DOORSTATE_CLOSING: Closing(); break;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::FirstUpdate()
 //
-//	ROUTINE:	Door::FirstUpdate()
-//
-//	PURPOSE:	Do first update (after all objects have been loaded)...
-//
+//	PURPOSE: Do first update (after all objects have been loaded)...
 // --------------------------------------------------------------------------- //
 
 void Door::FirstUpdate()
 {
 //	ObjectList *pList;
-    uint32 iLight;
+	uint32 iLight;
 	ConParse cParse;
 	HOBJECT hLight;
 	KeyframerLight *pKeyframerLight;
-    ILTLightAnim *pLightAnimLT;
+	ILTLightAnim *pLightAnimLT;
 	LAInfo info;
 
 
@@ -1079,29 +1048,29 @@ void Door::FirstUpdate()
 	// Init our light animations.
 	if(m_hShadowLightsString)
 	{
-        pLightAnimLT = g_pLTServer->GetLightAnimLT();
+		pLightAnimLT = g_pLTServer->GetLightAnimLT();
 
 		iLight = 0;
-        cParse.Init(g_pLTServer->GetStringData(m_hShadowLightsString));
-        while (g_pLTServer->Common()->Parse(&cParse) == LT_OK)
+		cParse.Init(g_pLTServer->GetStringData(m_hShadowLightsString));
+		while (g_pLTServer->Common()->Parse(&cParse) == LT_OK)
 		{
 			if (cParse.m_nArgs < 1 || iLight >= m_nLightAnims)
 				continue;
 
 			ObjArray <HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
-            g_pLTServer->FindNamedObjects(cParse.m_Args[0], objArray);
+			g_pLTServer->FindNamedObjects(cParse.m_Args[0], objArray);
 
 			if (!objArray.NumObjects())
 				continue;
 
 			hLight = objArray.GetObject(0);
 
-            if (IsKeyframerLight(g_pLTServer, hLight) &&
-                (pKeyframerLight = (KeyframerLight*)g_pLTServer->HandleToObject(hLight)))
+			if (IsKeyframerLight(g_pLTServer, hLight) &&
+				(pKeyframerLight = (KeyframerLight*)g_pLTServer->HandleToObject(hLight)))
 			{
 				if(pLightAnimLT->GetLightAnimInfo(m_hLightAnims[iLight], info) == LT_OK)
 				{
-                    g_pLTServer->GetObjectPos(hLight, &info.m_vLightPos);
+					g_pLTServer->GetObjectPos(hLight, &info.m_vLightPos);
 					info.m_iFrames[0] = info.m_iFrames[1] = 0;
 					info.m_fPercentBetween = 0.0f;
 					info.m_vLightColor = pKeyframerLight->m_vLightColor;
@@ -1113,7 +1082,7 @@ void Door::FirstUpdate()
 			iLight++;
 		}
 
-        g_pLTServer->FreeString(m_hShadowLightsString);
+		g_pLTServer->FreeString(m_hShadowLightsString);
 		m_hShadowLightsString = NULL;
 	}
 	SetLightAnimClosed();
@@ -1122,9 +1091,9 @@ void Door::FirstUpdate()
 
 	// Wait for a message to do anything...
 
-    SetNextUpdate(0.0f);
+	SetNextUpdate(0.0f);
 
-    m_bFirstUpdate = LTFALSE;
+	m_bFirstUpdate = LTFALSE;
 
 
 	// See if we have a door link...
@@ -1132,12 +1101,12 @@ void Door::FirstUpdate()
 	if (m_hstrDoorLink)
 	{
 		ObjArray <HOBJECT, 1> objArray;
-        g_pLTServer->FindNamedObjects(g_pLTServer->GetStringData(m_hstrDoorLink), objArray);
+		g_pLTServer->FindNamedObjects(g_pLTServer->GetStringData(m_hstrDoorLink), objArray);
 
 		if (objArray.NumObjects() > 0)
 		{
 			m_hDoorLink = objArray.GetObject(0);
-            g_pLTServer->CreateInterObjectLink(m_hObject, m_hDoorLink);
+			g_pLTServer->CreateInterObjectLink(m_hObject, m_hDoorLink);
 		}
 	}
 
@@ -1146,26 +1115,26 @@ void Door::FirstUpdate()
 
 	if (!m_hstrAttachments) return;
 
-    char* pAttachmentNames = g_pLTServer->GetStringData(m_hstrAttachments);
+	char* pAttachmentNames = g_pLTServer->GetStringData(m_hstrAttachments);
 	if (!pAttachmentNames) return;
 
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return;
 
 	ConParse parse;
 	parse.Init(pAttachmentNames);
 
-    HOBJECT hObj = LTNULL;
+	HOBJECT hObj = LTNULL;
 
 	while (pCommon->Parse(&parse) == LT_OK)
 	{
 		// Find the object to attach...
 
-        hObj = LTNULL;
+		hObj = LTNULL;
 		if (parse.m_nArgs > 0 && parse.m_Args[0])
 		{
 			ObjArray <HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
-            g_pLTServer->FindNamedObjects(parse.m_Args[0] ,objArray);
+			g_pLTServer->FindNamedObjects(parse.m_Args[0] ,objArray);
 
 			int numObjects = objArray.NumObjects();
 			for(int i = 0; i < numObjects; i++)
@@ -1178,44 +1147,42 @@ void Door::FirstUpdate()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::AttachObject()
 //
-//	ROUTINE:	Door::AttachObject()
-//
-//	PURPOSE:	Attach the object to us...
-//
+//	PURPOSE: Attach the object to us...
 // --------------------------------------------------------------------------- //
 
 HOBJECT Door::AttachObject(HOBJECT hObj, LTBOOL bAddToList)
 {
-    if (!hObj) return LTNULL;
+	if (!hObj) return LTNULL;
 
 	// Get our rotation/pos...
 
-    LTVector vPos, vParentPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vParentPos);
+	LTVector vPos, vParentPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vParentPos);
 
-    LTRotation rRot, rParentRot;
-    g_pLTServer->GetObjectRotation(m_hObject, &rParentRot);
+	LTRotation rRot, rParentRot;
+	g_pLTServer->GetObjectRotation(m_hObject, &rParentRot);
 
-    g_pLTServer->GetObjectPos(hObj, &vPos);
-    g_pLTServer->GetObjectRotation(hObj, &rRot);
-    LTVector vOffset = vPos - vParentPos;
+	g_pLTServer->GetObjectPos(hObj, &vPos);
+	g_pLTServer->GetObjectRotation(hObj, &rRot);
+	LTVector vOffset = vPos - vParentPos;
 
-    LTRotation rOffset;
-    rOffset.Init();
+	LTRotation rOffset;
+	rOffset.Init();
 
 	// Calc offset...
 
-    LTMatrix m1, m2, m3;
-    g_pLTServer->SetupRotationMatrix(&m1, &rParentRot);
-    g_pLTServer->SetupRotationMatrix(&m2, &rRot);
+	LTMatrix m1, m2, m3;
+	g_pLTServer->SetupRotationMatrix(&m1, &rParentRot);
+	g_pLTServer->SetupRotationMatrix(&m2, &rRot);
 	MatTranspose3x3(&m1);
 	MatMul(&m3, &m2, &m1);
-    g_pLTServer->SetupRotationFromMatrix(&rOffset, &m3);
+	g_pLTServer->SetupRotationFromMatrix(&rOffset, &m3);
 
 
 	HATTACHMENT hAttachment;
-    LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, hObj, LTNULL,
+	LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, hObj, LTNULL,
 												 &vOffset, &rOffset, &hAttachment);
 
 	// Make link to attached objects...
@@ -1226,13 +1193,13 @@ HOBJECT Door::AttachObject(HOBJECT hObj, LTBOOL bAddToList)
 		{
 			if (!m_pAttachmentList)
 			{
-                m_pAttachmentList = g_pLTServer->CreateObjectList();
+				m_pAttachmentList = g_pLTServer->CreateObjectList();
 			}
 
-            g_pLTServer->AddObjectToList(m_pAttachmentList, hObj);
+			g_pLTServer->AddObjectToList(m_pAttachmentList, hObj);
 		}
 
-        g_pLTServer->CreateInterObjectLink(m_hObject, hObj);
+		g_pLTServer->CreateInterObjectLink(m_hObject, hObj);
 	}
 
 	return hObj;
@@ -1241,22 +1208,20 @@ HOBJECT Door::AttachObject(HOBJECT hObj, LTBOOL bAddToList)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::SetOpen()
 //
-//	ROUTINE:	Door::SetOpen()
-//
-//	PURPOSE:	Sets the door open state
-//
+//	PURPOSE: Sets the door open state
 // --------------------------------------------------------------------------- //
 
 void Door::SetOpen(LTBOOL bInitialize)
 {
 	if (!bInitialize)
-    {
+	{
 		StopSound();
 
 		if (m_hstrOpenCmd)
 		{
-            char* pCmd = g_pLTServer->GetStringData(m_hstrOpenCmd);
+			char* pCmd = g_pLTServer->GetStringData(m_hstrOpenCmd);
 
 			if (pCmd && g_pCmdMgr->IsValidCmd(pCmd))
 			{
@@ -1271,15 +1236,15 @@ void Door::SetOpen(LTBOOL bInitialize)
 
 	if (m_dwStateFlags & DF_TRIGGERCLOSE)		// Trigger to close
 	{
-        SetNextUpdate(0.0f);
+		SetNextUpdate(0.0f);
 	}
 	else if (m_dwStateFlags & DF_REMAINSOPEN)
 	{
-        SetNextUpdate(0.0f);
+		SetNextUpdate(0.0f);
 	}
 	else
 	{
-        SetNextUpdate(m_fOpenWaitTime + 0.001f);
+		SetNextUpdate(m_fOpenWaitTime + 0.001f);
 	}
 
 	SetLightAnimOpen();
@@ -1287,11 +1252,9 @@ void Door::SetOpen(LTBOOL bInitialize)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::Open()
 //
-//	ROUTINE:	Door::Open()
-//
-//	PURPOSE:	Handles the door open state
-//
+//	PURPOSE: Handles the door open state
 // --------------------------------------------------------------------------- //
 
 void Door::Open()
@@ -1300,8 +1263,7 @@ void Door::Open()
 }
 
 
-// --------------------------------------------------------------------------- //
-// Update light animations for the open door.
+// --------------------------------------------------------------------------- // Update light animations for the open door.
 // --------------------------------------------------------------------------- //
 void Door::SetLightAnimOpen()
 {
@@ -1310,11 +1272,9 @@ void Door::SetLightAnimOpen()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::SetOpening()
 //
-//	ROUTINE:	Door::SetOpening()
-//
-//	PURPOSE:	Sets the door opening state
-//
+//	PURPOSE: Sets the door opening state
 // --------------------------------------------------------------------------- //
 
 void Door::SetOpening()
@@ -1324,9 +1284,9 @@ void Door::SetOpening()
 
 	if (m_dwDoorState == DOORSTATE_CLOSED)
 	{
-        g_pLTServer->GetObjectPos(m_hObject, &m_vClosedPos);
+		g_pLTServer->GetObjectPos(m_hObject, &m_vClosedPos);
 
-        LTVector vTemp;
+		LTVector vTemp;
 		VEC_MULSCALAR(vTemp, m_vMoveDir, m_fMoveDist);
 		m_vOpenPos = m_vClosedPos + vTemp;
 	}
@@ -1334,9 +1294,9 @@ void Door::SetOpening()
 	// If we aren't forced to move, allow self-triggerable doors to be
 	// triggered...
 
-    m_fMoveStartTime = g_pLTServer->GetTime();
+	m_fMoveStartTime = g_pLTServer->GetTime();
 
-    SetNextUpdate(UPDATE_DELTA);
+	SetNextUpdate(UPDATE_DELTA);
 
 	StartSound(m_hstrOpenSound, m_bLoopSounds);
 
@@ -1346,14 +1306,14 @@ void Door::SetOpening()
 
 	if (m_hstrPortalName)
 	{
-        char* pName = g_pLTServer->GetStringData(m_hstrPortalName);
+		char* pName = g_pLTServer->GetStringData(m_hstrPortalName);
 		if (pName)
 		{
-            uint32 dwFlags = 0;
-            g_pLTServer->GetPortalFlags(pName, &dwFlags);
+			uint32 dwFlags = 0;
+			g_pLTServer->GetPortalFlags(pName, &dwFlags);
 
 			dwFlags |= PORTAL_OPEN;
-            g_pLTServer->SetPortalFlags(pName, dwFlags);
+			g_pLTServer->SetPortalFlags(pName, dwFlags);
 		}
 	}
 
@@ -1363,27 +1323,25 @@ void Door::SetOpening()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::Opening()
 //
-//	ROUTINE:	Door::Opening()
-//
-//	PURPOSE:	Handles the door opening state
-//
+//	PURPOSE: Handles the door opening state
 // --------------------------------------------------------------------------- //
 
 void Door::Opening()
 {
 	float fPercent;
 
-    if (g_pLTServer->GetTime() < m_fMoveStartTime + m_fMoveDelay)
+	if (g_pLTServer->GetTime() < m_fMoveStartTime + m_fMoveDelay)
 	{
 		return;
 	}
 
-    LTVector vNewPos(0.0f, 0.0f, 0.0f);
+	LTVector vNewPos(0.0f, 0.0f, 0.0f);
 	CalculateNewPos(vNewPos, m_vOpenPos, m_fSpeed, &fPercent);
-    SetLightAnimPos(LTFALSE, LTFALSE);
+	SetLightAnimPos(LTFALSE, LTFALSE);
 
-    g_pLTServer->MoveObject(m_hObject, &vNewPos);
+	g_pLTServer->MoveObject(m_hObject, &vNewPos);
 
 	if (vNewPos == m_vOpenPos)
 	{
@@ -1392,20 +1350,18 @@ void Door::Opening()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::CalculateNewPos()
 //
-//	ROUTINE:	Door::CalculateNewPos()
-//
-//	PURPOSE:	Calculate the door's new position
-//
+//	PURPOSE: Calculate the door's new position
 // --------------------------------------------------------------------------- //
 
 void Door::CalculateNewPos(LTVector & vNewPos, LTVector vFinalPos, LTFLOAT fSpeed, LTFLOAT *pPercent)
 {
-    LTVector vDir;
-    g_pLTServer->GetObjectPos(m_hObject, &vNewPos);
+	LTVector vDir;
+	g_pLTServer->GetObjectPos(m_hObject, &vNewPos);
 
 	VEC_SUB(vDir, vFinalPos, vNewPos)
-    LTFLOAT distTo = (LTFLOAT)VEC_MAG(vDir);
+	LTFLOAT distTo = (LTFLOAT)VEC_MAG(vDir);
 
 	// Fix for FP error while normalizing 0.0!
 	if (distTo == 0.0f)
@@ -1416,15 +1372,15 @@ void Door::CalculateNewPos(LTVector & vNewPos, LTVector vFinalPos, LTFLOAT fSpee
 
 	VEC_NORM(vDir)
 
-    LTFLOAT fPercent    = 1 - distTo / m_fMoveDist;
-    LTFLOAT fFrameSpeed = GetDoorWaveValue(fSpeed, fPercent, m_dwWaveform);
+	LTFLOAT fPercent	= 1 - distTo / m_fMoveDist;
+	LTFLOAT fFrameSpeed = GetDoorWaveValue(fSpeed, fPercent, m_dwWaveform);
 
-    LTFLOAT moveDist = fFrameSpeed * g_pLTServer->GetFrameTime();
+	LTFLOAT moveDist = fFrameSpeed * g_pLTServer->GetFrameTime();
 
 	if(pPercent)
 	{
 		*pPercent = moveDist / m_fMoveDist;
-        *pPercent = LTCLAMP(*pPercent, 0.0f, 1.0f);
+		*pPercent = LTCLAMP(*pPercent, 0.0f, 1.0f);
 	}
 
 	if (moveDist > distTo)
@@ -1442,12 +1398,12 @@ void Door::CalculateNewPos(LTVector & vNewPos, LTVector vFinalPos, LTFLOAT fSpee
 void Door::SetLightAnimPos(LTBOOL bForce, LTBOOL bOnOff)
 {
 	float percent;
-    LTVector vPos;
+	LTVector vPos;
 
 
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 	percent = m_vMoveDir.Dot(vPos - m_vClosedPos) / m_fMoveDist;
-    percent = LTCLAMP(percent, 0.0f, 1.0f);
+	percent = LTCLAMP(percent, 0.0f, 1.0f);
 
 	if(bForce)
 		percent = (float)!!bOnOff;
@@ -1458,13 +1414,13 @@ void Door::SetLightAnimPos(LTBOOL bForce, LTBOOL bOnOff)
 
 void Door::ReallySetLightAnimPos(float percent)
 {
-    uint32 iAnim, nFrames;
+	uint32 iAnim, nFrames;
 	HLIGHTANIM hAnim;
-    ILTLightAnim *pLightAnimLT;
+	ILTLightAnim *pLightAnimLT;
 	LAInfo info;
 
 
-    pLightAnimLT = g_pLTServer->GetLightAnimLT();
+	pLightAnimLT = g_pLTServer->GetLightAnimLT();
 	for(iAnim=0; iAnim < m_nLightAnims; iAnim++)
 	{
 		hAnim = m_hLightAnims[iAnim];
@@ -1485,13 +1441,13 @@ void Door::ReallySetLightAnimPos(float percent)
 
 void Door::SetLightAnimRemoved()
 {
-    uint32 iAnim, nFrames;
+	uint32 iAnim, nFrames;
 	HLIGHTANIM hAnim;
-    ILTLightAnim *pLightAnimLT;
+	ILTLightAnim *pLightAnimLT;
 	LAInfo info;
 
 
-    pLightAnimLT = g_pLTServer->GetLightAnimLT();
+	pLightAnimLT = g_pLTServer->GetLightAnimLT();
 	for(iAnim=0; iAnim < m_nLightAnims; iAnim++)
 	{
 		hAnim = m_hLightAnims[iAnim];
@@ -1512,22 +1468,20 @@ void Door::SetLightAnimRemoved()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::SetClosed()
 //
-//	ROUTINE:	Door::SetClosed()
-//
-//	PURPOSE:	Sets the door closed state
-//
+//	PURPOSE: Sets the door closed state
 // --------------------------------------------------------------------------- //
 
 void Door::SetClosed(LTBOOL bInitialize)
 {
 	if (!bInitialize)
-    {
+	{
 		StopSound();
 
 		if (m_hstrCloseCmd)
 		{
-            char* pCmd = g_pLTServer->GetStringData(m_hstrCloseCmd);
+			char* pCmd = g_pLTServer->GetStringData(m_hstrCloseCmd);
 
 			if (pCmd && g_pCmdMgr->IsValidCmd(pCmd))
 			{
@@ -1538,7 +1492,7 @@ void Door::SetClosed(LTBOOL bInitialize)
 		m_fDoorStopTime = g_pLTServer->GetTime();
 	}
 
-    SetNextUpdate(0.0f);
+	SetNextUpdate(0.0f);
 
 	m_dwDoorState = DOORSTATE_CLOSED;
 
@@ -1549,14 +1503,14 @@ void Door::SetClosed(LTBOOL bInitialize)
 
 	if (m_hstrPortalName)
 	{
-        char* pName = g_pLTServer->GetStringData(m_hstrPortalName);
+		char* pName = g_pLTServer->GetStringData(m_hstrPortalName);
 		if (pName)
 		{
-            uint32 dwFlags = 0;
-            g_pLTServer->GetPortalFlags(pName, &dwFlags);
+			uint32 dwFlags = 0;
+			g_pLTServer->GetPortalFlags(pName, &dwFlags);
 
 			dwFlags &= ~PORTAL_OPEN;
-            g_pLTServer->SetPortalFlags(pName, dwFlags);
+			g_pLTServer->SetPortalFlags(pName, dwFlags);
 		}
 	}
 
@@ -1564,11 +1518,9 @@ void Door::SetClosed(LTBOOL bInitialize)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::Closed()
 //
-//	ROUTINE:	Door::Closed()
-//
-//	PURPOSE:	Sets the door closed state
-//
+//	PURPOSE: Sets the door closed state
 // --------------------------------------------------------------------------- //
 
 void Door::Closed()
@@ -1576,8 +1528,7 @@ void Door::Closed()
 }
 
 
-// --------------------------------------------------------------------------- //
-// Update the light animation for the closed position.
+// --------------------------------------------------------------------------- // Update the light animation for the closed position.
 // --------------------------------------------------------------------------- //
 void Door::SetLightAnimClosed()
 {
@@ -1586,11 +1537,9 @@ void Door::SetLightAnimClosed()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::SetClosing()
 //
-//	ROUTINE:	Door::SetClosing()
-//
-//	PURPOSE:	Sets the door closing state
-//
+//	PURPOSE: Sets the door closing state
 // --------------------------------------------------------------------------- //
 
 void Door::SetClosing()
@@ -1600,17 +1549,17 @@ void Door::SetClosing()
 
 	if (m_dwDoorState == DOORSTATE_OPEN)
 	{
-        g_pLTServer->GetObjectPos(m_hObject, &m_vOpenPos);
+		g_pLTServer->GetObjectPos(m_hObject, &m_vOpenPos);
 
-        LTVector vTemp;
+		LTVector vTemp;
 		VEC_MULSCALAR(vTemp, m_vMoveDir, m_fMoveDist);
 		m_vClosedPos = m_vOpenPos - vTemp;
 	}
 
 
-    m_fMoveStartTime = g_pLTServer->GetTime();
+	m_fMoveStartTime = g_pLTServer->GetTime();
 
-    SetNextUpdate(UPDATE_DELTA);
+	SetNextUpdate(UPDATE_DELTA);
 
 	m_dwDoorState = DOORSTATE_CLOSING;
 
@@ -1623,27 +1572,25 @@ void Door::SetClosing()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::Closing()
 //
-//	ROUTINE:	Door::Closing()
-//
-//	PURPOSE:	Handles the door closing state
-//
+//	PURPOSE: Handles the door closing state
 // --------------------------------------------------------------------------- //
 
 void Door::Closing()
 {
 	float fPercent;
 
-    if (g_pLTServer->GetTime() < m_fMoveStartTime + m_fMoveDelay)
+	if (g_pLTServer->GetTime() < m_fMoveStartTime + m_fMoveDelay)
 	{
 		return;
 	}
 
-    LTVector vNewPos(0.0f, 0.0f, 0.0f);
+	LTVector vNewPos(0.0f, 0.0f, 0.0f);
 	CalculateNewPos(vNewPos, m_vClosedPos, m_fClosingSpeed, &fPercent);
-    SetLightAnimPos(LTFALSE, LTFALSE);
+	SetLightAnimPos(LTFALSE, LTFALSE);
 
-    g_pLTServer->MoveObject(m_hObject, &vNewPos);
+	g_pLTServer->MoveObject(m_hObject, &vNewPos);
 
 	if (vNewPos == m_vClosedPos)
 	{
@@ -1652,11 +1599,9 @@ void Door::Closing()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::EngineMessageFn()
 //
-//	ROUTINE:	Door::EngineMessageFn()
-//
-//	PURPOSE:	Handler for engine messages
-//
+//	PURPOSE: Handler for engine messages
 // --------------------------------------------------------------------------- //
 
 uint32 Door::EngineMessageFn(uint32 messageID, void *pData, float fData)
@@ -1684,7 +1629,7 @@ uint32 Door::EngineMessageFn(uint32 messageID, void *pData, float fData)
 			// Need to call base class to have the object name read in before
 			// we call PostPropRead()
 
-            uint32 dwRet = GameBase::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = GameBase::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE)
 			{
@@ -1709,13 +1654,13 @@ uint32 Door::EngineMessageFn(uint32 messageID, void *pData, float fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -1734,11 +1679,9 @@ uint32 Door::EngineMessageFn(uint32 messageID, void *pData, float fData)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::HandleLinkBroken()
 //
-//	ROUTINE:	Door::HandleLinkBroken()
-//
-//	PURPOSE:	Handler for engine messages
-//
+//	PURPOSE: Handler for engine messages
 // --------------------------------------------------------------------------- //
 
 void Door::HandleLinkBroken(HOBJECT hObj)
@@ -1749,20 +1692,20 @@ void Door::HandleLinkBroken(HOBJECT hObj)
 
 	if (hObj == m_hActivateObj)
 	{
-        m_hActivateObj = LTNULL;
+		m_hActivateObj = LTNULL;
 		return;
 	}
 
 	if (m_hDoorLink == hObj)
 	{
-        m_hDoorLink = LTNULL;
+		m_hDoorLink = LTNULL;
 		return;
 	}
 
 	if (m_hAttachmentObj == hObj)
 	{
-        DetachObject(hObj, LTFALSE);
-        m_hAttachmentObj = LTNULL;
+		DetachObject(hObj, LTFALSE);
+		m_hAttachmentObj = LTNULL;
 	}
 	else if (m_pAttachmentList)
 	{
@@ -1773,8 +1716,8 @@ void Door::HandleLinkBroken(HOBJECT hObj)
 		{
 			if (pLink->m_hObject == hObj)
 			{
-                DetachObject(hObj, LTFALSE);
-                g_pLTServer->RemoveObjectFromList(m_pAttachmentList, hObj);
+				DetachObject(hObj, LTFALSE);
+				g_pLTServer->RemoveObjectFromList(m_pAttachmentList, hObj);
 				return;
 			}
 
@@ -1785,11 +1728,9 @@ void Door::HandleLinkBroken(HOBJECT hObj)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Door::Activate
 //
-//	ROUTINE:	Door::Activate
-//
-//	PURPOSE:	Handle object activate
-//
+//	PURPOSE: Handle object activate
 // ----------------------------------------------------------------------- //
 
 void Door::Activate(HOBJECT hObj)
@@ -1830,11 +1771,9 @@ void Door::Activate(HOBJECT hObj)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Door::SetActivateObj
 //
-//	ROUTINE:	Door::SetActivateObj
-//
-//	PURPOSE:	Set activate obj
-//
+//	PURPOSE: Set activate obj
 // ----------------------------------------------------------------------- //
 
 void Door::SetActivateObj(HOBJECT hObj)
@@ -1845,7 +1784,7 @@ void Door::SetActivateObj(HOBJECT hObj)
 
 		if (m_hActivateObj)
 		{
-            g_pLTServer->BreakInterObjectLink(m_hObject, m_hActivateObj);
+			g_pLTServer->BreakInterObjectLink(m_hObject, m_hActivateObj);
 		}
 
 		// Link to the new object...
@@ -1854,18 +1793,16 @@ void Door::SetActivateObj(HOBJECT hObj)
 
 		if (m_hActivateObj)
 		{
-            g_pLTServer->CreateInterObjectLink(m_hObject, m_hActivateObj);
+			g_pLTServer->CreateInterObjectLink(m_hObject, m_hActivateObj);
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Door::TriggerLink
 //
-//	ROUTINE:	Door::TriggerLink
-//
-//	PURPOSE:	Handle being triggered (when you're a link)...
-//
+//	PURPOSE: Handle being triggered (when you're a link)...
 // ----------------------------------------------------------------------- //
 
 void Door::TriggerLink(HOBJECT hActivateObj)
@@ -1881,17 +1818,15 @@ void Door::TriggerLink(HOBJECT hActivateObj)
 	{
 		// Don't re-trigger our link (infinite recursion is a bad thing ;)...
 
-        TriggerHandler(LTFALSE);
+		TriggerHandler(LTFALSE);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Door::TouchNotify
 //
-//	ROUTINE:	Door::TouchNotify
-//
-//	PURPOSE:	Handle object touch notify
-//
+//	PURPOSE: Handle object touch notify
 // ----------------------------------------------------------------------- //
 
 void Door::TouchNotify(HOBJECT hObj)
@@ -1918,11 +1853,9 @@ void Door::TouchNotify(HOBJECT hObj)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::TriggerMsg()
 //
-//	ROUTINE:	Door::TriggerMsg()
-//
-//	PURPOSE:	Handler for door trigger messages.
-//
+//	PURPOSE: Handler for door trigger messages.
 // --------------------------------------------------------------------------- //
 
 void Door::TriggerMsg(HOBJECT hSender, const char* szMsg)
@@ -1931,7 +1864,7 @@ void Door::TriggerMsg(HOBJECT hSender, const char* szMsg)
 	ConParse parse;
 	parse.Init((char*)szMsg);
 
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return;
 
 	while (pCommon->Parse(&parse) == LT_OK)
@@ -1956,7 +1889,7 @@ void Door::TriggerMsg(HOBJECT hSender, const char* szMsg)
 			}
 			else if (_stricmp(parse.m_Args[0], g_szAttach) == 0)
 			{
-                char* pObjName = parse.m_nArgs > 1 ? parse.m_Args[1] : LTNULL;
+				char* pObjName = parse.m_nArgs > 1 ? parse.m_Args[1] : LTNULL;
 				HandleAttach(pObjName);
 			}
 			else if (_stricmp(parse.m_Args[0], g_szDetach) == 0)
@@ -1965,22 +1898,20 @@ void Door::TriggerMsg(HOBJECT hSender, const char* szMsg)
 			}
 			else if (_stricmp(parse.m_Args[0], g_szLock) == 0)
 			{
-                m_bLocked = LTTRUE;
+				m_bLocked = LTTRUE;
 			}
 			else if (_stricmp(parse.m_Args[0], g_szUnLock) == 0)
 			{
-                m_bLocked = LTFALSE;
+				m_bLocked = LTFALSE;
 			}
 		}
 	}
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::ObjectMessageFn()
 //
-//	ROUTINE:	Door::ObjectMessageFn()
-//
-//	PURPOSE:	Handler for server object messages.
-//
+//	PURPOSE: Handler for server object messages.
 // --------------------------------------------------------------------------- //
 
 uint32 Door::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -1999,11 +1930,9 @@ uint32 Door::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRe
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::StartSound()
 //
-//	ROUTINE:	Door::StartSound()
-//
-//	PURPOSE:	Start the specified sound
-//
+//	PURPOSE: Start the specified sound
 // --------------------------------------------------------------------------- //
 
 void Door::StartSound(HSTRING hstrSoundName, LTBOOL bLoop)
@@ -2012,7 +1941,7 @@ void Door::StartSound(HSTRING hstrSoundName, LTBOOL bLoop)
 
 	if (!hstrSoundName) return;
 
-    char *pSoundName = g_pLTServer->GetStringData(hstrSoundName);
+	char *pSoundName = g_pLTServer->GetStringData(hstrSoundName);
 	if (!pSoundName) return;
 
 
@@ -2023,8 +1952,8 @@ void Door::StartSound(HSTRING hstrSoundName, LTBOOL bLoop)
 
 
 	// Determine if we should use the sound position or not...
-    if (m_vSoundPos.Equals(LTVector(0, 0, 0)))
-    {
+	if (m_vSoundPos.Equals(LTVector(0, 0, 0)))
+	{
 		playSoundInfo.m_dwFlags |= PLAYSOUND_ATTACHED;
 	}
 	else
@@ -2044,7 +1973,7 @@ void Door::StartSound(HSTRING hstrSoundName, LTBOOL bLoop)
 	playSoundInfo.m_fInnerRadius = m_fSoundRadius * 0.5f;
 	playSoundInfo.m_nPriority = SOUNDPRIORITY_MISC_MEDIUM;
 
-    g_pServerSoundMgr->PlaySoundDirect(playSoundInfo);
+	g_pServerSoundMgr->PlaySoundDirect(playSoundInfo);
 
 
 	// Save the handle of the sound...
@@ -2055,87 +1984,83 @@ void Door::StartSound(HSTRING hstrSoundName, LTBOOL bLoop)
 	}
 	else
 	{
-        m_sndLastSound = LTNULL;
+		m_sndLastSound = LTNULL;
 	}
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::StopSound()
 //
-//	ROUTINE:	Door::StopSound()
-//
-//	PURPOSE:	Stop the currently playing sound
-//
+//	PURPOSE: Stop the currently playing sound
 // --------------------------------------------------------------------------- //
 
 void Door::StopSound()
 {
 	if (m_sndLastSound)
 	{
-        g_pLTServer->KillSoundLoop(m_sndLastSound);
-        m_sndLastSound = LTNULL;
+		g_pLTServer->KillSoundLoop(m_sndLastSound);
+		m_sndLastSound = LTNULL;
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Door::Save
 //
-//	ROUTINE:	Door::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void Door::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hActivateObj);
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hAttachmentObj);
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hDoorLink);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hActivateObj);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hAttachmentObj);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hDoorLink);
 
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vMoveDir);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vSoundPos);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vOpenPos);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vClosedPos);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vAttachDir);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fSpeed);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fMoveDist);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fOpenWaitTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fCloseWaitTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fClosingSpeed);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fMoveStartTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fMoveDelay);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fDoorStopTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fSoundRadius);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bBoxPhysics);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bAITriggerable);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bLoopSounds);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bLocked);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bIsKeyframed);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bFirstUpdate);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bRemoveAttachments);
-    g_pLTServer->WriteToMessageDWord(hWrite, m_dwStateFlags);
-    g_pLTServer->WriteToMessageDWord(hWrite, m_dwDoorState);
-    g_pLTServer->WriteToMessageDWord(hWrite, m_dwWaveform);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrOpenSound);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrCloseSound);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrPortalName);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrLockedSound);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrAttachments);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrOpenCmd);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrCloseCmd);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrDoorLink);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrLockedCmd);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vMoveDir);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vSoundPos);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vOpenPos);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vClosedPos);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vAttachDir);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fSpeed);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fMoveDist);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fOpenWaitTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fCloseWaitTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fClosingSpeed);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fMoveStartTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fMoveDelay);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fDoorStopTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fSoundRadius);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bBoxPhysics);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bAITriggerable);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bLoopSounds);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bLocked);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bIsKeyframed);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bFirstUpdate);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bRemoveAttachments);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_dwStateFlags);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_dwDoorState);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_dwWaveform);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrOpenSound);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrCloseSound);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrPortalName);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrLockedSound);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrAttachments);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrOpenCmd);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrCloseCmd);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrDoorLink);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrLockedCmd);
 
-    uint8 nNumInList = m_pAttachmentList ? m_pAttachmentList->m_nInList : 0;
-    g_pLTServer->WriteToMessageByte(hWrite, nNumInList);
+	uint8 nNumInList = m_pAttachmentList ? m_pAttachmentList->m_nInList : 0;
+	g_pLTServer->WriteToMessageByte(hWrite, nNumInList);
 
 	if (nNumInList > 0)
 	{
 		ObjectLink* pLink = m_pAttachmentList->m_pFirstLink;
 		while (pLink)
 		{
-            g_pLTServer->WriteToLoadSaveMessageObject(hWrite, pLink->m_hObject);
+			g_pLTServer->WriteToLoadSaveMessageObject(hWrite, pLink->m_hObject);
 			pLink = pLink->m_pNext;
 		}
 	}
@@ -2143,11 +2068,9 @@ void Door::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Door::Load
 //
-//	ROUTINE:	Door::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void Door::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -2156,15 +2079,15 @@ void Door::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	LTBOOL invalidLoad = LTFALSE;
 
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hActivateObj);
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hAttachmentObj);
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hDoorLink);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hActivateObj);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hAttachmentObj);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hDoorLink);
 
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vMoveDir);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vSoundPos);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vOpenPos);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vClosedPos);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vAttachDir);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vMoveDir);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vSoundPos);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vOpenPos);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vClosedPos);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vAttachDir);
 
 	// NAN check -- For some reason the bombs in mission 2 return NAN for MoveDir.
 	if (isnan(m_vMoveDir.x)) {
@@ -2193,57 +2116,57 @@ void Door::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 		invalidLoad = LTTRUE;
 	}
 
-    m_fSpeed                = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fMoveDist             = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fOpenWaitTime         = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fCloseWaitTime        = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fClosingSpeed         = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fMoveStartTime        = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fMoveDelay            = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fDoorStopTime         = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fSoundRadius          = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_bBoxPhysics           = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bAITriggerable        = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bLoopSounds           = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bLocked               = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bIsKeyframed          = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bFirstUpdate          = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bRemoveAttachments    = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_dwStateFlags          = g_pLTServer->ReadFromMessageDWord(hRead);
-    m_dwDoorState           = g_pLTServer->ReadFromMessageDWord(hRead);
-    m_dwWaveform            = g_pLTServer->ReadFromMessageDWord(hRead);
-    m_hstrOpenSound         = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrCloseSound        = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrPortalName        = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrLockedSound       = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrAttachments       = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrOpenCmd           = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrCloseCmd          = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrDoorLink          = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrLockedCmd         = g_pLTServer->ReadFromMessageHString(hRead);
+	m_fSpeed				= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fMoveDist			 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fOpenWaitTime		 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fCloseWaitTime		= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fClosingSpeed		 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fMoveStartTime		= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fMoveDelay			= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fDoorStopTime		 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fSoundRadius		  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_bBoxPhysics		   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bAITriggerable		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bLoopSounds		   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bLocked			   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bIsKeyframed		  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bFirstUpdate		  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bRemoveAttachments	= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_dwStateFlags		  = g_pLTServer->ReadFromMessageDWord(hRead);
+	m_dwDoorState		   = g_pLTServer->ReadFromMessageDWord(hRead);
+	m_dwWaveform			= g_pLTServer->ReadFromMessageDWord(hRead);
+	m_hstrOpenSound		 = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrCloseSound		= g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrPortalName		= g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrLockedSound	   = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrAttachments	   = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrOpenCmd		   = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrCloseCmd		  = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrDoorLink		  = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrLockedCmd		 = g_pLTServer->ReadFromMessageHString(hRead);
 
 	// Load our attachments...
 
-    uint8 nNumAttach = g_pLTServer->ReadFromMessageByte(hRead);
+	uint8 nNumAttach = g_pLTServer->ReadFromMessageByte(hRead);
 
 	if (nNumAttach > 0)
 	{
 		if (m_pAttachmentList)
 		{
-            g_pLTServer->RelinquishList(m_pAttachmentList);
+			g_pLTServer->RelinquishList(m_pAttachmentList);
 		}
 
-        m_pAttachmentList = g_pLTServer->CreateObjectList();
+		m_pAttachmentList = g_pLTServer->CreateObjectList();
 	}
 
 	for (int i=0; i < nNumAttach; i++)
 	{
 		HOBJECT hObj;
-        g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &hObj);
+		g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &hObj);
 
 		if (hObj)
 		{
-            g_pLTServer->AddObjectToList(m_pAttachmentList, hObj);
+			g_pLTServer->AddObjectToList(m_pAttachmentList, hObj);
 		}
 	}
 
@@ -2278,51 +2201,47 @@ void Door::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Door::CacheFiles
 //
-//	ROUTINE:	Door::CacheFiles
-//
-//	PURPOSE:	Cache resources used by this object
-//
+//	PURPOSE: Cache resources used by this object
 // ----------------------------------------------------------------------- //
 
 void Door::CacheFiles()
 {
-    char* pFile = LTNULL;
+	char* pFile = LTNULL;
 	if (m_hstrOpenSound)
 	{
-        pFile = g_pLTServer->GetStringData(m_hstrOpenSound);
+		pFile = g_pLTServer->GetStringData(m_hstrOpenSound);
 		if (pFile)
 		{
-            g_pLTServer->CacheFile(FT_SOUND, pFile);
+			g_pLTServer->CacheFile(FT_SOUND, pFile);
 		}
 	}
 
 	if (m_hstrLockedSound)
 	{
-        pFile = g_pLTServer->GetStringData(m_hstrLockedSound);
+		pFile = g_pLTServer->GetStringData(m_hstrLockedSound);
 		if (pFile)
 		{
-            g_pLTServer->CacheFile(FT_SOUND, pFile);
+			g_pLTServer->CacheFile(FT_SOUND, pFile);
 		}
 	}
 
 	if (m_hstrCloseSound)
 	{
-        pFile = g_pLTServer->GetStringData(m_hstrCloseSound);
+		pFile = g_pLTServer->GetStringData(m_hstrCloseSound);
 		if (pFile)
 		{
-            g_pLTServer->CacheFile(FT_SOUND, pFile);
+			g_pLTServer->CacheFile(FT_SOUND, pFile);
 		}
 	}
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::ChangeMoveDir()
 //
-//	ROUTINE:	Door::ChangeMoveDir()
-//
-//	PURPOSE:	Move the door in the opposite direction, if this doesn't cause
+//	PURPOSE: Move the door in the opposite direction, if this doesn't cause
 //				any problems.
-//
 // --------------------------------------------------------------------------- //
 
 void Door::ChangeMoveDir()
@@ -2334,10 +2253,10 @@ void Door::ChangeMoveDir()
 		return;
 	}
 
-    LTVector vTestPos;
-    LTRotation rTestRot;
+	LTVector vTestPos;
+	LTRotation rTestRot;
 
-    LTBOOL bOkayToChangeState = LTTRUE;
+	LTBOOL bOkayToChangeState = LTTRUE;
 
 	if (m_hActivateObj)
 	{
@@ -2370,36 +2289,34 @@ void Door::ChangeMoveDir()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::GetMoveTestPosRot()
 //
-//	ROUTINE:	Door::GetMoveTestPosRot()
-//
-//	PURPOSE:	Get the test position/rotation of the door
-//
+//	PURPOSE: Get the test position/rotation of the door
 // --------------------------------------------------------------------------- //
 
 LTBOOL Door::GetMoveTestPosRot(LTVector & vTestPos, LTRotation & rTestRot)
 {
-    LTVector vFinalPos(0.0f, 0.0f, 0.0f);
-    LTFLOAT fSpeed = 0.0f;
+	LTVector vFinalPos(0.0f, 0.0f, 0.0f);
+	LTFLOAT fSpeed = 0.0f;
 
 	switch (m_dwDoorState)
 	{
 		case DOORSTATE_CLOSING:
 		{
 			vFinalPos = m_vOpenPos;
-			fSpeed    = m_fSpeed;
+			fSpeed	= m_fSpeed;
 		}
 		break;
 
 		case DOORSTATE_OPENING:
 		{
 			vFinalPos = m_vClosedPos;
-			fSpeed    = m_fClosingSpeed;
+			fSpeed	= m_fClosingSpeed;
 		}
 		break;
 
 		default:
-            return LTFALSE;
+			return LTFALSE;
 		break;
 	}
 
@@ -2407,42 +2324,40 @@ LTBOOL Door::GetMoveTestPosRot(LTVector & vTestPos, LTRotation & rTestRot)
 
 	// Our rotation doesn't change, so just set our rotation...
 
-    g_pLTServer->GetObjectRotation(m_hObject, &rTestRot);
+	g_pLTServer->GetObjectRotation(m_hObject, &rTestRot);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::TestObjectCollision()
 //
-//	ROUTINE:	Door::TestObjectCollision()
-//
-//	PURPOSE:	Determine if the test object would collide with the door if
+//	PURPOSE: Determine if the test object would collide with the door if
 //				the door were oriented in the test position/rotation.
-//
 // --------------------------------------------------------------------------- //
 
 LTBOOL Door::TestObjectCollision(HOBJECT hTest, LTVector vTestPos,
-                                LTRotation rTestRot, HOBJECT* pCollisionObj)
+								LTRotation rTestRot, HOBJECT* pCollisionObj)
 {
 	// Since doors can have attached bullet holes, make sure we get the
 	// objects we are interested in...
 	const int cArraySize = 100;
 
 	ObjArray<HOBJECT, cArraySize> objArray;
-    if (g_pLTServer->FindWorldModelObjectIntersections(m_hObject, vTestPos,
+	if (g_pLTServer->FindWorldModelObjectIntersections(m_hObject, vTestPos,
 		rTestRot, objArray) != LT_OK)
 	{
-        return LTFALSE;
+		return LTFALSE;
 	}
 
-    for (uint32 i=0; i < objArray.NumObjects(); i++)
+	for (uint32 i=0; i < objArray.NumObjects(); i++)
 	{
 		HOBJECT hObj = objArray.GetObject(i);
 		if (hObj && IsPlayer(hObj))
 		{
-            //g_pLTServer->CPrint("Object (%s) intersecting door!",
-            //  g_pLTServer->GetObjectName(hObj));
+			//g_pLTServer->CPrint("Object (%s) intersecting door!",
+			//  g_pLTServer->GetObjectName(hObj));
 
 			// If there isn't a test object, Return true if any characters
 			// collide
@@ -2456,21 +2371,19 @@ LTBOOL Door::TestObjectCollision(HOBJECT hTest, LTVector vTestPos,
 					*pCollisionObj = hObj;
 				}
 
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Door::TreatLikeWorld()
 //
-//	ROUTINE:	Door::TreatLikeWorld()
-//
-//	PURPOSE:	Should this door be treated like the world?
-//
+//	PURPOSE: Should this door be treated like the world?
 // --------------------------------------------------------------------------- //
 
 LTBOOL Door::TreatLikeWorld()
@@ -2481,8 +2394,8 @@ LTBOOL Door::TreatLikeWorld()
 	if (fabs(m_fMoveDist) <= 0.01f &&
 		(!m_damage.GetCanDamage() || m_damage.GetNeverDestroy()))
 	{
-        return LTTRUE;
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }

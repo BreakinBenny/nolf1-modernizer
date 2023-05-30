@@ -4,19 +4,18 @@
 
 
 BEGIN_CLASS(KeyframerLight)
-    ADD_BOOLPROP(DirLight, LTFALSE)
+	ADD_BOOLPROP(DirLight, LTFALSE)
 	ADD_REALPROP_FLAG(DirLightRadius, 300.0f, PF_FOVRADIUS)
 	ADD_REALPROP_FLAG(FOV, 90.0f, PF_FIELDOFVIEW)
 	ADD_REALPROP_FLAG(LightRadius, 300.0f, PF_RADIUS)
 	ADD_COLORPROP(InnerColor, 255.0f, 255.0f, 255.0f)
 	ADD_COLORPROP(OuterColor, 0.0f, 0.0f, 0.0f)
-    ADD_BOOLPROP(UseShadowMaps, LTTRUE)
+	ADD_BOOLPROP(UseShadowMaps, LTTRUE)
 END_CLASS_DEFAULT_FLAGS(KeyframerLight, BaseClass, NULL, NULL, 0)
 
 
 
-// ----------------------------------------------------------------------------------- //
-// Helpers.
+// ----------------------------------------------------------------------------------- // Helpers.
 // ----------------------------------------------------------------------------------- //
 void GetKLLightAnimName(char *pDest, const char *pObjectName)
 {
@@ -27,7 +26,7 @@ void GetKLLightAnimName(char *pDest, const char *pObjectName)
 void ReadKLProps(ILTPreLight *pInterface, HPREOBJECT hObject, KLProps *pProps)
 {
 	GenericProp gProp;
-    LTVector vUp, vRight;
+	LTVector vUp, vRight;
 
 	// Get light properties.
 	pInterface->GetPropGeneric(hObject, "DirLight", &gProp);
@@ -95,8 +94,7 @@ void SetupLightAnimPosition(LAInfo &info, uint32 nTotalFrames, float fPercent)
 
 
 
-// ----------------------------------------------------------------------------------- //
-// KeyframerLight functions.
+// ----------------------------------------------------------------------------------- // KeyframerLight functions.
 // ----------------------------------------------------------------------------------- //
 KeyframerLight::KeyframerLight()
 {
@@ -133,14 +131,14 @@ void KeyframerLight::PreCreate(ObjectCreateStruct *pStruct)
 	pStruct->m_Flags = 0;
 	pStruct->m_ObjectType = OT_NORMAL;
 
-    g_pLTServer->GetPropGeneric("InnerColor", &gProp);
+	g_pLTServer->GetPropGeneric("InnerColor", &gProp);
 	m_vLightColor = gProp.m_Color;
 
-    g_pLTServer->GetPropGeneric("DirLight", &gProp);
+	g_pLTServer->GetPropGeneric("DirLight", &gProp);
 	if(gProp.m_Bool)
-        g_pLTServer->GetPropGeneric("DirLightRadius", &gProp);
+		g_pLTServer->GetPropGeneric("DirLightRadius", &gProp);
 	else
-        g_pLTServer->GetPropGeneric("LightRadius", &gProp);
+		g_pLTServer->GetPropGeneric("LightRadius", &gProp);
 
 	m_fLightRadius = gProp.m_Float;
 }
@@ -151,9 +149,9 @@ void KeyframerLight::InitialUpdate()
 	char objectName[64], animName[128];
 
 
-    if(g_pLTServer->GetObjectName(m_hObject, objectName, sizeof(objectName)) == LT_OK)
+	if(g_pLTServer->GetObjectName(m_hObject, objectName, sizeof(objectName)) == LT_OK)
 	{
 		GetKLLightAnimName(animName, objectName);
-        g_pLTServer->GetLightAnimLT()->FindLightAnim(animName, m_hLightAnim);
+		g_pLTServer->GetLightAnimLT()->FindLightAnim(animName, m_hLightAnim);
 	}
 }

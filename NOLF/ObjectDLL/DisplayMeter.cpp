@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: DisplayMeter.cpp
 //
-// MODULE  : DisplayMeter.cpp
+// PURPOSE: DisplayMeter - Implementation
 //
-// PURPOSE : DisplayMeter - Implementation
-//
-// CREATED : 7/19/00
+// CREATED: 7/19/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -33,29 +31,25 @@ BEGIN_CLASS(DisplayMeter)
 	PROP_DEFINEGROUP(Phase5, PF_GROUP5)
 		ADD_LONGINTPROP_FLAG(Phase5Value, -1, PF_GROUP5)
 		ADD_STRINGPROP_FLAG(Phase5Cmd, "", PF_GROUP5)
-    ADD_BOOLPROP(RemoveWhenEmpty, LTTRUE)
+	ADD_BOOLPROP(RemoveWhenEmpty, LTTRUE)
 END_CLASS_DEFAULT(DisplayMeter, BaseClass, NULL, NULL)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::DisplayMeter()
 //
-//	ROUTINE:	DisplayMeter::DisplayMeter()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 DisplayMeter::DisplayMeter() : BaseClass(OT_NORMAL)
 {
-    m_bRemoveWhenEmpty  = LTTRUE;
+	m_bRemoveWhenEmpty  = LTTRUE;
 	m_nValue			= 0;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::~DisplayMeter()
 //
-//	ROUTINE:	DisplayMeter::~DisplayMeter()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 DisplayMeter::~DisplayMeter()
@@ -64,11 +58,9 @@ DisplayMeter::~DisplayMeter()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::EngineMessageFn
 //
-//	ROUTINE:	DisplayMeter::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 DisplayMeter::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -118,11 +110,9 @@ uint32 DisplayMeter::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDat
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::ObjectMessageFn
 //
-//	ROUTINE:	DisplayMeter::ObjectMessageFn
-//
-//	PURPOSE:	Handle object messages
-//
+//	PURPOSE: Handle object messages
 // ----------------------------------------------------------------------- //
 
 uint32 DisplayMeter::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -143,11 +133,9 @@ uint32 DisplayMeter::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGE
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::ReadProp
 //
-//	ROUTINE:	DisplayMeter::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 void DisplayMeter::ReadProp(ObjectCreateStruct *)
@@ -158,67 +146,61 @@ void DisplayMeter::ReadProp(ObjectCreateStruct *)
 	for (int i=1; i <= DM_MAX_NUMBER_OF_PHASES; i++)
 	{
 		sprintf(szProp, "Phase%dValue", i);
-        if (g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK)
 		{
 			m_PhaseData[i-1].nValue = genProp.m_Long;
 		}
 
 		sprintf(szProp, "Phase%dCmd", i);
-        if (g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK)
 		{
 			if (genProp.m_String[0])
 			{
-                m_PhaseData[i-1].hstrCmd = g_pLTServer->CreateString(genProp.m_String);
+				m_PhaseData[i-1].hstrCmd = g_pLTServer->CreateString(genProp.m_String);
 			}
 		}
 
 	}
 
-    if (g_pLTServer->GetPropGeneric("RemoveWhenEmpty", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("RemoveWhenEmpty", &genProp) == LT_OK)
 	{
 		m_bRemoveWhenEmpty = genProp.m_Bool;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::InitialUpdate()
 //
-//	ROUTINE:	DisplayMeter::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 void DisplayMeter::InitialUpdate()
 {
 	// Must be triggered on...
 
-    g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::Update()
 //
-//	ROUTINE:	DisplayMeter::Update()
-//
-//	PURPOSE:	Update
-//
+//	PURPOSE: Update
 // ----------------------------------------------------------------------- //
 
 void DisplayMeter::Update()
 {
-    g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::TriggerMsg()
 //
-//	ROUTINE:	DisplayMeter::TriggerMsg()
-//
-//	PURPOSE:	Process cinematic trigger messages
-//
+//	PURPOSE: Process cinematic trigger messages
 // --------------------------------------------------------------------------- //
 
 void DisplayMeter::TriggerMsg(HOBJECT hSender, const char *szMsg)
 {
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return;
 
 	// ConParse does not destroy szMsg, so this is safe
@@ -233,7 +215,7 @@ void DisplayMeter::TriggerMsg(HOBJECT hSender, const char *szMsg)
 			{
 				if (parse.m_nArgs > 1)
 				{
-                    HandleShow((uint8)atoi(parse.m_Args[1]));
+					HandleShow((uint8)atoi(parse.m_Args[1]));
 				}
 				else
 					HandleShow(100);
@@ -242,21 +224,21 @@ void DisplayMeter::TriggerMsg(HOBJECT hSender, const char *szMsg)
 			{
 				if (parse.m_nArgs > 1)
 				{
-                    HandlePlus((uint8)atoi(parse.m_Args[1]));
+					HandlePlus((uint8)atoi(parse.m_Args[1]));
 				}
 			}
 			else if (_stricmp(parse.m_Args[0], "minus") == 0)
 			{
 				if (parse.m_nArgs > 1)
 				{
-                    HandleMinus((uint8)atoi(parse.m_Args[1]));
+					HandleMinus((uint8)atoi(parse.m_Args[1]));
 				}
 			}
 			else if (_stricmp(parse.m_Args[0], "set") == 0)
 			{
 				if (parse.m_nArgs > 1)
 				{
-                    HandleSet((uint8)atoi(parse.m_Args[1]));
+					HandleSet((uint8)atoi(parse.m_Args[1]));
 				}
 			}
 			else if (_stricmp(parse.m_Args[0], "hide") == 0)
@@ -268,11 +250,9 @@ void DisplayMeter::TriggerMsg(HOBJECT hSender, const char *szMsg)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::HandleShow()
 //
-//	ROUTINE:	DisplayMeter::HandleShow()
-//
-//	PURPOSE:	Handle show message
-//
+//	PURPOSE: Handle show message
 // --------------------------------------------------------------------------- //
 
 void DisplayMeter::HandleShow(uint8 initVal)
@@ -287,15 +267,13 @@ void DisplayMeter::HandleShow(uint8 initVal)
 
 
 	// Update the DisplayMeter...
-//    g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
+//	g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::HandleSet()
 //
-//	ROUTINE:	DisplayMeter::HandleSet()
-//
-//	PURPOSE:	Handle set message
-//
+//	PURPOSE: Handle set message
 // --------------------------------------------------------------------------- //
 
 void DisplayMeter::HandleSet(uint8 val)
@@ -320,15 +298,13 @@ void DisplayMeter::HandleSet(uint8 val)
 	UpdateClients();
 
 	// Update the DisplayMeter...
-//    g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
+//	g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::HandlePlus()
 //
-//	ROUTINE:	DisplayMeter::HandlePlus()
-//
-//	PURPOSE:	Handle plus message
-//
+//	PURPOSE: Handle plus message
 // --------------------------------------------------------------------------- //
 
 void DisplayMeter::HandlePlus(uint8 val)
@@ -349,15 +325,13 @@ void DisplayMeter::HandlePlus(uint8 val)
 	UpdateClients();
 
 	// Update the DisplayMeter...
-//    g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
+//	g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::HandleMinus()
 //
-//	ROUTINE:	DisplayMeter::HandleMinus()
-//
-//	PURPOSE:	Handle plus message
-//
+//	PURPOSE: Handle plus message
 // --------------------------------------------------------------------------- //
 
 void DisplayMeter::HandleMinus(uint8 val)
@@ -409,16 +383,14 @@ void DisplayMeter::HandleMinus(uint8 val)
 	UpdateClients();
 
 	// Update the DisplayMeter...
-//    g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
+//	g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::HandleEnd()
 //
-//	ROUTINE:	DisplayMeter::HandleEnd()
-//
-//	PURPOSE:	Handle the DisplayMeter ending
-//
+//	PURPOSE: Handle the DisplayMeter ending
 // ----------------------------------------------------------------------- //
 
 void DisplayMeter::HandleEnd()
@@ -427,35 +399,31 @@ void DisplayMeter::HandleEnd()
 
 	if (m_bRemoveWhenEmpty)
 	{
-        g_pLTServer->RemoveObject(m_hObject);
+		g_pLTServer->RemoveObject(m_hObject);
 	}
 	UpdateClients();
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::UpdateClients()
 //
-//	ROUTINE:	DisplayMeter::UpdateClients()
-//
-//	PURPOSE:	Update the client's time
-//
+//	PURPOSE: Update the client's time
 // --------------------------------------------------------------------------- //
 
 void DisplayMeter::UpdateClients()
 {
 	// Send message to clients telling them about the DisplayMeter...
 
-    HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_DISPLAY_METER);
-    g_pLTServer->WriteToMessageByte(hMessage, m_nValue);
-    g_pLTServer->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(LTNULL, MID_DISPLAY_METER);
+	g_pLTServer->WriteToMessageByte(hMessage, m_nValue);
+	g_pLTServer->EndMessage(hMessage);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::Save
 //
-//	ROUTINE:	DisplayMeter::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void DisplayMeter::Save(HMESSAGEWRITE hWrite)
@@ -474,11 +442,9 @@ void DisplayMeter::Save(HMESSAGEWRITE hWrite)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: DisplayMeter::Load
 //
-//	ROUTINE:	DisplayMeter::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void DisplayMeter::Load(HMESSAGEREAD hRead)

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CachedFiles.h
 //
-// MODULE  : CachedFiles.h
+// PURPOSE: Pre load the following files for every level
 //
-// PURPOSE : Pre load the following files for every level
-//
-// CREATED : 6/17/98
+// CREATED: 6/17/98
 //
 // (c) 1998-1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __CACHED_FILES_H__

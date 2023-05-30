@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CHHWeaponModel.cpp
 //
-// MODULE  : CHHWeaponModel.cpp
+// PURPOSE: CHHWeaponModel implementation
 //
-// PURPOSE : CHHWeaponModel implementation
-//
-// CREATED : 10/31/97
+// CREATED: 10/31/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -29,25 +27,21 @@ BEGIN_CLASS(CHHWeaponModel)
 END_CLASS_DEFAULT_FLAGS(CHHWeaponModel, BaseClass, NULL, NULL, CF_HIDDEN)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CHHWeaponModel::CHHWeaponModel()
 //
-//	ROUTINE:	CHHWeaponModel::CHHWeaponModel()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 CHHWeaponModel::CHHWeaponModel() : BaseClass(OT_MODEL)
 {
-    m_pParent           = LTNULL;
-    m_hParentObject     = LTNULL;
+	m_pParent		   = LTNULL;
+	m_hParentObject	 = LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CHHWeaponModel::~CHHWeaponModel()
 //
-//	ROUTINE:	CHHWeaponModel::~CHHWeaponModel()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CHHWeaponModel::~CHHWeaponModel()
@@ -55,11 +49,9 @@ CHHWeaponModel::~CHHWeaponModel()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CHHWeaponModel::EngineMessageFn
 //
-//	ROUTINE:	CHHWeaponModel::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 CHHWeaponModel::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -98,7 +90,7 @@ uint32 CHHWeaponModel::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fD
 			{
 				if (hLink == m_hParentObject)
 				{
-                    m_hParentObject = LTNULL;
+					m_hParentObject = LTNULL;
 				}
 			}
 		}
@@ -112,25 +104,21 @@ uint32 CHHWeaponModel::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fD
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CHHWeaponModel::InitialUpdate()
 //
-//	ROUTINE:	CHHWeaponModel::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 void CHHWeaponModel::InitialUpdate()
 {
-    SetNextUpdate(m_hObject, 0.0f);
+	SetNextUpdate(m_hObject, 0.0f);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CHHWeaponModel::SetParent()
 //
-//	ROUTINE:	CHHWeaponModel::SetParent()
-//
-//	PURPOSE:	Set our parent data member
-//
+//	PURPOSE: Set our parent data member
 // ----------------------------------------------------------------------- //
 
 void CHHWeaponModel::SetParent(CWeapon* pParent)
@@ -142,7 +130,7 @@ void CHHWeaponModel::SetParent(CWeapon* pParent)
 		m_hParentObject = m_pParent->GetObject();
 		if (m_hParentObject)
 		{
-            g_pLTServer->CreateInterObjectLink(m_hObject, m_hParentObject);
+			g_pLTServer->CreateInterObjectLink(m_hObject, m_hParentObject);
 		}
 
 		m_pParent->SetModelObject(m_hObject);
@@ -167,16 +155,14 @@ void CHHWeaponModel::SetParent(CWeapon* pParent)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CHHWeaponModel::SetParent()
 //
-//	ROUTINE:	CHHWeaponModel::SetParent()
-//
-//	PURPOSE:	Set our parent data member
-//
+//	PURPOSE: Set our parent data member
 // ----------------------------------------------------------------------- //
 
 void CHHWeaponModel::Setup(CWeapon* pParent, WEAPON* pWeaponData)
 {
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 	if (pWeaponData->szHHModel[0])
 	{
 		g_pLTServer->SetModelFilenames(m_hObject, pWeaponData->szHHModel, pWeaponData->szHHSkin);
@@ -193,11 +179,9 @@ void CHHWeaponModel::Setup(CWeapon* pParent, WEAPON* pWeaponData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CHHWeaponModel::StringKey()
 //
-//	ROUTINE:	CHHWeaponModel::StringKey()
-//
-//	PURPOSE:	Handle animation command
-//
+//	PURPOSE: Handle animation command
 // ----------------------------------------------------------------------- //
 
 void CHHWeaponModel::StringKey(ArgList* pArgList)
@@ -215,11 +199,11 @@ void CHHWeaponModel::StringKey(ArgList* pArgList)
 	{
 		if (pArgList->argc > 1 && pArgList->argv[1])
 		{
-            uint8 nWeaponId = m_pParent->GetId();
+			uint8 nWeaponId = m_pParent->GetId();
 			WEAPON* pWeapon = g_pWeaponMgr->GetWeapon(nWeaponId);
 			if (!pWeapon) return;
 
-            char* pFilename = LTNULL;
+			char* pFilename = LTNULL;
 
 			PlayerSoundId nId = (PlayerSoundId)atoi(pArgList->argv[1]);
 			switch (nId)
@@ -242,10 +226,10 @@ void CHHWeaponModel::StringKey(ArgList* pArgList)
 
 			if (pFilename && pFilename[0])
 			{
-                LTVector vPos;
-                g_pLTServer->GetObjectPos(m_hObject, &vPos);
-                g_pServerSoundMgr->PlaySoundFromPos(vPos, pFilename, HHW_SOUND_KEY_RADIUS, SOUNDPRIORITY_AI_HIGH);
-            }
+				LTVector vPos;
+				g_pLTServer->GetObjectPos(m_hObject, &vPos);
+				g_pServerSoundMgr->PlaySoundFromPos(vPos, pFilename, HHW_SOUND_KEY_RADIUS, SOUNDPRIORITY_AI_HIGH);
+			}
 		}
 	}
 }

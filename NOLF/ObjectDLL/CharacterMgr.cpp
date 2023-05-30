@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CharacterMgr.cpp
 //
-// MODULE  : CharacterMgr.cpp
+// PURPOSE: CharacterMgr implementation
 //
-// PURPOSE : CharacterMgr implementation
-//
-// CREATED : 7/9/98
-//
+// CREATED: 7/9/98
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -37,11 +35,9 @@ CTList<class CDeathScene*>*  CCharacterMgr::s_aDeathLists[s_kDeathLists];
 CCharacterMgr* g_pCharacterMgr = LTNULL;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::CCharacterMgr()
 //
-//	ROUTINE:	CCharacterMgr::CCharacterMgr()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 CCharacterMgr::CCharacterMgr()
@@ -60,11 +56,9 @@ CCharacterMgr::CCharacterMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::Add()
 //
-//	ROUTINE:	CCharacterMgr::Add()
-//
-//	PURPOSE:	Add a character
-//
+//	PURPOSE: Add a character
 // ----------------------------------------------------------------------- //
 
 void CCharacterMgr::Add(CCharacter* pChar)
@@ -90,11 +84,9 @@ void CCharacterMgr::Add(CCharacter* pChar)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::Remove()
 //
-//	ROUTINE:	CCharacterMgr::Remove()
-//
-//	PURPOSE:	Remove a character
-//
+//	PURPOSE: Remove a character
 // ----------------------------------------------------------------------- //
 
 void CCharacterMgr::Remove(CCharacter* pChar)
@@ -121,11 +113,9 @@ void CCharacterMgr::Remove(CCharacter* pChar)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::PostStartWorld()
 //
-//	ROUTINE:	CCharacterMgr::PostStartWorld()
-//
-//	PURPOSE:	Post start world
-//
+//	PURPOSE: Post start world
 // ----------------------------------------------------------------------- //
 
 void CCharacterMgr::PostStartWorld(uint8 nLoadGameFlags)
@@ -165,11 +155,9 @@ void CCharacterMgr::PostStartWorld(uint8 nLoadGameFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::PreStartWorld()
 //
-//	ROUTINE:	CCharacterMgr::PreStartWorld()
-//
-//	PURPOSE:	Pre start world
-//
+//	PURPOSE: Pre start world
 // ----------------------------------------------------------------------- //
 
 void CCharacterMgr::PreStartWorld()
@@ -191,11 +179,9 @@ void CCharacterMgr::PreStartWorld()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::Load
 //
-//	ROUTINE:	CCharacterMgr::Load
-//
-//	PURPOSE:	Load our data
-//
+//	PURPOSE: Load our data
 // ----------------------------------------------------------------------- //
 
 void CCharacterMgr::Load(HMESSAGEREAD hRead)
@@ -208,11 +194,9 @@ void CCharacterMgr::Load(HMESSAGEREAD hRead)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::Save
 //
-//	ROUTINE:	CCharacterMgr::Save
-//
-//	PURPOSE:	Save our data
-//
+//	PURPOSE: Save our data
 // ----------------------------------------------------------------------- //
 
 void CCharacterMgr::Save(HMESSAGEWRITE hWrite)
@@ -225,16 +209,14 @@ void CCharacterMgr::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::UpdateSense()
 //
-//	ROUTINE:	CCharacterMgr::UpdateSense()
-//
-//	PURPOSE:	Checks to see if a stimulus for the given sense is present
-//
+//	PURPOSE: Checks to see if a stimulus for the given sense is present
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCharacterMgr::UpdateSense(CAI* pAI, CAISense* pAISense, LTFLOAT fTimeDelta)
 {
-    if (!pAI || !pAI->m_hObject || !pAISense) return LTFALSE;
+	if (!pAI || !pAI->m_hObject || !pAISense) return LTFALSE;
 
 	switch ( pAISense->GetType() )
 	{
@@ -248,7 +230,7 @@ LTBOOL CCharacterMgr::UpdateSense(CAI* pAI, CAISense* pAISense, LTFLOAT fTimeDel
 			{
 				if ( UpdateSenseInList(pAI, pAISense, m_playerList, fTimeDelta) )
 				{
-                    return LTTRUE;
+					return LTTRUE;
 				}
 			}
 		}
@@ -271,7 +253,7 @@ LTBOOL CCharacterMgr::UpdateSense(CAI* pAI, CAISense* pAISense, LTFLOAT fTimeDel
 				{
 					if ( UpdateSenseInList(pAI, pAISense, *s_aCharacterLists[iList], fTimeDelta) )
 					{
-                        return LTTRUE;
+						return LTTRUE;
 					}
 				}
 			}
@@ -288,7 +270,7 @@ LTBOOL CCharacterMgr::UpdateSense(CAI* pAI, CAISense* pAISense, LTFLOAT fTimeDel
 			{
 				if ( UpdateSenseInList(pAI, pAISense, m_badList, fTimeDelta) )
 				{
-                    return LTTRUE;
+					return LTTRUE;
 				}
 			}
 		}
@@ -306,7 +288,7 @@ LTBOOL CCharacterMgr::UpdateSense(CAI* pAI, CAISense* pAISense, LTFLOAT fTimeDel
 				{
 					if ( UpdateSenseInList(pAI, pAISense, *s_aCharacterLists[iList], fTimeDelta) )
 					{
-                        return LTTRUE;
+						return LTTRUE;
 					}
 				}
 			}
@@ -326,7 +308,7 @@ LTBOOL CCharacterMgr::UpdateSense(CAI* pAI, CAISense* pAISense, LTFLOAT fTimeDel
 				{
 					if ( UpdateSenseInList(pAI, pAISense, *s_aDeathLists[iList], fTimeDelta) )
 					{
-                        return LTTRUE;
+						return LTTRUE;
 					}
 				}
 			}
@@ -334,21 +316,19 @@ LTBOOL CCharacterMgr::UpdateSense(CAI* pAI, CAISense* pAISense, LTFLOAT fTimeDel
 		break;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::UpdateSenseInList
 //
-//	ROUTINE:	CCharacterMgr::UpdateSenseInList
-//
-//	PURPOSE:	Checks a sense against a given list of characters
-//
+//	PURPOSE: Checks a sense against a given list of characters
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCharacterMgr::UpdateSenseInList(CAI* pAI, CAISense* pAISense, CTList<CCharacter*>& listCharacters, LTFLOAT fTimeDelta)
 {
-    CCharacter** pCur  = LTNULL;
-    CCharacter*  pChar = LTNULL;
+	CCharacter** pCur  = LTNULL;
+	CCharacter*  pChar = LTNULL;
 
 	pCur = listCharacters.GetItem(TLIT_FIRST);
 
@@ -393,21 +373,19 @@ LTBOOL CCharacterMgr::UpdateSenseInList(CAI* pAI, CAISense* pAISense, CTList<CCh
 		pCur = listCharacters.GetItem(TLIT_NEXT);
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharcterMgr::UpdateSenseInList
 //
-//	ROUTINE:	CCharcterMgr::UpdateSenseInList
-//
-//	PURPOSE:	Checks a sense against a given list of death scenes
-//
+//	PURPOSE: Checks a sense against a given list of death scenes
 // ----------------------------------------------------------------------- //
 
 LTBOOL CCharacterMgr::UpdateSenseInList(CAI* pAI, CAISense* pAISense, CTList<CDeathScene*>& listDeathScenes, LTFLOAT fTimeDelta)
 {
-    CDeathScene** pCur  = LTNULL;
-    CDeathScene*  pDeathScene = LTNULL;
+	CDeathScene** pCur  = LTNULL;
+	CDeathScene*  pDeathScene = LTNULL;
 
 	pCur = listDeathScenes.GetItem(TLIT_FIRST);
 
@@ -425,22 +403,20 @@ LTBOOL CCharacterMgr::UpdateSenseInList(CAI* pAI, CAISense* pAISense, CTList<CDe
 		pCur = listDeathScenes.GetItem(TLIT_NEXT);
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::LookForEnemy()
 //
-//	ROUTINE:	CCharacterMgr::LookForEnemy()
-//
-//	PURPOSE:	Find someone we can see and we hate (SCANNER)
-//
+//	PURPOSE: Find someone we can see and we hate (SCANNER)
 // ----------------------------------------------------------------------- //
 
 CCharacter* CCharacterMgr::LookForEnemy(CScanner* pScanner)
 {
-    if (!pScanner || !pScanner->m_hObject) return LTNULL;
+	if (!pScanner || !pScanner->m_hObject) return LTNULL;
 
-    CCharacter* pChar = LTNULL;
+	CCharacter* pChar = LTNULL;
 
 	// For every faction this Scanner hates, look for targets...
 
@@ -456,22 +432,20 @@ CCharacter* CCharacterMgr::LookForEnemy(CScanner* pScanner)
 		}
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::LookForDeathScene()
 //
-//	ROUTINE:	CCharacterMgr::LookForDeathScene()
-//
-//	PURPOSE:	Find a death scene (SCANNER)
-//
+//	PURPOSE: Find a death scene (SCANNER)
 // ----------------------------------------------------------------------- //
 
 CDeathScene* CCharacterMgr::LookForDeathScene(CScanner* pScanner)
 {
-    if (!pScanner || !pScanner->m_hObject) return LTNULL;
+	if (!pScanner || !pScanner->m_hObject) return LTNULL;
 
-    CDeathScene *pDeathScene = LTNULL;
+	CDeathScene *pDeathScene = LTNULL;
 
 	// For every faction this Scanner likes, look for dead bodies
 
@@ -487,21 +461,19 @@ CDeathScene* CCharacterMgr::LookForDeathScene(CScanner* pScanner)
 		}
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::CanSeeEnemyInList
 //
-//	ROUTINE:	CCharacterMgr::CanSeeEnemyInList
-//
-//	PURPOSE:	See if we can see an enemy (SCANNER)
-//
+//	PURPOSE: See if we can see an enemy (SCANNER)
 // ----------------------------------------------------------------------- //
 
 CCharacter* CCharacterMgr::CanSeeEnemyInList(CScanner* pScanner, CTList<CCharacter*> & list)
 {
-    CCharacter** pCur  = LTNULL;
-    CCharacter*  pChar = LTNULL;
+	CCharacter** pCur  = LTNULL;
+	CCharacter*  pChar = LTNULL;
 
 	pCur = list.GetItem(TLIT_FIRST);
 
@@ -518,21 +490,19 @@ CCharacter* CCharacterMgr::CanSeeEnemyInList(CScanner* pScanner, CTList<CCharact
 		pCur = list.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::CanSeeDeathSceneInList
 //
-//	ROUTINE:	CCharacterMgr::CanSeeDeathSceneInList
-//
-//	PURPOSE:	See if we can see a Death Scene (SCANNER)
-//
+//	PURPOSE: See if we can see a Death Scene (SCANNER)
 // ----------------------------------------------------------------------- //
 
 CDeathScene* CCharacterMgr::CanSeeDeathSceneInList(CScanner* pScanner, CTList<CDeathScene*> & list)
 {
-    CDeathScene** pCur  = LTNULL;
-    CDeathScene*  pDeathScene = LTNULL;
+	CDeathScene** pCur  = LTNULL;
+	CDeathScene*  pDeathScene = LTNULL;
 
 	pCur = list.GetItem(TLIT_FIRST);
 
@@ -561,15 +531,13 @@ CDeathScene* CCharacterMgr::CanSeeDeathSceneInList(CScanner* pScanner, CTList<CD
 		pCur = list.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::AddDeathScene
 //
-//	ROUTINE:	CCharacterMgr::AddDeathScene
-//
-//	PURPOSE:	Method for adding "death scenes"
-//
+//	PURPOSE: Method for adding "death scenes"
 // ----------------------------------------------------------------------- //
 
 void CCharacterMgr::AddDeathScene(CDeathScene *pDeathScene)
@@ -589,15 +557,13 @@ void CCharacterMgr::AddDeathScene(CDeathScene *pDeathScene)
 		}
 	}
 
-    _ASSERT(LTFALSE);
+	_ASSERT(LTFALSE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::RemoveDeathScene
 //
-//	ROUTINE:	CCharacterMgr::RemoveDeathScene
-//
-//	PURPOSE:	Method for removing "death scenes"
-//
+//	PURPOSE: Method for removing "death scenes"
 // ----------------------------------------------------------------------- //
 
 void CCharacterMgr::RemoveDeathScene(CDeathScene *pDeathScene)
@@ -609,12 +575,12 @@ void CCharacterMgr::RemoveDeathScene(CDeathScene *pDeathScene)
 
 	for ( int iList = 0 ; iList < s_kDeathLists ; iList++ )
 	{
-        CDeathScene** ppCur  = LTNULL;
-        CDeathScene*  pCur = LTNULL;
+		CDeathScene** ppCur  = LTNULL;
+		CDeathScene*  pCur = LTNULL;
 
 		ppCur = s_aDeathLists[iList]->GetItem(TLIT_FIRST);
 
-        HOBJECT hObj = LTNULL;
+		HOBJECT hObj = LTNULL;
 		while (ppCur)
 		{
 			pCur = *ppCur;
@@ -631,28 +597,26 @@ void CCharacterMgr::RemoveDeathScene(CDeathScene *pDeathScene)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::GetDeathScene
 //
-//	ROUTINE:	CCharacterMgr::GetDeathScene
-//
-//	PURPOSE:	Method for finding "death scenes"
-//
+//	PURPOSE: Method for finding "death scenes"
 // ----------------------------------------------------------------------- //
 
 CDeathScene* CCharacterMgr::GetDeathScene(HOBJECT hBodyObject)
 {
 	_ASSERT(hBodyObject);
-    if ( !hBodyObject ) return LTNULL;
+	if ( !hBodyObject ) return LTNULL;
 
 	// Find the death scene in the list
 
 	for ( int iList = 0 ; iList < s_kDeathLists ; iList++ )
 	{
-        CDeathScene** pCur  = LTNULL;
-        CDeathScene*  pDeathScene = LTNULL;
+		CDeathScene** pCur  = LTNULL;
+		CDeathScene*  pDeathScene = LTNULL;
 
 		pCur = s_aDeathLists[iList]->GetItem(TLIT_FIRST);
 
-        HOBJECT hObj = LTNULL;
+		HOBJECT hObj = LTNULL;
 		while (pCur)
 		{
 			pDeathScene = *pCur;
@@ -668,15 +632,13 @@ CDeathScene* CCharacterMgr::GetDeathScene(HOBJECT hBodyObject)
 
 	// Couldn't find it
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::FindDogsInRadius
 //
-//	ROUTINE:	CCharacterMgr::FindDogsInRadius
-//
-//	PURPOSE:	Finds all the dogs in a given radius
-//
+//	PURPOSE: Finds all the dogs in a given radius
 // ----------------------------------------------------------------------- //
 
 void CCharacterMgr::FindDogsInRadius(CTList<AI_Dog*>& lstDogs, LTFLOAT fRadius)
@@ -685,7 +647,7 @@ void CCharacterMgr::FindDogsInRadius(CTList<AI_Dog*>& lstDogs, LTFLOAT fRadius)
 
 	for ( int iCharacterList = 1 ; iCharacterList < s_kCharacterLists ; iCharacterList++ )
 	{
-        CCharacter** pCur  = LTNULL;
+		CCharacter** pCur  = LTNULL;
 
 		pCur = s_aCharacterLists[iCharacterList]->GetItem(TLIT_FIRST);
 
@@ -693,7 +655,7 @@ void CCharacterMgr::FindDogsInRadius(CTList<AI_Dog*>& lstDogs, LTFLOAT fRadius)
 		{
 			if ( IsKindOf((*pCur)->m_hObject, "AI_Dog") )
 			{
-                lstDogs.Add((AI_Dog*)g_pLTServer->HandleToObject((*pCur)->m_hObject));
+				lstDogs.Add((AI_Dog*)g_pLTServer->HandleToObject((*pCur)->m_hObject));
 			}
 
 			pCur = s_aCharacterLists[iCharacterList]->GetItem(TLIT_NEXT);
@@ -702,11 +664,9 @@ void CCharacterMgr::FindDogsInRadius(CTList<AI_Dog*>& lstDogs, LTFLOAT fRadius)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::FindPlayer
 //
-//	ROUTINE:	CCharacterMgr::FindPlayer
-//
-//	PURPOSE:	(Hack) Finds a playerobject
-//
+//	PURPOSE: (Hack) Finds a playerobject
 // ----------------------------------------------------------------------- //
 
 CPlayerObj* CCharacterMgr::FindPlayer()
@@ -719,16 +679,14 @@ CPlayerObj* CCharacterMgr::FindPlayer()
 	}
 	else
 	{
-        return LTNULL;
+		return LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CCharacterMgr::ResetAIReactions
 //
-//	ROUTINE:	CCharacterMgr::ResetAIReactions
-//
-//	PURPOSE:	(Hack) Tells all AIs to spit themselves out to a file that resets their reactions
-//
+//	PURPOSE: (Hack) Tells all AIs to spit themselves out to a file that resets their reactions
 // ----------------------------------------------------------------------- //
 
 void CCharacterMgr::ResetAIReactions()

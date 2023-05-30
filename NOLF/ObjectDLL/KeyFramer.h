@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: KeyFramer.h
 //
-// MODULE  : KeyFramer.h
+// PURPOSE: KeyFramer definition
 //
-// PURPOSE : KeyFramer definition
-//
-// CREATED : 10/7/97
-//
+// CREATED: 10/7/97
 // ----------------------------------------------------------------------- //
 
 #ifndef __KEYFRAMER_H__
@@ -24,12 +22,12 @@ class KeyframerLight;
 #define ADD_KEYFRAMER_PROPERTIES(groupflag) \
 	ADD_STRINGPROP_FLAG(ObjectName, "", groupflag) \
 	ADD_STRINGPROP_FLAG(BaseKeyName, "", groupflag) \
-    ADD_BOOLPROP_FLAG(PushObjects, LTFALSE, groupflag) \
-    ADD_BOOLPROP_FLAG(StartActive, LTFALSE, groupflag) \
-    ADD_BOOLPROP_FLAG(StartPaused, LTFALSE, groupflag) \
-    ADD_BOOLPROP_FLAG(Looping, LTFALSE, groupflag) \
-    ADD_BOOLPROP_FLAG(AlignToPath, LTFALSE, groupflag) \
-    ADD_BOOLPROP_FLAG(IgnoreOffsets, LTFALSE, groupflag) \
+	ADD_BOOLPROP_FLAG(PushObjects, LTFALSE, groupflag) \
+	ADD_BOOLPROP_FLAG(StartActive, LTFALSE, groupflag) \
+	ADD_BOOLPROP_FLAG(StartPaused, LTFALSE, groupflag) \
+	ADD_BOOLPROP_FLAG(Looping, LTFALSE, groupflag) \
+	ADD_BOOLPROP_FLAG(AlignToPath, LTFALSE, groupflag) \
+	ADD_BOOLPROP_FLAG(IgnoreOffsets, LTFALSE, groupflag) \
 	ADD_STRINGPROP_FLAG(TargetName, "", groupflag) \
 	ADD_VECTORPROP_VAL_FLAG(TargetOffset, 0.0f, 0.0f, 0.0f, groupflag) \
 	ADD_STRINGPROP_FLAG(ActiveSound, "", groupflag) \
@@ -37,13 +35,13 @@ class KeyframerLight;
 	ADD_STRINGPROP(RotationWave, WAVESTR_SINE)\
 	PROP_DEFINEGROUP(Waveform, (groupflag == 0 ? PF_GROUP1 : (groupflag<<1))) \
 		ADD_REALPROP_FLAG(TotalPathTime, 0.0f, (groupflag == 0 ? PF_GROUP1 : (groupflag<<1))) \
-        ADD_BOOLPROP_FLAG(Linear, LTTRUE, (groupflag == 0 ? PF_GROUP1 : (groupflag<<1))) \
-        ADD_BOOLPROP_FLAG(Sine, LTFALSE, (groupflag == 0 ? PF_GROUP1 : (groupflag<<1))) \
-        ADD_BOOLPROP_FLAG(SlowOff, LTFALSE, (groupflag == 0 ? PF_GROUP1 : (groupflag<<1))) \
-        ADD_BOOLPROP_FLAG(SlowOn, LTFALSE, (groupflag == 0 ? PF_GROUP1 : (groupflag<<1))) \
+		ADD_BOOLPROP_FLAG(Linear, LTTRUE, (groupflag == 0 ? PF_GROUP1 : (groupflag<<1))) \
+		ADD_BOOLPROP_FLAG(Sine, LTFALSE, (groupflag == 0 ? PF_GROUP1 : (groupflag<<1))) \
+		ADD_BOOLPROP_FLAG(SlowOff, LTFALSE, (groupflag == 0 ? PF_GROUP1 : (groupflag<<1))) \
+		ADD_BOOLPROP_FLAG(SlowOn, LTFALSE, (groupflag == 0 ? PF_GROUP1 : (groupflag<<1))) \
 	PROP_DEFINEGROUP(Lighting, (groupflag == 0 ? PF_GROUP2 : (groupflag<<2))) \
 		ADD_STRINGPROP_FLAG(ShadowLights, "", (groupflag == 0 ? PF_GROUP2 : (groupflag<<2))) \
-        ADD_BOOLPROP_FLAG(ShadowMaps,LTFALSE, PF_HIDDEN|(groupflag == 0 ? PF_GROUP2 : (groupflag<<2)))
+		ADD_BOOLPROP_FLAG(ShadowMaps,LTFALSE, PF_HIDDEN|(groupflag == 0 ? PF_GROUP2 : (groupflag<<2)))
 
 struct KEYNODE
 {
@@ -56,8 +54,8 @@ struct KEYNODE
 
 struct PREWORLDMODEL
 {
-    LTVector     m_vPos;
-    LTRotation   m_rRot;
+	LTVector	 m_vPos;
+	LTRotation   m_rRot;
 	char		m_WorldModelName[64];
 };
 
@@ -75,8 +73,8 @@ enum KFWaveType
 class KeyframerPlugin : public IObjectPlugin
 {
 public:
-    virtual LTRESULT PreHook_Light(
-        ILTPreLight *pInterface,
+	virtual LTRESULT PreHook_Light(
+		ILTPreLight *pInterface,
 		HPREOBJECT hObject);
 };
 
@@ -93,7 +91,7 @@ class KeyFramer : public BaseClass
 
 		enum		KFDirection { KFD_FORWARD, KFD_BACKWARD };
 
-        void        GoActive(LTBOOL bReset=LTTRUE);
+		void		GoActive(LTBOOL bReset=LTTRUE);
 		void		GoInActive();
 		void		TriggerMsg(HOBJECT hSender, const char* pMsg);
 
@@ -110,13 +108,13 @@ class KeyFramer : public BaseClass
 
 		void		GoToKey(char* pKeyName);
 		void		MoveToKey(ConParse parse);
-        KEYNODE*    FindKey(char* pKeyName, KEYNODE* pTest=LTNULL, LTBOOL* pbAtOrBefore=LTNULL);
+		KEYNODE*	FindKey(char* pKeyName, KEYNODE* pTest=LTNULL, LTBOOL* pbAtOrBefore=LTNULL);
 
 		void		HandleLinkBroken(HOBJECT hLink);
-        void        UpdateObjects(LTBOOL bInterpolate=LTTRUE, LTBOOL bTeleport=LTFALSE);
+		void		UpdateObjects(LTBOOL bInterpolate=LTTRUE, LTBOOL bTeleport=LTFALSE);
 
-        uint32      EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
-        uint32      ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		uint32	  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+		uint32	  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 		void		SetObjectName(char* pName);
 		void		SetTarget(char* pName);
@@ -131,21 +129,21 @@ class KeyFramer : public BaseClass
 		HSTRING		m_hstrActiveSnd;
 		HSTRING		m_hstrDestCmd;
 
-        LTBOOL       m_bStartActive;
-        LTBOOL       m_bStartPaused;
-        LTBOOL       m_bLooping;
-        LTBOOL       m_bActive;
-        LTBOOL       m_bPaused;
-        LTBOOL       m_bFinished;
-        uint8       m_nNumKeys;
+		LTBOOL	   m_bStartActive;
+		LTBOOL	   m_bStartPaused;
+		LTBOOL	   m_bLooping;
+		LTBOOL	   m_bActive;
+		LTBOOL	   m_bPaused;
+		LTBOOL	   m_bFinished;
+		uint8	   m_nNumKeys;
 
 		HOBJECT		m_hTargetObject;
-        LTVector     m_vTargetOffset;
+		LTVector	 m_vTargetOffset;
 
 		ObjectList*	m_pObjectList;
 
-        CDynArray<LTVector>   m_pOffsets;
-        CDynArray<LTRotation> m_pRotations;
+		CDynArray<LTVector>   m_pOffsets;
+		CDynArray<LTRotation> m_pRotations;
 
 		WaveType	m_RotationWave;
 
@@ -156,31 +154,31 @@ class KeyFramer : public BaseClass
 		KEYNODE*	m_pLastKey;
 		KEYNODE*	m_pDestinationKey;
 
-        LTFLOAT      m_fCurTime;
-        LTFLOAT      m_fEndTime;
-        LTBOOL       m_bFirstUpdate;
-        LTBOOL       m_bUseVelocity;
-        LTBOOL       m_bAlignToPath;
-        LTBOOL       m_bPushObjects;
-        LTBOOL       m_bIgnoreOffsets;
+		LTFLOAT	  m_fCurTime;
+		LTFLOAT	  m_fEndTime;
+		LTBOOL	   m_bFirstUpdate;
+		LTBOOL	   m_bUseVelocity;
+		LTBOOL	   m_bAlignToPath;
+		LTBOOL	   m_bPushObjects;
+		LTBOOL	   m_bIgnoreOffsets;
 
 		KFWaveType	m_eWaveform;
-        LTFLOAT      m_fTotalPathTime;
-        LTFLOAT      m_fTotalDistance;
-        LTFLOAT      m_fVelocity;
-        LTVector     m_vCurPos;
-        LTFLOAT      m_fKeyPercent;
+		LTFLOAT	  m_fTotalPathTime;
+		LTFLOAT	  m_fTotalDistance;
+		LTFLOAT	  m_fVelocity;
+		LTVector	 m_vCurPos;
+		LTFLOAT	  m_fKeyPercent;
 
 		HOBJECT		m_hActiveSndObj;
-        HLTSOUND    m_hActiveSnd;
-        LTFLOAT      m_fSoundRadius;
+		HLTSOUND	m_hActiveSnd;
+		LTFLOAT	  m_fSoundRadius;
 		char*		m_pCommands;
 
 		HCLASS		m_hKeyframerLightClass;
 
 		HLIGHTANIM	m_hLightAnim;
 
-        LTFLOAT      m_fEarliestGoActiveTime;
+		LTFLOAT	  m_fEarliestGoActiveTime;
 
 		LTBOOL		m_bPausedOnLoad;
 
@@ -189,12 +187,12 @@ class KeyFramer : public BaseClass
 		void InitialUpdate();
 		void Update();
 
-        LTBOOL ReadProps();
+		LTBOOL ReadProps();
 
-        void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 
-        LTBOOL CreateKeyList();
+		LTBOOL CreateKeyList();
 		void  CreateObjectList();
 		void  CalculateVelocityInfo();
 
@@ -203,12 +201,12 @@ class KeyFramer : public BaseClass
 		void  UpdateShadowObjects();
 
 		// Updates the animation of a KeyframerLight.
-        void  UpdateKeyframerLight(KeyframerLight *pLight, LTVector vLightPos);
+		void  UpdateKeyframerLight(KeyframerLight *pLight, LTVector vLightPos);
 
 		// Get the index of a KEYNODE into our m_pKeys list.
-        uint32 GetKeyIndex(KEYNODE *pNode);
+		uint32 GetKeyIndex(KEYNODE *pNode);
 
-        LTBOOL CalcCurPos(LTBOOL & bAtKey);
+		LTBOOL CalcCurPos(LTBOOL & bAtKey);
 
 		// Calculate the lightmap animation indices to blend between, and the percentage between them
 		void CalcLMAnimFrames(uint32 &uFrame1, uint32 &uFrame2, float &fPercent);

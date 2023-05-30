@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Key.cpp
 //
-// MODULE  : Key.cpp
+// PURPOSE: Key implementation for Keyframer class
 //
-// PURPOSE : Key implementation for Keyframer class
-//
-// CREATED : 10/7/97
-//
+// CREATED: 10/7/97
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -27,11 +25,9 @@ END_CLASS_DEFAULT(Key, BaseClass, NULL, NULL)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Key::Key()
 //
-//	ROUTINE:	Key::Key()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 Key::Key() : BaseClass(OT_NORMAL)
@@ -53,16 +49,14 @@ Key::Key() : BaseClass(OT_NORMAL)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Key::~Key()
 //
-//	ROUTINE:	Key::~Key()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 Key::~Key()
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (pServerDE)
 	{
 		if (m_hstrSoundName) pServerDE->FreeString (m_hstrSoundName);
@@ -74,11 +68,9 @@ Key::~Key()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Key::EngineMessageFn
 //
-//	ROUTINE:	Key::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 Key::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -97,7 +89,7 @@ uint32 Key::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_INITIALUPDATE:
 		{
-            InitialUpdate((LTVector *)pData);
+			InitialUpdate((LTVector *)pData);
 			break;
 		}
 
@@ -109,17 +101,15 @@ uint32 Key::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Key::ReadProp
 //
-//	ROUTINE:	Key::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL Key::ReadProp(ObjectCreateStruct *)
 {
-    ILTServer* pServerDE = GetServerDE();
-    if (!pServerDE) return LTFALSE;
+	ILTServer* pServerDE = GetServerDE();
+	if (!pServerDE) return LTFALSE;
 
 	GenericProp genProp;
 
@@ -177,23 +167,21 @@ LTBOOL Key::ReadProp(ObjectCreateStruct *)
 		m_LightFrames = genProp.m_Long;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Key::InitialUpdate()
 //
-//	ROUTINE:	Key::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 LTBOOL Key::InitialUpdate(LTVector* pMovement)
 {
-    ILTServer* pServerDE = GetServerDE();
-    if (!pServerDE) return LTFALSE;
+	ILTServer* pServerDE = GetServerDE();
+	if (!pServerDE) return LTFALSE;
 
 	pServerDE->SetNextUpdate (m_hObject, 0.0f);
 
-    return LTTRUE;
+	return LTTRUE;
 }

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Breakable.CPP
 //
-// MODULE  : Breakable.CPP
+// PURPOSE: A Breakable object
 //
-// PURPOSE : A Breakable object
-//
-// CREATED : 1/14/99
+// CREATED: 1/14/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -27,34 +25,34 @@ BEGIN_CLASS(Breakable)
 	ADD_REALPROP_FLAG(BreakSoundRadius, 500.0f, PF_RADIUS)
 	ADD_STRINGPROP_FLAG(ImpactSound, "Snd\\Event\\BreakImpact.wav", PF_FILENAME)
 	ADD_REALPROP_FLAG(ImpactSoundRadius, 1000.0f, PF_RADIUS)
-    ADD_BOOLPROP(TouchActivate, LTTRUE)
-    ADD_BOOLPROP(DestroyOnImpact, LTFALSE)
-    ADD_BOOLPROP(DestroyAfterBreak, LTFALSE)
-    ADD_BOOLPROP(CrushObjects, LTFALSE)
+	ADD_BOOLPROP(TouchActivate, LTTRUE)
+	ADD_BOOLPROP(DestroyOnImpact, LTFALSE)
+	ADD_BOOLPROP(DestroyAfterBreak, LTFALSE)
+	ADD_BOOLPROP(CrushObjects, LTFALSE)
 	ADD_VECTORPROP_VAL(ScreenShakeAmount, 1.5f, 1.5f, 1.5f)
 	PROP_DEFINEGROUP(Physics, PF_GROUP4)
 		ADD_REALPROP_FLAG(FallVelocity, -1000.0f, PF_GROUP4)
 		ADD_REALPROP_FLAG(RotationTime, 15.0f, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(AdjustPitch, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(AdjustPitch, LTTRUE, PF_GROUP4)
 		ADD_REALPROP_FLAG(PitchDelta, 4.0f, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(AdjustYaw, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(AdjustYaw, LTTRUE, PF_GROUP4)
 		ADD_REALPROP_FLAG(YawDelta, 2.0f, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(AdjustRoll, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(AdjustRoll, LTTRUE, PF_GROUP4)
 		ADD_REALPROP_FLAG(RollDelta, 5.5f, PF_GROUP4)
 
 	// Property overrides...
-    ADD_BOOLPROP_FLAG(NeverDestroy, LTFALSE, PF_GROUP1)
+	ADD_BOOLPROP_FLAG(NeverDestroy, LTFALSE, PF_GROUP1)
 	PROP_DEFINEGROUP(StateFlags, PF_GROUP4 | PF_HIDDEN)
-        ADD_BOOLPROP_FLAG(ActivateTrigger, LTTRUE, PF_GROUP4 | PF_HIDDEN)
-        ADD_BOOLPROP_FLAG(StartOpen, LTFALSE, PF_GROUP4 | PF_HIDDEN)
-        ADD_BOOLPROP_FLAG(TriggerClose, LTTRUE, PF_GROUP4 | PF_HIDDEN)
-        ADD_BOOLPROP_FLAG(RemainsOpen, LTTRUE, PF_GROUP4 | PF_HIDDEN)
-        ADD_BOOLPROP_FLAG(ForceMove, LTFALSE, PF_GROUP4 | PF_HIDDEN)
+		ADD_BOOLPROP_FLAG(ActivateTrigger, LTTRUE, PF_GROUP4 | PF_HIDDEN)
+		ADD_BOOLPROP_FLAG(StartOpen, LTFALSE, PF_GROUP4 | PF_HIDDEN)
+		ADD_BOOLPROP_FLAG(TriggerClose, LTTRUE, PF_GROUP4 | PF_HIDDEN)
+		ADD_BOOLPROP_FLAG(RemainsOpen, LTTRUE, PF_GROUP4 | PF_HIDDEN)
+		ADD_BOOLPROP_FLAG(ForceMove, LTFALSE, PF_GROUP4 | PF_HIDDEN)
 	ADD_VISIBLE_FLAG(1, PF_HIDDEN)
 	ADD_SOLID_FLAG(1, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(BoxPhysics, LTFALSE, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(Locked, LTTRUE, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(IsKeyframed, LTTRUE, PF_HIDDEN) // Moves...
+	ADD_BOOLPROP_FLAG(BoxPhysics, LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(Locked, LTTRUE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(IsKeyframed, LTTRUE, PF_HIDDEN) // Moves...
 	ADD_BOOLPROP_FLAG(LoopSounds, LTTRUE, PF_HIDDEN)
 	ADD_REALPROP_FLAG(Speed, 0.0f, PF_HIDDEN)
 	ADD_REALPROP_FLAG(MoveDelay, 0.0f, PF_HIDDEN)
@@ -73,22 +71,20 @@ BEGIN_CLASS(Breakable)
 	ADD_REALPROP_FLAG(ClosingSpeed, 0.0f, PF_HIDDEN)
 	ADD_BOOLPROP(AITriggerable, 0)
 	PROP_DEFINEGROUP(Waveform, PF_GROUP5 | PF_HIDDEN)
-        ADD_BOOLPROP_FLAG(Linear, LTTRUE, PF_GROUP5 | PF_HIDDEN)
-        ADD_BOOLPROP_FLAG(Sine, LTFALSE, PF_GROUP5 | PF_HIDDEN)
-        ADD_BOOLPROP_FLAG(SlowOff, LTFALSE, PF_GROUP5 | PF_HIDDEN)
-        ADD_BOOLPROP_FLAG(SlowOn, LTFALSE, PF_GROUP5 | PF_HIDDEN)
+		ADD_BOOLPROP_FLAG(Linear, LTTRUE, PF_GROUP5 | PF_HIDDEN)
+		ADD_BOOLPROP_FLAG(Sine, LTFALSE, PF_GROUP5 | PF_HIDDEN)
+		ADD_BOOLPROP_FLAG(SlowOff, LTFALSE, PF_GROUP5 | PF_HIDDEN)
+		ADD_BOOLPROP_FLAG(SlowOn, LTFALSE, PF_GROUP5 | PF_HIDDEN)
 	ADD_STRINGPROP_FLAG(Attachments, "", PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(RemoveAttachments, LTTRUE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(RemoveAttachments, LTTRUE, PF_HIDDEN)
 	ADD_VECTORPROP_VAL_FLAG(AttachDir, 0.0f, 200.0f, 0.0f, PF_HIDDEN)
 	ADD_STRINGPROP_FLAG(ShadowLights, "", PF_OBJECTLINK | PF_HIDDEN)
 END_CLASS_DEFAULT(Breakable, Door, NULL, NULL)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::Breakable()
 //
-//	ROUTINE:	Breakable::Breakable()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 Breakable::Breakable() : Door()
@@ -97,17 +93,17 @@ Breakable::Breakable() : Door()
 	m_fBreakTime		 = 0.0f;
 	m_fBreakSoundRadius	 = 0.0f;
 	m_fImpactSoundRadius = 0.0f;
-    m_hstrBreakSound     = LTNULL;
-    m_hstrImpactSound    = LTNULL;
-    m_bFalling           = LTFALSE;
-    m_bStarted           = LTFALSE;
-    m_bCrushObjects      = LTFALSE;
-    m_bTouchActivate     = LTTRUE;
+	m_hstrBreakSound	 = LTNULL;
+	m_hstrImpactSound	= LTNULL;
+	m_bFalling		   = LTFALSE;
+	m_bStarted		   = LTFALSE;
+	m_bCrushObjects	  = LTFALSE;
+	m_bTouchActivate	 = LTTRUE;
 
-    m_bDestroyOnImpact   = LTFALSE;
-    m_bDestroyAfterBreak = LTFALSE;
+	m_bDestroyOnImpact   = LTFALSE;
+	m_bDestroyAfterBreak = LTFALSE;
 
-    m_hBreakObj          = LTNULL;
+	m_hBreakObj		  = LTNULL;
 
 	m_vShakeAmount.Init();
 	m_vFinalPos.Init();
@@ -121,11 +117,9 @@ Breakable::Breakable() : Door()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::~Breakable()
 //
-//	ROUTINE:	Breakable::~Breakable()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 Breakable::~Breakable()
@@ -135,16 +129,14 @@ Breakable::~Breakable()
 
 	if (m_hBreakObj)
 	{
-        g_pLTServer->BreakInterObjectLink(m_hObject, m_hBreakObj);
+		g_pLTServer->BreakInterObjectLink(m_hObject, m_hBreakObj);
 	}
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Breakable::EngineMessageFn()
 //
-//	ROUTINE:	Breakable::EngineMessageFn()
-//
-//	PURPOSE:	Handler for engine messages
-//
+//	PURPOSE: Handler for engine messages
 // --------------------------------------------------------------------------- //
 
 uint32 Breakable::EngineMessageFn(uint32 messageID, void *pData, float fData)
@@ -155,9 +147,9 @@ uint32 Breakable::EngineMessageFn(uint32 messageID, void *pData, float fData)
 		{
 			// Door changes this, so save original value...
 
-            LTBOOL bFirstUpdate = m_bFirstUpdate;
+			LTBOOL bFirstUpdate = m_bFirstUpdate;
 
-            uint32 dwRet = Door::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = Door::EngineMessageFn(messageID, pData, fData);
 
 			// Ignore the first update...
 
@@ -175,7 +167,7 @@ uint32 Breakable::EngineMessageFn(uint32 messageID, void *pData, float fData)
 			// Need to call base class to have the object name read in before
 			// we call PostPropRead()
 
-            uint32 dwRet = Door::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = Door::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE)
 			{
@@ -211,7 +203,7 @@ uint32 Breakable::EngineMessageFn(uint32 messageID, void *pData, float fData)
 			{
 				if (hLink == m_hBreakObj)
 				{
-                    m_hBreakObj = LTNULL;
+					m_hBreakObj = LTNULL;
 				}
 			}
 		}
@@ -225,107 +217,105 @@ uint32 Breakable::EngineMessageFn(uint32 messageID, void *pData, float fData)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Breakable::ReadProp()
 //
-//	ROUTINE:	Breakable::ReadProp()
-//
-//	PURPOSE:	Reads breakable properties
-//
+//	PURPOSE: Reads breakable properties
 // --------------------------------------------------------------------------- //
 
 void Breakable::ReadProp(ObjectCreateStruct *pStruct)
 {
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("BreakTime", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("BreakTime", &genProp) == LT_OK)
 	{
 		m_fBreakTime = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("BreakSoundRadius", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("BreakSoundRadius", &genProp) == LT_OK)
 	{
 		m_fBreakSoundRadius = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("ImpactSoundRadius", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ImpactSoundRadius", &genProp) == LT_OK)
 	{
 		m_fImpactSoundRadius = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("DestroyOnImpact", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DestroyOnImpact", &genProp) == LT_OK)
 	{
 		m_bDestroyOnImpact = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("DestroyAfterBreak", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DestroyAfterBreak", &genProp) == LT_OK)
 	{
 		m_bDestroyAfterBreak = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("CrushObjects", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("CrushObjects", &genProp) == LT_OK)
 	{
 		m_bCrushObjects = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("TouchActivate", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("TouchActivate", &genProp) == LT_OK)
 	{
 		m_bTouchActivate = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("BreakSound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("BreakSound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrBreakSound = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrBreakSound = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("ImpactSound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ImpactSound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrImpactSound = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrImpactSound = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("ScreenShakeAmount", &genProp ) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ScreenShakeAmount", &genProp ) == LT_OK)
 	{
 		m_vShakeAmount = genProp.m_Vec;
 	}
 
-    g_pLTServer->GetPropRotationEuler("Rotation", &m_vStartingPitchYawRoll);
+	g_pLTServer->GetPropRotationEuler("Rotation", &m_vStartingPitchYawRoll);
 	m_vPitchYawRoll = m_vStartingPitchYawRoll;
 
-    if (g_pLTServer->GetPropGeneric("AdjustPitch", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("AdjustPitch", &genProp) == LT_OK)
 	{
 		m_vAdjust.x = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("PitchDelta", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("PitchDelta", &genProp) == LT_OK)
 	{
 		m_vTotalDelta.x = MATH_DEGREES_TO_RADIANS(genProp.m_Float);
 	}
 
-    if (g_pLTServer->GetPropGeneric("AdjustYaw", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("AdjustYaw", &genProp) == LT_OK)
 	{
 		m_vAdjust.y = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("YawDelta", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("YawDelta", &genProp) == LT_OK)
 	{
 		m_vTotalDelta.y = MATH_DEGREES_TO_RADIANS(genProp.m_Float);
 	}
 
-    if (g_pLTServer->GetPropGeneric("AdjustRoll", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("AdjustRoll", &genProp) == LT_OK)
 	{
 		m_vAdjust.z = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("RollDelta", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("RollDelta", &genProp) == LT_OK)
 	{
 		m_vTotalDelta.z = MATH_DEGREES_TO_RADIANS(genProp.m_Float);
 	}
 
-    if (g_pLTServer->GetPropGeneric("RotationTime", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("RotationTime", &genProp) == LT_OK)
 	{
 		if (genProp.m_Float > 0.0f)
 		{
@@ -337,7 +327,7 @@ void Breakable::ReadProp(ObjectCreateStruct *pStruct)
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("FallVelocity", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("FallVelocity", &genProp) == LT_OK)
 	{
 		m_vVel.y = genProp.m_Float;
 	}
@@ -345,18 +335,16 @@ void Breakable::ReadProp(ObjectCreateStruct *pStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::Update()
 //
-//	ROUTINE:	Breakable::Update()
-//
-//	PURPOSE:	Update the breakable
-//
+//	PURPOSE: Update the breakable
 // ----------------------------------------------------------------------- //
 
 void Breakable::Update()
 {
-    LTFLOAT fTime = g_pLTServer->GetTime();
+	LTFLOAT fTime = g_pLTServer->GetTime();
 
-    g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
 
 	// See if it is time to stop the breaking...
 
@@ -379,18 +367,16 @@ void Breakable::Update()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::StartBreak()
 //
-//	ROUTINE:	Breakable::StartBreak()
-//
-//	PURPOSE:	Start the breaking...
-//
+//	PURPOSE: Start the breaking...
 // ----------------------------------------------------------------------- //
 
 void Breakable::StartBreak(HOBJECT hObj)
 {
 	if (m_bStarted) return;
 
-    m_bStarted = LTTRUE;
+	m_bStarted = LTTRUE;
 
 	// If an object caused us to break, give him a little upward
 	// velocity...
@@ -398,19 +384,19 @@ void Breakable::StartBreak(HOBJECT hObj)
 	if (hObj)
 	{
 		m_hBreakObj = hObj;
-        g_pLTServer->CreateInterObjectLink(m_hObject, m_hBreakObj);
+		g_pLTServer->CreateInterObjectLink(m_hObject, m_hBreakObj);
 
 		if (IsPlayer(hObj) && m_vShakeAmount.Mag() > 0.0f)
 		{
-            CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hObj);
+			CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hObj);
 			if (pPlayer)
 			{
 				HCLIENT hClient = pPlayer->GetClient();
 				if (hClient)
 				{
-                    HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_SHAKE_SCREEN);
-                    g_pLTServer->WriteToMessageVector(hMessage, &m_vShakeAmount);
-                    g_pLTServer->EndMessage(hMessage);
+					HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(hClient, MID_SHAKE_SCREEN);
+					g_pLTServer->WriteToMessageVector(hMessage, &m_vShakeAmount);
+					g_pLTServer->EndMessage(hMessage);
 				}
 			}
 		}
@@ -421,10 +407,10 @@ void Breakable::StartBreak(HOBJECT hObj)
 
 	if (m_hstrBreakSound)
 	{
-        LTVector vPos;
-        g_pLTServer->GetObjectPos(m_hObject, &vPos);
+		LTVector vPos;
+		g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
-        char* pSnd = g_pLTServer->GetStringData(m_hstrBreakSound);
+		char* pSnd = g_pLTServer->GetStringData(m_hstrBreakSound);
 
 		if (pSnd)
 		{
@@ -436,7 +422,7 @@ void Breakable::StartBreak(HOBJECT hObj)
 
 	// Use box physics (faster)...
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 	dwFlags |= FLAG_BOXPHYSICS;
 
 
@@ -447,22 +433,20 @@ void Breakable::StartBreak(HOBJECT hObj)
 		dwFlags &= ~FLAG_TOUCH_NOTIFY;
 	}
 
-    g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
+	g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
 
 	m_BreakTimer.Start(m_fBreakTime);
 
 	m_vDelta.Init();
 
-    g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
+	g_pLTServer->SetNextUpdate(m_hObject, 0.001f);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::StopBreak()
 //
-//	ROUTINE:	Breakable::StopBreak()
-//
-//	PURPOSE:	Stop the breaking...
-//
+//	PURPOSE: Stop the breaking...
 // ----------------------------------------------------------------------- //
 
 LTBOOL Breakable::StopBreak()
@@ -470,13 +454,13 @@ LTBOOL Breakable::StopBreak()
 	if (m_bDestroyAfterBreak)
 	{
 		Destroy();
-        return LTFALSE;
+		return LTFALSE;
 	}
 
 	// Determine how far we can fall before we'll hit the ground...
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	IntersectQuery IQuery;
 	IntersectInfo IInfo;
@@ -487,7 +471,7 @@ LTBOOL Breakable::StopBreak()
 
 	IQuery.m_Flags = INTERSECT_HPOLY | IGNORE_NONSOLID;
 
-    if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
+	if (g_pLTServer->IntersectSegment(&IQuery, &IInfo))
 	{
 		m_vFinalPos = IInfo.m_Point;
 	}
@@ -500,23 +484,23 @@ LTBOOL Breakable::StopBreak()
 	// fall normally... (i.e., they won't land on us while they
 	// are falling)...
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 	dwFlags &= ~FLAG_SOLID;
-    g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
+	g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
 
 	// If the player caused us to break, make sure the client
 	// moves (this will make gravity pull the object down)...
 
 	if (m_hBreakObj && IsPlayer(m_hBreakObj))
 	{
-        CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hBreakObj);
+		CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(m_hBreakObj);
 		if (pPlayer)
 		{
 			pPlayer->TeleportClientToServerPos();
 		}
 
-        g_pLTServer->BreakInterObjectLink(m_hObject, m_hBreakObj);
-        m_hBreakObj = LTNULL;
+		g_pLTServer->BreakInterObjectLink(m_hObject, m_hBreakObj);
+		m_hBreakObj = LTNULL;
 	}
 
 
@@ -525,22 +509,20 @@ LTBOOL Breakable::StopBreak()
 	CreateBreakFX();
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::UpdateBreaking()
 //
-//	ROUTINE:	Breakable::UpdateBreaking()
-//
-//	PURPOSE:	Update the breaking...
-//
+//	PURPOSE: Update the breaking...
 // ----------------------------------------------------------------------- //
 
 void Breakable::UpdateBreaking()
 {
-    LTFLOAT fDeltaTime = g_pLTServer->GetFrameTime();
-    LTFLOAT fDelta = 0.0f;
+	LTFLOAT fDeltaTime = g_pLTServer->GetFrameTime();
+	LTFLOAT fDelta = 0.0f;
 
 	if (m_vAdjust.x)
 	{
@@ -590,54 +572,52 @@ void Breakable::UpdateBreaking()
 
 	// Shake, rattle, and roll...
 
-    LTRotation rRot;
-    g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+	LTRotation rRot;
+	g_pLTServer->GetObjectRotation(m_hObject, &rRot);
 
-    g_pLTServer->SetupEuler(&rRot, m_vPitchYawRoll.x, m_vPitchYawRoll.y, m_vPitchYawRoll.z);
-    g_pLTServer->SetObjectRotation(m_hObject, &rRot);
+	g_pLTServer->SetupEuler(&rRot, m_vPitchYawRoll.x, m_vPitchYawRoll.y, m_vPitchYawRoll.z);
+	g_pLTServer->SetObjectRotation(m_hObject, &rRot);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::UpdateFalling()
 //
-//	ROUTINE:	Breakable::UpdateFalling()
-//
-//	PURPOSE:	Update the falling state...
-//
+//	PURPOSE: Update the falling state...
 // ----------------------------------------------------------------------- //
 
 void Breakable::UpdateFalling()
 {
-    LTVector vOldPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vOldPos);
+	LTVector vOldPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vOldPos);
 
-    LTVector vPos = vOldPos;
-    vPos += (m_vVel * g_pLTServer->GetFrameTime());
+	LTVector vPos = vOldPos;
+	vPos += (m_vVel * g_pLTServer->GetFrameTime());
 
-    LTBOOL bDone = LTFALSE;
+	LTBOOL bDone = LTFALSE;
 
 	if (vPos.y < m_vFinalPos.y)
 	{
 		vPos.y = m_vFinalPos.y;
-        bDone = LTTRUE;
+		bDone = LTTRUE;
 	}
 
-    g_pLTServer->TeleportObject(m_hObject, &vPos);
+	g_pLTServer->TeleportObject(m_hObject, &vPos);
 
 	if (vPos.Equals(m_vFinalPos, 10.0f))
 	{
-        bDone = LTTRUE;
+		bDone = LTTRUE;
 	}
 
 	if (bDone)
 	{
-        m_bFalling = LTFALSE;
+		m_bFalling = LTFALSE;
 
-        uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+		uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 		dwFlags |= FLAG_SOLID;
-        g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
+		g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
 
-        g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
+		g_pLTServer->SetNextUpdate(m_hObject, 0.0f);
 
 
 		// Create impact fx...
@@ -655,10 +635,10 @@ void Breakable::UpdateFalling()
 
 			if (m_hstrImpactSound)
 			{
-                LTVector vPos;
-                g_pLTServer->GetObjectPos(m_hObject, &vPos);
+				LTVector vPos;
+				g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
-                char* pSnd = g_pLTServer->GetStringData(m_hstrImpactSound);
+				char* pSnd = g_pLTServer->GetStringData(m_hstrImpactSound);
 
 				if (pSnd)
 				{
@@ -671,19 +651,17 @@ void Breakable::UpdateFalling()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::Destroy()
 //
-//	ROUTINE:	Breakable::Destroy()
-//
-//	PURPOSE:	Die
-//
+//	PURPOSE: Die
 // ----------------------------------------------------------------------- //
 
 void Breakable::Destroy()
 {
 	// Destroy us...
 
-    HOBJECT hObj = LTNULL;
-    LTVector vDir(0, 0, 0);
+	HOBJECT hObj = LTNULL;
+	LTVector vDir(0, 0, 0);
 
 	DamageStruct damage;
 
@@ -696,24 +674,22 @@ void Breakable::Destroy()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::CrushObject()
 //
-//	ROUTINE:	Breakable::CrushObject()
-//
-//	PURPOSE:	Crush the specified object
-//
+//	PURPOSE: Crush the specified object
 // ----------------------------------------------------------------------- //
 
 void Breakable::CrushObject(HOBJECT hObj)
 {
 	if (!hObj) return;
 
-    LTVector vPos;
-    LTVector vHisPos;
+	LTVector vPos;
+	LTVector vHisPos;
 
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
-    g_pLTServer->GetObjectPos(m_hObject, &vHisPos);
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	g_pLTServer->GetObjectPos(m_hObject, &vHisPos);
 
-    LTVector vDir = vPos - vHisPos;
+	LTVector vDir = vPos - vHisPos;
 	vDir.Norm();
 
 	DamageStruct damage;
@@ -727,11 +703,9 @@ void Breakable::CrushObject(HOBJECT hObj)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::CreateBreakFX()
 //
-//	ROUTINE:	Breakable::CreateBreakFX()
-//
-//	PURPOSE:	Create break fx
-//
+//	PURPOSE: Create break fx
 // ----------------------------------------------------------------------- //
 
 void Breakable::CreateBreakFX()
@@ -746,46 +720,44 @@ void Breakable::CreateBreakFX()
 	sc.fStartAlpha		= 0.5f;
 	sc.fStartScale		= 1.0f;
 	sc.fVel				= 20.0f;
-    sc.hstrParticle     = g_pLTServer->CreateString("SFX\\Impact\\Spr\\Smoke.spr");
+	sc.hstrParticle	 = g_pLTServer->CreateString("SFX\\Impact\\Spr\\Smoke.spr");
 	sc.vMinDriftVel.Init(-15, -20, -15);
 	sc.vMinDriftVel.Init(15, -5, 15);
 	sc.vColor1.Init(255, 255, 255);
 	sc.vColor2.Init(255, 255, 255);
 
-    LTVector vDims;
-    g_pLTServer->GetObjectDims(m_hObject, &vDims);
+	LTVector vDims;
+	g_pLTServer->GetObjectDims(m_hObject, &vDims);
 	sc.fVolumeRadius = Max(vDims.x, vDims.y);
 	sc.fVolumeRadius = Max(sc.fVolumeRadius, vDims.z);
 
 	sc.nNumParticles = int(sc.fVolumeRadius / 10.0f);
 	sc.nNumParticles = sc.nNumParticles < 1 ? 1 : sc.nNumParticles;
 
-    LTRotation rRot;
-    g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+	LTRotation rRot;
+	g_pLTServer->GetObjectRotation(m_hObject, &rRot);
 
-    LTVector vDown(0, -1, 0);
-    g_pLTServer->AlignRotation(&rRot, &vDown, LTNULL);
+	LTVector vDown(0, -1, 0);
+	g_pLTServer->AlignRotation(&rRot, &vDown, LTNULL);
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	Steam* pSteam = (Steam*)SpawnObject("Steam", vPos, rRot);
 	if (pSteam)
 	{
-        pSteam->Setup(&sc, 3.0f, LTTRUE);
+		pSteam->Setup(&sc, 3.0f, LTTRUE);
 	}
 
 	// Clear this so we don't try and delete it twice...
 
-    sc.hstrParticle = LTNULL;
+	sc.hstrParticle = LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::CreateImpactFX()
 //
-//	ROUTINE:	Breakable::CreateImpactFX()
-//
-//	PURPOSE:	Create impact fx
-//
+//	PURPOSE: Create impact fx
 // ----------------------------------------------------------------------- //
 
 void Breakable::CreateImpactFX()
@@ -800,46 +772,44 @@ void Breakable::CreateImpactFX()
 	sc.fStartAlpha		= 0.5f;
 	sc.fStartScale		= 1.0f;
 	sc.fVel				= 25.0f;
-    sc.hstrParticle     = g_pLTServer->CreateString("SFX\\Impact\\Spr\\Smoke.spr");
+	sc.hstrParticle	 = g_pLTServer->CreateString("SFX\\Impact\\Spr\\Smoke.spr");
 	sc.vMinDriftVel.Init(-35, 5, -35);
 	sc.vMinDriftVel.Init(35, 50, 35);
 	sc.vColor1.Init(255, 255, 255);
 	sc.vColor2.Init(255, 255, 255);
 
-    LTVector vDims;
-    g_pLTServer->GetObjectDims(m_hObject, &vDims);
+	LTVector vDims;
+	g_pLTServer->GetObjectDims(m_hObject, &vDims);
 	sc.fVolumeRadius = Max(vDims.x, vDims.y);
 	sc.fVolumeRadius = Max(sc.fVolumeRadius, vDims.z);
 
 	sc.nNumParticles = int(sc.fVolumeRadius / 10.0f);
 	sc.nNumParticles = sc.nNumParticles < 1 ? 1 : sc.nNumParticles;
 
-    LTRotation rRot;
-    g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+	LTRotation rRot;
+	g_pLTServer->GetObjectRotation(m_hObject, &rRot);
 
-    LTVector vDown(0, 1, 0);
-    g_pLTServer->AlignRotation(&rRot, &vDown, LTNULL);
+	LTVector vDown(0, 1, 0);
+	g_pLTServer->AlignRotation(&rRot, &vDown, LTNULL);
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	Steam* pSteam = (Steam*)SpawnObject("Steam", vPos, rRot);
 	if (pSteam)
 	{
-        pSteam->Setup(&sc, 3.0f, LTTRUE);
+		pSteam->Setup(&sc, 3.0f, LTTRUE);
 	}
 
 	// Clear this so we don't try and delete it twice...
 
-    sc.hstrParticle = LTNULL;
+	sc.hstrParticle = LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::TouchNotify
 //
-//	ROUTINE:	Breakable::TouchNotify
-//
-//	PURPOSE:	Handle object touch notify
-//
+//	PURPOSE: Handle object touch notify
 // ----------------------------------------------------------------------- //
 
 void Breakable::TouchNotify(HOBJECT hObj)
@@ -849,7 +819,7 @@ void Breakable::TouchNotify(HOBJECT hObj)
 	// Determine if he can actually break us (i.e., is he standing on us, or
 	// is he moving fast enough to break through)...
 
-    LTBOOL bBreak = IsStandingOnMe(hObj);
+	LTBOOL bBreak = IsStandingOnMe(hObj);
 
 
 	// Start the break...
@@ -865,18 +835,16 @@ void Breakable::TouchNotify(HOBJECT hObj)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::IsStandingOnMe
 //
-//	ROUTINE:	Breakable::IsStandingOnMe
-//
-//	PURPOSE:	Determine if the object is standing on me...
-//
+//	PURPOSE: Determine if the object is standing on me...
 // ----------------------------------------------------------------------- //
 
 LTBOOL Breakable::IsStandingOnMe(HOBJECT hObj)
 {
-    LTVector vHisPos, vPos;
-    g_pLTServer->GetObjectPos(hObj, &vHisPos);
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vHisPos, vPos;
+	g_pLTServer->GetObjectPos(hObj, &vHisPos);
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	// We're touching, he's above me, so...yes...
 
@@ -884,11 +852,9 @@ LTBOOL Breakable::IsStandingOnMe(HOBJECT hObj)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Breakable::TriggerMsg()
 //
-//	ROUTINE:	Breakable::TriggerMsg()
-//
-//	PURPOSE:	Handler for trigger messages.
-//
+//	PURPOSE: Handler for trigger messages.
 // --------------------------------------------------------------------------- //
 
 void Breakable::TriggerMsg(HOBJECT hSender, const char* szMsg)
@@ -903,41 +869,37 @@ void Breakable::TriggerMsg(HOBJECT hSender, const char* szMsg)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::CacheFiles
 //
-//	ROUTINE:	Breakable::CacheFiles
-//
-//	PURPOSE:	Cache resources used by this object
-//
+//	PURPOSE: Cache resources used by this object
 // ----------------------------------------------------------------------- //
 
 void Breakable::CacheFiles()
 {
-    char* pFile = LTNULL;
+	char* pFile = LTNULL;
 	if (m_hstrBreakSound)
 	{
-        pFile = g_pLTServer->GetStringData(m_hstrBreakSound);
+		pFile = g_pLTServer->GetStringData(m_hstrBreakSound);
 		if (pFile)
 		{
-            g_pLTServer->CacheFile(FT_SOUND, pFile);
+			g_pLTServer->CacheFile(FT_SOUND, pFile);
 		}
 	}
 
 	if (m_hstrImpactSound)
 	{
-        pFile = g_pLTServer->GetStringData(m_hstrImpactSound);
+		pFile = g_pLTServer->GetStringData(m_hstrImpactSound);
 		if (pFile)
 		{
-            g_pLTServer->CacheFile(FT_SOUND, pFile);
+			g_pLTServer->CacheFile(FT_SOUND, pFile);
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::Save
 //
-//	ROUTINE:	Breakable::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void Breakable::Save(HMESSAGEWRITE hWrite)
@@ -971,11 +933,9 @@ void Breakable::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Breakable::Load
 //
-//	ROUTINE:	Breakable::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void Breakable::Load(HMESSAGEREAD hRead)

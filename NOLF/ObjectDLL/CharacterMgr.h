@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CharacterMgr.h
 //
-// MODULE  : CharacterMgr.h
+// PURPOSE: CharacterMgr class definition
 //
-// PURPOSE : CharacterMgr class definition
-//
-// CREATED : 7/9/98
-//
+// CREATED: 7/9/98
 // ----------------------------------------------------------------------- //
 
 #ifndef __CHARACTER_MGR_H__
@@ -38,7 +36,7 @@ class CCharacterMgr
 
 		// Engine functions
 
-        void PostStartWorld(uint8 nLoadGameFlags);
+		void PostStartWorld(uint8 nLoadGameFlags);
 		void PreStartWorld();
 
 		void Load(HMESSAGEREAD hRead);
@@ -47,7 +45,7 @@ class CCharacterMgr
 		// Query/search
 
 		CPlayerObj* FindPlayer();
-        void FindDogsInRadius(CTList<AI_Dog*>& lstDogs, LTFLOAT fRadius);
+		void FindDogsInRadius(CTList<AI_Dog*>& lstDogs, LTFLOAT fRadius);
 
 		// Tracking things that affect sense
 
@@ -57,7 +55,7 @@ class CCharacterMgr
 
 		// AI Senses
 
-        LTBOOL UpdateSense(CAI* pAI, CAISense* pSense, LTFLOAT fTimeDelta);
+		LTBOOL UpdateSense(CAI* pAI, CAISense* pSense, LTFLOAT fTimeDelta);
 
 		// Scanner senses
 
@@ -99,8 +97,8 @@ class CCharacterMgr
 
 		// AI senses
 
-        LTBOOL UpdateSenseInList(CAI* pAI, CAISense* pSense, CTList<CCharacter*> & listCharacters, LTFLOAT fTimeDelta);
-        LTBOOL UpdateSenseInList(CAI* pAI, CAISense* pSense, CTList<CDeathScene*> & listDeathScenes, LTFLOAT fTimeDelta);
+		LTBOOL UpdateSenseInList(CAI* pAI, CAISense* pSense, CTList<CCharacter*> & listCharacters, LTFLOAT fTimeDelta);
+		LTBOOL UpdateSenseInList(CAI* pAI, CAISense* pSense, CTList<CDeathScene*> & listDeathScenes, LTFLOAT fTimeDelta);
 
 		// Scanner senses
 

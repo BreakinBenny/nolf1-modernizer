@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CHHWeaponModel.h
 //
-// MODULE  : CHHWeaponModel.h
+// PURPOSE: CHHWeaponModel definition - Hand Held weapon model support
 //
-// PURPOSE : CHHWeaponModel definition - Hand Held weapon model support
-//
-// CREATED : 10/31/97
+// CREATED: 10/31/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __HH_WEAPON_MODEL_H__
@@ -26,11 +24,11 @@ class CHHWeaponModel : public BaseClass
 
 		void Setup(CWeapon* pParent, WEAPON* pWeaponData);
 
-		CWeapon* GetParent()     const { return m_pParent; }
+		CWeapon* GetParent()	 const { return m_pParent; }
 
 	protected :
 
-        uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+		uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
 
 	private :
 

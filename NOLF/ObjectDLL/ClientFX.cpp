@@ -1,10 +1,10 @@
 //------------------------------------------------------------------
 //
-//   MODULE  : CLIENTFX.CPP
+//   MODULE: CLIENTFX.CPP
 //
-//   PURPOSE : Implements class CClientFX
+//   PURPOSE: Implements class CClientFX
 //
-//   CREATED : On 1/25/99 At 3:59:19 PM
+//   CREATED: On 1/25/99 At 3:59:19 PM
 //
 //------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ CClientFX::~CClientFX()
 {
 	if (m_hstrFxName)
 	{
-        g_pLTServer->FreeString(m_hstrFxName);
+		g_pLTServer->FreeString(m_hstrFxName);
 	}
 }
 
@@ -67,13 +67,13 @@ uint32 CClientFX::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 			{
 				GenericProp prop;
 
-                g_pLTServer->GetPropGeneric("FxName", &prop);
+				g_pLTServer->GetPropGeneric("FxName", &prop);
 				if (prop.m_String[0])
 				{
-                    m_hstrFxName = g_pLTServer->CreateString(prop.m_String);
+					m_hstrFxName = g_pLTServer->CreateString(prop.m_String);
 				}
 
-                g_pLTServer->GetPropGeneric("Loop", &prop);
+				g_pLTServer->GetPropGeneric("Loop", &prop);
 				m_bLoop = prop.m_Bool;
 			}
 		}
@@ -90,13 +90,13 @@ uint32 CClientFX::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -122,42 +122,38 @@ void CClientFX::SendFXMessage()
 	return;
 
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
-    HMESSAGEWRITE hWrite = g_pLTServer->StartMessage(LTNULL, MID_CLIENTFX_CREATE);
-    g_pLTServer->WriteToMessageString(hWrite, g_pLTServer->GetStringData(m_hstrFxName));
-    g_pLTServer->WriteToMessageVector(hWrite, &vPos);
-    g_pLTServer->WriteToMessageDWord(hWrite, m_bLoop);
-    g_pLTServer->EndMessage(hWrite);
+	HMESSAGEWRITE hWrite = g_pLTServer->StartMessage(LTNULL, MID_CLIENTFX_CREATE);
+	g_pLTServer->WriteToMessageString(hWrite, g_pLTServer->GetStringData(m_hstrFxName));
+	g_pLTServer->WriteToMessageVector(hWrite, &vPos);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_bLoop);
+	g_pLTServer->EndMessage(hWrite);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Save
 //
-//	ROUTINE:	Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void CClientFX::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrFxName);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bLoop);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrFxName);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bLoop);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Load
 //
-//	ROUTINE:	Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void CClientFX::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
-    m_hstrFxName = g_pLTServer->ReadFromMessageHString(hRead);
-    m_bLoop      = (BOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_hstrFxName = g_pLTServer->ReadFromMessageHString(hRead);
+	m_bLoop	  = (BOOL) g_pLTServer->ReadFromMessageByte(hRead);
 
 	// Send the special fx message to the client(s)...
 

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: DestructibleModel.cpp
 //
-// MODULE  : DestructibleModel.cpp
+// PURPOSE: DestructibleModel aggregate
 //
-// PURPOSE : DestructibleModel aggregate
-//
-// CREATED : 4/23/98
+// CREATED: 4/23/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -24,11 +22,9 @@
 #include <stdio.h>
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModelPlugin::PreHook_EditStringList()
 //
-//	ROUTINE:	CDestructibleModelPlugin::PreHook_EditStringList()
-//
-//	PURPOSE:	Fill in property string list
-//
+//	PURPOSE: Fill in property string list
 // ----------------------------------------------------------------------- //
 LTRESULT CDestructibleModelPlugin::PreHook_EditStringList(const char* szRezPath,
 	const char* szPropName, char** aszStrings, uint32* pcStrings,
@@ -57,11 +53,9 @@ LTRESULT CDestructibleModelPlugin::PreHook_EditStringList(const char* szRezPath,
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::CDestructibleModel()
 //
-//	ROUTINE:	CDestructibleModel::CDestructibleModel()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 CDestructibleModel::CDestructibleModel() : CDestructible()
@@ -87,11 +81,9 @@ CDestructibleModel::CDestructibleModel() : CDestructible()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::~CDestructibleModel()
 //
-//	ROUTINE:	CDestructibleModel::~CDestructibleModel()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CDestructibleModel::~CDestructibleModel()
@@ -102,11 +94,9 @@ CDestructibleModel::~CDestructibleModel()
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::EngineMessageFn()
 //
-//	ROUTINE:	CDestructibleModel::EngineMessageFn()
-//
-//	PURPOSE:	Handler for engine messages
-//
+//	PURPOSE: Handler for engine messages
 // --------------------------------------------------------------------------- //
 
 uint32 CDestructibleModel::EngineMessageFn(LPBASECLASS pObject, uint32 messageID, void *pData, LTFLOAT fData)
@@ -156,11 +146,9 @@ uint32 CDestructibleModel::EngineMessageFn(LPBASECLASS pObject, uint32 messageID
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::SetSurfaceType
 //
-//	ROUTINE:	CDestructibleModel::SetSurfaceType
-//
-//	PURPOSE:	Set the object's surface type...
-//
+//	PURPOSE: Set the object's surface type...
 // ----------------------------------------------------------------------- //
 
 void CDestructibleModel::SetSurfaceType()
@@ -174,7 +162,7 @@ void CDestructibleModel::SetSurfaceType()
 
 	if (g_pLTServer->GetObjectType(m_hObject) == OT_WORLDMODEL)
 	{
-        LTBOOL bDoBruteForce = LTTRUE;
+		LTBOOL bDoBruteForce = LTTRUE;
 
 		// See if we have a surface override...
 
@@ -240,16 +228,14 @@ void CDestructibleModel::SetSurfaceType()
 	dwSurfUsrFlgs = SurfaceToUserFlag(eSurfType);
 	g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlgs | dwSurfUsrFlgs);
 
-    m_dwOriginalFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	m_dwOriginalFlags = g_pLTServer->GetObjectFlags(m_hObject);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::ObjectMessageFn
 //
-//	ROUTINE:	CDestructibleModel::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 CDestructibleModel::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -262,7 +248,7 @@ uint32 CDestructibleModel::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender,
 		{
 			if (IsDead() && !m_bCreatedDebris)
 			{
-                ILTServer* pServerDE = BaseClass::GetServerDE();
+				ILTServer* pServerDE = BaseClass::GetServerDE();
 				if (!pServerDE) break;
 
 				SpawnItem();
@@ -349,37 +335,35 @@ uint32 CDestructibleModel::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender,
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::ReadProp()
 //
-//	ROUTINE:	CDestructibleModel::ReadProp()
-//
-//	PURPOSE:	Reads CDestructibleModel properties
-//
+//	PURPOSE: Reads CDestructibleModel properties
 // --------------------------------------------------------------------------- //
 
 LTBOOL CDestructibleModel::ReadProp(ObjectCreateStruct *)
 {
-    ILTServer* pServerDE = BaseClass::GetServerDE();
+	ILTServer* pServerDE = BaseClass::GetServerDE();
 	if (!pServerDE) return LTFALSE;
 
 	GetDebrisProperties(m_nDebrisId);
 
 	GenericProp genProp;
-    if (g_pLTServer->GetPropGeneric("CreateExplosion", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("CreateExplosion", &genProp) == LT_OK)
 	{
 		m_bCreateExplosion = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("WeaponId", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("WeaponId", &genProp) == LT_OK)
 	{
-        m_nExplosionWeaponId = (uint8)genProp.m_Long;
+		m_nExplosionWeaponId = (uint8)genProp.m_Long;
 	}
 
-    if (g_pLTServer->GetPropGeneric("FireAlongForward", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("FireAlongForward", &genProp) == LT_OK)
 	{
 		m_bFireAlongForward = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Spawn", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Spawn", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
@@ -388,7 +372,7 @@ LTBOOL CDestructibleModel::ReadProp(ObjectCreateStruct *)
 	}
 
 
-    if (g_pLTServer->GetPropGeneric("SurfaceOverride", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("SurfaceOverride", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
@@ -397,7 +381,7 @@ LTBOOL CDestructibleModel::ReadProp(ObjectCreateStruct *)
 	}
 
 
-    if (g_pLTServer->GetPropGeneric("DamageFactor", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DamageFactor", &genProp) == LT_OK)
 	{
 		m_fDamageFactor = genProp.m_Float;
 	}
@@ -407,16 +391,14 @@ LTBOOL CDestructibleModel::ReadProp(ObjectCreateStruct *)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::CreateWorldModelDebris()
 //
-//	ROUTINE:	CDestructibleModel::CreateWorldModelDebris()
-//
-//	PURPOSE:	Create world model debris...
-//
+//	PURPOSE: Create world model debris...
 // ----------------------------------------------------------------------- //
 
 void CDestructibleModel::CreateWorldModelDebris()
 {
-    ILTServer* pServerDE = BaseClass::GetServerDE();
+	ILTServer* pServerDE = BaseClass::GetServerDE();
 	if (!pServerDE) return;
 
 	char* pName = pServerDE->GetObjectName(m_hObject);
@@ -474,11 +456,9 @@ void CDestructibleModel::CreateWorldModelDebris()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::CreateDebris()
 //
-//	ROUTINE:	CDestructibleModel::CreateDebris()
-//
-//	PURPOSE:	Create debris...
-//
+//	PURPOSE: Create debris...
 // ----------------------------------------------------------------------- //
 
 void CDestructibleModel::CreateDebris()
@@ -489,18 +469,16 @@ void CDestructibleModel::CreateDebris()
 		LTVector vPos;
 		g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
-        LTVector vDeathDir = GetDeathDir();
-        ::CreatePropDebris(vPos, vDeathDir, m_nDebrisId);
+		LTVector vDeathDir = GetDeathDir();
+		::CreatePropDebris(vPos, vDeathDir, m_nDebrisId);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::DoExplosion()
 //
-//	ROUTINE:	CDestructibleModel::DoExplosion()
-//
-//	PURPOSE:	Handle doing explosion
-//
+//	PURPOSE: Handle doing explosion
 // ----------------------------------------------------------------------- //
 
 void CDestructibleModel::DoExplosion(char* pTargetName)
@@ -563,11 +541,9 @@ void CDestructibleModel::DoExplosion(char* pTargetName)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::SpawnItem()
 //
-//	ROUTINE:	CDestructibleModel::SpawnItem()
-//
-//	PURPOSE:	Spawn an item
-//
+//	PURPOSE: Spawn an item
 // ----------------------------------------------------------------------- //
 
 void CDestructibleModel::SpawnItem()
@@ -588,11 +564,9 @@ void CDestructibleModel::SpawnItem()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::CacheFiles
 //
-//	ROUTINE:	CDestructibleModel::CacheFiles
-//
-//	PURPOSE:	Caches files used by object.
-//
+//	PURPOSE: Caches files used by object.
 // ----------------------------------------------------------------------- //
 
 void CDestructibleModel::CacheFiles()
@@ -608,11 +582,9 @@ void CDestructibleModel::CacheFiles()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::Save
 //
-//	ROUTINE:	CDestructibleModel::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void CDestructibleModel::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -634,11 +606,9 @@ void CDestructibleModel::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDestructibleModel::Load
 //
-//	ROUTINE:	CDestructibleModel::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void CDestructibleModel::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -648,10 +618,10 @@ void CDestructibleModel::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 	LOAD_HSTRING(m_hstrSurfaceOverride);
 	m_hstrSpawn				= g_pLTServer->ReadFromMessageHString(hRead);
 	m_fDamageFactor			= g_pLTServer->ReadFromMessageFloat(hRead);
-    m_bCreatedDebris        = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bCreatedDebris		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
 	m_nDebrisId				= g_pLTServer->ReadFromMessageByte(hRead);
-    m_bFireAlongForward     = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bCreateExplosion      = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bFireAlongForward	 = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bCreateExplosion	  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
 	m_nExplosionWeaponId	= g_pLTServer->ReadFromMessageByte(hRead);
 	m_bSaveCanDamage		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
 	m_bSaveNeverDestroy		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);

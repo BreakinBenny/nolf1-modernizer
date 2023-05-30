@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CommandMgr.h
 //
-// MODULE  : CommandMgr.h
+// PURPOSE: CommandMgr definition
 //
-// PURPOSE : CommandMgr definition
-//
-// CREATED : 06/23/99
+// CREATED: 06/23/99
 //
 // (c) 1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __COMMAND_MGR_H__
@@ -82,7 +80,7 @@ struct CMD_STRUCT_PARAM
 
 struct CMD_PROCESS_STRUCT
 {
-    CMD_PROCESS_STRUCT(char* pCmd="", int nArgs=0, ProcessCmdFn pFn=LTNULL, char* pSyn="")
+	CMD_PROCESS_STRUCT(char* pCmd="", int nArgs=0, ProcessCmdFn pFn=LTNULL, char* pSyn="")
 	{
 		pCmdName	= pCmd;
 		nNumArgs	= nArgs;
@@ -107,33 +105,33 @@ class CCommandMgr
 		void Save(HMESSAGEWRITE hWrite);
 
 		void	ListCommands();
-        LTBOOL  IsValidCmd(const char* pCmd);
-        LTBOOL  Process(const char* pCmd) { return ProcessCmd(pCmd); }
-        LTBOOL  Update();
+		LTBOOL  IsValidCmd(const char* pCmd);
+		LTBOOL  Process(const char* pCmd) { return ProcessCmd(pCmd); }
+		LTBOOL  Update();
 
 		void	Clear();
 
 		// The following methods should only be called via the static cmdmgr_XXX
 		// functions...
 
-        LTBOOL	ProcessListCommands(ConParse & parse, int nCmdIndex);
-        LTBOOL  ProcessDelay(ConParse & parse, int nCmdIndex);
-        LTBOOL  ProcessDelayId(ConParse & parse, int nCmdIndex);
-        LTBOOL  ProcessMsg(ConParse & parse, int nCmdIndex);
-        LTBOOL  ProcessRand(ConParse & parse, int nCmdIndex);
-        LTBOOL  ProcessRandArgs(ConParse & parse, int nCmdIndex, int nNumArgs);
-        LTBOOL  ProcessRepeat(ConParse & parse, int nCmdIndex);
-        LTBOOL  ProcessRepeatId(ConParse & parse, int nCmdIndex);
-        LTBOOL  ProcessLoop(ConParse & parse, int nCmdIndex);
-        LTBOOL  ProcessLoopId(ConParse & parse, int nCmdIndex);
-        LTBOOL  ProcessAbort(ConParse & parse, int nCmdIndex);
+		LTBOOL	ProcessListCommands(ConParse & parse, int nCmdIndex);
+		LTBOOL  ProcessDelay(ConParse & parse, int nCmdIndex);
+		LTBOOL  ProcessDelayId(ConParse & parse, int nCmdIndex);
+		LTBOOL  ProcessMsg(ConParse & parse, int nCmdIndex);
+		LTBOOL  ProcessRand(ConParse & parse, int nCmdIndex);
+		LTBOOL  ProcessRandArgs(ConParse & parse, int nCmdIndex, int nNumArgs);
+		LTBOOL  ProcessRepeat(ConParse & parse, int nCmdIndex);
+		LTBOOL  ProcessRepeatId(ConParse & parse, int nCmdIndex);
+		LTBOOL  ProcessLoop(ConParse & parse, int nCmdIndex);
+		LTBOOL  ProcessLoopId(ConParse & parse, int nCmdIndex);
+		LTBOOL  ProcessAbort(ConParse & parse, int nCmdIndex);
 
 	private :
 
-        LTBOOL	ProcessCmd(const char* pCmd, int nCmdIndex=-1);
+		LTBOOL	ProcessCmd(const char* pCmd, int nCmdIndex=-1);
 
-        LTBOOL  AddDelayedCmd(CMD_STRUCT_PARAM & cmd, int nCmdIndex);
-        LTBOOL  CheckArgs(ConParse & parse, int nNum);
+		LTBOOL  AddDelayedCmd(CMD_STRUCT_PARAM & cmd, int nCmdIndex);
+		LTBOOL  CheckArgs(ConParse & parse, int nNum);
 		void	DevPrint(char *msg, ...);
 
 	private :

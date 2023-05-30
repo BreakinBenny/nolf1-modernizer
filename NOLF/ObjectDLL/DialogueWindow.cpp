@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: DialogueWindow.cpp
 //
-// MODULE  : DialogueWindow.cpp
+// PURPOSE: DialogueWindow - Implementation
 //
-// PURPOSE : DialogueWindow - Implementation
-//
-// CREATED : 4/17/99
+// CREATED: 4/17/99
 //
 // COMMENT : Copyright (c) 1999, Monolith Productions, Inc.
-//
 // ----------------------------------------------------------------------- //
 
 #include "StdAfx.h"
@@ -72,7 +70,7 @@ void CDialogueWindow::Finished(uint8 byDecision, uint32 dwDecision)
 		// Since CinematicTrigger::DialogueFinished can start another piece
 		// of dialogue, we need to break our link first
 		CinematicTrigger* pCin = m_pCinematic;
-        g_pLTServer->BreakInterObjectLink(m_hObject, m_pCinematic->m_hObject);
+		g_pLTServer->BreakInterObjectLink(m_hObject, m_pCinematic->m_hObject);
 		m_pCinematic = NULL;
 		pCin->DialogueFinished(byDecision, dwDecision);
 	}
@@ -80,7 +78,7 @@ void CDialogueWindow::Finished(uint8 byDecision, uint32 dwDecision)
 	if(m_pCurSpeaker)
 	{
 		m_pCurSpeaker->StopDialogue();
-        g_pLTServer->BreakInterObjectLink(m_hObject, m_pCurSpeaker->m_hObject);
+		g_pLTServer->BreakInterObjectLink(m_hObject, m_pCurSpeaker->m_hObject);
 		m_pCurSpeaker = NULL;
 	}
 }
@@ -91,7 +89,7 @@ BOOL CDialogueWindow::PlayDialogue(uint32 dwID, CActor* pSpeaker, BOOL bStayOpen
 	// Link us up
 	ASSERT(pSpeaker);
 	m_pCurSpeaker = pSpeaker;
-    g_pLTServer->CreateInterObjectLink(m_hObject, pSpeaker->m_hObject);
+	g_pLTServer->CreateInterObjectLink(m_hObject, pSpeaker->m_hObject);
 
 	// Bring up a dialogue window on the client (NOTE: This goes to ALL CLIENTS)
 	return(SendMessage(dwID,bStayOpen,szActorName,szDecisions));
@@ -103,7 +101,7 @@ BOOL CDialogueWindow::PlayDialogue(uint32 dwID, BOOL bStayOpen, const char *szAc
 	// Link us up
 	ASSERT(pCinematic);
 	m_pCinematic = pCinematic;
-    g_pLTServer->CreateInterObjectLink(m_hObject, m_pCinematic->m_hObject);
+	g_pLTServer->CreateInterObjectLink(m_hObject, m_pCinematic->m_hObject);
 
 	// Bring up a dialogue window on the client (NOTE: This goes to ALL CLIENTS)
 	return(SendMessage(dwID,bStayOpen,szActorName,szDecisions));

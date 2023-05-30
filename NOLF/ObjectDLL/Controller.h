@@ -1,10 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Controller.h
 //
-// MODULE  : Controller.h
+// PURPOSE: Controller - Definition
 //
-// PURPOSE : Controller - Definition
-//
-// CREATED : 4/17/99
+// CREATED: 4/17/99
 //
 // PURPOSE :
 //
@@ -26,7 +25,6 @@
 // Color - values 0-255, must be specified in quotes like "1 2 3"
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 
@@ -34,7 +32,7 @@
 #define __CONTROLLER_H__
 
 
-    #include "GameBase.h"
+	#include "GameBase.h"
 	#include "commonutilities.h"
 
 
@@ -65,13 +63,13 @@
 		float	GetAlpha()			{return m_Color.x;}
 		void	SetAlpha(float x)	{m_Color.x = x;}
 
-        LTVector GetColor()          {return m_Color;}
-        void    SetColor(LTVector x) {m_Color = x;}
+		LTVector GetColor()		  {return m_Color;}
+		void	SetColor(LTVector x) {m_Color = x;}
 
 		void	Load(HMESSAGEREAD hRead);
 		void	Save(HMESSAGEWRITE hWrite);
 
-        LTVector m_Color;
+		LTVector m_Color;
 	};
 
 
@@ -80,7 +78,7 @@
 	public:
 					FadeState()
 					{
-                        m_hTarget = LTNULL;
+						m_hTarget = LTNULL;
 					}
 
 		ParamValue	m_StartVal;
@@ -102,8 +100,8 @@
 
 		Controller();
 
-        uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
-        uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+		uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 
 	public:
@@ -114,8 +112,8 @@
 		void		Update();
 		void		OnLinkBroken(HOBJECT hObj);
 
-        void        Load(HMESSAGEREAD hRead, uint32 dwSaveFlags);
-        void        Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void		Load(HMESSAGEREAD hRead, uint32 dwSaveFlags);
+		void		Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
 
 		void		HandleTrigger(HOBJECT hSender, const char *szMsg);
 		void		HandleFadeCommand(const char *szMsg, ConParse *pParse);
@@ -132,7 +130,7 @@
 	public:
 
 		CState		m_State;			// What state are we in?
-        LTBOOL       m_bFirstUpdate;
+		LTBOOL	   m_bFirstUpdate;
 
 		// Vars for FLICKER state.
 		float		m_fNextFlickerTime;	// Next time to flicker.

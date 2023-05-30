@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: DisplayMeter.h
 //
-// MODULE  : DisplayMeter.h
+// PURPOSE: DisplayMeter - Definition
 //
-// PURPOSE : DisplayMeter - Definition
-//
-// CREATED : 7/19/00
+// CREATED: 7/19/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __DISPLAY_METER_H__
@@ -21,13 +19,13 @@
 
 struct PhaseData
 {
-    PhaseData()
+	PhaseData()
 	{
 		nValue		= 0;
-        hstrCmd     = LTNULL;
+		hstrCmd	 = LTNULL;
 	}
 
-    virtual ~PhaseData()
+	virtual ~PhaseData()
 	{
 		FREE_HSTRING(hstrCmd);
 	}
@@ -62,13 +60,13 @@ class DisplayMeter : public BaseClass
 
 	protected :
 
-        uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
-        uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		uint32  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+		uint32  ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 	private :
 
 		PhaseData	m_PhaseData[DM_MAX_NUMBER_OF_PHASES];
-        LTBOOL		m_bRemoveWhenEmpty;  // Remove when the meter is empty?
+		LTBOOL		m_bRemoveWhenEmpty;  // Remove when the meter is empty?
 		uint8		m_nValue;
 
 		void	ReadProp(ObjectCreateStruct *pData);
@@ -77,11 +75,11 @@ class DisplayMeter : public BaseClass
 
 		void	TriggerMsg(HOBJECT hSender, const char *pMsg);
 
-        void    HandleShow(uint8 initVal);
-        void    HandleSet(uint8 val);
-        void    HandlePlus(uint8 val);
-        void    HandleMinus(uint8 val);
-        void    HandleEnd();
+		void	HandleShow(uint8 initVal);
+		void	HandleSet(uint8 val);
+		void	HandlePlus(uint8 val);
+		void	HandleMinus(uint8 val);
+		void	HandleEnd();
 		void	UpdateClients();
 
 		void	Save(HMESSAGEWRITE hWrite);

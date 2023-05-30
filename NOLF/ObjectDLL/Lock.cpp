@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Lock.cpp
 //
-// MODULE  : Lock.cpp
+// PURPOSE: Implementation of the Lock object
 //
-// PURPOSE : Implementation of the Lock object
-//
-// CREATED : 01/11/00
+// CREATED: 01/11/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -31,10 +29,10 @@ BEGIN_CLASS(Lock)
 	ADD_REALPROP_FLAG(MaxHitPoints, 100.0f, PF_GROUP1 | PF_HIDDEN)
 	ADD_REALPROP_FLAG(Armor, 0.0f, PF_GROUP1 | PF_HIDDEN)
 	ADD_REALPROP_FLAG(MaxArmor, 0.0f, PF_GROUP1 | PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(CanHeal, LTFALSE, PF_GROUP1 | PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(CanRepair, LTFALSE, PF_GROUP1 | PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(CanDamage, LTTRUE, PF_GROUP1 | PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(NeverDestroy, LTFALSE, PF_GROUP1 | PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(CanHeal, LTFALSE, PF_GROUP1 | PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(CanRepair, LTFALSE, PF_GROUP1 | PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(CanDamage, LTTRUE, PF_GROUP1 | PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(NeverDestroy, LTFALSE, PF_GROUP1 | PF_HIDDEN)
 
 	ADD_STRINGPROP_FLAG(Filename, "Props\\Models\\Lock.abc", PF_DIMS | PF_LOCALDIMS | PF_FILENAME)
 	ADD_STRINGPROP_FLAG(Skin, "Props\\Skins\\Lock.dtx", PF_FILENAME)
@@ -43,10 +41,10 @@ BEGIN_CLASS(Lock)
 	ADD_GRAVITY_FLAG(0, PF_HIDDEN)
 	ADD_SOLID_FLAG(1, 0)
 
-    ADD_BOOLPROP_FLAG(MoveToFloor, LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(MoveToFloor, LTFALSE, PF_HIDDEN)
 	ADD_REALPROP_FLAG(Alpha, 1.0f, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(Additive, LTFALSE, PF_HIDDEN)
-    ADD_BOOLPROP_FLAG(Multiply, LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(Additive, LTFALSE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(Multiply, LTFALSE, PF_HIDDEN)
 
 	ADD_STRINGPROP(UnlockCommand, "")
 	ADD_STRINGPROP_FLAG(UnlockSound, "", PF_FILENAME)
@@ -55,10 +53,10 @@ BEGIN_CLASS(Lock)
 	ADD_REALPROP_FLAG(UnlockHitPts, 100.0f, 0)
 	ADD_REALPROP_FLAG(MinUnlockHitPts, 5.0f, 0)
 	ADD_REALPROP_FLAG(MaxUnlockHitPts, 10.0f, 0)
-    ADD_BOOLPROP_FLAG(Shootable, LTFALSE, 0)
-    ADD_BOOLPROP_FLAG(Weldable, LTFALSE, 0)
-    ADD_BOOLPROP_FLAG(Lightable, LTFALSE, 0)
-    ADD_BOOLPROP_FLAG(RemoveWhenUnlocked, LTFALSE, 0)
+	ADD_BOOLPROP_FLAG(Shootable, LTFALSE, 0)
+	ADD_BOOLPROP_FLAG(Weldable, LTFALSE, 0)
+	ADD_BOOLPROP_FLAG(Lightable, LTFALSE, 0)
+	ADD_BOOLPROP_FLAG(RemoveWhenUnlocked, LTFALSE, 0)
 
 	// Set our default debris type...
 	ADD_STRINGPROP_FLAG(DebrisType, "Lock", PF_STATICLIST)
@@ -66,39 +64,35 @@ BEGIN_CLASS(Lock)
 END_CLASS_DEFAULT(Lock, Prop, NULL, NULL)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Lock::Lock()
 //
-//	ROUTINE:	Lock::Lock()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 Lock::Lock() : Prop()
 {
-    m_hstrUnlockCmd     = LTNULL;
-    m_hstrUnlockSnd     = LTNULL;
-    m_hstrPickSnd       = LTNULL;
+	m_hstrUnlockCmd	 = LTNULL;
+	m_hstrUnlockSnd	 = LTNULL;
+	m_hstrPickSnd	   = LTNULL;
 	m_fSndRadius		= 500.0f;
 
 	m_fUnlockHitPts		= 100.0f;
 	m_fMinUnlockHitPts	= 5.0f;
 	m_fMaxUnlockHitPts	= 10.0f;
 
-    m_bShootable        = LTFALSE;
-    m_bWeldable         = LTFALSE;
-    m_bLightable        = LTFALSE;
-    m_bRemoveWhenDone   = LTFALSE;
-    m_bUnlocked         = LTFALSE;
+	m_bShootable		= LTFALSE;
+	m_bWeldable		 = LTFALSE;
+	m_bLightable		= LTFALSE;
+	m_bRemoveWhenDone   = LTFALSE;
+	m_bUnlocked		 = LTFALSE;
 
-    m_damage.m_bRemoveOnDeath = LTFALSE;
+	m_damage.m_bRemoveOnDeath = LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Lock::~Lock()
 //
-//	ROUTINE:	Lock::~Lock()
-//
-//	PURPOSE:	Deallocate object
-//
+//	PURPOSE: Deallocate object
 // ----------------------------------------------------------------------- //
 
 Lock::~Lock()
@@ -109,11 +103,9 @@ Lock::~Lock()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Lock::EngineMessageFn
 //
-//	ROUTINE:	Lock::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 Lock::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -160,22 +152,20 @@ uint32 Lock::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Lock::ObjectMessageFn
 //
-//	ROUTINE:	Lock::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 Lock::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
 {
-    if (!g_pLTServer) return 0;
+	if (!g_pLTServer) return 0;
 
 	switch(messageID)
 	{
 		case MID_TRIGGER:
 		{
-            ILTCommon* pCommon = g_pLTServer->Common();
+			ILTCommon* pCommon = g_pLTServer->Common();
 			if (!pCommon) return 0;
 
 			const char *szMsg = (const char*)g_pLTServer->ReadFromMessageDWord(hRead);
@@ -201,12 +191,12 @@ uint32 Lock::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRe
 		{
 			if (m_bUnlocked) break;
 
-            uint32 dwRet = 0;
+			uint32 dwRet = 0;
 
 			DamageStruct damage;
 			damage.InitFromMessage(hRead);
 
-            LTBOOL bProcessDamage = m_bShootable;
+			LTBOOL bProcessDamage = m_bShootable;
 
 			if (!bProcessDamage)
 			{
@@ -245,11 +235,9 @@ uint32 Lock::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRe
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Lock::HandleGadgetMsg
 //
-//	ROUTINE:	Lock::HandleGadgetMsg
-//
-//	PURPOSE:	Handle gadget messages
-//
+//	PURPOSE: Handle gadget messages
 // ----------------------------------------------------------------------- //
 
 void Lock::HandleGadgetMsg(HOBJECT hSender, ConParse & parse)
@@ -290,13 +278,13 @@ void Lock::HandleGadgetMsg(HOBJECT hSender, ConParse & parse)
 
 	// Play the lock pick sound...
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	if (m_hstrPickSnd)
 	{
  
-        char* pSound = g_pLTServer->GetStringData(m_hstrPickSnd);
+		char* pSound = g_pLTServer->GetStringData(m_hstrPickSnd);
 		if (pSound)
 		{
 			g_pServerSoundMgr->PlaySoundFromPos(vPos, pSound, m_fSndRadius,
@@ -346,74 +334,72 @@ void Lock::HandleGadgetMsg(HOBJECT hSender, ConParse & parse)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Lock::ReadProp
 //
-//	ROUTINE:	Lock::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL Lock::ReadProp(ObjectCreateStruct *pInfo)
 {
-    if (!pInfo) return LTFALSE;
+	if (!pInfo) return LTFALSE;
 
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("UnlockCommand", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("UnlockCommand", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrUnlockCmd = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrUnlockCmd = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("UnlockSound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("UnlockSound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrUnlockSnd = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrUnlockSnd = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("PickSound", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("PickSound", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
-            m_hstrPickSnd = g_pLTServer->CreateString(genProp.m_String);
+			m_hstrPickSnd = g_pLTServer->CreateString(genProp.m_String);
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("SoundRadius", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("SoundRadius", &genProp) == LT_OK)
 	{
 		m_fSndRadius = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("UnlockHitPts", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("UnlockHitPts", &genProp) == LT_OK)
 	{
 		m_fUnlockHitPts = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("MinUnlockHitPts", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("MinUnlockHitPts", &genProp) == LT_OK)
 	{
 		m_fMinUnlockHitPts = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("MaxUnlockHitPts", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("MaxUnlockHitPts", &genProp) == LT_OK)
 	{
 		m_fMaxUnlockHitPts = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Shootable", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Shootable", &genProp) == LT_OK)
 	{
 		m_bShootable = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Weldable", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Weldable", &genProp) == LT_OK)
 	{
 		m_bWeldable = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Lightable", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Lightable", &genProp) == LT_OK)
 	{
 		m_bLightable = genProp.m_Bool;
 	}
@@ -430,32 +416,30 @@ LTBOOL Lock::ReadProp(ObjectCreateStruct *pInfo)
 		m_bShootable = LTFALSE;
 	}
 
-    if (g_pLTServer->GetPropGeneric("RemoveWhenUnlocked", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("RemoveWhenUnlocked", &genProp) == LT_OK)
 	{
 		m_bRemoveWhenDone = genProp.m_Bool;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Lock::InitialUpdate()
 //
-//	ROUTINE:	Lock::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 LTBOOL Lock::InitialUpdate()
 {
-    SetNextUpdate(0.0);
+	SetNextUpdate(0.0);
 
 	// Setup up our destructible object...
 
 	m_damage.SetHitPoints(m_fUnlockHitPts);
 
-    uint32 dwCanDamageTypes = 0;
+	uint32 dwCanDamageTypes = 0;
 
 	// Set it up so nothing can damage us...
 
@@ -495,48 +479,46 @@ LTBOOL Lock::InitialUpdate()
 
 	// Make sure we can be activated even if we are non-solid...
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
-    g_pLTServer->SetObjectFlags(m_hObject, dwFlags | FLAG_RAYHIT);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+	g_pLTServer->SetObjectFlags(m_hObject, dwFlags | FLAG_RAYHIT);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Lock::SetupUnlockState
 //
-//	ROUTINE:	Lock::SetupUnlockState
-//
-//	PURPOSE:	Setup the un locked state
-//
+//	PURPOSE: Setup the un locked state
 // ----------------------------------------------------------------------- //
 
 void Lock::SetupUnlockState()
 {
-    m_bUnlocked = LTTRUE;
+	m_bUnlocked = LTTRUE;
 
-    uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	uint32 dwUserFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
 
 	if (m_bWeldable)
 	{
-        g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags & ~USRFLG_GADGET_WELDER);
+		g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags & ~USRFLG_GADGET_WELDER);
 	}
 	else if (m_bLightable)
 	{
-        g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags & ~USRFLG_GADGET_LIGHTER);
+		g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags & ~USRFLG_GADGET_LIGHTER);
 	}
 	else
 	{
-        g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags & ~USRFLG_GADGET_LOCK_PICK);
+		g_pLTServer->SetObjectUserFlags(m_hObject, dwUserFlags & ~USRFLG_GADGET_LOCK_PICK);
 	}
 
 
 	// Set the Lock's animation...
 
-    HMODELANIM hAni = g_pLTServer->GetAnimIndex(m_hObject, "Open");
+	HMODELANIM hAni = g_pLTServer->GetAnimIndex(m_hObject, "Open");
 	if (hAni)
 	{
-        g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
-        g_pLTServer->SetModelAnimation(m_hObject, hAni);
+		g_pLTServer->SetModelLooping(m_hObject, LTFALSE);
+		g_pLTServer->SetModelAnimation(m_hObject, hAni);
 	}
 
 
@@ -544,10 +526,10 @@ void Lock::SetupUnlockState()
 
 	if (m_hstrUnlockSnd)
 	{
-        LTVector vPos;
-        g_pLTServer->GetObjectPos(m_hObject, &vPos);
+		LTVector vPos;
+		g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
-        char* pSound = g_pLTServer->GetStringData(m_hstrUnlockSnd);
+		char* pSound = g_pLTServer->GetStringData(m_hstrUnlockSnd);
 		if (pSound)
 		{
 			g_pServerSoundMgr->PlaySoundFromPos(vPos, pSound, m_fSndRadius,
@@ -560,7 +542,7 @@ void Lock::SetupUnlockState()
 
 	if (m_hstrUnlockCmd)
 	{
-        char* pCmd = g_pLTServer->GetStringData(m_hstrUnlockCmd);
+		char* pCmd = g_pLTServer->GetStringData(m_hstrUnlockCmd);
 
 		if (pCmd && g_pCmdMgr->IsValidCmd(pCmd))
 		{
@@ -573,82 +555,76 @@ void Lock::SetupUnlockState()
 
 	if (m_bRemoveWhenDone)
 	{
-        g_pLTServer->RemoveObject(m_hObject);
+		g_pLTServer->RemoveObject(m_hObject);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Lock::Save
 //
-//	ROUTINE:	Lock::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void Lock::Save(HMESSAGEWRITE hWrite)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrUnlockCmd);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrUnlockSnd);
-    g_pLTServer->WriteToMessageHString(hWrite, m_hstrPickSnd);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fSndRadius);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fUnlockHitPts);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fMinUnlockHitPts);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fMaxUnlockHitPts);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bShootable);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bUnlocked);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bWeldable);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bLightable);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bRemoveWhenDone);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrUnlockCmd);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrUnlockSnd);
+	g_pLTServer->WriteToMessageHString(hWrite, m_hstrPickSnd);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fSndRadius);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fUnlockHitPts);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fMinUnlockHitPts);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fMaxUnlockHitPts);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bShootable);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bUnlocked);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bWeldable);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bLightable);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bRemoveWhenDone);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Lock::Load
 //
-//	ROUTINE:	Lock::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void Lock::Load(HMESSAGEREAD hRead)
 {
 	if (!hRead) return;
 
-    m_hstrUnlockCmd     = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrUnlockSnd     = g_pLTServer->ReadFromMessageHString(hRead);
-    m_hstrPickSnd       = g_pLTServer->ReadFromMessageHString(hRead);
-    m_fSndRadius        = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fUnlockHitPts     = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fMinUnlockHitPts  = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fMaxUnlockHitPts  = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_bShootable        = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bUnlocked         = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bWeldable         = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bLightable        = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_hstrUnlockCmd	 = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrUnlockSnd	 = g_pLTServer->ReadFromMessageHString(hRead);
+	m_hstrPickSnd	   = g_pLTServer->ReadFromMessageHString(hRead);
+	m_fSndRadius		= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fUnlockHitPts	 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fMinUnlockHitPts  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fMaxUnlockHitPts  = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_bShootable		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bUnlocked		 = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bWeldable		 = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bLightable		= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
 	m_bRemoveWhenDone   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Lock::Cache
 //
-//	ROUTINE:	Lock::Cache
-//
-//	PURPOSE:	Cache the sounds....
-//
+//	PURPOSE: Cache the sounds....
 // ----------------------------------------------------------------------- //
 
 void Lock::Cache()
 {
 	if (m_hstrUnlockSnd)
 	{
-        g_pLTServer->CacheFile(FT_SOUND, g_pLTServer->GetStringData(m_hstrUnlockSnd));
+		g_pLTServer->CacheFile(FT_SOUND, g_pLTServer->GetStringData(m_hstrUnlockSnd));
 	}
 
 	if (m_hstrPickSnd)
 	{
-        g_pLTServer->CacheFile(FT_SOUND, g_pLTServer->GetStringData(m_hstrPickSnd));
+		g_pLTServer->CacheFile(FT_SOUND, g_pLTServer->GetStringData(m_hstrPickSnd));
 	}
 }

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Controller.cpp
 //
-// MODULE  : Controller.cpp
+// PURPOSE: Controller - Implementation
 //
-// PURPOSE : Controller - Implementation
-//
-// CREATED : 4/17/99
+// CREATED: 4/17/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -32,8 +30,7 @@ END_CLASS_DEFAULT(Controller, GameBase, NULL, NULL)
 
 
 
-// ----------------------------------------------------------------------------------------------- //
-// ParamValue functions.
+// ----------------------------------------------------------------------------------------------- // ParamValue functions.
 // ----------------------------------------------------------------------------------------------- //
 
 void ParamValue::Load(HMESSAGEREAD hRead)
@@ -47,8 +44,7 @@ void ParamValue::Save(HMESSAGEWRITE hWrite)
 }
 
 
-// ----------------------------------------------------------------------------------------------- //
-// Controller functions.
+// ----------------------------------------------------------------------------------------------- // Controller functions.
 // ----------------------------------------------------------------------------------------------- //
 
 Controller::Controller()
@@ -56,7 +52,7 @@ Controller::Controller()
 	m_fStartTime = 0.0f;
 	m_fDuration = 0.0f;
 	m_State = CState_Off;
-    m_bFirstUpdate = LTTRUE;
+	m_bFirstUpdate = LTTRUE;
 }
 
 
@@ -90,13 +86,13 @@ uint32 Controller::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 	}
@@ -124,7 +120,7 @@ uint32 Controller::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGERE
 void Controller::PreCreate(ObjectCreateStruct *pStruct)
 {
 	char buf[256];
-    uint32 i;
+	uint32 i;
 	GenericProp gProp;
 
 
@@ -132,7 +128,7 @@ void Controller::PreCreate(ObjectCreateStruct *pStruct)
 	for(i=0; i < MAX_CONTROLLER_TARGETS; i++)
 	{
 		sprintf(buf, "Target%d", i);
-        if(g_pLTServer->GetPropGeneric(buf, &gProp) == LT_OK)
+		if(g_pLTServer->GetPropGeneric(buf, &gProp) == LT_OK)
 		{
 			SAFE_STRCPY(m_Fades[i].m_ObjectName, gProp.m_String);
 		}
@@ -142,7 +138,7 @@ void Controller::PreCreate(ObjectCreateStruct *pStruct)
 
 void Controller::InitialUpdate()
 {
-    SetNextUpdate(0.001f);
+	SetNextUpdate(0.001f);
 }
 
 
@@ -150,18 +146,18 @@ void Controller::FirstUpdate()
 {
 	// Find target objects and make interlinks.
 
-    for (uint32 i=0; i < MAX_CONTROLLER_TARGETS; i++)
+	for (uint32 i=0; i < MAX_CONTROLLER_TARGETS; i++)
 	{
 		ObjArray <HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
 
-        g_pLTServer->FindNamedObjects(m_Fades[i].m_ObjectName, objArray);
+		g_pLTServer->FindNamedObjects(m_Fades[i].m_ObjectName, objArray);
 
 		if (objArray.NumObjects())
 		{
 			HOBJECT hObject = objArray.GetObject(0);
 
 			m_Fades[i].m_hTarget = hObject;
-            g_pLTServer->CreateInterObjectLink(m_hObject, m_Fades[i].m_hTarget);
+			g_pLTServer->CreateInterObjectLink(m_hObject, m_Fades[i].m_hTarget);
 		}
 	}
 }
@@ -169,20 +165,20 @@ void Controller::FirstUpdate()
 
 void Controller::Update()
 {
-    uint32 i;
+	uint32 i;
 	FadeState *pState;
 	float curTime, t;
 
 	if(m_bFirstUpdate)
 	{
 		FirstUpdate();
-        m_bFirstUpdate = LTFALSE;
+		m_bFirstUpdate = LTFALSE;
 	}
 
 	if(m_State == CState_Fade)
 	{
 		// Find out if we're even interpolating.
-        curTime = g_pLTServer->GetTime();
+		curTime = g_pLTServer->GetTime();
 		if(curTime > (m_fStartTime + m_fDuration))
 			return;
 
@@ -199,11 +195,11 @@ void Controller::Update()
 			InterpolateValue(pState, t);
 		}
 
-        SetNextUpdate(0.001f);
+		SetNextUpdate(0.001f);
 	}
 	else if(m_State == CState_Flicker)
 	{
-        if(g_pLTServer->GetTime() > m_fNextFlickerTime)
+		if(g_pLTServer->GetTime() > m_fNextFlickerTime)
 		{
 			// Send the message.
 			for(i=0; i < MAX_CONTROLLER_TARGETS; i++)
@@ -213,7 +209,7 @@ void Controller::Update()
 				if(!pState->m_hTarget)
 					continue;
 
-                SendTriggerMsgToObject(this, pState->m_hTarget, LTFALSE, m_FlickerMsg);
+				SendTriggerMsgToObject(this, pState->m_hTarget, LTFALSE, m_FlickerMsg);
 			}
 
 			// Go again?
@@ -223,10 +219,10 @@ void Controller::Update()
 			if(m_FlickerCounter == 0)
 				HandleOffCommand(LTNULL, LTNULL);
 
-            m_fNextFlickerTime = g_pLTServer->GetTime() + GetRandom(m_fIntervalMin, m_fIntervalMax);
+			m_fNextFlickerTime = g_pLTServer->GetTime() + GetRandom(m_fIntervalMin, m_fIntervalMax);
 		}
 
-        SetNextUpdate(0.001f);
+		SetNextUpdate(0.001f);
 	}
 	else
 	{
@@ -237,14 +233,14 @@ void Controller::Update()
 
 void Controller::OnLinkBroken(HOBJECT hObj)
 {
-    uint32 i;
+	uint32 i;
 
 	// Disable the fade with this object.
 	for(i=0; i < MAX_CONTROLLER_TARGETS; i++)
 	{
 		if(m_Fades[i].m_hTarget == hObj)
 		{
-            m_Fades[i].m_hTarget = LTNULL;
+			m_Fades[i].m_hTarget = LTNULL;
 		}
 	}
 }
@@ -253,7 +249,7 @@ void Controller::OnLinkBroken(HOBJECT hObj)
 void Controller::Load(HMESSAGEREAD hRead, uint32 dwSaveFlags)
 {
 	FadeState *pState;
-    uint32 i;
+	uint32 i;
 
 	m_bFirstUpdate = (LTBOOL) hRead->ReadByte();
 
@@ -287,11 +283,11 @@ void Controller::Load(HMESSAGEREAD hRead, uint32 dwSaveFlags)
 void Controller::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	FadeState *pState;
-    uint32 i;
+	uint32 i;
 
-    hWrite->WriteByte((uint8)m_bFirstUpdate);
+	hWrite->WriteByte((uint8)m_bFirstUpdate);
 
-    hWrite->WriteDWord((uint32)m_State);
+	hWrite->WriteDWord((uint32)m_State);
 
 	// Write FLICKER vars.
 	hWrite->WriteFloat(m_fNextFlickerTime);
@@ -303,8 +299,8 @@ void Controller::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 	// Write FADE vars.
 	hWrite->WriteFloat(m_fStartTime);
 	hWrite->WriteFloat(m_fDuration);
-    hWrite->WriteDWord((uint32)m_WaveType);
-    hWrite->WriteDWord((uint32)m_ParamType);
+	hWrite->WriteDWord((uint32)m_WaveType);
+	hWrite->WriteDWord((uint32)m_ParamType);
 	m_DestValue.Save(hWrite);
 
 	for(i=0; i < MAX_CONTROLLER_TARGETS; i++)
@@ -323,7 +319,7 @@ void Controller::HandleTrigger(HOBJECT hSender, const char *szMsg)
 	ConParse parse;
 	parse.Init((char*)szMsg);
 
-    if(g_pLTServer->Common()->Parse(&parse) == LT_OK)
+	if(g_pLTServer->Common()->Parse(&parse) == LT_OK)
 	{
 		if (parse.m_nArgs == 0)
 		{
@@ -359,7 +355,7 @@ void Controller::HandleFadeCommand(const char *szMsg, ConParse *pParse)
 	ParamValue paramValue;
 	WaveType waveType;
 	float duration;
-    uint32 i;
+	uint32 i;
 
 
 	if(pParse->m_nArgs < 4)
@@ -389,7 +385,7 @@ void Controller::HandleFadeCommand(const char *szMsg, ConParse *pParse)
 
 	paramValue = ParseValue(paramType, pValue);
 	duration = (float)atof(pDuration);
-    duration = LTCLAMP(duration, 0.0f, 100000.0f);
+	duration = LTCLAMP(duration, 0.0f, 100000.0f);
 
 	waveType = Wave_Sine;
 	if(pParse->m_nArgs >= 5)
@@ -399,7 +395,7 @@ void Controller::HandleFadeCommand(const char *szMsg, ConParse *pParse)
 	}
 
 	// Ok, configure...
-    m_fStartTime = g_pLTServer->GetTime();
+	m_fStartTime = g_pLTServer->GetTime();
 	m_fDuration = duration;
 	m_ParamType = paramType;
 	m_WaveType = waveType;
@@ -411,7 +407,7 @@ void Controller::HandleFadeCommand(const char *szMsg, ConParse *pParse)
 	}
 
 	m_State = CState_Fade;
-    SetNextUpdate(0.001f);
+	SetNextUpdate(0.001f);
 }
 
 
@@ -430,7 +426,7 @@ void Controller::HandleFlickerCommand(const char *szMsg, ConParse *pParse)
 	pMessage = pParse->m_Args[3];
 	if(strlen(szMsg) > MAX_FLICKERMSG_LEN)
 	{
-        g_pLTServer->CPrint("Controller: Warning, msg '%s' greater than %d", szMsg, MAX_FLICKERMSG_LEN);
+		g_pLTServer->CPrint("Controller: Warning, msg '%s' greater than %d", szMsg, MAX_FLICKERMSG_LEN);
 	}
 
 	m_fIntervalMin = (float)atof(pMin);
@@ -440,12 +436,12 @@ void Controller::HandleFlickerCommand(const char *szMsg, ConParse *pParse)
 
 	if(pParse->m_nArgs >= 5)
 	{
-        m_FlickerCounter = (uint32)atof(pParse->m_Args[4]);
+		m_FlickerCounter = (uint32)atof(pParse->m_Args[4]);
 	}
 
-    m_fNextFlickerTime = g_pLTServer->GetTime() + GetRandom(m_fIntervalMin, m_fIntervalMax);
+	m_fNextFlickerTime = g_pLTServer->GetTime() + GetRandom(m_fIntervalMin, m_fIntervalMax);
 	m_State = CState_Flicker;
-    SetNextUpdate(0.001f);
+	SetNextUpdate(0.001f);
 }
 
 
@@ -458,16 +454,16 @@ void Controller::HandleOffCommand(const char *szMsg, ConParse *pParse)
 
 void Controller::ShowTriggerError(const char *szMsg)
 {
-    g_pLTServer->CPrint("Controller: Invalid msg: %s", szMsg);
+	g_pLTServer->CPrint("Controller: Invalid msg: %s", szMsg);
 }
 
 
 ParamValue Controller::ParseValue(ParamType paramType, char *pValue)
 {
 	ParamValue ret;
-    LTVector color;
+	LTVector color;
 	char colorStr[3][256];
-    uint32 i;
+	uint32 i;
 
 	if(paramType == Param_Alpha)
 	{
@@ -501,13 +497,13 @@ void Controller::SetupCurrentValue(FadeState *pState)
 
 	if(m_ParamType == Param_Alpha)
 	{
-        g_pLTServer->GetObjectColor(pState->m_hTarget, &r, &g, &b, &a);
+		g_pLTServer->GetObjectColor(pState->m_hTarget, &r, &g, &b, &a);
 		pState->m_StartVal.SetAlpha(a);
 	}
 	else
 	{
-        g_pLTServer->GetObjectColor(pState->m_hTarget, &r, &g, &b, &a);
-        pState->m_StartVal.SetColor(LTVector(r*255.0f, g*255.0f, b*255.0f));
+		g_pLTServer->GetObjectColor(pState->m_hTarget, &r, &g, &b, &a);
+		pState->m_StartVal.SetColor(LTVector(r*255.0f, g*255.0f, b*255.0f));
 	}
 }
 
@@ -515,15 +511,15 @@ void Controller::SetupCurrentValue(FadeState *pState)
 void Controller::InterpolateValue(FadeState *pState, float t)
 {
 	float newAlpha, r, g, b, a;
-    LTVector newColor, destColor;
-    uint32 i;
+	LTVector newColor, destColor;
+	uint32 i;
 
 	if(m_ParamType == Param_Alpha)
 	{
 		// Alpha.
-        newAlpha = LTLERP(pState->m_StartVal.GetAlpha(), m_DestValue.GetAlpha(), t);
-        g_pLTServer->GetObjectColor(pState->m_hTarget, &r, &g, &b, &a);
-        g_pLTServer->SetObjectColor(pState->m_hTarget, r, g, b, newAlpha);
+		newAlpha = LTLERP(pState->m_StartVal.GetAlpha(), m_DestValue.GetAlpha(), t);
+		g_pLTServer->GetObjectColor(pState->m_hTarget, &r, &g, &b, &a);
+		g_pLTServer->SetObjectColor(pState->m_hTarget, r, g, b, newAlpha);
 	}
 	else
 	{
@@ -534,11 +530,11 @@ void Controller::InterpolateValue(FadeState *pState, float t)
 			if(destColor[i] == -1.0f)
 				newColor[i] = pState->m_StartVal.m_Color[i];
 			else
-                newColor[i] = LTLERP(pState->m_StartVal.m_Color[i], m_DestValue.m_Color[i], t);
+				newColor[i] = LTLERP(pState->m_StartVal.m_Color[i], m_DestValue.m_Color[i], t);
 		}
 
-        g_pLTServer->GetObjectColor(pState->m_hTarget, &r, &g, &b, &a);
-        g_pLTServer->SetObjectColor(pState->m_hTarget,
+		g_pLTServer->GetObjectColor(pState->m_hTarget, &r, &g, &b, &a);
+		g_pLTServer->SetObjectColor(pState->m_hTarget,
 			newColor.x / 255.0f,
 			newColor.y / 255.0f,
 			newColor.z / 255.0f,

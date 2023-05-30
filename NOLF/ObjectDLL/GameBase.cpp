@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: GameBase.cpp
 //
-// MODULE  : GameBase.cpp
+// PURPOSE: Game base object class implementation
 //
-// PURPOSE : Game base object class implementation
-//
-// CREATED : 10/8/99
+// CREATED: 10/8/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -27,17 +25,15 @@ END_CLASS_DEFAULT_FLAGS(GameBase, BaseClass, NULL, NULL, CF_HIDDEN)
 //END_CLASS_DEFAULT_FLAGS_PLUGIN(GameBase, BaseClass, NULL, NULL, CF_HIDDEN, CGameBasePlugin)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GameBase::GameBase()
 //
-//	ROUTINE:	GameBase::GameBase()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 GameBase::GameBase(uint8 nType) : BaseClass(nType)
 {
-    m_hDimsBox          = LTNULL;
-    m_pMarkList         = LTNULL;
+	m_hDimsBox		  = LTNULL;
+	m_pMarkList		 = LTNULL;
 	m_dwOriginalFlags	= 0;
 
 	m_nSaveVersion		= CVersionMgr::GetSaveVersion();
@@ -45,11 +41,9 @@ GameBase::GameBase(uint8 nType) : BaseClass(nType)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GameBase::~GameBase()
 //
-//	ROUTINE:	GameBase::~GameBase()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 GameBase::~GameBase()
@@ -58,23 +52,21 @@ GameBase::~GameBase()
 
 	if (m_pMarkList)
 	{
-        g_pLTServer->RelinquishList(m_pMarkList);
+		g_pLTServer->RelinquishList(m_pMarkList);
 	}
 
 	FREE_HSTRING(m_hstrSave);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GameBase::ObjectMessageFn
 //
-//	ROUTINE:	GameBase::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 GameBase::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
 {
-    if (!g_pLTServer) return 0;
+	if (!g_pLTServer) return 0;
 
 	switch(messageID)
 	{
@@ -85,7 +77,7 @@ uint32 GameBase::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD
 
 			// Make sure other people can read it...
 
-            g_pLTServer->ResetRead(hRead);
+			g_pLTServer->ResetRead(hRead);
 		}
 		break;
 
@@ -96,18 +88,16 @@ uint32 GameBase::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: GameBase::TriggerMsg()
 //
-//	ROUTINE:	GameBase::TriggerMsg()
-//
-//	PURPOSE:	Process trigger messages
-//
+//	PURPOSE: Process trigger messages
 // --------------------------------------------------------------------------- //
 
 void GameBase::TriggerMsg(HOBJECT hSender, const char* szMsg)
 {
 	if (!szMsg) return;
 
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return;
 
 	// ConParse does not destroy szMsg, so this is safe
@@ -118,7 +108,7 @@ void GameBase::TriggerMsg(HOBJECT hSender, const char* szMsg)
 	{
 		if (parse.m_nArgs > 0 && parse.m_Args[0])
 		{
-            uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+			uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
 			if (!m_dwOriginalFlags)
 			{
 				m_dwOriginalFlags = dwFlags;
@@ -169,17 +159,15 @@ void GameBase::TriggerMsg(HOBJECT hSender, const char* szMsg)
 				}
 			}
 
-            g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
+			g_pLTServer->SetObjectFlags(m_hObject, dwFlags);
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GameBase::CreateBoundingBox()
 //
-//	ROUTINE:	GameBase::CreateBoundingBox()
-//
-//	PURPOSE:	Create a bounding box
-//
+//	PURPOSE: Create a bounding box
 // ----------------------------------------------------------------------- //
 
 void GameBase::CreateBoundingBox()
@@ -188,14 +176,14 @@ void GameBase::CreateBoundingBox()
 
 	if (!g_vtDimsAlpha.IsInitted())
 	{
-        g_vtDimsAlpha.Init(g_pLTServer, "DimsAlpha", LTNULL, 1.0f);
+		g_vtDimsAlpha.Init(g_pLTServer, "DimsAlpha", LTNULL, 1.0f);
 	}
 
 	ObjectCreateStruct theStruct;
 	INIT_OBJECTCREATESTRUCT(theStruct);
 
-    LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	LTVector vPos;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 	theStruct.m_Pos = vPos;
 
 	SAFE_STRCPY(theStruct.m_Filename, "Models\\1x1_square.abc");
@@ -204,37 +192,37 @@ void GameBase::CreateBoundingBox()
 	theStruct.m_Flags = FLAG_VISIBLE | FLAG_NOLIGHT | FLAG_GOTHRUWORLD;
 	theStruct.m_ObjectType = OT_MODEL;
 
-    HCLASS hClass = g_pLTServer->GetClass("BaseClass");
-    LPBASECLASS pModel = g_pLTServer->CreateObject(hClass, &theStruct);
+	HCLASS hClass = g_pLTServer->GetClass("BaseClass");
+	LPBASECLASS pModel = g_pLTServer->CreateObject(hClass, &theStruct);
 
 	if (pModel)
 	{
 		m_hDimsBox = pModel->m_hObject;
 
-        LTVector vDims;
-        g_pLTServer->GetObjectDims(m_hObject, &vDims);
+		LTVector vDims;
+		g_pLTServer->GetObjectDims(m_hObject, &vDims);
 
-        LTVector vScale;
+		LTVector vScale;
 		VEC_DIVSCALAR(vScale, vDims, 0.5f);
-        g_pLTServer->ScaleObject(m_hDimsBox, &vScale);
+		g_pLTServer->ScaleObject(m_hDimsBox, &vScale);
 	}
 
 
-    LTVector vOffset;
-    LTRotation rOffset;
+	LTVector vOffset;
+	LTRotation rOffset;
 	vOffset.Init();
-    rOffset.Init();
+	rOffset.Init();
 
 	HATTACHMENT hAttachment;
-    LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, m_hDimsBox, LTNULL,
-											     &vOffset, &rOffset, &hAttachment);
-    if (dRes != LT_OK)
+	LTRESULT dRes = g_pLTServer->CreateAttachment(m_hObject, m_hDimsBox, LTNULL,
+												 &vOffset, &rOffset, &hAttachment);
+	if (dRes != LT_OK)
 	{
-        g_pLTServer->RemoveObject(m_hDimsBox);
-        m_hDimsBox = LTNULL;
+		g_pLTServer->RemoveObject(m_hDimsBox);
+		m_hDimsBox = LTNULL;
 	}
 
-    LTVector vColor = GetBoundingBoxColor();
+	LTVector vColor = GetBoundingBoxColor();
 	LTFLOAT fAlpha = g_vtDimsAlpha.GetFloat();
 
 	if (g_vtDisplayTriggers.GetFloat())
@@ -243,16 +231,14 @@ void GameBase::CreateBoundingBox()
 		fAlpha = 0.95f;
 	}
 
-    g_pLTServer->SetObjectColor(m_hDimsBox, vColor.x, vColor.y, vColor.z, fAlpha);
+	g_pLTServer->SetObjectColor(m_hDimsBox, vColor.x, vColor.y, vColor.z, fAlpha);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GameBase::RemoveBoundingBox()
 //
-//	ROUTINE:	GameBase::RemoveBoundingBox()
-//
-//	PURPOSE:	Remove the bounding box
-//
+//	PURPOSE: Remove the bounding box
 // ----------------------------------------------------------------------- //
 
 void GameBase::RemoveBoundingBox()
@@ -260,29 +246,27 @@ void GameBase::RemoveBoundingBox()
 	if (m_hDimsBox)
 	{
 		HATTACHMENT hAttachment;
-        if (g_pLTServer->FindAttachment(m_hObject, m_hDimsBox, &hAttachment) == LT_OK)
+		if (g_pLTServer->FindAttachment(m_hObject, m_hDimsBox, &hAttachment) == LT_OK)
 		{
-            g_pLTServer->RemoveAttachment(hAttachment);
+			g_pLTServer->RemoveAttachment(hAttachment);
 		}
 
-        g_pLTServer->RemoveObject(m_hDimsBox);
-        m_hDimsBox = LTNULL;
+		g_pLTServer->RemoveObject(m_hDimsBox);
+		m_hDimsBox = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GameBase::EngineMessageFn
 //
-//	ROUTINE:	GameBase::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 GameBase::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 {
 	switch(messageID)
 	{
-        case MID_ACTIVATING:
+		case MID_ACTIVATING:
 		{
 			if (IsCharacter(m_hObject))
 			{
@@ -300,9 +284,9 @@ uint32 GameBase::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 		}
 		break;
 
-        case MID_PRECREATE:
+		case MID_PRECREATE:
 		{
-            uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
 
 			int nInfo = (int)fData;
 			if (nInfo == PRECREATE_WORLDFILE || nInfo == PRECREATE_STRINGPROP || nInfo == PRECREATE_NORMAL)
@@ -310,7 +294,7 @@ uint32 GameBase::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 				ObjectCreateStruct* pocs = (ObjectCreateStruct*)pData;
 				if ( !(pocs->m_Name[0]) )
 				{
-                    static int s_nUniqueId = 0;
+					static int s_nUniqueId = 0;
 					sprintf(pocs->m_Name, "noname%d", s_nUniqueId++);
 				}
 			}
@@ -321,7 +305,7 @@ uint32 GameBase::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_MODELSTRINGKEY:
 		{
-            uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = BaseClass::EngineMessageFn(messageID, pData, fData);
 
 			// Let the CmdMgr take a crack at it.
 
@@ -370,11 +354,9 @@ uint32 GameBase::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: GameBase::AddMark()
 //
-//	ROUTINE:	GameBase::AddMark()
-//
-//	PURPOSE:	Add a mark to our list...
-//
+//	PURPOSE: Add a mark to our list...
 // --------------------------------------------------------------------------- //
 
 void GameBase::AddMark(HOBJECT hMark)
@@ -385,20 +367,18 @@ void GameBase::AddMark(HOBJECT hMark)
 
 	if (!m_pMarkList)
 	{
-        m_pMarkList = g_pLTServer->CreateObjectList();
+		m_pMarkList = g_pLTServer->CreateObjectList();
 		if (!m_pMarkList) return;
 	}
 
-    g_pLTServer->AddObjectToList(m_pMarkList, hMark);
-    g_pLTServer->CreateInterObjectLink(m_hObject, hMark);
+	g_pLTServer->AddObjectToList(m_pMarkList, hMark);
+	g_pLTServer->CreateInterObjectLink(m_hObject, hMark);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: GameBase::HandleLinkBroken()
 //
-//	ROUTINE:	GameBase::HandleLinkBroken()
-//
-//	PURPOSE:	Handle MID_LINKBROKEN engine message
-//
+//	PURPOSE: Handle MID_LINKBROKEN engine message
 // --------------------------------------------------------------------------- //
 
 void GameBase::HandleLinkBroken(HOBJECT hLink)
@@ -408,7 +388,7 @@ void GameBase::HandleLinkBroken(HOBJECT hLink)
 	// Handle removing marks from the list...
 
 	ObjectLink* pLink = m_pMarkList->m_pFirstLink;
-    ObjectLink* pPrevious = LTNULL;
+	ObjectLink* pPrevious = LTNULL;
 
 	while (pLink)
 	{
@@ -429,8 +409,8 @@ void GameBase::HandleLinkBroken(HOBJECT hLink)
 
 			if (!m_pMarkList->m_nInList)
 			{
-                g_pLTServer->RelinquishList(m_pMarkList);
-                m_pMarkList = LTNULL;
+				g_pLTServer->RelinquishList(m_pMarkList);
+				m_pMarkList = LTNULL;
 			}
 
 			return;
@@ -442,16 +422,14 @@ void GameBase::HandleLinkBroken(HOBJECT hLink)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GameBase::GetBoundingBoxColor()
 //
-//	ROUTINE:	GameBase::GetBoundingBoxColor()
-//
-//	PURPOSE:	Get the color of the bounding box
-//
+//	PURPOSE: Get the color of the bounding box
 // ----------------------------------------------------------------------- //
 
 LTVector GameBase::GetBoundingBoxColor()
 {
-    LTVector vColor(1, 1, 1);
+	LTVector vColor(1, 1, 1);
 	switch (GetType())
 	{
 		case OT_MODEL :
@@ -472,11 +450,9 @@ LTVector GameBase::GetBoundingBoxColor()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GameBase::UpdateBoundingBox()
 //
-//	ROUTINE:	GameBase::UpdateBoundingBox()
-//
-//	PURPOSE:	Update bounding box
-//
+//	PURPOSE: Update bounding box
 // ----------------------------------------------------------------------- //
 
 void GameBase::UpdateBoundingBox()
@@ -530,20 +506,18 @@ void GameBase::UpdateBoundingBox()
 
 	if (m_hDimsBox)
 	{
-        LTVector vDims, vScale;
-        g_pLTServer->GetObjectDims(m_hObject, &vDims);
+		LTVector vDims, vScale;
+		g_pLTServer->GetObjectDims(m_hObject, &vDims);
 		vScale = (vDims * 2.0);
-        g_pLTServer->ScaleObject(m_hDimsBox, &vScale);
+		g_pLTServer->ScaleObject(m_hDimsBox, &vScale);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GameBase::SetNextUpdate()
 //
-//	ROUTINE:	GameBase::SetNextUpdate()
-//
-//	PURPOSE:	Allows objects to set their next update time and at
+//	PURPOSE: Allows objects to set their next update time and at
 //				time same time update autodeactivation
-//
 // ----------------------------------------------------------------------- //
 
 void GameBase::SetNextUpdate(LTFLOAT fDelta, eUpdateControl eControl)
@@ -551,7 +525,7 @@ void GameBase::SetNextUpdate(LTFLOAT fDelta, eUpdateControl eControl)
 	if (!m_hObject) return;
 
 	fDelta = fDelta <= 0.0f ? 0.0f : fDelta;
-    g_pLTServer->SetNextUpdate(m_hObject, fDelta);
+	g_pLTServer->SetNextUpdate(m_hObject, fDelta);
 
 	if (eControl == eControlDeactivation)
 	{
@@ -571,21 +545,19 @@ void GameBase::SetNextUpdate(LTFLOAT fDelta, eUpdateControl eControl)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GameBase::Save
 //
-//	ROUTINE:	GameBase::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void GameBase::Save(HMESSAGEWRITE hWrite)
 {
-    g_pLTServer->WriteToMessageDWord(hWrite, m_dwOriginalFlags);
+	g_pLTServer->WriteToMessageDWord(hWrite, m_dwOriginalFlags);
 
 	// Save the number of marks in the list...
 
-    uint8 nNumInList = m_pMarkList ? m_pMarkList->m_nInList : 0;
-    g_pLTServer->WriteToMessageByte(hWrite, nNumInList);
+	uint8 nNumInList = m_pMarkList ? m_pMarkList->m_nInList : 0;
+	g_pLTServer->WriteToMessageByte(hWrite, nNumInList);
 
 	// Save the objects marks...
 
@@ -594,7 +566,7 @@ void GameBase::Save(HMESSAGEWRITE hWrite)
 		ObjectLink* pLink = m_pMarkList->m_pFirstLink;
 		while (pLink)
 		{
-            g_pLTServer->WriteToLoadSaveMessageObject(hWrite, pLink->m_hObject);
+			g_pLTServer->WriteToLoadSaveMessageObject(hWrite, pLink->m_hObject);
 			pLink = pLink->m_pNext;
 		}
 	}
@@ -604,20 +576,18 @@ void GameBase::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GameBase::Load
 //
-//	ROUTINE:	GameBase::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void GameBase::Load(HMESSAGEREAD hRead)
 {
-    m_dwOriginalFlags = g_pLTServer->ReadFromMessageDWord(hRead);
+	m_dwOriginalFlags = g_pLTServer->ReadFromMessageDWord(hRead);
 
 	// Load the number of marks in our list...
 
-    uint8 nNumInList = g_pLTServer->ReadFromMessageByte(hRead);
+	uint8 nNumInList = g_pLTServer->ReadFromMessageByte(hRead);
 
 	// Load the marks...
 
@@ -625,18 +595,18 @@ void GameBase::Load(HMESSAGEREAD hRead)
 	{
 		if (m_pMarkList)
 		{
-            g_pLTServer->RelinquishList(m_pMarkList);
+			g_pLTServer->RelinquishList(m_pMarkList);
 		}
 
-        m_pMarkList = g_pLTServer->CreateObjectList();
+		m_pMarkList = g_pLTServer->CreateObjectList();
 
 		if (m_pMarkList)
 		{
-            HOBJECT hObj = LTNULL;
+			HOBJECT hObj = LTNULL;
 			for (int i=0; i < nNumInList; i++)
 			{
-                g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &hObj);
-                g_pLTServer->AddObjectToList(m_pMarkList, hObj);
+				g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &hObj);
+				g_pLTServer->AddObjectToList(m_pMarkList, hObj);
 			}
 		}
 	}

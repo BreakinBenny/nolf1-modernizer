@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CachedFiles.cpp
 //
-// MODULE  : CachedFiles.cpp
+// PURPOSE: Pre load the following files for every level
 //
-// PURPOSE : Pre load the following files for every level
-//
-// CREATED : 9/8/98
+// CREATED: 9/8/98
 //
 // (c) 1998-1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -16,19 +14,19 @@
 char* g_pCachedModels[] =
 {
 	"Props\\Models\\Goat1.abc",
-    LTNULL,  // Make sure last element is null
+	LTNULL,  // Make sure last element is null
 };
 
 char* g_pCachedTextures[] =
 {
 	"SFX\\Snow\\SprTex\\Snow1.dtx",
 	"Props\\Skins\\Goat.dtx",
-    LTNULL, // Make sure last element is null
+	LTNULL, // Make sure last element is null
 };
 
 char* g_pCachedSprite[] =
 {
-    LTNULL, // Make sure last element is null
+	LTNULL, // Make sure last element is null
 };
 
 char* g_pCachedSoundLocal[] =
@@ -46,6 +44,6 @@ char* g_pCachedSoundLocal[] =
 
 char* g_pCachedSound3D[] =
 {
-    LTNULL, // Make sure last element is null
+	LTNULL, // Make sure last element is null
 };
 

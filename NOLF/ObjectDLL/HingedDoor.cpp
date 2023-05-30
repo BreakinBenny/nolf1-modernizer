@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: HingedDoor.CPP
 //
-// MODULE  : HingedDoor.CPP
+// PURPOSE: A HingedDoor object
 //
-// PURPOSE : A HingedDoor object
-//
-// CREATED : 12/3/97
-//
+// CREATED: 12/3/97
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -15,11 +13,11 @@ BEGIN_CLASS(HingedDoor)
 	ADD_BOOLPROP_FLAG(OpenAway, 1, 0)
 	ADD_VECTORPROP_VAL_FLAG(RotationAngles, 0.0f, 90.0f, 0.0f, 0)//  Where to rotate to
 	PROP_DEFINEGROUP(StateFlags, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(ActivateTrigger, LTTRUE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(StartOpen, LTFALSE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(TriggerClose, LTTRUE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(RemainsOpen, LTTRUE, PF_GROUP4)
-        ADD_BOOLPROP_FLAG(ForceMove, LTFALSE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(ActivateTrigger, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(StartOpen, LTFALSE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(TriggerClose, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(RemainsOpen, LTTRUE, PF_GROUP4)
+		ADD_BOOLPROP_FLAG(ForceMove, LTFALSE, PF_GROUP4)
 	ADD_STRINGPROP(OpenSound, "Snd\\Doors\\03Start.wav")
 	ADD_STRINGPROP(CloseSound, "Snd\\Doors\\03Start.wav")
 	ADD_STRINGPROP(LockedSound, "Snd\\Doors\\03Locked.wav")
@@ -29,17 +27,16 @@ END_CLASS_DEFAULT(HingedDoor, RotatingDoor, NULL, NULL)
 
 
 
-// ----------------------------------------------------------------------- //
-// Sets up transforms for the hinged door.
+// ----------------------------------------------------------------------- // Sets up transforms for the hinged door.
 // ----------------------------------------------------------------------- //
 void SetupTransform_HingedDoor(ILTPreLight *pInterface,
 	HPREOBJECT hObject,
 	float fPercent,
-    LTVector &vOutPos,
-    LTRotation &rOutRotation)
+	LTVector &vOutPos,
+	LTRotation &rOutRotation)
 {
-    LTVector vStartAngles, vEndAngles, vAngles;
-    LTVector vRotationPoint, vOriginalPos;
+	LTVector vStartAngles, vEndAngles, vAngles;
+	LTVector vRotationPoint, vOriginalPos;
 	GenericProp gProp;
 
 
@@ -69,25 +66,21 @@ void SetupTransform_HingedDoor(ILTPreLight *pInterface,
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: HingedDoor::HingedDoor()
 //
-//	ROUTINE:	HingedDoor::HingedDoor()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 HingedDoor::HingedDoor() : RotatingDoor()
 {
-    m_bOpeningNormal = LTTRUE;
+	m_bOpeningNormal = LTTRUE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: HingedDoor::EngineMessageFn()
 //
-//	ROUTINE:	HingedDoor::EngineMessageFn()
-//
-//	PURPOSE:	Handler for engine messages
-//
+//	PURPOSE: Handler for engine messages
 // --------------------------------------------------------------------------- //
 
 uint32 HingedDoor::EngineMessageFn(uint32 messageID, void *pData, float fData)
@@ -99,7 +92,7 @@ uint32 HingedDoor::EngineMessageFn(uint32 messageID, void *pData, float fData)
 			// Need to call base class to have the object name read in before
 			// we call ReadProp()
 
-            uint32 dwRet = RotatingDoor::EngineMessageFn(messageID, pData, fData);
+			uint32 dwRet = RotatingDoor::EngineMessageFn(messageID, pData, fData);
 
 			if (fData == PRECREATE_WORLDFILE)
 			{
@@ -114,7 +107,7 @@ uint32 HingedDoor::EngineMessageFn(uint32 messageID, void *pData, float fData)
 		{
 			if (fData != INITIALUPDATE_SAVEGAME)
 			{
-                uint32 dwRet = RotatingDoor::EngineMessageFn(messageID, pData, fData);
+				uint32 dwRet = RotatingDoor::EngineMessageFn(messageID, pData, fData);
 				InitialUpdate();
 				return dwRet;
 			}
@@ -123,13 +116,13 @@ uint32 HingedDoor::EngineMessageFn(uint32 messageID, void *pData, float fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint8)fData);
+			Save((HMESSAGEWRITE)pData, (uint8)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint8)fData);
+			Load((HMESSAGEREAD)pData, (uint8)fData);
 		}
 		break;
 
@@ -141,35 +134,31 @@ uint32 HingedDoor::EngineMessageFn(uint32 messageID, void *pData, float fData)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: HingedDoor::ReadProp()
 //
-//	ROUTINE:	HingedDoor::ReadProp()
-//
-//	PURPOSE:	Reads HingedDoor properties
-//
+//	PURPOSE: Reads HingedDoor properties
 // --------------------------------------------------------------------------- //
 
 LTBOOL HingedDoor::ReadProp(ObjectCreateStruct *)
 {
-    ILTServer* pServerDE = GetServerDE();
-    if (!pServerDE) return LTFALSE;
+	ILTServer* pServerDE = GetServerDE();
+	if (!pServerDE) return LTFALSE;
 
 	pServerDE->GetPropBool("OpenAway", &m_bOpenAway);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: HingedDoor::InitialUpdate()
 //
-//	ROUTINE:	HingedDoor::InitialUpdate()
-//
-//	PURPOSE:	First update
-//
+//	PURPOSE: First update
 // ----------------------------------------------------------------------- //
 
 void HingedDoor::InitialUpdate()
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE) return;
 
 	// Save original angles...
@@ -179,16 +168,14 @@ void HingedDoor::InitialUpdate()
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: HingedDoor::SetOpen()
 //
-//	ROUTINE:	HingedDoor::SetOpen()
-//
-//	PURPOSE:	Set the door to the closed state
-//
+//	PURPOSE: Set the door to the closed state
 // --------------------------------------------------------------------------- //
 
 void HingedDoor::SetClosed(LTBOOL bInitialize)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE) return;
 
 	if (!bInitialize)
@@ -203,11 +190,9 @@ void HingedDoor::SetClosed(LTBOOL bInitialize)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: HingedDoor::SetOpening()
 //
-//	ROUTINE:	HingedDoor::SetOpening()
-//
-//	PURPOSE:	Set the door to the opening state
-//
+//	PURPOSE: Set the door to the opening state
 // --------------------------------------------------------------------------- //
 
 void HingedDoor::SetOpening()
@@ -217,7 +202,7 @@ void HingedDoor::SetOpening()
 
  	if (m_dwDoorState == DOORSTATE_CLOSED)
 	{
-        g_pLTServer->GetObjectPos(m_hObject, &m_vOriginalPos);
+		g_pLTServer->GetObjectPos(m_hObject, &m_vOriginalPos);
 	}
 
 
@@ -233,10 +218,10 @@ void HingedDoor::SetOpening()
 
 		if (m_hActivateObj)
 		{
-            LTVector vObjPos;
-            g_pLTServer->GetObjectPos(m_hActivateObj, &vObjPos);
+			LTVector vObjPos;
+			g_pLTServer->GetObjectPos(m_hActivateObj, &vObjPos);
 
-            LTVector vOldAngles(m_fPitch, m_fYaw, m_fRoll);
+			LTVector vOldAngles(m_fPitch, m_fYaw, m_fRoll);
 
 			// Calculate the door's open position if it opened normally...
 
@@ -244,8 +229,8 @@ void HingedDoor::SetOpening()
 			m_fYaw	 = m_vOriginalOpenAngles.y;
 			m_fRoll	 = m_vOriginalOpenAngles.z;
 
-            LTVector vTestPos1, vTestPos2;
-            LTRotation rTestRot;
+			LTVector vTestPos1, vTestPos2;
+			LTRotation rTestRot;
 
 			CalcPosAndRot(vTestPos1, rTestRot);
 
@@ -269,13 +254,13 @@ void HingedDoor::SetOpening()
 			if (VEC_DISTSQR(vObjPos, vTestPos1) <
 				VEC_DISTSQR(vObjPos, vTestPos2))
 			{
-                m_bOpeningNormal = LTFALSE;
+				m_bOpeningNormal = LTFALSE;
 				m_vOpenAngles.y	 = m_vOriginalOpenAngles.y - MATH_PI;
-				m_vOpenDir.y     = -m_vOriginalOpenDir.y;
+				m_vOpenDir.y	 = -m_vOriginalOpenDir.y;
 			}
 			else
 			{
-                m_bOpeningNormal = LTTRUE;
+				m_bOpeningNormal = LTTRUE;
 				m_vOpenAngles	 = m_vOriginalOpenAngles;
 				m_vOpenDir		 = m_vOriginalOpenDir;
 			}
@@ -286,16 +271,14 @@ void HingedDoor::SetOpening()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: HingedDoor::Save
 //
-//	ROUTINE:	HingedDoor::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void HingedDoor::Save(HMESSAGEWRITE hWrite, uint8 nType)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hWrite) return;
 
 	pServerDE->WriteToMessageByte(hWrite, m_bOpenAway);
@@ -305,19 +288,17 @@ void HingedDoor::Save(HMESSAGEWRITE hWrite, uint8 nType)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: HingedDoor::Load
 //
-//	ROUTINE:	HingedDoor::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void HingedDoor::Load(HMESSAGEREAD hRead, uint8 nType)
 {
-    ILTServer* pServerDE = GetServerDE();
+	ILTServer* pServerDE = GetServerDE();
 	if (!pServerDE || !hRead) return;
 
-    m_bOpenAway         = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
+	m_bOpenAway		 = (LTBOOL) pServerDE->ReadFromMessageByte(hRead);
 	pServerDE->ReadFromMessageVector(hRead, &m_vOriginalOpenDir);
 	pServerDE->ReadFromMessageVector(hRead, &m_vOriginalOpenAngles);
 }
@@ -335,7 +316,7 @@ void HingedDoor::SetLightAnimOpen()
 float HingedDoor::GetRotatingLightAnimPercent()
 {
 	float fOpenPercent, fClosedPercent, fPercentOpen, fMaxDiff, fTestDiff;
-    uint32 iDim, iBestDim;
+	uint32 iDim, iBestDim;
 
 	// How far along are we?
 

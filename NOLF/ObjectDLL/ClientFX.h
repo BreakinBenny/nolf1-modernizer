@@ -1,10 +1,10 @@
 //------------------------------------------------------------------
 //
-//   MODULE  : CLIENTFX.H
+//   MODULE: CLIENTFX.H
 //
-//   PURPOSE : Defines class CClientFX
+//   PURPOSE: Defines class CClientFX
 //
-//   CREATED : On 1/25/99 At 3:57:10 PM
+//   CREATED: On 1/25/99 At 3:57:10 PM
 //
 //------------------------------------------------------------------
 
@@ -13,7 +13,7 @@
 
 	// Includes....
 
-    #include "ltengineobjects.h"
+	#include "ltengineobjects.h"
 
 	class CClientFX : public BaseClass
 	{
@@ -31,13 +31,13 @@
 
 			// Member Functions
 
-            uint32                  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+			uint32				  EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
 
 		private :
 
 			void					SendFXMessage();
-            void                    Save(HMESSAGEWRITE hWrite, uint32 dwFlags);
-            void                    Load(HMESSAGEREAD hRead, uint32 dwFlags);
+			void					Save(HMESSAGEWRITE hWrite, uint32 dwFlags);
+			void					Load(HMESSAGEREAD hRead, uint32 dwFlags);
 
 
 			HSTRING					m_hstrFxName;

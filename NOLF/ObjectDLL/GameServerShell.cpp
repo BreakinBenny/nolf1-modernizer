@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: GameServerShell.cpp
 //
-// MODULE  : GameServerShell.cpp
+// PURPOSE: The game's server shell - Implementation
 //
-// PURPOSE : The game's server shell - Implementation
-//
-// CREATED : 9/17/97
+// CREATED: 9/17/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -85,35 +83,35 @@ IServerShell* CreateServerShell(ILTServer *pServerDE)
 
 	// Set our global pointer
 
-    g_pLTServer = pServerDE;
+	g_pLTServer = pServerDE;
 
 	// Set up the LT subsystem pointers
 
-    g_pMathLT = g_pLTServer->GetMathLT();
-    g_pModelLT = g_pLTServer->GetModelLT();
-    g_pTransLT = g_pLTServer->GetTransformLT();
-    g_pPhysicsLT = g_pLTServer->Physics();
+	g_pMathLT = g_pLTServer->GetMathLT();
+	g_pModelLT = g_pLTServer->GetModelLT();
+	g_pTransLT = g_pLTServer->GetTransformLT();
+	g_pPhysicsLT = g_pLTServer->Physics();
 	g_pBaseLT = static_cast<ILTCSBase*>(g_pLTServer);
 	g_pPhysicsLT->SetStairHeight(DEFAULT_STAIRSTEP_HEIGHT);
 
 	// Set up global console trackers...
 
-    g_CanShowDimsTrack.Init(g_pLTServer, "CanShowDims", LTNULL, 0.0f);
-    g_ShowDimsTrack.Init(g_pLTServer, "ShowDims", LTNULL, 0.0f);
-    g_ShowTimingTrack.Init(g_pLTServer, "ShowTiming", "0", 0.0f);
-    g_ShowTriggersTrack.Init(g_pLTServer, "ShowTriggers", "0", 0.0f);
-    g_ShowTriggersFilter.Init(g_pLTServer, "FilterTriggerMsgs", "", 0.0f);
-    g_DamageScale.Init(g_pLTServer, "DamageScale", LTNULL, 1.0f);
-    g_HealScale.Init(g_pLTServer, "HealScale", LTNULL, 1.0f);
-    g_MaxPlayers.Init(g_pLTServer, "NetMaxPlayers", LTNULL, (LTFLOAT)(MAX_MULTI_PLAYERS_DISPLAY));
-    g_NetDMGameEnd.Init(g_pLTServer,"NetDMGameEnd",LTNULL,0.0f);
-    g_NetCAGameEnd.Init(g_pLTServer,"NetCAGameEnd",LTNULL,1.0f);
-    g_NetEndTime.Init(g_pLTServer,"NetEndTime",LTNULL,15.0f);
-    g_NetEndFrags.Init(g_pLTServer,"NetEndFrags",LTNULL,25.0f);
-    g_NetEndScore.Init(g_pLTServer,"NetEndScore",LTNULL,50.0f);
-    g_NetUseSpawnLimit.Init(g_pLTServer,"NetUseSpawnLimit",LTNULL,0.0f);
-    g_NetSpawnLimit.Init(g_pLTServer,"NetSpawnLimit",LTNULL,5.0f);
-    g_NetFragScore.Init(g_pLTServer,"NetFragScore",LTNULL,1.0f);
+	g_CanShowDimsTrack.Init(g_pLTServer, "CanShowDims", LTNULL, 0.0f);
+	g_ShowDimsTrack.Init(g_pLTServer, "ShowDims", LTNULL, 0.0f);
+	g_ShowTimingTrack.Init(g_pLTServer, "ShowTiming", "0", 0.0f);
+	g_ShowTriggersTrack.Init(g_pLTServer, "ShowTriggers", "0", 0.0f);
+	g_ShowTriggersFilter.Init(g_pLTServer, "FilterTriggerMsgs", "", 0.0f);
+	g_DamageScale.Init(g_pLTServer, "DamageScale", LTNULL, 1.0f);
+	g_HealScale.Init(g_pLTServer, "HealScale", LTNULL, 1.0f);
+	g_MaxPlayers.Init(g_pLTServer, "NetMaxPlayers", LTNULL, (LTFLOAT)(MAX_MULTI_PLAYERS_DISPLAY));
+	g_NetDMGameEnd.Init(g_pLTServer,"NetDMGameEnd",LTNULL,0.0f);
+	g_NetCAGameEnd.Init(g_pLTServer,"NetCAGameEnd",LTNULL,1.0f);
+	g_NetEndTime.Init(g_pLTServer,"NetEndTime",LTNULL,15.0f);
+	g_NetEndFrags.Init(g_pLTServer,"NetEndFrags",LTNULL,25.0f);
+	g_NetEndScore.Init(g_pLTServer,"NetEndScore",LTNULL,50.0f);
+	g_NetUseSpawnLimit.Init(g_pLTServer,"NetUseSpawnLimit",LTNULL,0.0f);
+	g_NetSpawnLimit.Init(g_pLTServer,"NetSpawnLimit",LTNULL,5.0f);
+	g_NetFragScore.Init(g_pLTServer,"NetFragScore",LTNULL,1.0f);
 	g_NetAudioTaunts.Init(g_pLTServer,"NetAudioTaunts",LTNULL,1.0f);
 	g_NetArmorHealthPercent.Init(g_pLTServer, "NetArmorHealthPercent", LTNULL, 0.0f);
 
@@ -124,20 +122,20 @@ IServerShell* CreateServerShell(ILTServer *pServerDE)
 
 	// Make sure we are using autodeactivation...
 
-    g_pLTServer->RunGameConString("autodeactivate 1.0");
+	g_pLTServer->RunGameConString("autodeactivate 1.0");
 
 	CGameServerShell *pShell = debug_new1(CGameServerShell, pServerDE);
 
 	g_pGameServerShell = pShell;
 
-    return (IServerShell*)pShell;
+	return (IServerShell*)pShell;
 }
 
 void DeleteServerShell(IServerShell *pInputShell)
 {
 	CGameServerShell *pShell = (CGameServerShell*)pInputShell;
 
-    // g_pGameServerShell = LTNULL;
+	// g_pGameServerShell = LTNULL;
 	// (kls - 2/22/98 - CreateSeverShell() is called BEFORE
 	// DeleteServerShell() is called so we CAN'T set this to NULL)
 
@@ -154,8 +152,7 @@ LTBOOL g_bRobert = LTFALSE;
 
 
 
-// ----------------------------------------------------------------------- //
-// Helpers for world time conversion.
+// ----------------------------------------------------------------------- // Helpers for world time conversion.
 // ----------------------------------------------------------------------- //
 
 inline float TODSecondsToHours(float time)
@@ -171,11 +168,9 @@ inline float TODHoursToSeconds(float time)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::CGameServerShell()
 //
-//	ROUTINE:	CGameServerShell::CGameServerShell()
-//
-//	PURPOSE:	Initialize
-//
+//	PURPOSE: Initialize
 // ----------------------------------------------------------------------- //
 
 CGameServerShell::CGameServerShell(ILTServer *pServerDE)
@@ -187,22 +182,22 @@ CGameServerShell::CGameServerShell(ILTServer *pServerDE)
 	ClearClientList();
 	SetUpdateGameServ();
 
-    m_bGameServHosted = LTFALSE;
+	m_bGameServHosted = LTFALSE;
 	m_WorldTimeColor[0] = m_WorldTimeColor[1] = m_WorldTimeColor[2] = MAX_WORLDTIME_COLOR;
 	m_SunVec[0] = m_SunVec[1] = m_SunVec[2] = 0;
 
 	SetupGameInfo();
 
 	m_nLastLGFlags  = LOAD_NEW_GAME;
-    m_hSwitchWorldVar = LTNULL;
-    m_bFirstUpdate = LTTRUE;
+	m_hSwitchWorldVar = LTNULL;
+	m_bFirstUpdate = LTTRUE;
 
 	m_TODSeconds = TODHoursToSeconds(12.0f);
-    m_TODCounter = 0.0f;
+	m_TODCounter = 0.0f;
 	m_ClientPingSendCounter = 0.0f;
 	m_iPrevRamp = 0;
 
-    m_bUseMissionData = LTFALSE;
+	m_bUseMissionData = LTFALSE;
 
 	m_bFadeBodies = LTTRUE;
 
@@ -217,9 +212,9 @@ CGameServerShell::CGameServerShell(ILTServer *pServerDE)
 	{
 		m_bDontUseGameSpy = LTTRUE;
 	}
-    else
+	else
 	{
-        m_ServerOptionMgr.Init(g_pLTServer);
+		m_ServerOptionMgr.Init(g_pLTServer);
 		ReadNetHostSettings( );
 	}
 	m_bShowMultiplayerSummary = LTFALSE;
@@ -241,11 +236,9 @@ CGameServerShell::CGameServerShell(ILTServer *pServerDE)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::~CGameServerShell()
 //
-//	ROUTINE:	CGameServerShell::~CGameServerShell()
-//
-//	PURPOSE:	Deallocate
-//
+//	PURPOSE: Deallocate
 // ----------------------------------------------------------------------- //
 
 CGameServerShell::~CGameServerShell()
@@ -262,11 +255,9 @@ CGameServerShell::~CGameServerShell()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::OnAddClient()
 //
-//	ROUTINE:	CGameServerShell::OnAddClient()
-//
-//	PURPOSE:	Called when a client connects to a server
-//
+//	PURPOSE: Called when a client connects to a server
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::OnAddClient(HCLIENT hClient)
@@ -278,21 +269,19 @@ void CGameServerShell::OnAddClient(HCLIENT hClient)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::OnRemoveClient()
 //
-//	ROUTINE:	CGameServerShell::OnRemoveClient()
-//
-//	PURPOSE:	Called when a client disconnects from a server
-//
+//	PURPOSE: Called when a client disconnects from a server
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::OnRemoveClient(HCLIENT hClient)
 {
 	// Clear our client data...
 
-    CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hClient);
+	CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hClient);
 	if (pPlayer)
 	{
-        pPlayer->SetClient(LTNULL);
+		pPlayer->SetClient(LTNULL);
 	}
 
 	// Tell server app about it.
@@ -300,20 +289,18 @@ void CGameServerShell::OnRemoveClient(HCLIENT hClient)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::OnClientEnterWorld()
 //
-//	ROUTINE:	CGameServerShell::OnClientEnterWorld()
-//
-//	PURPOSE:	Add a client
-//
+//	PURPOSE: Add a client
 // ----------------------------------------------------------------------- //
 
 LPBASECLASS	CGameServerShell::OnClientEnterWorld(HCLIENT hClient, void *pClientData,
-                                                 uint32 clientDataLen)
+												 uint32 clientDataLen)
 {
-    if (!hClient) return LTNULL;
+	if (!hClient) return LTNULL;
 	g_pLTServer->CPrint("OnClientEnterWorld");
 
-    CPlayerObj* pPlayer = LTNULL;
+	CPlayerObj* pPlayer = LTNULL;
 
 	g_pPhysicsLT->SetStairHeight(DEFAULT_STAIRSTEP_HEIGHT);
 
@@ -322,38 +309,38 @@ LPBASECLASS	CGameServerShell::OnClientEnterWorld(HCLIENT hClient, void *pClientD
 	SendTimeOfDay(hClient);
 
 
-    LTBOOL bFoundClient = LTFALSE;
+	LTBOOL bFoundClient = LTFALSE;
 	char sClientName[MAX_CLIENT_NAME_LENGTH];
 	char sClientRefName[MAX_CLIENT_NAME_LENGTH];
 	sClientName[0] = sClientRefName[0] = '\0';
 
 
-    g_pLTServer->GetClientName(hClient, sClientName, MAX_CLIENT_NAME_LENGTH-1);
+	g_pLTServer->GetClientName(hClient, sClientName, MAX_CLIENT_NAME_LENGTH-1);
 
 
 	// Search through the client refs to see if any of them match our
 	// client...
-    HCLIENTREF hClientRef = g_pLTServer->GetNextClientRef(LTNULL);
+	HCLIENTREF hClientRef = g_pLTServer->GetNextClientRef(LTNULL);
 	while (hClientRef)
 	{
 		// See if this client reference is local or not...
 
-        if (g_pLTServer->GetClientRefInfoFlags(hClientRef) & CIF_LOCAL)
+		if (g_pLTServer->GetClientRefInfoFlags(hClientRef) & CIF_LOCAL)
 		{
-            bFoundClient = LTTRUE;
+			bFoundClient = LTTRUE;
 		}
 
 
 		// Determine if there is a reference to a client with the same
 		// name...
 
-        if (!bFoundClient && g_pLTServer->GetClientRefName(hClientRef, sClientRefName, MAX_CLIENT_NAME_LENGTH-1))
+		if (!bFoundClient && g_pLTServer->GetClientRefName(hClientRef, sClientRefName, MAX_CLIENT_NAME_LENGTH-1))
 		{
 			if (sClientName[0] && sClientRefName[0])
 			{
 				if (_stricmp(sClientName, sClientRefName) == 0)
 				{
-                    bFoundClient = LTTRUE;
+					bFoundClient = LTTRUE;
 				}
 			}
 		}
@@ -363,8 +350,8 @@ LPBASECLASS	CGameServerShell::OnClientEnterWorld(HCLIENT hClient, void *pClientD
 
 		if (bFoundClient)
 		{
-            HOBJECT hObject = g_pLTServer->GetClientRefObject(hClientRef);
-            pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hObject);
+			HOBJECT hObject = g_pLTServer->GetClientRefObject(hClientRef);
+			pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hObject);
 
 			if (pPlayer)
 			{
@@ -373,7 +360,7 @@ LPBASECLASS	CGameServerShell::OnClientEnterWorld(HCLIENT hClient, void *pClientD
 			break;
 		}
 
-        hClientRef = g_pLTServer->GetNextClientRef(hClientRef);
+		hClientRef = g_pLTServer->GetNextClientRef(hClientRef);
 	}
 
 	uint32 dwTeamID = TEAM_AUTO;
@@ -403,15 +390,15 @@ LPBASECLASS	CGameServerShell::OnClientEnterWorld(HCLIENT hClient, void *pClientD
 			}
 		}
 
-        uint32 dwTransTeamID = m_TeamMgr.GetTeamTransID(g_pLTServer->GetClientID(hClient));
-		CTeam* pTeam         = m_TeamMgr.GetTeam(dwTransTeamID);
+		uint32 dwTransTeamID = m_TeamMgr.GetTeamTransID(g_pLTServer->GetClientID(hClient));
+		CTeam* pTeam		 = m_TeamMgr.GetTeam(dwTransTeamID);
 
 		if (dwTransTeamID != TM_ID_NULL && pTeam)
 		{
 			dwTeamID = dwTransTeamID;
 		}
 
-        m_TeamMgr.AddPlayer(dwTeamID, g_pLTServer->GetClientID(hClient));
+		m_TeamMgr.AddPlayer(dwTeamID, g_pLTServer->GetClientID(hClient));
 	}
 
 
@@ -428,7 +415,7 @@ LPBASECLASS	CGameServerShell::OnClientEnterWorld(HCLIENT hClient, void *pClientD
 	}
 
 
-    g_pLTServer->SetClientInfoFlags(hClient, CIF_AUTOACTIVATEOBJECTS);
+	g_pLTServer->SetClientInfoFlags(hClient, CIF_AUTOACTIVATEOBJECTS);
 
 
 
@@ -442,8 +429,8 @@ LPBASECLASS	CGameServerShell::OnClientEnterWorld(HCLIENT hClient, void *pClientD
 		SendGameDataToClient(hClient);
 		SendServerOptionsToClient(hClient);
 
-	    uint32  nClientID   = g_pLTServer->GetClientID(hClient);
-	    HSTRING hClientName = g_pLTServer->CreateString(szPlayerName);
+		uint32  nClientID   = g_pLTServer->GetClientID(hClient);
+		HSTRING hClientName = g_pLTServer->CreateString(szPlayerName);
 		int  nTeam1Score = 0;
 		int  nTeam2Score = 0;
 		if (pPlayer->GetTeamID())
@@ -455,13 +442,13 @@ LPBASECLASS	CGameServerShell::OnClientEnterWorld(HCLIENT hClient, void *pClientD
 		}
 
 		HMESSAGEWRITE hWrite = g_pLTServer->StartMessage(hClient, MID_PLAYER_CONNECTED);
-	    g_pLTServer->WriteToMessageHString(hWrite, hClientName);
+		g_pLTServer->WriteToMessageHString(hWrite, hClientName);
 		g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nClientID);
-	    g_pLTServer->WriteToMessageByte(hWrite, (uint8)pPlayer->GetTeamID());
-	    g_pLTServer->WriteToMessageFloat(hWrite, (float)nTeam1Score);
-	    g_pLTServer->WriteToMessageFloat(hWrite, (float)nTeam2Score);
+		g_pLTServer->WriteToMessageByte(hWrite, (uint8)pPlayer->GetTeamID());
+		g_pLTServer->WriteToMessageFloat(hWrite, (float)nTeam1Score);
+		g_pLTServer->WriteToMessageFloat(hWrite, (float)nTeam2Score);
 
-	    g_pLTServer->EndMessage(hWrite);
+		g_pLTServer->EndMessage(hWrite);
 
 		g_pLTServer->FreeString(hClientName);
 
@@ -479,41 +466,39 @@ LPBASECLASS	CGameServerShell::OnClientEnterWorld(HCLIENT hClient, void *pClientD
 }
 
 
-// ----------------------------------------------------------------------- //
-// Sends a time of day message to the specified client(s).
+// ----------------------------------------------------------------------- // Sends a time of day message to the specified client(s).
 // ----------------------------------------------------------------------- //
 void CGameServerShell::SendTimeOfDay(HCLIENT hClient)
 {
 	HMESSAGEWRITE hWrite;
-    hWrite = g_pLTServer->StartMessage(hClient, MID_TIMEOFDAYCOLOR);
+	hWrite = g_pLTServer->StartMessage(hClient, MID_TIMEOFDAYCOLOR);
 
-    g_pLTServer->WriteToMessageByte(hWrite, m_WorldTimeColor[0]);
-    g_pLTServer->WriteToMessageByte(hWrite, m_WorldTimeColor[1]);
-    g_pLTServer->WriteToMessageByte(hWrite, m_WorldTimeColor[2]);
-    g_pLTServer->WriteToMessageByte(hWrite, m_SunVec[0]);
-    g_pLTServer->WriteToMessageByte(hWrite, m_SunVec[1]);
-    g_pLTServer->WriteToMessageByte(hWrite, m_SunVec[2]);
+	g_pLTServer->WriteToMessageByte(hWrite, m_WorldTimeColor[0]);
+	g_pLTServer->WriteToMessageByte(hWrite, m_WorldTimeColor[1]);
+	g_pLTServer->WriteToMessageByte(hWrite, m_WorldTimeColor[2]);
+	g_pLTServer->WriteToMessageByte(hWrite, m_SunVec[0]);
+	g_pLTServer->WriteToMessageByte(hWrite, m_SunVec[1]);
+	g_pLTServer->WriteToMessageByte(hWrite, m_SunVec[2]);
 
-    g_pLTServer->WriteToMessageFloat(hWrite, TODSecondsToHours(m_TODSeconds));
+	g_pLTServer->WriteToMessageFloat(hWrite, TODSecondsToHours(m_TODSeconds));
 
-    g_pLTServer->EndMessage(hWrite);
+	g_pLTServer->EndMessage(hWrite);
 }
 
 
-// ----------------------------------------------------------------------- //
-// Sends a game data message to the specified client.
+// ----------------------------------------------------------------------- // Sends a game data message to the specified client.
 // ----------------------------------------------------------------------- //
 void CGameServerShell::SendGameDataToClient(HCLIENT hClient)
 {
-    void *pData = g_pLTServer->GetClientUserData(hClient);
+	void *pData = g_pLTServer->GetClientUserData(hClient);
 	CPlayerObj* pPlayer = (CPlayerObj*)pData;
 
 
 
 	HMESSAGEWRITE hWrite;
-    hWrite = g_pLTServer->StartMessage(hClient, MID_MULTIPLAYER_DATA);
+	hWrite = g_pLTServer->StartMessage(hClient, MID_MULTIPLAYER_DATA);
 
-    g_pLTServer->WriteToMessageByte(hWrite, (uint8)GetGameType());
+	g_pLTServer->WriteToMessageByte(hWrite, (uint8)GetGameType());
 
 	if (GetGameType() != SINGLE)
 	{
@@ -522,11 +507,11 @@ void CGameServerShell::SendGameDataToClient(HCLIENT hClient)
 		int  nBufSize = 30;
 		WORD wPort = 0;
 		g_pLTServer->GetTcpIpAddress(sBuf, nBufSize, wPort);
-	    g_pLTServer->WriteToMessageString(hWrite, sBuf);
-	    g_pLTServer->WriteToMessageDWord(hWrite,(uint32) wPort);
+		g_pLTServer->WriteToMessageString(hWrite, sBuf);
+		g_pLTServer->WriteToMessageDWord(hWrite,(uint32) wPort);
 	}
 
-    uint32 dwTeam = 0;
+	uint32 dwTeam = 0;
 	if (pPlayer)
 	{
 		pPlayer->UpdateTeamID();
@@ -535,47 +520,45 @@ void CGameServerShell::SendGameDataToClient(HCLIENT hClient)
 	int nNumObj = m_Objectives[0].nNumObjectives + m_Objectives[dwTeam].nNumObjectives;
 
 	//send total number of objectives
-    g_pLTServer->WriteToMessageByte(hWrite, (uint8)nNumObj);
+	g_pLTServer->WriteToMessageByte(hWrite, (uint8)nNumObj);
 
 	//send list of general objectives
 	for (int i = 0; i < m_Objectives[0].nNumObjectives; i++)
 	{
-        g_pLTServer->WriteToMessageDWord(hWrite, (uint32)m_Objectives[0].dwObjectives[i]);
+		g_pLTServer->WriteToMessageDWord(hWrite, (uint32)m_Objectives[0].dwObjectives[i]);
 	}
 	//send list of team objectives
 	for ( i = 0; i < m_Objectives[dwTeam].nNumObjectives; i++)
 	{
-        g_pLTServer->WriteToMessageDWord(hWrite, (uint32)m_Objectives[dwTeam].dwObjectives[i]);
+		g_pLTServer->WriteToMessageDWord(hWrite, (uint32)m_Objectives[dwTeam].dwObjectives[i]);
 	}
 
 	//send total number of completed objectives
 	nNumObj = m_CompletedObjectives[0].nNumObjectives + m_CompletedObjectives[dwTeam].nNumObjectives;
-    g_pLTServer->WriteToMessageByte(hWrite, (uint8)nNumObj);
+	g_pLTServer->WriteToMessageByte(hWrite, (uint8)nNumObj);
 
 	//send list of general completed objectives
 	for (i = 0; i < m_CompletedObjectives[0].nNumObjectives; i++)
 	{
-        g_pLTServer->WriteToMessageDWord(hWrite, (uint32)m_CompletedObjectives[0].dwObjectives[i]);
+		g_pLTServer->WriteToMessageDWord(hWrite, (uint32)m_CompletedObjectives[0].dwObjectives[i]);
 	}
 	//send list of team completed objectives
 	for (i = 0; i < m_CompletedObjectives[dwTeam].nNumObjectives; i++)
 	{
-        g_pLTServer->WriteToMessageDWord(hWrite, (uint32)m_CompletedObjectives[dwTeam].dwObjectives[i]);
+		g_pLTServer->WriteToMessageDWord(hWrite, (uint32)m_CompletedObjectives[dwTeam].dwObjectives[i]);
 	}
 
 	LTBOOL bFragScore = (g_NetFragScore.GetFloat() > 0.0f);
 	g_pLTServer->WriteToMessageByte(hWrite, bFragScore);
 
-    g_pLTServer->EndMessage(hWrite);
+	g_pLTServer->EndMessage(hWrite);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::OnClientExitWorld()
 //
-//	ROUTINE:	CGameServerShell::OnClientExitWorld()
-//
-//	PURPOSE:	remove a client
-//
+//	PURPOSE: remove a client
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::OnClientExitWorld(HCLIENT hClient)
@@ -584,13 +567,13 @@ void CGameServerShell::OnClientExitWorld(HCLIENT hClient)
 	{
 		// Send a message to all clients, letting them know this user is leaving the world
 
-        uint32 nClientID = g_pLTServer->GetClientID(hClient);
-        HMESSAGEWRITE hWrite = g_pLTServer->StartMessage(LTNULL, MID_PLAYER_REMOVED);
-        g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nClientID);
-        g_pLTServer->EndMessage(hWrite);
+		uint32 nClientID = g_pLTServer->GetClientID(hClient);
+		HMESSAGEWRITE hWrite = g_pLTServer->StartMessage(LTNULL, MID_PLAYER_REMOVED);
+		g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nClientID);
+		g_pLTServer->EndMessage(hWrite);
 
 		// Remove this client from the team...
-        m_TeamMgr.RemovePlayer(g_pLTServer->GetClientID(hClient));
+		m_TeamMgr.RemovePlayer(g_pLTServer->GetClientID(hClient));
 	}
 
 	// Remove this client from our local list...
@@ -601,24 +584,22 @@ void CGameServerShell::OnClientExitWorld(HCLIENT hClient)
 
 	// Remove the player object...
 
-    CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hClient);
+	CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hClient);
 	if (pPlayer)
 	{
-        // pPlayer->SetClient(LTNULL);
-        //g_pLTServer->RemoveObject(pPlayer->m_hObject);
+		// pPlayer->SetClient(LTNULL);
+		//g_pLTServer->RemoveObject(pPlayer->m_hObject);
 		pPlayer->RemoveObject();
 	}
 
-    g_pLTServer->SetClientUserData(hClient, LTNULL);
+	g_pLTServer->SetClientUserData(hClient, LTNULL);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::PreStartWorld()
 //
-//	ROUTINE:	CGameServerShell::PreStartWorld()
-//
-//	PURPOSE:	Handle pre start world
-//
+//	PURPOSE: Handle pre start world
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::PreStartWorld(LTBOOL bSwitchingWorlds)
@@ -646,11 +627,9 @@ void CGameServerShell::PreStartWorld(LTBOOL bSwitchingWorlds)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::PostStartWorld()
 //
-//	ROUTINE:	CGameServerShell::PostStartWorld()
-//
-//	PURPOSE:	Handle post switch world
-//
+//	PURPOSE: Handle post switch world
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::PostStartWorld()
@@ -660,7 +639,7 @@ void CGameServerShell::PostStartWorld()
 
 	static CVarTrack cvResetAIReactions;
 	if (!cvResetAIReactions.IsInitted())
-        cvResetAIReactions.Init(g_pLTServer, "ResetAIReactions", LTNULL, 0.0f);
+		cvResetAIReactions.Init(g_pLTServer, "ResetAIReactions", LTNULL, 0.0f);
 	if ( cvResetAIReactions.GetFloat() > 0.0f )
 	{
 		g_pLTServer->CPrint("got ai reaction reset");
@@ -677,8 +656,8 @@ void CGameServerShell::SendPlayerInfoMsgToClients(HCLIENT hClients, CPlayerObj *
 	HCLIENT hClient	= pPlayer->GetClient();
 	if (!hClient) return;
 
-    uint32  nClientID   = g_pLTServer->GetClientID(hClient);
-    HSTRING hClientName = g_pLTServer->CreateString(pPlayer->GetNetName());
+	uint32  nClientID   = g_pLTServer->GetClientID(hClient);
+	HSTRING hClientName = g_pLTServer->CreateString(pPlayer->GetNetName());
 
 	uint8 nLives = 255;
 	if (g_NetUseSpawnLimit.GetFloat() > 0.0f)
@@ -686,17 +665,17 @@ void CGameServerShell::SendPlayerInfoMsgToClients(HCLIENT hClients, CPlayerObj *
 		nLives = (1+(uint8)g_NetSpawnLimit.GetFloat()-pPlayer->GetRespawnCount());
 	}
 
-    HMESSAGEWRITE hWrite = g_pLTServer->StartMessage(hClients, MID_PLAYER_ADDED);
-    g_pLTServer->WriteToMessageHString(hWrite, hClientName);
-    g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nClientID);
-    g_pLTServer->WriteToMessageObject(hWrite, pPlayer->m_hObject);
-    g_pLTServer->WriteToMessageFloat(hWrite, (float)pPlayer->GetFragCount());
-    g_pLTServer->WriteToMessageByte(hWrite, (uint8)pPlayer->GetTeamID());
-    g_pLTServer->WriteToMessageByte(hWrite, nLives);
-    g_pLTServer->WriteToMessageByte(hWrite, (uint8)bNewPlayer);
-    g_pLTServer->FreeString(hClientName);
+	HMESSAGEWRITE hWrite = g_pLTServer->StartMessage(hClients, MID_PLAYER_ADDED);
+	g_pLTServer->WriteToMessageHString(hWrite, hClientName);
+	g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) nClientID);
+	g_pLTServer->WriteToMessageObject(hWrite, pPlayer->m_hObject);
+	g_pLTServer->WriteToMessageFloat(hWrite, (float)pPlayer->GetFragCount());
+	g_pLTServer->WriteToMessageByte(hWrite, (uint8)pPlayer->GetTeamID());
+	g_pLTServer->WriteToMessageByte(hWrite, nLives);
+	g_pLTServer->WriteToMessageByte(hWrite, (uint8)bNewPlayer);
+	g_pLTServer->FreeString(hClientName);
 
-    g_pLTServer->EndMessage(hWrite);
+	g_pLTServer->EndMessage(hWrite);
 }
 
 
@@ -825,11 +804,9 @@ void CGameServerShell::ProcessHandshake(HCLIENT hClient, HMESSAGEREAD hMessage)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::OnMessage()
 //
-//	ROUTINE:	CGameServerShell::OnMessage()
-//
-//	PURPOSE:	Handle messages
-//
+//	PURPOSE: Handle messages
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD hMessage)
@@ -876,7 +853,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_WEAPON_FIRE:
 		{
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 			if (pPlayer)
 			{
@@ -887,7 +864,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_WEAPON_SOUND:
 		{
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 			if (pPlayer)
 			{
@@ -898,11 +875,11 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_WEAPON_CHANGE:
 		{
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 			if (pPlayer)
 			{
-                uint8 nWeaponId = g_pLTServer->ReadFromMessageByte(hMessage);
+				uint8 nWeaponId = g_pLTServer->ReadFromMessageByte(hMessage);
 				pPlayer->DoWeaponChange(nWeaponId);
 			}
 		}
@@ -910,7 +887,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_PLAYER_ACTIVATE:
 		{
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 			if (pPlayer)
 			{
@@ -921,7 +898,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_PLAYER_CLIENTMSG:
 		{
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 			if (pPlayer)
 			{
@@ -932,10 +909,10 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_FRAG_SELF:
 		{
-            CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hSender);
+			CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hSender);
 			if(pPlayer)
 			{
-                LPBASECLASS pClass = g_pLTServer->HandleToObject(pPlayer->m_hObject);
+				LPBASECLASS pClass = g_pLTServer->HandleToObject(pPlayer->m_hObject);
 				if (pClass)
 				{
 					DamageStruct damage;
@@ -953,7 +930,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_PLAYER_RESPAWN :
 		{
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 			if (pPlayer && pPlayer->GetState() == PS_DEAD)
 			{
@@ -979,7 +956,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_PLAYER_TAUNT :
 		{
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			uint32 nTauntID = g_pLTServer->ReadFromMessageDWord(hMessage);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 			if (pPlayer && g_NetAudioTaunts.GetFloat() > 0.0f)
@@ -998,7 +975,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_MULTIPLAYER_UPDATE:
 		{
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 			if (pPlayer)
 			{
@@ -1021,7 +998,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 		case MID_PLAYER_MULTIPLAYER_INIT :
 		case MID_PLAYER_MULTIPLAYER_CHANGE :
 		{
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 			if (pPlayer)
 			{
@@ -1031,7 +1008,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 					// Send a message to all clients, letting them know a
 					// new client has joined the game...
 
-                    SendPlayerInfoMsgToClients(LTNULL, pPlayer, (messageID == MID_PLAYER_MULTIPLAYER_INIT));
+					SendPlayerInfoMsgToClients(LTNULL, pPlayer, (messageID == MID_PLAYER_MULTIPLAYER_INIT));
 
 					// Tell the new Client about all the clients already
 					// on the server...
@@ -1041,7 +1018,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 						CPlayerObj* pCurPlayer = GetPlayerFromClientList(m_aClients[i]);
 						if (pCurPlayer && pCurPlayer != pPlayer)
 						{
-                            SendPlayerInfoMsgToClients(pPlayer->GetClient(), pCurPlayer, LTFALSE);
+							SendPlayerInfoMsgToClients(pPlayer->GetClient(), pCurPlayer, LTFALSE);
 						}
 					}
 					if (messageID == MID_PLAYER_MULTIPLAYER_INIT)
@@ -1061,9 +1038,9 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_PLAYER_INITVARS :
 		{
-            LTBOOL bRunLock = (LTBOOL)g_pLTServer->ReadFromMessageByte(hMessage);
+			LTBOOL bRunLock = (LTBOOL)g_pLTServer->ReadFromMessageByte(hMessage);
 
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 			if (pPlayer)
 			{
@@ -1084,22 +1061,22 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 			strcpy_s(szString, 100, sMessage.c_str());
 
 			// So it shows up in GameSrv..
-            if(szString[0] && !(g_pLTServer->GetClientInfoFlags(hSender) & CIF_LOCAL))
+			if(szString[0] && !(g_pLTServer->GetClientInfoFlags(hSender) & CIF_LOCAL))
 			{
-                g_pLTServer->CPrint(szString);
+				g_pLTServer->CPrint(szString);
 			}
 
 			// now send the string to all clients
 
-            HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(NULL, MID_PLAYER_MESSAGE);
-            g_pLTServer->WriteToMessageString(hMessage, szString);
-            g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLE);
+			HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(NULL, MID_PLAYER_MESSAGE);
+			g_pLTServer->WriteToMessageString(hMessage, szString);
+			g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLE);
 		}
 		break;
 
 		case MID_PLAYER_TEAMMESSAGE :
 		{
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 
 			//do nothing if player isn't on a team
@@ -1112,9 +1089,9 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 			hMessage->ReadStringFL(szString, sizeof(szString));
 
 			// So it shows up in GameSrv..
-            if(szString[0] && !(g_pLTServer->GetClientInfoFlags(hSender) & CIF_LOCAL))
+			if(szString[0] && !(g_pLTServer->GetClientInfoFlags(hSender) & CIF_LOCAL))
 			{
-                g_pLTServer->CPrint(szString);
+				g_pLTServer->CPrint(szString);
 			}
 
 
@@ -1124,9 +1101,9 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 				CPlayerObj* pCurPlayer = GetPlayerFromClientList(m_aClients[i]);
 				if (pCurPlayer &&  pCurPlayer->GetTeamID() == pPlayer->GetTeamID())
 				{
-                    HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(pCurPlayer->GetClient(), MID_PLAYER_TEAMMESSAGE);
-                    g_pLTServer->WriteToMessageString(hMessage, szString);
-                    g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLE);
+					HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(pCurPlayer->GetClient(), MID_PLAYER_TEAMMESSAGE);
+					g_pLTServer->WriteToMessageString(hMessage, szString);
+					g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLE);
 				}
 			}
 
@@ -1135,7 +1112,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_PLAYER_GHOSTMESSAGE :
 		{
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 
 			//do nothing if player isn't a ghost
@@ -1148,9 +1125,9 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 			hMessage->ReadStringFL(szString, sizeof(szString));
 
 			// So it shows up in GameSrv..
-            if(szString[0] && !(g_pLTServer->GetClientInfoFlags(hSender) & CIF_LOCAL))
+			if(szString[0] && !(g_pLTServer->GetClientInfoFlags(hSender) & CIF_LOCAL))
 			{
-                g_pLTServer->CPrint(szString);
+				g_pLTServer->CPrint(szString);
 			}
 
 
@@ -1160,9 +1137,9 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 				CPlayerObj* pCurPlayer = GetPlayerFromClientList(m_aClients[i]);
 				if (pCurPlayer &&  pCurPlayer->GetState() == PS_GHOST)
 				{
-                    HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(pCurPlayer->GetClient(), MID_PLAYER_GHOSTMESSAGE);
-                    g_pLTServer->WriteToMessageString(hMessage, szString);
-                    g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLE);
+					HMESSAGEWRITE hMessage = g_pLTServer->StartMessage(pCurPlayer->GetClient(), MID_PLAYER_GHOSTMESSAGE);
+					g_pLTServer->WriteToMessageString(hMessage, szString);
+					g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLE);
 				}
 			}
 
@@ -1171,9 +1148,9 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_PLAYER_CHATMODE:
 		{
-            LTBOOL bChatting = (LTBOOL)g_pLTServer->ReadFromMessageByte(hMessage);
+			LTBOOL bChatting = (LTBOOL)g_pLTServer->ReadFromMessageByte(hMessage);
 
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 
 			if (pPlayer)
@@ -1193,14 +1170,14 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 			// get a pointer to the sender's player object
 
-            void *pData = g_pLTServer->GetClientUserData(hSender);
+			void *pData = g_pLTServer->GetClientUserData(hSender);
 			CPlayerObj* pPlayer = (CPlayerObj*)pData;
 			if (!pPlayer) return;
 
 			// retrieve message data
 
-            CheatCode nCheatCode = (CheatCode) g_pLTServer->ReadFromMessageByte (hMessage);
-            uint8 nData = g_pLTServer->ReadFromMessageByte (hMessage);
+			CheatCode nCheatCode = (CheatCode) g_pLTServer->ReadFromMessageByte (hMessage);
+			uint8 nData = g_pLTServer->ReadFromMessageByte (hMessage);
 
 			// now deal with the specific cheat code
 
@@ -1234,13 +1211,13 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_GAME_PAUSE:
 		{
-            PauseGame(LTTRUE);
+			PauseGame(LTTRUE);
 		}
 		break;
 
 		case MID_GAME_UNPAUSE:
 		{
-            PauseGame(LTFALSE);
+			PauseGame(LTFALSE);
 		}
 		break;
 
@@ -1266,7 +1243,7 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 		{
 			if (GetGameType() == SINGLE)
 			{
-                void *pData = g_pLTServer->GetClientUserData(hSender);
+				void *pData = g_pLTServer->GetClientUserData(hSender);
 				CPlayerObj* pPlayer = (CPlayerObj*)pData;
 				if (pPlayer)
 				{
@@ -1294,14 +1271,14 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 		case MID_DIFFICULTY:
 		{
-            m_eDifficulty = (GameDifficulty)g_pLTServer->ReadFromMessageByte(hMessage);
+			m_eDifficulty = (GameDifficulty)g_pLTServer->ReadFromMessageByte(hMessage);
 			g_pLTServer->CPrint("Difficulty:%d",(int)m_eDifficulty);
 		}
 		break;
 
 		case MID_FADEBODIES:
 		{
-            m_bFadeBodies = (LTBOOL)g_pLTServer->ReadFromMessageByte(hMessage);
+			m_bFadeBodies = (LTBOOL)g_pLTServer->ReadFromMessageByte(hMessage);
 			g_pLTServer->CPrint("FadeBodies:%d",(int)m_bFadeBodies);
 
 			if ( m_bFadeBodies )
@@ -1341,8 +1318,8 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 		case CSM_DIALOGUE_DONE_SELECTION:
 		{
 			// Tell our global dialogue manager that the dialogue is done
-            unsigned char byDecision = g_pLTServer->ReadFromMessageByte(hMessage);
-            uint32 dwID = g_pLTServer->ReadFromMessageDWord(hMessage);
+			unsigned char byDecision = g_pLTServer->ReadFromMessageByte(hMessage);
+			uint32 dwID = g_pLTServer->ReadFromMessageDWord(hMessage);
 			g_DialogueWindow.Finished(byDecision,dwID);
 		}
 		break;
@@ -1360,18 +1337,16 @@ void CGameServerShell::OnMessage(HCLIENT hSender, uint8 messageID, HMESSAGEREAD 
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandleUpdatePlayerMsg()
 //
-//	ROUTINE:	CGameServerShell::HandleUpdatePlayerMsg()
-//
-//	PURPOSE:	Handle updating the player info
-//
+//	PURPOSE: Handle updating the player info
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandleUpdatePlayerMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 {
 	// Update the player...
 
-    void *pData = g_pLTServer->GetClientUserData(hSender);
+	void *pData = g_pLTServer->GetClientUserData(hSender);
 	CPlayerObj* pPlayer = (CPlayerObj*)pData;
 
 	if (pPlayer)
@@ -1385,11 +1360,9 @@ void CGameServerShell::HandleUpdatePlayerMsg(HCLIENT hSender, HMESSAGEREAD hMess
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandleCheatCode()
 //
-//	ROUTINE:	CGameServerShell::HandleCheatCode()
-//
-//	PURPOSE:	Handle the various cheat codes
-//
+//	PURPOSE: Handle the various cheat codes
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandleCheatCode(CPlayerObj* pPlayer, CheatCode nCheatCode, uint8 nData)
@@ -1459,13 +1432,13 @@ void CGameServerShell::HandleCheatCode(CPlayerObj* pPlayer, CheatCode nCheatCode
 
 		case CHEAT_MOTORCYCLE:
 		{
-            g_pLTServer->RunGameConString("spawnobject PlayerVehicle (VehicleType Motorcycle)");
+			g_pLTServer->RunGameConString("spawnobject PlayerVehicle (VehicleType Motorcycle)");
 		}
 		break;
 
 		case CHEAT_SNOWMOBILE:
 		{
-            g_pLTServer->RunGameConString("spawnobject PlayerVehicle (VehicleType Snowmobile)");
+			g_pLTServer->RunGameConString("spawnobject PlayerVehicle (VehicleType Snowmobile)");
 		}
 		break;
 
@@ -1489,18 +1462,16 @@ void CGameServerShell::HandleCheatCode(CPlayerObj* pPlayer, CheatCode nCheatCode
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::OnCommandOn()
 //
-//	ROUTINE:	CGameServerShell::OnCommandOn()
-//
-//	PURPOSE:	Handle commands
-//
+//	PURPOSE: Handle commands
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::OnCommandOn(HCLIENT hClient, int command)
 {
 	if (!hClient) return;
 
-    void *pData = g_pLTServer->GetClientUserData(hClient);
+	void *pData = g_pLTServer->GetClientUserData(hClient);
 	CPlayerObj* pPlayer = (CPlayerObj*)pData;
 	if (!pPlayer) return;
 
@@ -1514,11 +1485,9 @@ void CGameServerShell::OnCommandOn(HCLIENT hClient, int command)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::CreatePlayer()
 //
-//	ROUTINE:	CGameServerShell::CreatePlayer()
-//
-//	PURPOSE:	Create the player object, and associated it with the client.
-//
+//	PURPOSE: Create the player object, and associated it with the client.
 // ----------------------------------------------------------------------- //
 
 CPlayerObj* CGameServerShell::CreatePlayer(HCLIENT hClient)
@@ -1526,22 +1495,22 @@ CPlayerObj* CGameServerShell::CreatePlayer(HCLIENT hClient)
 	ObjectCreateStruct theStruct;
 	INIT_OBJECTCREATESTRUCT(theStruct);
 
-    theStruct.m_Rotation.Init();
+	theStruct.m_Rotation.Init();
 	VEC_INIT(theStruct.m_Pos);
 	theStruct.m_Flags = 0;
 
-    HCLASS hClass = g_pLTServer->GetClass("CPlayerObj");
+	HCLASS hClass = g_pLTServer->GetClass("CPlayerObj");
 
 	GameStartPoint* pStartPoint = FindStartPoint(LTNULL);
 	if (pStartPoint)
 	{
-      g_pLTServer->GetObjectPos(pStartPoint->m_hObject, &(theStruct.m_Pos));
+	  g_pLTServer->GetObjectPos(pStartPoint->m_hObject, &(theStruct.m_Pos));
 	}
 
 	CPlayerObj* pPlayer = NULL;
 	if (hClass)
 	{
-        pPlayer = (CPlayerObj*) g_pLTServer->CreateObject(hClass, &theStruct);
+		pPlayer = (CPlayerObj*) g_pLTServer->CreateObject(hClass, &theStruct);
 		if (pPlayer)
 		{
 			RespawnPlayer(pPlayer, hClient);
@@ -1552,11 +1521,9 @@ CPlayerObj* CGameServerShell::CreatePlayer(HCLIENT hClient)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::FindStartPoint()
 //
-//	ROUTINE:	CGameServerShell::FindStartPoint()
-//
-//	PURPOSE:	Find a good start point.
-//
+//	PURPOSE: Find a good start point.
 // ----------------------------------------------------------------------- //
 
 GameStartPoint* CGameServerShell::FindStartPoint(CPlayerObj* pPlayer)
@@ -1565,29 +1532,29 @@ GameStartPoint* CGameServerShell::FindStartPoint(CPlayerObj* pPlayer)
 
 	ObjArray <HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
 	int numObjects, i;
-    GameStartPoint** pStartPtArray = LTNULL;
+	GameStartPoint** pStartPtArray = LTNULL;
 
-    g_pLTServer->FindNamedObjects("GameStartPoint", objArray);
+	g_pLTServer->FindNamedObjects("GameStartPoint", objArray);
 	numObjects = objArray.NumObjects();
 
 	if (!numObjects)
-    {
-        return LTNULL;
-    }
-    else
-    {
+	{
+		return LTNULL;
+	}
+	else
+	{
 		pStartPtArray = debug_newa(GameStartPoint*, numObjects);
-    }
+	}
 
-    if (!pStartPtArray) return LTNULL;
+	if (!pStartPtArray) return LTNULL;
 
 	int nCount = 0;
-    GameStartPoint* pStartPt = LTNULL;
-    GameStartPoint* pDefStartPt = (GameStartPoint*)g_pLTServer->HandleToObject(objArray.GetObject(0));
+	GameStartPoint* pStartPt = LTNULL;
+	GameStartPoint* pDefStartPt = (GameStartPoint*)g_pLTServer->HandleToObject(objArray.GetObject(0));
 
 	for(i = 0; i < numObjects; i++)
 	{
-        pStartPt = (GameStartPoint*)g_pLTServer->HandleToObject(objArray.GetObject(i));
+		pStartPt = (GameStartPoint*)g_pLTServer->HandleToObject(objArray.GetObject(i));
 		if (pStartPt)
 		{
 			if (pStartPt->GetGameType() == GetGameType())
@@ -1607,7 +1574,7 @@ GameStartPoint* CGameServerShell::FindStartPoint(CPlayerObj* pPlayer)
 		}
 	}
 
-    pStartPt = LTNULL;
+	pStartPt = LTNULL;
 
 	if (nCount > 0 && nCount <= numObjects)
 	{
@@ -1622,7 +1589,7 @@ GameStartPoint* CGameServerShell::FindStartPoint(CPlayerObj* pPlayer)
 
 			case COOPERATIVE_ASSAULT:
 			case DEATHMATCH :
-            {
+			{
 				nIndex = nCount+1;
 				int nRetries = nCount;
 				LTBOOL bSafe = LTFALSE;
@@ -1637,11 +1604,11 @@ GameStartPoint* CGameServerShell::FindStartPoint(CPlayerObj* pPlayer)
 						nIndex = (nIndex+1)%nCount;
 					}
 					LTVector testPos;
-				    g_pLTServer->GetObjectPos(pStartPtArray[nIndex]->m_hObject, &testPos);
+					g_pLTServer->GetObjectPos(pStartPtArray[nIndex]->m_hObject, &testPos);
 					bSafe = !IsPositionOccupied(testPos,pPlayer);
 					nRetries--;
 				}
-            }
+			}
 			break;
 
 		/* commented out spawn closest jrg - 9/23/00
@@ -1653,14 +1620,14 @@ GameStartPoint* CGameServerShell::FindStartPoint(CPlayerObj* pPlayer)
 
 				LTVector curPos;
 				LTFLOAT	fDistance = -1.0f;
-		        g_pLTServer->GetObjectPos(pPlayer->m_hObject, &curPos);
+				g_pLTServer->GetObjectPos(pPlayer->m_hObject, &curPos);
 
 				for (int i=0; i < nCount; i++)
 				{
 					if (pStartPtArray[i])
 					{
 						LTVector testPos;
-					    g_pLTServer->GetObjectPos(pStartPtArray[i]->m_hObject, &testPos);
+						g_pLTServer->GetObjectPos(pStartPtArray[i]->m_hObject, &testPos);
 						LTFLOAT fTestDist = curPos.Dist(testPos);
 
 						if (fDistance < 0.0f || fTestDist < fDistance)
@@ -1691,11 +1658,9 @@ GameStartPoint* CGameServerShell::FindStartPoint(CPlayerObj* pPlayer)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::RespawnPlayer()
 //
-//	ROUTINE:	CGameServerShell::RespawnPlayer()
-//
-//	PURPOSE:	Respawn the player object
-//
+//	PURPOSE: Respawn the player object
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::RespawnPlayer(CPlayerObj* pPlayer, HCLIENT hClient)
@@ -1705,7 +1670,7 @@ void CGameServerShell::RespawnPlayer(CPlayerObj* pPlayer, HCLIENT hClient)
 	// Player object meet client, client meet player object...
 
 	pPlayer->SetClient(hClient);
-    g_pLTServer->SetClientUserData(hClient, (void *)pPlayer);
+	g_pLTServer->SetClientUserData(hClient, (void *)pPlayer);
 
 	if (GetGameType() != SINGLE)
 		pPlayer->PreMultiplayerInit();
@@ -1737,7 +1702,7 @@ void CGameServerShell::RespawnPlayer(CPlayerObj* pPlayer, HCLIENT hClient)
 	}
 	else
 	{
-	    uint8 nMessage = MID_PLAYER_MULTIPLAYER_INIT;
+		uint8 nMessage = MID_PLAYER_MULTIPLAYER_INIT;
 
 		// Tell the client to init us!
 
@@ -1751,35 +1716,33 @@ void CGameServerShell::RespawnPlayer(CPlayerObj* pPlayer, HCLIENT hClient)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandleCheatRemoveAI()
 //
-//	ROUTINE:	CGameServerShell::HandleCheatRemoveAI()
-//
-//	PURPOSE:	Handle the remove ai cheat
-//
+//	PURPOSE: Handle the remove ai cheat
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandleCheatRemoveAI(uint8 nData)
 {
-    HOBJECT hObj   = g_pLTServer->GetNextObject(LTNULL);
-    HCLASS  hClass = g_pLTServer->GetClass("CAI");
+	HOBJECT hObj   = g_pLTServer->GetNextObject(LTNULL);
+	HCLASS  hClass = g_pLTServer->GetClass("CAI");
 
 	// Remove all the ai objects...
 
-    LTBOOL bRemove = LTFALSE;
+	LTBOOL bRemove = LTFALSE;
 
-    HOBJECT hRemoveObj = LTNULL;
+	HOBJECT hRemoveObj = LTNULL;
 	while (hObj)
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 		{
 			hRemoveObj = hObj;
 		}
 
-        hObj = g_pLTServer->GetNextObject(hObj);
+		hObj = g_pLTServer->GetNextObject(hObj);
 
 		if (hRemoveObj)
 		{
-            LPBASECLASS pClass = g_pLTServer->HandleToObject(hRemoveObj);
+			LPBASECLASS pClass = g_pLTServer->HandleToObject(hRemoveObj);
 			if (pClass)
 			{
 				DamageStruct damage;
@@ -1791,25 +1754,25 @@ void CGameServerShell::HandleCheatRemoveAI(uint8 nData)
 				damage.DoDamage(pClass, hRemoveObj);
 			}
 
-            hRemoveObj = LTNULL;
+			hRemoveObj = LTNULL;
 		}
 	}
 
 
-    hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
-    hRemoveObj = LTNULL;
+	hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
+	hRemoveObj = LTNULL;
 	while (hObj)
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 		{
 			hRemoveObj = hObj;
 		}
 
-        hObj = g_pLTServer->GetNextInactiveObject(hObj);
+		hObj = g_pLTServer->GetNextInactiveObject(hObj);
 
 		if (hRemoveObj)
 		{
-            LPBASECLASS pClass = g_pLTServer->HandleToObject(hRemoveObj);
+			LPBASECLASS pClass = g_pLTServer->HandleToObject(hRemoveObj);
 			if (pClass)
 			{
 				DamageStruct damage;
@@ -1821,24 +1784,22 @@ void CGameServerShell::HandleCheatRemoveAI(uint8 nData)
 				damage.DoDamage(pClass, hRemoveObj);
 			}
 
-            hRemoveObj = LTNULL;
+			hRemoveObj = LTNULL;
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandleMissionInfoMsg()
 //
-//	ROUTINE:	CGameServerShell::HandleMissionInfoMsg()
-//
-//	PURPOSE:	Handle the mission info message
-//
+//	PURPOSE: Handle the mission info message
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandleMissionInfoMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 {
 	// Read the message data...
 
-    m_MissionData.ReadFromMessage(g_pLTServer, hMessage);
+	m_MissionData.ReadFromMessage(g_pLTServer, hMessage);
 
 	if (g_pLTServer->ReadFromMessageByte(hMessage))
 	{
@@ -1857,26 +1818,24 @@ void CGameServerShell::HandleMissionInfoMsg(HCLIENT hSender, HMESSAGEREAD hMessa
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandleLoadGameMsg()
 //
-//	ROUTINE:	CGameServerShell::HandleLoadGameMsg()
-//
-//	PURPOSE:	Handle loading a game
-//
+//	PURPOSE: Handle loading a game
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandleLoadGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 {
-    LTRESULT dResult = LT_OK;
-    uint32 flags;
+	LTRESULT dResult = LT_OK;
+	uint32 flags;
 
 	// Read the message data...
 
-    m_nLastLGFlags  = g_pLTServer->ReadFromMessageByte(hMessage);
-    m_eDifficulty   = (GameDifficulty) g_pLTServer->ReadFromMessageByte(hMessage);
-    m_bFadeBodies   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hMessage);
-    HSTRING hLGName = g_pLTServer->ReadFromMessageHString(hMessage);
-    HSTRING hSGName = g_pLTServer->ReadFromMessageHString(hMessage);
-    HSTRING hROName = g_pLTServer->ReadFromMessageHString(hMessage);
+	m_nLastLGFlags  = g_pLTServer->ReadFromMessageByte(hMessage);
+	m_eDifficulty   = (GameDifficulty) g_pLTServer->ReadFromMessageByte(hMessage);
+	m_bFadeBodies   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hMessage);
+	HSTRING hLGName = g_pLTServer->ReadFromMessageHString(hMessage);
+	HSTRING hSGName = g_pLTServer->ReadFromMessageHString(hMessage);
+	HSTRING hROName = g_pLTServer->ReadFromMessageHString(hMessage);
 
 	// BL 09/30/00 HACK to fix ammo save/load
 	LTFLOAT fRestoreAmmoId = g_pLTServer->ReadFromMessageFloat(hMessage);
@@ -1884,27 +1843,27 @@ void CGameServerShell::HandleLoadGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 
 	// Save client-side info if loading a new level...
 
-    HMESSAGEREAD hClientData = g_pLTServer->ReadFromMessageHMessageRead(hMessage);
+	HMESSAGEREAD hClientData = g_pLTServer->ReadFromMessageHMessageRead(hMessage);
 
-    ObjectList* pKeepAliveList = g_pLTServer->CreateObjectList();
+	ObjectList* pKeepAliveList = g_pLTServer->CreateObjectList();
 
 
-    char* pLGFileName = LTNULL;
-    char* pSGFileName = LTNULL;
-    char* pROFileName = LTNULL;
+	char* pLGFileName = LTNULL;
+	char* pSGFileName = LTNULL;
+	char* pROFileName = LTNULL;
 
-    if (hLGName) pLGFileName = g_pLTServer->GetStringData(hLGName);
-    if (hSGName) pSGFileName = g_pLTServer->GetStringData(hSGName);
-    if (hROName) pROFileName = g_pLTServer->GetStringData(hROName);
+	if (hLGName) pLGFileName = g_pLTServer->GetStringData(hLGName);
+	if (hSGName) pSGFileName = g_pLTServer->GetStringData(hSGName);
+	if (hROName) pROFileName = g_pLTServer->GetStringData(hROName);
 
-    LTBOOL bLoadWorldObjects     = LTFALSE;
-    LTBOOL bSaveKeepAlives       = LTFALSE;
-    LTBOOL bRestoreLevelObjects  = LTFALSE;
+	LTBOOL bLoadWorldObjects	 = LTFALSE;
+	LTBOOL bSaveKeepAlives	   = LTFALSE;
+	LTBOOL bRestoreLevelObjects  = LTFALSE;
 
 
 	// Set up the player's client data...
 
-    void *pData = g_pLTServer->GetClientUserData(hSender);
+	void *pData = g_pLTServer->GetClientUserData(hSender);
 	CPlayerObj* pPlayer = (CPlayerObj*)pData;
 	if (pPlayer)
 	{
@@ -1914,27 +1873,27 @@ void CGameServerShell::HandleLoadGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 	if (!hLGName)
 	{
 		ReportError(hSender, SERROR_LOADGAME);
-        g_pLTServer->BPrint("Load Game Error: Invalid world filename!");
+		g_pLTServer->BPrint("Load Game Error: Invalid world filename!");
 		goto FREE_DATA;
 	}
 
 	if (m_nLastLGFlags == LOAD_NEW_GAME)
 	{
-        bLoadWorldObjects = LTTRUE;
+		bLoadWorldObjects = LTTRUE;
 	}
 	else if (m_nLastLGFlags == LOAD_NEW_LEVEL)
 	{
-        bLoadWorldObjects   = LTTRUE;
-        bSaveKeepAlives     = LTTRUE;
+		bLoadWorldObjects   = LTTRUE;
+		bSaveKeepAlives	 = LTTRUE;
 	}
 	else if (m_nLastLGFlags == LOAD_RESTORE_GAME)
 	{
-        bRestoreLevelObjects = LTTRUE;
+		bRestoreLevelObjects = LTTRUE;
 	}
 	else // Invalid flags
 	{
 		ReportError(hSender, SERROR_LOADGAME);
-        g_pLTServer->BPrint("Load Game Error: Invalid flags!");
+		g_pLTServer->BPrint("Load Game Error: Invalid flags!");
 		goto FREE_DATA;
 	}
 
@@ -1944,7 +1903,7 @@ void CGameServerShell::HandleLoadGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 	if (!pLGFileName || pLGFileName[0] == ' ')
 	{
 		ReportError(hSender, SERROR_LOADGAME);
-        g_pLTServer->BPrint("Load Game Error: Invalid world filename!");
+		g_pLTServer->BPrint("Load Game Error: Invalid world filename!");
 		goto FREE_DATA;
 	}
 
@@ -1953,7 +1912,7 @@ void CGameServerShell::HandleLoadGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 		if (!pROFileName || pROFileName[0] == ' ')
 		{
 			ReportError(hSender, SERROR_LOADGAME);
-            g_pLTServer->BPrint("Load Game Error: Invalid restore objects filename!");
+			g_pLTServer->BPrint("Load Game Error: Invalid restore objects filename!");
 			goto FREE_DATA;
 		}
 	}
@@ -1962,7 +1921,7 @@ void CGameServerShell::HandleLoadGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 	if (!pKeepAliveList)
 	{
 		ReportError(hSender, SERROR_LOADGAME);
-        g_pLTServer->BPrint("Load Game Error: Couldn't create keep alive list!");
+		g_pLTServer->BPrint("Load Game Error: Couldn't create keep alive list!");
 		goto FREE_DATA;
 	}
 
@@ -1972,7 +1931,7 @@ void CGameServerShell::HandleLoadGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 
 		// Let the player add necessary keep alives to the list...
 
-        void *pData = g_pLTServer->GetClientUserData(hSender);
+		void *pData = g_pLTServer->GetClientUserData(hSender);
 		CPlayerObj* pPlayer = (CPlayerObj*)pData;
 		if (pPlayer)
 		{
@@ -1980,12 +1939,12 @@ void CGameServerShell::HandleLoadGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 		}
 
 
-        dResult = g_pLTServer->SaveObjects(KEEPALIVE_FILENAME, pKeepAliveList, m_nLastLGFlags, 0);
+		dResult = g_pLTServer->SaveObjects(KEEPALIVE_FILENAME, pKeepAliveList, m_nLastLGFlags, 0);
 
 		if (dResult != LT_OK)
 		{
 			ReportError(hSender, SERROR_LOADGAME);
-            g_pLTServer->BPrint("Load Game Error: Couldn't save keepalives");
+			g_pLTServer->BPrint("Load Game Error: Couldn't save keepalives");
 			goto FREE_DATA;
 		}
 	}
@@ -1995,24 +1954,24 @@ void CGameServerShell::HandleLoadGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 
 	flags = bLoadWorldObjects ? LOADWORLD_LOADWORLDOBJECTS : 0;
 	flags |= LOADWORLD_NORELOADGEOMETRY;
-    dResult = g_pLTServer->LoadWorld(pLGFileName, flags);
+	dResult = g_pLTServer->LoadWorld(pLGFileName, flags);
 
 	if (dResult != LT_OK)
 	{
 		ReportError(hSender, SERROR_LOADGAME);
-        g_pLTServer->BPrint("Load Game Error: Couldn't Load world '%s'", pLGFileName);
+		g_pLTServer->BPrint("Load Game Error: Couldn't Load world '%s'", pLGFileName);
 		goto FREE_DATA;
 	}
 
 
 	if (bRestoreLevelObjects)
 	{
-        dResult = g_pLTServer->RestoreObjects(pROFileName, m_nLastLGFlags, RESTOREOBJECTS_RESTORETIME);
+		dResult = g_pLTServer->RestoreObjects(pROFileName, m_nLastLGFlags, RESTOREOBJECTS_RESTORETIME);
 
 		if (dResult != LT_OK)
 		{
 			ReportError(hSender, SERROR_LOADGAME);
-            g_pLTServer->BPrint("Load Game Error: Couldn't restore objects '%s'", pROFileName);
+			g_pLTServer->BPrint("Load Game Error: Couldn't restore objects '%s'", pROFileName);
 			goto FREE_DATA;
 		}
 	}
@@ -2022,12 +1981,12 @@ void CGameServerShell::HandleLoadGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 
 	if (bSaveKeepAlives && pKeepAliveList && pKeepAliveList->m_nInList > 0)
 	{
-        dResult = g_pLTServer->RestoreObjects(KEEPALIVE_FILENAME, m_nLastLGFlags, 0);
+		dResult = g_pLTServer->RestoreObjects(KEEPALIVE_FILENAME, m_nLastLGFlags, 0);
 
 		if (dResult != LT_OK)
 		{
 			ReportError(hSender, SERROR_LOADGAME);
-            g_pLTServer->BPrint("Load Game Error: Couldn't restore keepalives");
+			g_pLTServer->BPrint("Load Game Error: Couldn't restore keepalives");
 			goto FREE_DATA;
 		}
 	}
@@ -2036,12 +1995,12 @@ void CGameServerShell::HandleLoadGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 
 	// Start the world...
 
-    dResult = g_pLTServer->RunWorld();
+	dResult = g_pLTServer->RunWorld();
 
 	if (dResult != LT_OK)
 	{
 		ReportError(hSender, SERROR_LOADGAME);
-        g_pLTServer->BPrint("Load Game Error: Couldn't run world!");
+		g_pLTServer->BPrint("Load Game Error: Couldn't run world!");
 	}
 
 
@@ -2051,49 +2010,47 @@ FREE_DATA:
 
 	if (pKeepAliveList)
 	{
-        g_pLTServer->RelinquishList(pKeepAliveList);
+		g_pLTServer->RelinquishList(pKeepAliveList);
 	}
 
 	if (hClientData)
 	{
-        g_pLTServer->EndHMessageRead(hClientData);
+		g_pLTServer->EndHMessageRead(hClientData);
 	}
 
-    if (hLGName) g_pLTServer->FreeString(hLGName);
-    if (hSGName) g_pLTServer->FreeString(hSGName);
-    if (hROName) g_pLTServer->FreeString(hROName);
+	if (hLGName) g_pLTServer->FreeString(hLGName);
+	if (hSGName) g_pLTServer->FreeString(hSGName);
+	if (hROName) g_pLTServer->FreeString(hROName);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandleSaveGameMsg()
 //
-//	ROUTINE:	CGameServerShell::HandleSaveGameMsg()
-//
-//	PURPOSE:	Handle saving a game
-//
+//	PURPOSE: Handle saving a game
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandleSaveGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 {
-    char* pSGFileName = LTNULL;
-    HOBJECT hObj = LTNULL;
-    ObjectList* pSaveList = g_pLTServer->CreateObjectList();
+	char* pSGFileName = LTNULL;
+	HOBJECT hObj = LTNULL;
+	ObjectList* pSaveList = g_pLTServer->CreateObjectList();
 
 	// Read the message data...
 
-    uint8   nSGFlags = g_pLTServer->ReadFromMessageByte(hMessage);
-    HSTRING hSGName  = g_pLTServer->ReadFromMessageHString(hMessage);
+	uint8   nSGFlags = g_pLTServer->ReadFromMessageByte(hMessage);
+	HSTRING hSGName  = g_pLTServer->ReadFromMessageHString(hMessage);
 
 	// BL 09/30/00 HACK to fix ammo save/load
 	LTFLOAT fRestoreAmmoId = g_pLTServer->ReadFromMessageFloat(hMessage);
 	uint32 nRestoreMusicIntensity = g_pLTServer->ReadFromMessageDWord(hMessage);
 
-    HMESSAGEREAD hClientData = g_pLTServer->ReadFromMessageHMessageRead(hMessage);
+	HMESSAGEREAD hClientData = g_pLTServer->ReadFromMessageHMessageRead(hMessage);
 
 
 	// Set up the player's client data...
 
-    void *pData = g_pLTServer->GetClientUserData(hSender);
+	void *pData = g_pLTServer->GetClientUserData(hSender);
 	CPlayerObj* pPlayer = (CPlayerObj*)pData;
 	if (pPlayer)
 	{
@@ -2107,15 +2064,15 @@ void CGameServerShell::HandleSaveGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 	if (!hSGName)
 	{
 		ReportError(hSender, SERROR_SAVEGAME);
-        g_pLTServer->BPrint("Save Game Error: Invalid filename!");
+		g_pLTServer->BPrint("Save Game Error: Invalid filename!");
 		goto FREE_DATA;
 	}
 
-    pSGFileName = g_pLTServer->GetStringData(hSGName);
+	pSGFileName = g_pLTServer->GetStringData(hSGName);
 	if (!pSGFileName || pSGFileName[0] == ' ')
 	{
 		ReportError(hSender, SERROR_SAVEGAME);
-        g_pLTServer->BPrint("Save Game Error: Invalid filename!");
+		g_pLTServer->BPrint("Save Game Error: Invalid filename!");
 		goto FREE_DATA;
 	}
 
@@ -2125,7 +2082,7 @@ void CGameServerShell::HandleSaveGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 	if (!pSaveList)
 	{
 		ReportError(hSender, SERROR_SAVEGAME);
-        g_pLTServer->BPrint("Save Game Error: Allocation error!");
+		g_pLTServer->BPrint("Save Game Error: Allocation error!");
 		goto FREE_DATA;
 	}
 
@@ -2136,35 +2093,35 @@ void CGameServerShell::HandleSaveGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 	if (!g_pWorldProperties)
 	{
 		ReportError(hSender, SERROR_SAVEGAME);
-        g_pLTServer->BPrint("Save Game Error: No WorldProperties object!  Can not save game!");
+		g_pLTServer->BPrint("Save Game Error: No WorldProperties object!  Can not save game!");
 		goto FREE_DATA;
 	}
 
 
 	// Add active objects to the list...
 
-    hObj = g_pLTServer->GetNextObject(LTNULL);
+	hObj = g_pLTServer->GetNextObject(LTNULL);
 	while (hObj)
 	{
 		if (hObj != g_pWorldProperties->m_hObject)
 		{
-            g_pLTServer->AddObjectToList(pSaveList, hObj);
+			g_pLTServer->AddObjectToList(pSaveList, hObj);
 		}
 
-        hObj = g_pLTServer->GetNextObject(hObj);
+		hObj = g_pLTServer->GetNextObject(hObj);
 	}
 
 	// Add inactive objects to the list...
 
-    hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
+	hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
 	while (hObj)
 	{
 		if (hObj != g_pWorldProperties->m_hObject)
 		{
-            g_pLTServer->AddObjectToList(pSaveList, hObj);
+			g_pLTServer->AddObjectToList(pSaveList, hObj);
 		}
 
-        hObj = g_pLTServer->GetNextInactiveObject(hObj);
+		hObj = g_pLTServer->GetNextInactiveObject(hObj);
 	}
 
 
@@ -2173,18 +2130,18 @@ void CGameServerShell::HandleSaveGameMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 	// (ServerDE::AddObjectsToList() adds to the front of the list, so we
 	// need to add it last ;)...
 
-    g_pLTServer->AddObjectToList(pSaveList, g_pWorldProperties->m_hObject);
+	g_pLTServer->AddObjectToList(pSaveList, g_pWorldProperties->m_hObject);
 
 
 
 	if (pSaveList && pSaveList->m_nInList > 0)
 	{
-        LTRESULT dResult = g_pLTServer->SaveObjects(pSGFileName, pSaveList, LOAD_RESTORE_GAME,
+		LTRESULT dResult = g_pLTServer->SaveObjects(pSGFileName, pSaveList, LOAD_RESTORE_GAME,
 												 SAVEOBJECTS_SAVEGAMECONSOLE | SAVEOBJECTS_SAVEPORTALS);
 		if (dResult != LT_OK)
 		{
 			ReportError(hSender, SERROR_SAVEGAME);
-            g_pLTServer->BPrint("Save Game Error: Couldn't save objects!");
+			g_pLTServer->BPrint("Save Game Error: Couldn't save objects!");
 		}
 	}
 
@@ -2194,35 +2151,31 @@ FREE_DATA:
 
 	if (hClientData)
 	{
-        g_pLTServer->EndHMessageRead(hClientData);
+		g_pLTServer->EndHMessageRead(hClientData);
 	}
 
-    if (hSGName) g_pLTServer->FreeString(hSGName);
+	if (hSGName) g_pLTServer->FreeString(hSGName);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::ReportError()
 //
-//	ROUTINE:	CGameServerShell::ReportError()
-//
-//	PURPOSE:	Tell the client about a server error
-//
+//	PURPOSE: Tell the client about a server error
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::ReportError(HCLIENT hSender, uint8 nErrorType)
 {
-    HMESSAGEWRITE hWrite = g_pLTServer->StartMessage(hSender, MID_SERVER_ERROR);
-    g_pLTServer->WriteToMessageByte(hWrite, nErrorType);
-    g_pLTServer->EndMessage(hWrite);
+	HMESSAGEWRITE hWrite = g_pLTServer->StartMessage(hSender, MID_SERVER_ERROR);
+	g_pLTServer->WriteToMessageByte(hWrite, nErrorType);
+	g_pLTServer->EndMessage(hWrite);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::CacheFiles()
 //
-//	ROUTINE:	CGameServerShell::CacheFiles()
-//
-//	PURPOSE:	Cache files that are used often
-//
+//	PURPOSE: Cache files that are used often
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::CacheFiles()
@@ -2235,75 +2188,67 @@ void CGameServerShell::CacheFiles()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::CacheModels()
 //
-//	ROUTINE:	CGameServerShell::CacheModels()
-//
-//	PURPOSE:	Cache models that are used often
-//
+//	PURPOSE: Cache models that are used often
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::CacheModels()
 {
 	for (int i=0; g_pCachedModels[i]; i++)
 	{
-        g_pLTServer->CacheFile(FT_MODEL, g_pCachedModels[i]);
+		g_pLTServer->CacheFile(FT_MODEL, g_pCachedModels[i]);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::CacheTextures()
 //
-//	ROUTINE:	CGameServerShell::CacheTextures()
-//
-//	PURPOSE:	Cache textures that are used often
-//
+//	PURPOSE: Cache textures that are used often
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::CacheTextures()
 {
 	for (int i=0; g_pCachedTextures[i]; i++)
 	{
-        g_pLTServer->CacheFile(FT_TEXTURE, g_pCachedTextures[i]);
+		g_pLTServer->CacheFile(FT_TEXTURE, g_pCachedTextures[i]);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::CacheSprites()
 //
-//	ROUTINE:	CGameServerShell::CacheSprites()
-//
-//	PURPOSE:	Cache sprites that are used often
-//
+//	PURPOSE: Cache sprites that are used often
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::CacheSprites()
 {
 	for (int i=0; g_pCachedSprite[i]; i++)
 	{
-        g_pLTServer->CacheFile(FT_SPRITE, g_pCachedSprite[i]);
+		g_pLTServer->CacheFile(FT_SPRITE, g_pCachedSprite[i]);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::CacheSounds()
 //
-//	ROUTINE:	CGameServerShell::CacheSounds()
-//
-//	PURPOSE:	Cache sounds that are used often
-//
+//	PURPOSE: Cache sounds that are used often
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::CacheSounds()
 {
-    int i;
-    for (i=0; g_pCachedSoundLocal[i]; i++)
+	int i;
+	for (i=0; g_pCachedSoundLocal[i]; i++)
 	{
-        g_pLTServer->CacheFile(FT_SOUND, g_pCachedSoundLocal[i]);
+		g_pLTServer->CacheFile(FT_SOUND, g_pCachedSoundLocal[i]);
 	}
 
 	for (i=0; g_pCachedSound3D[i]; i++)
 	{
-        g_pLTServer->CacheFile(FT_SOUND, g_pCachedSound3D[i]);
+		g_pLTServer->CacheFile(FT_SOUND, g_pCachedSound3D[i]);
 	}
 }
 
@@ -2312,26 +2257,26 @@ void CGameServerShell::UpdateClientPingTimes()
 {
 	HMESSAGEWRITE hWrite;
 	float ping;
-    uint32 clientID;
+	uint32 clientID;
 	HCLIENT hClient;
 
-    m_ClientPingSendCounter += g_pLTServer->GetFrameTime();
+	m_ClientPingSendCounter += g_pLTServer->GetFrameTime();
 	if(m_ClientPingSendCounter > CLIENT_PING_UPDATE_RATE)
 	{
-        hWrite = g_pLTServer->StartMessage(LTNULL, MID_PINGTIMES);
+		hWrite = g_pLTServer->StartMessage(LTNULL, MID_PINGTIMES);
 
-            hClient = LTNULL;
-            while(hClient = g_pLTServer->GetNextClient(hClient))
+			hClient = LTNULL;
+			while(hClient = g_pLTServer->GetNextClient(hClient))
 			{
-                clientID = g_pLTServer->GetClientID(hClient);
-                g_pLTServer->GetClientPing(hClient, ping);
+				clientID = g_pLTServer->GetClientID(hClient);
+				g_pLTServer->GetClientPing(hClient, ping);
 
-                g_pLTServer->WriteToMessageWord(hWrite, (uint16)clientID);
-                g_pLTServer->WriteToMessageWord(hWrite, (uint16)(ping * 1000.0f));
+				g_pLTServer->WriteToMessageWord(hWrite, (uint16)clientID);
+				g_pLTServer->WriteToMessageWord(hWrite, (uint16)(ping * 1000.0f));
 			}
 
-        g_pLTServer->WriteToMessageWord(hWrite, 0xFFFF);
-        g_pLTServer->EndMessage2(hWrite, MESSAGE_NAGGLE);
+		g_pLTServer->WriteToMessageWord(hWrite, 0xFFFF);
+		g_pLTServer->EndMessage2(hWrite, MESSAGE_NAGGLE);
 
 		m_ClientPingSendCounter = 0.0f;
 	}
@@ -2339,11 +2284,9 @@ void CGameServerShell::UpdateClientPingTimes()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::Update
 //
-//	ROUTINE:	CGameServerShell::Update
-//
-//	PURPOSE:	Update servier stuff periodically
-//
+//	PURPOSE: Update servier stuff periodically
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::Update(LTFLOAT timeElapsed)
@@ -2352,7 +2295,7 @@ void CGameServerShell::Update(LTFLOAT timeElapsed)
 
 	if (m_bFirstUpdate)
 	{
-        m_bFirstUpdate = LTFALSE;
+		m_bFirstUpdate = LTFALSE;
 		FirstUpdate();
 	}
 
@@ -2388,9 +2331,9 @@ void CGameServerShell::Update(LTFLOAT timeElapsed)
 		char fullMsg[512];
 
 		sprintf(fullMsg, "HOST: %s", pSay);
-        HMESSAGEWRITE hMessage = g_pLTServer->StartMessage (NULL, MID_PLAYER_MESSAGE);
-        g_pLTServer->WriteToMessageString (hMessage, fullMsg);
-        g_pLTServer->EndMessage2 (hMessage, MESSAGE_NAGGLE);
+		HMESSAGEWRITE hMessage = g_pLTServer->StartMessage (NULL, MID_PLAYER_MESSAGE);
+		g_pLTServer->WriteToMessageString (hMessage, fullMsg);
+		g_pLTServer->EndMessage2 (hMessage, MESSAGE_NAGGLE);
 
 		m_SayTrack.SetStr("");
 	}
@@ -2440,11 +2383,9 @@ void CGameServerShell::Update(LTFLOAT timeElapsed)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::CheckMultiSwitchWorlds
 //
-//	ROUTINE:	CGameServerShell::CheckMultiSwitchWorlds
-//
-//	PURPOSE:	See if we should change multiplayer worlds
-//
+//	PURPOSE: See if we should change multiplayer worlds
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::CheckMultiSwitchWorlds()
@@ -2468,14 +2409,14 @@ void CGameServerShell::CheckMultiSwitchWorlds()
 
 	if (!m_hSwitchWorldVar)
 	{
-        g_pLTServer->SetGameConVar(pCmdName, "");
-        m_hSwitchWorldVar = g_pLTServer->GetGameConVar(pCmdName);
+		g_pLTServer->SetGameConVar(pCmdName, "");
+		m_hSwitchWorldVar = g_pLTServer->GetGameConVar(pCmdName);
 
 		if (!m_hSwitchWorldVar)	return;
 	}
 
 	// Is it set to anything?
-    char* pVal = g_pLTServer->GetVarValueString(m_hSwitchWorldVar);
+	char* pVal = g_pLTServer->GetVarValueString(m_hSwitchWorldVar);
 	if (pVal && pVal[0] != 0)
 	{
 		// Switch to the requested world.
@@ -2485,25 +2426,23 @@ void CGameServerShell::CheckMultiSwitchWorlds()
 		}
 
 		// Reset this.
-        g_pLTServer->SetGameConVar(pCmdName, "");
+		g_pLTServer->SetGameConVar(pCmdName, "");
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::Update
 //
-//	ROUTINE:	CGameServerShell::Update
-//
-//	PURPOSE:	Do the first update
-//
+//	PURPOSE: Do the first update
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::FirstUpdate()
 {
 	m_SayTrack.Init(g_pLTServer, "Say", "", 0.0f);
-    m_ShowTimeTrack.Init(g_pLTServer, "ShowTime", LTNULL, 0.0f);
-    m_WorldTimeTrack.Init(g_pLTServer, "WorldTime", "-1", 0.0f);
-    m_WorldTimeSpeedTrack.Init(g_pLTServer, "WorldTimeSpeed", "-1", 0.0f);
+	m_ShowTimeTrack.Init(g_pLTServer, "ShowTime", LTNULL, 0.0f);
+	m_WorldTimeTrack.Init(g_pLTServer, "WorldTime", "-1", 0.0f);
+	m_WorldTimeSpeedTrack.Init(g_pLTServer, "WorldTimeSpeed", "-1", 0.0f);
 
 	SetupGameInfo();
 
@@ -2520,26 +2459,24 @@ void CGameServerShell::FirstUpdate()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::UpdateTimeOfDay
 //
-//	ROUTINE:	CGameServerShell::UpdateTimeOfDay
-//
-//	PURPOSE:	Update the time of day stuff
-//
+//	PURPOSE: Update the time of day stuff
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::UpdateTimeOfDay(LTFLOAT timeElapsed)
 {
 	float todHours;
 	float sunAngle;
-    LTVector sunVec;
-    unsigned char newSunVec[3];
+	LTVector sunVec;
+	unsigned char newSunVec[3];
 	float testHours, t;
 	TimeRamp *pRamp, *pNextRamp;
-    uint32 i, iCurRamp;
+	uint32 i, iCurRamp;
 
 
 	LTVector day, night, theColor;
-    uint8 newColor[3];
+	uint8 newColor[3];
 
 	if (m_WorldTimeSpeedTrack.GetFloat() == -1)
 	{
@@ -2566,8 +2503,8 @@ void CGameServerShell::UpdateTimeOfDay(LTFLOAT timeElapsed)
 		// How often we update the time of day.
 		static float updateRate = 0.0005f;
 
-        m_TODCounter += timeElapsed;
-        if(m_TODCounter > updateRate)
+		m_TODCounter += timeElapsed;
+		if(m_TODCounter > updateRate)
 		{
 			// Figure out how many time ramps we have.
 			for(m_nTimeRamps=0; m_nTimeRamps < MAX_TIME_RAMPS; m_nTimeRamps++)
@@ -2600,9 +2537,9 @@ void CGameServerShell::UpdateTimeOfDay(LTFLOAT timeElapsed)
 
 			m_iPrevRamp = iCurRamp;
 
-            newColor[0] = (uint8)(theColor.x * (float)MAX_WORLDTIME_COLOR);
-            newColor[1] = (uint8)(theColor.y * (float)MAX_WORLDTIME_COLOR);
-            newColor[2] = (uint8)(theColor.z * (float)MAX_WORLDTIME_COLOR);
+			newColor[0] = (uint8)(theColor.x * (float)MAX_WORLDTIME_COLOR);
+			newColor[1] = (uint8)(theColor.y * (float)MAX_WORLDTIME_COLOR);
+			newColor[2] = (uint8)(theColor.z * (float)MAX_WORLDTIME_COLOR);
 
 			// Figure out the sun direction.
 			sunAngle = ((todHours - 6.0f) * MATH_PI) / 12.0f;
@@ -2613,11 +2550,11 @@ void CGameServerShell::UpdateTimeOfDay(LTFLOAT timeElapsed)
 
 			sunVec = -sunVec;
 
-            newSunVec[0] = (uint8)(char)(sunVec.x * 127.0f);
-            newSunVec[1] = (uint8)(char)(sunVec.y * 127.0f);
-            newSunVec[2] = (uint8)(char)(sunVec.z * 127.0f);
+			newSunVec[0] = (uint8)(char)(sunVec.x * 127.0f);
+			newSunVec[1] = (uint8)(char)(sunVec.y * 127.0f);
+			newSunVec[2] = (uint8)(char)(sunVec.z * 127.0f);
 
-            m_TODCounter = 0.0f;
+			m_TODCounter = 0.0f;
 		}
 		else
 		{
@@ -2633,7 +2570,7 @@ void CGameServerShell::UpdateTimeOfDay(LTFLOAT timeElapsed)
 
 	if (m_ShowTimeTrack.GetFloat() != 0.0f)
 	{
-        g_pLTServer->CPrint("TOD: %.2f, Color: %d %d %d", TODSecondsToHours(m_TODSeconds), newColor[0], newColor[1], newColor[2]);
+		g_pLTServer->CPrint("TOD: %.2f, Color: %d %d %d", TODSecondsToHours(m_TODSeconds), newColor[0], newColor[1], newColor[2]);
 	}
 
 	// Did it change?
@@ -2652,65 +2589,61 @@ void CGameServerShell::UpdateTimeOfDay(LTFLOAT timeElapsed)
 		m_SunVec[1] = newSunVec[1];
 		m_SunVec[2] = newSunVec[2];
 
-        SendTimeOfDay(LTNULL);
+		SendTimeOfDay(LTNULL);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::UpdateGameServer
 //
-//	ROUTINE:	CGameServerShell::UpdateGameServer
-//
-//	PURPOSE:	Updates a stand-alone server with game info if necessary
-//
+//	PURPOSE: Updates a stand-alone server with game info if necessary
 // ----------------------------------------------------------------------- //
 
 LTBOOL CGameServerShell::UpdateGameServer()
 {
-    // Check if we need to update...
+	// Check if we need to update...
 
 	if (!m_bUpdateGameServ)
 	{
-        return(LTFALSE);
+		return(LTFALSE);
 	}
 
-    m_bUpdateGameServ = LTFALSE;
+	m_bUpdateGameServ = LTFALSE;
 
 
 	// Make sure we are actually being hosted via GameServ...
 
 	if (!m_bGameServHosted)
 	{
-        return(LTFALSE);
+		return(LTFALSE);
 	}
 
 	ServerAppShellUpdate( );
 
 	// All done...
-    return(LTTRUE);
+	return(LTTRUE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::AddClientToList
 //
-//	ROUTINE:	CGameServerShell::AddClientToList
-//
-//	PURPOSE:	Adds the given client handle to our local list
-//
+//	PURPOSE: Adds the given client handle to our local list
 // ----------------------------------------------------------------------- //
 
 LTBOOL CGameServerShell::AddClientToList(HCLIENT hClient)
 {
 	// Sanity checks...
 
-    if (!hClient) return(LTFALSE);
+	if (!hClient) return(LTFALSE);
 
 
 	// Make sure this client isn't already in our list...
 
 	if (IsClientInList(hClient))
 	{
-        return(LTTRUE);
+		return(LTTRUE);
 	}
 
 
@@ -2718,33 +2651,31 @@ LTBOOL CGameServerShell::AddClientToList(HCLIENT hClient)
 
 	for (int i = 0; i < MAX_CLIENTS; i++)
 	{
-        if (m_aClients[i] == LTNULL)
+		if (m_aClients[i] == LTNULL)
 		{
 			m_aClients[i] = hClient;
-            return(LTTRUE);
+			return(LTTRUE);
 		}
 	}
 
 
 	// If we get here, there wasn't any space left in the array...
 
-    return(LTFALSE);
+	return(LTFALSE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::RemoveClientFromList
 //
-//	ROUTINE:	CGameServerShell::RemoveClientFromList
-//
-//	PURPOSE:	Adds the given client handle to our local list
-//
+//	PURPOSE: Adds the given client handle to our local list
 // ----------------------------------------------------------------------- //
 
 LTBOOL CGameServerShell::RemoveClientFromList(HCLIENT hClient)
 {
 	// Sanity checks...
 
-    if (!hClient) return(LTFALSE);
+	if (!hClient) return(LTFALSE);
 
 
 	// Remove this client handle from our array...
@@ -2753,31 +2684,29 @@ LTBOOL CGameServerShell::RemoveClientFromList(HCLIENT hClient)
 	{
 		if (m_aClients[i] == hClient)
 		{
-            m_aClients[i] = LTNULL;
-            return(LTTRUE);
+			m_aClients[i] = LTNULL;
+			return(LTTRUE);
 		}
 	}
 
 
 	// If we get here, we didn't find the given client handle in the array...
 
-    return(LTFALSE);
+	return(LTFALSE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::IsClientInList
 //
-//	ROUTINE:	CGameServerShell::IsClientInList
-//
-//	PURPOSE:	Determines if the given client handle is in our list
-//
+//	PURPOSE: Determines if the given client handle is in our list
 // ----------------------------------------------------------------------- //
 
 LTBOOL CGameServerShell::IsClientInList(HCLIENT hClient)
 {
 	// Sanity checks...
 
-    if (!hClient) return(LTFALSE);
+	if (!hClient) return(LTFALSE);
 
 
 	// Look for this client handle in our array...
@@ -2786,30 +2715,28 @@ LTBOOL CGameServerShell::IsClientInList(HCLIENT hClient)
 	{
 		if (m_aClients[i] == hClient)
 		{
-            return(LTTRUE);
+			return(LTTRUE);
 		}
 	}
 
 
 	// If we get here, we didn't find the given client handle in the array...
 
-    return(LTFALSE);
+	return(LTFALSE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::GetPlayerFromClientList
 //
-//	ROUTINE:	CGameServerShell::GetPlayerFromClientList
-//
-//	PURPOSE:	Adds the given client handle to our local list
-//
+//	PURPOSE: Adds the given client handle to our local list
 // ----------------------------------------------------------------------- //
 
 CPlayerObj*	CGameServerShell::GetPlayerFromClientList(HCLIENT hClient)
 {
 	// Sanity checks...
 
-    if (!hClient) return(LTNULL);
+	if (!hClient) return(LTNULL);
 
 
 	// Remove this client handle from our array...
@@ -2818,7 +2745,7 @@ CPlayerObj*	CGameServerShell::GetPlayerFromClientList(HCLIENT hClient)
 	{
 		if (m_aClients[i] == hClient)
 		{
-            CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hClient);
+			CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hClient);
 			return(pPlayer);
 		}
 	}
@@ -2826,23 +2753,21 @@ CPlayerObj*	CGameServerShell::GetPlayerFromClientList(HCLIENT hClient)
 
 	// If we get here, we didn't find the given client handle in the array...
 
-    return(LTNULL);
+	return(LTNULL);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::SetupGameInfo
 //
-//	ROUTINE:	CGameServerShell::SetupGameInfo
-//
-//	PURPOSE:	Setup game info
-//
+//	PURPOSE: Setup game info
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::SetupGameInfo()
 {
 	NetGame* pGameInfo;
-    uint32 dwLen = sizeof(NetGame);
-    g_pLTServer->GetGameInfo((void**)&pGameInfo, &dwLen);
+	uint32 dwLen = sizeof(NetGame);
+	g_pLTServer->GetGameInfo((void**)&pGameInfo, &dwLen);
 
 	if (pGameInfo)
 	{
@@ -2851,11 +2776,9 @@ void CGameServerShell::SetupGameInfo()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::SetServerOptions
 //
-//	ROUTINE:	CGameServerShell::SetServerOptions
-//
-//	PURPOSE:	Set server options
-//
+//	PURPOSE: Set server options
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::SetServerOptions()
@@ -2875,17 +2798,15 @@ void CGameServerShell::SetServerOptions()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::UpdateBoundingBoxes()
 //
-//	ROUTINE:	CGameServerShell::UpdateBoundingBoxes()
-//
-//	PURPOSE:	Update object bounding boxes
-//
+//	PURPOSE: Update object bounding boxes
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::UpdateBoundingBoxes()
 {
-    HOBJECT hObj   = g_pLTServer->GetNextObject(LTNULL);
-    HCLASS  hClass = g_pLTServer->GetClass("GameBase");
+	HOBJECT hObj   = g_pLTServer->GetNextObject(LTNULL);
+	HCLASS  hClass = g_pLTServer->GetClass("GameBase");
 
 	if (g_vtDisplayTriggers.GetFloat())
 	{
@@ -2896,9 +2817,9 @@ void CGameServerShell::UpdateBoundingBoxes()
 
 	while (hObj)
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 		{
-            GameBase* pObj = (GameBase*)g_pLTServer->HandleToObject(hObj);
+			GameBase* pObj = (GameBase*)g_pLTServer->HandleToObject(hObj);
 
 			if (pObj)
 			{
@@ -2906,40 +2827,38 @@ void CGameServerShell::UpdateBoundingBoxes()
 			}
 		}
 
-        hObj = g_pLTServer->GetNextObject(hObj);
+		hObj = g_pLTServer->GetNextObject(hObj);
 	}
 
 	// Inactive objects...
 
-    hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
+	hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
 	while (hObj)
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 		{
-            GameBase* pObj = (GameBase*)g_pLTServer->HandleToObject(hObj);
+			GameBase* pObj = (GameBase*)g_pLTServer->HandleToObject(hObj);
 			if (pObj)
 			{
 				pObj->UpdateBoundingBox();
 			}
 		}
 
-        hObj = g_pLTServer->GetNextInactiveObject(hObj);
+		hObj = g_pLTServer->GetNextInactiveObject(hObj);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::RemoveBoundingBoxes()
 //
-//	ROUTINE:	CGameServerShell::RemoveBoundingBoxes()
-//
-//	PURPOSE:	Remove object bounding boxes
-//
+//	PURPOSE: Remove object bounding boxes
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::RemoveBoundingBoxes()
 {
-    HOBJECT hObj   = g_pLTServer->GetNextObject(LTNULL);
-    HCLASS  hClass = g_pLTServer->GetClass("GameBase");
+	HOBJECT hObj   = g_pLTServer->GetNextObject(LTNULL);
+	HCLASS  hClass = g_pLTServer->GetClass("GameBase");
 
 	if (g_vtDisplayTriggers.GetFloat())
 	{
@@ -2950,43 +2869,41 @@ void CGameServerShell::RemoveBoundingBoxes()
 
 	while (hObj)
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 		{
-            GameBase* pObj = (GameBase*)g_pLTServer->HandleToObject(hObj);
+			GameBase* pObj = (GameBase*)g_pLTServer->HandleToObject(hObj);
 			if (pObj)
 			{
 				pObj->RemoveBoundingBox();
 			}
 		}
 
-        hObj = g_pLTServer->GetNextObject(hObj);
+		hObj = g_pLTServer->GetNextObject(hObj);
 	}
 
 	// Inactive objects...
 
-    hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
+	hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
 	while (hObj)
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 		{
-            GameBase* pObj = (GameBase*)g_pLTServer->HandleToObject(hObj);
+			GameBase* pObj = (GameBase*)g_pLTServer->HandleToObject(hObj);
 			if (pObj)
 			{
 				pObj->RemoveBoundingBox();
 			}
 		}
 
-        hObj = g_pLTServer->GetNextInactiveObject(hObj);
+		hObj = g_pLTServer->GetNextInactiveObject(hObj);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::UpdateMultiplayer
 //
-//	ROUTINE:	CGameServerShell::UpdateMultiplayer
-//
-//	PURPOSE:	Determine if it is time to change levels
-//
+//	PURPOSE: Determine if it is time to change levels
 // ----------------------------------------------------------------------- //
 void CGameServerShell::UpdateMultiplayer()
 {
@@ -3019,7 +2936,7 @@ void CGameServerShell::UpdateMultiplayer()
 
 	}
 
-    uint8 byEnd = NGE_NEVER;
+	uint8 byEnd = NGE_NEVER;
 	if (GetGameType() == COOPERATIVE_ASSAULT)
 	{
 		byEnd = (uint8)g_NetCAGameEnd.GetFloat();
@@ -3033,17 +2950,17 @@ void CGameServerShell::UpdateMultiplayer()
 	m_eLevelEnd = LE_UNKNOWN;
 
 
-    LTBOOL bStartLevel = LTFALSE;
+	LTBOOL bStartLevel = LTFALSE;
 
 	if (byEnd == NGE_TIME || byEnd == NGE_FRAGSANDTIME)
 	{
-        LTFLOAT fEndLevelTime = (g_NetEndTime.GetFloat() * 60.0f);
-        LTFLOAT fTime = g_pLTServer->GetTime();
+		LTFLOAT fEndLevelTime = (g_NetEndTime.GetFloat() * 60.0f);
+		LTFLOAT fTime = g_pLTServer->GetTime();
 
 		if (fTime >= fEndLevelTime)
 		{
 			m_eLevelEnd = LE_TIMELIMIT;
-            bStartLevel = LTTRUE;
+			bStartLevel = LTTRUE;
 
 		}
 	}
@@ -3142,17 +3059,17 @@ void CGameServerShell::UpdateMultiplayer()
 
 LTRESULT CGameServerShell::SwitchToWorld(char *pWorldName, char *pNextWorldName)
 {
-    LTRESULT dResult;
+	LTRESULT dResult;
 
 	// Tell all clients we're changing levels
-    HMESSAGEWRITE hWrite = g_pLTServer->StartMessage (LTNULL, MID_CHANGING_LEVELS);
+	HMESSAGEWRITE hWrite = g_pLTServer->StartMessage (LTNULL, MID_CHANGING_LEVELS);
 	if (GetGameType() != SINGLE)
 	{
 		HSTRING hWorld = g_pLTServer->CreateString(pWorldName);
 		g_pLTServer->WriteToMessageHString(hWrite, hWorld);
 		g_pLTServer->FreeString(hWorld);
 	}
-    g_pLTServer->EndMessage (hWrite);
+	g_pLTServer->EndMessage (hWrite);
 
 
 
@@ -3175,7 +3092,7 @@ LTRESULT CGameServerShell::SwitchToWorld(char *pWorldName, char *pNextWorldName)
 	// Load the next level...
 	if (pWorldName)
 	{
-        dResult = g_pLTServer->LoadWorld(pWorldName, LOADWORLD_LOADWORLDOBJECTS|LOADWORLD_RUNWORLD);
+		dResult = g_pLTServer->LoadWorld(pWorldName, LOADWORLD_LOADWORLDOBJECTS|LOADWORLD_RUNWORLD);
 		if(dResult != LT_OK)
 		{
 			return dResult;
@@ -3183,7 +3100,7 @@ LTRESULT CGameServerShell::SwitchToWorld(char *pWorldName, char *pNextWorldName)
 	}
 	else
 	{
-        g_pLTServer->BPrint("ERROR CAN'T START NEXT MULTIPLAYER LEVEL!");
+		g_pLTServer->BPrint("ERROR CAN'T START NEXT MULTIPLAYER LEVEL!");
 		return LT_ERROR;
 	}
 
@@ -3198,11 +3115,9 @@ LTRESULT CGameServerShell::SwitchToWorld(char *pWorldName, char *pNextWorldName)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::StartNextMultiplayerLevel
 //
-//	ROUTINE:	CGameServerShell::StartNextMultiplayerLevel
-//
-//	PURPOSE:	Start the next multiplayer level
-//
+//	PURPOSE: Start the next multiplayer level
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::StartNextMultiplayerLevel()
@@ -3231,11 +3146,9 @@ void CGameServerShell::StartNextMultiplayerLevel()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::ServerAppMessageFn
 //
-//	ROUTINE:	CGameServerShell::ServerAppMessageFn
-//
-//	PURPOSE:	Server app message function
-//
+//	PURPOSE: Server app message function
 // ----------------------------------------------------------------------- //
 
 LTRESULT CGameServerShell::ServerAppMessageFn(char* sMsg, int nLen)
@@ -3275,16 +3188,14 @@ LTRESULT CGameServerShell::ServerAppMessageFn(char* sMsg, int nLen)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::PauseGame
 //
-//	ROUTINE:	CGameServerShell::PauseGame
-//
-//	PURPOSE:	Pause/unpause the game
-//
+//	PURPOSE: Pause/unpause the game
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::PauseGame(LTBOOL bPause)
 {
-    uint32 nFlags = g_pLTServer->GetServerFlags();
+	uint32 nFlags = g_pLTServer->GetServerFlags();
 
 	if (bPause)
 	{
@@ -3295,113 +3206,109 @@ void CGameServerShell::PauseGame(LTBOOL bPause)
 		nFlags &= ~SS_PAUSED;
 	}
 
-    g_pLTServer->SetServerFlags (nFlags);
+	g_pLTServer->SetServerFlags (nFlags);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandleConsoleCmdMsg()
 //
-//	ROUTINE:	CGameServerShell::HandleConsoleCmdMsg()
-//
-//	PURPOSE:	Handle console cmd messages
-//
+//	PURPOSE: Handle console cmd messages
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandleConsoleCmdMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 {
-    HSTRING hMsg = g_pLTServer->ReadFromMessageHString(hMessage);
+	HSTRING hMsg = g_pLTServer->ReadFromMessageHString(hMessage);
 	if (!hMsg) return;
 
-    if (m_CmdMgr.Process(g_pLTServer->GetStringData(hMsg)))
+	if (m_CmdMgr.Process(g_pLTServer->GetStringData(hMsg)))
 	{
-        g_pLTServer->CPrint("Sent Command '%s'", g_pLTServer->GetStringData(hMsg));
+		g_pLTServer->CPrint("Sent Command '%s'", g_pLTServer->GetStringData(hMsg));
 	}
 
 	if (hMsg)
 	{
-        g_pLTServer->FreeString(hMsg);
+		g_pLTServer->FreeString(hMsg);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandleConsoleTriggerMsg()
 //
-//	ROUTINE:	CGameServerShell::HandleConsoleTriggerMsg()
-//
-//	PURPOSE:	Handle console trigger messages
-//
+//	PURPOSE: Handle console trigger messages
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandleConsoleTriggerMsg(HCLIENT hSender, HMESSAGEREAD hMessage)
 {
-    CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hSender);
+	CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hSender);
 	if (!pPlayer) return;
 
 		// Read the message data...
 
-    HSTRING hstrObjName = g_pLTServer->ReadFromMessageHString(hMessage);
-    HSTRING hstrMsg     = g_pLTServer->ReadFromMessageHString(hMessage);
+	HSTRING hstrObjName = g_pLTServer->ReadFromMessageHString(hMessage);
+	HSTRING hstrMsg	 = g_pLTServer->ReadFromMessageHString(hMessage);
 
-    char* pName = LTNULL;
-    char* pMsg  = LTNULL;
+	char* pName = LTNULL;
+	char* pMsg  = LTNULL;
 
 	if (hstrObjName)
 	{
-        pName = g_pLTServer->GetStringData(hstrObjName);
+		pName = g_pLTServer->GetStringData(hstrObjName);
 	}
 
 	if (hstrMsg)
 	{
-        pMsg = g_pLTServer->GetStringData(hstrMsg);
+		pMsg = g_pLTServer->GetStringData(hstrMsg);
 	}
 
 	// Special case if we're supposed to list objects of a certain type...
 
 	if (_strnicmp(pMsg, "LIST", 4) == 0)
 	{
-        ILTCommon* pCommon = g_pLTServer->Common();
+		ILTCommon* pCommon = g_pLTServer->Common();
 		if (!pCommon) return;
 
 		ConParse parse;
 		parse.Init(pMsg);
 
-        LTBOOL bNoObjects = LTTRUE;
+		LTBOOL bNoObjects = LTTRUE;
 
 		if (pCommon->Parse(&parse) == LT_OK)
 		{
 			if (parse.m_nArgs > 1)
 			{
-                g_pLTServer->CPrint("Listing objects of type '%s'", parse.m_Args[1]);
+				g_pLTServer->CPrint("Listing objects of type '%s'", parse.m_Args[1]);
 
-                HCLASS  hClass = g_pLTServer->GetClass(parse.m_Args[1]);
+				HCLASS  hClass = g_pLTServer->GetClass(parse.m_Args[1]);
 
 				// Get the names of all the objects of the specified class...
 
-                HOBJECT hObj = g_pLTServer->GetNextObject(LTNULL);
+				HOBJECT hObj = g_pLTServer->GetNextObject(LTNULL);
 				while (hObj)
 				{
-                    if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+					if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 					{
-                        g_pLTServer->CPrint("%s (active)", g_pLTServer->GetObjectName(hObj));
-                        bNoObjects = LTFALSE;
+						g_pLTServer->CPrint("%s (active)", g_pLTServer->GetObjectName(hObj));
+						bNoObjects = LTFALSE;
 					}
 
-                    hObj = g_pLTServer->GetNextObject(hObj);
+					hObj = g_pLTServer->GetNextObject(hObj);
 				}
 
-                hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
+				hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
 				while (hObj)
 				{
-                    if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+					if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 					{
-                        g_pLTServer->CPrint("%s (inactive)", g_pLTServer->GetObjectName(hObj));
-                        bNoObjects = LTFALSE;
+						g_pLTServer->CPrint("%s (inactive)", g_pLTServer->GetObjectName(hObj));
+						bNoObjects = LTFALSE;
 					}
 
-                    hObj = g_pLTServer->GetNextInactiveObject(hObj);
+					hObj = g_pLTServer->GetNextInactiveObject(hObj);
 				}
 
 				if (bNoObjects)
 				{
-                    g_pLTServer->CPrint("No objects of type '%s' exist (NOTE: object type IS case-sensitive)", parse.m_Args[1]);
+					g_pLTServer->CPrint("No objects of type '%s' exist (NOTE: object type IS case-sensitive)", parse.m_Args[1]);
 				}
 			}
 		}
@@ -3409,37 +3316,35 @@ void CGameServerShell::HandleConsoleTriggerMsg(HCLIENT hSender, HMESSAGEREAD hMe
 	// Send the message to all appropriate objects...
 	else if (SendTriggerMsgToObjects(pPlayer, hstrObjName, hstrMsg))
 	{
-        g_pLTServer->CPrint("Sent '%s' Msg '%s'", pName ? pName : "Invalid Object!", pMsg ? pMsg : "Empty Message!!!");
+		g_pLTServer->CPrint("Sent '%s' Msg '%s'", pName ? pName : "Invalid Object!", pMsg ? pMsg : "Empty Message!!!");
 	}
 	else
 	{
-        g_pLTServer->CPrint("Failed to Send '%s' Msg '%s'!", pName ? pName : "Invalid Object!", pMsg ? pMsg : "Empty Message!!!");
+		g_pLTServer->CPrint("Failed to Send '%s' Msg '%s'!", pName ? pName : "Invalid Object!", pMsg ? pMsg : "Empty Message!!!");
 	}
 
 	if (hstrObjName)
 	{
-        g_pLTServer->FreeString(hstrObjName);
+		g_pLTServer->FreeString(hstrObjName);
 	}
 
 	if (hstrMsg)
 	{
-        g_pLTServer->FreeString(hstrMsg);
+		g_pLTServer->FreeString(hstrMsg);
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandlePlayerExitLevel()
 //
-//	ROUTINE:	CGameServerShell::HandlePlayerExitLevel()
-//
-//	PURPOSE:	Handle exit level command
-//
+//	PURPOSE: Handle exit level command
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandlePlayerExitLevel(HCLIENT hSender, HMESSAGEREAD hMessage)
 {
 	if (!hSender) return;
 
-    CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hSender);
+	CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hSender);
 	if (!pPlayer) return;
 
 //	if (GetGameType() == COOPERATIVE_ASSAULT && m_bShowMultiplayerSummary)
@@ -3450,32 +3355,32 @@ void CGameServerShell::HandlePlayerExitLevel(HCLIENT hSender, HMESSAGEREAD hMess
 	}
 
 
-    HOBJECT hObj   = g_pLTServer->GetNextObject(LTNULL);
-    HCLASS  hClass = g_pLTServer->GetClass("ExitTrigger");
+	HOBJECT hObj   = g_pLTServer->GetNextObject(LTNULL);
+	HCLASS  hClass = g_pLTServer->GetClass("ExitTrigger");
 
-    HOBJECT hRemoveObj = LTNULL;
+	HOBJECT hRemoveObj = LTNULL;
 	while (hObj)
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 		{
 			SendTriggerMsgToObject(pPlayer, hObj, 0, "TRIGGER");
 			return;
 		}
 
-        hObj = g_pLTServer->GetNextObject(hObj);
+		hObj = g_pLTServer->GetNextObject(hObj);
 	}
 
 
-    hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
+	hObj = g_pLTServer->GetNextInactiveObject(LTNULL);
 	while (hObj)
 	{
-        if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
+		if (g_pLTServer->IsKindOf(g_pLTServer->GetObjectClass(hObj), hClass))
 		{
 			SendTriggerMsgToObject(pPlayer, hObj, 0, "TRIGGER");
 			return;
 		}
 
-        hObj = g_pLTServer->GetNextInactiveObject(hObj);
+		hObj = g_pLTServer->GetNextInactiveObject(hObj);
 	}
 
 
@@ -3485,11 +3390,9 @@ void CGameServerShell::HandlePlayerExitLevel(HCLIENT hSender, HMESSAGEREAD hMess
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::ExitLevel()
 //
-//	ROUTINE:	CGameServerShell::ExitLevel()
-//
-//	PURPOSE:	Exit the current level
-//
+//	PURPOSE: Exit the current level
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::ExitLevel(LTBOOL bSendMsgToClient)
@@ -3509,16 +3412,16 @@ void CGameServerShell::ExitLevel(LTBOOL bSendMsgToClient)
 
 		case SINGLE:
 		{
-            HOBJECT hPlayerObj = LTNULL;
+			HOBJECT hPlayerObj = LTNULL;
 			ObjArray <HOBJECT, 1> objArray;
 
-            g_pLTServer->FindNamedObjects(DEFAULT_PLAYERNAME, objArray);
+			g_pLTServer->FindNamedObjects(DEFAULT_PLAYERNAME, objArray);
 			if (!objArray.NumObjects()) return;
 
 			hPlayerObj = objArray.GetObject(0);
 			if (!hPlayerObj || !IsPlayer(hPlayerObj)) return;
 
-            CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hPlayerObj);
+			CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->HandleToObject(hPlayerObj);
 			if (!pPlayer || pPlayer->IsDead()) return;
 
 			// Tell the player to handle exiting...
@@ -3543,18 +3446,16 @@ void CGameServerShell::ExitLevel(LTBOOL bSendMsgToClient)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandlePlayerSummary()
 //
-//	ROUTINE:	CGameServerShell::HandlePlayerSummary()
-//
-//	PURPOSE:	Handle the player summary request
-//
+//	PURPOSE: Handle the player summary request
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandlePlayerSummary(HCLIENT hSender, HMESSAGEREAD hMessage)
 {
 	if (!hSender) return;
 
-    CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hSender);
+	CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hSender);
 	if (!pPlayer) return;
 
 	CPlayerSummaryMgr* pPlayerSummary = pPlayer->GetPlayerSummaryMgr();
@@ -3565,26 +3466,24 @@ void CGameServerShell::HandlePlayerSummary(HCLIENT hSender, HMESSAGEREAD hMessag
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandlePlayerChangeTeam()
 //
-//	ROUTINE:	CGameServerShell::HandlePlayerChangeTeam()
-//
-//	PURPOSE:	Handle the player summary request
-//
+//	PURPOSE: Handle the player summary request
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandlePlayerChangeTeam(HCLIENT hSender, HMESSAGEREAD hMessage)
 {
 	if (!hSender || GetGameType() != COOPERATIVE_ASSAULT) return;
 
-    CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hSender);
+	CPlayerObj* pPlayer = (CPlayerObj*)g_pLTServer->GetClientUserData(hSender);
 	if (!pPlayer) return;
 
-    uint8 byNewTeam = g_pLTServer->ReadFromMessageByte(hMessage);
-    uint32 dwPlayerID = g_pLTServer->GetClientID(hSender);
+	uint8 byNewTeam = g_pLTServer->ReadFromMessageByte(hMessage);
+	uint32 dwPlayerID = g_pLTServer->GetClientID(hSender);
 
 	CTeam* pOldTeam = m_TeamMgr.GetTeamFromPlayerID(dwPlayerID);
 
-    CTeam* pTeam = LTNULL;
+	CTeam* pTeam = LTNULL;
 
 
 	if (byNewTeam == TEAM_AUTO)
@@ -3594,20 +3493,18 @@ void CGameServerShell::HandlePlayerChangeTeam(HCLIENT hSender, HMESSAGEREAD hMes
 
 	if (pTeam && pTeam != pOldTeam)
 	{
-        if (m_TeamMgr.ChangePlayerTeam(dwPlayerID, pTeam, LTTRUE))
+		if (m_TeamMgr.ChangePlayerTeam(dwPlayerID, pTeam, LTTRUE))
 			RespawnPlayer(pPlayer, hSender);
 		SendGameDataToClient(hSender);
-        SendPlayerInfoMsgToClients(LTNULL, pPlayer, LTFALSE);
+		SendPlayerInfoMsgToClients(LTNULL, pPlayer, LTFALSE);
 
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::HandleUpdateServerOptions()
 //
-//	ROUTINE:	CGameServerShell::HandleUpdateServerOptions()
-//
-//	PURPOSE:	Handle updates to the server options
-//
+//	PURPOSE: Handle updates to the server options
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::HandleUpdateServerOptions(HMESSAGEREAD hMessage)
@@ -3629,11 +3526,9 @@ void CGameServerShell::HandleUpdateServerOptions(HMESSAGEREAD hMessage)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::Save
 //
-//	ROUTINE:	CGameServerShell::Save
-//
-//	PURPOSE:	Save the global world info
-//
+//	PURPOSE: Save the global world info
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -3661,11 +3556,9 @@ void CGameServerShell::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::Load
 //
-//	ROUTINE:	CGameServerShell::Load
-//
-//	PURPOSE:	Load the global world info
-//
+//	PURPOSE: Load the global world info
 // ----------------------------------------------------------------------- //
 
 void CGameServerShell::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -3711,23 +3604,23 @@ void CGameServerShell::FillGameData(GAMEDATA *gameData)
 	static CVarTrack cvRespawnScale;
 	if (!cvRunSpeed.IsInitted())
 	{
-        cvRunSpeed.Init(g_pLTServer, "RunSpeed", LTNULL, 1.0f);
-        cvRespawnScale.Init(g_pLTServer, "RespawnScale", LTNULL, 1.0f);
+		cvRunSpeed.Init(g_pLTServer, "RunSpeed", LTNULL, 1.0f);
+		cvRespawnScale.Init(g_pLTServer, "RespawnScale", LTNULL, 1.0f);
 	}
 	gameData->m_fRunSpeed = cvRunSpeed.GetFloat();
 	gameData->m_fRespawnScale = cvRespawnScale.GetFloat();
 
 	if (GetGameType() == COOPERATIVE_ASSAULT)
 	{
-	    gameData->m_dwEndFrags = (uint32)g_NetEndScore.GetFloat();
+		gameData->m_dwEndFrags = (uint32)g_NetEndScore.GetFloat();
 		gameData->m_byEnd = (uint8)g_NetCAGameEnd.GetFloat();
 	}
 	else
 	{
 		gameData->m_byEnd = (uint8)g_NetDMGameEnd.GetFloat();
-	    gameData->m_dwEndFrags = (uint32)g_NetEndFrags.GetFloat();
+		gameData->m_dwEndFrags = (uint32)g_NetEndFrags.GetFloat();
 	}
-    gameData->m_dwEndTime = (uint32)g_NetEndTime.GetFloat();
+	gameData->m_dwEndTime = (uint32)g_NetEndTime.GetFloat();
 
 	gameData->m_bUsePassword = m_GameInfo.m_bUsePassword;
 	SAFE_STRCPY(gameData->m_szPassword,m_GameInfo.m_sPassword);
@@ -3736,12 +3629,12 @@ void CGameServerShell::FillGameData(GAMEDATA *gameData)
 
 ObjectivesList* CGameServerShell::GetObjectives(uint8 byTeam)
 {
-    if (byTeam > NUM_TEAMS) return LTNULL;
+	if (byTeam > NUM_TEAMS) return LTNULL;
 	return &m_Objectives[byTeam];
 }
 ObjectivesList* CGameServerShell::GetCompletedObjectives(uint8 byTeam)
 {
-    if (byTeam > NUM_TEAMS) return LTNULL;
+	if (byTeam > NUM_TEAMS) return LTNULL;
 	return &m_CompletedObjectives[byTeam];
 }
 
@@ -3775,9 +3668,9 @@ void CGameServerShell::ShowMultiplayerSummary()
 	}
 	m_fSummaryEndTime = g_pServerButeMgr->GetSummaryDelay() + g_pLTServer->GetTime();
 	HMESSAGEWRITE hMsg = g_pLTServer->StartMessage(LTNULL, MID_PLAYER_EXITLEVEL);
-    g_pLTServer->WriteToMessageByte(hMsg, (uint8)m_eLevelEnd);
-    g_pLTServer->WriteToMessageDWord(hMsg, (uint32)endString);
-    g_pLTServer->EndMessage(hMsg);
+	g_pLTServer->WriteToMessageByte(hMsg, (uint8)m_eLevelEnd);
+	g_pLTServer->WriteToMessageDWord(hMsg, (uint32)endString);
+	g_pLTServer->EndMessage(hMsg);
 
 }
 
@@ -3795,7 +3688,7 @@ LTBOOL CGameServerShell::InitGameSpy()
 	char sBuf[32];
 	int  nBufSize = 30;
 	WORD wPort = 0;
-    g_pLTServer->GetTcpIpAddress(sBuf, nBufSize, wPort);
+	g_pLTServer->GetTcpIpAddress(sBuf, nBufSize, wPort);
 
 	// Init the game spy manager.
 	char sVer[16];
@@ -3909,7 +3802,7 @@ char* CGameServerShell::GetGameSpyGameType()
 int	CGameServerShell::GetNumPlayers()
 {
 	CPlayerObj* pPlr   = GetFirstNetPlayer();
-	int         nCount = 0;
+	int		 nCount = 0;
 
 	while (pPlr)
 	{
@@ -3943,17 +3836,15 @@ void CGameServSendHandler::SendTo(const void *pData, unsigned long len, const ch
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CGameServerShell::IsPositionOccupied
 //
-//	ROUTINE:	CGameServerShell::IsPositionOccupied
-//
-//	PURPOSE:	Check for any other player object's at this position
-//
+//	PURPOSE: Check for any other player object's at this position
 // ----------------------------------------------------------------------- //
 
 LTBOOL CGameServerShell::IsPositionOccupied(LTVector & vPos, CPlayerObj* pPlayer)
 {
 	ObjArray <HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
-    g_pLTServer->FindNamedObjects(DEFAULT_PLAYERNAME, objArray);
+	g_pLTServer->FindNamedObjects(DEFAULT_PLAYERNAME, objArray);
 	int numObjects = objArray.NumObjects();
 
 	if (!numObjects) return LTFALSE;
@@ -3971,9 +3862,9 @@ LTBOOL CGameServerShell::IsPositionOccupied(LTVector & vPos, CPlayerObj* pPlayer
 
 		if (hObject != hPlayerObj)
 		{
-            LTVector vObjPos, vDims;
-            g_pLTServer->GetObjectPos(hObject, &vObjPos);
-            g_pLTServer->GetObjectDims(hObject, &vDims);
+			LTVector vObjPos, vDims;
+			g_pLTServer->GetObjectPos(hObject, &vObjPos);
+			g_pLTServer->GetObjectDims(hObject, &vDims);
 
 			// Increase the size of the dims to account for the players
 			// dims overlapping...
@@ -4074,17 +3965,16 @@ void CGameServerShell::ServerAppPostStartWorld( )
 }
 
 
-// ----------------------------------------------------------------------- //
-// Sends a game data message to the specified client.
+// ----------------------------------------------------------------------- // Sends a game data message to the specified client.
 // ----------------------------------------------------------------------- //
 void CGameServerShell::SendServerOptionsToClient(HCLIENT hClient)
 {
 	if (GetGameType() == SINGLE) return;
 
 	HMESSAGEWRITE hWrite;
-    hWrite = g_pLTServer->StartMessage(hClient, MID_UPDATE_OPTIONS);
+	hWrite = g_pLTServer->StartMessage(hClient, MID_UPDATE_OPTIONS);
 
-    g_pLTServer->WriteToMessageString(hWrite, m_GameInfo.m_sSession);
+	g_pLTServer->WriteToMessageString(hWrite, m_GameInfo.m_sSession);
 
 	int	nNumOptions = (int)g_pServerOptionMgr->GetNumOptions();
 	if (nNumOptions > MAX_GAME_OPTIONS)
@@ -4100,5 +3990,5 @@ void CGameServerShell::SendServerOptionsToClient(HCLIENT hClient)
 		}
 	}
 
-    g_pLTServer->EndMessage(hWrite);
+	g_pLTServer->EndMessage(hWrite);
 }

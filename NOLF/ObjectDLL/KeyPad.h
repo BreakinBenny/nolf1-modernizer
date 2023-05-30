@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: KeyPad.h
 //
-// MODULE  : KeyPad.h
+// PURPOSE: Definition of the Key pad Model
 //
-// PURPOSE : Definition of the Key pad Model
-//
-// CREATED : 4/30/99
-//
+// CREATED: 4/30/99
 // ----------------------------------------------------------------------- //
 
 #ifndef __KEY_PAD_H__
@@ -25,13 +23,13 @@ class KeyPad : public Prop
 
 	protected :
 
-        virtual uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
-        virtual uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		virtual uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		virtual uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
 	protected :
 
-        LTBOOL  ReadProp(ObjectCreateStruct *pData);
-        LTBOOL  InitialUpdate();
+		LTBOOL  ReadProp(ObjectCreateStruct *pData);
+		LTBOOL  InitialUpdate();
 		void	Update();
 
 		void	SetupDisabledState();
@@ -42,10 +40,10 @@ class KeyPad : public Prop
 		HSTRING		m_hstrDisabledCmd;
 		HSTRING		m_hstrPickSound;
 		HOBJECT		m_hDeciphererModel;
-        HLTSOUND    m_hPickSound;
-        LTFLOAT     m_fMinPickTime;
-        LTFLOAT     m_fMaxPickTime;
-        LTFLOAT     m_fPickSoundRadius;
+		HLTSOUND	m_hPickSound;
+		LTFLOAT	 m_fMinPickTime;
+		LTFLOAT	 m_fMaxPickTime;
+		LTFLOAT	 m_fPickSoundRadius;
 
 		LTBOOL		m_bSpaceCodeBreaker;
 

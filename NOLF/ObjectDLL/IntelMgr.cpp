@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: IntelMgr.cpp
 //
-// MODULE  : IntelMgr.cpp
+// PURPOSE: IntelMgr - Implementation
 //
-// PURPOSE : IntelMgr - Implementation
-//
-// CREATED : 7/25/2000
+// CREATED: 7/25/2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -37,24 +35,20 @@ CIntelMgr*   g_pIntelMgr = LTNULL;
 CIntelMgr CIntelMgrPlugin::sm_IntelMgr;
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelMgr::CIntelMgr
 //
-//	ROUTINE:	CIntelMgr::CIntelMgr
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CIntelMgr::CIntelMgr()
 {
-    m_IntelList.Init(LTTRUE);
+	m_IntelList.Init(LTTRUE);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelMgr::~CIntelMgr
 //
-//	ROUTINE:	CIntelMgr::~CIntelMgr
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CIntelMgr::~CIntelMgr()
@@ -63,17 +57,15 @@ CIntelMgr::~CIntelMgr()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelMgr::Init()
 //
-//	ROUTINE:	CIntelMgr::Init()
-//
-//	PURPOSE:	Init mgr
-//
+//	PURPOSE: Init mgr
 // ----------------------------------------------------------------------- //
 
 LTBOOL CIntelMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 {
-    if (g_pIntelMgr || !szAttributeFile) return LTFALSE;
-    if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
+	if (g_pIntelMgr || !szAttributeFile) return LTFALSE;
+	if (!Parse(pInterface, szAttributeFile)) return LTFALSE;
 
 	g_pIntelMgr = this;
 
@@ -95,7 +87,7 @@ LTBOOL CIntelMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 		else
 		{
 			debug_delete(pIntel);
-            return LTFALSE;
+			return LTFALSE;
 		}
 
 		nNum++;
@@ -103,21 +95,19 @@ LTBOOL CIntelMgr::Init(ILTCSBase *pInterface, const char* szAttributeFile)
 	}
 
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelMgr::GetIntel
 //
-//	ROUTINE:	CIntelMgr::GetIntel
-//
-//	PURPOSE:	Get the specified Intel record
-//
+//	PURPOSE: Get the specified Intel record
 // ----------------------------------------------------------------------- //
 
 INTEL* CIntelMgr::GetIntel(uint32 nId)
 {
-    INTEL** pCur  = LTNULL;
+	INTEL** pCur  = LTNULL;
 
 	pCur = m_IntelList.GetItem(TLIT_FIRST);
 
@@ -131,22 +121,20 @@ INTEL* CIntelMgr::GetIntel(uint32 nId)
 		pCur = m_IntelList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelMgr::GetIntel
 //
-//	ROUTINE:	CIntelMgr::GetIntel
-//
-//	PURPOSE:	Get the specified Intel record
-//
+//	PURPOSE: Get the specified Intel record
 // ----------------------------------------------------------------------- //
 
 INTEL* CIntelMgr::GetIntel(char* pName)
 {
-    if (!pName) return LTNULL;
+	if (!pName) return LTNULL;
 
-    INTEL** pCur  = LTNULL;
+	INTEL** pCur  = LTNULL;
 
 	pCur = m_IntelList.GetItem(TLIT_FIRST);
 
@@ -160,38 +148,34 @@ INTEL* CIntelMgr::GetIntel(char* pName)
 		pCur = m_IntelList.GetItem(TLIT_NEXT);
 	}
 
-    return LTNULL;
+	return LTNULL;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelMgr::Term()
 //
-//	ROUTINE:	CIntelMgr::Term()
-//
-//	PURPOSE:	Clean up.
-//
+//	PURPOSE: Clean up.
 // ----------------------------------------------------------------------- //
 
 void CIntelMgr::Term()
 {
-    g_pIntelMgr = LTNULL;
+	g_pIntelMgr = LTNULL;
 
 	m_IntelList.Clear();
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelMgr::CacheAll
 //
-//	ROUTINE:	CIntelMgr::CacheAll
-//
-//	PURPOSE:	Cache all the Prop Type related resources
-//
+//	PURPOSE: Cache all the Prop Type related resources
 // ----------------------------------------------------------------------- //
 
 void CIntelMgr::CacheAll()
 {
 	// Cache all the Intel data...
 
-    INTEL** pCurIntel  = LTNULL;
+	INTEL** pCurIntel  = LTNULL;
 	pCurIntel = m_IntelList.GetItem(TLIT_FIRST);
 
 	while (pCurIntel)
@@ -208,11 +192,9 @@ void CIntelMgr::CacheAll()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: INTEL::INTEL
 //
-//	ROUTINE:	INTEL::INTEL
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 INTEL::INTEL()
@@ -235,20 +217,18 @@ INTEL::INTEL()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: INTEL::Init
 //
-//	ROUTINE:	INTEL::Init
-//
-//	PURPOSE:	Build the prop type struct
-//
+//	PURPOSE: Build the prop type struct
 // ----------------------------------------------------------------------- //
 
 LTBOOL INTEL::Init(CButeMgr & buteMgr, char* aTagName)
 {
-    if (!aTagName) return LTFALSE;
+	if (!aTagName) return LTFALSE;
 
 	nDefaultTextId	= buteMgr.GetInt(aTagName, INTELMGR_DEFAULTTEXTID);
-    bChrome		    = (LTBOOL) buteMgr.GetInt(aTagName, INTELMGR_CHROME);
-    bChromakey      = (LTBOOL) buteMgr.GetInt(aTagName, INTELMGR_CHROMAKEY);
+	bChrome			= (LTBOOL) buteMgr.GetInt(aTagName, INTELMGR_CHROME);
+	bChromakey	  = (LTBOOL) buteMgr.GetInt(aTagName, INTELMGR_CHROMAKEY);
 
 	CString str = buteMgr.GetString(aTagName, INTELMGR_NAME);
 	if (!str.IsEmpty())
@@ -281,15 +261,13 @@ LTBOOL INTEL::Init(CButeMgr & buteMgr, char* aTagName)
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: INTEL::Cache
 //
-//	ROUTINE:	INTEL::Cache
-//
-//	PURPOSE:	Cache all the resources associated with the surface
-//
+//	PURPOSE: Cache all the resources associated with the surface
 // ----------------------------------------------------------------------- //
 
 void INTEL::Cache(CIntelMgr* pIntelMgr)
@@ -300,19 +278,19 @@ void INTEL::Cache(CIntelMgr* pIntelMgr)
 
 	if (szSkin[0])
 	{
-        g_pLTServer->CacheFile(FT_TEXTURE, szSkin);
+		g_pLTServer->CacheFile(FT_TEXTURE, szSkin);
 	}
 
 	// Cache models...
 
 	if (szFilename[0])
 	{
-        g_pLTServer->CacheFile(FT_MODEL, szFilename);
+		g_pLTServer->CacheFile(FT_MODEL, szFilename);
 	}
 
 	// Cache the scale fx...
 
-    for (int i=0; i < INTEL_MAX_SCALE_FX; i++)
+	for (int i=0; i < INTEL_MAX_SCALE_FX; i++)
 	{
 		if (szScaleFXNames[i][0])
 		{
@@ -335,20 +313,18 @@ void INTEL::Cache(CIntelMgr* pIntelMgr)
 ////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelMgrPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CIntelMgrPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Fill the string list
-//
+//	PURPOSE: Fill the string list
 // ----------------------------------------------------------------------- //
 
 LTRESULT CIntelMgrPlugin::PreHook_EditStringList(
 	const char* szRezPath,
 	const char* szPropName,
 	char** aszStrings,
-    uint32* pcStrings,
-    const uint32 cMaxStrings,
-    const uint32 cMaxStringLength)
+	uint32* pcStrings,
+	const uint32 cMaxStrings,
+	const uint32 cMaxStringLength)
 {
 	if (!g_pIntelMgr)
 	{
@@ -357,8 +333,8 @@ LTRESULT CIntelMgrPlugin::PreHook_EditStringList(
 
 		char szFile[256];
 		sprintf(szFile, "%s\\%s", szRezPath, INTELMGR_DEFAULT_FILE);
-        sm_IntelMgr.SetInRezFile(LTFALSE);
-        sm_IntelMgr.Init(g_pLTServer, szFile);
+		sm_IntelMgr.SetInRezFile(LTFALSE);
+		sm_IntelMgr.Init(g_pLTServer, szFile);
 	}
 
 	if (!PopulateStringList(aszStrings, pcStrings, cMaxStrings, cMaxStringLength))
@@ -370,17 +346,15 @@ LTRESULT CIntelMgrPlugin::PreHook_EditStringList(
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelMgrPlugin::PopulateStringList
 //
-//	ROUTINE:	CIntelMgrPlugin::PopulateStringList
-//
-//	PURPOSE:	Populate the list
-//
+//	PURPOSE: Populate the list
 // ----------------------------------------------------------------------- //
 
 LTBOOL CIntelMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,
-    const uint32 cMaxStrings, const uint32 cMaxStringLength)
+	const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {
-    if (!aszStrings || !pcStrings) return LTFALSE;
+	if (!aszStrings || !pcStrings) return LTFALSE;
 	_ASSERT(aszStrings && pcStrings);
 
 	// Add an entry for each Intel type
@@ -388,7 +362,7 @@ LTBOOL CIntelMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,
 	int nNumIntel = g_pIntelMgr->GetNumIntels();
 	_ASSERT(nNumIntel > 0);
 
-    INTEL* pIntel = LTNULL;
+	INTEL* pIntel = LTNULL;
 
 	for (int i=0; i < nNumIntel; i++)
 	{
@@ -397,7 +371,7 @@ LTBOOL CIntelMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,
 		pIntel = g_pIntelMgr->GetIntel(i);
 		if (pIntel && pIntel->szName[0])
 		{
-            uint32 dwImpactFXNameLen = strlen(pIntel->szName);
+			uint32 dwImpactFXNameLen = strlen(pIntel->szName);
 
 			if (dwImpactFXNameLen < cMaxStringLength && ((*pcStrings) + 1) < cMaxStrings)
 			{
@@ -406,15 +380,13 @@ LTBOOL CIntelMgrPlugin::PopulateStringList(char** aszStrings, uint32* pcStrings,
 		}
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CIntelMgrPlugin::PreHook_Dims
 //
-//	ROUTINE:	CIntelMgrPlugin::PreHook_Dims
-//
-//	PURPOSE:	Determine the dims for this prop
-//
+//	PURPOSE: Determine the dims for this prop
 // ----------------------------------------------------------------------- //
 
 LTRESULT CIntelMgrPlugin::PreHook_Dims(
@@ -436,8 +408,8 @@ LTRESULT CIntelMgrPlugin::PreHook_Dims(
 
 		char szFile[256];
 		sprintf(szFile, "%s\\%s", szRezPath, INTELMGR_DEFAULT_FILE);
-        sm_IntelMgr.SetInRezFile(LTFALSE);
-        sm_IntelMgr.Init(g_pLTServer, szFile);
+		sm_IntelMgr.SetInRezFile(LTFALSE);
+		sm_IntelMgr.Init(g_pLTServer, szFile);
 	}
 
 	INTEL* pIntel = g_pIntelMgr->GetIntel((char*)szPropValue);

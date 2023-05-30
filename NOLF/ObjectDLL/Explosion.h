@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Explosion.h
 //
-// MODULE  : Explosion.h
+// PURPOSE: Explosion - Definition
 //
-// PURPOSE : Explosion - Definition
-//
-// CREATED : 11/25/97
+// CREATED: 11/25/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __EXPLOSION_H__
@@ -24,29 +22,29 @@ class Explosion : public GameBase
 	public :
 
  		Explosion();
-        void Setup(HOBJECT hFiredFrom, uint8 nAmmoType);
+		void Setup(HOBJECT hFiredFrom, uint8 nAmmoType);
 
 	protected :
 
-        uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
-        uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT lData);
+		uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
-        virtual LTVector GetBoundingBoxColor();
+		virtual LTVector GetBoundingBoxColor();
 
-        virtual void Start(HOBJECT hFiredFrom=LTNULL);
+		virtual void Start(HOBJECT hFiredFrom=LTNULL);
 
-        LTFLOAT			m_fDamageRadius;
-        LTFLOAT         m_fMaxDamage;
+		LTFLOAT			m_fDamageRadius;
+		LTFLOAT		 m_fMaxDamage;
 		DamageType		m_eDamageType;
 		HOBJECT			m_hFiredFrom;
-        LTVector        m_vPos;
-        LTBOOL          m_bRemoveWhenDone;
-        uint8           m_nImpactFXId;
+		LTVector		m_vPos;
+		LTBOOL		  m_bRemoveWhenDone;
+		uint8		   m_nImpactFXId;
 
-        LTFLOAT         m_fProgDamage;
-        LTFLOAT         m_fProgDamageLifetime;
-        LTFLOAT         m_fProgDamageDuration;
-        LTFLOAT         m_fProgDamageRadius;
+		LTFLOAT		 m_fProgDamage;
+		LTFLOAT		 m_fProgDamageLifetime;
+		LTFLOAT		 m_fProgDamageDuration;
+		LTFLOAT		 m_fProgDamageRadius;
 		DamageType		m_eProgDamageType;
 
 		CTimer			m_ProgDamageTimer;
@@ -62,21 +60,21 @@ class Explosion : public GameBase
 
 		void CacheFiles();
 
-        void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 };
 
 class CExplosionPlugin : public IObjectPlugin
 {
 	public:
 
-        virtual LTRESULT PreHook_EditStringList(
+		virtual LTRESULT PreHook_EditStringList(
 			const char* szRezPath,
 			const char* szPropName,
 			char** aszStrings,
-            uint32* pcStrings,
-            const uint32 cMaxStrings,
-            const uint32 cMaxStringLength);
+			uint32* pcStrings,
+			const uint32 cMaxStrings,
+			const uint32 cMaxStringLength);
 
 	private:
 

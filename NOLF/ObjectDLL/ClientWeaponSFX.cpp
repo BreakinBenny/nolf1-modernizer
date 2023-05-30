@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CClientWeaponSFX.cpp
 //
-// MODULE  : CClientWeaponSFX.cpp
+// PURPOSE: CClientWeaponSFX - Implementation
 //
-// PURPOSE : CClientWeaponSFX - Implementation
-//
-// CREATED : 1/17/98
+// CREATED: 1/17/98
 //
 // (c) 1997-1999 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -29,16 +27,14 @@ static void CreateServerExitMark(const CLIENTWEAPONFX & theStruct);
 #define MAX_MARKS_PER_OBJECT	40
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CreateClientWeaponFX
 //
-//	ROUTINE:	CreateClientWeaponFX
-//
-//	PURPOSE:	Send message to client with data
-//
+//	PURPOSE: Send message to client with data
 // ----------------------------------------------------------------------- //
 
 void CreateClientWeaponFX(CLIENTWEAPONFX & theStruct)
 {
-    if (!g_pLTServer) return;
+	if (!g_pLTServer) return;
 
 	// If this is a moveable object, set the flags of fx to ignore
 	// marks and smoke...
@@ -58,7 +54,7 @@ void CreateClientWeaponFX(CLIENTWEAPONFX & theStruct)
 				{
 					if (WFX_MARK & pAmmo->pImpactFX->nFlags)
 					{
-                        CreateServerMark((CLIENTWEAPONFX)theStruct);
+						CreateServerMark((CLIENTWEAPONFX)theStruct);
 					}
 				}
 
@@ -84,31 +80,29 @@ void CreateClientWeaponFX(CLIENTWEAPONFX & theStruct)
 
 	// Tell all the clients who can see this fx about the fx...
 
-    HMESSAGEWRITE hMessage = g_pLTServer->StartInstantSpecialEffectMessage(&(theStruct.vPos));
-    g_pLTServer->WriteToMessageByte(hMessage, SFX_WEAPON_ID);
-    g_pLTServer->WriteToMessageObject(hMessage, theStruct.hFiredFrom);
-    g_pLTServer->WriteToMessageByte(hMessage, theStruct.nWeaponId);
-    g_pLTServer->WriteToMessageByte(hMessage, theStruct.nAmmoId);
-    g_pLTServer->WriteToMessageByte(hMessage, theStruct.nSurfaceType);
-    g_pLTServer->WriteToMessageWord(hMessage, theStruct.wIgnoreFX);
-    g_pLTServer->WriteToMessageByte(hMessage, theStruct.nShooterId);
-    g_pLTServer->WriteToMessageVector(hMessage, &(theStruct.vFirePos));
-    g_pLTServer->WriteToMessageVector(hMessage, &(theStruct.vPos));
-    g_pLTServer->WriteToMessageVector(hMessage, &(theStruct.vSurfaceNormal));
+	HMESSAGEWRITE hMessage = g_pLTServer->StartInstantSpecialEffectMessage(&(theStruct.vPos));
+	g_pLTServer->WriteToMessageByte(hMessage, SFX_WEAPON_ID);
+	g_pLTServer->WriteToMessageObject(hMessage, theStruct.hFiredFrom);
+	g_pLTServer->WriteToMessageByte(hMessage, theStruct.nWeaponId);
+	g_pLTServer->WriteToMessageByte(hMessage, theStruct.nAmmoId);
+	g_pLTServer->WriteToMessageByte(hMessage, theStruct.nSurfaceType);
+	g_pLTServer->WriteToMessageWord(hMessage, theStruct.wIgnoreFX);
+	g_pLTServer->WriteToMessageByte(hMessage, theStruct.nShooterId);
+	g_pLTServer->WriteToMessageVector(hMessage, &(theStruct.vFirePos));
+	g_pLTServer->WriteToMessageVector(hMessage, &(theStruct.vPos));
+	g_pLTServer->WriteToMessageVector(hMessage, &(theStruct.vSurfaceNormal));
 	// This doesn't always work correctly...
-    //g_pLTServer->WriteToMessageCompPosition(hMessage, &(theStruct.vFirePos));
-    //g_pLTServer->WriteToMessageCompPosition(hMessage, &(theStruct.vPos));
-    //g_pLTServer->WriteToMessageCompPosition(hMessage, &(theStruct.vSurfaceNormal));
-    g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLEFAST);
+	//g_pLTServer->WriteToMessageCompPosition(hMessage, &(theStruct.vFirePos));
+	//g_pLTServer->WriteToMessageCompPosition(hMessage, &(theStruct.vPos));
+	//g_pLTServer->WriteToMessageCompPosition(hMessage, &(theStruct.vSurfaceNormal));
+	g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLEFAST);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CreateServerMark
 //
-//	ROUTINE:	CreateServerMark
-//
-//	PURPOSE:	Create a server side mark
-//
+//	PURPOSE: Create a server side mark
 // ----------------------------------------------------------------------- //
 
 static void CreateServerMark(CLIENTWEAPONFX & theStruct)
@@ -126,37 +120,37 @@ static void CreateServerMark(CLIENTWEAPONFX & theStruct)
 	// If the GameBase has the max number of marks or this mark is very close
 	// to a pre-existing mark, just move that mark to the new position.
 
-    GameBase* pObj = (GameBase*) g_pLTServer->HandleToObject(theStruct.hObj);
+	GameBase* pObj = (GameBase*) g_pLTServer->HandleToObject(theStruct.hObj);
 	if (!pObj) return;
 
-    HOBJECT hMoveObj = LTNULL;
-    HOBJECT hFarObj  = LTNULL;
+	HOBJECT hMoveObj = LTNULL;
+	HOBJECT hFarObj  = LTNULL;
 
 	ObjectList* pMarkList = pObj->GetMarkList();
 	if (pMarkList)
 	{
-        uint8 nNumMarks = pMarkList->m_nInList;
+		uint8 nNumMarks = pMarkList->m_nInList;
 		ObjectLink* pLink = pMarkList->m_pFirstLink;
 
-        LTFLOAT  fClosestMarkDist  = REGION_DIAMETER;
-        LTFLOAT  fFarthestMarkDist = 0.0f;
-        uint8   nNumInRegion      = 0;
-        LTVector vPos;
+		LTFLOAT  fClosestMarkDist  = REGION_DIAMETER;
+		LTFLOAT  fFarthestMarkDist = 0.0f;
+		uint8   nNumInRegion	  = 0;
+		LTVector vPos;
 
 		for (int i=0; i < nNumMarks && pLink; i++)
 		{
 			if (pLink->m_hObject)
 			{
 				HATTACHMENT hAttachment;
-                if (LT_OK == g_pLTServer->FindAttachment(theStruct.hObj, pLink->m_hObject, &hAttachment))
+				if (LT_OK == g_pLTServer->FindAttachment(theStruct.hObj, pLink->m_hObject, &hAttachment))
 				{
 					LTransform transform;
-                    g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
+					g_pLTServer->Common()->GetAttachmentTransform(hAttachment, transform, LTTRUE);
 
 					vPos = transform.m_Pos;
 				}
 
-                LTFLOAT fDist = VEC_DISTSQR(vPos, theStruct.vPos);
+				LTFLOAT fDist = VEC_DISTSQR(vPos, theStruct.vPos);
 				if (fDist < REGION_DIAMETER)
 				{
 					if (fDist < fClosestMarkDist)
@@ -192,7 +186,7 @@ static void CreateServerMark(CLIENTWEAPONFX & theStruct)
 		}
 		else
 		{
-            hMoveObj = LTNULL; // Need to create one...
+			hMoveObj = LTNULL; // Need to create one...
 		}
 	}
 
@@ -200,19 +194,19 @@ static void CreateServerMark(CLIENTWEAPONFX & theStruct)
 
 	if (hMoveObj && IsKindOf(hMoveObj, "CServerMark"))
 	{
-        CServerMark* pMoveMark = (CServerMark*) g_pLTServer->HandleToObject(hMoveObj);
+		CServerMark* pMoveMark = (CServerMark*) g_pLTServer->HandleToObject(hMoveObj);
 		if (!pMoveMark) return;
 
 		// Since this mark is already attached to pObj, remove the attachment
 		// (since CServerMark::Setup() will re-attach it)...
 
 		HATTACHMENT hAttachment;
-        if (LT_OK == g_pLTServer->FindAttachment(theStruct.hObj, hMoveObj, &hAttachment))
+		if (LT_OK == g_pLTServer->FindAttachment(theStruct.hObj, hMoveObj, &hAttachment))
 		{
-            g_pLTServer->RemoveAttachment(hAttachment);
+			g_pLTServer->RemoveAttachment(hAttachment);
 		}
 
-        pMoveMark->Setup((CLIENTWEAPONFX)theStruct);
+		pMoveMark->Setup((CLIENTWEAPONFX)theStruct);
 		return;
 	}
 
@@ -222,7 +216,7 @@ static void CreateServerMark(CLIENTWEAPONFX & theStruct)
 	ObjectCreateStruct createStruct;
 	INIT_OBJECTCREATESTRUCT(createStruct);
 
-    LTFLOAT fScaleAdjust = 1.0f;
+	LTFLOAT fScaleAdjust = 1.0f;
 	if (!GetImpactSprite((SurfaceType)theStruct.nSurfaceType, fScaleAdjust,
 		theStruct.nAmmoId, createStruct.m_Filename, ARRAY_LEN(createStruct.m_Filename)))
 	{
@@ -233,11 +227,11 @@ static void CreateServerMark(CLIENTWEAPONFX & theStruct)
 	createStruct.m_Flags = FLAG_VISIBLE | FLAG_NOLIGHT | FLAG_ROTATEABLESPRITE;
 	createStruct.m_Pos = theStruct.vPos;
 
-    g_pLTServer->AlignRotation(&(createStruct.m_Rotation), &((LTVector)theStruct.vSurfaceNormal), LTNULL);
+	g_pLTServer->AlignRotation(&(createStruct.m_Rotation), &((LTVector)theStruct.vSurfaceNormal), LTNULL);
 
 
-    HCLASS hClass = g_pLTServer->GetClass("CServerMark");
-    CServerMark* pMark = (CServerMark*) g_pLTServer->CreateObject(hClass, &createStruct);
+	HCLASS hClass = g_pLTServer->GetClass("CServerMark");
+	CServerMark* pMark = (CServerMark*) g_pLTServer->CreateObject(hClass, &createStruct);
 	if (!pMark) return;
 
 	// Add the mark to the object...
@@ -249,11 +243,11 @@ static void CreateServerMark(CLIENTWEAPONFX & theStruct)
 
 	if (pAmmo->pImpactFX)
 	{
-        LTFLOAT fScale = fScaleAdjust * pAmmo->pImpactFX->fMarkScale;
+		LTFLOAT fScale = fScaleAdjust * pAmmo->pImpactFX->fMarkScale;
 
-        LTVector vScale;
+		LTVector vScale;
 		VEC_SET(vScale, fScale, fScale, fScale);
-        g_pLTServer->ScaleObject(pMark->m_hObject, &vScale);
+		g_pLTServer->ScaleObject(pMark->m_hObject, &vScale);
 	}
 
 	pMark->Setup((CLIENTWEAPONFX)theStruct);
@@ -262,11 +256,9 @@ static void CreateServerMark(CLIENTWEAPONFX & theStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CreateExitMark
 //
-//	ROUTINE:	CreateExitMark
-//
-//	PURPOSE:	Create a server side exit mark
-//
+//	PURPOSE: Create a server side exit mark
 // ----------------------------------------------------------------------- //
 
 static void CreateServerExitMark(const CLIENTWEAPONFX & theStruct)
@@ -282,29 +274,29 @@ static void CreateServerExitMark(const CLIENTWEAPONFX & theStruct)
 	IntersectQuery qInfo;
 	IntersectInfo iInfo;
 
-    LTVector vDir = theStruct.vPos - theStruct.vFirePos;
+	LTVector vDir = theStruct.vPos - theStruct.vFirePos;
 	vDir.Norm();
 
-    qInfo.m_From = theStruct.vPos + (vDir * (LTFLOAT)(nMaxThickness + 1));
+	qInfo.m_From = theStruct.vPos + (vDir * (LTFLOAT)(nMaxThickness + 1));
 	qInfo.m_To   = theStruct.vPos;
 
 	qInfo.m_Flags = INTERSECT_OBJECTS | IGNORE_NONSOLID | INTERSECT_HPOLY;
 
 	SurfaceType eType = ST_UNKNOWN;
 
-    if (g_pLTServer->IntersectSegment(&qInfo, &iInfo))
+	if (g_pLTServer->IntersectSegment(&qInfo, &iInfo))
 	{
 		eType = GetSurfaceType(iInfo);
 		if (ShowsMark(eType))
 		{
-            LTRotation rNormRot;
-            g_pLTServer->AlignRotation(&rNormRot, &(iInfo.m_Plane.m_Normal), LTNULL);
+			LTRotation rNormRot;
+			g_pLTServer->AlignRotation(&rNormRot, &(iInfo.m_Plane.m_Normal), LTNULL);
 
 			CLIENTWEAPONFX exitStruct = theStruct;
 			exitStruct.vPos = iInfo.m_Point + vDir;
 			exitStruct.vSurfaceNormal = iInfo.m_Plane.m_Normal;
 
-            CreateServerMark(exitStruct);
+			CreateServerMark(exitStruct);
 		}
 	}
 }

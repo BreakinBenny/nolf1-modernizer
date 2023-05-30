@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: DestructibleModel.h
 //
-// MODULE  : DestructibleModel.h
+// PURPOSE: Destructible model aggregate class
 //
-// PURPOSE : Destructible model aggregate class
-//
-// CREATED : 4/23/98
+// CREATED: 4/23/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __DESTRUCTABLE_MODEL_H__
@@ -45,7 +43,7 @@ class CDestructibleModelPlugin : public IObjectPlugin
 
   public:
 
-    virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
+	virtual LTRESULT PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
   private:
 	CDebrisPlugin		m_DebrisPlugin;
@@ -59,18 +57,18 @@ class CDestructibleModel : public CDestructible
 		CDestructibleModel();
 		virtual ~CDestructibleModel();
 
-        void        DoExplosion(char* pTargetName=LTNULL);
+		void		DoExplosion(char* pTargetName=LTNULL);
 
-        uint8       m_nDebrisId;
+		uint8	   m_nDebrisId;
 
-        LTBOOL      m_bCreatedDebris;
+		LTBOOL	  m_bCreatedDebris;
 
-        LTBOOL      m_bCreateExplosion;
-        uint8       m_nExplosionWeaponId;
-        LTBOOL      m_bFireAlongForward;
-        LTFLOAT     m_fDamageFactor;
+		LTBOOL	  m_bCreateExplosion;
+		uint8	   m_nExplosionWeaponId;
+		LTBOOL	  m_bFireAlongForward;
+		LTFLOAT	 m_fDamageFactor;
 
-        LTBOOL      m_bRemoveOnDeath;
+		LTBOOL	  m_bRemoveOnDeath;
 
 		HSTRING		m_hstrSpawn;
 		HSTRING		m_hstrSurfaceOverride;
@@ -81,18 +79,18 @@ class CDestructibleModel : public CDestructible
 
 	protected:
 
-        uint32  EngineMessageFn(LPBASECLASS pObject, uint32 messageID, void *pData, LTFLOAT lData);
-        uint32  ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		uint32  EngineMessageFn(LPBASECLASS pObject, uint32 messageID, void *pData, LTFLOAT lData);
+		uint32  ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 
-        LTBOOL   ReadProp(ObjectCreateStruct *);
+		LTBOOL   ReadProp(ObjectCreateStruct *);
 		void	CreateWorldModelDebris();
 		void	CreateDebris();
 		void	SetSurfaceType();
 
 	private :
 
-        void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 		void CacheFiles();
 		void SpawnItem();
 };

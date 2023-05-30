@@ -30,7 +30,7 @@ IMPLEMENT_FACTORY(CBodyStateFade, 0)
 
 void CBodyState::Constructor()
 {
-    m_pBody = LTNULL;
+	m_pBody = LTNULL;
 }
 
 void CBodyState::Destructor()
@@ -54,10 +54,10 @@ void CBodyState::Init(Body* pBody)
 	dwFlags |= FLAG_TOUCH_NOTIFY;
 	dwFlags |= FLAG_RAYHIT;
 
-    g_pLTServer->SetObjectFlags(m_pBody->m_hObject, dwFlags);
+	g_pLTServer->SetObjectFlags(m_pBody->m_hObject, dwFlags);
 
-    g_pLTServer->SetVelocity(m_pBody->m_hObject, &LTVector(0,0,0));
-    g_pLTServer->SetAcceleration(m_pBody->m_hObject, &LTVector(0,0,0));
+	g_pLTServer->SetVelocity(m_pBody->m_hObject, &LTVector(0,0,0));
+	g_pLTServer->SetAcceleration(m_pBody->m_hObject, &LTVector(0,0,0));
 }
 
 void CBodyState::InitLoad(Body* pBody)
@@ -83,7 +83,7 @@ void CBodyStateNormal::Init(Body* pBody)
 
 	if(!s_LifetimeTrack.IsInitted())
 	{
-        s_LifetimeTrack.Init(g_pLTServer, "BodyLifetime", NULL, 30.0f);
+		s_LifetimeTrack.Init(g_pLTServer, "BodyLifetime", NULL, 30.0f);
 	}
 }
 
@@ -93,7 +93,7 @@ void CBodyStateNormal::InitLoad(Body* pBody)
 
 	if(!s_LifetimeTrack.IsInitted())
 	{
-        s_LifetimeTrack.Init(g_pLTServer, "BodyLifetime", NULL, 30.0f);
+		s_LifetimeTrack.Init(g_pLTServer, "BodyLifetime", NULL, 30.0f);
 	}
 }
 
@@ -107,7 +107,7 @@ void CBodyStateNormal::Update()
 		return;
 	}
 
-    LTFLOAT fTime = g_pLTServer->GetTime();
+	LTFLOAT fTime = g_pLTServer->GetTime();
 
 	if (!m_pBody->m_hObject || !g_pGameServerShell) return;
 
@@ -155,9 +155,9 @@ void CBodyStateStairs::Constructor()
 {
 	CBodyState::Constructor();
 
-    m_vDir = LTVector(0,0,0);
+	m_vDir = LTVector(0,0,0);
 	m_iVolume = -1;
-    m_bFell = LTFALSE;
+	m_bFell = LTFALSE;
 }
 
 void CBodyStateStairs::Destructor()
@@ -169,9 +169,9 @@ void CBodyStateStairs::Init(Body* pBody)
 {
 	CBodyState::Init(pBody);
 
-    LTVector vPos, vDims;
-    g_pLTServer->GetObjectPos(m_pBody->m_hObject, &vPos);
-    g_pLTServer->GetObjectDims(m_pBody->m_hObject, &vDims);
+	LTVector vPos, vDims;
+	g_pLTServer->GetObjectPos(m_pBody->m_hObject, &vPos);
+	g_pLTServer->GetObjectDims(m_pBody->m_hObject, &vDims);
 
 	CAIVolume* pVolume = g_pAIVolumeMgr->FindContainingVolume(vPos, 64.0f/*vDims.y*/);
 	_ASSERT(pVolume && pVolume->HasStairs());
@@ -192,15 +192,15 @@ void CBodyStateStairs::Init(Body* pBody)
 
 	if ( m_vDir.Dot(vForward) > 0.0f )
 	{
-	    m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairsStart");
+		m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairsStart");
 	}
 	else
 	{
-	    m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairsBack");
+		m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairsBack");
 	}
 
-    m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairs");
-    m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairsStop");
+	m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairs");
+	m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairsStop");
 
 	// Face down the stairs
 
@@ -211,30 +211,30 @@ void CBodyStateStairs::InitLoad(Body* pBody)
 {
 	CBodyState::InitLoad(pBody);
 
-    m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairsStart");
-    m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairs");
-    m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairsStop");
+	m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairsStart");
+	m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairs");
+	m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallDownStairsStop");
 }
 
 void CBodyStateStairs::Update()
 {
 	CBodyState::Update();
 
-    LTVector vPos, vDims;
-    g_pLTServer->GetObjectPos(m_pBody->m_hObject, &vPos);
-    g_pLTServer->GetObjectDims(m_pBody->m_hObject, &vDims);
+	LTVector vPos, vDims;
+	g_pLTServer->GetObjectPos(m_pBody->m_hObject, &vPos);
+	g_pLTServer->GetObjectDims(m_pBody->m_hObject, &vDims);
 
 	CAIVolume* pVolume = g_pAIVolumeMgr->FindContainingVolume(vPos, 64.0f/*vDims.y*2.0f*/, m_iVolume == -1 ? LTNULL : g_pAIVolumeMgr->GetVolumeByIndex(m_iVolume), LTFALSE);
-    LTBOOL bInside = pVolume && pVolume->HasStairs();
+	LTBOOL bInside = pVolume && pVolume->HasStairs();
 
 	if ( !bInside )
 	{
 		CAIVolume* pLastVolume = g_pAIVolumeMgr->GetVolumeByIndex(m_iVolume);
 
-        HMODELANIM hAni = g_pLTServer->GetModelAnimation(m_pBody->m_hObject);
+		HMODELANIM hAni = g_pLTServer->GetModelAnimation(m_pBody->m_hObject);
 		if ( hAni == m_hAniStop )
 		{
-            if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
+			if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
 			{
 				m_pBody->SetState(eBodyStateNormal);
 				return;
@@ -242,8 +242,8 @@ void CBodyStateStairs::Update()
 		}
 		else
 		{
-            g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStop);
-            g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
+			g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStop);
+			g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
 		}
 
 		if ( pVolume && pVolume->Inside2dLoose(vPos, 36.0f) )
@@ -264,42 +264,42 @@ void CBodyStateStairs::Update()
 		if ( m_bFell )
 		{
 			const static LTFLOAT fStairsFallSpeed = g_pServerButeMgr->GetBodyStairsFallSpeed();
-            LTVector vNewPos = vPos + pVolume->GetStairsDir()*g_pLTServer->GetFrameTime()*fStairsFallSpeed;
+			LTVector vNewPos = vPos + pVolume->GetStairsDir()*g_pLTServer->GetFrameTime()*fStairsFallSpeed;
 
 			IntersectQuery IQuery;
 			IntersectInfo IInfo;
 
 			VEC_COPY(IQuery.m_From, vNewPos);
-            VEC_COPY(IQuery.m_To, vNewPos+LTVector(0,-256.0f,0));
+			VEC_COPY(IQuery.m_To, vNewPos+LTVector(0,-256.0f,0));
 			IQuery.m_Flags = INTERSECT_OBJECTS | IGNORE_NONSOLID;
 			IQuery.m_FilterFn = GroundFilterFn;
 
 			g_cIntersectSegmentCalls++;
-            if (g_pLTServer->IntersectSegment(&IQuery, &IInfo) && ((IsMainWorld(IInfo.m_hObject)) || (OT_WORLDMODEL == g_pLTServer->GetObjectType(IInfo.m_hObject))))
+			if (g_pLTServer->IntersectSegment(&IQuery, &IInfo) && ((IsMainWorld(IInfo.m_hObject)) || (OT_WORLDMODEL == g_pLTServer->GetObjectType(IInfo.m_hObject))))
 			{
 				vNewPos.y = IInfo.m_Point.y + vDims.y;
 			}
 
 			// TODO: for reasons unbeknownst to me, calling TeleportObject causes the Body to jerk around
-            g_pLTServer->MoveObject(m_pBody->m_hObject, &vNewPos);
+			g_pLTServer->MoveObject(m_pBody->m_hObject, &vNewPos);
 		}
 		else
 		{
-            HMODELANIM hAni = g_pLTServer->GetModelAnimation(m_pBody->m_hObject);
+			HMODELANIM hAni = g_pLTServer->GetModelAnimation(m_pBody->m_hObject);
 			if ( hAni == m_hAniStart )
 			{
-                if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
+				if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
 				{
-                    m_bFell = LTTRUE;
+					m_bFell = LTTRUE;
 
-                    g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniLoop);
-                    g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTTRUE);
+					g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniLoop);
+					g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTTRUE);
 				}
 			}
 			else
 			{
-                g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStart);
-                g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
+				g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStart);
+				g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
 			}
 		}
 	}
@@ -335,7 +335,7 @@ void CBodyStateLedge::Constructor()
 	CBodyState::Constructor();
 
 	m_fTimer = 0.0f;
-    m_vVelocity = LTVector(0,0,0);
+	m_vVelocity = LTVector(0,0,0);
 	m_iVolume = -1;
 	m_eState = eLeaning;
 }
@@ -349,9 +349,9 @@ void CBodyStateLedge::Init(Body* pBody)
 {
 	CBodyState::Init(pBody);
 
-    LTVector vPos, vDims;
-    g_pLTServer->GetObjectPos(m_pBody->m_hObject, &vPos);
-    g_pLTServer->GetObjectDims(m_pBody->m_hObject, &vDims);
+	LTVector vPos, vDims;
+	g_pLTServer->GetObjectPos(m_pBody->m_hObject, &vPos);
+	g_pLTServer->GetObjectDims(m_pBody->m_hObject, &vDims);
 
 	CAIVolume* pVolume = g_pAIVolumeMgr->FindContainingVolume(vPos, 64.0f/*vDims.y*/);
 	_ASSERT(pVolume && pVolume->HasLedge());
@@ -378,8 +378,8 @@ void CBodyStateLedge::Init(Body* pBody)
 		m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallOffLedgeBack");
 	}
 
-    m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallOffLedge");
-    m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallOffLedgeStop");
+	m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallOffLedge");
+	m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallOffLedgeStop");
 
 	// Face over the ledge
 
@@ -389,24 +389,24 @@ void CBodyStateLedge::Init(Body* pBody)
 
 	m_eState = eLeaning;
 
-    g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStart);
-    g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
+	g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStart);
+	g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
 
 	// Get the length of the animation
 
-    LTAnimTracker* pat;
+	LTAnimTracker* pat;
 	g_pModelLT->GetMainTracker(m_pBody->m_hObject, pat);
 
-    uint32 dwLength;
+	uint32 dwLength;
 	g_pModelLT->GetCurAnimLength(pat, dwLength);
-    m_fTimer = (LTFLOAT)dwLength/1000.0f;
+	m_fTimer = (LTFLOAT)dwLength/1000.0f;
 
 	// Figure out the dims of the volume
 
 	LTFLOAT fWidth = (LTFLOAT)fabs(pVolume->GetFrontTopLeft().x - pVolume->GetFrontTopRight().x);
-    LTFLOAT fLength = (LTFLOAT)fabs(pVolume->GetFrontTopLeft().z - pVolume->GetBackTopLeft().z);
+	LTFLOAT fLength = (LTFLOAT)fabs(pVolume->GetFrontTopLeft().z - pVolume->GetBackTopLeft().z);
 
-    m_vVelocity = pVolume->GetLedgeDir()*(24.0f + Min<LTFLOAT>(fWidth, fLength) + vDims.x*2.0f)/m_fTimer;
+	m_vVelocity = pVolume->GetLedgeDir()*(24.0f + Min<LTFLOAT>(fWidth, fLength) + vDims.x*2.0f)/m_fTimer;
 
 	// Teleport us to the edge of the volume
 
@@ -439,8 +439,8 @@ void CBodyStateLedge::InitLoad(Body* pBody)
 	CBodyState::InitLoad(pBody);
 
 	m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallOffLedgeStart");
-    m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallOffLedge");
-    m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallOffLedgeStop");
+	m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallOffLedge");
+	m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "FallOffLedgeStop");
 }
 
 void CBodyStateLedge::Update()
@@ -449,12 +449,12 @@ void CBodyStateLedge::Update()
 
 	if ( m_eState == eLanding )
 	{
-        HMODELANIM hAni = g_pLTServer->GetModelAnimation(m_pBody->m_hObject);
+		HMODELANIM hAni = g_pLTServer->GetModelAnimation(m_pBody->m_hObject);
 		if ( hAni == m_hAniStop )
 		{
 			// If the land ani is done, we're done with the whole state...
 
-            if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
+			if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
 			{
 				m_pBody->SetState(eBodyStateNormal);
 				return;
@@ -467,13 +467,13 @@ void CBodyStateLedge::Update()
 	}
 	else if ( m_eState == eLeaning )
 	{
-        HMODELANIM hAni = g_pLTServer->GetModelAnimation(m_pBody->m_hObject);
-        if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
+		HMODELANIM hAni = g_pLTServer->GetModelAnimation(m_pBody->m_hObject);
+		if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
 		{
 			// If the start ani ends before we're done, do the falling ani.
 
-            g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniLoop);
-            g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTTRUE);
+			g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniLoop);
+			g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTTRUE);
 			m_eState = eFalling;
 
 			// Teleport us over the edge
@@ -505,10 +505,10 @@ void CBodyStateLedge::Update()
 
 			// Turn all the goodness back on
 
-            uint32 dwFlags = g_pLTServer->GetObjectFlags(m_pBody->m_hObject);
+			uint32 dwFlags = g_pLTServer->GetObjectFlags(m_pBody->m_hObject);
 			dwFlags &= ~FLAG_GOTHRUWORLD;
 			dwFlags |= FLAG_GRAVITY;
-            g_pLTServer->SetObjectFlags(m_pBody->m_hObject, dwFlags);
+			g_pLTServer->SetObjectFlags(m_pBody->m_hObject, dwFlags);
 
 			g_pLTServer->SetVelocity(m_pBody->m_hObject, &LTVector(pVolume->GetLedgeDir().x*100.0f,-500,pVolume->GetLedgeDir().y*100.0f));
 		}
@@ -521,8 +521,8 @@ void CBodyStateLedge::HandleTouch(HOBJECT hObject)
 
 	if ( m_eState == eFalling )
 	{
-        g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStop);
-        g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
+		g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStop);
+		g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
 
 		m_eState = eLanding;
 	}
@@ -554,7 +554,7 @@ void CBodyStateUnderwater::Constructor()
 {
 	CBodyState::Constructor();
 
-    m_bStop = LTFALSE;
+	m_bStop = LTFALSE;
 }
 
 void CBodyStateUnderwater::Destructor()
@@ -566,9 +566,9 @@ void CBodyStateUnderwater::Init(Body* pBody)
 {
 	CBodyState::Init(pBody);
 
-    m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeathStart");
-    m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeath");
-    m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeathStop");
+	m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeathStart");
+	m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeath");
+	m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeathStop");
 
 	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_pBody->m_hObject);
 	dwFlags &= ~FLAG_GOTHRUWORLD;
@@ -580,9 +580,9 @@ void CBodyStateUnderwater::InitLoad(Body* pBody)
 {
 	CBodyState::InitLoad(pBody);
 
-    m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeathStart");
-    m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeath");
-    m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeathStop");
+	m_hAniStart = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeathStart");
+	m_hAniLoop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeath");
+	m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "SwimDeathStop");
 }
 
 void CBodyStateUnderwater::Update()
@@ -591,41 +591,41 @@ void CBodyStateUnderwater::Update()
 
 	// Update our animations
 
-    HMODELANIM hAni = g_pLTServer->GetModelAnimation(m_pBody->m_hObject);
+	HMODELANIM hAni = g_pLTServer->GetModelAnimation(m_pBody->m_hObject);
 	if ( hAni == m_hAniStart )
 	{
-        if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
+		if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
 		{
-            g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniLoop);
-            g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTTRUE);
+			g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniLoop);
+			g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTTRUE);
 		}
 	}
 	else if ( hAni == m_hAniLoop )
 	{
 		// Drift us downwards
 
-        LTVector vPos;
-        g_pLTServer->GetObjectPos(m_pBody->m_hObject, &vPos);
-        vPos += LTVector(0,-36.0f,0)*g_pLTServer->GetFrameTime();
-        g_pLTServer->MoveObject(m_pBody->m_hObject, &vPos);
+		LTVector vPos;
+		g_pLTServer->GetObjectPos(m_pBody->m_hObject, &vPos);
+		vPos += LTVector(0,-36.0f,0)*g_pLTServer->GetFrameTime();
+		g_pLTServer->MoveObject(m_pBody->m_hObject, &vPos);
 
 		if ( m_bStop )
 		{
-            g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStop);
-            g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
+			g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStop);
+			g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
 		}
 	}
 	else if ( hAni == m_hAniStop )
 	{
-        if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
+		if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
 		{
 			m_pBody->SetState(eBodyStateNormal);
 		}
 	}
 	else
 	{
-        g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStart);
-        g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
+		g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStart);
+		g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
 	}
 }
 
@@ -635,7 +635,7 @@ void CBodyStateUnderwater::HandleTouch(HOBJECT hObject)
 
 	if ( IsMainWorld(hObject) || (OT_WORLDMODEL == g_pLTServer->GetObjectType(hObject)) )
 	{
-        m_bStop = LTTRUE;
+		m_bStop = LTTRUE;
 	}
 }
 
@@ -673,16 +673,16 @@ void CBodyStateLaser::Init(Body* pBody)
 	createstruct.Clear();
 
 	char szFileName[256], szSkinName[256];
-    g_pLTServer->GetModelFilenames(pBody->m_hObject, szFileName, ARRAY_LEN(szFileName), szSkinName, ARRAY_LEN(szSkinName));
+	g_pLTServer->GetModelFilenames(pBody->m_hObject, szFileName, ARRAY_LEN(szFileName), szSkinName, ARRAY_LEN(szSkinName));
 
 	SAFE_STRCPY(createstruct.m_Filename, szFileName);
 	SAFE_STRCPY(createstruct.m_SkinNames[0], "SFX\\Debris\\Skins\\Feather.dtx");
 	SAFE_STRCPY(createstruct.m_SkinNames[1], "SFX\\Debris\\Skins\\Feather.dtx");
 
-    g_pLTServer->Common()->SetObjectFilenames(pBody->m_hObject, &createstruct);
+	g_pLTServer->Common()->SetObjectFilenames(pBody->m_hObject, &createstruct);
 */
 	static const char* aszDeathLasers[] = { "DLaser1", "DLaser2", "DLaser3", "DLaser4" };
-    static const int cDeathLasers = sizeof(aszDeathLasers)/sizeof(const char*);
+	static const int cDeathLasers = sizeof(aszDeathLasers)/sizeof(const char*);
 
 	HMODELANIM hAni = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, (char*)aszDeathLasers[GetRandom(0, cDeathLasers-1)]);
 
@@ -749,13 +749,13 @@ void CBodyStateDecay::Init(Body* pBody)
 	createstruct.Clear();
 
 	char szFileName[256], szSkinName[256];
-    g_pLTServer->GetModelFilenames(pBody->m_hObject, szFileName, ARRAY_LEN(szFileName), szSkinName, ARRAY_LEN(szSkinName));
+	g_pLTServer->GetModelFilenames(pBody->m_hObject, szFileName, ARRAY_LEN(szFileName), szSkinName, ARRAY_LEN(szSkinName));
 
 	SAFE_STRCPY(createstruct.m_Filename, szFileName);
 	SAFE_STRCPY(createstruct.m_SkinNames[0], "SFX\\Debris\\Skins\\Feather.dtx");
 	SAFE_STRCPY(createstruct.m_SkinNames[1], "SFX\\Debris\\Skins\\Feather.dtx");
 
-    g_pLTServer->Common()->SetObjectFilenames(pBody->m_hObject, &createstruct);
+	g_pLTServer->Common()->SetObjectFilenames(pBody->m_hObject, &createstruct);
 */
 	m_pBody->SetState(eBodyStateFade);
 /*
@@ -888,7 +888,7 @@ void CBodyStateCrush::Init(Body* pBody)
 	CBodyState::Init(pBody);
 
 	static char* aszCrushDeaths[] = { "DCrush" };
-    static int cCrushDeaths = sizeof(aszCrushDeaths)/sizeof(char*);
+	static int cCrushDeaths = sizeof(aszCrushDeaths)/sizeof(char*);
 	char* szDeath = aszCrushDeaths[GetRandom(0, cCrushDeaths-1)];
 
 	HMODELANIM hAni = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, szDeath);
@@ -921,7 +921,7 @@ void CBodyStateChair::Init(Body* pBody)
 	CBodyState::Init(pBody);
 
 	static char* aszChairDeaths[] = { "DSit2" /*, "DSitFall"*/ };
-    static int cChairDeaths = sizeof(aszChairDeaths)/sizeof(char*);
+	static int cChairDeaths = sizeof(aszChairDeaths)/sizeof(char*);
 	char* szDeath = aszChairDeaths[GetRandom(0, cChairDeaths-1)];
 
 	HMODELANIM hAni = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, szDeath);
@@ -954,7 +954,7 @@ void CBodyStatePoison::Init(Body* pBody)
 	CBodyState::Init(pBody);
 
 	static char* aszPoisonDeaths[] = { "DPoison" };
-    static int cPoisonDeaths = sizeof(aszPoisonDeaths)/sizeof(char*);
+	static int cPoisonDeaths = sizeof(aszPoisonDeaths)/sizeof(char*);
 	char* szDeath = aszPoisonDeaths[GetRandom(0, cPoisonDeaths-1)];
 
 	HMODELANIM hAni = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, szDeath);
@@ -987,7 +987,7 @@ void CBodyStateAcid::Init(Body* pBody)
 	CBodyState::Init(pBody);
 
 	static char* aszAcidDeaths[] = { "DAcid" };
-    static int cAcidDeaths = sizeof(aszAcidDeaths)/sizeof(char*);
+	static int cAcidDeaths = sizeof(aszAcidDeaths)/sizeof(char*);
 	char* szDeath = aszAcidDeaths[GetRandom(0, cAcidDeaths-1)];
 
 	HMODELANIM hAni = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, szDeath);
@@ -1020,7 +1020,7 @@ void CBodyStateArrow::Init(Body* pBody)
 	CBodyState::Init(pBody);
 
 	static char* aszArrowDeaths[] = { "DArrow" };
-    static int cArrowDeaths = sizeof(aszArrowDeaths)/sizeof(char*);
+	static int cArrowDeaths = sizeof(aszArrowDeaths)/sizeof(char*);
 	char* szDeath = aszArrowDeaths[GetRandom(0, cArrowDeaths-1)];
 
 	HMODELANIM hAni = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, szDeath);
@@ -1120,27 +1120,27 @@ void CBodyStateExplode::Init(Body* pBody)
 		m_hAniStop = g_pLTServer->GetAnimIndex(m_pBody->m_hObject, "DXBStop");
 	}
 
-    g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStart);
-    g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
+	g_pLTServer->SetModelAnimation(m_pBody->m_hObject, m_hAniStart);
+	g_pLTServer->SetModelLooping(m_pBody->m_hObject, LTFALSE);
 
 	// Make us non solid
 
-    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_pBody->m_hObject);
+	uint32 dwFlags = g_pLTServer->GetObjectFlags(m_pBody->m_hObject);
 	dwFlags |= FLAG_GRAVITY;
 	dwFlags &= ~FLAG_GOTHRUWORLD;
-    g_pLTServer->SetObjectFlags(m_pBody->m_hObject, dwFlags);
+	g_pLTServer->SetObjectFlags(m_pBody->m_hObject, dwFlags);
 
 	// Give us some velocity
 
 	static CVarTrack cvBodyExplodeVelocity;
 	if ( !cvBodyExplodeVelocity.IsInitted() )
 	{
-        cvBodyExplodeVelocity.Init(g_pLTServer, "BodyExplodeVelocity", LTNULL, 200.0f);
+		cvBodyExplodeVelocity.Init(g_pLTServer, "BodyExplodeVelocity", LTNULL, 200.0f);
 	}
 
 //	g_pLTServer->CPrint("vel = %f", cvBodyExplodeVelocity.GetFloat());
-    LTVector vTemp(vDir*cvBodyExplodeVelocity.GetFloat());
-    g_pLTServer->SetVelocity(m_pBody->m_hObject, &vTemp);
+	LTVector vTemp(vDir*cvBodyExplodeVelocity.GetFloat());
+	g_pLTServer->SetVelocity(m_pBody->m_hObject, &vTemp);
 }
 
 void CBodyStateExplode::InitLoad(Body* pBody)
@@ -1154,7 +1154,7 @@ void CBodyStateExplode::InitLoad(Body* pBody)
 
 LTBOOL FlyingFilterFn(HOBJECT hObj, void *pUserData)
 {
-    if ( !hObj ) return LTFALSE;
+	if ( !hObj ) return LTFALSE;
 
 	uint32 dwFlags;
 	dwFlags = g_pLTServer->GetObjectFlags(hObj);
@@ -1215,7 +1215,7 @@ void CBodyStateExplode::Update()
 		m_pBody->SetState(eBodyStateNormal);
 	}
 
-    if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
+	if ( g_pLTServer->GetModelPlaybackState(m_pBody->m_hObject) & MS_PLAYDONE )
 	{
 		if ( g_pLTServer->GetModelAnimation(m_pBody->m_hObject) == m_hAniStart )
 		{

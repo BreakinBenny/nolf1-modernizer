@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Mine.cpp
 //
-// MODULE  : Mine.cpp
+// PURPOSE: Mine - Definition
 //
-// PURPOSE : Mine - Definition
-//
-// CREATED : 2/26/00
+// CREATED: 2/26/00
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -18,12 +16,12 @@ BEGIN_CLASS(Mine)
 // Parent overrides...
 
 	ADD_STRINGPROP_FLAG(ImpactFXName, "Mine", PF_STATICLIST)
-    ADD_BOOLPROP_FLAG(RemoveWhenDone, LTTRUE, PF_HIDDEN)
+	ADD_BOOLPROP_FLAG(RemoveWhenDone, LTTRUE, PF_HIDDEN)
 
 
 // New properties...
 
-    ADD_BOOLPROP(MoveToFloor, LTTRUE)
+	ADD_BOOLPROP(MoveToFloor, LTTRUE)
 
 	ADD_VECTORPROP_VAL_FLAG(Dims, 25.0f, 25.0f, 25.0f, PF_DIMS)
 	ADD_REALPROP_FLAG(ActivateDelay, 0.1f, 0)
@@ -31,11 +29,9 @@ BEGIN_CLASS(Mine)
 END_CLASS_DEFAULT_FLAGS(Mine, Explosion, NULL, NULL, 0)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Mine::Mine()
 //
-//	ROUTINE:	Mine::Mine()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 Mine::Mine() : Explosion()
@@ -43,16 +39,14 @@ Mine::Mine() : Explosion()
 	m_fActivateDelay = 0.2f;
 	m_vDims.Init(25, 25, 25);
 
-    m_bMoveToFloor  = LTTRUE;
+	m_bMoveToFloor  = LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Mine::EngineMessageFn
 //
-//	ROUTINE:	Mine::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 Mine::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -69,15 +63,15 @@ uint32 Mine::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 		{
 			if (fData != INITIALUPDATE_SAVEGAME)
 			{
-                g_pLTServer->SetObjectDims(m_hObject, &m_vDims);
+				g_pLTServer->SetObjectDims(m_hObject, &m_vDims);
 
 				m_fxcs.fMinRadius = (m_vDims.x + m_vDims.y + m_vDims.z) / 3.0f;
 				m_fxcs.fMaxRadius = m_fDamageRadius;
 
-                HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
-                g_pLTServer->WriteToMessageByte(hMessage, SFX_MINE_ID);
-                m_fxcs.Write(g_pLTServer, hMessage);
-                g_pLTServer->EndMessage(hMessage);
+				HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
+				g_pLTServer->WriteToMessageByte(hMessage, SFX_MINE_ID);
+				m_fxcs.Write(g_pLTServer, hMessage);
+				g_pLTServer->EndMessage(hMessage);
 
 				if (m_bMoveToFloor)
 				{
@@ -114,13 +108,13 @@ uint32 Mine::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -131,39 +125,35 @@ uint32 Mine::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Mine::ReadProp
 //
-//	ROUTINE:	Mine::ReadProp
-//
-//	PURPOSE:	Read object properties
-//
+//	PURPOSE: Read object properties
 // ----------------------------------------------------------------------- //
 
 void Mine::ReadProp()
 {
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("ActivateDelay", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ActivateDelay", &genProp) == LT_OK)
 	{
 		m_fActivateDelay = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Dims", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Dims", &genProp) == LT_OK)
 	{
 		m_vDims = genProp.m_Vec;
 	}
 
-    if (g_pLTServer->GetPropGeneric("MoveToFloor", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("MoveToFloor", &genProp) == LT_OK)
 	{
 		 m_bMoveToFloor = genProp.m_Bool;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Mine::TouchNotify
 //
-//	ROUTINE:	Mine::TouchNotify
-//
-//	PURPOSE:	Handle character touch
-//
+//	PURPOSE: Handle character touch
 // ----------------------------------------------------------------------- //
 
 void Mine::TouchNotify(HOBJECT hObj)
@@ -175,7 +165,7 @@ void Mine::TouchNotify(HOBJECT hObj)
 
 	if (m_fActivateDelay > 0.0f)
 	{
-        g_pLTServer->SetNextUpdate(m_hObject, m_fActivateDelay);
+		g_pLTServer->SetNextUpdate(m_hObject, m_fActivateDelay);
 	}
 	else
 	{
@@ -184,11 +174,9 @@ void Mine::TouchNotify(HOBJECT hObj)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Mine::Update
 //
-//	ROUTINE:	Mine::Update
-//
-//	PURPOSE:	Handle updates
-//
+//	PURPOSE: Handle updates
 // ----------------------------------------------------------------------- //
 
 void Mine::Update()
@@ -197,45 +185,39 @@ void Mine::Update()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Mine::GetBoundingBoxColor()
 //
-//	ROUTINE:	Mine::GetBoundingBoxColor()
-//
-//	PURPOSE:	Get the color of the bounding box
-//
+//	PURPOSE: Get the color of the bounding box
 // ----------------------------------------------------------------------- //
 
 LTVector Mine::GetBoundingBoxColor()
 {
-    return LTVector(0.5, 0.5, 0);
+	return LTVector(0.5, 0.5, 0);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Mine::Save
 //
-//	ROUTINE:	Mine::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void Mine::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fActivateDelay);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fActivateDelay);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Mine::Load
 //
-//	ROUTINE:	Mine::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void Mine::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    m_fActivateDelay = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fActivateDelay = g_pLTServer->ReadFromMessageFloat(hRead);
 }

@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Explosion.cpp
 //
-// MODULE  : Explosion.cpp
+// PURPOSE: Explosion - Definition
 //
-// PURPOSE : Explosion - Definition
-//
-// CREATED : 11/25/97
+// CREATED: 11/25/97
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -29,7 +27,7 @@ BEGIN_CLASS(Explosion)
 	ADD_STRINGPROP_FLAG(DamageType, "EXPLODE", PF_STATICLIST)
 	ADD_REALPROP_FLAG(DamageRadius, 200.0f, PF_RADIUS)
 	ADD_REALPROP_FLAG(MaxDamage, 200.0f, 0)
-    ADD_BOOLPROP_FLAG(RemoveWhenDone, LTTRUE, 0)
+	ADD_BOOLPROP_FLAG(RemoveWhenDone, LTTRUE, 0)
 
 END_CLASS_DEFAULT_FLAGS_PLUGIN(Explosion, GameBase, NULL, NULL, 0, CExplosionPlugin)
 
@@ -49,11 +47,9 @@ LTBOOL ExplosionFilterFn(HOBJECT hObj, void *pUserData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::Explosion()
 //
-//	ROUTINE:	Explosion::Explosion()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 Explosion::Explosion() : GameBase()
@@ -71,7 +67,7 @@ Explosion::Explosion() : GameBase()
 	m_eProgDamageType		= DT_UNSPECIFIED;
 	m_hFiredFrom			= LTNULL;
 
-    m_bRemoveWhenDone       = LTTRUE;
+	m_bRemoveWhenDone	   = LTTRUE;
 
 	m_vPos.Init();
 
@@ -79,11 +75,9 @@ Explosion::Explosion() : GameBase()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::Setup()
 //
-//	ROUTINE:	Explosion::Setup()
-//
-//	PURPOSE:	Setup the Explosion
-//
+//	PURPOSE: Setup the Explosion
 // ----------------------------------------------------------------------- //
 
 void Explosion::Setup(HOBJECT hFiredFrom, uint8 nAmmoId)
@@ -93,13 +87,13 @@ void Explosion::Setup(HOBJECT hFiredFrom, uint8 nAmmoId)
 	AMMO* pAmmo = g_pWeaponMgr->GetAmmo(nAmmoId);
 	if (!pAmmo) return;
 
-    m_bRemoveWhenDone = LTTRUE;
+	m_bRemoveWhenDone = LTTRUE;
 
-    m_fDamageRadius = (LTFLOAT) pAmmo->nAreaDamageRadius;
-    m_fMaxDamage    = (LTFLOAT) pAmmo->nAreaDamage;
+	m_fDamageRadius = (LTFLOAT) pAmmo->nAreaDamageRadius;
+	m_fMaxDamage	= (LTFLOAT) pAmmo->nAreaDamage;
 	m_eDamageType	= pAmmo->eAreaDamageType;
 
-    m_fProgDamageRadius     = (LTFLOAT) pAmmo->fProgDamageRadius;
+	m_fProgDamageRadius	 = (LTFLOAT) pAmmo->fProgDamageRadius;
 	m_fProgDamageLifetime	= pAmmo->fProgDamageLifetime;
 	m_fProgDamage			= pAmmo->fProgDamage;
 	m_fProgDamageDuration	= pAmmo->fProgDamageDuration;
@@ -110,25 +104,23 @@ void Explosion::Setup(HOBJECT hFiredFrom, uint8 nAmmoId)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::Start()
 //
-//	ROUTINE:	Explosion::Start()
-//
-//	PURPOSE:	Start the Explosion
-//
+//	PURPOSE: Start the Explosion
 // ----------------------------------------------------------------------- //
 
 void Explosion::Start(HOBJECT hFiredFrom)
 {
 	if (!m_hObject) return;
 
-    g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
+	g_pLTServer->GetObjectPos(m_hObject, &m_vPos);
 
 	// Do special fx (on the client) if applicable...
 
 	if (m_nImpactFXId != FXBMGR_INVALID_ID)
 	{
-        LTRotation rRot;
-        g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+		LTRotation rRot;
+		g_pLTServer->GetObjectRotation(m_hObject, &rRot);
 
 		EXPLOSIONCREATESTRUCT cs;
 		cs.nImpactFX	 = m_nImpactFXId;
@@ -136,10 +128,10 @@ void Explosion::Start(HOBJECT hFiredFrom)
 		cs.vPos			 = m_vPos;
 		cs.fDamageRadius = m_fDamageRadius;
 
-        HMESSAGEWRITE hMessage = g_pLTServer->StartInstantSpecialEffectMessage(&m_vPos);
-        g_pLTServer->WriteToMessageByte(hMessage, SFX_EXPLOSION_ID);
-        cs.Write(g_pLTServer, hMessage);
-        g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLEFAST);
+		HMESSAGEWRITE hMessage = g_pLTServer->StartInstantSpecialEffectMessage(&m_vPos);
+		g_pLTServer->WriteToMessageByte(hMessage, SFX_EXPLOSION_ID);
+		cs.Write(g_pLTServer, hMessage);
+		g_pLTServer->EndMessage2(hMessage, MESSAGE_NAGGLEFAST);
 	}
 
 	m_hFiredFrom = hFiredFrom;
@@ -169,24 +161,22 @@ void Explosion::Start(HOBJECT hFiredFrom)
 		// Process the progressive damage every frame...
 
 		m_ProgDamageTimer.Start(m_fProgDamageLifetime);
-        SetNextUpdate(0.001f);
+		SetNextUpdate(0.001f);
 	}
 	else
 	{
 		if (m_bRemoveWhenDone)
 		{
-            g_pLTServer->RemoveObject(m_hObject);
+			g_pLTServer->RemoveObject(m_hObject);
 		}
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::DoDamage()
 //
-//	ROUTINE:	Explosion::DoDamage()
-//
-//	PURPOSE:	Do the damage...
-//
+//	PURPOSE: Do the damage...
 // ----------------------------------------------------------------------- //
 
 void Explosion::Update()
@@ -199,7 +189,7 @@ void Explosion::Update()
 	{
 		if (m_bRemoveWhenDone)
 		{
-            g_pLTServer->RemoveObject(m_hObject);
+			g_pLTServer->RemoveObject(m_hObject);
 		}
 
 		if (m_hFiredFrom)
@@ -209,17 +199,15 @@ void Explosion::Update()
 	}
 	else
 	{
-        SetNextUpdate(0.001f);
+		SetNextUpdate(0.001f);
 	}
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::EngineMessageFn
 //
-//	ROUTINE:	Explosion::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 Explosion::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -257,20 +245,20 @@ uint32 Explosion::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 			HOBJECT hLink = (HOBJECT)pData;
 			if (hLink == m_hFiredFrom)
 			{
-                m_hFiredFrom = LTNULL;
+				m_hFiredFrom = LTNULL;
 			}
 		}
 		break;
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -281,11 +269,9 @@ uint32 Explosion::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::ObjectMessageFn
 //
-//	ROUTINE:	Explosion::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 Explosion::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -309,35 +295,33 @@ uint32 Explosion::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREA
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::ReadProp
 //
-//	ROUTINE:	Explosion::ReadProp
-//
-//	PURPOSE:	Read object properties
-//
+//	PURPOSE: Read object properties
 // ----------------------------------------------------------------------- //
 
 void Explosion::ReadProp()
 {
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("DamageRadius", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DamageRadius", &genProp) == LT_OK)
 	{
 		m_fDamageRadius = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("MaxDamage", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("MaxDamage", &genProp) == LT_OK)
 	{
 		m_fMaxDamage = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("RemoveWhenDone", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("RemoveWhenDone", &genProp) == LT_OK)
 	{
 		m_bRemoveWhenDone = genProp.m_Bool;
 	}
 
 	g_pFXButeMgr->ReadImpactFXProp("ImpactFXName", m_nImpactFXId);
 
-    if (g_pLTServer->GetPropGeneric("DamageType", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("DamageType", &genProp) == LT_OK)
 	{
 		if (genProp.m_String[0])
 		{
@@ -348,11 +332,9 @@ void Explosion::ReadProp()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::AreaDamageObject()
 //
-//	ROUTINE:	Explosion::AreaDamageObject()
-//
-//	PURPOSE:	Damage the object...
-//
+//	PURPOSE: Damage the object...
 // ----------------------------------------------------------------------- //
 
 void Explosion::AreaDamageObject(HOBJECT hObj)
@@ -361,11 +343,11 @@ void Explosion::AreaDamageObject(HOBJECT hObj)
 
 	HOBJECT hDamager = m_hFiredFrom ? m_hFiredFrom : m_hObject;
 
-    LTVector vObjPos;
-    g_pLTServer->GetObjectPos(hObj, &vObjPos);
+	LTVector vObjPos;
+	g_pLTServer->GetObjectPos(hObj, &vObjPos);
 
-    LTVector vDir = vObjPos - m_vPos;
-    LTFLOAT fDist = vDir.Mag();
+	LTVector vDir = vObjPos - m_vPos;
+	LTFLOAT fDist = vDir.Mag();
 
 	if (fDist <= m_fDamageRadius)
 	{
@@ -405,16 +387,16 @@ void Explosion::AreaDamageObject(HOBJECT hObj)
 			damage.hDamager = hDamager;
 			damage.vDir		= vDir;
 
-            LTFLOAT fMinRadius  = m_fDamageRadius * MIN_RADIUS_PERCENT;
-            LTFLOAT fRange      = m_fDamageRadius - fMinRadius;
+			LTFLOAT fMinRadius  = m_fDamageRadius * MIN_RADIUS_PERCENT;
+			LTFLOAT fRange	  = m_fDamageRadius - fMinRadius;
 
 			// Scale damage if necessary...
 
-            LTFLOAT fMultiplier = 1.0f;
+			LTFLOAT fMultiplier = 1.0f;
 
 			if (fDist > fMinRadius)
 			{
-                LTFLOAT fPercent = (fDist - fMinRadius) / (m_fDamageRadius - fMinRadius);
+				LTFLOAT fPercent = (fDist - fMinRadius) / (m_fDamageRadius - fMinRadius);
 				fPercent = fPercent > 1.0f ? 1.0f : (fPercent < 0.0f ? 0.0f : fPercent);
 
 				fMultiplier = (1.0f - fPercent);
@@ -432,11 +414,9 @@ void Explosion::AreaDamageObject(HOBJECT hObj)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::ProgDamageObject()
 //
-//	ROUTINE:	Explosion::ProgDamageObject()
-//
-//	PURPOSE:	Damage the object...
-//
+//	PURPOSE: Damage the object...
 // ----------------------------------------------------------------------- //
 
 void Explosion::ProgDamageObject(HOBJECT hObj)
@@ -445,11 +425,11 @@ void Explosion::ProgDamageObject(HOBJECT hObj)
 
 	HOBJECT hDamager = m_hFiredFrom ? m_hFiredFrom : m_hObject;
 
-    LTVector vObjPos;
-    g_pLTServer->GetObjectPos(hObj, &vObjPos);
+	LTVector vObjPos;
+	g_pLTServer->GetObjectPos(hObj, &vObjPos);
 
-    LTVector vDir = vObjPos - m_vPos;
-    LTFLOAT fDist = vDir.Mag();
+	LTVector vDir = vObjPos - m_vPos;
+	LTFLOAT fDist = vDir.Mag();
 
 	if (fDist <= m_fProgDamageRadius)
 	{
@@ -500,16 +480,14 @@ void Explosion::ProgDamageObject(HOBJECT hObj)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::ProgDamageObjectsInSphere()
 //
-//	ROUTINE:	Explosion::ProgDamageObjectsInSphere()
-//
-//	PURPOSE:	Progressively damage all the objects in our radius
-//
+//	PURPOSE: Progressively damage all the objects in our radius
 // ----------------------------------------------------------------------- //
 
 void Explosion::ProgDamageObjectsInSphere()
 {
-    ObjectList* pList = g_pLTServer->FindObjectsTouchingSphere(&m_vPos,
+	ObjectList* pList = g_pLTServer->FindObjectsTouchingSphere(&m_vPos,
 		m_fProgDamageRadius);
 	if (!pList) return;
 
@@ -520,20 +498,18 @@ void Explosion::ProgDamageObjectsInSphere()
 		pLink = pLink->m_pNext;
 	}
 
-    g_pLTServer->RelinquishList(pList);
+	g_pLTServer->RelinquishList(pList);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::AreaDamageObjectsInSphere()
 //
-//	ROUTINE:	Explosion::AreaDamageObjectsInSphere()
-//
-//	PURPOSE:	Area damage all the objects in our radius
-//
+//	PURPOSE: Area damage all the objects in our radius
 // ----------------------------------------------------------------------- //
 
 void Explosion::AreaDamageObjectsInSphere()
 {
-    ObjectList* pList = g_pLTServer->FindObjectsTouchingSphere(&m_vPos, m_fDamageRadius);
+	ObjectList* pList = g_pLTServer->FindObjectsTouchingSphere(&m_vPos, m_fDamageRadius);
 	if (!pList) return;
 
 	ObjectLink* pLink = pList->m_pFirstLink;
@@ -543,28 +519,24 @@ void Explosion::AreaDamageObjectsInSphere()
 		pLink = pLink->m_pNext;
 	}
 
-    g_pLTServer->RelinquishList(pList);
+	g_pLTServer->RelinquishList(pList);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::GetBoundingBoxColor()
 //
-//	ROUTINE:	Explosion::GetBoundingBoxColor()
-//
-//	PURPOSE:	Get the color of the bounding box
-//
+//	PURPOSE: Get the color of the bounding box
 // ----------------------------------------------------------------------- //
 
 LTVector Explosion::GetBoundingBoxColor()
 {
-    return LTVector(0, 0, 1);
+	return LTVector(0, 0, 1);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::CacheFiles()
 //
-//	ROUTINE:	Explosion::CacheFiles()
-//
-//	PURPOSE:	Cache impact fx resources
-//
+//	PURPOSE: Cache impact fx resources
 // ----------------------------------------------------------------------- //
 
 void Explosion::CacheFiles()
@@ -581,77 +553,71 @@ void Explosion::CacheFiles()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::Save
 //
-//	ROUTINE:	Explosion::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void Explosion::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hFiredFrom);
-    g_pLTServer->WriteToMessageVector(hWrite, &m_vPos);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fDamageRadius);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fMaxDamage);
-    g_pLTServer->WriteToMessageByte(hWrite, m_eDamageType);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fProgDamage);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fProgDamageRadius);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fProgDamageDuration);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fProgDamageLifetime);
-    g_pLTServer->WriteToMessageByte(hWrite, m_eProgDamageType);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bRemoveWhenDone);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nImpactFXId);
+	g_pLTServer->WriteToLoadSaveMessageObject(hWrite, m_hFiredFrom);
+	g_pLTServer->WriteToMessageVector(hWrite, &m_vPos);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fDamageRadius);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fMaxDamage);
+	g_pLTServer->WriteToMessageByte(hWrite, m_eDamageType);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fProgDamage);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fProgDamageRadius);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fProgDamageDuration);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fProgDamageLifetime);
+	g_pLTServer->WriteToMessageByte(hWrite, m_eProgDamageType);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bRemoveWhenDone);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nImpactFXId);
 
 	m_ProgDamageTimer.Save(hWrite);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Explosion::Load
 //
-//	ROUTINE:	Explosion::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void Explosion::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hFiredFrom);
-    g_pLTServer->ReadFromMessageVector(hRead, &m_vPos);
+	g_pLTServer->ReadFromLoadSaveMessageObject(hRead, &m_hFiredFrom);
+	g_pLTServer->ReadFromMessageVector(hRead, &m_vPos);
 
-    m_fDamageRadius         = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fMaxDamage            = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_eDamageType           = (DamageType) g_pLTServer->ReadFromMessageByte(hRead);
-    m_fProgDamage           = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fProgDamageRadius     = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fProgDamageDuration   = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fProgDamageLifetime   = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_eProgDamageType       = (DamageType) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bRemoveWhenDone       = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_nImpactFXId           = g_pLTServer->ReadFromMessageByte(hRead);
+	m_fDamageRadius		 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fMaxDamage			= g_pLTServer->ReadFromMessageFloat(hRead);
+	m_eDamageType		   = (DamageType) g_pLTServer->ReadFromMessageByte(hRead);
+	m_fProgDamage		   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fProgDamageRadius	 = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fProgDamageDuration   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fProgDamageLifetime   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_eProgDamageType	   = (DamageType) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bRemoveWhenDone	   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_nImpactFXId		   = g_pLTServer->ReadFromMessageByte(hRead);
 
 	m_ProgDamageTimer.Load(hRead);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CExplosionPlugin::PreHook_EditStringList
 //
-//	ROUTINE:	CExplosionPlugin::PreHook_EditStringList
-//
-//	PURPOSE:	Requests a state change
-//
+//	PURPOSE: Requests a state change
 // ----------------------------------------------------------------------- //
 LTRESULT CExplosionPlugin::PreHook_EditStringList(const char* szRezPath,
 												 const char* szPropName,
 												 char** aszStrings,
-                                                 uint32* pcStrings,
-                                                 const uint32 cMaxStrings,
-                                                 const uint32 cMaxStringLength)
+												 uint32* pcStrings,
+												 const uint32 cMaxStrings,
+												 const uint32 cMaxStringLength)
 {
 	// See if we can handle the property...
 

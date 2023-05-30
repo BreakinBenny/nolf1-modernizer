@@ -11,7 +11,7 @@ class CMusicButeMgr : public CGameButeMgr
 {
 	public : // Public member variables
 
-        LTBOOL	Init(ILTCSBase *pInterface, const char* szAttributeFile = "Attributes\\Music.txt")
+		LTBOOL	Init(ILTCSBase *pInterface, const char* szAttributeFile = "Attributes\\Music.txt")
 		{
 			return Parse(pInterface, szAttributeFile);
 		}
@@ -88,7 +88,7 @@ void CMusicMgr::Init(const char* szMusicControlFile)
 		*pchDot = 0;
 	}
 
-    _strlwr(m_szTheme);
+	_strlwr(m_szTheme);
 
 	for ( uint32 iMood = 0 ; iMood < kNumMoods ; ++iMood )
 	{

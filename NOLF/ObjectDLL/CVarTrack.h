@@ -6,7 +6,7 @@
 #define __CVARTRACK_H__
 
 
-    #include "iltserver.h"
+	#include "iltserver.h"
 
 
 	class CVarTrack
@@ -15,12 +15,12 @@
 
 					CVarTrack()
 					{
-                        m_hVar = LTNULL;
-                        m_pServerDE = LTNULL;
+						m_hVar = LTNULL;
+						m_pServerDE = LTNULL;
 						m_pVarName = NULL;
 					}
 
-        LTBOOL       Init(ILTServer *pServerDE, char *pVarName, char *pStartVal, float fStartVal)
+		LTBOOL	   Init(ILTServer *pServerDE, char *pVarName, char *pStartVal, float fStartVal)
 		{
 			char tempStr[128];
 
@@ -38,15 +38,15 @@
 				m_hVar = pServerDE->GetGameConVar(pVarName);
 				if(!m_hVar)
 				{
-                    return LTFALSE;
+					return LTFALSE;
 				}
 			}
 
 			m_pServerDE = pServerDE;
-            return LTTRUE;
+			return LTTRUE;
 		}
 
-        LTBOOL       IsInitted()
+		LTBOOL	   IsInitted()
 		{
 			return !!m_pServerDE;
 		}
@@ -93,7 +93,7 @@
 	protected:
 
 		HCONVAR		m_hVar;
-        ILTServer   *m_pServerDE;
+		ILTServer   *m_pServerDE;
 		char		*m_pVarName;
 	};
 

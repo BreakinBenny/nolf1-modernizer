@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: DebrisFuncs.cpp
 //
-// MODULE  : DebrisFuncs.cpp
+// PURPOSE: Misc functions for creating debris
 //
-// PURPOSE : Misc functions for creating debris
-//
-// CREATED : 6/29/98
+// CREATED: 6/29/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 // Includes...
@@ -23,39 +21,35 @@ CDebrisMgrPlugin s_DebrisMgrPlugin;
 #define DEBRIS_PROPERTY_NAME	"DebrisType"
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CreateDebris()
 //
-//	ROUTINE:	CreateDebris()
-//
-//	PURPOSE:	Create client-side debris...
-//
+//	PURPOSE: Create client-side debris...
 // ----------------------------------------------------------------------- //
 
 static void CreateDebris(CLIENTDEBRIS & cd)
 {
-    if (!g_pLTServer) return;
+	if (!g_pLTServer) return;
 
-    HMESSAGEWRITE hMessage = g_pLTServer->StartInstantSpecialEffectMessage(&cd.vPos);
-    g_pLTServer->WriteToMessageByte(hMessage, SFX_DEBRIS_ID);
-    g_pLTServer->WriteToMessageRotation(hMessage, &cd.rRot);
-    g_pLTServer->WriteToMessageCompPosition(hMessage, &cd.vPos);
-    g_pLTServer->WriteToMessageByte(hMessage, cd.nDebrisId);
-    g_pLTServer->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartInstantSpecialEffectMessage(&cd.vPos);
+	g_pLTServer->WriteToMessageByte(hMessage, SFX_DEBRIS_ID);
+	g_pLTServer->WriteToMessageRotation(hMessage, &cd.rRot);
+	g_pLTServer->WriteToMessageCompPosition(hMessage, &cd.vPos);
+	g_pLTServer->WriteToMessageByte(hMessage, cd.nDebrisId);
+	g_pLTServer->EndMessage(hMessage);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CreatePropDebris()
 //
-//	ROUTINE:	CreatePropDebris()
-//
-//	PURPOSE:	Create client-side debris for props...
-//
+//	PURPOSE: Create client-side debris for props...
 // ----------------------------------------------------------------------- //
 
 void CreatePropDebris(LTVector & vPos, LTVector & vDir, uint8 nDebrisId)
 {
 	CLIENTDEBRIS cd;
 
-    LTVector vUp(0.0f, 1.0f, 0.0f);
-    g_pLTServer->AlignRotation(&(cd.rRot), &vDir, &vUp);
+	LTVector vUp(0.0f, 1.0f, 0.0f);
+	g_pLTServer->AlignRotation(&(cd.rRot), &vDir, &vUp);
 
 	cd.vPos			= vPos;
 	cd.nDebrisId	= nDebrisId;
@@ -64,21 +58,19 @@ void CreatePropDebris(LTVector & vPos, LTVector & vDir, uint8 nDebrisId)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: GetDebrisProperties()
 //
-//	ROUTINE:	GetDebrisProperties()
-//
-//	PURPOSE:	Determine the debris properties (This should only be
+//	PURPOSE: Determine the debris properties (This should only be
 //				called during an object's ReadProp function if the object
 //				added the ADD_DEBRISTYPE_PROPERTY macro).
-//
 // ----------------------------------------------------------------------- //
 
 void GetDebrisProperties(uint8 & nDebrisId)
 {
-    if (!g_pLTServer) return;
+	if (!g_pLTServer) return;
 
 	GenericProp genProp;
-    if (g_pLTServer->GetPropGeneric(DEBRIS_PROPERTY_NAME, &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric(DEBRIS_PROPERTY_NAME, &genProp) == LT_OK)
 	{
 		DEBRIS* pDebris = g_pDebrisMgr->GetDebris(genProp.m_String);
 		if (pDebris)
@@ -90,11 +82,9 @@ void GetDebrisProperties(uint8 & nDebrisId)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CDebrisPlugin::PreHook_EditStringList()
 //
-//	ROUTINE:	CDebrisPlugin::PreHook_EditStringList()
-//
-//	PURPOSE:	Fill in property string list
-//
+//	PURPOSE: Fill in property string list
 // ----------------------------------------------------------------------- //
 LTRESULT CDebrisPlugin::PreHook_EditStringList(const char* szRezPath, const char* szPropName, char** aszStrings, uint32* pcStrings, const uint32 cMaxStrings, const uint32 cMaxStringLength)
 {

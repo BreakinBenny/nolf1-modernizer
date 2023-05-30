@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Camera.cpp
 //
-// MODULE  : Camera.cpp
+// PURPOSE: Camera implementation
 //
-// PURPOSE : Camera implementation
-//
-// CREATED : 5/20/98
+// CREATED: 5/20/98
 //
 // (c) 1998-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -25,31 +23,27 @@ BEGIN_CLASS(Camera)
 END_CLASS_DEFAULT(Camera, BaseClass, NULL, NULL)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Camera::Camera()
 //
-//	ROUTINE:	Camera::Camera()
-//
-//	PURPOSE:	Initialize object
-//
+//	PURPOSE: Initialize object
 // ----------------------------------------------------------------------- //
 
 Camera::Camera() : BaseClass(OT_NORMAL)
 {
-    m_bAllowPlayerMovement  = LTFALSE;
+	m_bAllowPlayerMovement  = LTFALSE;
 	m_fActiveTime			= 1.0f;
-    m_bOneTime              = LTTRUE;
+	m_bOneTime			  = LTTRUE;
 	m_nCameraType			= CT_CINEMATIC;
-    m_bStartActive          = LTFALSE;
+	m_bStartActive		  = LTFALSE;
 	m_fTurnOffTime			= 0.0f;
-    m_bIsListener           = LTFALSE;
+	m_bIsListener		   = LTFALSE;
 	m_bOn					= LTFALSE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Camera::~Camera()
 //
-//	ROUTINE:	Camera::~Camera()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 Camera::~Camera()
@@ -64,11 +58,9 @@ Camera::~Camera()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Camera::EngineMessageFn()
 //
-//	ROUTINE:	Camera::EngineMessageFn()
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 Camera::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -91,7 +83,7 @@ uint32 Camera::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 			if (fData == PRECREATE_WORLDFILE || fData == PRECREATE_STRINGPROP)
 			{
-                ReadProps(LTFALSE);
+				ReadProps(LTFALSE);
 			}
 		}
 		break;
@@ -104,13 +96,13 @@ uint32 Camera::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -121,11 +113,9 @@ uint32 Camera::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Camera::ObjectMessageFn()
 //
-//	ROUTINE:	Camera::ObjectMessageFn()
-//
-//	PURPOSE:	Handler for server object messages.
-//
+//	PURPOSE: Handler for server object messages.
 // --------------------------------------------------------------------------- //
 
 uint32 Camera::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -144,42 +134,40 @@ uint32 Camera::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD h
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Camera::ReadProp
 //
-//	ROUTINE:	Camera::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL Camera::ReadProps(LTBOOL bCreateSFXMsg)
 {
 	GenericProp genProp;
-    if (g_pLTServer->GetPropGeneric("AllowPlayerMovement", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("AllowPlayerMovement", &genProp) == LT_OK)
 	{
 		m_bAllowPlayerMovement = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("ActiveTime", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ActiveTime", &genProp) == LT_OK)
 	{
 		m_fActiveTime = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("OneTime", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("OneTime", &genProp) == LT_OK)
 	{
 		m_bOneTime = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("Type", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("Type", &genProp) == LT_OK)
 	{
-        m_nCameraType = (uint8)genProp.m_Long;
+		m_nCameraType = (uint8)genProp.m_Long;
 	}
 
-    if (g_pLTServer->GetPropGeneric("StartActive", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("StartActive", &genProp) == LT_OK)
 	{
 		m_bStartActive = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("IsListener", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("IsListener", &genProp) == LT_OK)
 	{
 		m_bIsListener = genProp.m_Bool;
 	}
@@ -189,16 +177,14 @@ LTBOOL Camera::ReadProps(LTBOOL bCreateSFXMsg)
 		CreateSFXMsg();
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Camera::InitialUpdate
 //
-//	ROUTINE:	Camera::InitialUpdate
-//
-//	PURPOSE:	Initialize the object
-//
+//	PURPOSE: Initialize the object
 // ----------------------------------------------------------------------- //
 
 void Camera::InitialUpdate(int nInfo)
@@ -217,35 +203,31 @@ void Camera::InitialUpdate(int nInfo)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Camera::CreateSFXMsg
 //
-//	ROUTINE:	Camera::CreateSFXMsg
-//
-//	PURPOSE:	Initialize the object
-//
+//	PURPOSE: Initialize the object
 // ----------------------------------------------------------------------- //
 
 void Camera::CreateSFXMsg()
 {
-    HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
-    g_pLTServer->WriteToMessageByte(hMessage, SFX_CAMERA_ID);
-    g_pLTServer->WriteToMessageByte(hMessage, (uint8)m_bAllowPlayerMovement);
-    g_pLTServer->WriteToMessageByte(hMessage, (uint8)m_nCameraType);
-    g_pLTServer->WriteToMessageByte(hMessage, (uint8)m_bIsListener);
-    g_pLTServer->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
+	g_pLTServer->WriteToMessageByte(hMessage, SFX_CAMERA_ID);
+	g_pLTServer->WriteToMessageByte(hMessage, (uint8)m_bAllowPlayerMovement);
+	g_pLTServer->WriteToMessageByte(hMessage, (uint8)m_nCameraType);
+	g_pLTServer->WriteToMessageByte(hMessage, (uint8)m_bIsListener);
+	g_pLTServer->EndMessage(hMessage);
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Camera::TriggerMsg()
 //
-//	ROUTINE:	Camera::TriggerMsg()
-//
-//	PURPOSE:	Trigger function to turn camera on/off
-//
+//	PURPOSE: Trigger function to turn camera on/off
 // --------------------------------------------------------------------------- //
 
 void Camera::TriggerMsg(HOBJECT hSender, const char* szMsg)
 {
-    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
 
 	if (_stricmp(szMsg, "ON") == 0)
 	{
@@ -259,53 +241,49 @@ void Camera::TriggerMsg(HOBJECT hSender, const char* szMsg)
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Camera::Update()
 //
-//	ROUTINE:	Camera::Update()
-//
-//	PURPOSE:	Update the camera...
-//
+//	PURPOSE: Update the camera...
 // --------------------------------------------------------------------------- //
 
 void Camera::Update()
 {
 	LTVector vPos;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
 
 	ObjArray <HOBJECT, MAX_OBJECT_ARRAY_SIZE> objArray;
-    g_pLTServer->FindNamedObjects(DEFAULT_PLAYERNAME,objArray);
+	g_pLTServer->FindNamedObjects(DEFAULT_PLAYERNAME,objArray);
 
 	int numObjects = objArray.NumObjects();
 
 	for (int i = 0; i < numObjects; i++ )
 	{
-        CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(objArray.GetObject(i));
+		CPlayerObj* pPlayer = (CPlayerObj*) g_pLTServer->HandleToObject(objArray.GetObject(i));
 		if (pPlayer)
 		{
 			HCLIENT hClient = pPlayer->GetClient();
 			if (hClient)
 			{
-                g_pLTServer->SetClientViewPos(hClient, &vPos);
+				g_pLTServer->SetClientViewPos(hClient, &vPos);
 			}
 		}
 	}
 
-    if (m_fActiveTime > 0.0f && g_pLTServer->GetTime() > m_fTurnOffTime)
+	if (m_fActiveTime > 0.0f && g_pLTServer->GetTime() > m_fTurnOffTime)
 	{
 		TurnOff();
 	}
 	else
 	{
-        SetNextUpdate(m_hObject, 0.001f);
+		SetNextUpdate(m_hObject, 0.001f);
 	}
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Camera::TurnOff()
 //
-//	ROUTINE:	Camera::TurnOff()
-//
-//	PURPOSE:	Turn camera off
-//
+//	PURPOSE: Turn camera off
 // --------------------------------------------------------------------------- //
 
 void Camera::TurnOff()
@@ -320,24 +298,22 @@ void Camera::TurnOff()
 		m_bOn = LTFALSE;
 	}
 
-    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags & ~USRFLG_CAMERA_LIVE);
-    
+	uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags & ~USRFLG_CAMERA_LIVE);
+	
 	SetNextUpdate(m_hObject, 0.0f);
 
 	if (m_bOneTime)
 	{
-        g_pLTServer->RemoveObject(m_hObject);
+		g_pLTServer->RemoveObject(m_hObject);
 	}
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: Camera::TurnOn()
 //
-//	ROUTINE:	Camera::TurnOn()
-//
-//	PURPOSE:	Turn camera on
-//
+//	PURPOSE: Turn camera on
 // --------------------------------------------------------------------------- //
 
 void Camera::TurnOn()
@@ -348,50 +324,46 @@ void Camera::TurnOn()
 		m_bOn = LTTRUE;
 	}
 
-    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+	uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
 	dwUsrFlags |= USRFLG_CAMERA_LIVE;
-    g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags);
+	g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags);
 
 	if (m_fActiveTime > 0.0f)
 	{
-        m_fTurnOffTime = g_pLTServer->GetTime() + m_fActiveTime;
+		m_fTurnOffTime = g_pLTServer->GetTime() + m_fActiveTime;
 	}
 
-    SetNextUpdate(m_hObject, 0.001f);
+	SetNextUpdate(m_hObject, 0.001f);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Camera::Save
 //
-//	ROUTINE:	Camera::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void Camera::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 {
 	if (!hWrite) return;
 
-    g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) sm_nActiveCamera);
+	g_pLTServer->WriteToMessageFloat(hWrite, (LTFLOAT) sm_nActiveCamera);
 
 	g_pLTServer->WriteToMessageByte(hWrite, m_bOn);
 	g_pLTServer->WriteToMessageByte(hWrite, m_bIsListener);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bAllowPlayerMovement);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bOneTime);
-    g_pLTServer->WriteToMessageByte(hWrite, m_nCameraType);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bStartActive);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fActiveTime);
-    g_pLTServer->WriteToMessageFloat(hWrite, m_fTurnOffTime);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bAllowPlayerMovement);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bOneTime);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nCameraType);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bStartActive);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fActiveTime);
+	g_pLTServer->WriteToMessageFloat(hWrite, m_fTurnOffTime);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Camera::Load
 //
-//	ROUTINE:	Camera::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void Camera::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
@@ -400,12 +372,12 @@ void Camera::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 
 	sm_nActiveCamera		= (int) g_pLTServer->ReadFromMessageFloat(hRead);
 
-    m_bOn					= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bIsListener           = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bAllowPlayerMovement  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_bOneTime              = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_nCameraType           = g_pLTServer->ReadFromMessageByte(hRead);
-    m_bStartActive          = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
-    m_fActiveTime           = g_pLTServer->ReadFromMessageFloat(hRead);
-    m_fTurnOffTime          = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_bOn					= (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bIsListener		   = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bAllowPlayerMovement  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_bOneTime			  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_nCameraType		   = g_pLTServer->ReadFromMessageByte(hRead);
+	m_bStartActive		  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_fActiveTime		   = g_pLTServer->ReadFromMessageFloat(hRead);
+	m_fTurnOffTime		  = g_pLTServer->ReadFromMessageFloat(hRead);
 }

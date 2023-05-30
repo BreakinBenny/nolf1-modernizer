@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: CClientWeaponSFX.h
 //
-// MODULE  : CClientWeaponSFX.h
+// PURPOSE: CClientWeaponSFX - Definition
 //
-// PURPOSE : CClientWeaponSFX - Definition
-//
-// CREATED : 2/22/98
-//
+// CREATED: 2/22/98
 // ----------------------------------------------------------------------- //
 
 #ifndef __CLIENT_WEAPON_SFX_H__
@@ -16,18 +14,18 @@
 
 struct CLIENTWEAPONFX
 {
-    CLIENTWEAPONFX();
+	CLIENTWEAPONFX();
 
 	HOBJECT		hFiredFrom;
 	HOBJECT		hObj;
-    uint8       nWeaponId;
-    uint8       nAmmoId;
-    uint8       nSurfaceType;
-    uint16      wIgnoreFX;
-    uint8       nShooterId;
-    LTVector     vFirePos;
-    LTVector     vPos;
-    LTVector     vSurfaceNormal;
+	uint8	   nWeaponId;
+	uint8	   nAmmoId;
+	uint8	   nSurfaceType;
+	uint16	  wIgnoreFX;
+	uint8	   nShooterId;
+	LTVector	 vFirePos;
+	LTVector	 vPos;
+	LTVector	 vSurfaceNormal;
 };
 
 inline CLIENTWEAPONFX::CLIENTWEAPONFX()

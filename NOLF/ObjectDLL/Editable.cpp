@@ -1,10 +1,10 @@
 //----------------------------------------------------------
 //
-// MODULE  : Editable.cpp
+// MODULE: Editable.cpp
 //
-// PURPOSE : Editable aggreate
+// PURPOSE: Editable aggreate
 //
-// CREATED : 3/10/99
+// CREATED: 3/10/99
 //
 //----------------------------------------------------------
 
@@ -14,25 +14,21 @@
 #include "ObjectMsgs.h"
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CEditable::CEditable()
 //
-//	ROUTINE:	CEditable::CEditable()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 CEditable::CEditable() : IAggregate()
 {
-    m_propList.Init(LTTRUE);
+	m_propList.Init(LTTRUE);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CEditable::~CEditable()
 //
-//	ROUTINE:	CEditable::~CEditable()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 CEditable::~CEditable()
@@ -41,11 +37,9 @@ CEditable::~CEditable()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CEditable::EngineMessageFn()
 //
-//	ROUTINE:	CEditable::EngineMessageFn()
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 CEditable::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -62,15 +56,13 @@ uint32 CEditable::ObjectMessageFn(LPBASECLASS pObject, HOBJECT hSender, uint32 m
 		default : break;
 	}
 
-    return IAggregate::ObjectMessageFn(pObject, hSender, messageID, hRead);
+	return IAggregate::ObjectMessageFn(pObject, hSender, messageID, hRead);
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CEditable::AddFloatProp
 //
-//	ROUTINE:	CEditable::AddFloatProp
-//
-//	PURPOSE:	Add a float prop to our list
-//
+//	PURPOSE: Add a float prop to our list
 // ----------------------------------------------------------------------- //
 
 void CEditable::AddFloatProp(char* pPropName, LTFLOAT* pPropAddress)
@@ -86,11 +78,9 @@ void CEditable::AddFloatProp(char* pPropName, LTFLOAT* pPropAddress)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CEditable::AddDWordProp
 //
-//	ROUTINE:	CEditable::AddDWordProp
-//
-//	PURPOSE:	Add a dword prop to our list
-//
+//	PURPOSE: Add a dword prop to our list
 // ----------------------------------------------------------------------- //
 
 void CEditable::AddDWordProp(char* pPropName, uint32* pPropAddress)
@@ -106,11 +96,9 @@ void CEditable::AddDWordProp(char* pPropName, uint32* pPropAddress)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CEditable::AddByteProp
 //
-//	ROUTINE:	CEditable::AddByteProp
-//
-//	PURPOSE:	Add a byte prop to our list
-//
+//	PURPOSE: Add a byte prop to our list
 // ----------------------------------------------------------------------- //
 
 void CEditable::AddByteProp(char* pPropName, uint8* pPropAddress)
@@ -126,11 +114,9 @@ void CEditable::AddByteProp(char* pPropName, uint8* pPropAddress)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CEditable::AddBoolProp
 //
-//	ROUTINE:	CEditable::AddBoolProp
-//
-//	PURPOSE:	Add a bool prop to our list
-//
+//	PURPOSE: Add a bool prop to our list
 // ----------------------------------------------------------------------- //
 
 void CEditable::AddBoolProp(char* pPropName, LTBOOL* pPropAddress)
@@ -146,11 +132,9 @@ void CEditable::AddBoolProp(char* pPropName, LTBOOL* pPropAddress)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: CEditable::AddVectorProp
 //
-//	ROUTINE:	CEditable::AddVectorProp
-//
-//	PURPOSE:	Add a vector prop to our list
-//
+//	PURPOSE: Add a vector prop to our list
 // ----------------------------------------------------------------------- //
 
 void CEditable::AddVectorProp(char* pPropName, LTVector* pPropAddress)
@@ -166,18 +150,16 @@ void CEditable::AddVectorProp(char* pPropName, LTVector* pPropAddress)
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CEditable::TriggerMsg()
 //
-//	ROUTINE:	CEditable::TriggerMsg()
-//
-//	PURPOSE:	Process trigger messages
-//
+//	PURPOSE: Process trigger messages
 // --------------------------------------------------------------------------- //
 
 void CEditable::TriggerMsg(LPBASECLASS pObject, HOBJECT hSender, const char* szMsg)
 {
 	if (!szMsg) return;
 
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return;
 
 	// ConParse does not destroy szMsg, so this is safe
@@ -205,11 +187,9 @@ void CEditable::TriggerMsg(LPBASECLASS pObject, HOBJECT hSender, const char* szM
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CEditable::EditProperty()
 //
-//	ROUTINE:	CEditable::EditProperty()
-//
-//	PURPOSE:	Edit the specified property
-//
+//	PURPOSE: Edit the specified property
 // --------------------------------------------------------------------------- //
 
 void CEditable::EditProperty(LPBASECLASS pObject, char* pPropName, char* pPropValue)
@@ -219,7 +199,7 @@ void CEditable::EditProperty(LPBASECLASS pObject, char* pPropName, char* pPropVa
 	// Edit the appropriate property...
 
 	CPropDef** pCur = m_propList.GetItem(TLIT_FIRST);
-    CPropDef*  pPropDef = LTNULL;
+	CPropDef*  pPropDef = LTNULL;
 
 	while (pCur)
 	{
@@ -235,7 +215,7 @@ void CEditable::EditProperty(LPBASECLASS pObject, char* pPropName, char* pPropVa
 				}
 				else
 				{
-                    g_pLTServer->CPrint("Couldn't set '%s' to '%s'!", pName, pPropValue);
+					g_pLTServer->CPrint("Couldn't set '%s' to '%s'!", pName, pPropValue);
 				}
 				return;
 			}
@@ -247,22 +227,20 @@ void CEditable::EditProperty(LPBASECLASS pObject, char* pPropName, char* pPropVa
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CEditable::ListProperties()
 //
-//	ROUTINE:	CEditable::ListProperties()
-//
-//	PURPOSE:	List our properties/values
-//
+//	PURPOSE: List our properties/values
 // --------------------------------------------------------------------------- //
 
 void CEditable::ListProperties(LPBASECLASS pObject)
 {
 	if (!pObject) return;
 
-    g_pLTServer->CPrint("Object Properties------------------------");
-    g_pLTServer->CPrint("'Name' = '%s'", g_pLTServer->GetObjectName(pObject->m_hObject));
+	g_pLTServer->CPrint("Object Properties------------------------");
+	g_pLTServer->CPrint("'Name' = '%s'", g_pLTServer->GetObjectName(pObject->m_hObject));
 
 	CPropDef** pCur = m_propList.GetItem(TLIT_FIRST);
-    CPropDef*  pPropDef = LTNULL;
+	CPropDef*  pPropDef = LTNULL;
 
 	while (pCur)
 	{
@@ -273,190 +251,166 @@ void CEditable::ListProperties(LPBASECLASS pObject)
 			CString str;
 			pPropDef->GetStringValue(str);
 
-            g_pLTServer->CPrint("'%s' = %s", pPropName ? pPropName : "(Invalid name)",
+			g_pLTServer->CPrint("'%s' = %s", pPropName ? pPropName : "(Invalid name)",
 				str.GetLength() > 1 ? str.GetBuffer(1) : "(Invalid value)");
 		}
 		pCur = m_propList.GetItem(TLIT_NEXT);
 	}
 
-    g_pLTServer->CPrint("-----------------------------------------");
+	g_pLTServer->CPrint("-----------------------------------------");
 }
 
 
-// --------------------------------------------------------------------------- //
-// --------------------------------------------------------------------------- //
-//
+// --------------------------------------------------------------------------- // --------------------------------------------------------------------------- //
 //	CPropDef class methods
-//
-// --------------------------------------------------------------------------- //
-// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- // --------------------------------------------------------------------------- //
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CPropDef::CPropDef()
 //
-//	ROUTINE:	CPropDef::CPropDef()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // --------------------------------------------------------------------------- //
 
 CPropDef::CPropDef()
 {
-    m_strPropName   = LTNULL;
+	m_strPropName   = LTNULL;
 	m_eType			= PT_UNKNOWN_TYPE;
-    m_pAddress      = LTNULL;
+	m_pAddress	  = LTNULL;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CPropDef::~CPropDef()
 //
-//	ROUTINE:	CPropDef::~CPropDef()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // --------------------------------------------------------------------------- //
 
 CPropDef::~CPropDef()
 {
 	if (m_strPropName)
 	{
-        g_pLTServer->FreeString(m_strPropName);
+		g_pLTServer->FreeString(m_strPropName);
 	}
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CPropDef::Init()
 //
-//	ROUTINE:	CPropDef::Init()
-//
-//	PURPOSE:	Set up our data members
-//
+//	PURPOSE: Set up our data members
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPropDef::Init(char* pName, PropType eType, void* pAddress)
 {
-    if (m_strPropName || !pName) return LTFALSE;
+	if (m_strPropName || !pName) return LTFALSE;
 
-    m_strPropName = g_pLTServer->CreateString(pName);
+	m_strPropName = g_pLTServer->CreateString(pName);
 	m_eType = eType;
 	m_pAddress = pAddress;
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CPropDef::GetFloatValue()
 //
-//	ROUTINE:	CPropDef::GetFloatValue()
-//
-//	PURPOSE:	Get the value of the property as a float
-//
+//	PURPOSE: Get the value of the property as a float
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPropDef::GetFloatValue(LTFLOAT & fRet)
 {
 	if (m_eType == PT_FLOAT_TYPE && m_pAddress)
 	{
-        fRet = *((LTFLOAT*)m_pAddress);
-        return LTTRUE;
+		fRet = *((LTFLOAT*)m_pAddress);
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CPropDef::GetDWordValue()
 //
-//	ROUTINE:	CPropDef::GetDWordValue()
-//
-//	PURPOSE:	Get the value of the property as a dword
-//
+//	PURPOSE: Get the value of the property as a dword
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPropDef::GetDWordValue(uint32 & dwRet)
 {
 	if (m_eType == PT_DWORD_TYPE && m_pAddress)
 	{
-        dwRet = *((uint32*)m_pAddress);
-        return LTTRUE;
+		dwRet = *((uint32*)m_pAddress);
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CPropDef::GetByteValue()
 //
-//	ROUTINE:	CPropDef::GetByteValue()
-//
-//	PURPOSE:	Get the value of the property as a byte
-//
+//	PURPOSE: Get the value of the property as a byte
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPropDef::GetByteValue(uint8 & nRet)
 {
 	if (m_eType == PT_BYTE_TYPE && m_pAddress)
 	{
-        nRet = *((uint8*)m_pAddress);
-        return LTTRUE;
+		nRet = *((uint8*)m_pAddress);
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CPropDef::GetBoolValue()
 //
-//	ROUTINE:	CPropDef::GetBoolValue()
-//
-//	PURPOSE:	Get the value of the property as a bool
-//
+//	PURPOSE: Get the value of the property as a bool
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPropDef::GetBoolValue(LTBOOL & bRet)
 {
 	if (m_eType == PT_BOOL_TYPE && m_pAddress)
 	{
-        bRet = *((LTBOOL*)m_pAddress);
-        return LTTRUE;
+		bRet = *((LTBOOL*)m_pAddress);
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CPropDef::GetVectorValue()
 //
-//	ROUTINE:	CPropDef::GetVectorValue()
-//
-//	PURPOSE:	Get the value of the property as a vector
-//
+//	PURPOSE: Get the value of the property as a vector
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPropDef::GetVectorValue(LTVector & vRet)
 {
 	if (m_eType == PT_VECTOR_TYPE && m_pAddress)
 	{
-        vRet = *((LTVector*)m_pAddress);
-        return LTTRUE;
+		vRet = *((LTVector*)m_pAddress);
+		return LTTRUE;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CPropDef::GetPropName()
 //
-//	ROUTINE:	CPropDef::GetPropName()
-//
-//	PURPOSE:	Get the name of the property
-//
+//	PURPOSE: Get the name of the property
 // --------------------------------------------------------------------------- //
 
 char* CPropDef::GetPropName()
 {
-    if (!m_strPropName) return LTNULL;
+	if (!m_strPropName) return LTNULL;
 
-    return g_pLTServer->GetStringData(m_strPropName);
+	return g_pLTServer->GetStringData(m_strPropName);
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CPropDef::GetStringValue()
 //
-//	ROUTINE:	CPropDef::GetStringValue()
-//
-//	PURPOSE:	Get the value of the property as a string
-//
+//	PURPOSE: Get the value of the property as a string
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPropDef::GetStringValue(CString & str)
@@ -465,55 +419,55 @@ LTBOOL CPropDef::GetStringValue(CString & str)
 	{
 		case PT_BYTE_TYPE:
 		{
-            uint8 nVal;
+			uint8 nVal;
 			if (GetByteValue(nVal))
 			{
 				str.Format("%d", nVal);
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 		break;
 
 		case PT_BOOL_TYPE:
 		{
-            LTBOOL bVal;
+			LTBOOL bVal;
 			if (GetBoolValue(bVal))
 			{
 				str.Format("%s", bVal ? "True" : "False");
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 		break;
 
 		case PT_FLOAT_TYPE:
 		{
-            LTFLOAT fVal;
+			LTFLOAT fVal;
 			if (GetFloatValue(fVal))
 			{
 				str.Format("%.2f", fVal);
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 		break;
 
 		case PT_VECTOR_TYPE:
 		{
-            LTVector vVal;
+			LTVector vVal;
 			if (GetVectorValue(vVal))
 			{
 				str.Format("(%.2f, %.2f, %.2f)", vVal.x, vVal.y, vVal.z);
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 		break;
 
 		case PT_DWORD_TYPE:
 		{
-            uint32 dwVal;
+			uint32 dwVal;
 			if (GetDWordValue(dwVal))
 			{
 				str.Format("%d", dwVal);
-                return LTTRUE;
+				return LTTRUE;
 			}
 		}
 		break;
@@ -521,73 +475,71 @@ LTBOOL CPropDef::GetStringValue(CString & str)
 		default : break;
 	}
 
-    return LTFALSE;
+	return LTFALSE;
 }
 
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: CPropDef::SetValue()
 //
-//	ROUTINE:	CPropDef::SetValue()
-//
-//	PURPOSE:	Set this property to the value specified...
-//
+//	PURPOSE: Set this property to the value specified...
 // --------------------------------------------------------------------------- //
 
 LTBOOL CPropDef::SetValue(char* pPropName, char* pValue)
 {
-    if (!pPropName || !pValue) return LTFALSE;
+	if (!pPropName || !pValue) return LTFALSE;
 
 	switch (m_eType)
 	{
 		case PT_BYTE_TYPE:
 		{
-            uint8 nVal = (uint8) atol(pValue);
-            *((uint8*)m_pAddress) = nVal;
+			uint8 nVal = (uint8) atol(pValue);
+			*((uint8*)m_pAddress) = nVal;
 		}
 		break;
 
 		case PT_BOOL_TYPE:
 		{
-            LTBOOL bVal = (LTBOOL) atol(pValue);
-            *((LTBOOL*)m_pAddress) = bVal;
+			LTBOOL bVal = (LTBOOL) atol(pValue);
+			*((LTBOOL*)m_pAddress) = bVal;
 		}
 		break;
 
 		case PT_FLOAT_TYPE:
 		{
-            LTFLOAT fVal = (LTFLOAT) atof(pValue);
-            *((LTFLOAT*)m_pAddress) = fVal;
+			LTFLOAT fVal = (LTFLOAT) atof(pValue);
+			*((LTFLOAT*)m_pAddress) = fVal;
 		}
 		break;
 
 		case PT_VECTOR_TYPE:
 		{
-            LTFLOAT fVal = (LTFLOAT) atof(pValue);
+			LTFLOAT fVal = (LTFLOAT) atof(pValue);
 
 			if (strstr(pPropName, ".x") || strstr(pPropName, ".r"))
 			{
-                ((LTVector*)m_pAddress)->x = fVal;
+				((LTVector*)m_pAddress)->x = fVal;
 			}
 			else if (strstr(pPropName, ".y") || strstr(pPropName, ".g"))
 			{
-                ((LTVector*)m_pAddress)->y = fVal;
+				((LTVector*)m_pAddress)->y = fVal;
 			}
 			else if (strstr(pPropName, ".z") || strstr(pPropName, ".b"))
 			{
-                ((LTVector*)m_pAddress)->z = fVal;
+				((LTVector*)m_pAddress)->z = fVal;
 			}
 		}
 		break;
 
 		case PT_DWORD_TYPE:
 		{
-            uint32 dwVal = (uint32) atol(pValue);
-            *((uint32*)m_pAddress) = dwVal;
+			uint32 dwVal = (uint32) atol(pValue);
+			*((uint32*)m_pAddress) = dwVal;
 		}
 		break;
 
 		default : break;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }

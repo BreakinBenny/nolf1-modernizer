@@ -1,11 +1,9 @@
 // ----------------------------------------------------------------------- //
+// MODULE: ObjectiveSprite.cpp
 //
-// MODULE  : ObjectiveSprite.cpp
+// PURPOSE: ObjectiveSprite class - implementation
 //
-// PURPOSE : ObjectiveSprite class - implementation
-//
-// CREATED : 12/07/97
-//
+// CREATED: 12/07/97
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -16,7 +14,7 @@
 
 BEGIN_CLASS(ObjectiveSprite)
 	ADD_STRINGPROP_FLAG(Filename, "", PF_HIDDEN | PF_FILENAME)
-    ADD_BOOLPROP_FLAG(StartOn, LTFALSE, 0)
+	ADD_BOOLPROP_FLAG(StartOn, LTFALSE, 0)
 	ADD_LONGINTPROP(ObjectiveNumber, 1)
 	ADD_LONGINTPROP(PlayerTeamFilter, 0)
 	ADD_REALPROP(ScaleX, 0.5f)
@@ -32,27 +30,23 @@ END_CLASS_DEFAULT(ObjectiveSprite, GameBase, NULL, NULL)
 #define OBJSPR_4	"spr\\spr0043.spr"
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::ObjectiveSprite
 //
-//	ROUTINE:	ObjectiveSprite::ObjectiveSprite
-//
-//	PURPOSE:	Initialize
-//
+//	PURPOSE: Initialize
 // ----------------------------------------------------------------------- //
 
 ObjectiveSprite::ObjectiveSprite() : GameBase(OT_SPRITE)
 {
 	VEC_SET(m_vScale, 1.0f, 1.0f, 1.0f);
 	m_nObjectiveNum			= 1;
-    m_bStartOn              = LTFALSE;
+	m_bStartOn			  = LTFALSE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::~ObjectiveSprite
 //
-//	ROUTINE:	ObjectiveSprite::~ObjectiveSprite
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 ObjectiveSprite::~ObjectiveSprite()
@@ -61,16 +55,14 @@ ObjectiveSprite::~ObjectiveSprite()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::EngineMessageFn
 //
-//	ROUTINE:	ObjectiveSprite::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 ObjectiveSprite::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
 {
-    uint32 dwRet;
+	uint32 dwRet;
 
 	switch(messageID)
 	{
@@ -105,13 +97,13 @@ uint32 ObjectiveSprite::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT f
 
 		case MID_SAVEOBJECT:
 		{
-            Save((HMESSAGEWRITE)pData, (uint32)fData);
+			Save((HMESSAGEWRITE)pData, (uint32)fData);
 		}
 		break;
 
 		case MID_LOADOBJECT:
 		{
-            Load((HMESSAGEREAD)pData, (uint32)fData);
+			Load((HMESSAGEREAD)pData, (uint32)fData);
 		}
 		break;
 
@@ -123,11 +115,9 @@ uint32 ObjectiveSprite::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT f
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::ObjectMessageFn
 //
-//	ROUTINE:	ObjectiveSprite::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 uint32 ObjectiveSprite::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -150,22 +140,22 @@ uint32 ObjectiveSprite::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESS
 			{
 				if (m_hObject)
 				{
-                    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
-                    g_pLTServer->SetObjectFlags(m_hObject, dwFlags | FLAG_VISIBLE);
+					uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+					g_pLTServer->SetObjectFlags(m_hObject, dwFlags | FLAG_VISIBLE);
 
-                    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-                    g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags | USRFLG_VISIBLE);
+					uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+					g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags | USRFLG_VISIBLE);
 				}
 			}
 			else if (stricmp(szMsg, "OFF") == 0)
 			{
 				if (m_hObject)
 				{
-                    uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
-                    g_pLTServer->SetObjectFlags(m_hObject, dwFlags & ~FLAG_VISIBLE);
+					uint32 dwFlags = g_pLTServer->GetObjectFlags(m_hObject);
+					g_pLTServer->SetObjectFlags(m_hObject, dwFlags & ~FLAG_VISIBLE);
 
-                    uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
-                    g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags & ~USRFLG_VISIBLE);
+					uint32 dwUsrFlags = g_pLTServer->GetObjectUserFlags(m_hObject);
+					g_pLTServer->SetObjectUserFlags(m_hObject, dwUsrFlags & ~USRFLG_VISIBLE);
 				}
 			}
 		}
@@ -176,34 +166,32 @@ uint32 ObjectiveSprite::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESS
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::ReadProp()
 //
-//	ROUTINE:	ObjectiveSprite::ReadProp()
-//
-//	PURPOSE:	Update Properties
-//
+//	PURPOSE: Update Properties
 // ----------------------------------------------------------------------- //
 
 void ObjectiveSprite::ReadProp(ObjectCreateStruct *pStruct)
 {
 	GenericProp genProp;
 
-    if (g_pLTServer->GetPropGeneric("StartOn", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("StartOn", &genProp) == LT_OK)
 	{
 		m_bStartOn = genProp.m_Bool;
 	}
 
-    if (g_pLTServer->GetPropGeneric("ScaleX", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ScaleX", &genProp) == LT_OK)
 	{
 		m_vScale.x = genProp.m_Float;
 	}
 
-    if (g_pLTServer->GetPropGeneric("ScaleY", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ScaleY", &genProp) == LT_OK)
 	{
 		m_vScale.y = genProp.m_Float;
 	}
 
 
-    if (g_pLTServer->GetPropGeneric("ObjectiveNumber", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("ObjectiveNumber", &genProp) == LT_OK)
 	{
 		long nLongVal = genProp.m_Long;
 		if (nLongVal < 1)
@@ -218,11 +206,9 @@ void ObjectiveSprite::ReadProp(ObjectCreateStruct *pStruct)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::PostPropRead()
 //
-//	ROUTINE:	ObjectiveSprite::PostPropRead()
-//
-//	PURPOSE:	Finalize some data.
-//
+//	PURPOSE: Finalize some data.
 // ----------------------------------------------------------------------- //
 
 void ObjectiveSprite::PostPropRead(ObjectCreateStruct *pStruct)
@@ -259,31 +245,27 @@ void ObjectiveSprite::PostPropRead(ObjectCreateStruct *pStruct)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::InitialUpdate
 //
-//	ROUTINE:	ObjectiveSprite::InitialUpdate
-//
-//	PURPOSE:	Do initial updating
-//
+//	PURPOSE: Do initial updating
 // ----------------------------------------------------------------------- //
 
 LTBOOL ObjectiveSprite::InitialUpdate()
 {
-    if (!m_hObject) return LTFALSE;
+	if (!m_hObject) return LTFALSE;
 
 	CreateSFXMsg();
-    g_pLTServer->SetObjectColor(m_hObject, 1.0f, 1.0f, 1.0f, 0.999f);
+	g_pLTServer->SetObjectColor(m_hObject, 1.0f, 1.0f, 1.0f, 0.999f);
 
 	SetNextUpdate(0.001f);
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::Update
 //
-//	ROUTINE:	ObjectiveSprite::Update
-//
-//	PURPOSE:	Do one update
-//
+//	PURPOSE: Do one update
 // ----------------------------------------------------------------------- //
 
 LTBOOL ObjectiveSprite::Update()
@@ -295,11 +277,11 @@ LTBOOL ObjectiveSprite::Update()
 	// For some reason the sprites are sometimes backwards...Get the rotation
 	// so we can flip it...
 
-    LTRotation rRot;
-    LTVector vPos, vDir, vU, vR, vF;
-    g_pLTServer->GetObjectPos(m_hObject, &vPos);
-    g_pLTServer->GetObjectRotation(m_hObject, &rRot);
-    g_pLTServer->GetRotationVectors(&rRot, &vU, &vR, &vF);
+	LTRotation rRot;
+	LTVector vPos, vDir, vU, vR, vF;
+	g_pLTServer->GetObjectPos(m_hObject, &vPos);
+	g_pLTServer->GetObjectRotation(m_hObject, &rRot);
+	g_pLTServer->GetRotationVectors(&rRot, &vU, &vR, &vF);
 /*
 	if (m_bFlushWithWorld)
 	{
@@ -318,11 +300,11 @@ LTBOOL ObjectiveSprite::Update()
 		VEC_COPY(qInfo.m_From, vPos);
 		VEC_COPY(qInfo.m_Direction, vDir);
 		qInfo.m_Flags	 = IGNORE_NONSOLID | INTERSECT_OBJECTS | INTERSECT_HPOLY;
-        qInfo.m_FilterFn = LTNULL;
+		qInfo.m_FilterFn = LTNULL;
 
-        if (g_pLTServer->CastRay(&qInfo, &iInfo))
+		if (g_pLTServer->CastRay(&qInfo, &iInfo))
 		{
-            LTVector vTemp;
+			LTVector vTemp;
 			VEC_COPY(vPos, iInfo.m_Point);
 			VEC_COPY(vDir, iInfo.m_Plane.m_Normal);
 
@@ -331,32 +313,28 @@ LTBOOL ObjectiveSprite::Update()
 			VEC_MULSCALAR(vTemp, vDir, 1.0f);
 			VEC_ADD(vPos, vPos, vTemp);
 
-            g_pLTServer->SetObjectPos(m_hObject, &vPos);
+			g_pLTServer->SetObjectPos(m_hObject, &vPos);
 		}
 	}
 */
-    return LTTRUE;
+	return LTTRUE;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::SetCompleted
 //
-//	ROUTINE:	ObjectiveSprite::SetCompleted
-//
-//	PURPOSE:	Set to completed sprite
-//
+//	PURPOSE: Set to completed sprite
 // ----------------------------------------------------------------------- //
 
 void ObjectiveSprite::SetCompleted()
 {
-    g_pLTServer->SetObjectFilenames(m_hObject, OBJSPR_COMP, "");
+	g_pLTServer->SetObjectFilenames(m_hObject, OBJSPR_COMP, "");
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::Reset
 //
-//	ROUTINE:	ObjectiveSprite::Reset
-//
-//	PURPOSE:	Reset to initial sprite
-//
+//	PURPOSE: Reset to initial sprite
 // ----------------------------------------------------------------------- //
 
 void ObjectiveSprite::Reset()
@@ -382,11 +360,9 @@ void ObjectiveSprite::Reset()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::Save
 //
-//	ROUTINE:	ObjectiveSprite::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void ObjectiveSprite::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
@@ -394,36 +370,32 @@ void ObjectiveSprite::Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags)
 	if (!hWrite) return;
 
 
-    g_pLTServer->WriteToMessageByte(hWrite, m_nObjectiveNum);
-    g_pLTServer->WriteToMessageByte(hWrite, m_bStartOn);
+	g_pLTServer->WriteToMessageByte(hWrite, m_nObjectiveNum);
+	g_pLTServer->WriteToMessageByte(hWrite, m_bStartOn);
 	m_ObjSpriteStruct.Save(hWrite);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::Load
 //
-//	ROUTINE:	ObjectiveSprite::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void ObjectiveSprite::Load(HMESSAGEREAD hRead, uint32 dwLoadFlags)
 {
 	if (!hRead) return;
 
-    m_nObjectiveNum         = g_pLTServer->ReadFromMessageByte(hRead);
-    m_bStartOn              = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
+	m_nObjectiveNum		 = g_pLTServer->ReadFromMessageByte(hRead);
+	m_bStartOn			  = (LTBOOL) g_pLTServer->ReadFromMessageByte(hRead);
 	m_ObjSpriteStruct.Load(hRead);
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::CacheFiles
 //
-//	ROUTINE:	ObjectiveSprite::CacheFiles
-//
-//	PURPOSE:	Cache resources associated with this object
-//
+//	PURPOSE: Cache resources associated with this object
 // ----------------------------------------------------------------------- //
 
 void ObjectiveSprite::CacheFiles()
@@ -450,18 +422,16 @@ void ObjectiveSprite::CacheFiles()
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: ObjectiveSprite::CreateSFXMsg
 //
-//	ROUTINE:	ObjectiveSprite::CreateSFXMsg
-//
-//	PURPOSE:	Create our special fx message
-//
+//	PURPOSE: Create our special fx message
 // ----------------------------------------------------------------------- //
 
 void ObjectiveSprite::CreateSFXMsg()
 {
-    HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
-    g_pLTServer->WriteToMessageByte(hMessage, SFX_OBJSPRITE_ID);
-    m_ObjSpriteStruct.Write(g_pLTServer, hMessage);
-    g_pLTServer->EndMessage(hMessage);
+	HMESSAGEWRITE hMessage = g_pLTServer->StartSpecialEffectMessage(this);
+	g_pLTServer->WriteToMessageByte(hMessage, SFX_OBJSPRITE_ID);
+	m_ObjSpriteStruct.Write(g_pLTServer, hMessage);
+	g_pLTServer->EndMessage(hMessage);
 }
 

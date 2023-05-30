@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Group.cpp
 //
-// MODULE  : Group.cpp
+// PURPOSE: Group - Implementation
 //
-// PURPOSE : Group - Implementation
-//
-// CREATED : 12/21/99
+// CREATED: 12/21/99
 //
 // (c) 1999-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -72,27 +70,23 @@ END_CLASS_DEFAULT(Group, BaseClass, NULL, NULL)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Group::Group
 //
-//	ROUTINE:	Group::Group
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 Group::Group()
 {
 	for (int i=0; i < MAX_GROUP_TARGETS; i++)
 	{
-        m_hstrObjectNames[i] = LTNULL;
+		m_hstrObjectNames[i] = LTNULL;
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Group::~Group
 //
-//	ROUTINE:	Group::~Group
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 Group::~Group()
@@ -101,17 +95,15 @@ Group::~Group()
 	{
 		if (m_hstrObjectNames[i])
 		{
-            g_pLTServer->FreeString(m_hstrObjectNames[i]);
+			g_pLTServer->FreeString(m_hstrObjectNames[i]);
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Group::EngineMessageFn
 //
-//	ROUTINE:	Group::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 DWORD Group::EngineMessageFn(DWORD messageID, void *pData, LTFLOAT fData)
@@ -154,11 +146,9 @@ DWORD Group::EngineMessageFn(DWORD messageID, void *pData, LTFLOAT fData)
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Group::ObjectMessageFn
 //
-//	ROUTINE:	Group::ObjectMessageFn
-//
-//	PURPOSE:	Handle object-to-object messages
-//
+//	PURPOSE: Handle object-to-object messages
 // ----------------------------------------------------------------------- //
 
 DWORD Group::ObjectMessageFn(HOBJECT hSender, DWORD messageID, HMESSAGEREAD hRead)
@@ -177,11 +167,9 @@ DWORD Group::ObjectMessageFn(HOBJECT hSender, DWORD messageID, HMESSAGEREAD hRea
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Group::PreCreate
 //
-//	ROUTINE:	Group::PreCreate
-//
-//	PURPOSE:	Handle pre create
-//
+//	PURPOSE: Handle pre create
 // ----------------------------------------------------------------------- //
 
 void Group::PreCreate(ObjectCreateStruct *pStruct)
@@ -192,22 +180,20 @@ void Group::PreCreate(ObjectCreateStruct *pStruct)
 	for (int i=0; i < MAX_GROUP_TARGETS; i++)
 	{
 		sprintf(buf, "Object%d", i+1);
-        if (g_pLTServer->GetPropGeneric(buf, &gProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(buf, &gProp) == LT_OK)
 		{
 			if (gProp.m_String[0])
 			{
-                m_hstrObjectNames[i] = g_pLTServer->CreateString(gProp.m_String);
+				m_hstrObjectNames[i] = g_pLTServer->CreateString(gProp.m_String);
 			}
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Group::Load
 //
-//	ROUTINE:	Group::Load
-//
-//	PURPOSE:	Handle loading object
-//
+//	PURPOSE: Handle loading object
 // ----------------------------------------------------------------------- //
 
 void Group::Load(HMESSAGEREAD hRead, DWORD dwSaveFlags)
@@ -221,11 +207,9 @@ void Group::Load(HMESSAGEREAD hRead, DWORD dwSaveFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Group::Save
 //
-//	ROUTINE:	Group::Save
-//
-//	PURPOSE:	Handle saving object
-//
+//	PURPOSE: Handle saving object
 // ----------------------------------------------------------------------- //
 
 void Group::Save(HMESSAGEWRITE hWrite, DWORD dwSaveFlags)
@@ -239,11 +223,9 @@ void Group::Save(HMESSAGEWRITE hWrite, DWORD dwSaveFlags)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: Group::HandleTrigger
 //
-//	ROUTINE:	Group::HandleTrigger
-//
-//	PURPOSE:	Handle sending off messages to our objects
-//
+//	PURPOSE: Handle sending off messages to our objects
 // ----------------------------------------------------------------------- //
 
 void Group::HandleTrigger(HOBJECT hSender, const char *szMsg)
@@ -255,7 +237,7 @@ void Group::HandleTrigger(HOBJECT hSender, const char *szMsg)
 	{
 		if (m_hstrObjectNames[i])
 		{
-            pName = g_pLTServer->GetStringData(m_hstrObjectNames[i]);
+			pName = g_pLTServer->GetStringData(m_hstrObjectNames[i]);
 			if (pName && pName[0])
 			{
 				SendTriggerMsgToObjects(this, pName, szMsg);

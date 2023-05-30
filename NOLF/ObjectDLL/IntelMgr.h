@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: IntelMgr.h
 //
-// MODULE  : IntelMgr.h
+// PURPOSE: Definition of intel mgr
 //
-// PURPOSE : Definition of intel mgr
-//
-// CREATED : 7/25/2000
+// CREATED: 7/25/2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __INTEL_MGR_H__
@@ -30,10 +28,10 @@ struct INTEL
 {
 	INTEL();
 
-    LTBOOL      Init(CButeMgr & buteMgr, char* aTagName);
+	LTBOOL	  Init(CButeMgr & buteMgr, char* aTagName);
 	void		Cache(CIntelMgr* pIntelMgr);
 
-    uint32      nId;
+	uint32	  nId;
 
 	uint32		nDefaultTextId;
 	LTBOOL		bChrome;
@@ -59,12 +57,12 @@ class CIntelMgr : public CGameButeMgr
 		~CIntelMgr();
 
 		void		CacheAll();
-        void        Reload(ILTCSBase *pInterface) { Term(); m_buteMgr.Term(); Init(pInterface); }
+		void		Reload(ILTCSBase *pInterface) { Term(); m_buteMgr.Term(); Init(pInterface); }
 
-        LTBOOL      Init(ILTCSBase *pInterface, const char* szAttributeFile=INTELMGR_DEFAULT_FILE);
+		LTBOOL	  Init(ILTCSBase *pInterface, const char* szAttributeFile=INTELMGR_DEFAULT_FILE);
 		void		Term();
 
-        INTEL*      GetIntel(uint32 nId);
+		INTEL*	  GetIntel(uint32 nId);
 		INTEL*		GetIntel(char* pName);
 
 		int			GetNumIntels() const { return m_IntelList.GetLength(); }
@@ -90,9 +88,9 @@ class CIntelMgrPlugin : public IObjectPlugin
 			const char* szRezPath,
 			const char* szPropName,
 			char** aszStrings,
-            uint32* pcStrings,
-            const uint32 cMaxStrings,
-            const uint32 cMaxStringLength);
+			uint32* pcStrings,
+			const uint32 cMaxStrings,
+			const uint32 cMaxStringLength);
 
 		virtual LTRESULT PreHook_Dims(
 			const char* szRezPath,
@@ -101,8 +99,8 @@ class CIntelMgrPlugin : public IObjectPlugin
 			int	  nModelFilenameBufLen,
 			LTVector & vDims);
 
-        LTBOOL PopulateStringList(char** aszStrings, uint32* pcStrings,
-            const uint32 cMaxStrings, const uint32 cMaxStringLength);
+		LTBOOL PopulateStringList(char** aszStrings, uint32* pcStrings,
+			const uint32 cMaxStrings, const uint32 cMaxStringLength);
 
 	protected :
 

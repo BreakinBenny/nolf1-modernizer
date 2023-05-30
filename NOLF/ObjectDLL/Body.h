@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: Body.h
 //
-// MODULE  : Body.h
+// PURPOSE: Body Prop - Definition
 //
-// PURPOSE : Body Prop - Definition
-//
-// CREATED : 1997 (was BodyProp)
+// CREATED: 1997 (was BodyProp)
 //
 // (c) 1997-2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #ifndef __BODY_PROP_H__
@@ -104,8 +102,8 @@ class Body : public Prop
 
 		// Engine methods
 
-        uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
-        uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
+		uint32 EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData);
+		uint32 ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead);
 		void TriggerMsg(HOBJECT hSender, const char* szMsg);
 
 		// Hitbox message
@@ -125,8 +123,8 @@ class Body : public Prop
 //		LTBOOL UpdateFreezeDeath(LTFLOAT fTime);
 //		LTBOOL UpdateVaporizeDeath(LTFLOAT fTime);
 
-        void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
-        void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
+		void Save(HMESSAGEWRITE hWrite, uint32 dwSaveFlags);
+		void Load(HMESSAGEREAD hRead, uint32 dwLoadFlags);
 
 		void CreateDeathScene(CCharacter *pChar);
 //		void CreateGibs();

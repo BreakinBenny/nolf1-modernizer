@@ -61,9 +61,9 @@ class CBodyStateStairs : DEFINE_FACTORY_CLASS(CBodyStateStairs), public CBodySta
 
 	protected :
 
-        LTVector    m_vDir;
+		LTVector	m_vDir;
 		int			m_iVolume;
-        LTBOOL      m_bFell;
+		LTBOOL	  m_bFell;
 		HMODELANIM	m_hAniStart;
 		HMODELANIM	m_hAniLoop;
 		HMODELANIM	m_hAniStop;
@@ -99,8 +99,8 @@ class CBodyStateLedge : DEFINE_FACTORY_CLASS(CBodyStateLedge), public CBodyState
 	protected :
 
 		State		m_eState;
-        LTFLOAT      m_fTimer;
-        LTVector     m_vVelocity;
+		LTFLOAT	  m_fTimer;
+		LTVector	 m_vVelocity;
 		int			m_iVolume;
 		HMODELANIM	m_hAniStart;
 		HMODELANIM	m_hAniLoop;
@@ -130,7 +130,7 @@ class CBodyStateUnderwater : DEFINE_FACTORY_CLASS(CBodyStateUnderwater), public 
 		HMODELANIM	m_hAniStart;
 		HMODELANIM	m_hAniLoop;
 		HMODELANIM	m_hAniStop;
-        LTBOOL       m_bStop;
+		LTBOOL	   m_bStop;
 };
 
 class CBodyStateLaser : DEFINE_FACTORY_CLASS(CBodyStateLaser), public CBodyState

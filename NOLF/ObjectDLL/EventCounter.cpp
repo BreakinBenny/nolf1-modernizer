@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------- //
+// MODULE: EventCounter.cpp
 //
-// MODULE  : EventCounter.cpp
+// PURPOSE: EventCounter - Implementation
 //
-// PURPOSE : EventCounter - Implementation
-//
-// CREATED : 03/22/2000
+// CREATED: 03/22/2000
 //
 // (c) 2000 Monolith Productions, Inc.  All Rights Reserved
-//
 // ----------------------------------------------------------------------- //
 
 #include "stdafx.h"
@@ -40,25 +38,21 @@ BEGIN_CLASS(EventCounter)
 END_CLASS_DEFAULT(EventCounter, BaseClass, NULL, NULL)
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: EventCounter::EventCounter()
 //
-//	ROUTINE:	EventCounter::EventCounter()
-//
-//	PURPOSE:	Constructor
-//
+//	PURPOSE: Constructor
 // ----------------------------------------------------------------------- //
 
 EventCounter::EventCounter() : BaseClass()
 {
-    m_bLocked = LTFALSE;
+	m_bLocked = LTFALSE;
 	m_nCurVal = 0;
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: EventCounter::~EventCounter()
 //
-//	ROUTINE:	EventCounter::~EventCounter()
-//
-//	PURPOSE:	Destructor
-//
+//	PURPOSE: Destructor
 // ----------------------------------------------------------------------- //
 
 EventCounter::~EventCounter()
@@ -66,11 +60,9 @@ EventCounter::~EventCounter()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: EventCounter::EngineMessageFn
 //
-//	ROUTINE:	EventCounter::EngineMessageFn
-//
-//	PURPOSE:	Handle engine messages
-//
+//	PURPOSE: Handle engine messages
 // ----------------------------------------------------------------------- //
 
 uint32 EventCounter::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fData)
@@ -105,11 +97,9 @@ uint32 EventCounter::EngineMessageFn(uint32 messageID, void *pData, LTFLOAT fDat
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: EventCounter::ObjectMessageFn
 //
-//	ROUTINE:	EventCounter::ObjectMessageFn
-//
-//	PURPOSE:	Handle object messages
-//
+//	PURPOSE: Handle object messages
 // ----------------------------------------------------------------------- //
 
 uint32 EventCounter::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGEREAD hRead)
@@ -130,18 +120,16 @@ uint32 EventCounter::ObjectMessageFn(HOBJECT hSender, uint32 messageID, HMESSAGE
 }
 
 // --------------------------------------------------------------------------- //
+//	ROUTINE: EventCounter::TriggerMsg()
 //
-//	ROUTINE:	EventCounter::TriggerMsg()
-//
-//	PURPOSE:	Process EventCounter trigger messages
-//
+//	PURPOSE: Process EventCounter trigger messages
 // --------------------------------------------------------------------------- //
 
 void EventCounter::TriggerMsg(HOBJECT hSender, const char* szMsg)
 {
 	if (!szMsg) return;
 
-    ILTCommon* pCommon = g_pLTServer->Common();
+	ILTCommon* pCommon = g_pLTServer->Common();
 	if (!pCommon) return;
 
 	// ConParse does not destroy szMsg, so this is safe
@@ -186,22 +174,20 @@ void EventCounter::TriggerMsg(HOBJECT hSender, const char* szMsg)
 			}
 			else if (_stricmp(parse.m_Args[0], "LOCK") == 0)
 			{
-                m_bLocked = LTTRUE;
+				m_bLocked = LTTRUE;
 			}
 			else if (_stricmp(parse.m_Args[0], "UNLOCK") == 0)
 			{
-                m_bLocked = LTFALSE;
+				m_bLocked = LTFALSE;
 			}
 		}
 	}
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: EventCounter::Increment
 //
-//	ROUTINE:	EventCounter::Increment
-//
-//	PURPOSE:	Increment the event counter
-//
+//	PURPOSE: Increment the event counter
 // ----------------------------------------------------------------------- //
 
 void EventCounter::Increment()
@@ -218,7 +204,7 @@ void EventCounter::Increment()
 		{
 			if (m_EventData[i].hstrIncToValCmd)
 			{
-                char* pCmd = g_pLTServer->GetStringData(m_EventData[i].hstrIncToValCmd);
+				char* pCmd = g_pLTServer->GetStringData(m_EventData[i].hstrIncToValCmd);
 				if (pCmd && g_pCmdMgr->IsValidCmd(pCmd))
 				{
 					g_pCmdMgr->Process(pCmd);
@@ -229,11 +215,9 @@ void EventCounter::Increment()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: EventCounter::Decrement
 //
-//	ROUTINE:	EventCounter::Decrement
-//
-//	PURPOSE:	Decrement the event counter
-//
+//	PURPOSE: Decrement the event counter
 // ----------------------------------------------------------------------- //
 
 void EventCounter::Decrement()
@@ -250,7 +234,7 @@ void EventCounter::Decrement()
 		{
 			if (m_EventData[i].hstrDecToValCmd)
 			{
-                char* pCmd = g_pLTServer->GetStringData(m_EventData[i].hstrDecToValCmd);
+				char* pCmd = g_pLTServer->GetStringData(m_EventData[i].hstrDecToValCmd);
 				if (pCmd && g_pCmdMgr->IsValidCmd(pCmd))
 				{
 					g_pCmdMgr->Process(pCmd);
@@ -261,16 +245,14 @@ void EventCounter::Decrement()
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: EventCounter::ReadProp
 //
-//	ROUTINE:	EventCounter::ReadProp
-//
-//	PURPOSE:	Set property value
-//
+//	PURPOSE: Set property value
 // ----------------------------------------------------------------------- //
 
 LTBOOL EventCounter::ReadProp(ObjectCreateStruct *pInfo)
 {
-    if (!pInfo) return LTFALSE;
+	if (!pInfo) return LTFALSE;
 
 	GenericProp genProp;
 	char szProp[128];
@@ -278,45 +260,43 @@ LTBOOL EventCounter::ReadProp(ObjectCreateStruct *pInfo)
 	for (int i=1; i <= EC_MAX_NUMBER_OF_EVENTS; i++)
 	{
 		sprintf(szProp, "Event%dValue", i);
-        if (g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK)
 		{
 			m_EventData[i-1].nValue = genProp.m_Long;
 		}
 
 		sprintf(szProp, "Event%dIncToValCmd", i);
-        if (g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK)
 		{
 			if (genProp.m_String[0])
 			{
-                m_EventData[i-1].hstrIncToValCmd = g_pLTServer->CreateString(genProp.m_String);
+				m_EventData[i-1].hstrIncToValCmd = g_pLTServer->CreateString(genProp.m_String);
 			}
 		}
 
 		sprintf(szProp, "Event%dDecToValCmd", i);
-        if (g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK)
+		if (g_pLTServer->GetPropGeneric(szProp, &genProp) == LT_OK)
 		{
 			if (genProp.m_String[0])
 			{
-                m_EventData[i-1].hstrDecToValCmd = g_pLTServer->CreateString(genProp.m_String);
+				m_EventData[i-1].hstrDecToValCmd = g_pLTServer->CreateString(genProp.m_String);
 			}
 		}
 	}
 
-    if (g_pLTServer->GetPropGeneric("StartingValue", &genProp) == LT_OK)
+	if (g_pLTServer->GetPropGeneric("StartingValue", &genProp) == LT_OK)
 	{
 		m_nCurVal = genProp.m_Long;
 	}
 
-    return LTTRUE;
+	return LTTRUE;
 }
 
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: EventCounter::Save
 //
-//	ROUTINE:	EventCounter::Save
-//
-//	PURPOSE:	Save the object
-//
+//	PURPOSE: Save the object
 // ----------------------------------------------------------------------- //
 
 void EventCounter::Save(HMESSAGEWRITE hWrite)
@@ -342,11 +322,9 @@ void EventCounter::Save(HMESSAGEWRITE hWrite)
 }
 
 // ----------------------------------------------------------------------- //
+//	ROUTINE: EventCounter::Load
 //
-//	ROUTINE:	EventCounter::Load
-//
-//	PURPOSE:	Load the object
-//
+//	PURPOSE: Load the object
 // ----------------------------------------------------------------------- //
 
 void EventCounter::Load(HMESSAGEREAD hRead)
